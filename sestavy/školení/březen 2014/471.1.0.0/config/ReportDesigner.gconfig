@@ -1,0 +1,1720 @@
+﻿<AddIn name        = "ReportDesigner"
+       author      = "Mgr. Stepan Sukovyč"
+       description = "Návrhář sestav - hlavní modul"
+       addInManagerHidden = "true"
+       version="4.72.1.10">
+
+  <Manifest>
+    <Identity name = "Gordic.GFE.WinClient" version = "@ReportDesignerCoreVersion"/>
+  </Manifest>
+  
+  <!-- Prostředí aplikace -->
+  <Runtime>
+    <Import assembly=":Gordic.GFE.WinClient">
+      <ConditionEvaluator name="WindowActive" class="Gordic.GFE.WinClient.Core.WindowActiveConditionEvaluator"/>
+      <ConditionEvaluator name="ActiveWindowState" class="Gordic.GFE.WinClient.Core.ActiveWindowStateConditionEvaluator"/>
+      <ConditionEvaluator name="OpenWindowState" class="Gordic.GFE.WinClient.Core.OpenWindowStateConditionEvaluator"/>
+      <ConditionEvaluator name="SelectedObject" class="Gordic.GFE.WinClient.Core.SelectedObjectConditionEvaluator"/>
+      <!-- TODO odstranit FormationType -->
+      <ConditionEvaluator name="FormationType" class="Gordic.GFE.WinClient.Core.FormationTypeConditionEvaluator"/>
+      <ConditionEvaluator name="WriteableProject" class="Gordic.GFE.WinClient.Core.WriteableProjectConditionEvaluator"/>
+      <ConditionEvaluator name="SolutionOpen" class="Gordic.GFE.WinClient.Project.SolutionOpenConditionEvaluator"/>
+      <ConditionEvaluator name="WriteableSolution" class="Gordic.GFE.WinClient.Project.WriteableSolutionConditionEvaluator"/>
+
+      <Maker name="LanguageBinding" class="Gordic.GFE.WinClient.LanguageBindingMaker"/>
+    </Import>
+    <Import assembly=":Gordic.GFE.Parsers">
+      <Maker name="Pad" class="Gordic.GFE.Parsers.PadMaker"/>
+    </Import>
+      <Import assembly=":Gordic.TextEditor"/>
+  </Runtime>
+  <!-- konec prostředí -->
+  
+  <!-- Vazby -->
+  <Path name = "/Desktop/DisplayBindings">
+    <DisplayBinding id    = "Text"
+                title = "Textový editor"
+                class = "Gordic.GFE.WinClient.DefaultEditor.TextEditorDisplayBinding" />
+  </Path>
+  <!-- konec Vazba -->
+
+  <!-- Analyzátor obsahu -->
+  <Path name = "/Workspace/Parser">
+    <Parser id    = "AlfParser"
+		        supportedextensions  = ".alf"
+            supportformats ="grf;grr;mse;rtf"
+		        class = "Gordic.GFE.WinClient.Editor.AlfParser"/>
+    <Parser id    = "ALFXParser"
+		        supportedextensions  = ".alfx"
+		        class = "Gordic.GFE.WinClient.Editor.AlfxParser"/>
+  </Path>
+  <!-- konec Analyzátor obsahu -->
+  
+  <!-- Filtry souborů -->
+  <Path name = "/Desktop/FileFilter">
+    <FileFilter id = "SSRFile"
+		            name = "soubory náhledu"
+		            extensions = "*.ssr"/>
+    <FileFilter id = "AllFiles"
+		            name = "vše"
+		            extensions = "*.*"/>
+  </Path>
+  <Path name = "/ReportDesigner/Desktop/OpenFileFilter">
+    <FileFilter id         = "ALF"
+		            name       = "formát"
+		            extensions = "*.alf;*.alfx"/>
+    <FileFilter id         = "XME"
+		            name       = "struktura"
+		            extensions = "*.xme"/>
+    <FileFilter id         = "DAT"
+		            name       = "data"
+		            extensions = "*.dat;*.tmp;*.xml"/>
+    <FileFilter id         = "GFRM"
+		            name       = "formulář"
+		            extensions = "*.gfrm"/>
+    <FileFilter id         = "ALL"
+		            name       = "vše"
+		            extensions = "*.*"/>
+  </Path>
+  <Path name = "/ReportDesigner/Desktop/OpenDataFilter">
+    <FileFilter id         = "DataFile"
+		            name       = "Soubory dat"
+		            extensions = "*.dat;*.tmp;*.xml"/>
+  </Path>
+  <Path name = "/ReportDesigner/Desktop/SaveGfrmFilter">
+    <FileFilter id         = "SaveGfrmFile"
+		            name       = "Soubory formuláře"
+		            extensions = "*.gfrm"/>
+  </Path>
+  <Path name = "/ReportDesigner/Desktop/ApplicationFileFilter">
+    <FileFilter id         = "Application"
+		            name       = "Aplikace"
+		            extensions = "*.exe"/>
+  </Path>
+  <Path name = "/ReportDesigner/Desktop/OpenStructureFilter">
+    <FileFilter id         = "XME"
+		            name       = "struktura"
+		            extensions = "*.xme"/>
+  </Path>
+  <Path name = "/ReportDesigner/Desktop/OpenTemplateFilter">
+    <FileFilter id         = "DOC"
+		            name       = "Šablona Word"
+		            extensions = "*.doc"/>
+    <FileFilter id         = "XLS"
+		            name       = "Šablona Excel"
+		            extensions = "*.xls"/>
+  </Path>
+  <Path name = "/ReportDesigner/Desktop/PreviewDataFilter">
+    <FileFilter id         = "DATA"
+		            name       = "Soubor dat"
+		            extensions = "*.tmp;*.dat;*.txt;"/>
+  </Path>
+  <Path name = "/ReportDesigner/Desktop/PreviewSsrFilter">
+    <FileFilter id         = "SSR"
+		            name       = "Soubor prohlížeče"
+		            extensions = "*.ssr"/>
+  </Path>
+  <Path name = "/ReportDesigner/Desktop/NewImageFilter">
+    <FileFilter id         = "PICTURES"
+		            name       = "Soubory obrázků"
+		            extensions = "*.png;*.emf;*.exif;*.gif;*.ico;*.jpeg;*.wmf;*.tiff;*.bmp;*.jpg;"/>
+  </Path>
+  <Path name = "/ReportDesigner/Desktop/Combine/FileFilter">
+    <FileFilter id         = "Solution"
+		            name       = "formulář"
+		            class      = "Gordic.GFE.WinClient.Project.LoadSolution"
+		            extensions = "*.gfrm"/>
+    <FileFilter id         = "AllFiles"
+		            name       = "vše"
+		            extensions = "*.*"/>
+  </Path>
+  <!-- konec Filtry souborů -->
+
+  <!-- Koncovky závislých souborů -->
+  <Path name = "/Desktop/DependentFileExtensions">
+    <String id = "FormationResources" text=".zip"/>
+  </Path>
+  <!-- konec Koncovky závislých souborů -->
+  
+  <!-- události textového editoru -->
+  <Path name = "/ReportDesigner/RDTextEditor/EditActions">
+    <EditAction id = "CompletionPopup" class = "Gordic.GFE.WinClient.DefaultEditor.CodeCompletionPopup"  keys = "Control|Space"/>
+    <!--<EditAction id = "GoToDefinition" class = "XmlEditor.GoToSchemaDefinitionEditAction" keys = "Control|Enter"/>-->
+  </Path>
+  <!-- konec události textového editoru -->
+
+  <!-- vázby na nápovědný text -->
+  <Path name = "/ReportDesigner/RDTextEditor/CodeCompletion">
+    <CodeCompletionBinding id = "GRF" extensions = ".alf" class = "Gordic.GFE.WinClient.Editor.GrfCompletionBinding"/>
+    <CodeCompletionBinding id = "GRR" extensions = ".alf" class = "Gordic.GFE.WinClient.Editor.GrrCompletionBinding"/>
+    <CodeCompletionBinding id = "RTF" extensions = ".alf" class = "Gordic.GFE.WinClient.Editor.RtfCompletionBinding"/>
+    <CodeCompletionBinding id = "MSE" extensions = ".alf" class = "Gordic.GFE.WinClient.Editor.MseCompletionBinding"/>
+  </Path>
+  <!-- konec vázby na nápovědný text -->
+
+  <!-- Hlavní nabídka aplikace -->
+  <Path name = "/ReportDesigner/MainMenu">
+    <!-- FILE -->
+    <MenuItem id = "File" label    = "&amp;Aplikace" type="Menu" >
+      <MenuItem id = "New" label = "&amp;nový" type="Menu" icon  = "Icons__Gin__zaznam_novy">
+        <MenuItem id           = "File"
+				          label        = "s&amp;oubor..."
+				          icon         = "Icons__Wfl__dokument_novy"
+				          shortcut     = "Control|N"
+				          class        = "Gordic.GFE.WinClient.FileCommands.CreateNewFile"/>
+      </MenuItem>
+
+      <MenuItem id = "Open" label = "&amp;otevřít" type="Menu" icon  = "Icons__Gin__slozka_otevrena">
+        <MenuItem id          = "File"
+				          label       = "s&amp;oubor..."
+				          icon        = "Icons__Gin__soubor_otevrit"
+				          shortcut    = "Control|O"
+				          class       = "Gordic.GFE.WinClient.FileCommands.OpenFile"/>
+        <MenuItem id          = "DBFile"
+                  label       = "formát z databáze..."
+                  icon        = "Icons__Gin__databaze"
+                  shortcut    = "Control|Shift|D"
+                  class       = "Gordic.GFE.WinClient.FileCommands.OpenFileDb"/>
+        <MenuItem id = "Project"
+				          label = "otevřít sestavení..."
+				          icon = "Icons.16x16.OpenProjectIcon"
+				          shortcut = "Control|Shift|O"
+				          class = "Gordic.GFE.WinClient.Project.Commands.LoadSolution"/>
+      </MenuItem>
+      <MenuItem id = "Close" label = "zavřít" type="Menu" icon  = "Icons__Gin__okno_zavrit">
+        <Condition name = "WindowActive" activewindow="*" action="Disable">
+          <MenuItem id = "CloseFile"
+					          label = "soubor"
+					          icon  = "Icons.16x16.CloseFileIcon"
+					          shortcut = "Control|F4"
+					          class ="Gordic.GFE.WinClient.FileCommands.CloseFile"/>
+        </Condition>
+        <Condition name = "SolutionOpen" action="Disable">
+          <MenuItem id = "CloseCombine"
+					          label = "sestavení"
+					          shortcut = "Control|Shift|F4"
+					          class = "Gordic.GFE.WinClient.Project.Commands.CloseSolution"/>
+        </Condition>
+      </MenuItem>
+      <MenuItem id = "CloseSeparator" type = "Separator"  />
+      <MenuItem id = "ConvertFile"
+                label = "konverze..."
+                icon  = "Icons__Gin__rozpad"
+                class ="Gordic.GFE.WinClient.FileCommands.ConvertFile"/>
+      <MenuItem id = "ConvertSeparator" type = "Separator"  />
+      <!-- FORMATION -->
+      <Condition name = "ActiveWindowState" windowstate="Dirty, Untitled" nowindowstate="ViewOnly" action="Disable">
+        <MenuItem id = "Save"
+                  label = "uložit"
+                  icon = "Icons__Gin__ulozit"
+                  shortcut = "Control|S"
+                  class = "Gordic.GFE.WinClient.FileCommands.SaveFile"/>
+      </Condition>
+
+      <MenuItem id = "SaveAs"
+                icon = "Icons__Gin__ulozit_jako"
+                label = "uložit jako..."
+                loadclasslazy = "false"
+                shortcut = "Control|Shift|S"
+                class = "Gordic.GFE.WinClient.FileCommands.SaveFileAs"/>
+
+      <MenuItem id = "SaveDb"
+                icon = "Icons__Gin__ulozit_do_databaze"
+                label = "uložit do databáze..."
+                loadclasslazy = "false"
+                class = "Gordic.GFE.WinClient.FileCommands.SaveFileToDatabase"/>
+      <!-- konec FORMATION -->
+
+      <MenuItem id = "ExitSC:eparator" type = "Separator"  />
+      <MenuItem id = "Exit"
+			          label = "&amp;konec"
+			          icon = "Icons__Gin__aplikace_ukonceni"
+			          class = "Gordic.GFE.WinClient.ApplicationCommands.ExitDesktopCommand" />
+    </MenuItem>
+    <!-- konec FILE -->
+    <!-- EDITOVAT -->
+    <MenuItem id = "Edit" insertafter="File" label = "Ú&amp;pravy" type="Menu">
+      <ComplexCondition action = "Exclude" >
+        <And>
+          <Not>
+            <Condition name = "WindowActive" activewindow="RtfViewContent"/>
+          </Not>
+          <Not>
+            <Condition name = "WindowActive" activewindow="MseViewContent"/>
+          </Not>
+        </And>
+        <MenuItem id = "Undo"
+			          label = "zpět"
+			          icon = "Icons__Gin__zpet"
+			          type = "Item"
+			          shortcut = "Control|Z"
+			          loadclasslazy = "false"
+			          class = "Gordic.GFE.WinClient.EditCommands.Undo"/>
+        <MenuItem id = "Redo"
+                  label = "odvolat zpět"
+                  icon = "Icons__Gin__znovuproved"
+                  type = "Item"
+                  shortcut = "Control|Y"
+                  loadclasslazy = "false"
+                  class = "Gordic.GFE.WinClient.EditCommands.Redo"/>
+        <MenuItem id = "Separator1" type = "Separator"  />
+      </ComplexCondition>
+      <MenuItem id = "Cut"
+			          label = "vyjmou&amp;t"
+			          icon = "Icons__Gin__vyjmout"
+			          type = "Item"
+			          shortcut = "Control|X"
+			          loadclasslazy = "false"
+			          class = "Gordic.GFE.WinClient.EditCommands.Cut"/>
+      <MenuItem id = "Copy"
+			          label = "&amp;kopírovat"
+			          icon = "Icons__Gin__kopirovat"
+			          type = "Item"
+			          shortcut = "Control|C"
+			          loadclasslazy = "false"
+			          class = "Gordic.GFE.WinClient.EditCommands.Copy"/>
+      <MenuItem id = "Paste"
+			          label = "&amp;vložit"
+			          icon = "Icons__Gin__vlozit"
+			          type = "Item"
+			          shortcut = "Control|V"
+			          loadclasslazy = "false"
+			          class = "Gordic.GFE.WinClient.EditCommands.Paste"/>
+      <MenuItem id = "Delete"
+			          label = "&amp;odstranit výběr"
+			          icon = "Icons__Gin__vymazat"
+			          type = "Item"
+			          shortcut = "Delete"
+			          loadclasslazy = "false"
+			          class = "Gordic.GFE.WinClient.EditCommands.Delete"/>
+      
+      <Condition name = "SelectedObject" implementinterface="Gordic.GFE.Parsers.Gui.IBackground">
+        <MenuItem id = "DeleteBackImage"
+                label = "odstranit obrázek pozadí"
+                icon = "Icons__Gin__oblibene_vymazat"
+                type = "Item"
+                loadclasslazy="false"
+                class = "Gordic.GFE.WinClient.EditCommands.DeleteBackImage"/>
+      </Condition>
+      <ComplexCondition action = "Exclude" >
+        <Or>
+          <Condition name="SelectedObject" implementinterface="Gordic.GFE.Parsers.Gui.IParentable"/>
+          <Condition name = "WindowActive" activewindow="GrrViewContent"/>
+        </Or>
+        <MenuItem id = "DeleteSelectedContent"
+                   tooltip = "odstranit pouze obsah vybraných objektů"
+                   icon ="Icons__Wfl__dokument_vymazat"
+                   loadclasslazy = "false"
+                   type = "Item"
+                   label="odstranit obsah vyběru"
+                   shortcut = "Control|Delete"
+                   class = "Gordic.GFE.WinClient.EditCommands.DeleteContent"/>
+      </ComplexCondition>
+
+      <MenuItem id = "SelectAll"
+                label = "vybrat vše"
+                type = "Item"
+                shortcut = "Control|A"
+                loadclasslazy = "false"
+                class = "Gordic.GFE.WinClient.EditCommands.SelectAll"/>
+      <MenuItem id = "Separator2" type = "Separator"  />
+      <MenuItem id = "Find"
+			          label = "najít"
+			          icon = "Icons.16x16.FindIcon"
+			          type = "Item"
+			          shortcut = "Control|F"
+			          loadclasslazy = "false"
+			          class = "Gordic.GFE.WinClient.Gui.FindNext"/>
+      <MenuItem id = "Replace"
+			          label = "nahradit"
+			          icon = "Icons.16x16.ReplaceIcon"
+			          type = "Item"
+			          shortcut = "Control|H"
+			          loadclasslazy = "false"
+			          class = "Gordic.GFE.WinClient.Gui.ReplaceNext"/>
+      <MenuItem id = "Separator3" type = "Separator"  />
+      <MenuItem id = "ToUpper"
+			          label = "velká písmena"
+			          type = "Item"
+			          shortcut = "Control|U"
+			          loadclasslazy = "false"
+			          class = "Gordic.GFE.WinClient.TextContentCommands.ToUpper"/>
+      <MenuItem id = "ToLower"
+			          label = "malá písmena"
+			          type = "Item"
+			          shortcut = "Control|Shift|U"
+			          loadclasslazy = "false"
+			          class = "Gordic.GFE.WinClient.TextContentCommands.ToLower"/>
+    </MenuItem>
+    <!-- konec EDITOVAT-->
+    <!-- ZOBRAZIT -->
+    <MenuItem id = "View" label = "&amp;Zobrazit" insertafter="Edit" type="Menu">
+      <MenuItem id    = "MainViewMenuBuilder"
+			          type  = "Builder"
+			          class = "Gordic.GFE.WinClient.Commands.MainViewMenuBuilder" />
+
+      <MenuItem id = "Tools" label = "nástroje" type="Menu" icon="Icons__Gin__nastroje">
+        <MenuItem id    = "ToolsViewMenuBuilder"
+				          type  = "Builder"
+				          class = "Gordic.GFE.WinClient.Commands.ToolsViewMenuBuilder" />
+      </MenuItem>
+      <MenuItem id = "ViewItemsSeparator" type = "Separator" />
+      <MenuItem id = "FullScreen"
+          label = "úplná obrazovka"
+          icon = "Icons.16x16.FullScreen"
+          shortcut = "F11"
+          class = "Gordic.GFE.WinClient.Commands.ToggleFullscreenCommand" />
+    </MenuItem>
+    <!-- konec ZOBRAZIT -->
+    <!-- NÁSTROJE -->
+    <MenuItem id="Tools" label="Nás&amp;troje" type="Menu" >
+      <MenuItem id = "ToolBuilder" type="Builder" class = "Gordic.GFE.WinClient.Commands.ToolMenuBuilder" />
+      <!--<MenuItem id = "Separator1" type = "Separator" />-->
+      <Include id = "ToolList" path = "/Workspace/Tools" />
+      <!--<MenuItem id = "Separator2" type = "Separator" />-->
+      <!-- nabídka se objeví pouze pro sestavy implementující rozhraní IGenerateFormationHandler -->
+      <ComplexCondition action="Exclude">
+        <And>
+          <Condition name = "WindowActive" activewindow="IGenerateFormationHandler" />
+        </And>
+        <MenuItem id = "FormCreate"
+              icon = "Icons__Gin__formular"
+              label = "generovat formulář"
+              class = "Gordic.GFE.WinClient.ToolsCommands.GenerateFormation"/>
+        <MenuItem id = "LastSeparator" type = "Separator" />
+      </ComplexCondition>
+      <MenuItem id = "Options"
+			          label = "nastavení..."
+			          icon = "Icons__Gin__aplikace_nastaveni"
+				        shortcut    = "F9"
+			          class = "Gordic.GFE.WinClient.ToolsCommands.OptionsCommand"/>
+    </MenuItem>
+    <!-- konec NÁSTROJE -->
+  </Path>
+  <!-- konec Hlavní nabídka aplikace-->
+
+  <!-- vytvoření prázdné cesty /Workspace/Tools - je obsazeno v hlavním menu -->
+  <Path name = "/Workspace/Tools"/>
+
+  <!-- Okna -->
+  <Path name = "/ReportDesigner/Desktop/Pads">
+    <Pad id       = "ProjectBrowser"
+		     category = "Tools"
+         title    = "sestavení"
+         icon     = "PadIcons.ProjectBrowser"
+         shortcut = "Control|Alt|L"
+         class    = "Gordic.GFE.WinClient.ProjectBrowser.ProjectBrowserPad"/>
+    <Pad id       = "StructureViewBrowser"
+		     category = "Main"
+		     title    = "struktura dat"
+		     shortcut = "F5"
+         icon     = "Icons__Ost__struktura"
+		     class    = "Gordic.GFE.WinClient.StructureView.StructureViewPad"
+         insertafter="PropertyPad"/>
+    <Pad id       = "InfoSectionViewBrowser"
+		     category = "Main"
+		     title    = "info sekce"
+		     icon     = "Icons__Gin__dialog_info"
+		     class    = "Gordic.GFE.WinClient.InfoSectionView.InfoSectionViewPad"
+         insertafter="StructureViewBrowser"/>
+    <Pad id       = "SideBarPad"
+		     category = "Tools"
+		     title    = "nové objekty"
+		     icon     = "PadIcons.Toolbar"
+		     shortcut = "Control|Alt|X"
+		     class    = "Gordic.GFE.WinClient.Gui.ToolsPad"
+         insertafter="CompilerMessageView"/>
+    <Pad id       = "LinkedFiles"
+		     category = "Tools"
+		     title    = "vázané soubory"
+		     icon     = "Icons__Gin__vazba"
+		     class    = "Gordic.GFE.WinClient.LinkedFiles.LinkedFilesPad"
+         insertafter="SideBarPad"/>
+    <Pad id       = "CompilerMessageView"
+         category = "Tools"
+         title    = "logování"
+         icon     = "PadIcons.Output"
+         shortcut = "Control|Alt|O"
+         class    = "Gordic.GFE.WinClient.MessageView.CompilerMessageView"
+         insertafter="ProjectBrowser"/>
+    <Pad id       = "PropertyPad"
+         category = "Main"
+         title    = "vlastnosti"
+         icon     = "Icons.16x16.PropertiesIcon"
+         shortcut = "F4"
+         class    = "Gordic.GFE.WinClient.PropertyPad"/>
+  </Path>
+  <!-- konec Okna -->
+  
+  <!-- ToolBar nabídka aplikace-->
+  <Path name = "/ReportDesigner/ToolBarMenu/Standard">
+    <ToolbarItem id           = "File"
+				          tooltip        = "vytvoření souboru..."
+				          icon         = "Icons__Wfl__dokument_novy"
+				          shortcut     = "Control|N"
+				          class        = "Gordic.GFE.WinClient.FileCommands.CreateNewFile"/>
+    <ToolbarItem id = "ConvertFile"
+              tooltip = "konverze formátu GRR do GRF"
+              icon  = "Icons__Gin__rozpad"
+                 insertafter="File"
+              class ="Gordic.GFE.WinClient.FileCommands.ConvertFile"/>
+    <ToolbarItem id = "NewSeparator" type = "Separator"  insertafter="ConvertFile"/>
+    <!--<ToolbarItem id="OpenItem"
+                 tooltip="otevřít nový soubor/sesatvení"
+                 type="DropDownButton"
+                 icon="Icons__Gin__soubor_otevrit"
+                 loadclasslazy="false"
+                 insertafter="NewSeparator">-->
+    <ToolbarItem id          = "OpenFile"
+                tooltip       = "otevřít soubor..."
+                icon        = "Icons__Gin__soubor_otevrit"
+                shortcut    = "Control|O"
+                class       = "Gordic.GFE.WinClient.FileCommands.OpenFile"
+                insertafter="NewSeparator"/>
+    <ToolbarItem id      = "OpenProject"
+                tooltip = "otevřít sestavení..."
+                shortcut    = "Control|Shift|O"
+                icon    = "Icons.16x16.OpenProjectIcon"
+                class   = "Gordic.GFE.WinClient.Project.Commands.LoadSolution"
+                 insertafter="OpenFile"/>
+    <ToolbarItem id          = "OpenDBFile"
+                tooltip       = "otevřít formát z databáze..."
+                icon        = "Icons__Gin__databaze"
+                shortcut    = "Control|Shift|D"
+                class       = "Gordic.GFE.WinClient.FileCommands.OpenFileDb"
+                 insertafter="OpenProject"/>
+    <!--</ToolbarItem>-->
+    <ToolbarItem id = "OpenSeparator" type = "Separator"  insertafter="OpenDBFile"/>
+    <!--<ToolbarItem id="SaveItem"
+              tooltip="uložení aktuálního souboru"
+              type="DropDownButton"
+              icon="Icons__Gin__ulozit"
+              loadclasslazy="false"
+              insertafter="OpenSeparator">-->
+    <Condition name = "ActiveWindowState" windowstate="Dirty,Untitled" nowindowstate="ViewOnly" action="Disable">
+      <ToolbarItem id      = "SaveFile"
+                icon    = "Icons__Gin__ulozit"
+                tooltip="uložit aktuální soubor"
+                shortcut = "Control|S"
+                class   = "Gordic.GFE.WinClient.FileCommands.SaveFile"
+                insertafter="OpenSeparator"/>
+    </Condition>
+    <ToolbarItem id = "SaveAsFile"
+              icon = "Icons__Gin__ulozit_jako"
+              shortcut = "Control|Shift|S"
+              tooltip="uložit aktuální soubor jako"
+              loadclasslazy="false"
+              class = "Gordic.GFE.WinClient.FileCommands.SaveFileAs"
+              insertafter="SaveFile"/>
+    <ToolbarItem id = "SaveDbFile"
+              icon = "Icons__Gin__ulozit_do_databaze"
+              tooltip="uložit aktuální soubor do databáze"
+              loadclasslazy="false"
+              class = "Gordic.GFE.WinClient.FileCommands.SaveFileToDatabase"
+              insertafter="SaveAsFile"/>
+    <!--</ToolbarItem>-->
+    <Condition action = "Exclude" name = "WindowActive" activewindow="ITextEditorControlProvider">
+      <ToolbarItem id = "FindReplaceSeparator"  type = "Separator" insertafter="SaveDbFile"/>
+      <ToolbarItem id = "Find"
+                tooltip = "najít řetězec"
+                icon = "Icons.16x16.FindIcon"
+                type = "Item"
+                shortcut = "Control|F"
+                loadclasslazy = "false"
+                class = "Gordic.GFE.WinClient.Gui.FindNext"
+                insertafter="FindReplaceSeparator"/>
+      <ToolbarItem id = "Replace"
+                tooltip = "dialogové okno nahrazení řetězce"
+                icon = "Icons.16x16.ReplaceIcon"
+                type = "Item"
+                shortcut = "Control|H"
+                loadclasslazy = "false"
+                class = "Gordic.GFE.WinClient.Gui.ReplaceNext"
+                insertafter="Find"/>
+    </Condition>
+    <Condition action = "Exclude" name = "WindowActive" activewindow="IUndoHandler">
+      <ToolbarItem id = "UndoRedoSeparator"  type = "Separator" insertafter="Replace"/>
+      <ToolbarItem id      = "Undo"
+                   icon    = "Icons__Gin__zpet"
+                   tooltip = "zpět"
+                   loadclasslazy = "false"
+                   class   = "Gordic.GFE.WinClient.EditCommands.Undo"
+                   insertafter="UndoRedoSeparator"/>
+      <ToolbarItem id      = "Redo"
+                   icon    = "Icons__Gin__znovuproved"
+                   tooltip = "odvolat zpět"
+                   loadclasslazy = "false"
+                   class   = "Gordic.GFE.WinClient.EditCommands.Redo"
+                   insertafter="Undo"/>
+    </Condition>
+  </Path>
+  <!-- konec ToolBar nabídka aplikace-->
+  
+  <!-- Položky nástrojových líšt -->
+  <!-- EDIT -->
+  <Path name = "/ReportDesigner/ToolBar/Edit">
+    <ToolbarItem id = "Cut"
+		             icon = "Icons__Gin__vyjmout"
+		             tooltip = "vyjmout"
+		             loadclasslazy = "false"
+		             class = "Gordic.GFE.WinClient.EditCommands.Cut"/>
+    <ToolbarItem id = "Copy"
+		             icon = "Icons__Gin__kopirovat"
+		             tooltip = "kopírovat"
+		             loadclasslazy = "false"
+		             class = "Gordic.GFE.WinClient.EditCommands.Copy"/>
+    <ToolbarItem id = "Paste"
+		             icon = "Icons__Gin__vlozit"
+		             tooltip = "vložit"
+		             loadclasslazy = "false"
+		             class = "Gordic.GFE.WinClient.EditCommands.Paste"/>
+    <ToolbarItem id = "Delete"
+		             icon = "Icons__Gin__vymazat"
+		             tooltip = "odstranit výběr"
+		             loadclasslazy = "false"
+		             class = "Gordic.GFE.WinClient.EditCommands.Delete"/>
+  </Path>
+  <!-- konec EDIT -->
+  
+  <!-- Výchozí textový editor-->
+  <Path name="/ReportDesigner/ToolBar/DefaultTextEditor">
+    <Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.Alf.AlfView" action="Disable">
+      <ToolbarItem id = "Syntax"
+                tooltip = "Syntax"
+                icon = "Icons__Ost__zdrojovy_kod"
+                loadclasslazy = "false"
+                class = "Gordic.GFE.WinClient.DefaultTextEditorCommands.Syntax"/>
+      <ToolbarItem id = "Pilcrow"
+                tooltip = "Netisknutelné znaky"
+                icon = "Icons_32x32_Pilcrow"
+                loadclasslazy = "false"
+                class = "Gordic.GFE.WinClient.DefaultTextEditorCommands.Pilcrow"/>
+      <ToolbarItem id = "LineNumbers"
+                tooltip = "Čísla řádků"
+                icon = "Icons_48x48_LineNumbers"
+                loadclasslazy = "false"
+                class = "Gordic.GFE.WinClient.DefaultTextEditorCommands.LineNumbers"/>
+      <ToolbarItem id = "EnableFolding"
+              tooltip = "Povolit skládání"
+              icon = "Icons__Gin__plus_centralni"
+              loadclasslazy = "false"
+              class = "Gordic.GFE.WinClient.DefaultTextEditorCommands.EnableFolding"/>
+    </Condition>
+    <ToolbarItem id="FindSeparator" type="Separator"/>
+    <ToolbarItem id="Find"
+                  tooltip="hledání řetězce nebo objektu obsahujícího řetězec"
+                  icon="Icons__Gin__hledat"
+                  loadclasslazy="false"
+                  class="Gordic.GFE.WinClient.SearchReplaceCommands.Search"/>
+    <ToolbarItem id="FindReplace"
+                  tooltip="nahradí řetězec zadaným"
+                  icon="Icons__Gin__hledat_a_nahradit"
+                  loadclasslazy="false"
+                  class="Gordic.GFE.WinClient.SearchReplaceCommands.SearchReplace"/>
+  </Path>
+  <!-- konec výchozí textový editor-->
+  <!-- Sekce NÁSTROJE -->
+  <Path name="/ReportDesigner/ToolBar/ToolsSection">
+    <!-- nabídka se objeví pouze pro sestavy implementující rozhraní IGenerateFormationHandler -->
+    <ComplexCondition action="Exclude">
+      <And>
+        <Condition name = "WindowActive" activewindow="IGenerateFormationHandler" />
+      </And>
+      <ToolbarItem id = "FormCreate"
+              icon = "Icons__Gin__formular"
+              tooltip = "generovat formulář"
+              type="Item"
+              class = "Gordic.GFE.WinClient.ToolsCommands.GenerateFormation"/>
+    </ComplexCondition>
+    <ToolbarItem id = "FormSeparator" type = "Separator"  />
+    <ToolbarItem id="GlobalScripts"
+              tooltip="Editace globálních skriptů"
+              type="Item"
+              icon="Icons__Gin__ciselnik_editace"
+              loadclasslazy="false"
+              class="Gordic.GFE.WinClient.ToolsCommands.GlobalScripts"/>
+    <ToolbarItem id="Languages"
+              tooltip="Dostupné jazyky"
+              label="CS"
+              type="Item"
+              loadclasslazy="false"
+              class="Gordic.GFE.WinClient.ToolsCommands.Languages"/>
+    <ToolbarItem id = "SpecificFormatSeparator" type = "Separator"  />
+    <ToolbarItem id="HiddenObjects"
+          tooltip="Skryté objekty"
+          type="CheckBox"
+          icon="Icons__Wfl__dokument_odeslat_original"
+          loadclasslazy="false"
+          class="Gordic.GFE.WinClient.SpecificFormatCommands.CheckHiddenObjects"/>
+  </Path>
+  <!-- konec SESTAV -->
+  <!-- Stránka -->
+  <Path name="/ReportDesigner/ToolBar/Page">
+    <Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.Gui.IPageHandler" action="Disable">
+      <ToolbarItem id="Format"
+              type="ComboBox"
+              tooltip="Formát stránky"
+              class="Gordic.GFE.WinClient.PageCommands.Format">
+        <IncludeDictionary id = "Formats" item="/GlobalList/PageFormats"/>
+      </ToolbarItem>
+        <ToolbarItem id="Settings"
+              type="Item"
+              tooltip="Vlastnosti stránky"
+              icon="Icons__Gin__vlastnosti"
+              class="Gordic.GFE.WinClient.PageCommands.Settings"/>
+    </Condition>
+  </Path>
+  <!-- konec Stránka -->
+  <!-- PÍSMO -->
+  <Path name="/ReportDesigner/ToolBar/Font">
+      <ToolbarItem id="ForeColor"
+                   tooltip="Barva písma"
+                   type="ComboBox"
+                   loadclasslazy="false"
+                   class="Gordic.GFE.WinClient.FontCommands.FontForeColor">
+        <IncludeDictionary id = "ListOfColors" item="/GlobalList/ColorNameCZEN"/>
+      </ToolbarItem>
+    <ToolbarItem id="FontName"
+                 tooltip="název písma"
+                 type="ComboBox"
+                 loadclasslazy="false"
+                 class="Gordic.GFE.WinClient.FontCommands.FontName">
+      <IncludeDictionary id = "ListOfFonts" item="/GlobalList/Fonts"/>
+    </ToolbarItem>
+    <ToolbarItem id="FontSize"
+                 tooltip="Velikost písma ve výběru. Lze zadat číslo i s jednotkami. Povolené jednotky [mm, tw, pt]"
+                 type="TextBox"
+                 loadclasslazy="false"
+                 class="Gordic.GFE.WinClient.FontCommands.FontSize"/>
+    </Path>
+  <!-- konec PÍSMO -->
+  <!-- konec -->
+
+  <!-- Kontextová nabídka pro FileExplorer -->
+  <Path name = "/ReportDesigner/Pads/FileExplorer/ContextMenu/FileNode">
+    <ComplexCondition>
+      <Not>
+        <Condition name = "Ownerstate" ownerstate = "Missing"/>
+      </Not>
+      <MenuItem id = "CMFEOpenFile"
+			          label = "Otevřít"
+			          icon  = "Icons.16x16.OpenFileIcon"
+			          class = "Gordic.GFE.WinClient.OpenFileFromFileExplorer"/>
+      <MenuItem id = "CMFEOpenFolderContainingFile"
+			          label = "otevřít umístění složky"
+                icon ="Icons__Gin__prehled_ulozene"
+			          class = "Gordic.GFE.WinClient.OpenFolderContainingFile"/>
+      <MenuItem id = "TBFESCreateFolder" type = "Separator" />
+    </ComplexCondition>
+    <Include id="CutCopyPasteDeleteRename" path="/ReportDesigner/Pads/FileExplorer/ContextMenu/CutCopyPasteDeleteRename"/>
+  </Path>
+  <!-- konec -->
+
+  <!-- Kontextová nabídka Output -->
+  <Path name = "/ReportDesigner/Pads/CompilerMessageView/ContextMenu">
+    <Include id = "Copy" item = "/ReportDesigner/MainMenu/Edit/Copy"/>+
+    <Include id = "SelectAll" item = "/ReportDesigner/MainMenu/Edit/SelectAll"/>
+    <MenuItem id    = "Clear"
+		          icon  = "OutputPad.Toolbar.ClearOutputWindow"
+		          label = "odstranit vše"
+		          class = "Gordic.GFE.WinClient.MessageView.ClearOutputWindow"/>
+  </Path>
+  <!-- Konec kontextové nabídky -->
+  <!-- nástrojová lišta Output -->
+  <Path name = "/ReportDesigner/Pads/CompilerMessageView/Toolbar">
+    <ToolbarItem id      = "CategorySelect"
+		             type    = "ComboBox"
+		             tooltip = "zobrazit logování z:"
+		             class   = "Gordic.GFE.WinClient.MessageView.ShowOutputFromComboBox"/>
+    <ToolbarItem id    = "CategorySelectSeparator" type  = "Separator"/>
+    <ToolbarItem id      = "Clear"
+		             icon    = "OutputPad.Toolbar.ClearOutputWindow"
+		             tooltip = "odstranit vše"
+		             class   = "Gordic.GFE.WinClient.MessageView.ClearOutputWindow"/>
+    <ToolbarItem id      = "ToggleWordWrap"
+		             type    = "CheckBox"
+		             icon    = "OutputPad.Toolbar.ToggleWordWrap"
+		             tooltip = "přepnout zalámování řádku"
+		             class   = "Gordic.GFE.WinClient.MessageView.ToggleMessageViewWordWrap"/>
+  </Path>
+  <!-- konec nástrojová lišta Output -->
+  
+  <!-- Standardní položky menu Vyjmout, Kopírovat, Vložit, Odstranit, Přejmenovat -->
+  <Path name = "/ReportDesigner/Pads/FileExplorer/ContextMenu/CutCopyPasteDeleteRename">
+    <MenuItem id = "Cut"
+		          label = "vyjmout"
+		          type = "Item"
+		          icon = "Icons__Gin__vyjmout"
+		          loadclasslazy = "false"
+		          class = "Gordic.GFE.WinClient.FileExplorerCommands.FECut"/>
+    <MenuItem id = "Copy"
+		          label = "kopírovat"
+		          type = "Item"
+		          icon = "Icons__Gin__kopirovat"
+		          loadclasslazy = "false"
+		          class = "Gordic.GFE.WinClient.FileExplorerCommands.FECopy"/>
+    <MenuItem id    = "Paste"
+		          label = "vložit"
+		          type = "Item"
+		          icon  = "Icons__Gin__vlozit"
+		          loadclasslazy = "false"
+		          class = "Gordic.GFE.WinClient.FileExplorerCommands.FEPaste"/>
+    <MenuItem id = "Delete"
+		          label = "odstranit"
+		          type = "Item"
+		          icon  = "Icons__Gin__vymazat"
+		          loadclasslazy = "false"
+		          class = "Gordic.GFE.WinClient.FileExplorerCommands.FEDelete"/>
+    <MenuItem id = "Rename"
+		          label    = "přejmenovat"
+		          shortcut = "F2"
+		          class    = "Gordic.GFE.WinClient.FileExplorerCommands.FERename"/>
+  </Path>
+  <!-- konec -->
+
+  <!-- Kontextová nabídka pro VariableExplorer -->
+  <Path name = "/ReportDesigner/Pads/VariableExplorer/ContextMenu/VariableNode">
+    <Include id="NewItem" path="/ReportDesigner/Pads/VariableExplorer/ContextMenu/VariableExplorer"/>
+    <MenuItem id = "NewItemSeparator" type = "Separator" />
+    <MenuItem id = "Delete"
+		          label = "Odstranit"
+		          type = "Item"
+		          shortcut = "Delete"
+		          icon  = "Icons__Gin__vymazat"
+		          loadclasslazy = "false"
+		          class = "Gordic.GFE.WinClient.VariableExplorerCommands.Delete"/>
+    <MenuItem id = "Rename"
+		          label    = "Přejmenovat"
+		          shortcut = "F2"
+		          class    = "Gordic.GFE.WinClient.VariableExplorerCommands.Rename"/>
+  </Path>
+  
+  <Path name = "/ReportDesigner/Pads/VariableExplorer/ContextMenu/VariableExplorer">
+    <MenuItem id = "NewItem"
+		          label = "Nová proměnná"
+		          type = "Item"
+		          shortcut = "Insert"
+		          icon  = "Icons__Gin__zaznam_novy"
+		          loadclasslazy = "false"
+		          class = "Gordic.GFE.WinClient.VariableExplorerCommands.NewItem"/>
+  </Path>
+  <!-- konec -->
+  <!-- záložky SideBar kontextové menu -->
+  <Path name = "/ReportDesigner/Desktop/ReportDesignerSideBar/ContextMenu">
+		<Condition name = "Ownerstate" ownerstate = "TabCanBeDeleted" action="Disable">
+			<MenuItem id     = "DeleteTab"
+			          label = "odstranit záložku"
+			          class = "Gordic.GFE.WinClient.SideBarCommands.SideBarDeleteTabHeader"/>
+		</Condition>
+		
+		<Condition name = "Ownerstate" ownerstate="CanBeRenamed" action="Disable">
+			<MenuItem id    = "RenameTab"
+			          label = "přejmenovat záložku"
+			          class = "Gordic.GFE.WinClient.SideBarCommands.SideBarRenameTabHeader"/>
+		</Condition>
+		
+		<MenuItem id = "Separator1" type = "Separator" />
+		<MenuItem id    = "AddTab"
+		          label = "přidat záložku"
+		          class = "Gordic.GFE.WinClient.SideBarCommands.SideBarAddTabHeader"/>
+		
+		<MenuItem id = "Separator2" type = "Separator" />
+		<Condition name = "Ownerstate" ownerstate="CanMoveUp" action="Disable">
+			<MenuItem id    = "MoveTabUp"
+			          label = "posunout záložku nahoru"
+			          class = "Gordic.GFE.WinClient.SideBarCommands.SideBarMoveTabUp"/>
+		</Condition>
+		
+		<Condition name = "Ownerstate" ownerstate="CanMoveDown" action="Disable">
+			<MenuItem id    = "MoveTabDown"
+			          label = "posunout záložku dolů"
+			          class = "Gordic.GFE.WinClient.SideBarCommands.SideBarMoveTabDown"/>
+		</Condition>
+	</Path>
+  <!-- konec záložky SideBar kontextové menu -->
+
+  <!--kontextové menu XMLContentPanel-->
+  <Path name = "/SinglePropertyDialog/ContextMenu/XMLContentPanel">
+    <!--<MenuItem id = "Comment"
+              icon  = "Icons.16x16.CommentRegion"
+              label = "zakomentovat/odkomentovat blok"
+              class= "Gordic.GFE.WinClient.DefaultEditor.CommentRegion"/>
+    <MenuItem id = "Indent"
+		          label = "odsazení"
+		          class = "Gordic.GFE.WinClient.DefaultEditor.IndentSelection" />-->
+  </Path>
+  <!--konec kontextové menu XMLContentPanel-->
+  
+  <!-- položky SideBar kontextového menu -->
+  <Path name = "/ReportDesigner/Desktop/ReportDesignerSideBar/SideTab/ContextMenu">
+    <Condition name = "Ownerstate" ownerstate="TabCanBeDeleted" action="Disable">
+      <MenuItem id = "DeleteTabItem"
+			          label = "odstranit"
+			          class = "Gordic.GFE.WinClient.SideBarCommands.SideBarDeleteTabItem"/>
+    </Condition>
+
+    <Condition name = "Ownerstate" ownerstate="CanBeRenamed" action="Disable">
+      <MenuItem id = "RenameTabItem"
+			          label = "přejmenovat"
+			          class = "Gordic.GFE.WinClient.SideBarCommands.SideBarRenameTabItem" />
+    </Condition>
+
+    <MenuItem id = "Separator1" type = "Separator" />
+    <Condition name = "Ownerstate" ownerstate="CanMoveItemUp" action="Disable">
+      <MenuItem id = "MoveItemUp"
+			          label = "posun nahoru"
+			          class = "Gordic.GFE.WinClient.SideBarCommands.SideBarMoveActiveItemUp"/>
+    </Condition>
+
+    <Condition name = "Ownerstate" ownerstate="CanMoveItemDown" action="Disable">
+      <MenuItem id = "MoveItemDown"
+			          label = "posun dolu"
+			          class = "Gordic.GFE.WinClient.SideBarCommands.SideBarMoveActiveItemDown"/>
+    </Condition>
+  </Path>
+  <!-- konec položky SideBar kontextového menu -->
+
+  <!-- Standardní ToolBar nabídka pro FileExplorer -->
+  <Path name = "/ReportDesigner/Pads/FileExplorer/ToolBar/Standard">
+    <Condition name = "FileExplorer" action="Disable">
+      <ToolbarItem id      = "TBFECreateFolder"
+			             icon    = "Icons__Wfl__spis_novy"
+			             tooltip = "vytvořit složku"
+			             class   = "Gordic.GFE.WinClient.FileExplorerCommands.FECreateFolder"/>
+      <ToolbarItem id = "TBFESCreateFolder" type = "Separator" />
+      <ToolbarItem id = "TBFECut"
+                tooltip = "vyjmout"
+                icon = "Icons__Gin__vyjmout"
+                class = "Gordic.GFE.WinClient.FileExplorerCommands.FECut"/>
+      <ToolbarItem id      = "TBFECopy"
+			             icon    = "Icons__Gin__kopirovat"
+			             tooltip = "kopírovat"
+			             class   = "Gordic.GFE.WinClient.FileExplorerCommands.FECopy"/>
+    </Condition>
+    <Condition name = "FileExplorerPaste" action="Disable">
+      <ToolbarItem id      = "TBFEPaste"
+			             icon    = "Icons__Gin__vlozit"
+			             tooltip = "vložit"
+			             class   = "Gordic.GFE.WinClient.FileExplorerCommands.FEPaste"/>
+    </Condition>
+    <Condition name = "FileExplorer" action="Disable">
+      <ToolbarItem id      = "TBFEDelete"
+			             icon    = "Icons__Gin__vymazat"
+			             tooltip = "odstranit"
+			             class   = "Gordic.GFE.WinClient.FileExplorerCommands.FEDelete"/>
+    </Condition>
+  </Path>
+  <!-- konec -->
+  <!-- Kontextové menu Naposledy otevřených položek startovacího okna -->
+  <Path name = "/ReportDesigner/StartTab/RecentOpen/ContextMenu">
+    <MenuItem id = "OpenFile"
+		          label = "otevřít"
+		          icon = "Icons.16x16.OpenFileIcon"
+		          class = "Gordic.GFE.WinClient.FileCommands.OpenFile"/>
+    <!-- dodělat případ souboru z DB, tam by se tato položka neměla nabízet -->
+    <MenuItem id = "OpenFolderContainingFile"
+              label = "otevřít umístění souboru"
+              icon ="Icons__Gin__prehled_ulozene"
+              class = "Gordic.GFE.WinClient.FileCommands.OpenFolderContainingFile"/>
+    <MenuItem id = "RemoveSeparator" type = "Separator"/>
+    <MenuItem id = "RemoveRecentOpen"
+              label = "odstranit položku"
+              icon="Icons__Gin__vymazat"
+              class = "Gordic.GFE.WinClient.FileCommands.RemoveRecentOpen"/>
+    <MenuItem id = "RefreshSeparator" type = "Separator"/>
+    <MenuItem id = "RefreshRecentOpenFiles"
+		          label = "aktualizovat"
+		          icon = "Icons__Gin__redistribuce"
+		          class = "Gordic.GFE.WinClient.FileCommands.RefreshRecentOpen"/>
+  </Path>
+  <!-- konec -->
+    <!-- Kontextové menu záložek -->
+  <Path name = "/ReportDesigner/Desktop/OpenFileTab/ContextMenu">
+    <Condition name = "WindowActive" activewindow="*" action="Disable">
+      <MenuItem id = "CloseFile"
+                label = "&amp;zavřít"
+                icon  = "Icons__Gin__okno_zavrit"
+                shortcut = "Control|F4"
+                class ="Gordic.GFE.WinClient.FileCommands.CloseFile"/>
+    </Condition>
+    <MenuItem id    = "CloseAll"
+                  icon  = "Icons.16x16.CloseAllDocuments"
+                  label = "z&amp;avřít vše"
+                  class = "Gordic.GFE.WinClient.FileCommands.CloseAllWindows" />
+    <MenuItem id    = "CloseAllButThis"
+		          label = "za&amp;vřít vše kromě aktuálního"
+		          class = "Gordic.GFE.WinClient.FileTabStripCommands.CloseAllButThisFileTab" />
+
+    <MenuItem id = "CloseSeparator" type = "Separator" />
+    <Condition name = "ActiveWindowState" windowstate="Dirty, Untitled" nowindowstate="ViewOnly" action="Disable">
+      <MenuItem id = "Save"
+			          label = "&amp;uložit"
+				        icon = "Icons__Gin__ulozit"
+				        shortcut = "Control|S"
+				        class = "Gordic.GFE.WinClient.FileCommands.SaveFile"/>
+    </Condition>
+    <MenuItem id = "SaveAs"
+				      icon = "Icons__Gin__ulozit_jako"
+				      label = "uložit jako..."
+				      shortcut = "Control|Shift|S"
+				      loadclasslazy = "false"
+              class = "Gordic.GFE.WinClient.FileCommands.SaveFileAs"/>
+    <MenuItem id = "SaveDb"
+            icon = "Icons__Gin__ulozit_do_databaze"
+            label = "uložit do databáze"
+            loadclasslazy = "false"
+            class = "Gordic.GFE.WinClient.FileCommands.SaveFileToDatabase"/>
+    <Condition name = "OpenWindowState" openwindowstate="Dirty" action="Disable">
+      <MenuItem id = "SaveAll"
+			          icon = "Icons.16x16.SaveAllIcon"
+			          label = "uložit vše&amp;chny aktuálně otevřené"
+			          class = "Gordic.GFE.WinClient.FileCommands.SaveAllFiles"/>
+    </Condition>
+    <ComplexCondition action="Exclude">
+      <And>
+      <Not>
+        <Condition name="WindowActive" activewindow="StartPane"/>
+      </Not>
+      <Not>
+        <Condition name = "Ownerstate" ownerstate="FileUntitled" />
+      </Not>
+      </And>
+      <MenuItem id = "SaveSeparator" type = "Separator" />
+      <MenuItem id = "CopyPathName"
+			          label = "kopírovat cestu k souboru/název"
+                class = "Gordic.GFE.WinClient.FileTabStripCommands.CopyPathName"/>
+      <MenuItem id = "OpenFolderContainingFileFromTab"
+			          label = "otevřít umístění složky"
+                icon ="Icons__Gin__prehled_ulozene"
+			          class = "Gordic.GFE.WinClient.FileTabStripCommands.OpenFolderContainingFile"/>
+    </ComplexCondition>
+  </Path>
+  <!-- konec -->
+  <!-- IKONKY -->
+  <Path name = "/Workspace/Icons">
+    <!-- XML -->
+    <Icon id         = "XmlFileIcon"
+		      extensions = ".xme"
+		      resource   = "Icons__Ost__struktura" />
+
+    <Icon id         = "DataFileIcon"
+		      extensions = ".tmp;.xml"
+		      resource   = "Icons__Gin__soubor_textovy" />
+
+    <Icon id         = "AddInFileIcon"
+		      extensions = ".alf;.alfx"
+		      resource   = "Icons__Gin__sestava" />
+    <Icon id         = "AddInImageIcon"
+		      extensions = ".bmp;.jpg;.ico;.jpeg;.png"
+		      resource   = "Icons__Gin__prvek_obrazek" />
+
+    <!-- TextFiles -->
+    <Icon id         = "TextFileIcon"
+		      extensions = ".txt;.doc"
+		      resource   = "Icons.16x16.TextFileIcon"/>
+  </Path>
+  <!-- konec IKONKY -->
+  
+  <!-- NASTAVENÍ-->
+  <Path name="/ReportDesigner/Dialogs/OptionsDialog" icon = "Icons__Gin__aplikace_nastaveni">
+    <DialogPanel id="ApplicationOptions"
+                 label="aplikace">
+      <DialogPanel id = "VidRun"
+                   label = "konfigurovatelné cesty"
+                   class = "Gordic.GFE.WinClient.Dialogs.OptionPanels.ApplicationVidRunPanel"/>
+      <DialogPanel id = "RecentOpen"
+                   label = "naposledy otevřené"
+                   insertafter = "VidRun"
+                   class = "Gordic.GFE.WinClient.Dialogs.OptionPanels.ApplicationRecentOpenPanel"/>
+      <DialogPanel id = "Formation"
+                   label = "sestavení"
+                   insertafter = "RecentOpen"
+                   class = "Gordic.GFE.WinClient.Dialogs.OptionPanels.ApplicationFormationPanel"/>
+      <DialogPanel id = "Fullscreen"
+                   label = "úplná obrazovka"
+                   insertafter = "Formation"
+                   class = "Gordic.GFE.WinClient.Gui.OptionPanels.ApplicationFullscreenPanel"/>
+    </DialogPanel>
+  <DialogPanel id    = "TemplatesOption"
+		           label = "šablony"
+               insertafter="ApplicationOptions">
+    <DialogPanel id    = "EditStandardHeaderPanel"
+                 label = "hlavičky"
+                 class = "Gordic.GFE.WinClient.Gui.OptionPanels.TOEditStandardHeaderPanel"/>
+    <DialogPanel id    = "EditFileTemplatePanel"
+                 label = "šablony souborů"
+                 class = "Gordic.GFE.WinClient.Gui.OptionPanels.TOEditFileTemplatePanel"/>
+    <DialogPanel id    = "EditStandardInfoSectionPanel"
+                 label = "info sekce"
+                 class = "Gordic.GFE.WinClient.Gui.OptionPanels.TOEditInfoSectionPanel"/>
+  </DialogPanel>    
+  </Path>
+  <Path name="/ReportDesigner/Dialogs/OptionsDialog" icon="Icons__Gin__okno_nastaveni">
+      <DialogPanel id    = "TextEditorOptions"
+                   label = "textový editor"
+                   insertafter="TemplatesOption"
+                   icon="Icons__Eko__obdobi_ucetni_edit">
+        <DialogPanel id = "General"
+                     label = "obecné"
+                     class = "Gordic.GFE.WinClient.Dialogs.OptionPanels.TextEditorGeneralPanel"/>
+        <DialogPanel id = "Markers"
+                     label = "značky a pravítka"
+                     class = "Gordic.GFE.WinClient.Dialogs.OptionPanels.TextEditorMarkersPanel"/>
+        <DialogPanel id = "Behavior"
+                     label = "chování"
+                     class = "Gordic.GFE.WinClient.Dialogs.OptionPanels.TextEditorBehaviorPanel"/>
+        <DialogPanel id = "CodeCompletion"
+                     label = "automatické dokončování"
+                     class = "Gordic.GFE.WinClient.Dialogs.OptionPanels.TextEditorCodeCompletionPanel"/>
+      </DialogPanel>
+  </Path>
+  <Path name="/ReportDesigner/Dialogs/OptionsDialog" icon = "Icons__Gin__aplikace_nastaveni_vzhled">
+    <DialogPanel id="GeneralOptions"
+                 label="obecné"
+                 insertafter="TextEditorOptions">
+      <DialogPanel id = "Format"
+             label = "formát"
+             class = "Gordic.GFE.WinClient.Dialogs.OptionPanels.GeneralFormatPanel"/>
+      <DialogPanel id = "Display"
+             label = "pohledy"
+             class = "Gordic.GFE.WinClient.Dialogs.OptionPanels.GeneralDisplayViewsPanel"/>
+    </DialogPanel>
+    <DialogPanel id="DesignerOptions"
+                 label="designér"
+                 insertafter="GeneralOptions">
+          <DialogPanel id = "DefaultValues"
+                 label = "výchozí hodnoty"
+                 class = "Gordic.GFE.WinClient.Dialogs.OptionPanels.DesignerDefaultValuePanel"/>    
+    </DialogPanel>
+    <DialogPanel id    = "ToolsOptions"
+                 label = "nástroje">
+      <DialogPanel id    = "ExternalLists"
+                   label = "konfigurovatelné seznamy"
+                   class = "Gordic.GFE.WinClient.External.ToolExternalListPanel"/>
+      <DialogPanel id    = "ExternalTools"
+                   label = "externí nástroje"
+                   class = "Gordic.GFE.WinClient.External.ToolExternalToolPanel"/>
+    </DialogPanel>
+  </Path>
+
+  <!-- Dialogy Nastavení textového editoru-->
+  <Path name = "/ReportDesigner/DefaultTextEditor/OptionsDialog" icon="Icons__Eko__obdobi_ucetni_edit">
+    <DialogPanel id = "General"
+		             label = "obecné"
+		             class = "Gordic.GFE.WinClient.Dialogs.OptionPanels.TextEditorGeneralPanel"/>
+    <DialogPanel id = "Markers"
+		             label = "značky a pravítka"
+		             class = "Gordic.GFE.WinClient.Dialogs.OptionPanels.TextEditorMarkersPanel"/>
+    <DialogPanel id = "Behavior"
+		             label = "chování"
+		             class = "Gordic.GFE.WinClient.Dialogs.OptionPanels.TextEditorBehaviorPanel"/>
+    <DialogPanel id = "CodeCompletion"
+		             label = "automatické dokončování"
+		             class = "Gordic.GFE.WinClient.Dialogs.OptionPanels.TextEditorCodeCompletionPanel"/>
+  </Path>
+  <!-- Dialogy Nastavení databáze -->
+  <Path name = "/ReportDesigner/Dialogs/OptionsDialog" icon="Icons__Gin__databaze">
+    <DialogPanel id="DatabaseOptions"
+               label="databáze">
+      <DialogPanel id = "Reconnect"
+                   label = "připojení"
+                   class = "Gordic.GFE.WinClient.Dialogs.OptionPanels.DatabaseReconnectPanel"/>
+    </DialogPanel>
+  </Path>
+  <!-- konec -->
+  <!-- konec NASTAVENÍ -->
+  
+  <!-- Kontextová nabídka StructureExplorer-->
+  <Path name="/ReportDesigner/Pads/StructureView/ContextMenu">
+    <MenuItem id="CopyStructureItem"
+          label="kopírovat"
+          icon="Icons__Gin__kopirovat"
+          type="Item"
+          loadclasslazy="false"
+          class="Gordic.GFE.WinClient.EditCommands.Copy"/>
+    <MenuItem id = "SaveSeparator" type = "Separator" />
+    <MenuItem id="OpenstructureFile"
+          label="struktura ze souboru"
+          icon="Icons__Gin__soubor_otevrit"
+          type="Item"
+          loadclasslazy="false"
+          class="Gordic.GFE.WinClient.StructureView.OpenStructure"/>
+    <MenuItem id="OpenFolderContainingFile"
+          label="otevřít umístění struktury"
+          icon="Icons__Gin__prehled_ulozene"
+          type="Item"
+          loadclasslazy="false"
+          class="Gordic.GFE.WinClient.OpenFolderContainingFile"/>
+  </Path>
+  <Path name="/Pad/StructureView/TreeNode/ContextMenu">
+    <Include id="OpenStructureFile" path="/ReportDesigner/Pads/StructureView/ContextMenu"/>
+  </Path>
+  <!-- konec kontextové nabídky StructureExplorer-->
+
+  <!-- nástrojová lišta StructureView -->
+  <Path name = "/ReportDesigner/Pads/StructureView/Toolbar">
+    <ToolbarItem id      = "StructureSelect"
+		             type    = "ComboBox"
+		             tooltip = "Identifikátor struktury"
+		             class   = "Gordic.GFE.WinClient.StructureView.ShowStructureComboBox"/>
+    <ToolbarItem id    = "StructureSelectSeparator" type  = "Separator"/>
+    <ToolbarItem id="OpenStructureFile"
+          tooltip="načíst strukturu ze souboru"
+          icon="Icons__Gin__menu_strom"
+          type="Item"
+          loadclasslazy="false"
+          class="Gordic.GFE.WinClient.StructureView.OpenStructure"/>
+    <ToolbarItem id="RefreshStructureFile"
+          tooltip="aktualizace struktury ze souboru/paměti"
+          icon="Icons__Gin__redistribuce"
+          type="Item"
+          loadclasslazy="false"
+          class="Gordic.GFE.WinClient.StructureView.RefreshStructure"/>
+    <ToolbarItem id="EditStructureFile"
+          tooltip="otevřít pro editaci"
+          icon="Icons__Wfl__dokument_editace"
+          type="Item"
+          loadclasslazy="false"
+          class="Gordic.GFE.WinClient.StructureView.EditStructure"/>
+    <ToolbarItem id="RemoveStructureFile"
+          tooltip="odstranit ze seznamu"
+          icon="Icons__Gin__vymazat"
+          type="Item"
+          loadclasslazy="false"
+          class="Gordic.GFE.WinClient.StructureView.RemoveStructure"/>
+  </Path>
+  <!-- konec kontextové nabídky StructureView-->
+
+  <!-- Kontextová nabídka InfoSectionView-->
+  <Path name="/ReportDesigner/Pads/InfoSectionView/ContextMenu">
+    <MenuItem id="RemoveInfoItem"
+          label="odstranit atribut"
+          icon="Icons__Gin__vymazat"
+          type="Item"
+          loadclasslazy="false"
+          class="Gordic.GFE.WinClient.InfoSectionView.RemoveAttribute"/>
+  </Path>
+  <Path name="/Pad/InfoSectionView/TreeNode/ContextMenu">
+    <Include id="InfoSection" path="/ReportDesigner/Pads/InfoSectionView/ContextMenu"/>
+  </Path>
+  <!-- konec kontextové nabídky InfoSectionView-->
+  <!-- nástrojová lišta InfoSectionView -->
+  <Path name = "/ReportDesigner/Pads/InfoSectionView/Toolbar">
+    <!--<ToolbarItem id="RemoveInfoItem"
+          tooltip="odstranit atribut"
+          icon="Icons__Gin__vymazat"
+          type="Item"
+          loadclasslazy="false"
+          class="Gordic.GFE.WinClient.InfoSectionView.RemoveAttribute"/>
+    <ToolbarItem id="AddInfoItem"
+          tooltip="nový atribut"
+          icon="Icons__Gin__pridat"
+          type="Item"
+          loadclasslazy="false"
+          class="Gordic.GFE.WinClient.InfoSectionView.AddAttribute"/>-->
+  </Path>
+  <!-- konec kontextové nabídky InfoSectionView-->
+
+  <!-- Kontextová nabídka LinkedFiles -->
+  <Path name="/ReportDesigner/Pads/LinkedFiles/RootContextMenu">
+    <MenuItem id="AddItemImage"
+      label="přidat obrázek"
+      icon="Icons__Gin__prvek_obrazek"
+      type="Item"
+      loadclasslazy="false"
+      class="Gordic.GFE.WinClient.LinkedFiles.AddItemImage"/>
+  </Path>
+  <Path name="/ReportDesigner/Pads/LinkedFiles/NodeContextMenu">
+    <Include path="/ReportDesigner/Pads/LinkedFiles/RootContextMenu"/>
+    <MenuItem id = "AddSeparator" type = "Separator"/>
+    <MenuItem id="DeleteItem"
+      label="odstranit položku"
+      icon="Icons__Gin__vymazat"
+      type="Item"
+      loadclasslazy="false"
+      class="Gordic.GFE.WinClient.LinkedFiles.DeleteItem"/>
+  </Path>
+  <!-- konec kontextov0 nabídky LinkedFiles -->
+  
+  <!-- kontextová nabídka ProjectBrowser-->
+  <Path name = "/ReportDesigner/Pads/ProjectBrowser/ContextMenu/ProjectNode">
+    <Condition name="WriteableProject" action="Disable">
+      <MenuItem id = "ProjectAddMenu" label = "přidat" type = "Menu" >
+        <Include path="/ReportDesigner/Pads/ProjectBrowser/ContextMenu/FolderNode/Add"/>
+        <MenuItem id = "AddSeparator" type = "Separator"/>
+      </MenuItem>
+    </Condition>
+    <MenuItem id = "Separator1" type = "Separator"/>
+    <Include id="inc" path="/ReportDesigner/Pads/ProjectBrowser/ContextMenu/CutPasteRemoveRename"/>
+    <MenuItem id = "Separator2" type = "Separator"/>
+    <Include id = "ProjectActions" path="/ReportDesigner/Pads/ProjectBrowser/ContextMenu/ProjectActions"/>
+  </Path>
+
+  <Path name="/ReportDesigner/Pads/ProjectBrowser/ContextMenu/ProjectActions">
+    <MenuItem id = "CloseSolution"
+		          label = "zavřít sestavení"
+              icon ="Icons__Gin__okno_zavrit"
+		          class = "Gordic.GFE.WinClient.Project.Commands.CloseSolution"/>
+    <MenuItem id = "OpenFolder"
+		          label = "otevřít umístění složky"
+              icon ="Icons__Gin__prehled_ulozene"
+		          class = "Gordic.GFE.WinClient.Project.Commands.OpenProjectFolder"/>
+    <!--<Condition name="IsProcessRunning" isprocessrunning="False" action="Disable">-->
+    <MenuItem id = "Separator2" type = "Separator"/>
+    <MenuItem id          = "Run"
+              label       = "spustit"
+              loadclasslazy="false"
+              icon        = "Icons__Gin__uzivatel_ukon"
+              class       = "Gordic.GFE.WinClient.Project.Commands.RunProject"/>
+    <!--</Condition>-->
+  </Path>
+
+  <Path name = "/ReportDesigner/Pads/ProjectBrowser/ContextMenu/CutPasteRemoveRename">
+    
+    <MenuItem id = "Cut"
+		          label = "vyjmout"
+		          type = "Item"
+		          icon = "Icons.16x16.CutIcon"
+		          loadclasslazy = "false"
+		          class = "Gordic.GFE.WinClient.Project.Commands.CutProjectBrowserNode"/>
+    <MenuItem id    = "Paste"
+		          label = "vložit"
+		          type = "Item"
+		          icon  = "Icons.16x16.PasteIcon"
+		          loadclasslazy = "false"
+		          class = "Gordic.GFE.WinClient.Project.Commands.PasteProjectBrowserNode"/>
+    <MenuItem id = "Remove"
+		          label = "odstranit"
+		          type = "Item"
+		          icon  = "Icons.16x16.DeleteIcon"
+		          loadclasslazy = "false"
+		          class = "Gordic.GFE.WinClient.Project.Commands.DeleteProjectBrowserNode"/>
+    <MenuItem id = "Rename"
+		          label    = "přejmenovat"
+		          shortcut = "F2"
+		          class    = "Gordic.GFE.WinClient.Project.Commands.RenameEntryEvent"/>
+  </Path>
+
+  <Path name = "/ReportDesigner/Pads/ProjectBrowser/ContextMenu/FolderNode">
+    <!--
+    <Condition name = "Ownerstate" ownerstate = "Missing">
+      <MenuItem id = "CreateMissing"
+			          label = "nová složka"
+			          type  = "Item"
+			          icon  = "Icons.16x16.NewFolderIcon"
+			          class = "TODO.Project.Commands.CreateMissingCommand"/>
+      <MenuItem id = "RemoveMissing"
+			          label = "odstranit"
+			          type  = "Item"
+			          icon  = "Icons.16x16.DeleteIcon"
+			          class = "TODO.Project.Commands.ExcludeFileFromProject"/>
+    </Condition>
+    -->
+    <ComplexCondition>
+      <Not>
+        <Condition name = "Ownerstate" ownerstate = "Missing"/>
+      </Not>
+      <MenuItem id = "Add" label = "přidat" type="Menu">
+        <MenuItem id    = "NewItem"
+				          label = "nová položka..."
+				          icon  = "Icons.16x16.NewDocumentIcon"
+				          class = "Gordic.GFE.WinClient.Project.Commands.AddNewItemsToProject"/>
+        <MenuItem id    = "ExistingItem"
+				          label = "existující položka..."
+				          class = "Gordic.GFE.WinClient.Project.Commands.AddExistingItemsToProject"/>
+        <!--<MenuItem id    = "NewFolder"
+				          label = "nová složka"
+				          icon  = "Icons.16x16.NewFolderIcon"
+				          class = "Gordic.GFE.WinClient.Project.Commands.AddNewFolderToProject"/>
+        <MenuItem id    = "ExistingFolder"
+				          label = "existující složka"
+				          class = "Gordic.GFE.WinClient.Project.Commands.AddExistingFolderToProject"/>-->
+      </MenuItem>
+      <MenuItem id = "AddSeparator" type = "Separator"  />
+      <MenuItem id = "OpenFolder"
+              icon ="Icons__Gin__prehled_ulozene"
+			          label = "otevřít umístění složky"
+			          class = "TODO.Project.Commands.OpenFolder"/>
+      <!--
+      <ComplexCondition>
+        <Or>
+          <Condition name = "Ownerstate" ownerstate = "InProject"/>
+          <Condition name = "Ownerstate" ownerstate = "None"/>
+        </Or>
+        <Condition name = "Ownerstate" ownerstate = "InProject">
+          <MenuItem id    = "ExcludeFile"
+					          label = "vyloučit z projektu"
+					          class = "TODO.Project.Commands.ExcludeFileFromProject"/>
+        </Condition>
+
+        <Condition name = "Ownerstate" ownerstate = "None">
+          <MenuItem id    = "IncludeFile"
+					          label = "zahrnout do projektu"
+					          class = "TODO.Project.Commands.IncludeFileInProject"/>
+        </Condition>
+
+        <MenuItem id = "ExcludeSeparator" type = "Separator" />
+      </ComplexCondition>
+
+      <Include id="CutCopyPasteDeleteRename" path="/ReportDesigner/Pads/ProjectBrowser/ContextMenu/CutCopyPasteDeleteRename"/>-->
+    </ComplexCondition>
+  </Path>
+
+  <Path name = "/ReportDesigner/Pads/ProjectBrowser/ContextMenu/SolutionNode">
+    <MenuItem id = "CloseSolution"
+		          label = "zavřít sestavení"
+              icon ="Icons__Gin__okno_zavrit"
+		          class = "Gordic.GFE.WinClient.Project.Commands.CloseSolution"/>
+    <!--<Condition name="WriteableSolution" action="Disable">
+      <MenuItem id = "CombineAddMenu" label = "přidat" type = "Menu">
+        <MenuItem id    = "AddNewProjectToSolution"
+				          label = "nový projekt..."
+				          icon  = "Icons.16x16.NewProjectIcon"
+				          class = "TODO.Project.Commands.AddNewProjectToSolution"/>
+        <MenuItem id    = "AddExitingProjectToSolution"
+				          label = "existující projekt..."
+				          class = "TODO.Project.Commands.AddExitingProjectToSolution"/>
+        <MenuItem id    = "Separator1" type = "Separator" />
+        <MenuItem id    = "AddItem"
+				          label = "přidat položku..."
+				          class = "TODO.Project.Commands.AddExistingItemToSolution"/>
+        <MenuItem id    = "AddNewSolutionFolderToSolution"
+				          icon  = "ProjectBrowser.SolutionFolder.CreateNew"
+				          label = "nová složka sestavení..."
+				          class = "TODO.Project.Commands.AddNewSolutionFolderToSolution"/>
+      </MenuItem>
+    </Condition>
+
+    <MenuItem id = "AddSeparator" type = "Separator"/>
+    <MenuItem id    = "Paste"
+		          label = "vložit"
+		          icon  = "Icons.16x16.PasteIcon"
+		          loadclasslazy = "false"
+		          class = "TODO.Project.Commands.PasteProjectBrowserNode"/>
+    <MenuItem id       = "Rename"
+		          label    = "přejmenovat"
+		          shortcut = "F2"
+		          class    = "TODO.Project.Commands.RenameEntryEvent"/>-->
+  </Path>
+
+  <Path name = "/ReportDesigner/Pads/ProjectBrowser/ContextMenu/FileNode">
+    <Condition name = "Ownerstate" ownerstate = "InProject">
+      <MenuItem id = "Add" label = "přidat" type="Menu">
+        <Include path="/ReportDesigner/Pads/ProjectBrowser/ContextMenu/FolderNode/Add"/>
+      </MenuItem>
+      <MenuItem id = "AddSeparator" type = "Separator"  />
+    </Condition>
+    <ComplexCondition>
+      <Not>
+        <Condition name = "Ownerstate" ownerstate = "Missing"/>
+      </Not>
+      <MenuItem id = "OpenFile"
+			          label = "otevřít"
+			          icon  = "Icons.16x16.OpenFileIcon"
+			          class = "Gordic.GFE.WinClient.ProjectBrowser.OpenFileFromProjectBrowser"/>
+      <MenuItem id = "OpenFolderContainingFile"
+			          label = "otevřít umístění souboru"
+                icon="Icons__Gin__prehled_ulozene"
+			          class = "Gordic.GFE.WinClient.OpenFolderContainingFile"/>
+    </ComplexCondition>
+    <Condition name = "Ownerstate" ownerstate = "Missing">
+      <MenuItem id = "Remove"
+			          label = "odstranit"
+			          type = "Item"
+			          icon  = "Icons.16x16.DeleteIcon"
+			          class = "Gordic.GFE.WinClient.Project.Commands.DeleteProjectBrowserNode"/>
+    </Condition>
+    <ComplexCondition>
+      <Not>
+        <Condition name = "Ownerstate" ownerstate = "Missing"/>
+      </Not>
+      <MenuItem id = "OpenSeparator" type = "Separator" />
+      <!--
+      <ComplexCondition>
+        <Or>
+          <Condition name = "Ownerstate" ownerstate = "InProject"/>
+          <Condition name = "Ownerstate" ownerstate = "None"/>
+        </Or>
+        <Condition name = "Ownerstate" ownerstate = "InProject">
+          <MenuItem id    = "ExcludeFile"
+					          label = "vyloučit z projektu"
+					          class = "TODO.Project.Commands.ExcludeFileFromProject"/>
+        </Condition>
+
+        <Condition name = "Ownerstate" ownerstate = "None">
+          <MenuItem id    = "IncludeFile"
+					          label = "zahrnout do projektu"
+					          class = "TODO.Project.Commands.IncludeFileInProject"/>
+        </Condition>
+
+        <MenuItem id = "ExcludeSeparator" type = "Separator" />
+      </ComplexCondition>-->
+      <Include id="CutCopyPasteDeleteRename" path="/ReportDesigner/Pads/ProjectBrowser/ContextMenu/CutCopyPasteDeleteRename"/>
+    </ComplexCondition>
+  </Path>
+
+  <Path name = "/ReportDesigner/Pads/ProjectBrowser/ContextMenu/CutCopyPasteDeleteRename">
+    <MenuItem id = "Cut"
+		          label = "vyjmout"
+		          type = "Item"
+		          icon = "Icons.16x16.CutIcon"
+		          loadclasslazy = "false"
+		          class = "Gordic.GFE.WinClient.Project.Commands.CutProjectBrowserNode"/>
+    <MenuItem id = "Copy"
+		          label = "kopírovat"
+		          type = "Item"
+		          icon = "Icons.16x16.CopyIcon"
+		          loadclasslazy = "false"
+		          class = "Gordic.GFE.WinClient.Project.Commands.CopyProjectBrowserNode"/>
+    <MenuItem id    = "Paste"
+		          label = "vložit"
+		          type = "Item"
+		          icon  = "Icons.16x16.PasteIcon"
+		          loadclasslazy = "false"
+		          class = "Gordic.GFE.WinClient.Project.Commands.PasteProjectBrowserNode"/>
+    <MenuItem id = "Delete"
+		          label = "odstranit"
+		          type = "Item"
+		          icon  = "Icons.16x16.DeleteIcon"
+		          loadclasslazy = "false"
+		          class = "Gordic.GFE.WinClient.Project.Commands.DeleteProjectBrowserNode"/>
+    <MenuItem id = "Rename"
+		          label    = "přejmenovat"
+		          shortcut = "F2"
+		          class    = "Gordic.GFE.WinClient.Project.Commands.RenameEntryEvent"/>
+  </Path>
+  <!-- konec kontextové nabídky ProjectBrowser-->
+  
+  <!-- kontextová nabídka PropertyPad-->
+  <Path name = "/ReportDesigner/Views/PropertyPad/ContextMenu">
+    <MenuItem id    = "ResetProperty"
+		          label = "obnovit"
+              icon="Icons__Gin__redistribuce"
+		          class = "Gordic.GFE.WinClient.PropertyPadResetCommand"/>
+    <MenuItem id = "Separator"  type = "Separator" />
+    <MenuItem id    = "ShowDescription"
+		          label = "zobrazit popis"
+              icon="Icons__Gin__zaznam_detail"
+		          class = "Gordic.GFE.WinClient.PropertyPadShowDescriptionCommand"/>
+  </Path>
+  <!-- kontextová nabídka PropertyPad ^-->
+
+  <!-- nástrojová lišta PreviewView -->
+  <Path name = "/ReportDesigner/Pads/Preview/Toolbar">
+    <ToolbarItem id      = "PreviewSelect"
+		             type    = "ComboBox"
+		             tooltip = "Identifikátor náhledu"
+		             class   = "Gordic.GFE.WinClient.PreviewView.ShowPreviewComboBox"/>
+    <ToolbarItem id    = "PreviewSelectSeparator" type  = "Separator"/>
+    <ToolbarItem id="OpenSsrFile"
+          tooltip="Načíst *.ssr"
+          icon="Icons__Ssl__sip_balicek_nacteni"
+          type="Item"
+          loadclasslazy="false"
+          class="Gordic.GFE.WinClient.PreviewView.OpenSsr"/>
+    <ToolbarItem id="NewSsrFile"
+          tooltip="Vytvořít nový *.ssr"
+          icon="Icons__Ssl__sip_balicek_novy"
+          type="Item"
+          loadclasslazy="false"
+          class="Gordic.GFE.WinClient.PreviewView.NewSsr"/>
+    <ToolbarItem id="LoadDataFile"
+          tooltip="Načíst soubor dat"
+          icon="Icons__Gin__soubor_download"
+          type="Item"
+          loadclasslazy="false"
+          class="Gordic.GFE.WinClient.PreviewView.LoadData"/>
+    <ToolbarItem id="PreviewFormation"
+          tooltip="Náhled"
+          icon="Icons__Gin__tisk_nahled"
+          type="Item"
+          loadclasslazy="false"
+          class="Gordic.GFE.WinClient.PreviewView.Preview"/>
+    <ToolbarItem id    = "SaveSelectSeparator" type  = "Separator"/>
+    <ToolbarItem id="SaveSsrFile"
+          tooltip="Uložit provedené změny v *.ssr"
+          icon = "Icons__Gin__ulozit"
+          type="Item"
+          loadclasslazy="false"
+          class="Gordic.GFE.WinClient.PreviewView.SaveSsr"/>
+    <ToolbarItem id="SaveAsSsrFile"
+          tooltip="Uložit provedené změny v *.ssr jako..."
+          icon = "Icons__Gin__ulozit_jako"
+          type="Item"
+          loadclasslazy="false"
+          class="Gordic.GFE.WinClient.PreviewView.SaveAsSsr"/>
+    <ToolbarItem id    = "RefreshSelectSeparator" type  = "Separator"/>
+    <ToolbarItem id="RefreshSsrFile"
+      tooltip="Aktualizace obahu ze souboru/paměti"
+      icon="Icons__Gin__redistribuce"
+      type="Item"
+      loadclasslazy="false"
+      class="Gordic.GFE.WinClient.PreviewView.RefreshSsr"/>
+
+  </Path>
+  <!-- konec kontextové nabídky StructureView-->
+
+  <!-- Formation -->
+  <!-- kontextová nabídka výbraných objektů -->
+  
+  <Path name="/ReportDesigner/Formation/ContextMenu/SelectedObject">
+    <MenuItem id="NewObject" label="nový" type="Menu">
+      <Include id="GrrPanelContextMenuItemNewComponents" path="/Formation/ContextMenu/SelectedObject/NewComponent"/>
+      <MenuItem id="SetNewParameters"
+                label="převzít parametry"
+                tooltip="nastavení parametru nového objektu dle vybraného"
+			          type = "Item"
+			          loadclasslazy = "false"
+			          class = "Gordic.GFE.WinClient.EditCommands.SetNewParameters"/>
+    </MenuItem>
+    <Include id="GrrPanelContextMenuShift" path="/GrrFormation/PagePanel/ContextMenu/ShiftComponent" />
+    <Include id="GrrPanelContextMenuMove" path="/GrrFormation/PagePanel/ContextMenu/MoveComponent" />
+    <Include id="GrrPanelContextMenuLine" path="/GrrFormation/PagePanel/ContextMenu/LineProperties" />
+  </Path>
+  <!-- konec kontextová nabídka výbraných objektů -->
+  <!-- konec Formation -->
+
+  <!-- kontextová nabídka PreviewView editoru-->
+  <Path name="/ReportDesigner/PreviewView/XmlEditor/ContextMenu">
+    <MenuItem id = "Comment"
+              icon  = "Icons.16x16.CommentRegion"
+              label = "zakomentovat/odkomentovat blok"
+              shortcut = "Control|/"
+              class= "Gordic.GFE.WinClient.DefaultEditor.CommentRegion"/>
+    <MenuItem id = "Indent"
+		          label = "odsazení"
+		          shortcut = "Control|I"
+		          class = "Gordic.GFE.WinClient.DefaultEditor.IndentSelection" />
+    <MenuItem id = "FileMode" label = "syntaxe" type="Menu">
+      <MenuItem id = "HighlightBuilder" type="Builder" class = "Gordic.GFE.WinClient.DefaultTextEditorCommands.HighlightingTypeBuilder" />
+    </MenuItem>
+  </Path>
+  <!-- konec kontextvá nabídka PreviewView editoru-->
+  <!-- Wizards-->
+  <!-- Wizard grafických sestav -->
+  <!-- nový GRF, GRR-->
+  <Path  name = "/FormationGenerator/GraphicsFormation">
+    <DialogPanel id="InfoSection" label = "Info sekce" class="Gordic.GFE.WinClient.FormationWizard.InfoSectionPanel"/>
+    <DialogPanel id="FormatSection" label = "Formát" class="Gordic.GFE.WinClient.FormationWizard.FormatSectionPanel"/>
+  </Path>
+  <!-- konec nový GRF, GRR -->
+  <!-- nový MSE, RTF -->
+  <Path  name = "/FormationGenerator/OfficeFormation">
+    <DialogPanel id="InfoSection" label = "Info sekce" class="Gordic.GFE.WinClient.FormationWizard.InfoSectionPanel"/>
+    <DialogPanel id="TemplateSection" label = "Šablona" class="Gordic.GFE.WinClient.FormationWizard.TemplateSectionPanel"/>
+    <DialogPanel id="FormatSection" label = "Formát" class="Gordic.GFE.WinClient.FormationWizard.FormatSectionPanel"/>
+  </Path>
+  <!-- konec nový MSE, RTF -->
+
+  <!-- nový GFRM -->
+  <Path  name = "/FormationGenerator/GfrmFormation">
+    <DialogPanel id="CompletationSection" label = "Kompletace souborů" class="Gordic.GFE.WinClient.FormationWizard.CompletationSectionPanel"/>
+  </Path>
+  <!-- konec nový GFRM -->
+
+  <!-- konec wizard grafických sestav -->
+  <!-- konec Wizards-->
+  <!-- vlastnosti -->
+  <Path name = "/PropertyDialog" icon="Icons__Gin__vlastnosti">
+    <DialogPanel id = "TagText"
+             label = "text"
+             class = "Gordic.GFE.WinClient.Gui.PropertyPanels.TagTextPanel"/>
+    <DialogPanel id = "Font"
+             label = "písmo"
+             class = "Gordic.GFE.WinClient.Gui.PropertyPanels.FontPanel"/>
+    <DialogPanel id = "Formatting"
+             label = "formátování"
+             class = "Gordic.GFE.WinClient.Gui.PropertyPanels.FormattingPanel"/>
+    <DialogPanel id = "Surround"
+             label = "orámování"
+             class = "Gordic.GFE.WinClient.Gui.PropertyPanels.SurroundPanel"/>
+    <DialogPanel id = "Image"
+             label = "obrázek"
+             class = "Gordic.GFE.WinClient.Gui.PropertyPanels.ImagePanel"/>
+    <DialogPanel id = "Drawing"
+             label = "vektor"
+             class = "Gordic.GFE.WinClient.Gui.PropertyPanels.DrawingPanel"/>
+    <DialogPanel id = "Script"
+             label = "skripty"
+             class = "Gordic.GFE.WinClient.Gui.PropertyPanels.ScriptPanel"/>
+    <DialogPanel id = "Attributes"
+             label = "atributy"
+             class = "Gordic.GFE.WinClient.Gui.PropertyPanels.AttributesPanel"/>
+    <DialogPanel id = "Variables"
+             label = "proměnné"
+             class = "Gordic.GFE.WinClient.Gui.PropertyPanels.VariablesPanel"/>
+    <DialogPanel id = "XMLContent"
+           label = "XML obsah"
+           class = "Gordic.GFE.WinClient.Gui.PropertyPanels.XMLContentPanel"/>
+    <DialogPanel id = "Line"
+           label = "řádek"
+           class = "Gordic.GFE.WinClient.Gui.PropertyPanels.LinePanel"/>
+    <DialogPanel id = "Barcode"
+           label = "čárový kód"
+           class = "Gordic.GFE.WinClient.Gui.PropertyPanels.BarcodePanel"/>
+  </Path>
+
+  <Path name = "/SinglePropertyDialog/Font" icon="Icons__Ost__registr_uprava_pismen">
+    <DialogPanel id = "Font"
+         label = "Písmo"
+         class = "Gordic.GFE.WinClient.Gui.PropertyPanels.FontPanel"/>
+  </Path>
+  <Path name = "/SinglePropertyDialog/XMLContent" icon="Icons__Ost__xml">
+    <DialogPanel id = "XMLContent"
+         label = "XML obsah"
+         class = "Gordic.GFE.WinClient.Gui.PropertyPanels.XMLContentPanel"/>
+  </Path>
+  <Path name = "/SinglePropertyDialog/Script" icon="Icons__Gin__seznam_vyber">
+    <DialogPanel id = "Script"
+             label = "Skripty"
+             class = "Gordic.GFE.WinClient.Gui.PropertyPanels.ScriptPanel"/>
+  </Path>
+  <Path name = "/SinglePropertyDialog/Formatting" icon="Icons__Wfl__priznak_formy_fyzicke_a_hybridni">
+    <DialogPanel id = "Formatting"
+         label = "Formátování"
+         class = "Gordic.GFE.WinClient.Gui.PropertyPanels.FormattingPanel"/>
+  </Path>
+  <Path name = "/SinglePropertyDialog/Attributes">
+    <DialogPanel id = "Attributes"
+         label = "Atributy"
+         class = "Gordic.GFE.WinClient.Gui.PropertyPanels.AttributesPanel"/>
+  </Path>
+  <Path name = "/SinglePropertyDialog/Image">
+    <DialogPanel id = "Image"
+         label = "Obrázek"
+         class = "Gordic.GFE.WinClient.Gui.PropertyPanels.ImagePanel"/>
+  </Path>
+  <Path name = "/SinglePropertyDialog/Text" icon="Icons__Wfl__dokument_obsah">
+    <DialogPanel id = "TagText"
+             label = "Text"
+             class = "Gordic.GFE.WinClient.Gui.PropertyPanels.TagTextPanel"/>
+  </Path>
+  <Path name = "/SinglePropertyDialog/Surround" icon="Icons__Ost__oramovani_dokola">
+    <DialogPanel id = "Surround"
+             label = "Ohraničení"
+             class = "Gordic.GFE.WinClient.Gui.PropertyPanels.SurroundPanel"/>
+  </Path>
+  <Path name = "/SinglePropertyDialog/DictionaryItem" icon="Icons__Gin__polozky">
+    <DialogPanel id = "Items"
+             label = "Položka seznamu"
+             class = "Gordic.GFE.WinClient.Gui.PropertyPanels.DictionaryItemPanel"/>
+  </Path>
+  <Path name = "/SinglePropertyDialog/Variables" icon="Icons__Gin__protokol_zmen">
+    <DialogPanel id = "Variables"
+             label = "Proměnné"
+             class = "Gordic.GFE.WinClient.Gui.PropertyPanels.VariablesPanel"/>
+  </Path>
+  <Path name = "/SinglePropertyDialog/Line" icon="Icons__Ost__radek">
+    <DialogPanel id = "Line"
+             label = "Řádek"
+             class = "Gordic.GFE.WinClient.Gui.PropertyPanels.LinePanel"/>
+  </Path>
+  <Path name = "/SinglePropertyDialog/Barcode" icon="Icons__Wfl__dokspis_pid">
+    <DialogPanel id = "Barcode"
+             label = "Čárový kóds"
+             class = "Gordic.GFE.WinClient.Gui.PropertyPanels.BarcodePanel"/>
+  </Path>
+
+  <!-- konec vlastnosti -->
+
+</AddIn>

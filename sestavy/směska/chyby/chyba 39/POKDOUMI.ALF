@@ -1,0 +1,1140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<format type="grr" xmlns="http://www.gordic.cz/TR/alf/1.4/">
+  <info ixs_xme="POKDOUMI"
+	xmeta_ver="2"
+	xmeta_subver_min="1"
+	nazev="ERU"
+	maker="4002"
+	valid_from="20010101"
+	valid_to="99990101"
+	poznamka="Jedna strana"
+	dat_modif="201106230719"
+	/>
+<script><![CDATA[
+  
+import Logic
+
+def A(Vstup,Cast,Hal):
+#--------------------------------------------------------------------
+#
+# Vstup - vstupní hodnota, reálné číslo na dvě desetinná místa,
+#	  pokud není ošetřeno
+# Cast  - číslo pole, celé číslo 
+#		0 - Celá část, 
+#		1 - desetiny,
+#		2 - znaménko
+# Hal   - jakýmy znaky mají být nahrazeny haléře, pokud číslo nemá desetinou část
+#
+# Funkce rozdělí číslo na dvě části, desetinnou a mantisu. Obě části vrací jako string.
+#Pokud je číslo záporné, dokáže oddělit znaménko,a vrací string 'mínus'.
+#--------------------------------------------------------------------
+
+   String=str(Vstup)
+   # Zjistím, zda číslo má desetinou část
+   if String.find('.',1,10)>=0:
+      # Číslo má desetinnou část
+      Pole=String.split('.',1)
+   else:
+      # Číslo nemělo desetinou část
+	  String=String+'.'
+	  Pole=String.split('.',1)
+   # Zjistím, zda celá část čísla je kladná, nebo záporná
+   if Vstup<0:	
+      # Pokud bylo číslo záporné, zlikviduji znaménko, protože bude nahrazeno slovem
+      Pole[0]=Pole[0].replace('-','')
+      # Poznamenám si, že hodnota byla záporná
+      Pole.append('Mínus')
+   else:
+      # Se znaménkem nedělám nic, uložím prázdný znak
+      Pole.append('')
+   return Pole[Cast]
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++
+def B(Vstup,Cast):
+#--------------------------------------------------------------------
+#
+# Vstup - vstupní hodnota, string
+# Cast - která část se má vrátit
+# 
+#	Funkce vrací větu rozdělenou na první slovo a zbytek.
+#
+#--------------------------------------------------------------------
+
+  Pole=Vstup.split(' ',1)
+  return  Pole[Cast]
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++
+def Mena(Vstup):
+#--------------------------------------------------------------------
+#
+# Vstup - zkratka měny nebo desetin měny je string, bude převeden na slova 
+#
+#--------------------------------------------------------------------
+
+   if Vstup=='Kč': return 'korun českých'
+   if Vstup=='kč': return 'korun českých'
+   if Vstup=='Kc': return 'korun českých'
+   if Vstup=='kc': return 'korun českých'
+   if Vstup=='hal': return 'haléřů'
+   if Vstup=='Hal': return 'haléřů'
+   if Vstup=='c': return 'centů'
+   return 'XXX'
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+]]></script>
+  <region name="DOKLAD">
+    <body>
+      <line>
+        <style font-face="arial" font-bold="true" left-border-width="5" right-border-width="3" top-border-width="5">
+          <value-of name="" width="30%" onData="U=''&#xA;UP=''&#xA;US=''&#xA;Tisk=''" />
+        </style>
+        <style font-face="arial" font-bold="true" horizontal-align="center" top-border-width="5" bottom-border-width="1">
+          <text value="POKLADNÍ DOKLAD" width="17%" />
+        </style>
+        <style font-face="arial" font-bold="true" horizontal-align="center" vertical-align="center" top-border-width="5" bottom-border-width="1">
+          <text value="-" width="2%" />
+        </style>
+        <style font-face="arial" font-bold="true" horizontal-align="center" top-border-width="5" bottom-border-width="1">
+          <value-of name="DHDruhDokladu_Text" width="10%" />
+        </style>
+        <style font-face="arial" font-bold="true" horizontal-align="center" top-border-width="5" bottom-border-width="1">
+          <text value="" width="2%" />
+        </style>
+        <style font-face="arial" font-bold="true" top-border-width="5">
+          <value-of name="DHDanovyDoklad" width="15%" onData="self.value=self.value.upper()" />
+        </style>
+        <style font-face="arial" font-bold="true" top-border-width="5">
+          <text value="Doklad číslo:" width="13%" />
+        </style>
+        <style font-face="arial" font-bold="true" horizontal-align="right" right-border-width="5" top-border-width="5" right-padding="15">
+          <value-of name="DHCisloDokladu" width="11%" />
+        </style>
+      </line>
+      <line>
+        <style font-face="arial" left-border-width="5">
+          <text value="" width="2%" />
+        </style>
+        <style left-padding="10">
+          <image file="eru_1.bmp" image-width="15mm" image-height="25mm" width="13%" />
+        </style>
+        <style font-face="arial" right-border-width="3">
+          <value-of name="" width="15%" onData="self.value=Logic.TF('')" />
+        </style>
+        <style font-face="arial">
+          <text value="Datum vystavení:" width="15%" />
+        </style>
+        <style font-face="arial">
+          <value-of name="USDatum" width="16%" onData="self.value=self.value.format('dd.mm.yyyy')" />
+        </style>
+        <style font-face="arial" top-border-width="1">
+          <text value="" width="15%" />
+        </style>
+        <style font-face="arial" top-border-width="1">
+          <text value="Pokladna číslo:" width="13%" />
+        </style>
+        <style font-face="arial" horizontal-align="right" right-border-width="5" top-border-width="1" right-padding="15">
+          <value-of name="USPokNum" width="11%" />
+        </style>
+      </line>
+      <line>
+        <style font-face="arial" font-bold="true" left-border-width="5" right-border-width="3">
+          <value-of name="" width="30%" onData="self.value='Přemístěno'" />
+        </style>
+        <style font-face="arial">
+          <text value="Datum us.zd. pl.:" width="15%" />
+        </style>
+        <style font-face="arial">
+          <value-of name="DHDUZP" width="16%" onData="if (self.value.format('dd.mm.yyyy'))=='00.00.0000': self.value='Nejsme plátci DPH'&#xA;else :self.value=self.value.format('dd.mm.yyyy')" />
+        </style>
+        <style font-face="arial" horizontal-align="right" right-padding="2">
+          <text value="Název pokladny:" width="15%" />
+        </style>
+        <style vertical-align="bottom" right-border-width="5" left-padding="3">
+          <value-of name="USPokText" width="24%" onData="self.value=self.value[:1].capitalize()+self.value[1:]" />
+        </style>
+      </line>
+      <line>
+        <style font-face="arial" font-bold="true" left-border-width="5" right-border-width="3">
+          <value-of name="" width="30%" onData="import Logic;self.value=Logic.OR(1,0,True)" />
+        </style>
+        <style font-face="arial">
+          <text value="" width="52%" />
+        </style>
+        <style font-face="arial">
+          <text value="Platba:" width="7%" />
+        </style>
+        <style font-face="arial" right-border-width="5">
+          <value-of name="DHZpusobUhrady" width="11%" onData="if self.value==0: self.value='V hotovosti'&#xA;else: self.value='Kartou'" />
+        </style>
+      </line>
+      <line>
+        <style font-face="arial" font-bold="true" left-border-width="5" right-border-width="3">
+          <value-of name="UKOrgNazev" width="30%" />
+        </style>
+        <style font-face="arial" bottom-border-width="1">
+          <text value="" width="31%" />
+        </style>
+        <style font-face="arial" bottom-border-width="1">
+          <text value="" width="21%" />
+        </style>
+        <style font-face="arial" font-bold="true" right-border-width="5" bottom-border-width="1">
+          <value-of name="DHTisknuto" width="18%" onData="if (DOKLAD.DHTisknuto)=='Ano': self.value= 'Originál dokladu'&#xA;else: self.value='Originál dokladu'" />
+        </style>
+      </line>
+      <line>
+        <style font-bold="true" left-border-width="5">
+          <text value="IČ:" width="4%" />
+        </style>
+        <style font-face="arial" font-bold="true">
+          <value-of name="USOrgICO" width="10%" />
+        </style>
+        <style font-face="arial" font-bold="true">
+          <text value="DIČ:" width="5%" />
+        </style>
+        <style font-face="arial" font-bold="true" right-border-width="3">
+          <value-of name="UKDIC" width="11%" />
+        </style>
+        <style font-face="arial" top-border-width="3">
+          <value-of name="DHDruhDokladuP" width="9%" onData="self.value=self.value+':'" />
+        </style>
+        <style font-face="arial" top-border-width="3" left-padding="0">
+          <value-of name="DHNazev" width="43%" />
+        </style>
+        <style font-face="arial" top-border-width="3">
+          <text value="IČ:" width="5%" />
+        </style>
+        <style font-face="arial" right-border-width="5" top-border-width="3">
+          <value-of name="DHICO" width="13%" />
+        </style>
+      </line>
+      <line>
+        <style font-face="arial" font-bold="true" left-border-width="5" right-border-width="3">
+          <value-of name="UKUliceACD" width="30%" />
+        </style>
+        <style font-face="arial">
+          <text value="Adresa:" width="9%" />
+        </style>
+        <style font-face="arial" left-padding="0">
+          <value-of name="DHUliceACD" width="43%" />
+        </style>
+        <style font-face="arial">
+          <text value="DIČ:" width="5%" />
+        </style>
+        <style font-face="arial" right-border-width="5">
+          <value-of name="DHDIC" width="13%" />
+        </style>
+      </line>
+      <line>
+        <style font-face="arial" font-bold="true" left-border-width="5">
+          <value-of name="UKPSC" width="6%" />
+        </style>
+        <style font-face="arial" font-bold="true" right-border-width="3">
+          <value-of name="UKPosta" width="24%" />
+        </style>
+        <style font-face="arial">
+          <text value="" width="9%" />
+        </style>
+        <style font-face="arial" right-border-width="5" left-padding="0">
+          <value-of name="DHMestskaCast" width="61%" />
+        </style>
+      </line>
+      <line>
+        <style font-face="arial" left-border-width="5" right-border-width="3" bottom-border-width="3">
+          <text value="" width="30%" />
+        </style>
+        <style font-face="arial" bottom-border-width="1">
+          <text value="" width="9%" />
+        </style>
+        <style font-face="arial" bottom-border-width="1" left-padding="0">
+          <value-of name="DHPSC" width="6%" />
+        </style>
+        <style font-face="arial" right-border-width="5" bottom-border-width="1">
+          <value-of name="DHPosta" width="55%" />
+        </style>
+      </line>
+      <line>
+        <style font-face="arial" left-border-width="5" bottom-border-width="1">
+          <value-of name="DHDruhDokladu" width="4%" onData="if (DOKLAD.DHDruhDokladu)=='P': self.value='Za:'&#xA;else: self.value='Na:' " />
+        </style>
+        <style font-face="arial" right-border-width="5" bottom-border-width="1">
+          <value-of name="DHPopisDokladu" width="96%" onData="self.value=self.value[:1].capitalize()+self.value[1:]" />
+        </style>
+      </line>
+      <region name="POLOZKA">
+        <head>
+          <line>
+            <style font-face="arial" font-bold="true" left-border-width="5">
+              <value-of name="" width="20%" onData="self.value='Nákladové středisko'&#xA;if POLOZKA.CPoZZ1!='': UP='false'&#xA;else: UP='true'&#xA;if POLOZKA.CSkZZ1!='': US='false'&#xA;else: US='true'" />
+            </style>
+            <style font-face="arial" font-bold="true" horizontal-align="right">
+              <text value="Položka" width="10%" />
+            </style>
+            <style font-face="arial" font-bold="true">
+              <text value="Název" width="41%" />
+            </style>
+            <style font-face="arial" font-bold="true" horizontal-align="right">
+              <text value="Cena za MJ" width="11%" />
+            </style>
+            <style font-face="arial" font-bold="true" horizontal-align="right">
+              <text value="Počet" width="7%" />
+            </style>
+            <style font-face="arial" font-bold="true" horizontal-align="right" right-border-width="5" right-padding="10">
+              <text value="Částka" width="11%" />
+            </style>
+          </line>
+        </head>
+        <body>
+          <line>
+            <style font-face="arial" left-border-width="5">
+              <value-of name="DPIdentifikace" width="20%" />
+            </style>
+            <style font-face="arial" horizontal-align="right">
+              <value-of name="DPCisloPolozky" width="10%" />
+            </style>
+            <style font-face="arial" bottom-border-width="1">
+              <value-of name="DPNazevPolozky" width="41%" onData="self.value=self.value[:1].capitalize()+self.value[1:]" />
+            </style>
+            <style font-face="arial" horizontal-align="right">
+              <value-of name="DPCenaZaJednotku" width="11%" onData="if self.value==0: self.value=''&#xA;else: self.value=self.value.format('# 0,00_-;-# 0,00')" />
+            </style>
+            <style font-face="arial" horizontal-align="right">
+              <value-of name="DPMnozstvi" width="7%" onData="if self.value==0: self.value=''&#xA;else: self.value=self.value.format('# 0,00_-;-# 0,00')" />
+            </style>
+            <style font-face="arial" horizontal-align="right" right-border-width="5" right-padding="10">
+              <value-of name="DPCelkem" width="11%" onData="if self.value==0: self.value=''&#xA;else: self.value=self.value.format('# 0,00_-;-# 0,00')" />
+            </style>
+          </line>
+        </body>
+        <foot>
+          <line>
+            <style font-face="arial" font-bold="true" left-border-width="5" top-border-width="1" bottom-border-width="1">
+              <text value="Součet:" width="89%" />
+            </style>
+            <style font-face="arial" font-bold="true" horizontal-align="right" right-border-width="5" top-border-width="1" bottom-border-width="1" right-padding="10">
+              <value-of name="SUM(DPCelkem)" width="11%" format="# 0,00_-;-# 0,00" />
+            </style>
+          </line>
+          <line>
+            <style font-face="arial" font-bold="true" vertical-align="center" left-border-width="5">
+              <text value="Slovy:" width="7%" height="10mm" />
+            </style>
+            <style font-face="arial" font-bold="true" vertical-align="center" right-border-width="5">
+              <value-of name="SUM(DPCelkem)" width="93%" height="10mm" onData="self.value='=='+A(self.value,2,'0')+Decimal(A(self.value,0,'0')).spellOut().replace(' ','').capitalize()+Mena(DOKLAD.SPMena).replace(' ','')+' '+Decimal(A(self.value,1,'5')+'0').spellOut()+Mena(DOKLAD.SPMenaSetin)+'=='" />
+            </style>
+          </line>
+        </foot>
+      </region>
+      <line>
+        <style font-face="arial" font-bold="true" left-border-width="5" right-border-width="3" top-border-width="5" left-padding="10">
+          <text value="Příkazce operace" width="31%" />
+        </style>
+        <style font-face="arial" font-bold="true" top-border-width="5" left-padding="10">
+          <text value="Osoba odpovědná za účetní případ a zaúčtování" width="33%" />
+        </style>
+        <style font-face="arial" font-bold="true" left-border-width="3" right-border-width="5" top-border-width="5" left-padding="10">
+          <value-of name="" width="36%" onData="if (DOKLAD.DHDruhDokladu)&lt;&gt;'P': self.value='Přijal v zastoupení, nebo osobně (podpis)'&#xA;else: self.value='Přijato od' " />
+        </style>
+      </line>
+      <line>
+        <style font-face="arial" font-size="6" left-border-width="5" right-border-width="3" left-padding="10">
+          <text value="" width="31%" />
+        </style>
+        <style font-face="arial" left-padding="10">
+          <text value="" width="33%" />
+        </style>
+        <style font-face="arial" left-border-width="3" right-border-width="5" left-padding="10">
+          <value-of name="DHDruhDokladu" width="36%" onData="if (DOKLAD.DHDruhDokladu)=='P': self.value=&quot;&quot;&#xA;else: self.value=DOKLAD.DHPRIJAL" />
+        </style>
+      </line>
+      <line>
+        <style font-face="arial" left-border-width="5" bottom-border-width="5" left-padding="10">
+          <text value="Datum:" width="7%" />
+        </style>
+        <style font-face="arial" right-border-width="3" bottom-border-width="5" left-padding="10">
+          <value-of name="" width="24%" onData="self.value=DOKLAD.DHDen+'.'+DOKLAD.DHMesic+'.'+DOKLAD.DHRok" />
+        </style>
+        <style font-face="arial" bottom-border-width="5" left-padding="10">
+          <text value="Datum:" width="7%" />
+        </style>
+        <style font-face="arial" right-border-width="3" bottom-border-width="5" left-padding="10">
+          <value-of name="" width="26%" onData="self.value=DOKLAD.DHDen+'.'+DOKLAD.DHMesic+'.'+DOKLAD.DHRok" />
+        </style>
+        <style font-face="arial" bottom-border-width="5" left-padding="10">
+          <text value="Datum:" width="7%" />
+        </style>
+        <style font-face="arial" right-border-width="5" bottom-border-width="5" left-padding="10">
+          <value-of name="" width="29%" onData="self.value=DOKLAD.DHDen+'.'+DOKLAD.DHMesic+'.'+DOKLAD.DHRok" />
+        </style>
+      </line>
+      <line>
+        <style font-face="arial" font-bold="true" left-border-width="5" right-border-width="2" left-padding="10">
+          <text value="Hlavní účetní" width="50%" />
+        </style>
+        <style font-face="arial" font-bold="true" left-border-width="3" right-border-width="5" left-padding="10">
+          <value-of name="" width="50%" onData="if (DOKLAD.DHDruhDokladu)&lt;&gt;'P': self.value='Rozpočtář'&#xA;else: self.value='Zaúčtoval' " />
+        </style>
+      </line>
+      <line>
+        <style font-face="arial" left-border-width="5" right-border-width="3" left-padding="10">
+          <text value="" width="50%" height="9.84mm" />
+        </style>
+        <style font-face="arial" left-border-width="3" right-border-width="5" left-padding="10">
+          <text value="" width="50%" height="9.84mm" />
+        </style>
+      </line>
+      <line>
+        <style font-face="arial" left-border-width="5" bottom-border-width="5" left-padding="10">
+          <text value="Datum:" width="7%" />
+        </style>
+        <style font-face="arial" right-border-width="2" bottom-border-width="5" left-padding="0">
+          <value-of name="" width="43%" onData="self.value=DOKLAD.DHDen+'.'+DOKLAD.DHMesic+'.'+DOKLAD.DHRok" />
+        </style>
+        <style font-face="arial" left-border-width="3" bottom-border-width="5" left-padding="10">
+          <text value="Datum:" width="7%" />
+        </style>
+        <style font-face="arial" right-border-width="5" bottom-border-width="5" left-padding="0">
+          <value-of name="" width="43%" onData="if (DOKLAD.DHDruhDokladu)&lt;&gt;'P': self.value=DOKLAD.DHDen+'.'+DOKLAD.DHMesic+'.'+DOKLAD.DHRok&#xA;else: self.value=''" />
+        </style>
+      </line>
+      <line>
+        <style font-face="arial" left-border-width="5" right-border-width="5" bottom-border-width="5" left-padding="10" top-padding="10" bottom-padding="10">
+          <value-of name="" width="100%" onData="if (DOKLAD.DHDruhDokladu)&lt;&gt;'P': self.value='Příkazce operace a hlavní účetní svým podpisem stvrzují provedení předběžné kontroly dle §14 vyhl. č. 416/2004 Sb., o finanční kontrole ve veřejné správě a o změně některých zákonů, v platném znění.'&#xA;else: self.value='Příkazce operace a hlavní účetní svým podpisem stvrzuji provedení předběžé kontroly dle §12 vyhl. č. 416/2004 Sb., o finanční kontrole ve veřejné správě a o změně některých zákonů, v platném znění.' " />
+        </style>
+      </line>
+      <line>
+        <text value="" width="100%" />
+      </line>
+      <region name="UCTO">
+        <body>
+          <line>
+            <value-of name="" width="100%" onData="if UCTO.UPSU!='': U='false'&#xA;else: U='true'" />
+          </line>
+        </body>
+      </region>
+      <line>
+        <text value="" width="100%" />
+      </line>
+      <line>
+        <style font-bold="true" horizontal-align="center">
+          <text value="V N I T Ř N Í   Ú Č E T N Í   D O K L A D" width="100%" />
+        </style>
+      </line>
+      <line>
+        <text value="" width="100%" />
+      </line>
+      <region name="POLOZKA">
+        <body>
+          <line on-each-page="true" only-if="(UP!='A' or U!='false')">
+            <style right-padding="0">
+              <text value="Den:" width="5%" />
+            </style>
+            <style font-face="arial">
+              <text value="" width="6%" />
+            </style>
+            <style right-padding="0">
+              <text value="Měsíc:" width="6%" />
+            </style>
+            <style font-face="arial">
+              <text value="" width="12%" />
+            </style>
+            <style right-padding="0">
+              <text value="Číslo pokladního dokladu:" width="21%" />
+            </style>
+            <style font-face="arial">
+              <text value="" width="10%" />
+            </style>
+            <text value="" width="40%" />
+          </line>
+          <line on-each-page="true" only-if="(UP!='A' or U!='false')">
+            <style right-padding="0">
+              <text value="Datum zaúčtování:" width="15%" />
+            </style>
+            <style font-face="arial">
+              <text value="" width="14%" />
+            </style>
+            <style right-padding="0">
+              <text value="Číslo účetního dokladu:" width="21%" />
+            </style>
+            <style font-face="arial">
+              <text value="" width="10%" />
+            </style>
+            <style right-padding="0">
+              <text value="" width="40%" />
+            </style>
+          </line>
+          <line on-each-page="true" only-if="(UP!='A' or U!='false')">
+            <style right-padding="0">
+              <text value="" width="100%" />
+            </style>
+          </line>
+          <line on-each-page="true" only-if="(UP!='A' or U!='false')">
+            <text value="Účetní předpis:" width="100%" />
+          </line>
+          <line on-each-page="true" only-if="(UP!='A' or U!='false')">
+            <style font-size="1" font-bold="true" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="SU" width="4%" />
+            </style>
+            <style font-size="1" font-bold="true" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="AU" width="4%" />
+            </style>
+            <style font-size="1" font-bold="true" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="ODPA" width="6%" />
+            </style>
+            <style font-size="1" font-bold="true" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="POL" width="5%" />
+            </style>
+            <style font-size="1" font-bold="true" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="ZP" width="4%" />
+            </style>
+            <style font-size="1" font-bold="true" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="ZP" width="9%" />
+            </style>
+            <style font-size="1" font-bold="true" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="ORJ" width="6%" />
+            </style>
+            <style font-size="1" font-bold="true" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="ORG" width="13%" />
+            </style>
+            <style font-size="1" font-bold="true" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="" width="17%" />
+            </style>
+            <style font-size="1" font-bold="true" horizontal-align="right" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="MD" width="16%" />
+            </style>
+            <style font-size="1" font-bold="true" horizontal-align="right" border-width="1">
+              <text value="DAL" width="16%" />
+            </style>
+          </line>
+          <line on-each-page="true" only-if="(UP!='A' or U!='false')">
+            <style font-face="arial" border-width="1">
+              <text value="" width="4%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="4%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="6%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="5%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="4%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="9%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="6%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="13%" />
+            </style>
+            <style font-face="arial" font-size="1" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="" width="17%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="16%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="16%" />
+            </style>
+          </line>
+          <line on-each-page="true" only-if="(UP!='A' or U!='false')">
+            <style font-face="arial" border-width="1">
+              <text value="" width="4%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="4%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="6%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="5%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="4%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="9%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="6%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="13%" />
+            </style>
+            <style font-face="arial" font-size="1" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="" width="17%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="16%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="16%" />
+            </style>
+          </line>
+          <line on-each-page="true" only-if="(UP!='A' or U!='false')">
+            <style font-face="arial" border-width="1">
+              <text value="" width="4%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="4%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="6%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="5%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="4%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="9%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="6%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="13%" />
+            </style>
+            <style font-face="arial" font-size="1" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="" width="17%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="16%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="16%" />
+            </style>
+          </line>
+          <line on-each-page="true" only-if="(UP!='A' or U!='false')">
+            <style font-face="arial" border-width="1">
+              <text value="" width="4%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="4%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="6%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="5%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="4%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="9%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="6%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="13%" />
+            </style>
+            <style font-face="arial" font-size="1" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="" width="17%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="16%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="16%" />
+            </style>
+          </line>
+          <line on-each-page="true" only-if="(UP!='A' or U!='false')">
+            <style font-face="arial" font-size="1" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="Celkem obraty za doklad" width="68%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="16%" />
+            </style>
+            <style font-face="arial" border-width="1">
+              <text value="" width="16%" />
+            </style>
+          </line>
+        </body>
+      </region>
+      <region name="PARDOK">
+        <body>
+          <line>
+            <style right-padding="0">
+              <text value="Den:" width="5%" />
+            </style>
+            <style left-padding="0">
+              <value-of name="DHDen" width="6%" />
+            </style>
+            <style right-padding="0">
+              <text value="Měsíc:" width="6%" />
+            </style>
+            <style left-padding="0">
+              <value-of name="DHMesic" width="12%" />
+            </style>
+            <style right-padding="0">
+              <text value="Číslo pokladního dokladu:" width="21%" />
+            </style>
+            <style horizontal-align="right" left-padding="0">
+              <value-of name="DHCisloDokladu" width="10%" />
+            </style>
+            <text value="" width="40%" />
+          </line>
+          <line>
+            <style right-padding="0">
+              <text value="Datum zaúčtování:" width="15%" />
+            </style>
+            <style right-padding="0">
+              <value-of name="DHZauctovano" width="14%" onData="if (self.value.format('dd.mm.yyyy'))=='00.00.0000': self.value=''&#xA;else :self.value=self.value.format('dd.mm.yyyy')" />
+            </style>
+            <style right-padding="0">
+              <text value="Číslo účetního dokladu:" width="21%" />
+            </style>
+            <style horizontal-align="right" right-padding="0">
+              <value-of name="DHCUD" width="10%" onData="if self.value==0: self.value=''&#xA;else: self.value=self.value" />
+            </style>
+            <style right-padding="0">
+              <text value="" width="40%" />
+            </style>
+          </line>
+        </body>
+      </region>
+      <line>
+        <text value="" width="100%" />
+      </line>
+      <region name="UCTO">
+        <head>
+          <line>
+            <text value="Účetní předpis:" width="100%" />
+          </line>
+          <line>
+            <style font-size="1" font-bold="true" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="SU" width="4%" />
+            </style>
+            <style font-size="1" font-bold="true" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="AU" width="4%" />
+            </style>
+            <style font-size="1" font-bold="true" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="ODPA" width="6%" />
+            </style>
+            <style font-size="1" font-bold="true" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="POL" width="5%" />
+            </style>
+            <style font-size="1" font-bold="true" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="ZP" width="4%" />
+            </style>
+            <style font-size="1" font-bold="true" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="ZP" width="9%" />
+            </style>
+            <style font-size="1" font-bold="true" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="ORJ" width="6%" />
+            </style>
+            <style font-size="1" font-bold="true" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="ORG" width="13%" />
+            </style>
+            <style font-size="1" font-bold="true" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="" width="17%" />
+            </style>
+            <style font-size="1" font-bold="true" horizontal-align="right" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="MD" width="16%" />
+            </style>
+            <style font-size="1" font-bold="true" horizontal-align="right" border-width="1">
+              <text value="DAL" width="16%" />
+            </style>
+          </line>
+        </head>
+        <body>
+          <line>
+            <style font-face="arial" font-size="1" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="UPSU" width="4%" />
+            </style>
+            <style font-face="arial" font-size="1" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="UPAU" width="4%" onData="if self.value=='0000': self.value=''&#xA;else: self.value=self.value" />
+            </style>
+            <style font-face="arial" font-size="1" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="UPOdPpa" width="6%" onData="if self.value=='0000': self.value=''&#xA;else: self.value=self.value" />
+            </style>
+            <style font-face="arial" font-size="1" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="UPPol" width="5%" onData="if self.value=='0000': self.value=''&#xA;else: self.value=self.value" />
+            </style>
+            <style font-face="arial" font-size="1" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="UPZP" width="4%" onData="if self.value=='000': self.value=''&#xA;else: self.value=self.value" />
+            </style>
+            <style font-face="arial" font-size="1" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="UPUz" width="9%" onData="if self.value=='00000000': self.value=''&#xA;else: self.value=self.value" />
+            </style>
+            <style font-face="arial" font-size="1" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="UPOrj" width="6%" onData="if self.value=='0000': self.value=''&#xA;else: self.value=self.value" />
+            </style>
+            <style font-face="arial" font-size="1" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="UPORx" width="13%" onData="if self.value=='0000000000000': self.value=''&#xA;else: self.value=self.value" />
+            </style>
+            <style font-face="arial" font-size="1" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="" width="17%" />
+            </style>
+            <style font-face="arial" font-size="1" horizontal-align="right" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="AVMD" width="16%" onData="if self.value==0: self.value=''&#xA;else: self.value=self.value.format('_-# 0,00;-# 0,00')" />
+            </style>
+            <style font-face="arial" font-size="1" horizontal-align="right" border-width="1">
+              <value-of name="AVD" width="16%" onData="if self.value==0: self.value=''&#xA;else: self.value=self.value.format('_-# 0,00;-# 0,00')" />
+            </style>
+          </line>
+        </body>
+        <foot>
+          <line>
+            <style font-face="arial" font-size="1" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="Celkem obraty za doklad" width="68%" />
+            </style>
+            <style font-face="arial" font-size="1" horizontal-align="right" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="TOTAL-SUM(AVMD)" width="16%" onData="if self.value==0: self.value=''&#xA;else: self.value=self.value.format('_-# 0,00;-# 0,00')" />
+            </style>
+            <style font-face="arial" font-size="1" horizontal-align="right" border-width="1">
+              <value-of name="TOTAL-SUM(AVD)" width="16%" onData="if self.value==0: self.value=''&#xA;else: self.value=self.value.format('_-# 0,00;-# 0,00')" />
+            </style>
+          </line>
+        </foot>
+      </region>
+      <line>
+        <style font-face="arial" font-size="1" font-color="silver">
+          <value-of name="DHDatumZmeny" width="12%" onData="self.value=self.value.format('dd.mm.yyyy')" />
+        </style>
+        <style font-face="arial" font-size="1" font-color="silver" horizontal-align="center">
+          <value-of name="" width="76%" onData="self.value='LastModif='+format.info['dat_modif']+' '+format.info['ixs_xme']+' © 16. března 2009 Zbyněk Michálek, doklad vytvořen programem POK firmy GORDIC®'" />
+        </style>
+        <style font-face="arial" font-size="1" font-color="silver" horizontal-align="right">
+          <value-of name="ROOT.NOW" width="12%" onData="self.value=self.value.format('dd.mm.yyyy')" />
+        </style>
+      </line>
+      <!--<line break-page-before="always" on-each-page="true" only-if="1==1">-->
+      <line break-page-before="always" on-each-page="true" only-if="1==1 and DOKLAD.DHDruhDokladu=='V'">
+        <style font-face="arial" font-bold="true" left-border-width="5" right-border-width="3" top-border-width="5">
+          <text value="" width="30%" />
+        </style>
+        <style font-face="arial" font-bold="true" horizontal-align="center" top-border-width="5" bottom-border-width="1">
+          <text value="POKLADNÍ DOKLAD" width="17%" />
+        </style>
+        <style font-face="arial" font-bold="true" horizontal-align="center" vertical-align="center" top-border-width="5" bottom-border-width="1">
+          <text value="-" width="2%" />
+        </style>
+        <style font-face="arial" font-bold="true" horizontal-align="center" top-border-width="5" bottom-border-width="1">
+          <value-of name="DHDruhDokladu_Text" width="10%" />
+        </style>
+        <style font-face="arial" font-bold="true" horizontal-align="center" top-border-width="5" bottom-border-width="1">
+          <text value="" width="2%" />
+        </style>
+        <style font-face="arial" font-bold="true" top-border-width="5">
+          <value-of name="DHDanovyDoklad" width="15%" onData="self.value=self.value.upper()" />
+        </style>
+        <style font-face="arial" font-bold="true" top-border-width="5">
+          <text value="Doklad číslo:" width="13%" />
+        </style>
+        <style font-face="arial" font-bold="true" horizontal-align="right" right-border-width="5" top-border-width="5" right-padding="15">
+          <value-of name="DHCisloDokladu" width="11%" />
+        </style>
+      </line>
+      <line on-each-page="true" only-if="DOKLAD.DHDruhDokladu=='V'">
+        <style font-face="arial" left-border-width="5">
+          <text value="" width="2%" />
+        </style>
+        <style left-padding="10">
+          <image file="eru_1.bmp" image-width="25mm" image-height="15mm" width="13%" />
+        </style>
+        <style font-face="arial" right-border-width="3">
+          <text value="" width="15%" />
+        </style>
+        <style font-face="arial">
+          <text value="Datum vystavení:" width="15%" />
+        </style>
+        <style font-face="arial">
+          <value-of name="USDatum" width="16%" onData="self.value=self.value.format('dd.mm.yyyy')" />
+        </style>
+        <style font-face="arial" top-border-width="1">
+          <text value="" width="15%" />
+        </style>
+        <style font-face="arial" top-border-width="1">
+          <text value="Pokladna číslo:" width="13%" />
+        </style>
+        <style font-face="arial" horizontal-align="right" right-border-width="5" top-border-width="1" right-padding="15">
+          <value-of name="USPokNum" width="11%" />
+        </style>
+      </line>
+      <line on-each-page="true" only-if="DOKLAD.DHDruhDokladu=='V'">
+        <style font-face="arial" font-bold="true" left-border-width="5" right-border-width="3">
+          <text value="" width="30%" />
+        </style>
+        <style font-face="arial">
+          <text value="Datum us.zd. pl.:" width="15%" />
+        </style>
+        <style font-face="arial">
+          <value-of name="DHDUZP" width="16%" onData="if (self.value.format('dd.mm.yyyy'))=='00.00.0000': self.value='Nejsme plátci DPH'&#xA;else :self.value=self.value.format('dd.mm.yyyy')" />
+        </style>
+        <style font-face="arial" horizontal-align="right" right-padding="2">
+          <text value="Název pokladny:" width="15%" />
+        </style>
+        <style vertical-align="bottom" right-border-width="5" left-padding="3">
+          <value-of name="USPokText" width="24%" onData="self.value=self.value[:1].capitalize()+self.value[1:]" />
+        </style>
+      </line>
+      <line on-each-page="true" only-if="DOKLAD.DHDruhDokladu=='V'">
+        <style font-face="arial" font-bold="true" left-border-width="5" right-border-width="3">
+          <text value="" width="30%" />
+        </style>
+        <style font-face="arial">
+          <text value="" width="52%" />
+        </style>
+        <style font-face="arial">
+          <text value="Platba:" width="7%" />
+        </style>
+        <style font-face="arial" right-border-width="5">
+          <value-of name="DHZpusobUhrady" width="11%" onData="if self.value==0: self.value='V hotovosti'&#xA;else: self.value='Kartou'" />
+        </style>
+      </line>
+      <line on-each-page="true" only-if="DOKLAD.DHDruhDokladu_Text=='PŘÍJMOVÝ' and DOKLAD.DHDruhDokladu=='V'">
+        <style font-face="arial" font-bold="true" left-border-width="5" right-border-width="3">
+          <value-of name="UKOrgNazev" width="30%" />
+        </style>
+        <style font-face="arial" bottom-border-width="1">
+          <text value="" width="31%" />
+        </style>
+        <style font-face="arial" bottom-border-width="1">
+          <text value="" width="21%" />
+        </style>
+        <style font-face="arial" font-bold="true" right-border-width="5" bottom-border-width="1">
+          <value-of name="DHTisknuto" width="18%" onData="if (DOKLAD.DHTisknuto)=='Ano': self.value= 'Originál dokladu'&#xA;else: self.value='Originál dokladu'" />
+        </style>
+      </line>
+      <line on-each-page="true" only-if="DOKLAD.DHDruhDokladu=='V'">
+        <style font-bold="true" left-border-width="5">
+          <text value="IČ:" width="4%" />
+        </style>
+        <style font-face="arial" font-bold="true">
+          <value-of name="USOrgICO" width="10%" />
+        </style>
+        <style font-face="arial" font-bold="true">
+          <text value="DIČ:" width="5%" />
+        </style>
+        <style font-face="arial" font-bold="true" right-border-width="3">
+          <value-of name="UKDIC" width="11%" />
+        </style>
+        <style font-face="arial" top-border-width="3">
+          <value-of name="DHDruhDokladuP" width="9%" onData="self.value=self.value+':'" />
+        </style>
+        <style font-face="arial" top-border-width="3" left-padding="0">
+          <value-of name="DHNazev" width="43%" />
+        </style>
+        <style font-face="arial" top-border-width="3">
+          <text value="IČ:" width="5%" />
+        </style>
+        <style font-face="arial" right-border-width="5" top-border-width="3">
+          <value-of name="DHICO" width="13%" />
+        </style>
+      </line>
+      <line on-each-page="true" only-if="DOKLAD.DHDruhDokladu=='V'">
+        <style font-face="arial" font-bold="true" left-border-width="5" right-border-width="3">
+          <value-of name="UKUliceACD" width="30%" />
+        </style>
+        <style font-face="arial">
+          <text value="Adresa:" width="9%" />
+        </style>
+        <style font-face="arial" left-padding="0">
+          <value-of name="DHUliceACD" width="43%" />
+        </style>
+        <style font-face="arial">
+          <text value="DIČ:" width="5%" />
+        </style>
+        <style font-face="arial" right-border-width="5">
+          <value-of name="DHDIC" width="13%" />
+        </style>
+      </line>
+      <line on-each-page="true" only-if="DOKLAD.DHDruhDokladu=='V'">
+        <style font-face="arial" font-bold="true" left-border-width="5">
+          <value-of name="UKPSC" width="6%" />
+        </style>
+        <style font-face="arial" font-bold="true" right-border-width="3">
+          <value-of name="UKPosta" width="24%" />
+        </style>
+        <style font-face="arial">
+          <text value="" width="9%" />
+        </style>
+        <style font-face="arial" right-border-width="5" left-padding="0">
+          <value-of name="DHMestskaCast" width="61%" />
+        </style>
+      </line>
+      <line on-each-page="true" only-if="DOKLAD.DHDruhDokladu=='V'">
+        <style font-face="arial" left-border-width="5" right-border-width="3" bottom-border-width="3">
+          <text value="" width="30%" />
+        </style>
+        <style font-face="arial" bottom-border-width="1">
+          <text value="" width="9%" />
+        </style>
+        <style font-face="arial" bottom-border-width="1" left-padding="0">
+          <value-of name="DHPSC" width="6%" />
+        </style>
+        <style font-face="arial" right-border-width="5" bottom-border-width="1">
+          <value-of name="DHPosta" width="55%" />
+        </style>
+      </line>
+      <line on-each-page="true" only-if="DOKLAD.DHDruhDokladu=='V'">
+        <style font-face="arial" left-border-width="5" bottom-border-width="1">
+          <value-of name="DHDruhDokladu" width="4%" onData="if (DOKLAD.DHDruhDokladu)=='P': self.value='Za:'&#xA;else: self.value='Na:' " />
+        </style>
+        <style font-face="arial" right-border-width="5" bottom-border-width="1">
+          <value-of name="DHPopisDokladu" width="96%" onData="self.value=self.value[:1].capitalize()+self.value[1:]" />
+        </style>
+      </line>
+      <region name="POLOZKA" on-each-page="true" only-if="DOKLAD.DHDruhDokladu=='V'">
+        <head>
+          <line>
+            <style font-face="arial" font-bold="true" left-border-width="5">
+              <text value="Nákladové středisko" width="20%" />
+            </style>
+            <style font-face="arial" font-bold="true" horizontal-align="right">
+              <text value="Položka" width="10%" />
+            </style>
+            <style font-face="arial" font-bold="true">
+              <text value="Název" width="41%" />
+            </style>
+            <style font-face="arial" font-bold="true" horizontal-align="right">
+              <text value="Cena za MJ" width="11%" />
+            </style>
+            <style font-face="arial" font-bold="true" horizontal-align="right">
+              <text value="Počet" width="7%" />
+            </style>
+            <style font-face="arial" font-bold="true" horizontal-align="right" right-border-width="5" right-padding="10">
+              <text value="Částka" width="11%" />
+            </style>
+          </line>
+        </head>
+        <body>
+          <line>
+            <style font-face="arial" left-border-width="5">
+              <value-of name="DPIdentifikace" width="20%" />
+            </style>
+            <style font-face="arial" horizontal-align="right">
+              <value-of name="DPCisloPolozky" width="10%" />
+            </style>
+            <style font-face="arial" bottom-border-width="1">
+              <value-of name="DHPopisDokladu" width="41%" onData="self.value=self.value[:1].capitalize()+self.value[1:]" />
+            </style>
+            <style font-face="arial" horizontal-align="right">
+              <value-of name="DPCenaZaJednotku" width="11%" onData="if self.value==0: self.value=''&#xA;else: self.value=self.value.format('# 0,00_-;-# 0,00')" />
+            </style>
+            <style font-face="arial" horizontal-align="right">
+              <value-of name="DPMnozstvi" width="7%" onData="if self.value==0: self.value=''&#xA;else: self.value=self.value.format('# 0,00_-;-# 0,00')" />
+            </style>
+            <style font-face="arial" horizontal-align="right" right-border-width="5" right-padding="10">
+              <value-of name="DPCelkem" width="11%" onData="if self.value==0: self.value=''&#xA;else: self.value=self.value.format('# 0,00_-;-# 0,00')" />
+            </style>
+          </line>
+        </body>
+        <foot>
+          <line>
+            <style font-face="arial" font-bold="true" left-border-width="5" top-border-width="1" bottom-border-width="1">
+              <text value="Součet:" width="89%" />
+            </style>
+            <style font-face="arial" font-bold="true" horizontal-align="right" right-border-width="5" top-border-width="1" bottom-border-width="1" right-padding="10">
+              <value-of name="SUM(DPCelkem)" width="11%" format="# 0,00_-;-# 0,00" />
+            </style>
+          </line>
+          <line>
+            <style font-face="arial" font-bold="true" vertical-align="center" left-border-width="5">
+              <text value="Slovy:" width="7%" height="10mm" />
+            </style>
+            <style font-face="arial" font-bold="true" vertical-align="center" right-border-width="5">
+              <value-of name="SUM(DPCelkem)" width="93%" height="10mm" onData="self.value='=='+A(self.value,2,'0')+Decimal(A(self.value,0,'0')).spellOut().replace(' ','').capitalize()+Mena(DOKLAD.SPMena).replace(' ','')+' '+Decimal(A(self.value,1,'5')+'0').spellOut()+Mena(DOKLAD.SPMenaSetin)+'=='" />
+            </style>
+          </line>
+        </foot>
+      </region>
+      <line on-each-page="true" only-if="DOKLAD.DHDruhDokladu=='V'">
+        <style font-face="arial" font-bold="true" left-border-width="5" right-border-width="3" top-border-width="5" left-padding="10">
+          <text value="Příkazce operace" width="31%" />
+        </style>
+        <style font-face="arial" font-bold="true" top-border-width="5" left-padding="10">
+          <text value="Osoba odpovědná za účetní případ a zaúčtování" width="33%" />
+        </style>
+        <style font-face="arial" font-bold="true" left-border-width="3" right-border-width="5" top-border-width="5" left-padding="10">
+          <value-of name="" width="36%" onData="if (DOKLAD.DHDruhDokladu)&lt;&gt;'P': self.value='Přijal v zastoupení, nebo osobně (podpis)'&#xA;else: self.value='Přijato od' " />
+        </style>
+      </line>
+      <line on-each-page="true" only-if="DOKLAD.DHDruhDokladu=='V'">
+        <style font-face="arial" font-size="6" left-border-width="5" right-border-width="3" left-padding="10">
+          <text value="" width="31%" />
+        </style>
+        <style font-face="arial" left-padding="10">
+          <text value="" width="33%" />
+        </style>
+        <style font-face="arial" left-border-width="3" right-border-width="5" left-padding="10">
+          <value-of name="DHDruhDokladu" width="36%" onData="if (DOKLAD.DHDruhDokladu)&lt;&gt;'P': self.value=&quot;&quot;&#xA;else: self.value=DOKLAD.USUId" />
+        </style>
+      </line>
+      <line on-each-page="true" only-if="DOKLAD.DHDruhDokladu=='V'">
+        <style font-face="arial" left-border-width="5" bottom-border-width="5" left-padding="10">
+          <text value="Datum:" width="7%" />
+        </style>
+        <style font-face="arial" right-border-width="3" bottom-border-width="5" left-padding="10">
+          <value-of name="" width="24%" onData="self.value=DOKLAD.DHDen+'.'+DOKLAD.DHMesic+'.'+DOKLAD.DHRok" />
+        </style>
+        <style font-face="arial" bottom-border-width="5" left-padding="10">
+          <text value="Datum:" width="7%" />
+        </style>
+        <style font-face="arial" right-border-width="3" bottom-border-width="5" left-padding="10">
+          <value-of name="" width="26%" onData="self.value=DOKLAD.DHDen+'.'+DOKLAD.DHMesic+'.'+DOKLAD.DHRok" />
+        </style>
+        <style font-face="arial" bottom-border-width="5" left-padding="10">
+          <text value="Datum:" width="7%" />
+        </style>
+        <style font-face="arial" right-border-width="5" bottom-border-width="5" left-padding="10">
+          <value-of name="" width="29%" onData="self.value=DOKLAD.DHDen+'.'+DOKLAD.DHMesic+'.'+DOKLAD.DHRok" />
+        </style>
+      </line>
+      <line on-each-page="true" only-if="DOKLAD.DHDruhDokladu=='V'">
+        <style font-face="arial" font-bold="true" left-border-width="5" right-border-width="2" left-padding="10">
+          <text value="Hlavní účetní" width="50%" />
+        </style>
+        <style font-face="arial" font-bold="true" left-border-width="3" right-border-width="5" left-padding="10">
+          <text value="Rozpočtář" width="50%" />
+        </style>
+      </line>
+      <line on-each-page="true" only-if="DOKLAD.DHDruhDokladu=='V'">
+        <style font-face="arial" left-border-width="5" right-border-width="3" left-padding="10">
+          <text value="" width="50%" height="9.84mm" />
+        </style>
+        <style font-face="arial" left-border-width="3" right-border-width="5" left-padding="10">
+          <text value="" width="50%" height="9.84mm" />
+        </style>
+      </line>
+      <line on-each-page="true" only-if="DOKLAD.DHDruhDokladu=='V'">
+        <style font-face="arial" left-border-width="5" bottom-border-width="5" left-padding="10">
+          <text value="Datum:" width="7%" />
+        </style>
+        <style font-face="arial" right-border-width="2" bottom-border-width="5" left-padding="0">
+          <value-of name="" width="43%" onData="self.value=DOKLAD.DHDen+'.'+DOKLAD.DHMesic+'.'+DOKLAD.DHRok" />
+        </style>
+        <style font-face="arial" left-border-width="3" bottom-border-width="5" left-padding="10">
+          <text value="Datum:" width="7%" />
+        </style>
+        <style font-face="arial" right-border-width="5" bottom-border-width="5" left-padding="0">
+          <value-of name="" width="43%" onData="self.value=DOKLAD.DHDen+'.'+DOKLAD.DHMesic+'.'+DOKLAD.DHRok" />
+        </style>
+      </line>
+      <line on-each-page="true" only-if="DOKLAD.DHDruhDokladu=='V'">
+        <style font-face="arial" left-border-width="5" right-border-width="5" bottom-border-width="5" left-padding="10" top-padding="10" bottom-padding="10">
+          <value-of name="" width="100%" onData="if (DOKLAD.DHDruhDokladu)&lt;&gt;'P': self.value='Příkazce operace a hlavní účetní svým podpisem stvrzují provedení předběžné kontroly dle §14 vyhl. č. 416/2004 Sb., o finanční kontrole ve veřejné správě a o změně některých zákonů, v platném znění.'&#xA;else: self.value='Příkazce operace a hlavní účetní svým podpisem stvrzuji provedení předběžé kontroly dle §12 vyhl. č. 416/2004 Sb., o finanční kontrole ve veřejné správě a o změně některých zákonů, v platném znění.' " />
+        </style>
+      </line>
+      <line on-each-page="true" only-if="DOKLAD.DHDruhDokladu=='V'">
+        <style font-face="arial" font-size="1" font-color="silver">
+          <value-of name="DHDatumZmeny" width="12%" onData="self.value=self.value.format('dd.mm.yyyy')" />
+        </style>
+        <style font-face="arial" font-size="1" font-color="silver" horizontal-align="center">
+          <value-of name="" width="76%" onData="self.value='LastModif='+format.info['dat_modif']+' '+format.info['ixs_xme']+' © 16. března 2009 Zbyněk Michálek, doklad vytvořen programem POK firmy GORDIC®'" />
+        </style>
+        <style font-face="arial" font-size="1" font-color="silver" horizontal-align="right">
+          <value-of name="ROOT.NOW" width="12%" onData="self.value=self.value.format('dd.mm.yyyy')" />
+        </style>
+      </line>
+    </body>
+  </region>
+</format>

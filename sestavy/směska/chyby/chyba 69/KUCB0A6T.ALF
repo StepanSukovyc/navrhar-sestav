@@ -1,0 +1,898 @@
+<?xml version="1.0" encoding="windows-1250"?>
+
+<format type="grr" xmlns="http://www.gordic.cz/TR/alf/1.3/">
+
+	<info
+		ixs_xme="0000ALX0AG0I"
+		xmeta_ver="1"
+		xmeta_subver_min="1"
+		nazev="Vyúčtovací poukaz dotace"
+		ixs_alv="0000ALV0354O"
+		allowed_output="htm,xls,doc,frm"
+		ixs_frm="KUCBALF0A6TS"
+		maker="0432"
+		create_date="20070207"
+		rokmes_od="199801"
+		rokmes_do="999913"
+		poznamka=""
+		Dat_modif="201101190930"
+	/>
+
+
+<script><![CDATA[
+def ZobrazICORCPop(self,tes,zobr_rc):
+    if tes=='20': 
+      if zobr_rc=='0':
+        self.value=''
+      else:
+        self.value='RČ:'
+    else:
+      self.value='IČO:'
+
+def ZobrazICORCHod(self,tes,zobr_rc,ico,rc):
+    if tes=='20': 
+      if zobr_rc=='0':
+        self.value=''
+      else:
+        self.value=rc
+    else:
+      self.value=ico
+      
+def ZpuUhrUcet(ZpuCis):
+  if ZpuCis=='20' or ZpuCis=='30' or ZpuCis=='40' or ZpuCis=='70':
+    return 1
+  else:
+    if ZpuCis=='10':
+      return 2
+    else:
+      return 0
+
+def ZkratkaMena(ZkrMena):
+  if ZkrMena=='CZK':
+    return 'Kč'
+  else:
+    return ZkrMena
+
+# -------------------------------------------  
+# funkce pro rozpocitani dynamickych sirek
+# -------------------------------------------  
+def SpocitejSirky(sirky,delka,poradi):
+  celkem_delka=0;
+  
+  #zjisteni kompletni sirky textu
+  i1=0;
+  for i in delka:
+    celkem_delka=celkem_delka+i;
+    i1=i1+1;
+    
+  pocetdelka=i1-1;
+
+  i1=0;
+  celkem_delka2=100;
+  minporadi=0;
+  max=1;
+  for i in delka:
+    if i>0:
+      subsirka=int(round(i/celkem_delka,2)*100);
+      if pocetdelka==i1:
+        subsirka=int(celkem_delka2);
+        celkem_delka2=0;
+      else:
+        celkem_delka2=celkem_delka2-subsirka;
+      if i1<15:
+        #tohle jsou polozky ucetni vety a ty musi byt podle poradi...
+        sirky[int(poradi[i1])-1]=subsirka
+      else:
+        sirky[i1]=subsirka;
+    i1=i1+1;
+
+  # ted se pokusim seskupit polozky bez nul
+  nuly=0;
+  koncnuly=-1;
+  max=14;
+  while nuly<>koncnuly:
+    i1=0;
+    nuly=0;
+    koncnuly=0;
+    while i1<max:
+      if sirky[i1]==0:
+        sirky[i1]=sirky[i1+1];
+        sirky[i1+1]=0;
+      if sirky[i1]==0:
+        koncnuly=koncnuly+1
+        nuly=nuly+1
+      else:
+        koncnuly=0;
+      i1=i1+1
+
+  return ""
+
+# -------------------------------------------  
+# funkce pro prohozeni ucetnich polozek
+# -------------------------------------------  
+def ProhodUCTPol(poradi,polozky):
+
+  minporadi=0;
+  pocet=0;
+  polozky2 = [];
+  i=0
+  while i<15:
+    polozky2.append("");
+    i=i+1;
+  
+  while pocet<15:
+    i=0;
+    while i<15:
+      if poradi[i]==pocet+1:
+        polozky2[minporadi]=polozky[i];
+        minporadi=minporadi+1;
+        break;
+      i=i+1;
+    pocet=pocet+1;
+
+  i=0    
+  while i<minporadi:
+    polozky[i]=polozky2[i];
+    i=i+1
+    
+  while minporadi<15:
+    polozky[minporadi]="";
+    minporadi=minporadi+1
+
+  return ""
+
+# ------------------------------------------ 
+# funkce pro vrácení textu součtu
+# ------------------------------------------
+def VratTextSouctu(_KategorieDokladu):
+
+  _TextSouctu=""
+  
+  #---- podle kategorie si dodam text pro tisk sumy
+  if _KategorieDokladu==1310:
+    _TextSouctu="Dobropisovaná částka"
+  else:
+    if _KategorieDokladu==1305:
+      _TextSouctu="Celková částka"
+    else:
+      if _KategorieDokladu==1342 or _KategorieDokladu==1362:
+        _TextSouctu="Celková částka přeplatku"
+      else:
+        if _KategorieDokladu==1341 or _KategorieDokladu==1361:
+          _TextSouctu="Celková částka doplatku"
+        else:
+          _TextSouctu="Celková částka k úhradě"
+        
+  return _TextSouctu
+]]></script>
+
+	<region name="HLA">
+		<body>
+			<line>
+				<style width="14%" left-border-width="2" right-border-width="2" top-border-width="2" bottom-border-width="1" font-bold="true" horizontal-align="center">
+					<text value="Jihočeský kraj  IČ: 70890650"/>
+				</style>
+				<style width="86%" left-border-width="2" right-border-width="2" top-border-width="2" bottom-border-width="1" font-size="5" font-bold="true" horizontal-align="center">
+					<text value="Vyúčtovací poukaz        "/>
+				</style>
+			</line>
+			<line>
+				<style width="100%" height="3mm">
+					<text value=""/>
+				</style>
+			</line>
+			<line>
+				<style width="57%" left-border-width="2" right-border-width="2" top-border-width="2">
+					<value-of name="" onData="self.value=&apos;Kniha: &apos;+ HLA.FAK_KNI"/>
+				</style>
+				<style width="43%" left-border-width="2" right-border-width="2" top-border-width="2">
+					<value-of name="" onData="if(ZpuUhrUcet(HLA.FAK_ZPU_CIS)!=2): self.value=&apos;Na vrub účtu číslo: &apos;+ HLA.FAK_BAN_VL"/>
+				</style>
+			</line>
+			<line>
+				<style width="7%" left-border-width="2">
+					<text value="  PID:"/>
+				</style>
+				<style width="50%" right-border-width="2">
+					<value-of name="FAK_PID"/>
+				</style>
+				<style width="43%" left-border-width="2" right-border-width="2">
+					<value-of name="FAK_BAN_VL_BAN" onData="if(ZpuUhrUcet(HLA.FAK_ZPU_CIS)==2): self.value=&apos;&apos;"/>
+				</style>
+			</line>
+			<line>
+				<style width="57%" left-border-width="2" right-border-width="2">
+					<value-of name="" onData="self.value=&apos;Agendové číslo: &apos;+ HLA.FAK_ACAG"/>
+				</style>
+				<style width="43%" left-border-width="2" right-border-width="2">
+					<text value=""/>
+				</style>
+			</line>
+			<line>
+				<style width="57%" left-border-width="2" right-border-width="2">
+					<text value=""/>
+				</style>
+				<style width="43%" left-border-width="2" right-border-width="2">
+					<text value=""/>
+				</style>
+			</line>
+			<line>
+				<style width="57%" left-border-width="2" right-border-width="2" bottom-border-width="2">
+					<text value=""/>
+				</style>
+				<style width="43%" left-border-width="2" right-border-width="2" bottom-border-width="2">
+					<value-of name="" onData="if(ZpuUhrUcet(HLA.FAK_ZPU_CIS)==1): self.value=&apos;Způsob úhrady: &apos;+ HLA.FAK_ZPU;&#10;else: self.value=&apos;Placeno: &apos;+ HLA.FAK_ZPU"/>
+				</style>
+			</line>
+			<line>
+				<style width="57%" left-border-width="2" right-border-width="2" bottom-border-width="2">
+					<value-of name="FAK_TODBERU"/>
+				</style>
+				<style width="43%" left-border-width="2" right-border-width="2">
+					<text value=""/>
+				</style>
+			</line>
+			<line>
+				<style width="57%" left-border-width="2" right-border-width="2" font-bold="true" font-italic="true">
+					<value-of name="DOD_TYO"/>
+				</style>
+				<style width="15%">
+					<text value=" Datum UUP:"/>
+				</style>
+				<style width="28%" right-border-width="2">
+					<value-of name="FAK_DUP"/>
+				</style>
+			</line>
+			<line>
+				<style width="57%" left-border-width="2" right-border-width="2">
+					<value-of name="" onData="a=&apos;&apos;;ZobrazICORCPop(self,HLA.DOD_TES,HLA.FAK_ZOB_RC);a+=self.value;ZobrazICORCHod(self,HLA.DOD_TES,HLA.FAK_ZOB_RC,HLA.DOD_ICO,HLA.DOD_RC);self.value=a+&apos; &apos;+self.value;"/>
+				</style>
+				<style width="43%" left-border-width="2" right-border-width="2">
+					<value-of name="" onData="if(ZpuUhrUcet(HLA.FAK_ZPU_CIS)==1): self.value=&apos;Ve prospěch účtu číslo: &apos;+ HLA.FAK_BAN_CI"/>
+				</style>
+			</line>
+			<line>
+				<style width="15%" left-border-width="2">
+					<text value="Název firmy/Jméno:"/>
+				</style>
+				<style width="42%" right-border-width="2">
+					<value-of name="" onData="self.value=HLA.DOD_NAZ"/>
+				</style>
+				<style width="43%" left-border-width="2" right-border-width="2">
+					<text value=""/>
+				</style>
+			</line>
+			<line>
+				<style width="57%" left-border-width="2" right-border-width="2">
+					<value-of name="" onData="self.value=&apos;Adresa: &apos;+HLA.DOD_ULI+&apos;, &apos;+HLA.DOD_MES"/>
+				</style>
+				<style width="15%" left-border-width="2">
+					<text value=" Datum splatnosti:"/>
+				</style>
+				<style width="28%" right-border-width="2">
+					<value-of name="FAK_DSP"/>
+				</style>
+			</line>
+			<line>
+				<style width="57%" left-border-width="2" right-border-width="2" bottom-border-width="2">
+					<value-of name="" onData="self.value=&apos;PSČ: &apos;+HLA.DOD_PSC"/>
+				</style>
+				<style width="9%" left-border-width="2" bottom-border-width="2">
+					<text value=" Smlouva:"/>
+				</style>
+				<style width="34%" right-border-width="2" bottom-border-width="2">
+					<value-of name="FAK_PAR_SML"/>
+				</style>
+			</line>
+			<line>
+				<style width="57%" left-border-width="2" right-border-width="2">
+					<value-of name="" onData="self.value=&apos;Agendové číslo výdajového poukazu: &apos;+HLA.DOD_AC"/>
+				</style>
+				<style width="43%" left-border-width="2" right-border-width="2">
+					<value-of name="" onData="self.value=&apos;Variabilní symbol: &apos;+HLA.FAK_BAN_VS"/>
+				</style>
+			</line>
+			<line>
+				<style width="57%" left-border-width="2" right-border-width="2" bottom-border-width="2" top-padding="0">
+					<value-of name="" onData="self.value=&apos;Důvod: &apos;+HLA.FAK_POP"/>
+				</style>
+				<style width="43%" left-border-width="2" right-border-width="2" bottom-border-width="2" top-padding="0">
+					<value-of name="" onData="self.value=&apos;Konstantní symbol: &apos;+HLA.FAK_BAN_KS+&apos;\n&apos;+&apos;Specifický symbol: &apos;+HLA.FAK_BAN_SS;zkr_mena=ZkratkaMena(HLA.FAK_MEN_ZKR);"/>
+				</style>
+			</line>
+			<line only-if="Decimal(HLA.FAK_ZAL_CEN_MEN)!=0">
+				<style width="30%" left-border-width="2">
+					<value-of name="" onData="self.value=&apos;Náklady celkem:&apos;"/>
+				</style>
+				<style width="70%" right-border-width="2">
+					<value-of name="" onData="self.value=HLA.FAK_M_CENSVAZ_BZ+&apos; &apos;+zkr_mena;&#10;if(zkr_mena!=&apos;Kč&apos;): self.value=self.value+ &apos; (&apos;+HLA.FAK_CENSVAZ_BZ+&apos; Kč)&apos;"/>
+				</style>
+			</line>
+			<line only-if="Decimal(HLA.FAK_ZAL_CEN_MEN)!=0">
+				<style width="30%" left-border-width="2">
+					<value-of name="" onData="self.value=&apos;Zaplacené zálohy:&apos;"/>
+				</style>
+				<style width="70%" right-border-width="2">
+					<value-of name="" onData="self.value=HLA.FAK_ZAL_CEN_MEN+&apos; &apos;+zkr_mena;&#10;if(zkr_mena!=&apos;Kč&apos;): self.value=self.value+ &apos; (&apos;+HLA.FAK_ZAL_CEN+&apos; Kč)&apos;"/>
+				</style>
+			</line>
+			<line>
+				<style width="30%" left-border-width="2">
+					<value-of name="" onData="self.value=VratTextSouctu(int(HLA.FAK_HLA_TYP_NUM))+&apos;:&apos;"/>
+				</style>
+				<style width="70%" right-border-width="2" font-bold="true">
+					<value-of name="" onData="self.value=Decimal(HLA.FAK_M_CEN_BZ).format(&apos;# ##0,00&apos;)+&apos; &apos;+zkr_mena;&#10;if(zkr_mena!=&apos;Kč&apos;): self.value=self.value+ &apos; (&apos;+HLA.FAK_CEN_BZ+&apos; Kč)&apos;"/>
+				</style>
+			</line>
+			<line>
+				<style width="30%" left-border-width="2">
+					<value-of name="" onData="self.value=&apos;Slovy:&apos;"/>
+				</style>
+				<style width="70%" right-border-width="2" font-bold="true">
+					<value-of name="FAK_M_CEN_BZ_SLV" onData="if(zkr_mena!=&apos;Kč&apos;): self.value=self.value+ &apos; (&apos;+HLA.FAK_CEN_BZ_SLV+&apos;)&apos;"/>
+				</style>
+			</line>
+			<line>
+				<style width="100%" height="3mm" left-border-width="2" right-border-width="2" top-border-width="2">
+					<text value=""/>
+				</style>
+			</line>
+			<line>
+				<style width="1%" left-border-width="2" top-border-width="1" bottom-border-width="1">
+					<text value=""/>
+				</style>
+				<style width="99%" right-border-width="2" top-border-width="1" bottom-border-width="1" font-bold="true">
+					<text value="Právní forma organizace:"/>
+				</style>
+			</line>
+			<line>
+				<style width="4%" border-width="1">
+					<text value=""/>
+				</style>
+				<style width="28%" right-border-width="2">
+					<text value="Obce  a DSO"/>
+				</style>
+				<style width="4%" right-border-width="2" top-border-width="1" bottom-border-width="1">
+					<text value=""/>
+				</style>
+				<style width="25%" right-border-width="2">
+					<text value=" Právnické osoby"/>
+				</style>
+				<style width="4%" right-border-width="2" top-border-width="1" bottom-border-width="1">
+					<text value=""/>
+				</style>
+				<style width="35%" right-border-width="2" top-border-width="1" bottom-border-width="1">
+					<text value=" Neziskové a podobné organizace"/>
+				</style>
+			</line>
+			<line>
+				<style width="4%" border-width="1">
+					<text value=""/>
+				</style>
+				<style width="28%" top-border-width="1">
+					<text value=" RRRSJ"/>
+				</style>
+				<style width="4%" border-width="1">
+					<text value=""/>
+				</style>
+				<style width="25%" top-border-width="1">
+					<text value="Fyzické osoby nepodnikající"/>
+				</style>
+				<style width="4%" border-width="1">
+					<text value=""/>
+				</style>
+				<style width="35%" right-border-width="1" top-border-width="1">
+					<text value="Fyzické osoby podnikající"/>
+				</style>
+			</line>
+			<line>
+				<style width="4%" border-width="1">
+					<text value=""/>
+				</style>
+				<style width="43%" right-border-width="2" top-border-width="1" bottom-border-width="1">
+					<text value=" PO  - příspěvkové organizace krajské"/>
+				</style>
+				<style width="4%" border-width="1">
+					<text value=""/>
+				</style>
+				<style width="49%" right-border-width="2" top-border-width="1" bottom-border-width="1">
+					<text value="PO - příspěvkové organizace ostatní"/>
+				</style>
+			</line>
+			<line>
+				<style width="100%" height="3mm">
+					<text value=""/>
+				</style>
+			</line>
+			<line>
+				<style width="1%" left-border-width="1" top-border-width="1" bottom-border-width="1">
+					<text value=""/>
+				</style>
+				<style width="15%" right-border-width="1" top-border-width="1" bottom-border-width="1" font-bold="true">
+					<text value="Typ dotace:"/>
+				</style>
+				<style width="4%" right-border-width="1" top-border-width="1" bottom-border-width="1" font-bold="true">
+					<text value=""/>
+				</style>
+				<style width="19%" right-border-width="1" top-border-width="1" bottom-border-width="1">
+					<text value="Investiční"/>
+				</style>
+				<style width="4%" right-border-width="1" top-border-width="1" bottom-border-width="1" font-bold="true">
+					<text value=""/>
+				</style>
+				<style width="19%" right-border-width="1" top-border-width="1" bottom-border-width="1">
+					<text value="Neinvestiční"/>
+				</style>
+				<style width="38%" right-border-width="1" top-border-width="1" bottom-border-width="1">
+					<text value=" UZ:"/>
+				</style>
+			</line>
+			<line>
+				<style width="1%" left-border-width="1" top-border-width="1" bottom-border-width="1">
+					<text value=""/>
+				</style>
+				<style width="11%" right-border-width="1" top-border-width="1" bottom-border-width="1" font-bold="true">
+					<text value="Dotace:"/>
+				</style>
+				<style width="4%" border-width="1">
+					<text value=""/>
+				</style>
+				<style width="29%" border-width="1">
+					<text value="Krátkodobá"/>
+				</style>
+				<style width="4%" border-width="1">
+					<text value=""/>
+				</style>
+				<style width="51%" border-width="1">
+					<text value="Dlouhodobá"/>
+				</style>
+			</line>
+			<line>
+				<style width="100%" height="3mm">
+					<text value=""/>
+				</style>
+			</line>
+			<line>
+				<style width="100%" border-width="1">
+					<text value="Odúčtován podmíněný závazek z důvodu nedočerpání smlouvy (v případě, že ano, nutno přiložit &quot;Protokol k zaevidování podm. závazků&quot; s mínusovým znaménkem).            &#10;Odúčtovat podmíněný závazek (vyplní se v případě, že je podmíněný závazek k dané platbě evidován)."/>
+				</style>
+			</line>
+			<line>
+				<style width="4%" border-width="1">
+					<text value=""/>
+				</style>
+				<style width="46%" top-border-width="1" bottom-border-width="1">
+					<text value=" ANO - krátkodobý"/>
+				</style>
+				<style width="4%" border-width="1">
+					<text value=""/>
+				</style>
+				<style width="46%" right-border-width="2" top-border-width="1" bottom-border-width="1">
+					<text value="ANO - dlouhodobý"/>
+				</style>
+			</line>
+			<line>
+				<style width="100%" height="3mm">
+					<text value=""/>
+				</style>
+			</line>
+			<line>
+				<style width="100%">
+					<text value="Rozpočtové krytí:"/>
+				</style>
+			</line>
+			<line>
+				<style width="100%" height="0mm">
+					<value-of name="" onData="sirky=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];poradi=[HLA.FAK_POR_UEA,HLA.FAK_POR_UEB,HLA.FAK_POR_UEC,HLA.FAK_POR_UED,HLA.FAK_POR_UEE,HLA.FAK_POR_UEF,HLA.FAK_POR_UEG,HLA.FAK_POR_UEH,HLA.FAK_POR_UEI,HLA.FAK_POR_UEJ,HLA.FAK_POR_TE0,HLA.FAK_POR_TE1,HLA.FAK_POR_TE2,HLA.FAK_POR_TE3,HLA.FAK_POR_TE4,16,17,18];delky=[HLA.FAK_SIR_A_UEA,HLA.FAK_SIR_A_UEB,HLA.FAK_SIR_A_UEC,HLA.FAK_SIR_A_UED,HLA.FAK_SIR_A_UEE,HLA.FAK_SIR_A_UEF,HLA.FAK_SIR_A_UEG,HLA.FAK_SIR_A_UEH,HLA.FAK_SIR_A_UEI,HLA.FAK_SIR_A_UEJ,HLA.FAK_SIR_A_TE0,HLA.FAK_SIR_A_TE1,HLA.FAK_SIR_A_TE2,HLA.FAK_SIR_A_TE3,HLA.FAK_SIR_A_TE4,12,12,15];SpocitejSirky(sirky,delky,poradi);nazvy_uct=[HLA.FAK_NAZ_UEA,HLA.FAK_NAZ_UEB,HLA.FAK_NAZ_UEC,HLA.FAK_NAZ_UED,HLA.FAK_NAZ_UEE,HLA.FAK_NAZ_UEF,HLA.FAK_NAZ_UEG,HLA.FAK_NAZ_UEH,HLA.FAK_NAZ_UEI,HLA.FAK_NAZ_UEJ,HLA.FAK_NAZ_TE0,HLA.FAK_NAZ_TE1,HLA.FAK_NAZ_TE2,HLA.FAK_NAZ_TE3,HLA.FAK_NAZ_TE4];ProhodUCTPol(poradi,nazvy_uct);pocet_kryti=0;"/>
+				</style>
+			</line>
+			<line>
+				<style width="1%" left-border-width="1" top-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.value=nazvy_uct[0];self.style.width=str(sirky[0])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" top-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.value=nazvy_uct[1];self.style.width=str(sirky[1])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" top-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.value=nazvy_uct[2];self.style.width=str(sirky[2])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" top-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.value=nazvy_uct[3];self.style.width=str(sirky[3])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" top-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.value=nazvy_uct[4];self.style.width=str(sirky[4])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" top-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.value=nazvy_uct[5];self.style.width=str(sirky[5])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" top-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.value=nazvy_uct[6];self.style.width=str(sirky[6])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" top-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.value=nazvy_uct[7];self.style.width=str(sirky[7])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" top-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.value=nazvy_uct[8];self.style.width=str(sirky[8])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" top-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.value=nazvy_uct[9];self.style.width=str(sirky[9])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" top-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.value=nazvy_uct[10];self.style.width=str(sirky[10])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" top-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.value=nazvy_uct[11];self.style.width=str(sirky[11])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" top-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.value=nazvy_uct[12];self.style.width=str(sirky[12])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" top-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.value=nazvy_uct[13];self.style.width=str(sirky[13])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" top-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.value=nazvy_uct[14];self.style.width=str(sirky[14])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" top-border-width="1" left-padding="3" right-padding="3" font-size="1" horizontal-align="right" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.value=&apos;MD&apos;;self.style.width=str(sirky[15])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" top-border-width="1" left-padding="3" right-padding="3" font-size="1" horizontal-align="right" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.value=&apos;DAL&apos;;self.style.width=str(sirky[16])+&apos;%&apos;"/>
+				</style>
+				<style width="83%" right-border-width="1" top-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.value=&apos;Název&apos;;self.style.width=str(sirky[17])+&apos;%&apos;"/>
+				</style>
+			</line>
+			<region name="KRY_DEF_UCT">
+				<body>
+					<line>
+						<style width="100%" height="0mm" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+							<value-of name="" onData="polozky_uct=[KRY_DEF_UCT.KRY_UEA,KRY_DEF_UCT.KRY_UEB,KRY_DEF_UCT.KRY_UEC,KRY_DEF_UCT.KRY_UED,KRY_DEF_UCT.KRY_UEE,KRY_DEF_UCT.KRY_UEF,KRY_DEF_UCT.KRY_UEG  ,KRY_DEF_UCT.KRY_UEH,KRY_DEF_UCT.KRY_UEI,KRY_DEF_UCT.KRY_UEJ,KRY_DEF_UCT.KRY_TE0,KRY_DEF_UCT.KRY_TE1,KRY_DEF_UCT.KRY_TE2,KRY_DEF_UCT.KRY_TE3,KRY_DEF_UCT.KRY_TE4];ProhodUCTPol(poradi,polozky_uct);"/>
+						</style>
+					</line>
+					<line>
+						<style width="1%" left-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+							<value-of name="" onData="self.value=polozky_uct[0];self.style.width=str(sirky[0])+&apos;%&apos;"/>
+						</style>
+						<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+							<value-of name="" onData="self.value=polozky_uct[1];self.style.width=str(sirky[1])+&apos;%&apos;"/>
+						</style>
+						<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+							<value-of name="" onData="self.value=polozky_uct[2];self.style.width=str(sirky[2])+&apos;%&apos;"/>
+						</style>
+						<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+							<value-of name="" onData="self.value=polozky_uct[3];self.style.width=str(sirky[3])+&apos;%&apos;"/>
+						</style>
+						<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+							<value-of name="" onData="self.value=polozky_uct[4];self.style.width=str(sirky[4])+&apos;%&apos;"/>
+						</style>
+						<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+							<value-of name="" onData="self.value=polozky_uct[5];self.style.width=str(sirky[5])+&apos;%&apos;"/>
+						</style>
+						<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+							<value-of name="" onData="self.value=polozky_uct[6];self.style.width=str(sirky[6])+&apos;%&apos;"/>
+						</style>
+						<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+							<value-of name="" onData="self.value=polozky_uct[7];self.style.width=str(sirky[7])+&apos;%&apos;"/>
+						</style>
+						<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+							<value-of name="" onData="self.value=polozky_uct[8];self.style.width=str(sirky[8])+&apos;%&apos;"/>
+						</style>
+						<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+							<value-of name="" onData="self.value=polozky_uct[9];self.style.width=str(sirky[9])+&apos;%&apos;"/>
+						</style>
+						<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+							<value-of name="" onData="self.value=polozky_uct[10];self.style.width=str(sirky[10])+&apos;%&apos;"/>
+						</style>
+						<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+							<value-of name="" onData="self.value=polozky_uct[11];self.style.width=str(sirky[11])+&apos;%&apos;"/>
+						</style>
+						<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+							<value-of name="" onData="self.value=polozky_uct[12];self.style.width=str(sirky[12])+&apos;%&apos;"/>
+						</style>
+						<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+							<value-of name="" onData="self.value=polozky_uct[13];self.style.width=str(sirky[13])+&apos;%&apos;"/>
+						</style>
+						<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+							<value-of name="" onData="self.value=polozky_uct[14];self.style.width=str(sirky[14])+&apos;%&apos;"/>
+						</style>
+						<style width="1%" left-padding="3" right-padding="3" font-size="1" horizontal-align="right" ellipsis-style="cut" multiline="false">
+							<value-of name="" onData="self.value=KRY_DEF_UCT.KRY_MD;self.style.width=str(sirky[15])+&apos;%&apos;"/>
+						</style>
+						<style width="1%" left-padding="3" right-padding="3" font-size="1" horizontal-align="right" ellipsis-style="cut" multiline="false">
+							<value-of name="" onData="self.value=KRY_DEF_UCT.KRY_DAL;self.style.width=str(sirky[16])+&apos;%&apos;"/>
+						</style>
+						<style width="83%" right-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+							<value-of name="" onData="self.value=KRY_DEF_UCT.KRY_POP;self.style.width=str(sirky[17])+&apos;%&apos;;pocet_kryti=pocet_kryti+1"/>
+						</style>
+					</line>
+				</body>
+			</region>
+			<line only-if="pocet_kryti==0">
+				<style width="1%" left-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[0])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[1])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[2])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[3])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[4])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[5])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[6])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[7])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[8])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[9])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[10])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[11])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[12])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[13])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[14])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" horizontal-align="right" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[15])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" horizontal-align="right" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[16])+&apos;%&apos;"/>
+				</style>
+				<style width="83%" right-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[17])+&apos;%&apos;"/>
+				</style>
+			</line>
+			<line only-if="pocet_kryti==0">
+				<style width="1%" left-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[0])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[1])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[2])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[3])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[4])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[5])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[6])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[7])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[8])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[9])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[10])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[11])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[12])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[13])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[14])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" horizontal-align="right" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[15])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" horizontal-align="right" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[16])+&apos;%&apos;"/>
+				</style>
+				<style width="83%" right-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[17])+&apos;%&apos;"/>
+				</style>
+			</line>
+			<line only-if="pocet_kryti==0">
+				<style width="1%" left-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[0])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[1])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[2])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[3])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[4])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[5])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[6])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[7])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[8])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[9])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[10])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[11])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[12])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[13])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[14])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" horizontal-align="right" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[15])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" horizontal-align="right" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[16])+&apos;%&apos;"/>
+				</style>
+				<style width="83%" right-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[17])+&apos;%&apos;"/>
+				</style>
+			</line>
+			<line only-if="pocet_kryti==0">
+				<style width="1%" left-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[0])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[1])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[2])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[3])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[4])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[5])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[6])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[7])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[8])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[9])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[10])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[11])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[12])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[13])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[14])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" horizontal-align="right" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[15])+&apos;%&apos;"/>
+				</style>
+				<style width="1%" left-padding="3" right-padding="3" font-size="1" horizontal-align="right" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[16])+&apos;%&apos;"/>
+				</style>
+				<style width="83%" right-border-width="1" left-padding="3" right-padding="3" font-size="1" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.style.width=str(sirky[17])+&apos;%&apos;"/>
+				</style>
+			</line>
+			<line break-page-after="avoid">
+				<style width="50%" left-border-width="2" top-border-width="1">
+					<value-of name="" onData="self.value=&apos;Vyhotovil a za věcnou správnost odpovídá   &apos;+HLA.FAK_HLA_INF_ZMP"/>
+				</style>
+				<style width="50%" right-border-width="2" top-border-width="1">
+					<text value=" Podpis:"/>
+				</style>
+			</line>
+			<line break-page-after="avoid">
+				<style width="100%" left-border-width="2" right-border-width="2" bottom-border-width="1">
+					<value-of name="" onData="self.value=&apos;Datum: &apos;"/>
+				</style>
+			</line>
+			<line break-page-after="avoid">
+				<style width="40%" left-border-width="2">
+					<value-of name="" onData="self.value=&apos;Schválení operace&apos;"/>
+				</style>
+				<style width="60%" right-border-width="2">
+					<value-of name="" onData="self.value=&apos;Podpis příkazce operace&apos;"/>
+				</style>
+			</line>
+			<line break-page-after="avoid">
+				<style width="100%" left-border-width="2" right-border-width="2" font-size="1">
+					<text value="* pouze v případě přeplatku či nedoplatku (doložka podle § 3, odst. 4, písm. a) zákona č. 320/2001 Sb.)"/>
+				</style>
+			</line>
+			<line break-page-after="avoid">
+				<style width="100%" left-border-width="2" right-border-width="2" bottom-border-width="1">
+					<value-of name="" onData="self.value=&apos;Datum: &apos;"/>
+				</style>
+			</line>
+			<line break-page-after="avoid">
+				<style width="40%" left-border-width="2">
+					<value-of name="" onData="self.value=&apos;Schválení operace&apos;"/>
+				</style>
+				<style width="60%" right-border-width="2">
+					<value-of name="" onData="self.value=&apos;Podpis vedoucího ORJ&apos;"/>
+				</style>
+			</line>
+			<line break-page-after="avoid">
+				<style width="100%" left-border-width="2" right-border-width="2" font-size="1">
+					<text value="* pouze v případě přeplatku či nedoplatku (doložka podle § 3, odst. 4, písm. a) zákona č. 320/2001 Sb.)"/>
+				</style>
+			</line>
+			<line break-page-after="avoid">
+				<style width="100%" left-border-width="2" right-border-width="2" bottom-border-width="1">
+					<value-of name="" onData="self.value=&apos;Datum: &apos;"/>
+				</style>
+			</line>
+			<line break-page-after="avoid">
+				<style width="40%" left-border-width="2">
+					<value-of name="" onData="self.value=&apos;Operaci prověřil&apos;"/>
+				</style>
+				<style width="60%" right-border-width="2">
+					<value-of name="" onData="self.value=&apos;Podpis hlavní účetní&apos;"/>
+				</style>
+			</line>
+			<line break-page-after="avoid">
+				<style width="100%" left-border-width="2" right-border-width="2" bottom-border-width="1">
+					<value-of name="" onData="self.value=&apos;Datum: &apos;"/>
+				</style>
+			</line>
+		</body>
+	</region>
+</format>

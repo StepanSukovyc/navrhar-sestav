@@ -1,0 +1,81 @@
+﻿report KatalogListy
+{
+	include "katalog_listy.xme";
+	reference Gordic.General;
+	
+ 	main
+	{
+		var d = #SELECT 	
+				issue.id -- Int32
+				, zsc_pid
+				, zsc_shrnuti
+				, zsc_slogan
+				, summary 
+				, description
+				,  _40003.cesta as cesta_40003
+				, issue.summary as alt_40003
+				, _40001.cesta as cesta_40001
+				, _40001.nazev_souboru as alt_40001
+				, zsc_qr_kod as qr_kod
+				, zsc_qr_kod_popis as qr_kod_popis
+				, zsc_pdf_head as pdf_head
+				, _monitor.cesta as monitor_name
+				, zsc_zkratka_produktu
+				FROM Issue
+				left join (select ref_iss, cesta from zprilohy_wsdms where typ = 40003) as _40003 on Issue.id = _40003.ref_iss
+				left join (select ref_iss, cesta, nazev_souboru from zprilohy_wsdms where typ = 40001) as _40001 on Issue.id = _40001.ref_iss
+				left join (select ref_iss, cesta from zprilohy_wsdms where typ = 40006) as _monitor on Issue.id = _monitor.ref_iss
+				WHERE issue.zgloud = 40001
+		;;
+		//SQL.Select( "select Issue.zsc_pid, Issue.zsc_shrnuti, Issue.zsc_slogan, Issue.summary from Issue" );
+		
+		var hla = HLA.AddHLARow();
+				
+/*		hla.AddISSUERow("123","3445");
+		hla.AddISSUERow("123aaa","3445bb");*/
+		foreach(var r in d.Rows)
+		{
+			var pid = r.id;
+			var p = #SELECT prinos FROM zsc_prinosy WHERE aktivni = 1 and sc_list = :pid ;;
+			var v = #SELECT vyhoda FROM zsc_vyhody WHERE aktivni = 1 and sc_list = :pid ;;
+			var i = #SELECT cesta, nazev_souboru FROM zprilohy_wsdms WHERE typ = 40004 and ref_iss = :pid ;;
+
+			var issue = hla.AddISSUERow(
+			r["zsc_pid"].ToString()
+			,r["zsc_shrnuti"].ToString()
+			,r["zsc_slogan"].ToString()
+			,r["summary"].ToString() + " (" + r["zsc_zkratka_produktu"].ToString() + ")"
+			,r["description"].ToString()
+			,"http://www.gordic.cz/GORDIC_Moduly/Ikony/" + r["cesta_40003"].ToString()
+			,r["alt_40003"].ToString()
+			,"http://www.gordic.cz/GORDIC_Moduly/Obrazky/" + r["cesta_40001"].ToString()
+			,r["alt_40001"].ToString()
+			,"background-image: url('http://www.gordic.cz/GORDIC_Moduly/Obrazky/" + r["cesta_40001"].ToString() + "');"
+			,r["qr_kod"].ToString()
+			,r["qr_kod_popis"].ToString()
+			,r["pdf_head"].ToString()
+			,"http://www.gordic.cz/GORDIC_Moduly/PDF/" + r["zsc_pid"].ToString() + ".pdf"
+			,"http://www.gordic.cz/GORDIC_Moduly/Obrazky/" + r["monitor_name"].ToString()
+			, r["zsc_zkratka_produktu"].ToString()
+			);
+			
+			foreach(var _p in p.Rows)
+				issue.AddPRINOSYRow(
+					 prinos: _p.prinos
+				);			
+				
+			foreach(var _v in v.Rows)
+				issue.AddVYHODYRow(
+					 vyhoda: _v.vyhoda
+				);
+
+			foreach(var _i in i.Rows)
+				issue.AddPRILOHYRow(
+					 cesta: "http://www.gordic.cz/GORDIC_Moduly/Obrazky/" + _i.cesta
+					,nazev_souboru: _i.nazev_souboru
+					,style_background_image: "background-image: url('http://www.gordic.cz/GORDIC_Moduly/Obrazky/" + _i.cesta + "');"
+				);
+		}
+		return HLA.DataSet;
+	}
+}

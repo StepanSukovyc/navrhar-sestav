@@ -1,0 +1,269 @@
+<AddIn name        = "Xml Editor"
+       author      = "Mgr. Stepan Sukovyč"
+       description = "Xml Editor"
+       addInManagerHidden = "preinstalled"
+       version="4.72.1.9">
+	
+	<Manifest>
+		<Identity name = "Gordic.GFE.WinClient.XmlEditor"/>
+	</Manifest>
+
+  <Runtime>
+    <Import assembly=":Gordic.GFE.WinClient">
+      <ConditionEvaluator name = "StylesheetAssigned" class = "Gordic.GFE.WinClient.XmlEditor.StylesheetAssignedCondition"/>
+    </Import>
+  </Runtime>
+	
+	<!-- Xml Editor View -->
+	<Path name = "/Desktop/DisplayBindings">
+		<DisplayBinding id = "XmlEditor"
+		                insertbefore = "Text"
+		                title = "XML editor"
+		                class = "Gordic.GFE.WinClient.XmlEditor.Gui.Editor.XmlDisplayBinding"/>
+	</Path>
+  <!-- konec Xml Editor View -->
+  
+	<!-- XML analyzátory -->
+	<Path name = "/Workspace/Parser">
+		<Parser id = "XmlFoldingParser"
+		        supportedextensions  = ".xme;.xml;.xsl;.xslt;.xsd;.manifest;.config;.addin;.xshd;.wxs;.wxi;.wxl;.proj;.csproj;.vbproj;.ilproj;.build;.xfrm;.targets;.xpt;.xft;.map;.wsdl;.disco"
+		        class = "Gordic.GFE.WinClient.XmlEditor.Parser"/>
+	</Path>
+	
+	<!-- XML souborový filter -->
+	<Path name = "/Desktop/FileFilter">
+    <FileFilter id = "XML"
+		            name = "soubor XML"
+		            insertbefore="AllFiles"
+		            extensions = "*.xml"/>
+    <FileFilter id = "XME"
+		            insertbefore="XML"
+		            name = "datová struktura"
+		            extensions = "*.xme"/>
+    <FileFilter id = "XSL"
+		            insertbefore="XME"
+		            name = "šablona XSL"
+		            extensions = "*.xsl;*.xslt"/>
+	</Path>
+	
+	<!-- XML menu -->
+	<Path name = "/ReportDesigner/MainMenu">
+		<Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.XmlEditor.Gui.Editor.XmlView">
+			<MenuItem id = "Xml" insertafter="View" insertbefore="Tools" label="Fo&amp;rmát" type = "Menu">
+				<MenuItem id = "CreateSchema"
+				          label = "vytvořít schéma"
+				          class = "Gordic.GFE.WinClient.XmlEditor.CreateSchemaCommand" />
+				<MenuItem id = "ValidateXml"
+				          label = "validace XML"
+				          class = "Gordic.GFE.WinClient.XmlEditor.ValidateXmlCommand"
+				          shortcut = "Control|Shift|V" />
+				<MenuItem id = "Separator1" type = "Separator"/>
+				<!--<ComplexCondition action="Disable">
+					<Not>
+						<Condition name = "WindowActive" activewindow = "Gordic.GFE.WinClient.XmlEditor.XslOutputView"/>
+					</Not>
+					<MenuItem id="AssignStylesheet"
+					          label="přiřadit XSLT..."
+					          class="Gordic.GFE.WinClient.XmlEditor.AssignStylesheetCommand"/>
+					<ComplexCondition action="Disable">
+						--><!-- ocenění StylesheetAssigned pouze pokud XmlView je aktivní --><!--
+						<And>
+							<Condition name = "WindowActive" activewindow = "Gordic.GFE.WinClient.XmlEditor.Gui.Editor.XmlView"/>
+							<Condition name = "StylesheetAssigned" action="Disable"/>
+						</And>
+						<MenuItem id="OpenStylesheet"
+						          label="otevřít XSLT"
+						          class="Gordic.GFE.WinClient.XmlEditor.OpenStylesheetCommand"/>
+					</ComplexCondition>
+					<MenuItem id="RunTransform"
+					          label="spustit XSLT"
+					          class="Gordic.GFE.WinClient.XmlEditor.RunXslTransformCommand"
+					          shortcut="Control|Shift|T"/>
+				</ComplexCondition>
+				<MenuItem id = "Separator2" type = "Separator"/>-->
+				<MenuItem id = "Format"
+				          label = "formát"
+				          class = "Gordic.GFE.WinClient.XmlEditor.FormatXmlCommand" />
+			</MenuItem>
+		</Condition>
+	</Path>
+	
+	<!-- Kontextové menu -->
+	<Path name = "/ReportDesigner/ViewContent/XmlEditor/ContextMenu">
+    <Include id = "Cut" item = "/ReportDesigner/MainMenu/Edit/Cut"/>
+    <Include id = "Copy" item = "/ReportDesigner/MainMenu/Edit/Copy"/>
+    <Include id = "Paste" item = "/ReportDesigner/MainMenu/Edit/Paste"/>
+    <Include id = "Delete" item = "/ReportDesigner/MainMenu/Edit/Delete"/>
+    <MenuItem id = "Separator1" type = "Separator"/>
+    <Include id = "Save" item = "/ReportDesigner/MainMenu/File/Save"/>
+    <Include id = "SaveAs" item = "/ReportDesigner/MainMenu/File/SaveAs"/>
+    <Include id = "SaveDb" item = "/ReportDesigner/MainMenu/File/SaveDb"/>
+    <Include id = "CloseFile" item = "/ReportDesigner/MainMenu/File/Close/CloseFile"/>
+    <MenuItem id = "Separator2" type = "Separator"/>
+    <MenuItem id = "Comment"
+              icon  = "Icons.16x16.CommentRegion"
+              label = "zakomentovat/odkomentovat blok"
+              shortcut = "Control|/"
+              class= "Gordic.GFE.WinClient.DefaultTextEditorCommands.CommentRegion"/>
+    <MenuItem id = "Indent"
+		          label = "odsazení"
+              icon  = "Icons__Gin__posun_doprava"
+		          shortcut = "Control|I"
+		          class = "Gordic.GFE.WinClient.DefaultTextEditorCommands.IndentSelection" />
+		<MenuItem id = "HideXPathResults"
+			      label = "odstranit zvýraznění XPath výsledků"
+			      class = "Gordic.GFE.WinClient.XmlEditor.RemoveXPathHighlightingCommand"/>
+		<MenuItem id = "GoToDefinition"
+			      label = "přejit k definicí"
+			      class = "Gordic.GFE.WinClient.XmlEditor.GoToSchemaDefinitionCommand"/>
+		<MenuItem id = "FileMode" label = "syntaxe" type="Menu">
+			<MenuItem id = "HighlightBuilder" type="Builder" class = "Gordic.GFE.WinClient.DefaultTextEditorCommands.HighlightingTypeBuilder" />
+		</MenuItem>
+		<MenuItem id = "Separator3" type = "Separator"/>
+    <MenuItem id = "Options"
+		          label = "nastavení..."
+		          icon = "Icons.16x16.PropertiesIcon"
+		          class ="Gordic.GFE.WinClient.ToolsCommands.ShowTextEditorOptions"/>
+  </Path>
+
+  <!-- nástrojové líšty -->
+  <Path name = "/ReportDesigner/ToolBarMenu/Standard">
+    <Condition name = "WindowActive" activewindow="Gordic.GFE.Parsers.DefaultEditor.ITextEditorControlProvider">
+      <ToolbarItem id = "TextEditorSeparator" type = "Separator" insertafter="Redo" />
+      <ToolbarItem id = "Comment"
+          type = "Item"
+          icon  = "Icons.16x16.CommentRegion"
+          tooltip = "zakomentovat/odkomentovat blok (Control + /)"
+          loadclasslazy = "false"
+          class= "Gordic.GFE.WinClient.DefaultTextEditorCommands.CommentRegion"/>
+      <ToolbarItem id = "Indent"
+          type = "Item"
+          icon  = "Icons__Gin__posun_doprava"
+          tooltip = "odsazení textu (Control+I)"
+          shortcut = "Control|I"
+          loadclasslazy = "false"
+          class = "Gordic.GFE.WinClient.DefaultTextEditorCommands.IndentSelection" />
+      <ToolbarItem id = "TextEditorSeparator" type = "Separator" insertafter="Indent" />
+      <ToolbarItem id = "NewPID"
+          type = "Item"
+          icon  = "Icons__Gin__pridat_sejmutim_pidu"
+          tooltip = "generovat nový PID"
+          loadclasslazy = "false"
+          class= "Gordic.GFE.WinClient.Database.NewPID"/>
+    </Condition>
+  </Path>
+  <!-- Options panel -->  
+	<!-- události textového editoru -->  
+	<Path name = "/AddIns/XmlEditor/EditActions">
+		<EditAction id = "CompletionPopup" class = "Gordic.GFE.WinClient.DefaultEditor.CodeCompletionPopup"  keys = "Control|Space"/>
+		<!--<EditAction id = "GoToDefinition" class = "XmlEditor.GoToSchemaDefinitionEditAction" keys = "Control|Enter"/>
+    -->
+	</Path>
+	<!-- konec události textového editoru -->  
+
+	<!-- XPath Query podložka -->
+	<Path name = "/ReportDesigner/Desktop/Pads">
+		<Pad id = "XPathQueryPad" 
+		     category = "Tools"
+		     icon = "PadIcons.XPathQuery"
+		     title = "příkazy XPath"
+		     class = "Gordic.GFE.WinClient.XPathQuery.XPathQueryPad"/>
+	</Path>
+
+	<!-- Možností nabídky vypnout XPath Query zvýraznění -->
+	<Path name = "/ReportDesigner/MainMenu/Edit/Format">
+		<Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.XmlEditor.Gui.Editor.XmlView">
+			<MenuItem id = "RemoveXPathHighlighting"
+			          label = "odstranit zvýraznění XPath výsledků"
+			          class = "Gordic.GFE.WinClient.XmlEditor.RemoveXPathHighlightingCommand"/>
+		</Condition>
+	</Path>
+
+	<!-- XML Tree kontextové menu -->
+	<Path name = "/AddIns/XmlEditor/XmlTree/AttributesGrid/ContextMenu">
+		<Condition name = "Ownerstate" ownerstate="ElementSelected" action="Disable">
+			<MenuItem id = "AddAttribute"
+				label = "přidat atribut..."
+				class = "Gordic.GFE.WinClient.XmlEditor.AddAttributeCommand"/>
+		</Condition>
+		<Condition name = "Ownerstate" ownerstate="AttributeSelected" action="Disable">
+			<MenuItem id = "RemoveAttribute"
+				label = "odstranit atribut"
+				icon = "Icons.16x16.DeleteIcon"
+				class = "Gordic.GFE.WinClient.XmlEditor.RemoveAttributeCommand"/>
+		</Condition>
+	</Path>
+
+	<Path name = "/AddIns/XmlEditor/XmlTree/ContextMenu">
+    <Include id = "Cut" item = "/ReportDesigner/MainMenu/Edit/Cut"/>
+    <Include id = "Copy" item = "/ReportDesigner/MainMenu/Edit/Copy"/>
+    <Include id = "Paste" item = "/ReportDesigner/MainMenu/Edit/Paste"/>
+    <Include id = "Delete" item = "/ReportDesigner/MainMenu/Edit/Delete"/>
+    <MenuItem id = "EditItemsSeparator" type = "Separator"/>
+		<ComplexCondition action = "Disable">
+			<Or>
+				<Condition name = "Ownerstate" ownerstate = "CommentSelected"/>
+				<And>
+					<Condition name = "Ownerstate" ownerstate = "ElementSelected"/>
+					<Not>
+						<Condition name = "Ownerstate" ownerstate = "RootElementSelected"/>
+					</Not>
+				</And>
+			</Or>
+			<MenuItem id = "InsertElementBefore"
+				label = "Vložit element před..."
+				class = "Gordic.GFE.WinClient.XmlEditor.InsertElementBeforeCommand"/>
+			<MenuItem id = "InsertElementAfter"
+				label = "vložit element za..."
+				class = "Gordic.GFE.WinClient.XmlEditor.InsertElementAfterCommand"/>
+		</ComplexCondition>
+		<Condition name = "Ownerstate" ownerstate = "ElementSelected" action = "Disable">
+			<MenuItem id = "AddChildElement"
+				label = "vložit vnitřní element"
+				class = "Gordic.GFE.WinClient.XmlEditor.AddChildElementCommand"/>
+		</Condition>
+		<ComplexCondition action = "Disable">
+			<Or>
+				<Condition name = "Ownerstate" ownerstate = "TextNodeSelected"/>
+				<Condition name = "Ownerstate" ownerstate = "CommentSelected"/>
+				<And>
+					<Condition name = "Ownerstate" ownerstate = "ElementSelected"/>
+					<Not>
+						<Condition name = "Ownerstate" ownerstate = "RootElementSelected"/>
+					</Not>
+				</And>
+			</Or>
+			<MenuItem id = "TextNodeCommandsSeparator" type = "Separator"/>
+			<MenuItem id = "InsertTextNodeBefore"
+				label = "vložit textovou větev před..."
+				class = "Gordic.GFE.WinClient.XmlEditor.InsertTextNodeBeforeCommand"/>
+			<MenuItem id = "InsertTextNodeAfter"
+				label = "vložit textovou větev za..."
+				class = "Gordic.GFE.WinClient.XmlEditor.InsertTextNodeAfterCommand"/>
+		</ComplexCondition>		
+		<Condition name = "Ownerstate" ownerstate = "ElementSelected" action = "Disable">
+			<MenuItem id = "AddChildTextNode"
+				label = "vložit vnitřní textovou větev"
+				class = "Gordic.GFE.WinClient.XmlEditor.AddChildTextNodeCommand"/>			
+		</Condition>
+		<ComplexCondition action = "Disable">
+			<Or>
+				<Condition name = "Ownerstate" ownerstate = "TextNodeSelected"/>
+				<Condition name = "Ownerstate" ownerstate = "ElementSelected"/>
+				<Condition name = "Ownerstate" ownerstate = "CommentSelected"/>
+			</Or>
+			<MenuItem id = "CommentNodeCommandsSeparator" type = "Separator"/>
+			<MenuItem id = "InsertCommentBefore"
+				label = "vložit větev komentáře před..."
+				class = "Gordic.GFE.WinClient.XmlEditor.InsertCommentBeforeCommand"/>
+			<MenuItem id = "InsertCommentAfter"
+				label = "vložit větev komentáře za..."
+				class = "Gordic.GFE.WinClient.XmlEditor.InsertCommentAfterCommand"/>
+		</ComplexCondition>
+		<Condition name = "Ownerstate" ownerstate = "ElementSelected" action = "Disable">
+			<MenuItem id = "AddChildCommentNode"
+				label = "vložit vnitřní větev komentáře"
+				class = "Gordic.GFE.WinClient.XmlEditor.AddChildCommentCommand"/>			
+		</Condition>
+	</Path>
+</AddIn>

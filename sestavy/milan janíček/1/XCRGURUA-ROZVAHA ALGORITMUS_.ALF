@@ -1,0 +1,676 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<format type="grr" xmlns="http://www.gordic.cz/TR/alf/1.4/">
+  <info ixs_xme="0000ALX0ATXE"
+	xmeta_ver="1"
+	xmeta_subver_min="1"
+	format="RUA3"
+	nazev="Algoritmus nápočtu"
+	poznamka="distribuce GINIS 3.44"
+	ixs_alv="0000ALV044JF,0000ALV04RTK"
+	allowed_output="htm,xls,doc,frm"
+	ixs_frm="0000ALF02G0W"
+	maker="0202,0206"
+	last_modif="201101071642"
+	rokmes_od="201001"
+	rokmes_do="299913"
+	/>
+  <paper-setting paper-width="297mm" paper-height="210mm" />
+  <!--
+	#ZMENY
+	N*12.11.2009.1- nový formát výkazu ROZVAHA ÚSC pro rok 2010
+	N*18.11.2009.1- doplněno číslování sloupců
+	N*05.02.2010.1- doplněn záznam "CAST-N-NKS"pro ÚP
+        P*13.07.2010.1- z formátu vymazáno nastavení okrajů listu
+	N*07.01.2011.1- doplněn nový alv ORJ:0212
+        #ZMENY
+-->
+  <script><![CDATA[
+#-------------------------------------------------
+# definice zobrazeni cisla
+#-------------------------------------------------
+def cisla():
+ if self.value=='X':
+  self.style.font_color='black'
+  self.style.align='right'
+  self.value='X '
+ else:
+  num=Decimal(self.value)
+  self.value=num.format("# 0,00 ;# 0,00-; ")
+  if num<0:
+   self.style.font_color='red'
+  else:
+   self.style.font_color='black'
+
+#-------------------------------------------------
+# funkce pro prevedeni cisla na pismeno organizace
+#-------------------------------------------------
+def ret_typ_org_txt(typ_txt):
+  typ_txt=typ_txt.strip()
+  if typ_txt=='1':
+    return 'U'
+  else:
+    if typ_txt=='2':
+      return 'O'
+    else:
+      if typ_txt=='3':
+        return 'P'
+      else:
+        if typ_txt=='4':
+          return 'F'        
+          
+  return ''
+]]></script>
+  <region name="ROZVAHA">
+    <head>
+      <line endpage="avoid" on-each-page="true">
+        <style font-face="arial" font-size="1" font-italic="true" multiline="false" bottom-border-width="1">
+          <value-of name="" width="18%" onData="self.value='Licence: '+ROZVAHA.LIC" />
+        </style>
+        <style font-face="arial" font-size="1" font-italic="true" horizontal-align="right" bottom-border-width="1">
+          <value-of name="" width="82%" onData="self.value=ROZVAHA.FORMAT+' / ' +format.info['format'] +'  ('+ROZVAHA.VERZE+' / ' +format.info['last_modif']+')'" />
+        </style>
+      </line>
+      <line endpage="avoid" on-each-page="true">
+        <style font-face="arial" font-size="1" font-italic="true" multiline="false">
+          <text value="" width="100%" />
+        </style>
+      </line>
+    </head>
+    <body>
+      <line>
+        <value-of name="" width="100%" height="0mm" onData="typ_org_txt=ret_typ_org_txt(ROZVAHA.TYP);self.value=typ_org_txt" />
+      </line>
+      <region name="R-HLAVICKA">
+        <head>
+          <line on-each-page="true">
+            <style font-face="arial">
+              <text value="" width="18%" onLoad="sirka1='13';sirka2='0'" />
+            </style>
+            <style font-face="arial" font-size="5" font-bold="true">
+              <text value="ROZVAHA - BILANCE - algoritmus nápočtu" width="76%" />
+            </style>
+            <style font-face="arial" font-size="5" font-bold="true">
+              <value-of name="CAST-N-NKS" width="6%" />
+            </style>
+          </line>
+          <line on-each-page="true">
+            <style font-face="arial">
+              <text value="" width="2%" />
+            </style>
+            <image file="znak-m.bmp" image-width="25mm" image-height="25mm" width="16%" />
+            <style font-face="arial" font-size="165tw" font-bold="true">
+              <value-of name="" width="82%" onData="if ROZVAHA.TYP=='1': typ='územní samosprávné celky, svazky obcí, regionální rady regionu soudržnosti'&#xA;if ROZVAHA.TYP=='2': typ='organizační složky státu'&#xA;if ROZVAHA.TYP=='3': typ='příspěvkové organizace'&#xA;if ROZVAHA.TYP=='4': typ='státní fondy'&#xA;self.value=typ" />
+            </style>
+          </line>
+          <line>
+            <style font-face="arial">
+              <text value="" width="18%" />
+            </style>
+            <style font-face="arial">
+              <value-of name="" width="82%" onData="if sirka1=='13': rezim='(v Kč)'&#xA;else: rezim='(v tis. Kč)'&#xA;self.value=rezim" onLoad="rezim=''" />
+            </style>
+          </line>
+          <line on-each-page="true">
+            <style font-face="arial">
+              <text value="" width="18%" />
+            </style>
+            <style font-face="arial" vertical-align="center">
+              <text value="Období:" width="7%" />
+            </style>
+            <style font-face="arial" font-size="3" font-bold="true">
+              <value-of name="" width="75%" onData="self.value=R_HLAVICKA.M+' / '+R_HLAVICKA.Y" />
+            </style>
+          </line>
+          <line on-each-page="true">
+            <style font-face="arial">
+              <text value="" width="18%" />
+            </style>
+            <style font-face="arial">
+              <text value="IČO:" width="7%" />
+            </style>
+            <style font-face="arial" font-size="3" font-bold="true">
+              <value-of name="X-ICO" width="75%" />
+            </style>
+          </line>
+          <line on-each-page="true">
+            <style font-face="arial">
+              <text value="" width="18%" />
+            </style>
+            <style font-face="arial">
+              <text value="Název:" width="7%" />
+            </style>
+            <style font-face="arial" font-size="3" font-bold="true">
+              <value-of name="" width="75%" onData="self.value=R_HLAVICKA.X_N+' '+R_HLAVICKA.X_NPOM" />
+            </style>
+          </line>
+          <line only-if="Decimal(R_HLAVICKA.R_BEZNE)!=0 or Decimal(R_HLAVICKA.R_MINULE)!=0">
+            <style font-face="arial">
+              <text value="" width="18%" />
+            </style>
+            <style font-face="arial" font-bold="true" font-color="red">
+              <text value="POZOR - rozdíl mezi aktivy a pasivy" width="82%" />
+            </style>
+          </line>
+        </head>
+        <body>
+          <line>
+            <style font-size="1">
+              <text value="" width="100%" />
+            </style>
+          </line>
+          <region name="HLAV-SNS">
+            <body>
+              <line endpage="avoid" on-each-page="true">
+                <style font-face="arial">
+                  <text value="" width="18%" />
+                </style>
+                <style font-face="arial">
+                  <text value="SNS:" width="7%" />
+                </style>
+                <style font-face="arial" font-size="3" font-bold="true">
+                  <value-of name="N" width="75%" />
+                </style>
+              </line>
+            </body>
+          </region>
+          <region name="HLAV-UCS">
+            <body>
+              <line endpage="avoid" on-each-page="true">
+                <style font-face="arial">
+                  <text value="" width="18%" />
+                </style>
+                <style font-face="arial">
+                  <text value="UCS:" width="7%" />
+                </style>
+                <style font-face="arial" font-size="3">
+                  <value-of name="I" width="11%" />
+                </style>
+                <style font-face="arial" font-size="3" font-bold="true">
+                  <value-of name="N" width="64%" />
+                </style>
+              </line>
+            </body>
+          </region>
+          <region name="HLAV-UUS">
+            <body>
+              <line endpage="avoid" on-each-page="true">
+                <style font-face="arial">
+                  <text value="" width="18%" />
+                </style>
+                <style font-face="arial">
+                  <text value="UUS:" width="7%" />
+                </style>
+                <style font-face="arial">
+                  <value-of name="I" width="11%" />
+                </style>
+                <style font-face="arial">
+                  <value-of name="N" width="64%" />
+                </style>
+              </line>
+            </body>
+          </region>
+          <region name="HLAV-NKS">
+            <body>
+              <line endpage="avoid" on-each-page="true">
+                <style font-face="arial">
+                  <text value="" width="18%" />
+                </style>
+                <style font-face="arial">
+                  <text value="NS:" width="7%" />
+                </style>
+                <style font-face="arial" font-italic="true">
+                  <value-of name="I" width="11%" />
+                </style>
+                <style font-face="arial" font-italic="true">
+                  <value-of name="N" width="64%" />
+                </style>
+              </line>
+            </body>
+          </region>
+          <line>
+            <style font-size="1" top-border-width="1">
+              <text value="" width="100%" />
+            </style>
+          </line>
+        </body>
+      </region>
+      <region name="R-A">
+        <head>
+          <line endpage="avoid" on-each-page="true">
+            <style font-face="arial" font-size="1" font-italic="true" top-border-width="1" left-padding="2" right-padding="2" background-color="#e3e3e3">
+              <text value="" width="4%" />
+            </style>
+            <style font-face="arial" font-size="1" font-italic="true" top-border-width="1" background-color="#e3e3e3">
+              <text value="" width="39%" />
+            </style>
+            <style font-face="arial" font-size="1" font-italic="true" horizontal-align="right" top-border-width="1" background-color="#e3e3e3">
+              <text value="" width="5%" />
+            </style>
+            <style font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1" background-color="#e3e3e3">
+              <text value="Období" width="52%" />
+            </style>
+          </line>
+          <line endpage="avoid" on-each-page="true">
+            <style font-face="arial" font-size="1" font-italic="true" left-padding="2" right-padding="2" background-color="#e3e3e3">
+              <text value="Číslo" width="4%" />
+            </style>
+            <style font-face="arial" font-size="1" font-italic="true" background-color="#e3e3e3">
+              <text value="" width="39%" />
+            </style>
+            <style font-face="arial" font-size="1" font-italic="true" horizontal-align="right" background-color="#e3e3e3">
+              <text value="Syntetický" width="5%" />
+            </style>
+            <style font-face="arial" font-size="1" font-italic="true" horizontal-align="right" left-border-width="1" bottom-border-width="1" background-color="#e3e3e3">
+              <text value="" width="13%" />
+            </style>
+            <style font-face="arial" font-size="1" font-bold="true" font-italic="true" horizontal-align="center" bottom-border-width="1" background-color="#e3e3e3">
+              <text value="Běžné" width="13%" />
+            </style>
+            <style font-face="arial" font-size="1" font-italic="true" horizontal-align="right" bottom-border-width="1" background-color="#e3e3e3">
+              <text value="" width="13%" />
+            </style>
+            <style font-face="arial" font-size="1" font-bold="true" font-italic="true" horizontal-align="right" left-border-width="1" background-color="#e3e3e3">
+              <text value="Minulé" width="13%" />
+            </style>
+          </line>
+          <line endpage="avoid" on-each-page="true">
+            <style font-face="arial" font-size="1" font-italic="true" left-padding="2" right-padding="2" background-color="#e3e3e3">
+              <text value="položky" width="4%" />
+            </style>
+            <style font-face="arial" font-size="1" font-italic="true" background-color="#e3e3e3">
+              <text value="Název položky" width="39%" />
+            </style>
+            <style font-face="arial" font-size="1" font-italic="true" horizontal-align="right" background-color="#e3e3e3">
+              <text value="účet" width="5%" />
+            </style>
+            <style font-face="arial" font-size="1" font-italic="true" horizontal-align="right" left-border-width="1" background-color="#e3e3e3">
+              <text value="Brutto" width="13%" />
+            </style>
+            <style font-face="arial" font-size="1" font-italic="true" horizontal-align="right" background-color="#e3e3e3">
+              <text value="Korekce" width="13%" />
+            </style>
+            <style font-face="arial" font-size="1" font-italic="true" horizontal-align="right" background-color="#e3e3e3">
+              <text value="Netto" width="13%" />
+            </style>
+            <style font-face="arial" font-size="1" font-italic="true" horizontal-align="right" left-border-width="1" background-color="#e3e3e3">
+              <text value="" width="13%" />
+            </style>
+          </line>
+          <line endpage="avoid" on-each-page="true">
+            <style font-face="arial" font-size="5pt" font-italic="true" left-padding="2" right-padding="2" background-color="#e3e3e3">
+              <text value="" width="4%" />
+            </style>
+            <style font-face="arial" font-size="5pt" font-italic="true" background-color="#e3e3e3">
+              <text value="" width="39%" />
+            </style>
+            <style font-face="arial" font-size="5pt" font-italic="true" horizontal-align="right" background-color="#e3e3e3">
+              <text value="" width="5%" />
+            </style>
+            <style font-face="arial" font-size="5pt" font-italic="true" horizontal-align="right" left-border-width="1" background-color="#e3e3e3">
+              <text value="1" width="13%" />
+            </style>
+            <style font-face="arial" font-size="5pt" font-italic="true" horizontal-align="right" background-color="#e3e3e3">
+              <text value="2" width="13%" />
+            </style>
+            <style font-face="arial" font-size="5pt" font-italic="true" horizontal-align="right" right-border-width="1" background-color="#e3e3e3">
+              <text value="3" width="13%" />
+            </style>
+            <style font-face="arial" font-size="5pt" font-bold="true" font-italic="true" horizontal-align="right" background-color="#e3e3e3">
+              <text value="4" width="13%" />
+            </style>
+          </line>
+          <line endpage="avoid" on-each-page="true">
+            <style font-face="arial" font-size="1" font-italic="true">
+              <text value="" width="100%" />
+            </style>
+          </line>
+        </head>
+        <body>
+          <line>
+            <style font-face="arial" font-size="8pt" font-bold="true" top-border-width="1" bottom-border-width="1" top-padding="4" bottom-padding="4" background-color="silver">
+              <text value="" width="4%" />
+            </style>
+            <style font-face="arial" font-size="10pt" font-bold="true" font-color="navy" top-border-width="1" bottom-border-width="1" top-padding="4" bottom-padding="4" background-color="silver">
+              <value-of name="NAZEV" width="41%" />
+            </style>
+            <style font-face="arial" font-size="8pt" font-bold="true" top-border-width="1" bottom-border-width="1" top-padding="4" bottom-padding="4" background-color="silver">
+              <text value="" width="3%" />
+            </style>
+            <style font-face="arial" font-size="8pt" horizontal-align="right" top-border-width="1" bottom-border-width="1" top-padding="4" bottom-padding="4" background-color="silver">
+              <value-of name="SOUCTY" width="13%" />
+            </style>
+            <style font-face="arial" font-size="8pt" horizontal-align="right" top-border-width="1" bottom-border-width="1" top-padding="4" bottom-padding="4" background-color="silver">
+              <value-of name="SOUCTY" width="13%" />
+            </style>
+            <style font-face="arial" font-size="8pt" horizontal-align="right" top-border-width="1" bottom-border-width="1" top-padding="4" bottom-padding="4" background-color="silver">
+              <value-of name="SOUCTY" width="13%" />
+            </style>
+            <style font-face="arial" font-size="8pt" horizontal-align="right" top-border-width="1" bottom-border-width="1" top-padding="4" bottom-padding="4" background-color="silver">
+              <value-of name="SOUCTY" width="13%" />
+            </style>
+          </line>
+          <region name="R-A-D">
+            <body>
+              <line>
+                <style font-face="arial" font-size="1" font-italic="true">
+                  <text value="" width="100%" />
+                </style>
+              </line>
+              <line>
+                <style font-face="arial" font-size="8pt" font-bold="true" horizontal-align="right" top-border-width="1" bottom-border-width="1" top-padding="4" bottom-padding="4" background-color="#e6e6e6">
+                  <value-of name="ID" width="2%" />
+                </style>
+                <style font-face="arial" font-size="8pt" font-bold="true" horizontal-align="right" top-border-width="1" bottom-border-width="1" top-padding="4" bottom-padding="4" background-color="#e6e6e6">
+                  <text value="" width="2%" />
+                </style>
+                <style font-face="arial" font-size="8pt" font-bold="true" top-border-width="1" bottom-border-width="1" top-padding="4" bottom-padding="4" background-color="#e6e6e6">
+                  <value-of name="TEXT" width="41%" />
+                </style>
+                <style font-face="arial" font-size="8pt" font-bold="true" top-border-width="1" bottom-border-width="1" top-padding="4" bottom-padding="4" background-color="#e6e6e6">
+                  <text value="" width="3%" />
+                </style>
+                <style font-face="arial" font-size="8pt" horizontal-align="right" top-border-width="1" top-padding="4" bottom-padding="4" background-color="#e6e6e6">
+                  <value-of name="SOUCTY" width="13%" />
+                </style>
+                <style font-face="arial" font-size="8pt" horizontal-align="right" top-border-width="1" top-padding="4" bottom-padding="4" background-color="#e6e6e6">
+                  <value-of name="SOUCTY" width="13%" />
+                </style>
+                <style font-face="arial" font-size="8pt" horizontal-align="right" top-border-width="1" top-padding="4" bottom-padding="4" background-color="#e6e6e6">
+                  <value-of name="SOUCTY" width="13%" />
+                </style>
+                <style font-face="arial" font-size="8pt" horizontal-align="right" top-border-width="1" top-padding="4" bottom-padding="4" background-color="#e6e6e6">
+                  <value-of name="SOUCTY" width="13%" />
+                </style>
+              </line>
+              <region name="R-A-D-T">
+                <body>
+                  <line only-if="string.find(R-A-D-T.TYP,typ_org_txt)&gt;=0">
+                    <style font-face="arial" font-size="8pt" top-padding="4" bottom-padding="4">
+                      <text value="" width="1%" />
+                    </style>
+                    <style font-face="arial" font-size="8pt" font-bold="true" horizontal-align="right" top-border-width="1" top-padding="4" bottom-padding="4">
+                      <value-of name="ID" width="2%" />
+                    </style>
+                    <style font-face="arial" font-size="8pt" top-border-width="1" top-padding="4" bottom-padding="4">
+                      <text value="" width="1%" />
+                    </style>
+                    <style font-face="arial" font-size="8pt" font-bold="true" top-border-width="1" top-padding="4" bottom-padding="4">
+                      <value-of name="TEXT" width="41%" />
+                    </style>
+                    <style font-face="arial" font-size="8pt" font-bold="true" top-border-width="1" top-padding="4" bottom-padding="4">
+                      <text value="" width="3%" />
+                    </style>
+                    <style font-face="arial" font-size="8pt" horizontal-align="right" top-border-width="1" top-padding="4" bottom-padding="4">
+                      <value-of name="SOUCTY" width="13%" />
+                    </style>
+                    <style font-face="arial" font-size="8pt" horizontal-align="right" top-border-width="1" top-padding="4" bottom-padding="4">
+                      <value-of name="SOUCTY" width="13%" />
+                    </style>
+                    <style font-face="arial" font-size="8pt" horizontal-align="right" top-border-width="1" top-padding="4" bottom-padding="4">
+                      <value-of name="SOUCTY" width="13%" />
+                    </style>
+                    <style font-face="arial" font-size="8pt" horizontal-align="right" top-border-width="1" top-padding="4" bottom-padding="4">
+                      <value-of name="SOUCTY" width="13%" />
+                    </style>
+                  </line>
+                  <region name="R-A-D-T-R">
+                    <body>
+                      <line only-if="string.find(R-A-D-T-R.TYP,typ_org_txt)&gt;=0">
+                        <style font-face="arial" font-size="8pt" top-padding="4" bottom-padding="4">
+                          <text value="" width="1%" />
+                        </style>
+                        <style font-face="arial" font-size="8pt" horizontal-align="right" top-padding="4" bottom-padding="4">
+                          <value-of name="ID" width="3%" />
+                        </style>
+                        <style font-face="arial" font-size="8pt" top-padding="4" bottom-padding="4">
+                          <value-of name="TEXT" width="41%" />
+                        </style>
+                        <style font-face="arial" font-size="8pt" top-padding="4" bottom-padding="4">
+                          <value-of name="SOUCTY" width="3%" />
+                        </style>
+                        <style font-face="arial" font-size="8pt" horizontal-align="right" top-padding="4" bottom-padding="4">
+                          <value-of name="A1-BRUTTO" width="13%" />
+                        </style>
+                        <style font-face="arial" font-size="8pt" horizontal-align="right" top-padding="4" bottom-padding="4">
+                          <value-of name="A2-KOREKCE" width="13%" />
+                        </style>
+                        <style font-face="arial" font-size="8pt" horizontal-align="right" top-padding="4" bottom-padding="4">
+                          <value-of name="A3-NETTO" width="13%" />
+                        </style>
+                        <style font-face="arial" font-size="8pt" horizontal-align="right" top-padding="4" bottom-padding="4">
+                          <value-of name="A4-MINULE" width="13%" />
+                        </style>
+                      </line>
+                    </body>
+                  </region>
+                </body>
+              </region>
+            </body>
+          </region>
+        </body>
+      </region>
+      <region name="R-P">
+        <head>
+          <line break-page-before="always" endpage="avoid" on-each-page="true">
+            <style font-face="arial" font-size="1" font-italic="true" top-border-width="1" left-padding="2" right-padding="2" background-color="#e3e3e3">
+              <text value="Číslo" width="4%" />
+            </style>
+            <style font-face="arial" font-size="1" font-italic="true" top-border-width="1" background-color="#e3e3e3">
+              <text value="" width="39%" />
+            </style>
+            <style font-face="arial" font-size="1" font-italic="true" horizontal-align="right" top-border-width="1" background-color="#e3e3e3">
+              <text value="Syntetický" width="5%" />
+            </style>
+            <style font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1" background-color="#e3e3e3">
+              <text value="Období" width="26%" />
+            </style>
+            <style font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+              <text value="" width="26%" />
+            </style>
+          </line>
+          <line endpage="avoid" on-each-page="true">
+            <style font-face="arial" font-size="1" font-italic="true" left-padding="2" right-padding="2" background-color="#e3e3e3">
+              <text value="položky" width="4%" />
+            </style>
+            <style font-face="arial" font-size="1" font-italic="true" background-color="#e3e3e3">
+              <text value="Název položky" width="39%" />
+            </style>
+            <style font-face="arial" font-size="1" font-italic="true" horizontal-align="right" background-color="#e3e3e3">
+              <text value="účet" width="5%" />
+            </style>
+            <style font-face="arial" font-size="1" font-italic="true" horizontal-align="right" left-border-width="1" background-color="#e3e3e3">
+              <text value="Běžné" width="13%" />
+            </style>
+            <style font-face="arial" font-size="1" font-italic="true" horizontal-align="right" background-color="#e3e3e3">
+              <text value="Minulé" width="13%" />
+            </style>
+            <style font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+              <text value="" width="26%" />
+            </style>
+          </line>
+          <line endpage="avoid" on-each-page="true">
+            <style font-face="arial" font-size="5pt" font-italic="true" left-padding="2" right-padding="2" background-color="#e3e3e3">
+              <text value="" width="4%" />
+            </style>
+            <style font-face="arial" font-size="5pt" font-italic="true" background-color="#e3e3e3">
+              <text value="" width="39%" />
+            </style>
+            <style font-face="arial" font-size="5pt" font-italic="true" horizontal-align="right" background-color="#e3e3e3">
+              <text value="" width="5%" />
+            </style>
+            <style font-face="arial" font-size="5pt" font-italic="true" horizontal-align="right" left-border-width="1" background-color="#e3e3e3">
+              <text value="1" width="13%" />
+            </style>
+            <style font-face="arial" font-size="5pt" font-italic="true" horizontal-align="right" background-color="#e3e3e3">
+              <text value="2" width="13%" />
+            </style>
+            <style font-face="arial" font-size="5pt" font-italic="true" horizontal-align="right">
+              <text value="" width="26%" />
+            </style>
+          </line>
+          <line endpage="avoid" on-each-page="true">
+            <style font-face="arial" font-size="1" font-italic="true">
+              <text value="" width="100%" />
+            </style>
+          </line>
+        </head>
+        <body>
+          <line>
+            <style font-face="arial" font-size="8pt" font-bold="true" top-border-width="1" bottom-border-width="1" top-padding="4" bottom-padding="4" background-color="silver">
+              <text value="" width="4%" />
+            </style>
+            <style font-face="arial" font-size="10pt" font-bold="true" font-color="navy" top-border-width="1" bottom-border-width="1" top-padding="4" bottom-padding="4" background-color="silver">
+              <value-of name="NAZEV" width="41%" />
+            </style>
+            <style font-face="arial" font-size="8pt" font-bold="true" top-border-width="1" bottom-border-width="1" top-padding="4" bottom-padding="4" background-color="silver">
+              <text value="" width="3%" />
+            </style>
+            <style font-face="arial" font-size="8pt" horizontal-align="right" top-border-width="1" bottom-border-width="1" top-padding="4" bottom-padding="4" background-color="silver">
+              <value-of name="SOUCTY" width="13%" />
+            </style>
+            <style font-face="arial" font-size="8pt" horizontal-align="right" top-border-width="1" bottom-border-width="1" top-padding="4" bottom-padding="4" background-color="silver">
+              <value-of name="SOUCTY" width="13%" />
+            </style>
+            <style font-face="arial" font-size="8pt" horizontal-align="right" top-padding="4" bottom-padding="4">
+              <text value="" width="13%" />
+            </style>
+            <style font-face="arial" font-size="8pt" horizontal-align="right" top-padding="4" bottom-padding="4">
+              <text value="" width="13%" />
+            </style>
+          </line>
+          <region name="R-P-D">
+            <body>
+              <line>
+                <style font-face="arial" font-size="1" font-italic="true">
+                  <text value="" width="100%" />
+                </style>
+              </line>
+              <line>
+                <style font-face="arial" font-size="8pt" font-bold="true" horizontal-align="right" top-border-width="1" bottom-border-width="1" top-padding="4" bottom-padding="4" background-color="#e6e6e6">
+                  <value-of name="ID" width="2%" />
+                </style>
+                <style font-face="arial" font-size="8pt" font-bold="true" horizontal-align="right" top-border-width="1" bottom-border-width="1" top-padding="4" bottom-padding="4" background-color="#e6e6e6">
+                  <text value="" width="2%" />
+                </style>
+                <style font-face="arial" font-size="8pt" font-bold="true" top-border-width="1" bottom-border-width="1" top-padding="4" bottom-padding="4" background-color="#e6e6e6">
+                  <value-of name="TEXT" width="41%" />
+                </style>
+                <style font-face="arial" font-size="8pt" font-bold="true" top-border-width="1" bottom-border-width="1" top-padding="4" bottom-padding="4" background-color="#e6e6e6">
+                  <text value="" width="3%" />
+                </style>
+                <style font-face="arial" font-size="8pt" horizontal-align="right" top-border-width="1" bottom-border-width="1" top-padding="4" bottom-padding="4" background-color="#e6e6e6">
+                  <value-of name="SOUCTY" width="13%" />
+                </style>
+                <style font-face="arial" font-size="8pt" horizontal-align="right" top-border-width="1" bottom-border-width="1" top-padding="4" bottom-padding="4" background-color="#e6e6e6">
+                  <value-of name="SOUCTY" width="13%" />
+                </style>
+                <style font-face="arial" font-size="8pt" horizontal-align="right" top-padding="4" bottom-padding="4">
+                  <text value="" width="13%" />
+                </style>
+                <style font-face="arial" font-size="8pt" horizontal-align="right" top-padding="4" bottom-padding="4">
+                  <text value="" width="13%" />
+                </style>
+              </line>
+              <region name="R-P-D-T">
+                <body>
+                  <line only-if="string.find(R-P-D-T.TYP,typ_org_txt)&gt;=0">
+                    <style font-face="arial" font-size="8pt" top-padding="4" bottom-padding="4">
+                      <text value="" width="1%" />
+                    </style>
+                    <style font-face="arial" font-size="8pt" font-bold="true" horizontal-align="right" top-border-width="1" top-padding="4" bottom-padding="4">
+                      <value-of name="ID" width="2%" />
+                    </style>
+                    <style font-face="arial" font-size="8pt" top-border-width="1" top-padding="4" bottom-padding="4">
+                      <text value="" width="1%" />
+                    </style>
+                    <style font-face="arial" font-size="8pt" font-bold="true" top-border-width="1" top-padding="4" bottom-padding="4">
+                      <value-of name="TEXT" width="41%" />
+                    </style>
+                    <style font-face="arial" font-size="8pt" font-bold="true" top-border-width="1" top-padding="4" bottom-padding="4">
+                      <text value="" width="3%" />
+                    </style>
+                    <style font-face="arial" font-size="8pt" horizontal-align="right" top-border-width="1" top-padding="4" bottom-padding="4">
+                      <value-of name="SOUCTY" width="13%" />
+                    </style>
+                    <style font-face="arial" font-size="8pt" horizontal-align="right" top-border-width="1" top-padding="4" bottom-padding="4">
+                      <value-of name="SOUCTY" width="13%" />
+                    </style>
+                    <style font-face="arial" font-size="8pt" horizontal-align="right" top-padding="4" bottom-padding="4">
+                      <text value="" width="26%" />
+                    </style>
+                  </line>
+                  <region name="R-P-D-T-R">
+                    <body>
+                      <line only-if="string.find(R-P-D-T-R.TYP,typ_org_txt)&gt;=0">
+                        <style font-face="arial" font-size="8pt" top-padding="4" bottom-padding="4">
+                          <text value="" width="1%" />
+                        </style>
+                        <style font-face="arial" font-size="8pt" horizontal-align="right" top-padding="4" bottom-padding="4">
+                          <value-of name="ID" width="3%" />
+                        </style>
+                        <style font-face="arial" font-size="8pt" top-padding="4" bottom-padding="4">
+                          <value-of name="TEXT" width="41%" />
+                        </style>
+                        <style font-face="arial" font-size="8pt" top-padding="4" bottom-padding="4">
+                          <value-of name="SOUCTY" width="3%" />
+                        </style>
+                        <style font-face="arial" font-size="8pt" horizontal-align="right" top-padding="4" bottom-padding="4">
+                          <value-of name="A1-BEZNE" width="13%" />
+                        </style>
+                        <style font-face="arial" font-size="8pt" horizontal-align="right" top-padding="4" bottom-padding="4">
+                          <value-of name="A2-MINULE" width="13%" />
+                        </style>
+                        <style font-face="arial" font-size="8pt" horizontal-align="right" top-padding="4" bottom-padding="4">
+                          <text value="" width="13%" />
+                        </style>
+                        <style font-face="arial" font-size="8pt" horizontal-align="right" top-padding="4" bottom-padding="4">
+                          <text value="" width="13%" />
+                        </style>
+                      </line>
+                    </body>
+                  </region>
+                </body>
+              </region>
+            </body>
+          </region>
+        </body>
+      </region>
+      <line>
+        <style font-face="arial" font-size="8pt" font-italic="true" horizontal-align="center">
+          <text value="* Konec sestavy *" width="100%" />
+        </style>
+      </line>
+      <region name="MASKA-REF">
+        <body>
+          <line>
+            <style font-size="1">
+              <text value="" width="100%" />
+            </style>
+          </line>
+          <region name="MASKA-RADEK">
+            <body>
+              <line>
+                <style font-face="courier" font-size="125tw" font-color="red">
+                  <value-of name="RADEK" width="100%" />
+                </style>
+              </line>
+            </body>
+          </region>
+        </body>
+      </region>
+    </body>
+    <foot>
+      <line on-each-page="true">
+        <style font-face="arial" font-size="1" font-italic="true" ellipsis-style="cut" multiline="false" top-border-width="1">
+          <value-of name="" width="30%" onData="self.value=''+ROZVAHA.DATUM+' '+ROZVAHA.CAS" />
+        </style>
+        <style font-face="arial" font-size="1" font-italic="true" horizontal-align="center" multiline="false" top-border-width="1">
+          <text value="Zpracováno systémem  GINIS® GORDIC® spol. s  r. o." width="40%" />
+        </style>
+        <style font-face="arial" font-size="1" font-italic="true" horizontal-align="right" multiline="false" top-border-width="1">
+          <value-of name="" width="30%" onData="self.value='strana '+ROOT.PAGE+' / '+ROOT.PAGES" />
+        </style>
+      </line>
+    </foot>
+  </region>
+</format>

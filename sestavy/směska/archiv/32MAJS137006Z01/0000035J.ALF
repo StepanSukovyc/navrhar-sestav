@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<format type="grr" xmlns="http://www.gordic.cz/TR/alf/1.4/">
+  <info type_cust="Z" ixs_xme="0000ALX0AB27" xmeta_ver="1" xmeta_subver_min="20" nazev="Přehled rozdělení majetku" allowed_output="xls" ixs_alv="0000ALV02HXO,0000ALV04ZVQ" ixs_frm="0000ALF035J1" maker="0431" dat_modif="201207171211" rokmes_od="199801" rokmes_do="999913" />
+  <paper-setting paper-width="297mm" paper-height="210mm" />
+  <region name="VYBER">
+    <head>
+      <line on-each-page="true">
+        <style font-face="arial" font-size="1" font-italic="true" bottom-border-width="1">
+          <value-of name="" width="10%" onData="self.value='Licence: '+ ': '+ VYBER.LIC" />
+        </style>
+        <style font-face="arial" font-size="1" font-italic="true" horizontal-align="right" bottom-border-width="1">
+          <value-of name="" width="90%" onData="self.value='IDENTIFIKACE SESTAVY / ' +format.info['ixs_frm'] +'  ('+format.info['dat_modif']+')'" />
+        </style>
+      </line>
+      <line on-each-page="true">
+        <image file="znak-m.bmp" image-width="25mm" image-height="25mm" width="10%" />
+        <!-- <text value="PŘEHLED EVIDOVANÉHO MAJETKU"/> -->
+        <style font-face="arial" font-size="4" font-bold="true">
+          <text value="PŘEHLED ROZDĚLENÍ MAJETKU" />
+        </style>
+      </line>
+      <line on-each-page="true">
+        <style font-face="arial">
+          <text value="" width="10%" />
+        </style>
+        <style font-face="arial">
+          <text value="IČO:" width="5%" />
+        </style>
+        <style font-face="arial" font-size="3" font-bold="true">
+          <value-of name="" width="85%" onData="self.value=VYBER.ICO+ ' - '+ VYBER.ICO_NAZEV" />
+        </style>
+      </line>
+      <line on-each-page="true">
+        <style font-face="arial">
+          <text value="" width="10%" />
+        </style>
+        <style font-face="arial">
+          <text value="" width="5%" />
+        </style>
+        <style font-face="arial" font-size="3" font-bold="true">
+          <value-of name="ICO_ADRESA" width="84%" />
+        </style>
+        <style font-face="arial" font-size="3" font-bold="true">
+          <text value="" width="1%" />
+        </style>
+      </line>
+      <line on-each-page="true">
+        <style font-face="arial">
+          <text value="" width="10%" />
+        </style>
+        <style font-face="arial">
+          <text value="NS:" width="5%" />
+        </style>
+        <style font-face="arial" font-size="3" font-bold="true">
+          <value-of name="" width="85%" onData="self.value=VYBER.NS+ ' - '+ VYBER.NS_NAZEV" />
+        </style>
+      </line>
+      <line on-each-page="true">
+        <style background-color="#e4e7e7">
+          <text value="" width="100%" />
+        </style>
+      </line>
+    </head>
+    <body>
+      <!-- <region name="KARTA" order-by="SKUPINA">
+        <group name="KARTA_1" by="SKUPINA">
+          <foot>
+            <line>
+              <style font-face="arial">
+                <value-of name="SKUPINA" width="50%" />
+              </style>
+              <style font-face="arial" horizontal-align="right">
+                <value-of name="SUM(PORIZCENA)" format="# #,00" />
+              </style>
+            </line>
+          </foot>
+        </group>
+      </region> -->
+
+      <!-- grafy 1 řada -->
+      <line>
+        <style font-face="arial" font-size="3" font-bold="true">
+          <text value="Přehled majetku dle skupin" width="50%" />
+        </style>
+        <style font-face="arial" font-size="3" font-bold="true">
+          <text value="Přehled majetku dle druhů" width="50%" />
+        </style>                
+      </line>
+      
+      <line>
+        <chart type="pie" image-height="auto" image-width="auto" group-limit="0%" height="100mm" legend="left">
+          <layer>
+            <dataset series="1" name="Skupiny" />
+          </layer>
+          <region name="KARTA" order-by="SKUPINA" >
+            <group by="SKUPINA">
+              <foot>
+                <data>
+                  <value-of name="SKUPINA" />
+                  <value-of name="SUM(PORIZCENA)" />
+                </data>
+              </foot>
+            </group>
+          </region>
+        </chart>
+
+        <chart type="pie" image-height="auto" image-width="auto" group-limit="0%" height="100mm" legend="left">
+          <layer>
+            <dataset series="1" name="Druhy" />
+          </layer>
+          <region name="KARTA" order-by="DRU_MAJ" >
+            <group by="DRU_MAJ">
+              <foot>
+                <data>
+                  <value-of name="DRU_MAJ" />
+                  <value-of name="SUM(PORIZCENA)" />
+                </data>
+              </foot>
+            </group>
+          </region>
+        </chart> 
+
+      </line>
+
+      <line break-page-after="always">
+        <style font-face="arial" font-size="3" font-bold="true">
+          <text value="" width="50%" height="0mm"/>
+        </style>                
+      </line>
+
+      <!-- grafy 2 řada -->
+      <line>
+        <style font-face="arial" font-size="3" font-bold="true">
+          <text value="Přehled majetku dle účtů evidence" width="50%" />
+        </style>
+        <style font-face="arial" font-size="3" font-bold="true">
+          <text value="Přehled majetku dle účtů oprávek" width="50%" />
+        </style>                
+      </line>
+      
+      <line>
+        <chart type="pie" image-height="auto" image-width="auto" group-limit="0%" height="100mm" legend="left">
+          <layer>
+            <dataset series="1" name="SuAu_evi" />
+          </layer>
+          <region name="KARTA" order-by="SUAUEVIDENCE" >
+            <group by="SUAUEVIDENCE">
+              <foot>
+                <data>
+                  <value-of name="SUAUEVIDENCE" />
+                  <value-of name="SUM(PORIZCENA)" />
+                </data>
+              </foot>
+            </group>
+          </region>
+        </chart>
+
+        <chart type="pie" image-height="auto" image-width="auto" group-limit="0%" height="100mm" legend="left">
+          <layer>
+            <dataset series="1" name="SuAu_opravky" />
+          </layer>
+          <region name="KARTA" order-by="SUAUOPRAVKY" >
+            <group by="SUAUOPRAVKY">
+              <foot>
+                <data>
+                  <value-of name="SUAUOPRAVKY" />
+                  <value-of name="SUM(PORIZCENA)" />
+                </data>
+              </foot>
+            </group>
+          </region>
+        </chart> 
+
+      </line>
+
+    </body>
+  </region>
+</format>

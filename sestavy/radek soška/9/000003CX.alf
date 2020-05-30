@@ -1,0 +1,816 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<format type="grf" xmlns="http://www.gordic.cz/TR/alf/1.4/">
+	<info ixs_xme="0000ALX0AZD0" />
+	<info xmeta_ver="1" />
+	<info xmeta_subver_min="1" />
+	<info nazev="Rozpocet v kostce-new" />
+	<info ixs_alv="0000ALV05KB2" />
+	<info ixs_frm="0000ALF03CXQ" />
+	<info maker="0457" />
+	<info create_date="20121109" />
+	<info dat_modif="20140129115018" />
+	<info rokmes_od="199801" />
+	<info rokmes_do="999913" />
+	<info form_vyst="GFRM" />
+	<paper-setting paper-width="260mm" paper-height="210mm" />
+	<region name="HLA">
+		<body>
+			<style font-face="arial" font-color="transparent">
+				<value-of name="DATE" rect="218.75mm,0mm,238.75mm,5mm" onData="bydleni=0;zdravotnictvi=0;pokladni=0;doprava=0;verejna=0;bezpecnost=0;zivotni=0;socialni=0;skolstvi=0;telovychova=0;ostatni=0;zdravotnictviP=0" />
+			</style>
+			<style font-face="arial" font-bold="true">
+				<text value="Příjmy" rect="2.5mm,33.75mm,42.5mm,38.75mm" />
+			</style>
+			<style font-face="arial" font-bold="true">
+				<text value="Saldo" rect="133.75mm,32.5mm,173.75mm,37.5mm" />
+			</style>
+			<style font-face="arial" font-bold="true">
+				<text value="Náklady" rect="70mm,32.5mm,110mm,37.5mm" />
+			</style>
+			<grid rect="2.5mm,38.75mm,60mm,53.75mm">
+				<region name="ROZRP103" filter-out="ROZRP103.nazev3&lt;&gt;'Příjmy'">
+					<foot>
+						<line>
+							<style font-face="arial" font-size="20pt" font-bold="true" font-color="#0089c7" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(RU)" format="# 0,00" onData="ruP=self.value" type="number" />
+							</style>
+						</line>
+					</foot>
+				</region>
+			</grid>
+			<grid rect="70mm,38.75mm,127.5mm,53.75mm">
+				<region name="ROZRP103" filter-out="ROZRP103.nazev3&lt;&gt;'Výdaje'">
+					<foot>
+						<line>
+							<style font-face="arial" font-size="20pt" font-bold="true" font-color="#e4342d" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(RU)" format="# 0,00" onData="ruV=self.value" type="number" />
+							</style>
+						</line>
+					</foot>
+				</region>
+			</grid>
+			<grid rect="133.75mm,38.75mm,191.25mm,53.75mm">
+				<line>
+					<style font-face="arial" font-size="20pt" font-bold="true" font-color="#e4342d" horizontal-align="right" format="[#0089c7]# 0,00;[#e4342d]-# ,00;0">
+						<value-of name="" format="[#0089c7]# 0,00;[#e4342d]-# ,00;0" onData="self.value=ruP - ruV" />
+					</style>
+				</line>
+			</grid>
+			<!--GRIDY VYDAJE-->
+			<grid rect="5mm,101mm,230mm,107mm">
+				<region name="ROZRP106" filter-out="ROZRP106.hodnota6&lt;&gt;'51' and ROZRP106.hodnota6&lt;&gt;'52'and ROZRP106.hodnota6&lt;&gt;'53' and ROZRP106.hodnota6&lt;&gt;'54' and ROZRP106.hodnota6&lt;&gt;'55' or ROZRP106.hodnota3!='V'">
+					<foot>
+						<line>
+							<style font-face="arial">
+								<text value="Bezpečnost" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(RS)" format="# 0,00" type="number" tooltip="Rozpočet schválený" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(RU)" format="# 0,00" onData="bezpecnost=self.value" type="number" tooltip="Rozpočet upravený" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#e4342d" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(Cerpani)" format="# 0,00" onData="bezpecnostC=self.value" type="number" tooltip="Čerpáno" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" format="# 0,00 %;;0 %">
+								<value-of name="" format="# 0,00 %;;0 %" onData="if bezpecnost==0: self.value=-1&#xA;else: self.value=(100/bezpecnost)*bezpecnostC&#xA;bezpecnostP=self.value" type="number" tooltip="Procento čerpání" />
+							</style>
+							<style width="20mm" height="19.67mm" padding="10">
+								<chart type="bar" image-width="auto" image-height="auto" orientation="horizontal" edge-color="transparent" grid-color="transparent" label-color="transparent" label="none" tooltip="true" min="0" max="100">
+									<layer type="stack" label-color="transparent" tick-color="transparent" draw3d="false">
+										<dataset series="1" name="d1" />
+										<dataset series="2" name="d2" />
+									</layer>
+									<data only-if="bezpecnostP&gt;0">
+										<text value="" />
+										<value-of name="" onData="self.value=bezpecnostP" />
+										<value-of name="" onData="self.value=100-bezpecnostP" />
+									</data>
+								</chart>
+							</style>
+						</line>
+					</foot>
+				</region>
+						<line>
+							<style font-face="arial" height="5.19mm">
+								<text value="Bezpečnost" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#e4342d" horizontal-align="right" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" width="20mm" height="5.19mm">
+								<text value="" />
+							</style>
+						</line>
+					</grid>
+			<grid rect="5mm,107mm,230mm,113mm" onClick="if ROZRP106.RU&gt;0: window.open('report:/0000ALV05KB2/0000ALF03B28/0','_self')">
+					<region name="ROZRP106" filter-out="ROZRP106.hodnota6&lt;&gt;'36' or ROZRP106.hodnota3!='V'">
+						<foot>
+							<line>
+								<style width="5mm">
+									<image file="lupa.png" image-width="auto" image-height="auto" onClick="window.open('report:/0000ALV05KB2/0000ALF03B28/0','_self')" />
+								</style>
+								<style font-face="arial">
+									<text value="Bydlení" onClick="window.open('report:/0000ALV05KB2/0000ALF03B28/0','_self')" />
+								</style>
+								<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" format="# 0,00">
+									<value-of name="SUM(RS)" format="# 0,00" type="number" tooltip="Rozpočet schválený" />
+								</style>
+								<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" format="# 0,00">
+									<value-of name="SUM(RU)" format="# 0,00" onData="bydleni=self.value" type="number" tooltip="Rozpočet upravený" />
+								</style>
+								<style font-face="arial" font-bold="true" font-color="#e4342d" horizontal-align="right" format="# 0,00">
+									<value-of name="SUM(Cerpani)" format="# 0,00" onData="bydleniC=self.value" type="number" tooltip="Čerpáno" />
+								</style>
+								<style font-face="arial" font-bold="true" horizontal-align="center" format="# 0,00 %;;0 %">
+									<value-of name="" format="# 0,00 %;;0 %" onData="if bydleni==0: self.value=-1&#xA;else: self.value=(100/bydleni)*bydleniC&#xA;bydleniP=self.value" type="number" tooltip="Procento čerpání" />
+								</style>
+								<style width="20mm" height="16.1mm" padding="10">
+									<chart type="bar" image-width="auto" image-height="auto" orientation="horizontal" edge-color="transparent" grid-color="transparent" label-color="transparent" label="none" tooltip="true" min="0" max="100">
+										<layer type="stack" label-color="transparent" tick-color="transparent" draw3d="false">
+											<dataset series="1" name="d1" />
+											<dataset series="2" name="d2" />
+										</layer>
+										<data only-if="bydleniP&gt;0">
+											<text value="" />
+											<value-of name="" onData="self.value=bydleniP" />
+											<value-of name="" onData="self.value=100-bydleniP" />
+										</data>
+									</chart>
+								</style>
+							</line>
+						</foot>
+					</region>
+					<line>
+						<style font-face="arial" height="5.19mm" top-border-width="">
+							<text value="Bydlení" onClick="window.open('report:/0000ALV05KB2/0000ALF03B28/0','_self')" />
+						</style>
+						<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" height="5.19mm" top-border-width="">
+							<text value="0,00" />
+						</style>
+						<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" height="5.19mm" top-border-width="">
+							<text value="0,00" />
+						</style>
+						<style font-face="arial" font-bold="true" font-color="#e4342d" horizontal-align="right" height="5.19mm" top-border-width="">
+							<text value="0,00" />
+						</style>
+						<style font-face="arial" font-bold="true" horizontal-align="center" height="5.19mm" top-border-width="">
+							<text value="0,00" />
+						</style>
+						<style font-face="arial" font-bold="true" horizontal-align="center" width="20mm" height="5.19mm" top-border-width="">
+							<text value="" />
+						</style>
+					</line>
+				</grid>
+				<grid rect="5mm,113mm,230mm,119mm">
+					<region name="ROZRP106" filter-out="ROZRP106.hodnota6&lt;&gt;'35' or ROZRP106.hodnota3!='V'">
+						<foot>
+							<line>
+								<style font-face="arial" top-border-width="" bottom-border-width="1">
+									<text value="Zdravotnictví" />
+								</style>
+								<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" format="# 0,00" top-border-width="" bottom-border-width="1">
+									<value-of name="SUM(RS)" format="# 0,00" type="number" tooltip="Rozpočet schválený" />
+								</style>
+								<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" format="# 0,00" top-border-width="" bottom-border-width="1">
+									<value-of name="SUM(RU)" format="# 0,00" onData="zdravotnictvi=self.value" type="number" tooltip="Rozpočet upravený" />
+								</style>
+								<style font-face="arial" font-bold="true" font-color="#e4342d" horizontal-align="right" format="# 0,00" top-border-width="" bottom-border-width="1">
+									<value-of name="SUM(Cerpani)" format="# 0,00" onData="zdravotnictviC=self.value" type="number" tooltip="Čerpáno" />
+								</style>
+								<style font-face="arial" font-bold="true" horizontal-align="center" format="# 0,00 %;;0 %" top-border-width="" bottom-border-width="1">
+									<value-of name="" format="# 0,00 %;;0 %" onData="if zdravotnictvi==0: self.value=-1&#xA;else: self.value=(100/zdravotnictvi)*zdravotnictviC&#xA;zdravotnictviP=self.value" type="number" tooltip="Procento čerpání" />
+								</style>
+								<style width="20mm" height="19.67mm" padding="10">
+									<chart type="bar" image-width="auto" image-height="auto" orientation="horizontal" edge-color="transparent" grid-color="transparent" label-color="transparent" label="none" tooltip="true" min="0" max="100">
+										<layer type="stack" label-color="transparent" tick-color="transparent" draw3d="false">
+											<dataset series="1" name="d1" />
+											<dataset series="2" name="d2" />
+										</layer>
+										<data only-if="zdravotnictviP&gt;0">
+											<text value="" />
+											<value-of name="" onData="self.value=zdravotnictviP" />
+											<value-of name="" onData="self.value=100-zdravotnictviP" />
+										</data>
+									</chart>
+								</style>
+							</line>
+						</foot>
+					</region>
+					<region name="ROZRP106">
+						<head>
+							<line>
+								<style font-face="arial" height="5.19mm" top-border-width="">
+									<text value="Zdravotnictví" />
+								</style>
+								<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" height="5.19mm" top-border-width="">
+									<text value="0,00" />
+								</style>
+								<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" height="5.19mm" top-border-width="">
+									<text value="0,00" />
+								</style>
+								<style font-face="arial" font-bold="true" font-color="#e4342d" horizontal-align="right" height="5.19mm" top-border-width="">
+									<text value="0,00" />
+								</style>
+								<style font-face="arial" font-bold="true" horizontal-align="center" height="5.19mm" top-border-width="">
+									<text value="0,00" />
+								</style>
+								<style font-face="arial" font-bold="true" horizontal-align="center" width="20mm" height="5.19mm" top-border-width="">
+									<text value="" />
+								</style>
+							</line>
+						</head>
+					</region>
+				</grid>
+				<grid rect="5mm,119mm,230mm,125mm">
+				<region name="ROZRP106" filter-out="ROZRP106.hodnota6&lt;&gt;'63' or ROZRP106.hodnota3!='V'">
+					<foot>
+						<line>
+							<style font-face="arial">
+								<text value="Pokladní správa" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(RS)" format="# 0,00" type="number" tooltip="Rozpočet schválený" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(RU)" format="# 0,00" onData="pokladni=self.value" type="number" tooltip="Rozpočet upravený" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#e4342d" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(Cerpani)" format="# 0,00" onData="pokladniC=self.value" type="number" tooltip="Čerpáno" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" format="# 0,00 %;;0 %">
+								<value-of name="" format="# 0,00 %;;0 %" onData="if pokladni==0: self.value=-1&#xA;else: self.value=(100/pokladni)*pokladniC&#xA;pokladniP=self.value" type="number" tooltip="Procento čerpání" />
+							</style>
+							<style width="20mm" height="16.1mm" padding="10">
+								<chart type="bar" image-width="auto" image-height="auto" orientation="horizontal" edge-color="transparent" grid-color="transparent" label-color="transparent" label="none" tooltip="true" min="0" max="100">
+									<layer type="stack" label-color="transparent" tick-color="transparent" draw3d="false">
+										<dataset series="1" name="d1" />
+										<dataset series="2" name="d2" />
+									</layer>
+									<data only-if="pokladniP&gt;0">
+										<text value="" />
+										<value-of name="" onData="self.value=pokladniP" />
+										<value-of name="" onData="self.value=100-pokladniP" />
+									</data>
+								</chart>
+							</style>
+						</line>
+					</foot>
+				</region>
+				<region name="ROZRP106">
+					<head>
+						<line>
+							<style font-face="arial" height="5.19mm">
+								<text value="Pokladní správa" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#e4342d" horizontal-align="right" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" width="20mm" height="5.19mm">
+								<text value="" />
+							</style>
+						</line>
+					</head>
+				</region>
+			</grid>
+			<grid rect="5mm,125mm,230mm,131mm">
+				<region name="ROZRP106" filter-out="ROZRP106.hodnota6&lt;&gt;'22' or ROZRP106.hodnota3!='V'">
+					<foot>
+						<line>
+							<style font-face="arial">
+								<text value="Doprava" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(RS)" format="# 0,00" type="number" tooltip="Rozpočet schválený" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(RU)" format="# 0,00" onData="doprava=self.value" type="number" tooltip="Rozpočet upravený" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#e4342d" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(Cerpani)" format="# 0,00" onData="dopravaC=self.value" type="number" tooltip="Čerpáno" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" format="# 0,00 %;;0 %">
+								<value-of name="" format="# 0,00 %;;0 %" onData="if doprava==0: self.value=-1&#xA;else: self.value=(100/doprava)*dopravaC&#xA;dopravaP=self.value" type="number" tooltip="Procento čerpání" />
+							</style>
+							<style width="20mm" height="16.1mm" padding="10">
+								<chart type="bar" image-width="auto" image-height="auto" orientation="horizontal" edge-color="transparent" grid-color="transparent" label-color="transparent" label="none" tooltip="true" min="0" max="100">
+									<layer type="stack" label-color="transparent" tick-color="transparent" draw3d="false">
+										<dataset series="1" name="d1" />
+										<dataset series="2" name="d2" />
+									</layer>
+									<data only-if="dopravaP&gt;0">
+										<text value="" />
+										<value-of name="" onData="self.value=dopravaP" />
+										<value-of name="" onData="self.value=100-dopravaP" />
+									</data>
+								</chart>
+							</style>
+						</line>
+					</foot>
+				</region>
+				<region name="ROZRP106">
+					<head>
+						<line>
+							<style font-face="arial" height="5.19mm">
+								<text value="Doprava" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="center" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="center" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="right" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" width="20mm" height="5.19mm">
+								<text value="" />
+							</style>
+						</line>
+					</head>
+				</region>
+			</grid>
+			<grid rect="5mm,131mm,230mm,137mm">
+				<region name="ROZRP106" filter-out="ROZRP106.hodnota6&lt;&gt;'61' and ROZRP106.hodnota6&lt;&gt;'62' or ROZRP106.hodnota3!='V'">
+					<foot>
+						<line>
+							<style font-face="arial">
+								<text value="Veřejná správa" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(RS)" format="# 0,00" type="number" tooltip="Rozpočet upravený" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(RU)" format="# 0,00" onData="verejna=self.value" type="number" tooltip="Rozpočet upravený" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#e4342d" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(Cerpani)" format="# 0,00" onData="verejnaC=self.value" type="number" tooltip="Rozpočet upravený" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" format="# 0,00 %;;0 %">
+								<value-of name="" format="# 0,00 %;;0 %" onData="if verejna==0: self.value=-1&#xA;else: self.value=(100/verejna)*verejnaC&#xA;verejnaP=self.value" type="number" tooltip="Rozpočet upravený" />
+							</style>
+							<style width="20mm" height="16.1mm" padding="10">
+								<chart type="bar" image-width="auto" image-height="auto" orientation="horizontal" edge-color="transparent" grid-color="transparent" label-color="transparent" label="none" tooltip="true" min="0" max="100">
+									<layer type="stack" label-color="transparent" tick-color="transparent" draw3d="false">
+										<dataset series="1" name="d1" />
+										<dataset series="2" name="d2" />
+									</layer>
+									<data only-if="verejnaP&gt;0">
+										<text value="" />
+										<value-of name="" onData="self.value=verejnaP" />
+										<value-of name="" onData="self.value=100-verejnaP" />
+									</data>
+								</chart>
+							</style>
+						</line>
+					</foot>
+				</region>
+				<region name="ROZRP106">
+					<head>
+						<line>
+							<style font-face="arial" height="5.19mm">
+								<text value="Veřejná správa" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#e4342d" horizontal-align="right" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" width="20mm" height="5.19mm">
+								<text value="" />
+							</style>
+						</line>
+					</head>
+				</region>
+			</grid>
+				<grid rect="5mm,137mm,230mm,143mm">
+				<region name="ROZRP106" filter-out="ROZRP106.hodnota6&lt;&gt;'10' and ROZRP106.hodnota6&lt;&gt;'23'and ROZRP106.hodnota6&lt;&gt;'37' or ROZRP106.hodnota3!='V'">
+					<foot>
+						<line>
+							<style font-face="arial">
+								<text value="Životní prostředí" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(RS)" format="# 0,00" type="number" tooltip="Rozpočet schválený" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(RU)" format="# 0,00" onData="zivotni=self.value" type="number" tooltip="Rozpočet upravený" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#e4342d" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(Cerpani)" format="# 0,00" onData="zivotniC=self.value" type="number" tooltip="Čerpáno" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" format="# 0,00 %;;0 %">
+								<value-of name="" format="# 0,00 %;;0 %" onData="if zivotni==0: self.value=-1&#xA;else: self.value=(100/zivotni)*zivotniC&#xA;zivotniP=self.value" type="number" tooltip="Procento čerpání" />
+							</style>
+							<style width="20mm" height="16.1mm" padding="10">
+								<chart type="bar" image-width="auto" image-height="auto" orientation="horizontal" edge-color="transparent" grid-color="transparent" label-color="transparent" label="none" tooltip="true" min="0" max="100">
+									<layer type="stack" label-color="transparent" tick-color="transparent" draw3d="false">
+										<dataset series="1" name="d1" />
+										<dataset series="2" name="d2" />
+									</layer>
+									<data only-if="zivotniP&gt;0">
+										<text value="" />
+										<value-of name="" onData="self.value=zivotniP" />
+										<value-of name="" onData="self.value=100-zivotniP" />
+									</data>
+								</chart>
+							</style>
+						</line>
+					</foot>
+				</region>
+				<region name="ROZRP106">
+					<head>
+						<line>
+							<style font-face="arial" height="5.19mm">
+								<text value="Životní prostředí" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#e4342d" horizontal-align="right" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" width="20mm" height="5.19mm">
+								<text value="" />
+							</style>
+						</line>
+					</head>
+				</region>
+			</grid>
+			<grid rect="5mm,143mm,230mm,149mm">
+				<region name="ROZRP106" filter-out="ROZRP106.hodnota6&lt;&gt;'43' or ROZRP106.hodnota3!='V'">
+					<foot>
+						<line>
+							<style font-face="arial">
+								<text value="Sociální služby" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(RS)" format="# 0,00" type="number" tooltip="Rozpočet schválený" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(RU)" format="# 0,00" onData="socialni=self.value" type="number" tooltip="Rozpočet upravený" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#e4342d" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(Cerpani)" format="# 0,00" onData="socialniC=self.value" type="number" tooltip="Čerpáno" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" format="# 0,00 %;;0 %">
+								<value-of name="" format="# 0,00 %;;0 %" onData="if socialni==0: self.value=-1&#xA;else: self.value=(100/socialni)*socialniC&#xA;socialniP=self.value" type="number" tooltip="Rozpočet upravený" />
+							</style>
+							<style width="20mm" height="16.1mm" padding="10">
+								<chart type="bar" image-width="auto" image-height="auto" orientation="horizontal" edge-color="transparent" grid-color="transparent" label-color="transparent" label="none" tooltip="true" min="0" max="100">
+									<layer type="stack" label-color="transparent" tick-color="transparent" draw3d="false">
+										<dataset series="1" name="d1" />
+										<dataset series="2" name="d2" />
+									</layer>
+									<data only-if="socialniP&gt;0">
+										<text value="" />
+										<value-of name="" onData="self.value=socialniP" />
+										<value-of name="" onData="self.value=100-socialniP" />
+									</data>
+								</chart>
+							</style>
+						</line>
+					</foot>
+				</region>
+				<region name="ROZRP106">
+					<head>
+						<line>
+							<style font-face="arial" height="5.19mm">
+								<text value="Sociálín služby" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#e4342d" horizontal-align="right" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" width="20mm" height="5.19mm">
+								<text value="" />
+							</style>
+						</line>
+					</head>
+				</region>
+			</grid>
+			<grid rect="5mm,149mm,230mm,155mm">
+				<region name="ROZRP106" filter-out="ROZRP106.hodnota6&lt;&gt;'31' and ROZRP106.hodnota6&lt;&gt;'32' or ROZRP106.hodnota3!='V'">
+					<foot>
+						<line>
+							<style font-face="arial">
+								<text value="Školství" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(RS)" format="# 0,00" type="number" tooltip="Rozpočet schválený" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(RU)" format="# 0,00" onData="skolstvi=self.value" type="number" tooltip="Rozpočet upravený" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#e4342d" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(Cerpani)" format="# 0,00" onData="skolstviC=self.value" type="number" tooltip="Čerpáno" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" format="# 0,00 %;;0 %">
+								<value-of name="" format="# 0,00 %;;0 %" onData="if skolstvi==0: self.value=-1&#xA;else: self.value=(100/skolstvi)*skolstviC&#xA;skolstviP=self.value" type="number" tooltip="Rozpočet upravený" />
+							</style>
+							<style width="20mm" height="16.1mm" padding="10">
+								<chart type="bar" image-width="auto" image-height="auto" orientation="horizontal" edge-color="transparent" grid-color="transparent" label-color="transparent" label="none" tooltip="true" min="0" max="100">
+									<layer type="stack" label-color="transparent" tick-color="transparent" draw3d="false">
+										<dataset series="1" name="d1" />
+										<dataset series="2" name="d2" />
+									</layer>
+									<data only-if="skolstviP&gt;0">
+										<text value="" />
+										<value-of name="" onData="self.value=skolstviP" />
+										<value-of name="" onData="self.value=100-skolstviP" />
+									</data>
+								</chart>
+							</style>
+						</line>
+					</foot>
+				</region>
+				<region name="ROZRP106">
+					<head>
+						<line>
+							<style font-face="arial" height="5.19mm">
+								<text value="Školství" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#e4342d" horizontal-align="right" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" width="20mm" height="5.19mm">
+								<text value="" />
+							</style>
+						</line>
+					</head>
+				</region>
+			</grid>
+			<grid rect="5mm,155mm,230mm,161mm">
+				<region name="ROZRP106" filter-out="ROZRP106.hodnota6&lt;&gt;'34' and ROZRP106.hodnota6&lt;&gt;'33' or ROZRP106.hodnota3!='V'">
+					<foot>
+						<line>
+							<style font-face="arial">
+								<text value="Tělovýchova" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(RS)" format="# 0,00" type="number" tooltip="Rozpočet schválený" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(RU)" format="# 0,00" onData="telovychova=self.value" type="number" tooltip="Rozpočet upravený" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#e4342d" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(Cerpani)" format="# 0,00" onData="telovychovaC=self.value" type="number" tooltip="Čerpáno" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" format="# 0,00 %;;0 %">
+								<value-of name="" format="# 0,00 %;;0 %" onData="if telovychova==0: self.value=-1&#xA;else: self.value=(100/telovychova)*telovychovaC&#xA;telovychovaP=self.value" type="number" tooltip="Rozpočet upravený" />
+							</style>
+							<style width="20mm" height="19.67mm" padding="10">
+								<chart type="bar" image-width="auto" image-height="auto" orientation="horizontal" edge-color="transparent" grid-color="transparent" label-color="transparent" label="none" tooltip="true" min="0" max="100">
+									<layer type="stack" label-color="transparent" tick-color="transparent" draw3d="false">
+										<dataset series="1" name="d1" />
+										<dataset series="2" name="d2" />
+									</layer>
+									<data only-if="telovychovaP&gt;0">
+										<text value="" />
+										<value-of name="" onData="self.value=telovychovaP" />
+										<value-of name="" onData="self.value=100-telovychovaP" />
+									</data>
+								</chart>
+							</style>
+						</line>
+					</foot>
+				</region>
+				<region name="ROZRP106">
+					<head>
+						<line>
+							<style font-face="arial" height="5.19mm">
+								<text value="Tělovýchova" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#e4342d" horizontal-align="right" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" width="20mm" height="5.19mm">
+								<text value="" />
+							</style>
+						</line>
+					</head>
+				</region>
+			</grid>
+			<grid rect="5mm,161mm,230mm,167mm">
+				<region name="ROZRP106" filter-out="ROZRP106.hodnota6=='35' or ROZRP106.hodnota6=='10' or ROZRP106.hodnota6=='23' or ROZRP106.hodnota6=='37' or ROZRP106.hodnota6=='36' or ROZRP106.hodnota6=='61' or ROZRP106.hodnota6=='62' or ROZRP106.hodnota6=='51' or ROZRP106.hodnota6=='52' or ROZRP106.hodnota6=='53' or ROZRP106.hodnota6=='55' or ROZRP106.hodnota6=='31' or ROZRP106.hodnota6=='32' or ROZRP106.hodnota6=='33' or ROZRP106.hodnota6=='34' or ROZRP106.hodnota6=='63' or ROZRP106.hodnota6=='22' or ROZRP106.hodnota6=='43' or ROZRP106.hodnota3!='V'">
+					<foot>
+						<line>
+							<style font-face="arial">
+								<text value="Ostatní" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(RS)" format="# 0,00" type="number" tooltip="Rozpočet schválený" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(RU)" format="# 0,00" onData="ostatni=self.value" type="number" tooltip="Rozpočet upravený" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#e4342d" horizontal-align="right" format="# 0,00">
+								<value-of name="SUM(Cerpani)" format="# 0,00" onData="ostatniC=self.value" type="number" tooltip="Čerpáno" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" format="# 0,00 %;;0 %">
+								<value-of name="" format="# 0,00 %;;0 %" onData="if ostatni==0: self.value=-1&#xA;else: self.value=(100/ostatni)*ostatniC&#xA;ostatniP=self.value" type="number" tooltip="Rozpočet upravený" />
+							</style>
+							<style width="20mm" height="16.1mm" padding="10">
+								<chart type="bar" image-width="auto" image-height="auto" orientation="horizontal" edge-color="transparent" grid-color="transparent" label-color="transparent" label="none" tooltip="true" min="0" max="100">
+									<layer type="stack" label-color="transparent" tick-color="transparent" draw3d="false">
+										<dataset series="1" name="d1" />
+										<dataset series="2" name="d2" />
+									</layer>
+									<data only-if="ostatniP&gt;0">
+										<text value="" />
+										<value-of name="" onData="self.value=ostatniP" />
+										<value-of name="" onData="self.value=100-ostatniP" />
+									</data>
+								</chart>
+							</style>
+						</line>
+					</foot>
+				</region>
+				<region name="ROZRP106">
+					<head>
+						<line>
+							<style font-face="arial" height="5.19mm">
+								<text value="Ostatní" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#0089c7" horizontal-align="right" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" font-color="#e4342d" horizontal-align="right" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" height="5.19mm">
+								<text value="0,00" />
+							</style>
+							<style font-face="arial" font-bold="true" horizontal-align="center" width="20mm" height="5.19mm">
+								<text value="" />
+							</style>
+						</line>
+					</head>
+				</region>
+			</grid>
+			<style font-face="arial" horizontal-align="right">
+				<text value="Čerpání" rect="133.75mm,95mm,168.75mm,100mm" />
+			</style>
+			<style font-face="arial" horizontal-align="right">
+				<text value="Rozpočet schválený" rect="51.25mm,95mm,86.25mm,100mm" />
+			</style>
+			<style font-face="arial" horizontal-align="right">
+				<text value="Rozpočet upravený" rect="92.5mm,95mm,127.5mm,100mm" />
+			</style>
+			<style font-face="arial" font-size="4" font-bold="true">
+				<text value="Celkový přehled příjmů a výdajů" rect="3.75mm,18.75mm,110mm,26.25mm" />
+			</style>
+			<style font-face="arial">
+				<text value="Odvětví" rect="5mm,95mm,40mm,100mm" />
+			</style>
+			<style font-face="arial" background-color="#ececec">
+				<text value="" rect="0mm,74.5mm,240mm,75.75mm" />
+			</style>
+			<style font-face="arial" font-size="4" font-bold="true" vertical-align="center">
+				<text value="Čerpání finančních prostředků v odvětvích" rect="3.75mm,61.25mm,123.75mm,71.25mm" />
+			</style>
+			<style font-face="arial" background-color="#ececec">
+				<text value="" rect="0mm,57.5mm,240mm,58.75mm" />
+			</style>
+			<style spacing="1">
+				<chart rect="2.5mm,78.75mm,240mm,92.5mm" type="bar" image-width="auto" image-height="auto" orientation="horizontal" label="none" scale="1" tooltip="true" color-palette="#DEDA00,#96BD0D,#40A52B,#00892E,#00632E,#009F95,#ECECEC,#37A8DB,#0A71B3,#0D3082,#13235B,#622280,#E4342D,#640A28">
+					<layer type="stack" label-color="transparent" tick-color="transparent" draw3d="false">
+						<dataset series="1" name="Bydlení" />
+						<dataset series="2" name="Zdravotnictvi" />
+						<dataset series="3" name="Pokladní správa" />
+						<dataset series="4" name="Doprava" />
+						<dataset series="5" name="Verejna správa" />
+						<dataset series="6" name="Bezpečnost" />
+						<dataset series="7" name="Životní prostředí" />
+						<dataset series="8" name="Sociální služby" />
+						<dataset series="9" name="Školství" />
+						<dataset series="10" name="Tělovýchova" />
+						<dataset series="11" name="Ostatní" />
+					</layer>
+					<data>
+						<value-of name="" />
+						<value-of name="" onData="self.value=bydleni" />
+						<value-of name="" onData="self.value=zdravotnictvi" />
+						<value-of name="" onData="self.value=pokladni" />
+						<value-of name="" onData="self.value=doprava" />
+						<value-of name="" onData="self.value=verejna" />
+						<value-of name="" onData="self.value=bezpecnost" />
+						<value-of name="" onData="self.value=zivotni" />
+						<value-of name="" onData="self.value=socialni" />
+						<value-of name="" onData="self.value=skolstvi" />
+						<value-of name="" onData="self.value=telovychova" />
+						<value-of name="" onData="self.value=ostatni" />
+					</data>
+				</chart>
+			</style>
+			<style font-face="arial" background-color="#ececec">
+				<text value="" rect="0mm,28.75mm,240mm,30mm" />
+			</style>
+			<style font-face="arial" background-color="#ececec">
+				<text value="" rect="0mm,16mm,240mm,17.25mm" />
+			</style>
+			<style font-face="arial" font-size="6" font-bold="true" horizontal-align="center" vertical-align="center" right-border-width="5">
+				<text value="Město XX" rect="6.25mm,3.75mm,55mm,13.75mm" />
+			</style>
+			<style font-face="arial" font-size="6" vertical-align="center">
+				<text value="Rozpočet města" rect="58.75mm,3.75mm,121.25mm,13.75mm" />
+			</style>
+			<style font-face="arial" font-size="6" font-bold="true" vertical-align="center">
+				<value-of name="rok" rect="118.75mm,3.75mm,143.75mm,13.75mm" type="number" />
+			</style>
+			<chart rect="207.5mm,31.25mm,232.5mm,56.25mm" type="pie" image-width="auto" image-height="auto" donut="90" sector-effect="10" tooltip="true" color-palette="#e4342d,#f5f5f5,#e7501e,#b84018,#ee8461,#8a3012,#2e1006,#5c200c">
+				<layer label-layout="circle" label="none" label-color="Black" legend="none" draw3d="false" />
+				<data>
+					<text value="cerp" />
+					<value-of name="" onData="self.value=ruP" />
+				</data>
+				<data only-if="ruP&gt;ruV">
+					<text value="příjmy" />
+					<value-of name="" onData="self.value=ruP-ruV" />
+				</data>
+			</chart>
+			<style font-face="arial" font-bold="true" font-color="#e4342d" horizontal-align="center" vertical-align="center" multiline="false">
+				<value-of name="" rect="207.5mm,31.25mm,232.5mm,56.25mm" format="# 0,00 %" onData="self.value=(100/ruP)*ruV" />
+			</style>
+			<style font-face="arial" background-color="#0089c7">
+				<text value="" rect="200mm,22.5mm,202.5mm,25mm" />
+			</style>
+			<style font-face="arial">
+				<text value="Příjmy" rect="203.75mm,21.25mm,217.5mm,26.25mm" />
+			</style>
+			<style font-face="arial" background-color="#e4342d">
+				<text value="" rect="218.75mm,22.5mm,221.25mm,25mm" />
+			</style>
+			<style font-face="arial">
+				<text value="Výdaje" rect="222.5mm,21.25mm,236.25mm,26.25mm" />
+			</style>
+			<style font-face="arial" horizontal-align="right">
+				<value-of name="" rect="87.25mm,183.75mm,128.5mm,188.75mm" format="# 0,00" onData="self.value=bydleni+zdravotnictvi+pokladni+doprava+verejna+bezpecnost+zivotni+socialni+skolstvi+telovychova+ostatni" />
+			</style>
+		</body>
+	</region>
+</format>

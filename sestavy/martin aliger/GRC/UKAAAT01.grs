@@ -1,0 +1,97 @@
+﻿//FAZE=GINADM01
+//REVIZE=32ADM0137020X01
+//EKO=true
+report AatUkazka : GinisReport
+{
+	info
+    {
+		 ID_SES="UKAAAT01",
+		 IXS_ALV="0000ALV05C10",
+		 NAZEV="Ukázka AAT",
+
+		 MAKER="0443",
+		 DAT_MODIF="201211081634",
+		 ROKMES_OD="200201",
+		 ROKMES_DO="999913",
+
+		 PRIZ_SOR="0",
+		 create_date="20121108",
+  		 VERZE_DB_MIN="333EKO00",
+		 type_cust="A",
+
+		 faze="UCR01",
+		 TEMA="ucr_ptm_ucrbase",
+		 IXS_STR="0000STR000FP",
+
+  		 TYP_VYST="XME",
+		 IXS_FRM="0000ALF0365S",
+    }
+
+	include "00000AYQ.xme";
+	using Gordic.General;
+	
+	main
+	{		
+		var rok = new GInt16(X9.Rok); //X0009 se rozebere do X9
+		var uee = (Parameters["uee"]??"").ToString();
+		var rozpad1 = uee == "";
+		var uroven = rozpad1 ? "e" : "d";
+		var sl = rozpad1 ? "uee" : "ued";		
+		var cond = rozpad1 
+					? "uee>='5000' AND uee<='6999'"
+					: "uee='" + uee.Trim() + "'";
+
+		var sums = #SELECT1
+			sum(c0_10-c1_10) sum_sml                               -- decimal
+			,sum(c0_2-c1_2) sum_ros                                -- decimal
+			,sum(c0_2-c1_2+c0_3-c1_3+c0_7-c1_7+c0_8-c1_8) sum_roz  -- decimal
+			,sum(c0_0-c1_0) sum_uct                                -- decimal
+			FROM vas.rozaaat WHERE rok=:rok AND @(cond)
+		;;
+
+		var hla = HLA.AddHLARow(
+			 rok: rok
+			 ,slovo_id: sl
+			 ,slovo: SQL.SelectImmediateString("SELECT nazev FROM vas.ekoscfu WHERE rok=? and cfu=? and db_nazev=?", EkoParams.Rok, EkoParams.Cfu, new GString(sl))
+			 ,filtr: rozpad1 ? "" : "za položku "+uee
+		);
+
+		var max = new GDecimal(sums.sum_roz / 1000); //0,1%
+		var data = #SELECT
+			@(sl) slovo												-- char(12)
+			--,(SELECT nazev FROM vas.uctdroz uctdroz WHERE ixs_roz='@(EkoParams.IxsRoz)' and uroven_kon='e' and uctdroz.uee=rozaaat.uee) text
+			,sum(c0_0-c1_0) c_uct 									-- decimal
+			,sum(c0_2-c1_2) c_ros									-- decimal
+			,sum(c0_2-c1_2+c0_3-c1_3+c0_7-c1_7+c0_8-c1_8) c_roz		-- decimal
+			FROM vas.rozaaat rozaaat
+			WHERE rok=:rok AND @(cond)
+			GROUP BY @(sl)
+			HAVING sum(c0_2-c1_2+c0_3-c1_3+c0_7-c1_7+c0_8-c1_8)<:max --alespon 0,1%
+			ORDER BY c_roz
+		;;
+		
+		foreach(var row in data)
+		{
+			var text = #SELECT1 nazev 
+				FROM vas.uctdroz 
+				WHERE ixs_roz='@(EkoParams.IxsRoz)' and uroven_kon=:uroven and @(sl) LIKE '@(row.slovo.Trimmed)%'
+			;;		
+			hla.AddAATRow(
+				 slovo: row.slovo.Trimmed
+				,slovo_text: text.nazev.Trimmed
+				,obrat_uct: row.c_uct
+				,obrat_roz: row.c_roz
+				,obrat_ros: row.c_ros
+				,perc_uct: sums.sum_uct == 0 ? 100 : row.c_uct*100/sums.sum_uct
+				,perc_roz: sums.sum_roz == 0 ? 100 : row.c_roz*100/sums.sum_roz
+				,perc_ros: sums.sum_ros == 0 ? 100 : row.c_ros*100/sums.sum_ros
+			);
+		}
+
+	}
+	
+	
+}
+
+
+

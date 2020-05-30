@@ -1,0 +1,2602 @@
+<?xml version="1.0" encoding="windows-1250"?>
+
+<!--
+	#ZMENY
+	N*13.01.2011.1- vytvoření výkazu pro rok 2011 ORJ:0212
+	N*24.03.2011.1- změna patičky stránky - doplnění datumu generování výkazu ORJ:0202
+	#ZMENY
+-->
+
+<format type="grr" xmlns="http://www.gordic.cz/TR/alf/1.3/">
+
+	<info
+		ixs_xme="0000ALX0AO7Z"
+		xmeta_ver="1"
+		xmeta_subver_min="1"
+		nazev=" s texty"
+		format="UP"
+		poznamka="distribuce GINIS 3.52"
+		ixs_alv="0000ALV04O9X"
+		allowed_output="htm,xls,doc,frm"
+		ixs_frm="0000ALF02R7S"
+		maker="0202,0206"
+		last_modif="201103240926"
+		rokmes_od="201101"
+		rokmes_do="299913"
+	/>
+
+	<paper-setting paper-width="210mm" paper-height="297mm" left-margin="10mm" right-margin="10mm" top-margin="10mm" bottom-margin="15mm"/>
+
+<script><![CDATA[
+def cisla():
+ if self.value=='X':
+  self.style.font_color='black'
+  self.style.align='right'
+  self.value='X '
+ if self.value=='*******':
+  self.style.font_color='black'
+  self.style.align='right'
+  self.value='****** '
+ else:
+  num=Decimal(self.value)
+  self.value=num.format("# 0,00 ;# 0,00-; ")
+  if num<0:
+   self.style.font_color='red'
+  else:
+   self.style.font_color='black'
+]]></script>
+
+	<region name="FIN-CASTI">
+		<head>
+			<line on-each-page="true" endpage="false">
+				<style width="18%" bottom-border-width="1" font-face="arial" font-size="1" font-italic="true" multiline="false">
+					<value-of name="" onData="self.value=&apos;Licence: &apos;+FIN_CASTI.LIC"/>
+				</style>
+				<style width="82%" bottom-border-width="1" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+					<value-of name="" onData="self.value=FIN_CASTI.FORMAT+&apos; / &apos; +format.info[&apos;format&apos;] +&apos;  (&apos;+FIN_CASTI.VERZE+&apos; / &apos; +format.info[&apos;last_modif&apos;]+&apos;)&apos;"/>
+				</style>
+			</line>
+			<line>
+				<style width="100%" bottom-border-width="1" font-face="arial" font-size="1" font-italic="true" multiline="false">
+					<text value=""/>
+				</style>
+			</line>
+		</head>
+		<body>
+			<region name="FIN-HLAVICKA">
+				<body>
+					<line on-each-page="true">
+						<style width="2%" font-face="arial">
+							<text value=""/>
+						</style>
+						<style width="16%">
+							<image file="znak-m.bmp" image-width="25mm" image-height="25mm"/>
+						</style>
+						<style width="82%" font-face="arial" font-size="4" font-bold="true">
+							<text value="VÝKAZ PRO HODNOCENÍ PLNĚNÍ ROZPOČTU SPRÁVCŮ KAPITOL,"/>
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="18%" font-face="arial">
+							<text value=""/>
+						</style>
+						<style width="65%" font-face="arial" font-bold="true">
+							<text value="jimi zřízených organizačních složek státu a státních fondů"/>
+						</style>
+						<style width="17%" font-face="arial" font-size="4" font-bold="true" horizontal-align="right">
+							<text value="FIN 2-04 UP"/>
+						</style>
+					</line>
+					<line>
+						<style width="18%" font-face="arial">
+							<text value=""/>
+						</style>
+						<style width="56%" font-face="arial">
+							<value-of name="REZIM"/>
+						</style>
+						<style width="4%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="bottom" ellipsis-style="cut">
+							<text value="Čas:"/>
+						</style>
+						<style width="8%" font-face="arial" font-size="1" font-bold="true" vertical-align="bottom" ellipsis-style="cut">
+							<value-of name="CAS"/>
+						</style>
+						<style width="6%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="bottom" ellipsis-style="cut">
+							<text value="Datum:"/>
+						</style>
+						<style width="8%" font-face="arial" font-size="1" font-bold="true" vertical-align="bottom" ellipsis-style="cut">
+							<value-of name="DATUM"/>
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="18%" font-face="arial">
+							<text value=""/>
+						</style>
+						<style width="7%" font-face="arial" vertical-align="center">
+							<text value="Období:"/>
+						</style>
+						<style width="75%" font-face="arial" font-size="3" font-bold="true">
+							<value-of name="" onData="self.value=FIN-HLAVICKA.M+&apos; / &apos;+FIN-HLAVICKA.Y"/>
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="18%" font-face="arial">
+							<text value=""/>
+						</style>
+						<style width="7%" font-face="arial">
+							<text value="IČO:"/>
+						</style>
+						<style width="10%" font-face="arial" font-size="3" font-bold="true">
+							<value-of name="I"/>
+						</style>
+						<style width="65%" font-face="arial" font-size="3" font-bold="true">
+							<value-of name="N"/>
+						</style>
+					</line>
+					<region name="HLAV-SNS">
+						<body>
+							<line>
+								<style width="18%" font-face="arial">
+									<text value=""/>
+								</style>
+								<style width="7%" font-face="arial">
+									<text value="SNS:"/>
+								</style>
+								<style width="75%" font-face="arial" font-size="3" font-bold="true">
+									<value-of name="N"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<region name="HLAV-UCS">
+						<body>
+							<line>
+								<style width="18%" font-face="arial">
+									<text value=""/>
+								</style>
+								<style width="7%" font-face="arial">
+									<text value="UCS:"/>
+								</style>
+								<style width="10%" font-face="arial" font-size="3">
+									<value-of name="I"/>
+								</style>
+								<style width="65%" font-face="arial" font-size="3" font-bold="true">
+									<value-of name="N"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<region name="HLAV-NKS">
+						<body>
+							<line>
+								<style width="18%" font-face="arial">
+									<text value=""/>
+								</style>
+								<style width="7%" font-face="arial">
+									<text value="NS:"/>
+								</style>
+								<style width="10%" font-face="arial" font-size="3" font-italic="true">
+									<value-of name="I"/>
+								</style>
+								<style width="65%" font-face="arial" font-size="3" font-italic="true">
+									<value-of name="N"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<line>
+						<style width="100%" top-border-width="1">
+							<text value=""/>
+						</style>
+					</line>
+				</body>
+			</region>
+			<region name="FIN-CAST01">
+				<body>
+					<region name="FIN-CAST01-CEL-RADEK">
+						<head>
+							<line on-each-page="true" endpage="false">
+								<style width="100%" font-face="arial" font-size="4" font-color="navy" font-bold="true" font-underline="true">
+									<value-of name="FIN-CAST01.NAZEV"/>
+								</style>
+							</line>
+							<line on-each-page="true" endpage="false">
+								<style width="6%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="Paragraf"/>
+								</style>
+								<style width="6%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="Položka"/>
+								</style>
+								<style width="37%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="Text"/>
+								</style>
+								<style width="15%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="Schválený rozpočet"/>
+								</style>
+								<style width="15%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="Rozpočet po změnách"/>
+								</style>
+								<style width="15%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="Výsledek od počátku roku"/>
+								</style>
+								<style width="6%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="% RU"/>
+								</style>
+							</line>
+							<line on-each-page="true" endpage="false">
+								<style width="6%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="a"/>
+								</style>
+								<style width="6%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="b"/>
+								</style>
+								<style width="37%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value=""/>
+								</style>
+								<style width="15%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="1"/>
+								</style>
+								<style width="15%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="2"/>
+								</style>
+								<style width="15%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="3"/>
+								</style>
+								<style width="6%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value=""/>
+								</style>
+							</line>
+							<line on-each-page="true" endpage="false">
+								<style width="100%" top-padding="1" bottom-padding="1" font-face="arial" font-size="1">
+									<text value=""/>
+								</style>
+							</line>
+						</head>
+						<body>
+							<line>
+								<style width="6%" top-padding="3" bottom-padding="3" font-face="arial">
+									<value-of name="PARAGRAF"/>
+								</style>
+								<style width="6%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial" font-bold="true">
+									<value-of name="POLOZKA"/>
+								</style>
+								<style width="37%" bottom-border-style="dashed" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial">
+									<value-of name="TEXT"/>
+								</style>
+								<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+									<value-of name="SROZP" onPrint="cisla()"/>
+								</style>
+								<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+									<value-of name="UROZP" onPrint="cisla()"/>
+								</style>
+								<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+									<value-of name="SKUT" onPrint="cisla()"/>
+								</style>
+								<style width="6%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+									<value-of name="SKRU"/>
+								</style>
+							</line>
+							<region name="FIN-CAST01-CEL-POL">
+								<body>
+									<line>
+										<style width="6%" bottom-border-width="1" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+											<value-of name="PARAGRAF"/>
+										</style>
+										<style width="6%" bottom-border-width="1" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" font-bold="true">
+											<value-of name="POLOZKA"/>
+										</style>
+										<style width="37%" bottom-border-width="1" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+											<value-of name="TEXT"/>
+										</style>
+										<style width="15%" bottom-border-width="1" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+											<value-of name="SROZP" onPrint="cisla()"/>
+										</style>
+										<style width="15%" bottom-border-width="1" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+											<value-of name="UROZP" onPrint="cisla()"/>
+										</style>
+										<style width="15%" bottom-border-width="1" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+											<value-of name="SKUT" onPrint="cisla()"/>
+										</style>
+										<style width="6%" bottom-border-width="1" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+											<value-of name="SKRU"/>
+										</style>
+									</line>
+								</body>
+							</region>
+							<region name="FIN-CAST01-CEL-PAR">
+								<body>
+									<line break-page-before="avoid">
+										<style width="6%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" font-bold="true">
+											<value-of name="PARAGRAF"/>
+										</style>
+										<style width="43%" bottom-border-width="2" left-padding="2" right-padding="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" font-bold="true">
+											<value-of name="TEXT"/>
+										</style>
+										<style width="15%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" horizontal-align="right">
+											<value-of name="SROZP" onPrint="cisla()"/>
+										</style>
+										<style width="15%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" horizontal-align="right">
+											<value-of name="UROZP" onPrint="cisla()"/>
+										</style>
+										<style width="15%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" horizontal-align="right">
+											<value-of name="SKUT" onPrint="cisla()"/>
+										</style>
+										<style width="6%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" horizontal-align="right">
+											<value-of name="SKRU"/>
+										</style>
+									</line>
+								</body>
+							</region>
+						</body>
+					</region>
+					<region name="FIN-CAST01-CEL">
+						<body>
+							<line break-page-before="avoid" break-page-after="always">
+								<style width="49%" top-border-width="1" bottom-border-width="3" background-color="#e3e3e3" font-face="arial" font-size="3" font-color="navy" font-bold="true">
+									<value-of name="TEXT"/>
+								</style>
+								<style width="15%" top-border-width="1" bottom-border-width="3" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="SROZP" onPrint="cisla()"/>
+								</style>
+								<style width="15%" top-border-width="1" bottom-border-width="3" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="UROZP" onPrint="cisla()"/>
+								</style>
+								<style width="15%" top-border-width="1" bottom-border-width="3" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="SKUT" onPrint="cisla()"/>
+								</style>
+								<style width="6%" top-border-width="1" bottom-border-width="3" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="SKRU"/>
+								</style>
+							</line>
+						</body>
+					</region>
+				</body>
+			</region>
+			<region name="FIN-CAST02">
+				<body>
+					<region name="FIN-CAST02-CEL-RADEK">
+						<head>
+							<line on-each-page="true" endpage="false">
+								<style width="100%" font-face="arial" font-size="4" font-color="navy" font-bold="true" font-underline="true">
+									<value-of name="FIN-CAST02.NAZEV"/>
+								</style>
+							</line>
+							<line on-each-page="true" endpage="false">
+								<style width="6%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="Paragraf"/>
+								</style>
+								<style width="6%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="Položka"/>
+								</style>
+								<style width="37%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="Text"/>
+								</style>
+								<style width="15%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="Schválený rozpočet"/>
+								</style>
+								<style width="15%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="Rozpočet po změnách"/>
+								</style>
+								<style width="15%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="Výsledek od počátku roku"/>
+								</style>
+								<style width="6%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="% RU"/>
+								</style>
+							</line>
+							<line on-each-page="true" endpage="false">
+								<style width="6%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="a"/>
+								</style>
+								<style width="6%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="b"/>
+								</style>
+								<style width="37%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value=""/>
+								</style>
+								<style width="15%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="1"/>
+								</style>
+								<style width="15%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="2"/>
+								</style>
+								<style width="15%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="3"/>
+								</style>
+								<style width="6%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value=""/>
+								</style>
+							</line>
+							<line on-each-page="true" endpage="false">
+								<style width="100%" top-padding="1" bottom-padding="1" font-face="arial" font-size="1">
+									<text value=""/>
+								</style>
+							</line>
+						</head>
+						<body>
+							<line>
+								<style width="6%" top-padding="3" bottom-padding="3" font-face="arial">
+									<value-of name="PARAGRAF"/>
+								</style>
+								<style width="6%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial" font-bold="true">
+									<value-of name="POLOZKA"/>
+								</style>
+								<style width="37%" bottom-border-style="dashed" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial">
+									<value-of name="TEXT"/>
+								</style>
+								<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+									<value-of name="SROZP" onPrint="cisla()"/>
+								</style>
+								<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+									<value-of name="UROZP" onPrint="cisla()"/>
+								</style>
+								<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+									<value-of name="SKUT" onPrint="cisla()"/>
+								</style>
+								<style width="6%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+									<value-of name="SKRU"/>
+								</style>
+							</line>
+							<region name="FIN-CAST02-CEL-POL">
+								<body>
+									<line>
+										<style width="6%" bottom-border-width="1" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+											<value-of name="PARAGRAF"/>
+										</style>
+										<style width="6%" bottom-border-width="1" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" font-bold="true">
+											<value-of name="POLOZKA"/>
+										</style>
+										<style width="37%" bottom-border-width="1" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+											<value-of name="TEXT"/>
+										</style>
+										<style width="15%" bottom-border-width="1" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+											<value-of name="SROZP" onPrint="cisla()"/>
+										</style>
+										<style width="15%" bottom-border-width="1" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+											<value-of name="UROZP" onPrint="cisla()"/>
+										</style>
+										<style width="15%" bottom-border-width="1" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+											<value-of name="SKUT" onPrint="cisla()"/>
+										</style>
+										<style width="6%" bottom-border-width="1" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+											<value-of name="SKRU"/>
+										</style>
+									</line>
+								</body>
+							</region>
+							<region name="FIN-CAST02-CEL-PAR">
+								<body>
+									<line break-page-before="avoid">
+										<style width="6%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" font-bold="true">
+											<value-of name="PARAGRAF"/>
+										</style>
+										<style width="43%" bottom-border-width="2" left-padding="2" right-padding="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" font-bold="true">
+											<value-of name="TEXT"/>
+										</style>
+										<style width="15%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" horizontal-align="right">
+											<value-of name="SROZP" onPrint="cisla()"/>
+										</style>
+										<style width="15%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" horizontal-align="right">
+											<value-of name="UROZP" onPrint="cisla()"/>
+										</style>
+										<style width="15%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" horizontal-align="right">
+											<value-of name="SKUT" onPrint="cisla()"/>
+										</style>
+										<style width="6%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" horizontal-align="right">
+											<value-of name="SKRU"/>
+										</style>
+									</line>
+								</body>
+							</region>
+						</body>
+					</region>
+					<region name="FIN-CAST02-CEL">
+						<body>
+							<line break-page-before="avoid" break-page-after="always">
+								<style width="49%" top-border-width="1" bottom-border-width="3" background-color="#e3e3e3" font-face="arial" font-size="3" font-color="navy" font-bold="true">
+									<value-of name="TEXT"/>
+								</style>
+								<style width="15%" top-border-width="1" bottom-border-width="3" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="SROZP" onPrint="cisla()"/>
+								</style>
+								<style width="15%" top-border-width="1" bottom-border-width="3" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="UROZP" onPrint="cisla()"/>
+								</style>
+								<style width="15%" top-border-width="1" bottom-border-width="3" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="SKUT" onPrint="cisla()"/>
+								</style>
+								<style width="6%" top-border-width="1" bottom-border-width="3" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="SKRU"/>
+								</style>
+							</line>
+						</body>
+					</region>
+				</body>
+			</region>
+			<region name="FIN-REK">
+				<head>
+					<line on-each-page="true" break-page-before="always" endpage="false">
+						<style width="100%" font-face="arial" font-size="4" font-color="navy" font-bold="true" font-underline="true">
+							<text value="III. REKAPITULACE PŘÍJMŮ, VÝDAJŮ, FINANCOVÁNÍ A JEJICH KONSOLIDACE"/>
+						</style>
+					</line>
+					<line on-each-page="true" endpage="false">
+						<style width="40%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+							<text value="Název"/>
+						</style>
+						<style width="9%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Číslo řádku"/>
+						</style>
+						<style width="17%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Schválený rozpočet"/>
+						</style>
+						<style width="17%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Rozpočet po změnách"/>
+						</style>
+						<style width="17%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Výsledek od počátku roku"/>
+						</style>
+					</line>
+					<line on-each-page="true" endpage="false">
+						<style width="40%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+							<text value="text"/>
+						</style>
+						<style width="9%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="r"/>
+						</style>
+						<style width="17%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="31"/>
+						</style>
+						<style width="17%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="32"/>
+						</style>
+						<style width="17%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="33"/>
+						</style>
+					</line>
+					<line on-each-page="true" endpage="false">
+						<style width="100%" top-padding="1" bottom-padding="1" font-face="arial" font-size="1">
+							<text value=""/>
+						</style>
+					</line>
+				</head>
+				<body>
+					<region name="FIN-REK-TR-CEL">
+						<body>
+							<line>
+								<style width="43%" top-border-width="1" bottom-border-width="1" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" font-bold="true">
+									<value-of name="TEXTC"/>
+								</style>
+								<style width="6%" top-border-width="1" bottom-border-width="1" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="RADEKC"/>
+								</style>
+								<style width="17%" top-border-width="1" bottom-border-width="1" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" horizontal-align="right">
+									<value-of name="SROZPC" onPrint="cisla()"/>
+								</style>
+								<style width="17%" top-border-width="1" bottom-border-width="1" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" horizontal-align="right">
+									<value-of name="UROZPC" onPrint="cisla()"/>
+								</style>
+								<style width="17%" top-border-width="1" bottom-border-width="1" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" horizontal-align="right">
+									<value-of name="SKUTC" onPrint="cisla()"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<region name="FIN-REK-TR">
+						<body>
+							<line>
+								<style width="2%" top-padding="3" bottom-padding="3">
+									<text value=""/>
+								</style>
+								<style width="8%" top-padding="3" bottom-padding="3" font-face="arial">
+									<value-of name="TRIDA"/>
+								</style>
+								<style width="33%" top-padding="3" bottom-padding="3" font-face="arial">
+									<value-of name="TEXT"/>
+								</style>
+								<style width="6%" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="17%" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+									<value-of name="SROZP" onPrint="cisla()"/>
+								</style>
+								<style width="17%" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+									<value-of name="UROZP" onPrint="cisla()"/>
+								</style>
+								<style width="17%" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+									<value-of name="SKUT" onPrint="cisla()"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<region name="FIN-REK-KON">
+						<body>
+							<line>
+								<style width="43%" bottom-border-width="1" top-padding="6" bottom-padding="6" font-face="arial" font-bold="true">
+									<value-of name="TEXT"/>
+								</style>
+								<style width="6%" bottom-border-width="1" top-padding="6" bottom-padding="6" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="17%" bottom-border-width="1" top-padding="6" bottom-padding="6" font-face="arial" horizontal-align="right">
+									<value-of name="SROZP" onPrint="cisla()"/>
+								</style>
+								<style width="17%" bottom-border-width="1" top-padding="6" bottom-padding="6" font-face="arial" horizontal-align="right">
+									<value-of name="UROZP" onPrint="cisla()"/>
+								</style>
+								<style width="17%" bottom-border-width="1" top-padding="6" bottom-padding="6" font-face="arial" horizontal-align="right">
+									<value-of name="SKUT" onPrint="cisla()"/>
+								</style>
+							</line>
+							<region name="FIN-REK-KON-POM">
+								<body>
+									<line>
+										<style width="2%" top-padding="3" bottom-padding="3">
+											<text value=""/>
+										</style>
+										<style width="98%" top-padding="3" bottom-padding="3" font-face="arial">
+											<value-of name="POM"/>
+										</style>
+									</line>
+								</body>
+							</region>
+							<region name="FIN-REK-KON-POL">
+								<body>
+									<line>
+										<style width="1%" top-padding="3" bottom-padding="3">
+											<text value=""/>
+										</style>
+										<style width="7%" bottom-border-style="dotted" bottom-border-width="1" top-padding="3" bottom-padding="3" font-face="arial" font-bold="true">
+											<value-of name="POL"/>
+										</style>
+										<style width="35%" bottom-border-style="dotted" bottom-border-width="1" top-padding="3" bottom-padding="3" font-face="arial">
+											<value-of name="TEXT"/>
+										</style>
+										<style width="6%" bottom-border-style="dotted" bottom-border-width="1" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+											<value-of name="RADEK"/>
+										</style>
+										<style width="17%" bottom-border-style="dotted" bottom-border-width="1" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+											<value-of name="SROZP" onPrint="cisla()"/>
+										</style>
+										<style width="17%" bottom-border-style="dotted" bottom-border-width="1" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+											<value-of name="UROZP" onPrint="cisla()"/>
+										</style>
+										<style width="17%" bottom-border-style="dotted" bottom-border-width="1" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+											<value-of name="SKUT" onPrint="cisla()"/>
+										</style>
+									</line>
+								</body>
+							</region>
+						</body>
+					</region>
+					<region name="FIN-REK-CEL">
+						<body>
+							<line>
+								<style width="43%" top-border-width="1" bottom-border-width="1" top-padding="6" bottom-padding="6" background-color="#e3e3e3" font-face="arial" font-color="navy" font-bold="true">
+									<value-of name="TEXT"/>
+								</style>
+								<style width="6%" top-border-width="1" bottom-border-width="1" top-padding="6" bottom-padding="6" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="17%" top-border-width="1" bottom-border-width="1" top-padding="6" bottom-padding="6" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="SROZP" onPrint="cisla()"/>
+								</style>
+								<style width="17%" top-border-width="1" bottom-border-width="1" top-padding="6" bottom-padding="6" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="UROZP" onPrint="cisla()"/>
+								</style>
+								<style width="17%" top-border-width="1" bottom-border-width="1" top-padding="6" bottom-padding="6" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="SKUT" onPrint="cisla()"/>
+								</style>
+							</line>
+							<line on-each-page="true" endpage="false">
+								<style width="100%" top-border-width="3" top-padding="1" bottom-padding="1" font-face="arial" font-size="1">
+									<text value=""/>
+								</style>
+							</line>
+						</body>
+					</region>
+				</body>
+			</region>
+			<region name="FIN-UCTY">
+				<head>
+					<line>
+						<style width="100%">
+							<text value=""/>
+						</style>
+					</line>
+					<line>
+						<style width="100%">
+							<text value=""/>
+						</style>
+					</line>
+					<line on-each-page="true" endpage="false">
+						<style width="100%" font-face="arial" font-size="4" font-color="navy" font-bold="true" font-underline="true">
+							<text value="IV. STAVY A OBRATY NA BANKOVNÍCH ÚČTECH"/>
+						</style>
+					</line>
+					<line on-each-page="true" endpage="false">
+						<style width="40%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+							<text value="Název bankovního účtu"/>
+						</style>
+						<style width="9%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Číslo řádku"/>
+						</style>
+						<style width="17%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Počáteční stav k 1. 1."/>
+						</style>
+						<style width="17%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Stav ke konci vykazovaného období"/>
+						</style>
+						<style width="17%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Změna stavu bankovních účtů"/>
+						</style>
+					</line>
+					<line on-each-page="true" endpage="false">
+						<style width="40%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+							<text value="text"/>
+						</style>
+						<style width="9%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="r"/>
+						</style>
+						<style width="17%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="41"/>
+						</style>
+						<style width="17%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="42"/>
+						</style>
+						<style width="17%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="43"/>
+						</style>
+					</line>
+					<line on-each-page="true" endpage="false">
+						<style width="100%" top-padding="1" bottom-padding="1" font-face="arial" font-size="1">
+							<text value=""/>
+						</style>
+					</line>
+				</head>
+				<body>
+					<region name="FIN-UCTY-CELY">
+						<body>
+							<line>
+								<style width="42%" top-padding="4" bottom-padding="4" font-face="arial">
+									<value-of name="TEXT"/>
+								</style>
+								<style width="7%" top-padding="4" bottom-padding="4" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="17%" top-padding="4" bottom-padding="4" font-face="arial" horizontal-align="right">
+									<value-of name="POCST" onPrint="cisla()"/>
+								</style>
+								<style width="17%" top-padding="4" bottom-padding="4" font-face="arial" horizontal-align="right">
+									<value-of name="STAV" onPrint="cisla()"/>
+								</style>
+								<style width="17%" top-padding="4" bottom-padding="4" font-face="arial" horizontal-align="right">
+									<value-of name="ZMENA" onPrint="cisla()"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<region name="FIN-UCTY-PS-S">
+						<body>
+							<line>
+								<style width="42%" top-padding="4" bottom-padding="4" font-face="arial">
+									<value-of name="TEXT"/>
+								</style>
+								<style width="7%" top-padding="4" bottom-padding="4" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="17%" top-padding="4" bottom-padding="4" font-face="arial" horizontal-align="right">
+									<text value="X "/>
+								</style>
+								<style width="17%" top-padding="4" bottom-padding="4" font-face="arial" horizontal-align="right">
+									<value-of name="STAV" onPrint="cisla()"/>
+								</style>
+								<style width="17%" top-padding="4" bottom-padding="4" font-face="arial" horizontal-align="right">
+									<text value="X "/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<region name="FIN-UCTY-PS">
+						<body>
+							<line>
+								<style width="42%" top-padding="4" bottom-padding="4" font-face="arial">
+									<value-of name="TEXT"/>
+								</style>
+								<style width="7%" top-padding="4" bottom-padding="4" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="17%" top-padding="4" bottom-padding="4" font-face="arial" horizontal-align="right">
+									<text value="X "/>
+								</style>
+								<style width="17%" top-padding="4" bottom-padding="4" font-face="arial" horizontal-align="right">
+									<value-of name="STAV" onPrint="cisla()"/>
+								</style>
+								<style width="17%" top-padding="4" bottom-padding="4" font-face="arial" horizontal-align="right">
+									<value-of name="ZMENA" onPrint="cisla()"/>
+								</style>
+							</line>
+						</body>
+					</region>
+				</body>
+				<foot>
+					<line endpage="false">
+						<style width="100%" top-border-width="3" top-padding="1" bottom-padding="1" font-face="arial" font-size="1">
+							<text value=""/>
+						</style>
+					</line>
+				</foot>
+			</region>
+			<line>
+				<style width="100%">
+					<text value=""/>
+				</style>
+			</line>
+			<region name="FIN-FOND">
+				<body>
+					<region name="FIN-FOND-UV">
+						<body>
+							<line break-page-before="always">
+								<style width="100%" font-face="arial" font-size="4" font-color="navy" font-bold="true" font-underline="true">
+									<value-of name="TEXT"/>
+								</style>
+							</line>
+							<line>
+								<style width="100%">
+									<text value=""/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<region name="FIN-FOND-TIT">
+						<body>
+							<line>
+								<style width="100%" font-face="arial" font-size="3" font-color="navy" font-bold="true">
+									<value-of name="TEXT"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<line>
+						<style width="66%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+							<text value="Ukazatel"/>
+						</style>
+						<style width="8%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Číslo paragrafu"/>
+						</style>
+						<style width="9%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Číslo řádku/ položky"/>
+						</style>
+						<style width="17%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Výsledek od počátku roku"/>
+						</style>
+					</line>
+					<line>
+						<style width="66%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+							<text value="text"/>
+						</style>
+						<style width="8%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="a"/>
+						</style>
+						<style width="9%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="b"/>
+						</style>
+						<style width="17%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="53"/>
+						</style>
+					</line>
+					<region name="FIN-FOND-PS">
+						<body>
+							<line>
+								<style width="66%" font-face="arial" font-bold="true">
+									<value-of name="TEXT"/>
+								</style>
+								<style width="8%" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="ODPA"/>
+								</style>
+								<style width="9%" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="17%" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="SKUT" onPrint="cisla()"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<region name="FIN-FOND-RS-CELK">
+						<body>
+							<line>
+								<style width="66%" top-border-width="1" background-color="#f3f3f3" font-face="arial" font-bold="true">
+									<value-of name="TEXT"/>
+								</style>
+								<style width="8%" top-border-width="1" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="ODPA"/>
+								</style>
+								<style width="9%" top-border-width="1" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="17%" top-border-width="1" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="SKUT" onPrint="cisla()"/>
+								</style>
+							</line>
+							<region name="FIN-FOND-RS">
+								<body>
+									<line>
+										<style width="66%" font-face="arial">
+											<value-of name="TEXT"/>
+										</style>
+										<style width="8%" font-face="arial" horizontal-align="right">
+											<value-of name="ODPA"/>
+										</style>
+										<style width="9%" font-face="arial" horizontal-align="right">
+											<value-of name="RADEK"/>
+										</style>
+										<style width="17%" font-face="arial" horizontal-align="right">
+											<value-of name="SKUT" onPrint="cisla()"/>
+										</style>
+									</line>
+								</body>
+							</region>
+						</body>
+					</region>
+					<region name="FIN-FOND-KON">
+						<body>
+							<line>
+								<style width="66%" top-border-width="1" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-color="navy" font-bold="true">
+									<value-of name="TEXT"/>
+								</style>
+								<style width="8%" top-border-width="1" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-color="navy" font-bold="true" horizontal-align="right">
+									<value-of name="ODPA"/>
+								</style>
+								<style width="9%" top-border-width="1" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-color="navy" font-bold="true" horizontal-align="right">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="17%" top-border-width="1" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-color="navy" font-bold="true" horizontal-align="right">
+									<value-of name="SKUT" onPrint="cisla()"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<region name="FIN-FOND-FINANC">
+						<body>
+							<line>
+								<style width="66%" bottom-border-width="1" background-color="#f3f3f3" font-face="arial" font-bold="true">
+									<value-of name="TEXT"/>
+								</style>
+								<style width="8%" bottom-border-width="1" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="ODPA"/>
+								</style>
+								<style width="9%" bottom-border-width="1" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="17%" bottom-border-width="1" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="SKUT" onPrint="cisla()"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<line>
+						<style width="100%" top-border-width="3">
+							<text value=""/>
+						</style>
+					</line>
+					<line>
+						<style width="100%">
+							<text value=""/>
+						</style>
+					</line>
+				</body>
+			</region>
+			<line>
+				<style width="100%">
+					<text value=""/>
+				</style>
+			</line>
+			<region name="FIN-ZJ">
+				<head>
+					<line on-each-page="true" break-page-before="always" endpage="false">
+						<style width="100%" font-face="arial" font-size="4" font-color="navy" font-bold="true" font-underline="true">
+							<text value="VI. VYBRANÉ ZÁZNAMOVÉ JEDNOTKY"/>
+						</style>
+					</line>
+					<line on-each-page="true" endpage="false">
+						<style width="75%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+							<text value="Název záznamové jednotky"/>
+						</style>
+						<style width="8%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Číslo ZJ"/>
+						</style>
+						<style width="17%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Výsledek od počátku roku"/>
+						</style>
+					</line>
+					<line on-each-page="true" endpage="false">
+						<style width="75%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+							<text value="text"/>
+						</style>
+						<style width="8%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="r"/>
+						</style>
+						<style width="17%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="63"/>
+						</style>
+					</line>
+					<line on-each-page="true" endpage="false">
+						<style width="100%" top-padding="1" bottom-padding="1" font-face="arial" font-size="1">
+							<text value=""/>
+						</style>
+					</line>
+				</head>
+				<body>
+					<region name="FIN-ZJ-V">
+						<body>
+							<line break-page-after="avoid">
+								<style width="75%" top-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" font-bold="true">
+									<value-of name="TEXT"/>
+								</style>
+								<style width="8%" top-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="17%" top-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" horizontal-align="right">
+									<value-of name="SKUT" onPrint="cisla()"/>
+								</style>
+							</line>
+							<region name="FIN-ZJ-V-POM">
+								<body>
+									<line break-page-after="avoid">
+										<style width="1%">
+											<text value=""/>
+										</style>
+										<style width="99%" top-padding="3" bottom-padding="3" font-face="arial">
+											<value-of name="POM"/>
+										</style>
+									</line>
+								</body>
+							</region>
+							<region name="FIN-ZJ-V-POL">
+								<body>
+									<line>
+										<style width="1%" top-padding="3" bottom-padding="3">
+											<text value=""/>
+										</style>
+										<style width="74%" bottom-border-style="dotted" bottom-border-width="1" top-padding="3" bottom-padding="3" font-face="arial">
+											<value-of name="TEXT"/>
+										</style>
+										<style width="8%" bottom-border-style="dotted" bottom-border-width="1" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+											<value-of name="RADEK"/>
+										</style>
+										<style width="17%" bottom-border-style="dotted" bottom-border-width="1" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+											<value-of name="SKUT" onPrint="cisla()"/>
+										</style>
+									</line>
+								</body>
+							</region>
+						</body>
+					</region>
+				</body>
+			</region>
+			<line>
+				<style width="100%" top-border-width="3">
+					<text value=""/>
+				</style>
+			</line>
+			<region name="FIN-UKAZ">
+				<head>
+					<line on-each-page="true" endpage="false">
+						<style width="100%" font-face="arial" font-size="4" font-color="navy" font-bold="true" font-underline="true">
+							<text value="VII. ZÁVAZNÉ UKAZATELE STÁTNÍHO ROZPOČTU A DALŠÍ ANALYTICKÉ ÚDAJE"/>
+						</style>
+					</line>
+					<line on-each-page="true" endpage="false">
+						<style width="8%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Číslo řádku"/>
+						</style>
+						<style width="92%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+							<text value="Název ukazatele"/>
+						</style>
+					</line>
+					<line on-each-page="true" endpage="false">
+						<style width="14.28%" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Schválený rozpočet"/>
+						</style>
+						<style width="14.28%" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Rozpočet po změnách"/>
+						</style>
+						<style width="14.28%" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Konečný rozpočet výdajů"/>
+						</style>
+						<style width="14.28%" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Výsledek od počátku roku"/>
+						</style>
+						<style width="14.28%" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Mimorozpočtové prostředky"/>
+						</style>
+						<style width="14.28%" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Použití nároků z nespotřebovaných výdajů"/>
+						</style>
+						<style width="14.32%" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Převod prostředků do RF k 31.12. (§ 50 zák. č. 218/2000 Sb.)"/>
+						</style>
+					</line>
+					<line on-each-page="true" endpage="false">
+						<style width="8%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+							<text value="text"/>
+						</style>
+						<style width="6.28%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="71"/>
+						</style>
+						<style width="14.28%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="72"/>
+						</style>
+						<style width="14.28%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="73"/>
+						</style>
+						<style width="14.28%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="74"/>
+						</style>
+						<style width="14.28%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="75"/>
+						</style>
+						<style width="14.28%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="76"/>
+						</style>
+						<style width="14.32%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="77"/>
+						</style>
+					</line>
+				</head>
+				<body>
+					<region name="FIN-UKAZ-HLAV">
+						<body>
+							<line>
+								<style width="100%" font-face="arial" font-color="navy" font-bold="true">
+									<value-of name="TEXT"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<region name="FIN-UKAZ-R">
+						<body>
+							<line only-if="FIN_UKAZ_R.TYP==&apos;2&apos;">
+								<style width="100%" font-size="5pt">
+									<text value=""/>
+								</style>
+							</line>
+							<line only-if="FIN_UKAZ_R.TYP==&apos;0&apos;">
+								<style width="100%" bottom-border-style="dashed" font-face="arial">
+									<value-of name="TEXT"/>
+								</style>
+							</line>
+							<line only-if="FIN_UKAZ_R.TYP==&apos;2&apos;">
+								<style width="8%" font-face="arial" horizontal-align="right">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="92%" font-face="arial">
+									<value-of name="TEXT"/>
+								</style>
+							</line>
+							<line only-if="FIN_UKAZ_R.TYP==&apos;11&apos;">
+								<style width="8%" background-color="#aceecf" font-face="arial" horizontal-align="right">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="92%" bottom-border-style="dashed" background-color="#aceecf" font-face="arial">
+									<value-of name="TEXT"/>
+								</style>
+							</line>
+							<line only-if="FIN_UKAZ_R.TYP==&apos;3&apos;">
+								<style width="1%" bottom-border-style="dashed">
+									<text value=""/>
+								</style>
+								<style width="8%" font-face="arial" horizontal-align="right">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="91%" bottom-border-style="dashed" font-face="arial">
+									<value-of name="TEXT"/>
+								</style>
+							</line>
+							<line only-if="FIN_UKAZ_R.TYP==&apos;4&apos;">
+								<style width="2%" bottom-border-style="dashed">
+									<text value=""/>
+								</style>
+								<style width="8%" font-face="arial" horizontal-align="right">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="90%" bottom-border-style="dashed" font-face="arial">
+									<value-of name="TEXT"/>
+								</style>
+							</line>
+							<line only-if="FIN_UKAZ_R.TYP==&apos;6&apos;">
+								<style width="8%" bottom-border-style="dashed">
+									<text value=""/>
+								</style>
+								<style width="8%" font-face="arial" horizontal-align="right">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="84%" bottom-border-style="dashed" font-face="arial">
+									<value-of name="TEXT"/>
+								</style>
+							</line>
+							<line only-if="FIN_UKAZ_R.TYP==&apos;8&apos;">
+								<style width="11%" bottom-border-style="dashed">
+									<text value=""/>
+								</style>
+								<style width="8%" font-face="arial" horizontal-align="right">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="81%" bottom-border-style="dashed" font-face="arial">
+									<value-of name="TEXT"/>
+								</style>
+							</line>
+							<line only-if="FIN_UKAZ_R.TYP==&apos;9&apos;">
+								<style width="14%" bottom-border-style="dashed">
+									<text value=""/>
+								</style>
+								<style width="8%" font-face="arial" horizontal-align="right">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="78%" bottom-border-style="dashed" font-face="arial">
+									<value-of name="TEXT"/>
+								</style>
+							</line>
+							<line only-if="FIN_UKAZ_R.TYP==&apos;10&apos;">
+								<style width="17%" bottom-border-style="dashed">
+									<text value=""/>
+								</style>
+								<style width="8%" font-face="arial" horizontal-align="right">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="75%" bottom-border-style="dashed" font-face="arial">
+									<value-of name="TEXT"/>
+								</style>
+							</line>
+							<line only-if="FIN_UKAZ_R.TYP&lt;&gt;&apos;5&apos;">
+								<style width="14.28%" bottom-border-style="dashed" background-color="#f3f3f3" font-face="arial" font-size="8pt" font-bold="true" horizontal-align="right">
+									<value-of name="SROZP" onPrint="cisla()"/>
+								</style>
+								<style width="14.28%" bottom-border-style="dashed" background-color="#f3f3f3" font-face="arial" font-size="8pt" font-bold="true" horizontal-align="right">
+									<value-of name="UROZP" onPrint="cisla()"/>
+								</style>
+								<style width="14.28%" bottom-border-style="dashed" background-color="#f3f3f3" font-face="arial" font-size="8pt" font-bold="true" horizontal-align="right">
+									<value-of name="KROZP" onPrint="cisla()"/>
+								</style>
+								<style width="14.28%" bottom-border-style="dashed" background-color="#f3f3f3" font-face="arial" font-size="8pt" font-bold="true" horizontal-align="right">
+									<value-of name="SKUT" onPrint="cisla()"/>
+								</style>
+								<style width="14.28%" bottom-border-style="dashed" background-color="#f3f3f3" font-face="arial" font-size="8pt" font-bold="true" horizontal-align="right">
+									<value-of name="MIMOROZP" onPrint="cisla()"/>
+								</style>
+								<style width="14.28%" bottom-border-style="dashed" background-color="#f3f3f3" font-face="arial" font-size="8pt" font-bold="true" horizontal-align="right">
+									<value-of name="POUZNAR" onPrint="cisla()"/>
+								</style>
+								<style width="14.32%" bottom-border-style="dashed" background-color="#f3f3f3" font-face="arial" font-size="8pt" font-bold="true" horizontal-align="right">
+									<value-of name="PRINV" onPrint="cisla()"/>
+								</style>
+							</line>
+							<region name="FIN-UKAZ-TEXT">
+								<body>
+									<line only-if="FIN_UKAZ_TEXT.TYP==&apos;1&apos;">
+										<style width="100%" font-face="arial" font-italic="true">
+											<value-of name="TEXT"/>
+										</style>
+									</line>
+									<line only-if="FIN_UKAZ_TEXT.TYP==&apos;5&apos;">
+										<style width="5%" font-face="arial" font-italic="true">
+											<text value=""/>
+										</style>
+										<style width="95%" font-face="arial" font-italic="true">
+											<value-of name="TEXT"/>
+										</style>
+									</line>
+								</body>
+							</region>
+						</body>
+					</region>
+				</body>
+			</region>
+			<line>
+				<style width="100%" top-border-width="3">
+					<text value=""/>
+				</style>
+			</line>
+			<region name="FIN-PROG">
+				<head>
+					<line on-each-page="true" break-page-before="always" endpage="false">
+						<style width="100%" font-face="arial" font-size="4" font-color="navy" font-bold="true" font-underline="true">
+							<text value="VIII. VÝDAJE NA FINANCOVÁNÍ PROGRAMŮ"/>
+						</style>
+					</line>
+					<line on-each-page="true" endpage="false">
+						<style width="8%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+							<text value="Číslo programu"/>
+						</style>
+						<style width="6%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+							<text value="Položka"/>
+						</style>
+						<style width="26%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+							<text value="Text"/>
+						</style>
+						<style width="15%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Schválený rozpočet"/>
+						</style>
+						<style width="15%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Rozpočet po změnách"/>
+						</style>
+						<style width="15%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Konečný rozpočet výdajů"/>
+						</style>
+						<style width="15%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Výsledek od počátku roku"/>
+						</style>
+					</line>
+					<line on-each-page="true" endpage="false">
+						<style width="8%" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+							<text value="a"/>
+						</style>
+						<style width="6%" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+							<text value="b"/>
+						</style>
+						<style width="26%" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value=""/>
+						</style>
+						<style width="15%" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="81"/>
+						</style>
+						<style width="15%" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="82"/>
+						</style>
+						<style width="15%" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="83"/>
+						</style>
+						<style width="15%" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="84"/>
+						</style>
+					</line>
+					<line on-each-page="true" endpage="false">
+						<style width="100%" top-padding="1" bottom-padding="1" font-face="arial" font-size="1">
+							<text value=""/>
+						</style>
+					</line>
+				</head>
+				<body>
+					<region name="FIN-PROG-POL">
+						<body>
+							<line>
+								<style width="8%" top-padding="3" bottom-padding="3" font-face="arial">
+									<value-of name="PROGRAM"/>
+								</style>
+								<style width="6%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial" font-bold="true">
+									<value-of name="POLOZKA"/>
+								</style>
+								<style width="26%" bottom-border-style="dashed" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial">
+									<value-of name="TEXT-POL"/>
+								</style>
+								<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+									<value-of name="SROZP" onPrint="cisla()"/>
+								</style>
+								<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+									<value-of name="UROZP" onPrint="cisla()"/>
+								</style>
+								<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+									<value-of name="KROZP" onPrint="cisla()"/>
+								</style>
+								<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+									<value-of name="SKUT" onPrint="cisla()"/>
+								</style>
+							</line>
+							<region name="FIN-PROG-POL-PROG">
+								<body>
+									<line break-page-before="avoid">
+										<style width="8%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" font-bold="true">
+											<value-of name="PROGRAM"/>
+										</style>
+										<style width="32%" bottom-border-width="2" left-padding="2" right-padding="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" font-bold="true">
+											<value-of name="TEXT"/>
+										</style>
+										<style width="15%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" horizontal-align="right">
+											<value-of name="SROZP" onPrint="cisla()"/>
+										</style>
+										<style width="15%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" horizontal-align="right">
+											<value-of name="UROZP" onPrint="cisla()"/>
+										</style>
+										<style width="15%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" horizontal-align="right">
+											<value-of name="KROZP" onPrint="cisla()"/>
+										</style>
+										<style width="15%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" horizontal-align="right">
+											<value-of name="SKUT" onPrint="cisla()"/>
+										</style>
+									</line>
+								</body>
+							</region>
+							<region name="FIN-PROG-POL-UZ-CELKEM">
+								<body>
+									<line break-page-before="avoid">
+										<style width="40%" top-border-width="1" bottom-border-width="3" background-color="#e3e3e3" font-face="arial" font-size="3" font-color="navy" font-bold="true">
+											<value-of name="TEXT"/>
+										</style>
+										<style width="15%" top-border-width="1" bottom-border-width="3" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+											<value-of name="SROZP" onPrint="cisla()"/>
+										</style>
+										<style width="15%" top-border-width="1" bottom-border-width="3" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+											<value-of name="UROZP" onPrint="cisla()"/>
+										</style>
+										<style width="15%" top-border-width="1" bottom-border-width="3" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+											<value-of name="KROZP" onPrint="cisla()"/>
+										</style>
+										<style width="15%" top-border-width="1" bottom-border-width="3" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+											<value-of name="SKUT" onPrint="cisla()"/>
+										</style>
+									</line>
+								</body>
+							</region>
+						</body>
+					</region>
+				</body>
+			</region>
+			<line>
+				<style width="100%" top-border-width="3">
+					<text value=""/>
+				</style>
+			</line>
+			<region name="FIN-DOT">
+				<head>
+					<line on-each-page="true" break-page-before="always" endpage="false">
+						<style width="100%" font-face="arial" font-size="4" font-color="navy" font-bold="true" font-underline="true">
+							<text value="IX. TRANSFERY A PŮJČKY POSKYTNUTÉ VEŘEJNÝM ROZPOČTŮM ÚZEMNÍ ÚROVNĚ"/>
+						</style>
+					</line>
+					<line on-each-page="true" endpage="false">
+						<style width="7%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-bold="true" font-italic="true">
+							<text value="Účelový znak"/>
+						</style>
+						<style width="28%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-bold="true" font-italic="true">
+							<text value="Název"/>
+						</style>
+						<style width="11%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-bold="true" font-italic="true" horizontal-align="right">
+							<text value="Kód územní jednotky"/>
+						</style>
+						<style width="6%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-bold="true" font-italic="true" horizontal-align="right">
+							<text value="Položka"/>
+						</style>
+						<style width="31%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-bold="true" font-italic="true">
+							<text value="Název"/>
+						</style>
+						<style width="17%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-bold="true" font-italic="true" horizontal-align="right">
+							<text value="Výsledek od počátku roku"/>
+						</style>
+					</line>
+					<line on-each-page="true" endpage="false">
+						<style width="7%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+							<text value="a"/>
+						</style>
+						<style width="33%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value=""/>
+						</style>
+						<style width="6%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="b"/>
+						</style>
+						<style width="6%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="c"/>
+						</style>
+						<style width="31%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value=""/>
+						</style>
+						<style width="17%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="93"/>
+						</style>
+					</line>
+				</head>
+				<body>
+					<region name="FIN-DOT-POL">
+						<body>
+							<line only-if="FIN_DOT_POL.CISLO!=&apos;***&apos;">
+								<style width="7%" font-face="arial">
+									<value-of name="UZ"/>
+								</style>
+								<style width="33%" font-face="arial">
+									<value-of name="TEXT"/>
+								</style>
+								<style width="6%" font-face="arial" horizontal-align="right">
+									<value-of name="CISLO"/>
+								</style>
+								<style width="6%" font-face="arial" horizontal-align="right">
+									<value-of name="POL"/>
+								</style>
+								<style width="31%" font-face="arial">
+									<value-of name="TEXT-POL"/>
+								</style>
+								<style width="17%" font-face="arial" horizontal-align="right">
+									<value-of name="SKUT" onPrint="cisla()"/>
+								</style>
+							</line>
+							<line only-if="FIN_DOT_POL.CISLO==&apos;***&apos;">
+								<style width="7%" background-color="#f8f8f8" font-face="arial">
+									<value-of name="UZ"/>
+								</style>
+								<style width="33%" background-color="#f8f8f8" font-face="arial">
+									<value-of name="TEXT"/>
+								</style>
+								<style width="6%" background-color="#f8f8f8" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="CISLO"/>
+								</style>
+								<style width="6%" background-color="#f8f8f8" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="POL"/>
+								</style>
+								<style width="31%" background-color="#f8f8f8" font-face="arial" font-bold="true">
+									<value-of name="TEXT-POL"/>
+								</style>
+								<style width="17%" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+									<value-of name="SKUT" onPrint="cisla()"/>
+								</style>
+							</line>
+							<region name="FIN-DOT-POL-UZ">
+								<body>
+									<line>
+										<style width="7%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" font-bold="true">
+											<value-of name="UZ"/>
+										</style>
+										<style width="76%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" font-bold="true">
+											<value-of name="TEXT"/>
+										</style>
+										<style width="17%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" horizontal-align="right">
+											<value-of name="SKUT" onPrint="cisla()"/>
+										</style>
+									</line>
+								</body>
+							</region>
+							<region name="FIN-DOT-POL-UZ-CELKEM">
+								<body>
+									<line>
+										<style width="83%" background-color="#e3e3e3" font-face="arial" font-size="3" font-color="navy" font-bold="true">
+											<value-of name="TEXT"/>
+										</style>
+										<style width="17%" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+											<value-of name="SKUT" onPrint="cisla()"/>
+										</style>
+									</line>
+								</body>
+							</region>
+						</body>
+					</region>
+				</body>
+			</region>
+			<line>
+				<style width="100%" top-border-width="3">
+					<text value=""/>
+				</style>
+			</line>
+			<region name="FIN-STAVHL">
+				<head>
+					<line>
+						<style width="100%">
+							<text value=""/>
+						</style>
+					</line>
+					<line on-each-page="true" endpage="false">
+						<style width="100%" font-face="arial" font-size="4" font-color="navy" font-bold="true" font-underline="true">
+							<text value="X. STAVY A OBRATY NA BANKOVNÍCH ÚČTECH ORGANIZAČNÍCH SLOŽEK STÁTU, PRÁVNICKÝCH OSOB, KTERÉ MAJÍ VZTAH KE STÁTNÍ POKLADNĚ, A STÁTÁNÍCH FONDŮ VEDENÝCH V JINÝCH BANKÁCH (MIMO ČNB) "/>
+						</style>
+					</line>
+					<line on-each-page="true" endpage="false">
+						<style width="25%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-bold="true" font-italic="true">
+							<text value="Název bankovního účtu"/>
+						</style>
+						<style width="9%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-bold="true" font-italic="true">
+							<text value="Kód bankovního účtu"/>
+						</style>
+						<style width="8%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-bold="true" font-italic="true">
+							<text value="Kód druhu organizace"/>
+						</style>
+						<style width="7%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-bold="true" font-italic="true">
+							<text value="Kód banky"/>
+						</style>
+						<style width="17%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-bold="true" font-italic="true" horizontal-align="right">
+							<text value="Počáteční stav k 1. 1."/>
+						</style>
+						<style width="17%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-bold="true" font-italic="true" horizontal-align="right">
+							<text value="Stav ke konci vykazovaného období"/>
+						</style>
+						<style width="17%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-bold="true" font-italic="true" horizontal-align="right">
+							<text value="Změna stavu bankovních účtů"/>
+						</style>
+					</line>
+					<line on-each-page="true" endpage="false">
+						<style width="25%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+							<text value="text"/>
+						</style>
+						<style width="9%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+							<text value="a"/>
+						</style>
+						<style width="8%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+							<text value="b"/>
+						</style>
+						<style width="7%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+							<text value="c"/>
+						</style>
+						<style width="17%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="101"/>
+						</style>
+						<style width="17%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="102"/>
+						</style>
+						<style width="17%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="103"/>
+						</style>
+					</line>
+				</head>
+				<body>
+					<region name="FIN-STAV">
+						<body>
+							<line>
+								<style width="25%" font-face="arial" font-color="navy" font-bold="true">
+									<value-of name="NAZEV"/>
+								</style>
+								<style width="9%" font-face="arial">
+									<value-of name="UCET"/>
+								</style>
+								<style width="8%" font-face="arial">
+									<value-of name="ORG"/>
+								</style>
+								<style width="7%" font-face="arial">
+									<value-of name="BANKA"/>
+								</style>
+								<style width="17%" font-face="arial" horizontal-align="right">
+									<value-of name="POCST"/>
+								</style>
+								<style width="17%" font-face="arial" horizontal-align="right">
+									<value-of name="STAV"/>
+								</style>
+								<style width="17%" font-face="arial" horizontal-align="right">
+									<value-of name="ZMENA"/>
+								</style>
+							</line>
+						</body>
+					</region>
+				</body>
+			</region>
+			<line>
+				<style width="100%" top-border-width="3">
+					<text value=""/>
+				</style>
+			</line>
+			<region name="FIN-CAST11">
+				<body>
+					<region name="FIN-CAST11-RADEK">
+						<head>
+							<line on-each-page="true" endpage="false">
+								<style width="100%" font-face="arial" font-size="4" font-color="navy" font-bold="true" font-underline="true">
+									<value-of name="FIN-CAST11.NAZEV"/>
+								</style>
+							</line>
+							<line on-each-page="true" endpage="false">
+								<style width="6%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="Paragraf"/>
+								</style>
+								<style width="6%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="Položka"/>
+								</style>
+								<style width="27%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="Text"/>
+								</style>
+								<style width="5%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="Nástroj"/>
+								</style>
+								<style width="5%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="Zdroj"/>
+								</style>
+								<style width="17%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="Schválený rozpočet"/>
+								</style>
+								<style width="17%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="Rozpočet po změnách"/>
+								</style>
+								<style width="17%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="Výsledek od počátku roku"/>
+								</style>
+							</line>
+							<line on-each-page="true" endpage="false">
+								<style width="6%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="a"/>
+								</style>
+								<style width="6%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="b"/>
+								</style>
+								<style width="27%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value=""/>
+								</style>
+								<style width="5%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="c"/>
+								</style>
+								<style width="5%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="d"/>
+								</style>
+								<style width="17%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="1"/>
+								</style>
+								<style width="17%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="2"/>
+								</style>
+								<style width="17%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="3"/>
+								</style>
+							</line>
+							<line on-each-page="true" endpage="false">
+								<style width="100%" top-padding="1" bottom-padding="1" font-face="arial" font-size="1">
+									<text value=""/>
+								</style>
+							</line>
+						</head>
+						<body>
+							<line>
+								<style width="6%" top-padding="3" bottom-padding="3" font-face="arial">
+									<value-of name="PARAGRAF"/>
+								</style>
+								<style width="6%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial">
+									<value-of name="POLOZKA"/>
+								</style>
+								<style width="27%" bottom-border-style="dashed" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial">
+									<value-of name="TEXT"/>
+								</style>
+								<style width="5%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial">
+									<value-of name="NASTROJ"/>
+								</style>
+								<style width="5%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial">
+									<value-of name="ZDROJ"/>
+								</style>
+								<style width="17%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+									<value-of name="SROZP" onPrint="cisla()"/>
+								</style>
+								<style width="17%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+									<value-of name="UROZP" onPrint="cisla()"/>
+								</style>
+								<style width="17%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+									<value-of name="SKUT" onPrint="cisla()"/>
+								</style>
+							</line>
+							<region name="FIN-CAST11-RADEK-SODPA">
+								<body>
+									<line>
+										<style width="6%" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" font-bold="true">
+											<value-of name="PARAGRAF"/>
+										</style>
+										<style width="6%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+											<text value="XXXX"/>
+										</style>
+										<style width="27%" bottom-border-style="dashed" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+											<value-of name="TEXT"/>
+										</style>
+										<style width="5%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+											<value-of name="NASTROJ"/>
+										</style>
+										<style width="5%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+											<value-of name="ZDROJ"/>
+										</style>
+										<style width="17%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+											<value-of name="SROZP" onPrint="cisla()"/>
+										</style>
+										<style width="17%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+											<value-of name="UROZP" onPrint="cisla()"/>
+										</style>
+										<style width="17%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+											<value-of name="SKUT" onPrint="cisla()"/>
+										</style>
+									</line>
+									<region name="FIN-CAST11-RADEK-SZDROJ">
+										<body>
+											<line>
+												<style width="2%" bottom-border-style="dashed" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+													<text value=""/>
+												</style>
+												<style width="37%" bottom-border-style="dashed" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+													<value-of name="TEXT"/>
+												</style>
+												<style width="5%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+													<value-of name="NASTROJ"/>
+												</style>
+												<style width="5%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" font-bold="true">
+													<value-of name="ZDROJ"/>
+												</style>
+												<style width="17%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+													<value-of name="SROZP" onPrint="cisla()"/>
+												</style>
+												<style width="17%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+													<value-of name="UROZP" onPrint="cisla()"/>
+												</style>
+												<style width="17%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+													<value-of name="SKUT" onPrint="cisla()"/>
+												</style>
+											</line>
+											<region name="FIN-CAST11-RADEK-SNASTROJ">
+												<body>
+													<line>
+														<style width="2%" bottom-border-style="dashed" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#e8e8e8" font-face="arial">
+															<text value=""/>
+														</style>
+														<style width="37%" bottom-border-style="dashed" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#e8e8e8" font-face="arial">
+															<value-of name="TEXT"/>
+														</style>
+														<style width="5%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#e8e8e8" font-face="arial" font-bold="true">
+															<value-of name="NASTROJ"/>
+														</style>
+														<style width="5%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#e8e8e8" font-face="arial">
+															<text value=""/>
+														</style>
+														<style width="17%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#e8e8e8" font-face="arial" horizontal-align="right">
+															<value-of name="SROZP" onPrint="cisla()"/>
+														</style>
+														<style width="17%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#e8e8e8" font-face="arial" horizontal-align="right">
+															<value-of name="UROZP" onPrint="cisla()"/>
+														</style>
+														<style width="17%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#e8e8e8" font-face="arial" horizontal-align="right">
+															<value-of name="SKUT" onPrint="cisla()"/>
+														</style>
+													</line>
+												</body>
+											</region>
+										</body>
+									</region>
+								</body>
+							</region>
+							<region name="FIN-CAST11-RADEK-NASTROJ">
+								<body>
+									<line>
+										<style width="6%" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+											<value-of name="PARAGRAF"/>
+										</style>
+										<style width="6%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+											<value-of name="POLOZKA"/>
+										</style>
+										<style width="27%" bottom-border-style="dashed" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+											<value-of name="TEXT"/>
+										</style>
+										<style width="5%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" font-bold="true">
+											<value-of name="NASTROJ"/>
+										</style>
+										<style width="5%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+											<text value=""/>
+										</style>
+										<style width="17%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+											<value-of name="SROZP" onPrint="cisla()"/>
+										</style>
+										<style width="17%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+											<value-of name="UROZP" onPrint="cisla()"/>
+										</style>
+										<style width="17%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+											<value-of name="SKUT" onPrint="cisla()"/>
+										</style>
+									</line>
+								</body>
+							</region>
+							<region name="FIN-CAST11-RADEK-POL">
+								<body>
+									<line break-page-before="avoid">
+										<style width="6%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial">
+											<value-of name="PARAGRAF"/>
+										</style>
+										<style width="6%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" font-bold="true">
+											<value-of name="POLOZKA"/>
+										</style>
+										<style width="37%" bottom-border-width="2" left-padding="2" right-padding="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" font-bold="true">
+											<value-of name="TEXT"/>
+										</style>
+										<style width="17%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" horizontal-align="right">
+											<value-of name="SROZP" onPrint="cisla()"/>
+										</style>
+										<style width="17%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" horizontal-align="right">
+											<value-of name="UROZP" onPrint="cisla()"/>
+										</style>
+										<style width="17%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" horizontal-align="right">
+											<value-of name="SKUT" onPrint="cisla()"/>
+										</style>
+									</line>
+									<region name="FIN-CAST11-RADEK-POL-PAR">
+										<body>
+											<line break-page-before="avoid">
+												<style width="6%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#e8e8e8" font-face="arial" font-bold="true">
+													<value-of name="PARAGRAF"/>
+												</style>
+												<style width="43%" bottom-border-width="2" left-padding="2" right-padding="2" top-padding="6" bottom-padding="6" background-color="#e8e8e8" font-face="arial" font-bold="true">
+													<value-of name="TEXT"/>
+												</style>
+												<style width="17%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#e8e8e8" font-face="arial" horizontal-align="right">
+													<value-of name="SROZP" onPrint="cisla()"/>
+												</style>
+												<style width="17%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#e8e8e8" font-face="arial" horizontal-align="right">
+													<value-of name="UROZP" onPrint="cisla()"/>
+												</style>
+												<style width="17%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#e8e8e8" font-face="arial" horizontal-align="right">
+													<value-of name="SKUT" onPrint="cisla()"/>
+												</style>
+											</line>
+										</body>
+									</region>
+								</body>
+							</region>
+						</body>
+					</region>
+					<region name="FIN-CAST11-CEL">
+						<body>
+							<line break-page-before="avoid">
+								<style width="49%" top-border-width="1" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="3" font-color="navy" font-bold="true">
+									<value-of name="TEXT"/>
+								</style>
+								<style width="17%" top-border-width="1" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="SROZP" onPrint="cisla()"/>
+								</style>
+								<style width="17%" top-border-width="1" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="UROZP" onPrint="cisla()"/>
+								</style>
+								<style width="17%" top-border-width="1" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="SKUT" onPrint="cisla()"/>
+								</style>
+							</line>
+							<line>
+								<style width="100%" top-border-width="3">
+									<text value=""/>
+								</style>
+							</line>
+						</body>
+					</region>
+				</body>
+			</region>
+			<region name="FIN-CAST12">
+				<body>
+					<region name="FIN-CAST12-RADEK">
+						<head>
+							<line on-each-page="true" endpage="false">
+								<style width="100%" font-face="arial" font-size="4" font-color="navy" font-bold="true" font-underline="true">
+									<value-of name="FIN-CAST12.NAZEV"/>
+								</style>
+							</line>
+							<line on-each-page="true" endpage="false">
+								<style width="6%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="Paragraf"/>
+								</style>
+								<style width="6%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="Položka"/>
+								</style>
+								<style width="18%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="Text"/>
+								</style>
+								<style width="5%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="Nástroj"/>
+								</style>
+								<style width="5%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="Zdroj"/>
+								</style>
+								<style width="15%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="Schválený rozpočet"/>
+								</style>
+								<style width="15%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="Rozpočet po změnách"/>
+								</style>
+								<style width="15%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="Konečný rozpočet výdajů"/>
+								</style>
+								<style width="15%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="Výsledek od počátku roku"/>
+								</style>
+							</line>
+							<line on-each-page="true" endpage="false">
+								<style width="6%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="a"/>
+								</style>
+								<style width="6%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="b"/>
+								</style>
+								<style width="18%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value=""/>
+								</style>
+								<style width="5%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="c"/>
+								</style>
+								<style width="5%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+									<text value="d"/>
+								</style>
+								<style width="15%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="1"/>
+								</style>
+								<style width="15%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="2"/>
+								</style>
+								<style width="15%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="3"/>
+								</style>
+								<style width="15%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="4"/>
+								</style>
+							</line>
+							<line on-each-page="true" endpage="false">
+								<style width="100%" top-padding="1" bottom-padding="1" font-face="arial" font-size="1">
+									<text value=""/>
+								</style>
+							</line>
+						</head>
+						<body>
+							<line>
+								<style width="6%" top-padding="3" bottom-padding="3" font-face="arial">
+									<value-of name="PARAGRAF"/>
+								</style>
+								<style width="6%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial">
+									<value-of name="POLOZKA"/>
+								</style>
+								<style width="18%" bottom-border-style="dashed" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial">
+									<value-of name="TEXT"/>
+								</style>
+								<style width="5%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial">
+									<value-of name="NASTROJ"/>
+								</style>
+								<style width="5%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial">
+									<value-of name="ZDROJ"/>
+								</style>
+								<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+									<value-of name="SROZP" onPrint="cisla()"/>
+								</style>
+								<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+									<value-of name="UROZP" onPrint="cisla()"/>
+								</style>
+								<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+									<value-of name="KROZP" onPrint="cisla()"/>
+								</style>
+								<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" font-face="arial" horizontal-align="right">
+									<value-of name="SKUT" onPrint="cisla()"/>
+								</style>
+							</line>
+							<region name="FIN-CAST12-RADEK-SODPA">
+								<body>
+									<line>
+										<style width="6%" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" font-bold="true">
+											<value-of name="PARAGRAF"/>
+										</style>
+										<style width="6%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+											<text value="XXXX"/>
+										</style>
+										<style width="18%" bottom-border-style="dashed" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+											<value-of name="TEXT"/>
+										</style>
+										<style width="5%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+											<value-of name="NASTROJ"/>
+										</style>
+										<style width="5%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+											<value-of name="ZDROJ"/>
+										</style>
+										<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+											<value-of name="SROZP" onPrint="cisla()"/>
+										</style>
+										<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+											<value-of name="UROZP" onPrint="cisla()"/>
+										</style>
+										<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+											<value-of name="KROZP" onPrint="cisla()"/>
+										</style>
+										<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+											<value-of name="SKUT" onPrint="cisla()"/>
+										</style>
+									</line>
+									<region name="FIN-CAST12-RADEK-SZDROJ">
+										<body>
+											<line>
+												<style width="2%" bottom-border-style="dashed" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+													<text value=""/>
+												</style>
+												<style width="28%" bottom-border-style="dashed" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+													<value-of name="TEXT"/>
+												</style>
+												<style width="5%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+													<value-of name="NASTROJ"/>
+												</style>
+												<style width="5%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" font-bold="true">
+													<value-of name="ZDROJ"/>
+												</style>
+												<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+													<value-of name="SROZP" onPrint="cisla()"/>
+												</style>
+												<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+													<value-of name="UROZP" onPrint="cisla()"/>
+												</style>
+												<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+													<value-of name="KROZP" onPrint="cisla()"/>
+												</style>
+												<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+													<value-of name="SKUT" onPrint="cisla()"/>
+												</style>
+											</line>
+											<region name="FIN-CAST12-RADEK-SNASTROJ">
+												<body>
+													<line>
+														<style width="2%" bottom-border-style="dashed" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#e8e8e8" font-face="arial">
+															<text value=""/>
+														</style>
+														<style width="28%" bottom-border-style="dashed" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#e8e8e8" font-face="arial">
+															<value-of name="TEXT"/>
+														</style>
+														<style width="5%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#e8e8e8" font-face="arial" font-bold="true">
+															<value-of name="NASTROJ"/>
+														</style>
+														<style width="5%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#e8e8e8" font-face="arial">
+															<text value=""/>
+														</style>
+														<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#e8e8e8" font-face="arial" horizontal-align="right">
+															<value-of name="SROZP" onPrint="cisla()"/>
+														</style>
+														<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#e8e8e8" font-face="arial" horizontal-align="right">
+															<value-of name="UROZP" onPrint="cisla()"/>
+														</style>
+														<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#e8e8e8" font-face="arial" horizontal-align="right">
+															<value-of name="KROZP" onPrint="cisla()"/>
+														</style>
+														<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#e8e8e8" font-face="arial" horizontal-align="right">
+															<value-of name="SKUT" onPrint="cisla()"/>
+														</style>
+													</line>
+												</body>
+											</region>
+										</body>
+									</region>
+								</body>
+							</region>
+							<region name="FIN-CAST12-RADEK-NASTROJ">
+								<body>
+									<line>
+										<style width="6%" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+											<value-of name="PARAGRAF"/>
+										</style>
+										<style width="6%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+											<value-of name="POLOZKA"/>
+										</style>
+										<style width="18%" bottom-border-style="dashed" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+											<value-of name="TEXT"/>
+										</style>
+										<style width="5%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" font-bold="true">
+											<value-of name="NASTROJ"/>
+										</style>
+										<style width="5%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial">
+											<text value=""/>
+										</style>
+										<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+											<value-of name="SROZP" onPrint="cisla()"/>
+										</style>
+										<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+											<value-of name="UROZP" onPrint="cisla()"/>
+										</style>
+										<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+											<value-of name="KROZP" onPrint="cisla()"/>
+										</style>
+										<style width="15%" bottom-border-style="dashed" top-padding="3" bottom-padding="3" background-color="#f8f8f8" font-face="arial" horizontal-align="right">
+											<value-of name="SKUT" onPrint="cisla()"/>
+										</style>
+									</line>
+								</body>
+							</region>
+							<region name="FIN-CAST12-RADEK-POL">
+								<body>
+									<line break-page-before="avoid">
+										<style width="6%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial">
+											<value-of name="PARAGRAF"/>
+										</style>
+										<style width="6%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" font-bold="true">
+											<value-of name="POLOZKA"/>
+										</style>
+										<style width="28%" bottom-border-width="2" left-padding="2" right-padding="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" font-bold="true">
+											<value-of name="TEXT"/>
+										</style>
+										<style width="15%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" horizontal-align="right">
+											<value-of name="SROZP" onPrint="cisla()"/>
+										</style>
+										<style width="15%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" horizontal-align="right">
+											<value-of name="UROZP" onPrint="cisla()"/>
+										</style>
+										<style width="15%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" horizontal-align="right">
+											<value-of name="KROZP" onPrint="cisla()"/>
+										</style>
+										<style width="15%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#f3f3f3" font-face="arial" horizontal-align="right">
+											<value-of name="SKUT" onPrint="cisla()"/>
+										</style>
+									</line>
+									<region name="FIN-CAST12-RADEK-POL-PAR">
+										<body>
+											<line break-page-before="avoid">
+												<style width="6%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#e8e8e8" font-face="arial" font-bold="true">
+													<value-of name="PARAGRAF"/>
+												</style>
+												<style width="34%" bottom-border-width="2" left-padding="2" right-padding="2" top-padding="6" bottom-padding="6" background-color="#e8e8e8" font-face="arial" font-bold="true">
+													<value-of name="TEXT"/>
+												</style>
+												<style width="15%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#e8e8e8" font-face="arial" horizontal-align="right">
+													<value-of name="SROZP" onPrint="cisla()"/>
+												</style>
+												<style width="15%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#e8e8e8" font-face="arial" horizontal-align="right">
+													<value-of name="UROZP" onPrint="cisla()"/>
+												</style>
+												<style width="15%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#e8e8e8" font-face="arial" horizontal-align="right">
+													<value-of name="KROZP" onPrint="cisla()"/>
+												</style>
+												<style width="15%" bottom-border-width="2" top-padding="6" bottom-padding="6" background-color="#e8e8e8" font-face="arial" horizontal-align="right">
+													<value-of name="SKUT" onPrint="cisla()"/>
+												</style>
+											</line>
+										</body>
+									</region>
+								</body>
+							</region>
+						</body>
+					</region>
+					<region name="FIN-CAST12-CEL">
+						<body>
+							<line break-page-before="avoid">
+								<style width="40%" top-border-width="1" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="3" font-color="navy" font-bold="true">
+									<value-of name="TEXT"/>
+								</style>
+								<style width="15%" top-border-width="1" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="SROZP" onPrint="cisla()"/>
+								</style>
+								<style width="15%" top-border-width="1" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="UROZP" onPrint="cisla()"/>
+								</style>
+								<style width="15%" top-border-width="1" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="KROZP" onPrint="cisla()"/>
+								</style>
+								<style width="15%" top-border-width="1" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="SKUT" onPrint="cisla()"/>
+								</style>
+							</line>
+							<line>
+								<style width="100%" top-border-width="3">
+									<text value=""/>
+								</style>
+							</line>
+						</body>
+					</region>
+				</body>
+			</region>
+			<region name="FIN-CAST15">
+				<head>
+					<line on-each-page="true" break-page-before="always" endpage="false">
+						<style width="100%" font-face="arial" font-size="4" font-color="navy" font-bold="true" font-underline="true">
+							<text value="XV. PŘEHLED O PŘEVODECH PROSTŘEDKŮ STÁTNÍHO ROZPOČTU DO REZERVNÍHO FONDU OSS A JEJICH POUŽITÍ"/>
+						</style>
+					</line>
+					<line on-each-page="true" endpage="false">
+						<style width="8%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+							<text value="Číslo řádku"/>
+						</style>
+						<style width="92%" top-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true">
+							<text value="Členění peněžních prostředků RF podle § 48 zákona č. 218/2000 Sb., ve znění pozdějších předpisů"/>
+						</style>
+					</line>
+					<line on-each-page="true" endpage="false">
+						<style width="17%" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Počáteční stav RF k 1.1."/>
+						</style>
+						<style width="17%" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Příjmy RF v hodnoceném obd."/>
+						</style>
+						<style width="17%" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Zapojeno do příjmů v hodnoceném obd."/>
+						</style>
+						<style width="17%" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Použito v hodnoceném obd."/>
+						</style>
+						<style width="16%" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Jiné důvody snížení stavu"/>
+						</style>
+						<style width="16%" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="Zůstatek prostředků RF"/>
+						</style>
+					</line>
+					<line on-each-page="true" endpage="false">
+						<style width="17%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="151"/>
+						</style>
+						<style width="17%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="152"/>
+						</style>
+						<style width="17%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="153"/>
+						</style>
+						<style width="17%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="154"/>
+						</style>
+						<style width="16%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="155"/>
+						</style>
+						<style width="16%" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value="156"/>
+						</style>
+					</line>
+				</head>
+				<body>
+					<region name="FIN-CAST15-POZN2">
+						<body>
+							<line>
+								<style width="100%" font-size="10pt">
+									<text value=""/>
+								</style>
+							</line>
+							<line>
+								<style width="11%" bottom-border-width="2" font-face="arial" font-italic="true">
+									<text value=""/>
+								</style>
+								<style width="89%" bottom-border-width="2" font-face="arial" font-bold="true">
+									<value-of name="TEXT"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<region name="FIN-CAST15-RAD1">
+						<body>
+							<line only-if="FIN-CAST15-RAD1.TYP==&apos;1&apos;">
+								<style width="100%" font-size="5pt">
+									<text value=""/>
+								</style>
+							</line>
+							<line only-if="FIN-CAST15-RAD1.TYP==&apos;1&apos;">
+								<style width="8%" font-face="arial">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="92%" bottom-border-style="dashed" font-face="arial">
+									<value-of name="TEXT"/>
+								</style>
+							</line>
+							<line only-if="FIN-CAST15-RAD1.TYP==&apos;2&apos;">
+								<style width="8%" font-face="arial">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="7%" bottom-border-style="dashed" font-face="arial">
+									<text value=""/>
+								</style>
+								<style width="85%" bottom-border-style="dashed" font-face="arial">
+									<value-of name="TEXT"/>
+								</style>
+							</line>
+							<line>
+								<style width="17%" bottom-border-style="dashed" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="POSTAV" onPrint="cisla()"/>
+								</style>
+								<style width="17%" bottom-border-style="dashed" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="PRIJRF" onPrint="cisla()"/>
+								</style>
+								<style width="17%" bottom-border-style="dashed" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="ZAPOJE" onPrint="cisla()"/>
+								</style>
+								<style width="17%" bottom-border-style="dashed" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="POUZIT" onPrint="cisla()"/>
+								</style>
+								<style width="16%" bottom-border-style="dashed" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="PREVOD" onPrint="cisla()"/>
+								</style>
+								<style width="16%" bottom-border-style="dashed" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="ZUSTRF" onPrint="cisla()"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<region name="FIN-CAST15-RAD2">
+						<body>
+							<line only-if="FIN-CAST15-RAD2.TYP==&apos;1&apos;">
+								<style width="100%" font-size="5pt">
+									<text value=""/>
+								</style>
+							</line>
+							<line only-if="FIN-CAST15-RAD2.TYP==&apos;1&apos;">
+								<style width="8%" font-face="arial">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="92%" bottom-border-style="dashed" font-face="arial">
+									<value-of name="TEXT"/>
+								</style>
+							</line>
+							<line only-if="FIN-CAST15-RAD2.TYP==&apos;2&apos;">
+								<style width="8%" font-face="arial">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="7%" bottom-border-style="dashed" font-face="arial">
+									<text value=""/>
+								</style>
+								<style width="85%" bottom-border-style="dashed" font-face="arial">
+									<value-of name="TEXT"/>
+								</style>
+							</line>
+							<line>
+								<style width="17%" bottom-border-style="dashed" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="POSTAV" onPrint="cisla()"/>
+								</style>
+								<style width="17%" bottom-border-style="dashed" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<text value="X"/>
+								</style>
+								<style width="17%" bottom-border-style="dashed" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="ZAPOJE" onPrint="cisla()"/>
+								</style>
+								<style width="17%" bottom-border-style="dashed" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="POUZIT" onPrint="cisla()"/>
+								</style>
+								<style width="16%" bottom-border-style="dashed" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="PREVOD" onPrint="cisla()"/>
+								</style>
+								<style width="16%" bottom-border-style="dashed" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="ZUSTRF" onPrint="cisla()"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<region name="FIN-CAST15-POZN">
+						<body>
+							<line>
+								<style width="11%" font-face="arial" font-italic="true">
+									<text value=""/>
+								</style>
+								<style width="89%" font-face="arial" font-bold="true" font-italic="true">
+									<value-of name="TEXT"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<region name="FIN-CAST15-RAD3">
+						<body>
+							<line only-if="FIN-CAST15-RAD3.TYP==&apos;1&apos;">
+								<style width="100%" font-size="5pt">
+									<text value=""/>
+								</style>
+							</line>
+							<line only-if="FIN-CAST15-RAD3.TYP==&apos;1&apos;">
+								<style width="8%" font-face="arial">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="92%" bottom-border-style="dashed" font-face="arial">
+									<value-of name="TEXT"/>
+								</style>
+							</line>
+							<line only-if="FIN-CAST15-RAD3.TYP==&apos;2&apos;">
+								<style width="8%" font-face="arial">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="7%" bottom-border-style="dashed" font-face="arial">
+									<text value=""/>
+								</style>
+								<style width="85%" bottom-border-style="dashed" font-face="arial">
+									<value-of name="TEXT"/>
+								</style>
+							</line>
+							<line>
+								<style width="17%" bottom-border-style="dashed" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<text value="X"/>
+								</style>
+								<style width="17%" bottom-border-style="dashed" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="PRIJRF" onPrint="cisla()"/>
+								</style>
+								<style width="17%" bottom-border-style="dashed" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<text value="X"/>
+								</style>
+								<style width="17%" bottom-border-style="dashed" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<text value="X"/>
+								</style>
+								<style width="16%" bottom-border-style="dashed" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<text value="X"/>
+								</style>
+								<style width="16%" bottom-border-style="dashed" background-color="#f3f3f3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="ZUSTRF" onPrint="cisla()"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<region name="FIN-CAST15-CEL">
+						<body>
+							<line>
+								<style width="8%" bottom-border-style="dashed" top-border-width="2" background-color="#e3e3e3" font-face="arial" font-color="navy" font-bold="true">
+									<value-of name="RADEK"/>
+								</style>
+								<style width="92%" bottom-border-style="dashed" top-border-width="2" background-color="#e3e3e3" font-face="arial" font-color="navy" font-bold="true">
+									<value-of name="TEXT"/>
+								</style>
+							</line>
+							<line>
+								<style width="17%" bottom-border-width="2" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="POSTAV" onPrint="cisla()"/>
+								</style>
+								<style width="17%" bottom-border-width="2" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="PRIJRF" onPrint="cisla()"/>
+								</style>
+								<style width="17%" bottom-border-width="2" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="ZAPOJE" onPrint="cisla()"/>
+								</style>
+								<style width="17%" bottom-border-width="2" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="POUZIT" onPrint="cisla()"/>
+								</style>
+								<style width="16%" bottom-border-width="2" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="PREVOD" onPrint="cisla()"/>
+								</style>
+								<style width="16%" bottom-border-width="2" background-color="#e3e3e3" font-face="arial" font-bold="true" horizontal-align="right">
+									<value-of name="ZUSTRF" onPrint="cisla()"/>
+								</style>
+							</line>
+						</body>
+					</region>
+				</body>
+			</region>
+			<line>
+				<style width="100%">
+					<text value=""/>
+				</style>
+			</line>
+			<line>
+				<style width="100%">
+					<text value=""/>
+				</style>
+			</line>
+			<line>
+				<style width="29%" left-border-width="2" top-border-width="2" font-face="arial">
+					<text value="Odesláno dne:"/>
+				</style>
+				<style width="14%" top-border-width="2" font-face="arial">
+					<text value="Razítko:"/>
+				</style>
+				<style width="57%" right-border-width="2" top-border-width="2" font-face="arial">
+					<text value="Podpis vedoucího účetní jednotky:"/>
+				</style>
+			</line>
+			<line>
+				<style width="100%" left-border-width="2" right-border-width="2" font-face="arial">
+					<text value=""/>
+				</style>
+			</line>
+			<line>
+				<style width="29%" left-border-width="2" font-face="arial">
+					<text value=""/>
+				</style>
+				<style width="14%" font-face="arial">
+					<text value=""/>
+				</style>
+				<style width="57%" right-border-width="2" font-face="arial">
+					<text value="Odpovídají za údaje"/>
+				</style>
+			</line>
+			<line>
+				<style width="29%" left-border-width="2" font-face="arial">
+					<text value="Došlo dne:"/>
+				</style>
+				<style width="14%" font-face="arial">
+					<text value=""/>
+				</style>
+				<style width="41%" font-face="arial">
+					<text value="o rozpočtu:"/>
+				</style>
+				<style width="16%" right-border-width="2" font-face="arial">
+					<text value="tel:"/>
+				</style>
+			</line>
+			<line>
+				<style width="29%" left-border-width="2" font-face="arial">
+					<text value=""/>
+				</style>
+				<style width="71%" right-border-width="2" font-face="arial">
+					<text value=""/>
+				</style>
+			</line>
+			<line>
+				<style width="29%" left-border-width="2" bottom-border-width="2" font-face="arial">
+					<text value=""/>
+				</style>
+				<style width="14%" bottom-border-width="2" font-face="arial">
+					<text value=""/>
+				</style>
+				<style width="41%" bottom-border-width="2" font-face="arial">
+					<text value="o skutečnosti:"/>
+				</style>
+				<style width="16%" right-border-width="2" bottom-border-width="2" font-face="arial">
+					<text value="tel:"/>
+				</style>
+			</line>
+		</body>
+		<foot>
+			<line on-each-page="true">
+				<style width="30%" top-border-width="1" font-face="arial" font-size="1" font-italic="true" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.value=&apos;&apos;+FIN_CASTI.DATUM+&apos; &apos;+FIN_CASTI.CAS"/>
+				</style>
+				<style width="40%" top-border-width="1" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" multiline="false">
+					<text value="Zpracováno systémem  GINIS® GORDIC® spol. s  r. o."/>
+				</style>
+				<style width="30%" top-border-width="1" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" multiline="false">
+					<value-of name="" onData="self.value=&apos;strana &apos;+ROOT.PAGE+&apos; / &apos;+ROOT.PAGES"/>
+				</style>
+			</line>
+		</foot>
+	</region>
+</format>

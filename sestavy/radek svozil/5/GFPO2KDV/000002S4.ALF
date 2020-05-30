@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="windows-1250"?>
+
+<format type="grr" xmlns="http://www.gordic.cz/TR/alf/1.3/">
+
+	<info
+		ixs_xme="0000ALX0A7G1"
+		xmeta_ver="1"
+		xmeta_subver_min="1"
+		nazev="NVY - Exekuce na účet (2011)"
+		ixs_alv="0000ALV02HDG"
+		allowed_output="frm"
+		poznamka="distribuce Ginis 3.66"
+		ixs_frm="0000ALF02S40"
+		maker="5024"
+		rokmes_od="199801"
+		rokmes_do="999913"
+		Dat_modif="201104191612"
+	/>
+
+
+<script><![CDATA[
+def shodaDsEsu(esuobj,esuuli,esupsc,esuobec,dsobj,dsuli,dspsc,dsobec):
+  if (esuobj!=dsobj):
+    return 0
+  if (esuuli!=dsuli):
+    return 0
+  if (esupsc!=dspsc):
+    return 0
+  if (esuobec!=dsobec):
+    return 0
+  return 1
+  
+def slovy(castka):
+  c=Decimal(castka[:-3])
+  sl=c.spellOut(0)+'korunčeských'
+  sl=sl.replace(' ','')
+  return sl
+]]></script>
+
+	<region name="SES">
+		<body>
+			<region name="ISU">
+				<body>
+					<region name="PHL">
+						<body>
+							<region name="ZAK">
+								<body>
+									<region name="VYH">
+										<body>
+											<region name="UTX">
+												<body>
+													<region name="DDP">
+														<body>
+															<region name="TXT">
+																<body>
+																	<region name="ESU">
+																		<body>
+																			<line>
+																				<style width="18%">
+																					<image file="znak-m.bmp" global="true" image-width="25mm" image-height="25mm"/>
+																				</style>
+																				<style width="82%">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="18%">
+																					<text value=""/>
+																				</style>
+																				<style width="63%">
+																					<value-of name="ISU.ISU_OBJMENO"/>
+																				</style>
+																				<style width="19%" horizontal-align="right">
+																					<value-of name="DDP.DDP_DAT_VYST"/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="18%">
+																					<text value=""/>
+																				</style>
+																				<style width="82%">
+																					<value-of name="ISU.ISU_ULICE"/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="18%">
+																					<text value=""/>
+																				</style>
+																				<style width="82%">
+																					<value-of name="ISU.ISU_OBEC" onData="self.value=ISU.ISU_PSC+&apos; &apos;+self.value"/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" height="7mm" bottom-border-width="1">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="1">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="50%" font-size="3">
+																					<value-of name="ISU.ISU_OBJMENO"/>
+																				</style>
+																				<style width="50%" font-size="1">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="50%" font-size="3">
+																					<value-of name="SES.SES_ORJ_NAZEV"/>
+																				</style>
+																				<style width="50%" font-size="1">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="50%" font-size="3">
+																					<value-of name="DDP.DDP_CJ" onData="self.value=&apos;Č.j.: &apos;+self.value"/>
+																				</style>
+																				<style width="50%" font-size="1">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="50%" font-size="3">
+																					<value-of name="SES.SES_AUJ" onData="self.value=&apos;Vyřizuje: &apos;+self.value+&apos;, č. dveří &apos;+SES.SES_FUN_MISTNOST_KOD"/>
+																				</style>
+																				<style width="50%" font-size="1">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="50%" font-size="3">
+																					<value-of name="SES.SES_AUT" onData="self.value=&apos;Telefon: &apos;+self.value"/>
+																				</style>
+																				<style width="50%" font-size="1">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="1">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<region name="DS">
+																				<head>
+																					<line>
+																						<style width="50%" font-size="3" font-bold="true">
+																							<text value="Dlužník:"/>
+																						</style>
+																						<style width="50%" font-size="3" font-bold="true">
+																							<text value="Poskytovatel platebních služeb:"/>
+																						</style>
+																					</line>
+																					<line>
+																						<style width="50%" font-size="3">
+																							<value-of name="ESU.ESU_OBJMENO"/>
+																						</style>
+																						<style width="50%" font-size="3">
+																							<value-of name="DS_OBJ" onData="if ((ESU.ESU_OBJMENO==DS.DS_OBJ)and(ESU.ESU_RC==DS.DS_RC)):&#10;  self.value=&apos;&apos;&#10;else:&#10;  self.value=DS.DS_OBJ"/>
+																						</style>
+																					</line>
+																					<line>
+																						<style width="50%" font-size="3">
+																							<value-of name="ESU.ESU_ULICE"/>
+																						</style>
+																						<style width="50%" font-size="3">
+																							<value-of name="DS_ULI" onData="if ((ESU.ESU_OBJMENO==DS.DS_OBJ)and(ESU.ESU_RC==DS.DS_RC)):&#10;  self.value=&apos;&apos;&#10;else:&#10;  self.value=DS.DS_ULI"/>
+																						</style>
+																					</line>
+																					<line>
+																						<style width="50%" font-size="3">
+																							<value-of name="ESU.ESU_PSC" onData="self.value=self.value+&apos; &apos;+ESU.ESU_OBEC"/>
+																						</style>
+																						<style width="50%" font-size="3">
+																							<value-of name="DS_PSC" onData="if ((ESU.ESU_OBJMENO==DS.DS_OBJ)and(ESU.ESU_RC==DS.DS_RC)):&#10;  self.value=&apos;&apos;&#10;else:&#10;  self.value=DS.DS_PSC+&apos; &apos;+DS.DS_OBE"/>
+																						</style>
+																					</line>
+																					<line>
+																						<style width="50%" font-size="3">
+																							<value-of name="ESU.ESU_RC" onData="if (ESU.ESU_IC==&apos;&apos;):&#10;  self.value=&apos;RČ/IČ: &apos;+ESU.ESU_RC&#10;else:&#10;  self.value=&apos;RČ/IČ: &apos;+ESU.ESU_IC"/>
+																						</style>
+																						<style width="50%" font-size="3">
+																							<text value=""/>
+																						</style>
+																					</line>
+																					<line>
+																						<style width="50%" font-size="3">
+																							<text value=""/>
+																						</style>
+																						<style width="50%" font-size="3">
+																							<text value=""/>
+																						</style>
+																					</line>
+																				</head>
+																			</region>
+																			<line>
+																				<style width="100%" font-size="3">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="3">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-face="arial" font-size="5" font-bold="true" horizontal-align="center">
+																					<text value="EXEKUČNÍ PŘÍKAZ"/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="3">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="3" font-italic="true" horizontal-align="center">
+																					<text value="na přikázání pohledávky na peněžní prostředky dlužníka z účtů u poskytovatelů platebních služeb&#10;dle § 178 odst. 1 a odst. 5 písm. b) zák. č. 280/2009 Sb., daňový řád, ve znění pozdějších předpisů&#10;"/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="3" font-italic="true" horizontal-align="center">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="3" horizontal-align="justify">
+																					<text value="Shora uvedený správce místního poplatku rozhodl dle § 178 odst. 1 a odst. 5 písm. a) a s přiměřeným použitím zákona č. 99/1963 Sb., občanský soudní řád, ve znění pozdějších předpisů (dále jen &quot;občanský soudní řád&quot;), o nařízení daňové exekuce přikázáním pohledávky z účtu u poskytovatele platebních služeb dle § 190 zákona č. 280/2009 Sb., daňový řád, ve znění pozdějších předpisů, (dále jen &quot;daňový řád&quot;) a tímto se&#10;"/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="3">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="5" font-bold="true" horizontal-align="center">
+																					<text value="přikazuje"/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="3">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="3" horizontal-align="justify">
+																					<value-of name="DDP.DDP_VYM_CP" onData="self.value=&apos;poskytovateli platebních služeb, aby od okamžiku doručení tohoto exekučního příkazu, z účtu shora uvedeného poplatkového dlužníka, a to až do výše vykonatelného nedoplatku v částce &apos;+self.value+&apos; (slovy &apos;+DDP.DDP_VYM_CPS+&apos;) nevyplácel peněžní prostředky, neprováděl vzájemné započtení a nikterak jinak s nimi nenakládal.&apos;"/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="3" horizontal-align="justify">
+																					<value-of name="DDP.DDP_VYM_NE" onData="self.value=&apos;Dle § 183 daňového řádu činí náklady exekuce 2% z částky, pro kterou je daňová exekuce nařízena (minimálně však 500 Kč, nejvýše 500.000,- Kč) a povinnost jejich úhrady vzniká dlužníkovi vydáním tohoto exekučního příkazu. Náklady za nařízení exekuce vyčíslené ke dni podepsání exekučního příkazu činí &apos;+DDP.DDP_VYM_NE+&apos; (slovy &apos;+slovy(DDP.DDP_VYM_NE)+&apos;). V souladu s §182 odst. 4 a 6 daňového řádu jsou exekuční náklady vymáhány současně s nedoplatkem, pro který je exekuce nařízena.&apos;"/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="3">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="3" font-bold="true">
+																					<value-of name="DDP.DDP_VYM_S" onData="self.value=&apos;Tento exekuční příkaz se vztahuje na všechny peněžní prostředky dlužníka na účtu či účtech v celkové výši vykonatelného nedoplatku &apos;+self.value+&apos; (slovy &apos;+DDP.DDP_VYM_SS+&apos;),&apos;"/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="3" horizontal-align="justify">
+																					<value-of name="ESU_UCET" onData="self.value=&apos;číslo účtu: &apos;+self.value+&apos;/&apos;+ESU.ESU_SMKOD"/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="3" horizontal-align="justify">
+																					<value-of name="DDP.DDP_SS" onData="if (len(DDP.DDP_SS)!=0):&#10;  self.value=&apos;specifický symbol: &apos;+DDP.DDP_SS+&apos;. &apos;"/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="3" horizontal-align="justify">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="3" horizontal-align="justify">
+																					<value-of name="ISU.ISU_UCET" onData="self.value=&apos;Dále správce poplatku ukládá, aby v den, který následuje po doručení vyrozumění, že exekuční příkaz nabyl právní moci, provedl odepsání prostředků dlužníka z účtů vedených peněžním ústavem až do výše vykonatelného nedoplatku a vyplatil je shora uvedenému správci poplatku, a to ve prospěch účtu číslo &apos;+self.value+&apos;/&apos;+ISU.ISU_SMKOD+&apos;, který je vedený u pobočky banky &apos;+ISU.ISU_B_OBJ+&apos;, konstantní symbol &apos;+DDP.DDP_KS+&apos;, variabilní symbol &apos;+DDP.DDP_VS+&apos;.&apos;"/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="3">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="3">
+																					<text value="Rozhodnutí o vykonání exekučního příkazu bylo provedeno na základě doposud neuhrazeného(ých) exekučního(ch) titulu(ů): "/>
+																				</style>
+																			</line>
+																			<region name="HT">
+																				<body>
+																					<line>
+																						<style width="100%" font-size="3">
+																							<value-of name="HT_CJ" onData="self.value=HT.HT_KROK+&apos; č.j. &apos;+self.value+&apos; ze dne &apos;+HT.HT_DVYS+&apos; na částku &apos;+HT.HT_C+&apos; se splatností dne &apos;+HT.HT_DVYK+&apos;.&apos;"/>
+																						</style>
+																					</line>
+																				</body>
+																			</region>
+																			<line>
+																				<style width="100%" font-size="3">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="3" font-bold="true">
+																					<text value="Odůvodnění:"/>
+																				</style>
+																			</line>
+																			<line only-if="(SES.SES_T_ODUVODNENI!=&apos;&apos;)">
+																				<style width="100%" font-size="3" horizontal-align="justify">
+																					<value-of name="SES.SES_T_ODUVODNENI"/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="3">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="3" font-bold="true">
+																					<text value="Poučení:"/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="3" horizontal-align="justify">
+																					<text value="Pracovníci správce daně, jakož i třetí osoby, které byly jakkoli zúčastněny na daňovém řízení jsou povinny dle §52 až §55 daňového řádu zachovávat mlčenlivost o tom co se při daňovém řízení nebo v souvislosti s ním dozvěděli, zejména o poměrech daňových subjektů, jak osobních, tak i souvisejících s podnikáním.&#10;Za porušení mlčenlivosti lze uložit pokutu ve smyslu §246 daňového řádu a to až do výše 500.000,- Kč."/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="3" horizontal-align="justify">
+																					<value-of name="PHL.PHL_PM" onData="self.value=&apos;Všechny osoby, jimž je tento exekuční příkaz doručen, mohou proti němu podat písemně nebo ústně do protokolu u podepsaného správce daně odvolání, a to do &apos;+self.value+&apos; dnů od doručení tohoto exekučního příkazu. Podané odvolání nemá odkladný účinek pro samotné řízení.&apos;"/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="3">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="3">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" font-size="3" horizontal-align="center">
+																					<text value="Otisk úředního razítka"/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" horizontal-align="center">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" horizontal-align="center">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="100%" horizontal-align="center">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<line>
+																				<style width="50%" top-border-width="1" font-size="3" horizontal-align="center">
+																					<value-of name="SES.SES_T_PODPIS" onData="if (self.value==&apos;&apos;): self.value=&apos;(podpis s uvedením jména a funkce pověřeného pracovníka správce daně)&apos;"/>
+																				</style>
+																				<style width="50%" horizontal-align="center">
+																					<text value=""/>
+																				</style>
+																			</line>
+																			<line break-page-after="always">
+																				<style width="100%">
+																					<text value=""/>
+																				</style>
+																			</line>
+																		</body>
+																	</region>
+																</body>
+															</region>
+														</body>
+													</region>
+												</body>
+											</region>
+										</body>
+									</region>
+								</body>
+							</region>
+						</body>
+					</region>
+				</body>
+			</region>
+		</body>
+	</region>
+</format>

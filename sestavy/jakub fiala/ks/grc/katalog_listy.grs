@@ -1,0 +1,47 @@
+﻿report KatalogListy
+{
+	include "katalog_listy.xme";
+	reference Gordic.General;
+	
+ 	main
+	{
+		var d = #SELECT 
+				id  -- Int32
+				, zsc_pid
+				, zsc_shrnuti
+				, zsc_slogan
+				, summary 
+				FROM Issue
+				WHERE ztyp_issue = 40004 AND zgloud = 40001 AND status ='ACT'
+		;;
+		//SQL.Select( "select Issue.zsc_pid, Issue.zsc_shrnuti, Issue.zsc_slogan, Issue.summary from Issue" );
+		
+		var hla = HLA.AddHLARow();
+				
+/*		hla.AddISSUERow("123","3445");
+		hla.AddISSUERow("123aaa","3445bb");*/
+		foreach(var r in d.Rows)
+		{
+			var pid = r.id;
+			var p = #SELECT prinos FROM zsc_prinosy WHERE sc_list = :pid ;;
+			var v = #SELECT vyhoda FROM zsc_vyhody WHERE sc_list = :pid ;;
+			
+			var issue = hla.AddISSUERow(r["zsc_pid"].ToString()
+			,r["zsc_shrnuti"].ToString()
+			,r["zsc_slogan"].ToString()
+			,r["summary"].ToString()
+			);
+			
+			foreach(var _p in p.Rows)
+				issue.AddPRINOSYRow(
+					 prinos: _p.prinos
+				);			
+				
+			foreach(var _v in v.Rows)
+				issue.AddVYHODYRow(
+					 vyhoda: _v.vyhoda
+				);
+		}
+		return HLA.DataSet;
+	}
+}

@@ -1,0 +1,53 @@
+#declares hod_uea,hod_ueb
+#declarep hod_md,hod_dal
+#declares hod_nks
+#declarep celkem_md,celkem_dal
+#DECLARES hod_nks_nazev
+
+
+CYCLE \
+   SELECT hod_nks=zucta0ar.nks,\
+     hod_uea=zucta0ar.uea {su},\
+     hod_ueb=zucta0ar.ueb {au},\
+     hod_md=sum(zucta0ar.kc0),\
+     hod_dal=sum(zucta0ar.kc1),\
+     hod_nks_nazev=zekosnks.nazev \
+   FROM zucta0ar,OUTER zekosnks \
+   WHERE zucta0ar.nks=zekosnks.nks and \
+         rok=2013 and \
+         mesic=11 and uea<='018' \
+   GROUP BY zucta0ar.nks,uea,ueb,zekosnks.nazev \
+   ORDER BY zucta0ar.nks,uea,ueb,zekosnks.nazev \
+   KEY hod_nks,hod_uea
+
+  GROUPBY hod_nks,hod_uea SUM hod_md,hod_dal
+    PRINT hod_nks+" "+hod_uea+"/"+"**** "+Right(NumToStr(hod_md-hod_dal,"P"),20)
+  GROUPBY hod_nks SUM hod_md,hod_dal
+    ?Celkem: @hod_md-hod_dal,P.
+  ENDG
+ {
+  ON OLD KEY hod_nks
+    ?Celkem: @celkem_md-celkem_dal,P.
+    celkem_md=0
+    celkem_dal=0
+  ENDON
+ }
+
+  ON NEW KEY hod_nks
+{
+
+    SELECT hod_nks_nazev=nazev FROM zekosnks WHERE nks='@hod_nks'
+}
+    
+    ?NKS: @hod_nks. @hod_nks_nazev<<<<<<.
+  ENDON
+
+  PRINT hod_nks+" "+hod_uea+"/"+hod_ueb+" "+Right(NumToStr(hod_md-hod_dal,"P"),20)
+  
+{
+  celkem_md=celkem_md+hod_md
+  celkem_dal=celkem_dal+hod_dal
+  }
+ENDC
+    ?Celkem: @celkem_md-celkem_dal,P.
+

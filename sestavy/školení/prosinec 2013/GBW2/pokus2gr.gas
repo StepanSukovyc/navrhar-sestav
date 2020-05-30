@@ -1,0 +1,124 @@
+#INFO IXS_ALV="A499ALV0A758"
+#INFO NAZEV="Pokusná sestava -grafická"
+#INFO MAKER="POK"
+#INFO DAT_MODIF="201311260913"
+#INFO ROKMES_OD="200001"
+#INFO ROKMES_DO="299913"
+#INFO ID_SES="POKUS2GR"
+#INFO TEMA="ucr_ptm_ucrbase"
+#INFO IXS_STR="0000STR000J5"
+#INFO TYP_ALG="20"
+#INFO VERZE_DB_MIN="372EKO01"
+#INFO TYP_VYST="XME"
+#INFO xmeta_ver="1"
+#INFO xmeta_subver="1"
+#INFO ixs_xme="A499ALX0A013"
+#INFO ixs_frm="A499ALF0A01L"
+
+#RESOURCEXME A4990A01.xme
+
+#PRAGMA OUTNAME="A4990A75.ALV"
+
+FUNC VratNazevNks(IN DECLAREP _handlelist,IN DECLARES _nks)
+  #DECLARES _nazev
+  #DECLAREP _posice
+
+  GETLISTKEY _handlelist,_nks,_nazev,_posice
+  if _posice<0
+    SELECT _nazev=nazev FROM zekosnks WHERE nks='@_nks'
+    
+    ADDLIST _handlelist,_nks,_nazev
+  endif
+  RETURN _nazev
+ENDP
+
+#declares hod_uea,hod_ueb
+#declarep hod_md,hod_dal
+#declares hod_nks
+#declarep hod_drd
+#declarep celkem_md,celkem_dal
+#DECLARES hod_nks_nazev
+#DECLAREP handlelistnks
+
+#DECLAREP hod_zap_rok
+#DECLAREP hod_zap_mesic
+#DECLAREP hod_zap_den
+#DECLARES hod_zap_ac
+#DECLAREP hod_zap_md
+#DECLAREP hod_zap_dal
+
+
+SET RTFStyle=0
+SET FullBarTopLabel="Probíhá generování sestavy MO"
+SET FullBarPos=50
+
+?ixs_xme|@GetInfo("ixs_xme"),12.|@GetInfo("xmeta_ver"),1.|@GetInfo("xmeta_subver"),1.|
+
+WRITEXME "HLAVICKA","MASKA"= X0004,\
+                    "OBDOBI_MESIC"= X0006,\
+                    "OBODBI_ROK"=  X0007
+
+
+CREATELIST handlelistnks,1,1
+
+CYCLE \
+   SELECT \
+     hod_drd=zucta0ar.drd {drd}, \
+     hod_uea=zucta0ar.uea {su},\
+     hod_ueb=zucta0ar.ueb {au},\
+     hod_md=sum(zucta0ar.kc0),\
+     hod_dal=sum(zucta0ar.kc1) \
+   FROM zucta0ar \
+   WHERE @X0000 \
+   GROUP BY uea,ueb,zucta0ar.drd \
+  UNION ALL \
+   SELECT \
+     zucta0ar.drd {drd}, \
+     zucta0ar.uea {su},\
+     zucta0ar.ueb {au},\
+     sum(zucta0ar.kc0),\
+     sum(zucta0ar.kc1) \
+   FROM zroza0ar zucta0ar \
+   WHERE @X0000 and drd in (2,3,7,8,23,25) \
+   GROUP BY uea,ueb,zucta0ar.drd \
+  ORDER BY uea,ueb,zucta0ar.drd \
+   KEY hod_uea
+
+WRITEXME "STAV","DRD"=NumToStr(hod_drd,"I"), \
+                "SU"= hod_uea,\
+                "AU"= hod_ueb,\
+                "MD"= hod_md,\
+                "DAL"=hod_dal
+  #DECLARES Tabulka_Zapisy
+
+  if hod_drd=0 || hod_drd=1 || hod_drd=4 || hod_drd=5
+    Tabulka_Zapisy="zuctdxma" ;úèetnictví
+  else
+    Tabulka_Zapisy="zrozdxma" ;rozpoèet
+  endif
+  Tabulka_Zapisy=Tabulka_Zapisy+" zucta0ar"
+  
+  CYCLE \
+    SELECT \
+      hod_zap_rok=rok, \
+      hod_zap_mesic=mesic, \
+      hod_zap_den=den, \
+      hod_zap_ac=ac, \
+      hod_zap_md=c0, \
+      hod_zap_dal=c1 \
+    FROM \
+      Tabulka_Zapisy \
+    WHERE \
+      @X0000 and uea='@hod_uea' and ueb='@hod_ueb' and drd=@hod_drd,I.
+
+
+WRITEXME "ZAPIS","ROK"= hod_zap_rok,\
+                 "MESIC"= hod_zap_mesic,\
+                 "DEN"= hod_zap_den,\
+                 "AC"= hod_zap_ac,\
+                 "MD"= hod_zap_md,\
+                 "DAL"=  hod_zap_dal
+
+  ENDC
+ENDC
+FREELIST handlelistnks

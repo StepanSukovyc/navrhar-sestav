@@ -1,0 +1,2665 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<!--
+#ZMENY
+N*15.01.2016.1- vytvořen formát pro rok 2016 ORJ:0202
+	N*16.02.2016.1- dokončen formát pro rok 2016 ORJ:0202
+	P*18.02.2016.1- v ulici a čísle popisném se vypisoval stejný údaj, vytvořeny dva nové slouce zvlášť pro ULICI a zvlíšť pro ČÍLO POPISNÉ / ORIENTAČNÍ ORJ:0202
+	P*19.02.2016.1- ošetření pozadí loga obrázku ORJ:0202
+	P*22.02.2016.1- ošetřena šířka loga obrázku ORJ:0202
+	P*23.02.2016.1- u města sídla organizace se chybně vypisoval údaj X-OBEC-MISTO, správný údaj je X-OBEC-SIDLO ORJ:0202
+	P*02.03.2016.1- u části B.2 rozšířena šířka posledních dvou sloupců ORJ:0202
+	P*25.05.2016.1- u části A.2, B.1 opraven text DIČ dodavatele ORJ:0202
+	P*25.05.2016.2- u části A.3 sjednocen text se vzorem na Daňovém portálu ORJ:0202
+	N*01.06.2016.1- u částí A.1 až A.4, B.1 a B.2 doplněny celkové součty ORJ:0202
+	N*04.07.2016.1- doplnění výpisu databázového profilu, ALV a verze GINISu ORJ:0202
+	N*30.08.2016.1- úprava textu názvu části A.2 ORJ:0202
+	N*08.09.2016.1- úprava zobrazení loga ve formátu - vycentrování znaku a jeho automatická velikost  s plným barevným pozadím ORJ:0202
+	N*11.10.2016.1- úprava zobrazení loga ve formátu - s pevnou výškou a automatickou šířkou ORJ:0202
+	N*22.05.2019.1- úprava názvů řádků A.2, A.4, A.5, B.2 a B.3 ORJ:0202
+#ZMENY
+-->
+<format type="grr" xmlns="http://www.gordic.cz/TR/alf/1.4/">
+	<info ixs_xme="WD_UCRGUDHX" />
+	<info xmeta_ver="1" />
+	<info xmeta_subver_min="3" />
+	<info format="A1" />
+	<info nazev="barevný" />
+	<info allowed_output="htm,xls,doc,frm" />
+	<info maker="0202" />
+	<info last_modif="201905221631" />
+	<info rokmes_od="201601" />
+	<info rokmes_do="209913" />
+	<paper-setting paper-width="297mm" paper-height="210mm" bottom-margin="15mm" />
+	<script>
+<![CDATA[
+def cisla():
+ if self.value==-999999999999999:
+  self.style.font_color='black'
+  self.style.align='right'
+  self.value='X '
+ else:
+  num=Decimal(self.value)
+  if num<0:
+   self.style.font_color='red'
+  else:
+   self.style.font_color='black'
+def cisla2():
+ if self.value=='X':
+  self.style.font_color='black'
+  self.style.align='right'
+  self.value='X '
+ else:
+   if self.value=='*******':
+    self.style.font_color='black'
+    self.style.align='right'
+    self.value='****** '
+   else:
+    num=Decimal(self.value)
+    self.value=num.format("# 0,00 ;# 0,00-; ")
+    if num<0:
+     self.style.font_color='red'
+    else:
+     self.style.font_color='black'
+]]>
+</script>
+	<region name="KH1">
+		<head>
+			<line on-each-page="true">
+				<style width="40%" font-face="arial" font-size="1" multiline="false" bottom-border-width="1">
+					<value-of name="" onData="self.value='Licence: '+KH1.LIC+' '+KH1.DB" />
+				</style>
+				<style width="60%" font-face="arial" font-size="1" horizontal-align="right" bottom-border-width="1">
+					<value-of name="" onData="self.value=KH1.FORMAT+' / ' +format.info['format'] +'  ('+KH1.VERZE+' / ' +format.info['last_modif']+')'" />
+				</style>
+			</line>
+			<line on-each-page="true" only-if="KH1.ALV!=''">
+				<style width="100%" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+					<value-of name="" onData="self.value=KH1.ALV" />
+				</style>
+			</line>
+		</head>
+		<body>
+			<region name="KH-HLAVICKA">
+				<head>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" left-padding="1" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+						<style width="33%" font-face="arial" font-size="1" vertical-align="center" left-padding="1" top-padding="3" bottom-padding="3">
+							<text value="Finančnímu úřadu pro / Specializovanému finančnímu úřadu" />
+						</style>
+						<style width="49%" font-face="arial" font-size="1" vertical-align="center" left-padding="1" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+						<style width="17%" font-face="arial" font-size="1" vertical-align="center" left-padding="1" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style padding="0">
+							<table width="33%">
+								<line>
+									<style width="100%" font-face="arial" vertical-align="center" border-width="2" left-border-style="solid" right-border-style="solid" top-border-style="solid" bottom-border-style="solid" left-padding="5" right-padding="5" top-padding="4" bottom-padding="4">
+										<value-of name="FIN-URAD" />
+									</style>
+								</line>
+								<line>
+									<style width="100%" font-face="arial" font-size="1" vertical-align="center" left-padding="1" top-padding="3" bottom-padding="3">
+										<text value="Územní pracoviště v, ve, pro" />
+									</style>
+								</line>
+								<line>
+									<style width="100%" font-face="arial" vertical-align="center" border-width="2" left-border-style="solid" right-border-style="solid" top-border-style="solid" bottom-border-style="solid" left-padding="5" right-padding="5" top-padding="4" bottom-padding="4">
+										<value-of name="UZ-PRAC" />
+									</style>
+								</line>
+								<line>
+									<style width="100%" font-face="arial" font-size="1" vertical-align="center" left-padding="1" top-padding="3" bottom-padding="3">
+										<text value="Daňové identifikační číslo" />
+									</style>
+								</line>
+								<line>
+									<style width="100%" font-face="arial" vertical-align="center" border-width="2" left-border-style="solid" right-border-style="solid" top-border-style="solid" bottom-border-style="solid" left-padding="5" right-padding="5" top-padding="4" bottom-padding="4">
+										<value-of name="" onData="self.value='CZ' + KH_HLAVICKA.DIC" />
+									</style>
+								</line>
+								<line>
+									<style width="100%" height="1mm" font-face="arial" font-size="1" vertical-align="center">
+										<text value="" />
+									</style>
+								</line>
+								<line>
+									<style width="15%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" border-width="2" left-border-style="solid" right-border-style="solid" top-border-style="solid" bottom-border-style="solid" left-padding="5" right-padding="5" top-padding="4" bottom-padding="4">
+										<text value="řádné" />
+									</style>
+									<style width="12%" font-face="arial" horizontal-align="center" vertical-align="center" border-width="2" left-border-style="solid" right-border-style="solid" top-border-style="solid" bottom-border-style="solid" top-padding="5" bottom-padding="5">
+										<value-of name="RADNE-KH" />
+									</style>
+									<style width="10%" horizontal-align="center" vertical-align="center">
+										<text value="" />
+									</style>
+									<style width="15%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" border-width="2" left-border-style="solid" right-border-style="solid" top-border-style="solid" bottom-border-style="solid">
+										<text value="následné" />
+									</style>
+									<style width="12%" font-face="arial" horizontal-align="center" vertical-align="center" border-width="2" left-border-style="solid" right-border-style="solid" top-border-style="solid" bottom-border-style="solid" top-padding="1" bottom-padding="1">
+										<value-of name="NASLED-KH" />
+									</style>
+									<style width="10%" horizontal-align="center" vertical-align="center">
+										<text value="" />
+									</style>
+									<style width="15%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" border-width="2" left-border-style="solid" right-border-style="solid" top-border-style="solid" bottom-border-style="solid">
+										<text value="opravné" />
+									</style>
+									<style width="11%" font-face="arial" horizontal-align="center" vertical-align="center" border-width="2" left-border-style="solid" right-border-style="solid" top-border-style="solid" bottom-border-style="solid" top-padding="1" bottom-padding="1">
+										<value-of name="OPRAVNE" />
+									</style>
+								</line>
+								<line>
+									<style width="100%" height="1mm" font-face="arial" font-size="1" vertical-align="center">
+										<text value="" />
+									</style>
+								</line>
+								<line>
+									<style width="40.5%" font-face="arial" font-size="1" vertical-align="center" right-padding="1">
+										<text value="Důvody pro podání následného&#xA;kontrolního hlášení zjištěny dne" />
+									</style>
+									<style width="59.5%" font-face="arial" horizontal-align="center" vertical-align="center" border-width="2" left-border-style="solid" right-border-style="solid" top-border-style="solid" bottom-border-style="solid" top-padding="1">
+										<value-of name="DEN-ZJIST" />
+									</style>
+								</line>
+							</table>
+						</style>
+						<style width="11%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="38%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="bottom" left-border-width="2" right-border-width="2" top-border-width="2" bottom-border-width="1">
+							<text value="otisk podacího razítka finančního úřadu" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="16%" background-color="white" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center">
+							<image global="true" file="logo.bmp" image-width="30mm" image-height="auto" background-color="white"/>
+						</style>
+					</line>
+					<line>
+						<style width="1%" height="1.5mm" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="33%" height="1.5mm" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="11%" height="1.5mm" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="38%" height="1.5mm" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="17%" height="1.5mm" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="8.3%" font-face="arial" font-size="1" vertical-align="center" right-padding="1">
+							<text value="Číslo jednací výzvy" />
+						</style>
+						<style width="24.7%" font-face="arial" horizontal-align="center" vertical-align="center" border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="CISlO-JED" />
+						</style>
+						<style width="11%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center">
+							<text value="Rychlá odpověď na výzvu" />
+						</style>
+						<style width="38%" font-face="arial" horizontal-align="center" vertical-align="center" border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="RYCHLA-ODP" />
+						</style>
+						<style width="17%" font-face="arial" font-size="1" vertical-align="center">
+							<value-of name="" onLoad="A5_1=0;A5_2=0;A5_3=0;A5_4=0;A5_5=0;A5_6=0;B3_1=0;B3_2=0;B3_3=0;B3_4=0;B3_5=0;B3_6=0" />
+						</style>
+					</line>
+					<line>
+						<style width="18%" height="1.5mm" font-face="arial" font-size="1" vertical-align="center" top-padding="2" bottom-padding="2">
+							<text value="" />
+						</style>
+						<style width="82%" height="1.5mm" font-face="arial" font-size="1" vertical-align="center" top-padding="2" bottom-padding="2">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="100%" font-face="arial" font-size="5" font-bold="true" horizontal-align="center" vertical-align="center" top-padding="3" bottom-padding="2">
+							<text value="K O N T R O L N Í    H L Á Š E N Í" />
+						</style>
+					</line>
+					<line>
+						<style width="100%" font-face="arial" font-size="3" font-bold="true" horizontal-align="center" vertical-align="center" top-padding="3" bottom-padding="3">
+							<text value="podle § 101c a násl. zákona č. 235/2004 Sb., o dani z přidané hodnoty, ve znění pozdějších předpisů (ZDPH)" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="37%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" right-border-width="2" right-padding="10">
+							<text value="za období: měsíc" />
+						</style>
+						<style width="4%" font-face="arial" horizontal-align="center" vertical-align="center" border-width="2" top-padding="1" bottom-padding="1">
+							<value-of name="M" />
+						</style>
+						<style width="5%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" right-padding="10">
+							<text value="čtvrtletí" />
+						</style>
+						<style width="4%" font-face="arial" horizontal-align="center" vertical-align="center" border-width="2" top-padding="1" bottom-padding="1">
+							<value-of name="CTVRT" />
+						</style>
+						<style width="5%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" right-padding="10">
+							<text value="rok" />
+						</style>
+						<style width="4%" font-face="arial" horizontal-align="center" vertical-align="center" border-width="2" top-padding="1" bottom-padding="1">
+							<value-of name="Y" />
+						</style>
+						<style width="11%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" right-border-width="2" right-padding="10">
+							<text value="od" />
+						</style>
+						<style width="7%" font-face="arial" horizontal-align="center" vertical-align="center" border-width="2" top-padding="1" bottom-padding="1">
+							<value-of name="DATOD" />
+						</style>
+						<style width="5%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" right-padding="10">
+							<text value="do" />
+						</style>
+						<style width="7%" font-face="arial" horizontal-align="center" vertical-align="center" border-width="2" top-padding="1" bottom-padding="1">
+							<value-of name="DATDO" />
+						</style>
+						<style width="10%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" right-padding="10">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-padding="1" right-padding="1" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+						<style width="8.2%" font-face="arial" font-size="1" font-bold="true" vertical-align="center" left-padding="1" right-padding="1" top-padding="3" bottom-padding="3">
+							<text value="Právnická osoba: " />
+						</style>
+						<style width="89.8%" font-face="arial" font-size="1" vertical-align="center" left-padding="1" right-padding="1" top-padding="3" bottom-padding="3">
+							<text value="Název právnické osoby" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-padding="1" right-padding="1" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="98%" font-face="arial" vertical-align="center" border-width="2" top-padding="2" bottom-padding="2">
+							<value-of name="NAZEV-PO" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-padding="1" right-padding="1" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+						<style width="6.5%" font-face="arial" font-size="1" font-bold="true" vertical-align="center" left-padding="1" right-padding="1" top-padding="3" bottom-padding="3">
+							<text value="Fyzická osoba:" />
+						</style>
+						<style width="23.5%" font-face="arial" font-size="1" vertical-align="center" left-padding="1" right-padding="1" top-padding="3" bottom-padding="3">
+							<text value="Příjmení" />
+						</style>
+						<style width="21%" font-face="arial" font-size="1" vertical-align="center" left-padding="1" right-padding="1" top-padding="3" bottom-padding="3">
+							<text value="Jméno" />
+						</style>
+						<style width="47%" font-face="arial" font-size="1" vertical-align="center" left-padding="1" right-padding="1" top-padding="3" bottom-padding="3">
+							<text value="Titul" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" left-padding="1" right-padding="1" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="28%" font-face="arial" vertical-align="center" border-width="2" top-padding="2" bottom-padding="2">
+							<value-of name="PRIJ-FO" />
+						</style>
+						<style width="2%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="19%" font-face="arial" vertical-align="center" border-width="2" top-padding="2" bottom-padding="2">
+							<value-of name="JMENO-FO" />
+						</style>
+						<style width="2%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="7%" font-face="arial" vertical-align="center" border-width="2" top-padding="2" bottom-padding="2">
+							<value-of name="TITUL-FO" />
+						</style>
+						<style width="41%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="49%" font-face="arial" font-size="1" font-bold="true" vertical-align="center" right-padding="0">
+							<text value="Sídlo právnické osoby / adresa místa pobytu fyzické osoby podle § 13 odst. 1 daňového řádu:" />
+						</style>
+						<style width="49%" font-face="arial" font-size="1" vertical-align="center" left-padding="0" right-padding="10">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" top-padding="2" bottom-padding="4">
+							<text value="" />
+						</style>
+						<style width="42%" font-face="arial" font-size="1" vertical-align="center" left-padding="1" top-padding="2" bottom-padding="2">
+							<text value="a) obec" />
+						</style>
+						<style width="7%" font-face="arial" font-size="1" vertical-align="center" left-padding="1" top-padding="2" bottom-padding="2">
+							<text value="b) PSČ" />
+						</style>
+						<style width="37%" font-face="arial" font-size="1" vertical-align="center" left-padding="1" top-padding="2" bottom-padding="2">
+							<text value="c) ulice (nebo část obce)" />
+						</style>
+						<style width="12%" font-face="arial" font-size="1" vertical-align="center" left-padding="1" top-padding="2" bottom-padding="4">
+							<text value="d) číslo popisné / orientační" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" top-padding="2" bottom-padding="4">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="40%" font-face="arial" vertical-align="center" border-width="2" top-padding="2" bottom-padding="2">
+							<value-of name="X-OBEC-SIDLO" />
+						</style>
+						<style width="2%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="5%" font-face="arial" horizontal-align="center" vertical-align="center" border-width="2" top-padding="2" bottom-padding="2">
+							<value-of name="X-POSTA-SIDLO" />
+						</style>
+						<style width="2%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="35%" font-face="arial" vertical-align="center" border-width="2" top-padding="2" bottom-padding="2">
+							<value-of name="SIDLO-ULICE" />
+						</style>
+						<style width="2%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="12%" font-face="arial" horizontal-align="center" vertical-align="center" border-width="2" top-padding="2" bottom-padding="2">
+							<value-of name="SIDLO-COR" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" top-padding="2" bottom-padding="4">
+							<text value="" />
+						</style>
+						<style width="32%" font-face="arial" font-size="1" vertical-align="center" left-padding="1" top-padding="2" bottom-padding="2">
+							<text value="e) stát" />
+						</style>
+						<style width="17%" font-face="arial" font-size="1" vertical-align="center" left-padding="1" top-padding="2" bottom-padding="2">
+							<text value="f) telefon" />
+						</style>
+						<style width="12%" font-face="arial" font-size="1" vertical-align="center" left-padding="1" top-padding="2" bottom-padding="2">
+							<text value="g) ID datové schránky" />
+						</style>
+						<style width="37%" font-face="arial" font-size="1" vertical-align="center" left-padding="1" top-padding="2" bottom-padding="2">
+							<text value="h) e-mail" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" top-padding="2" bottom-padding="4">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="30%" font-face="arial" vertical-align="center" border-width="2" top-padding="3" bottom-padding="2">
+							<value-of name="STAT" />
+						</style>
+						<style width="2%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="center" vertical-align="center" border-width="2" top-padding="2" bottom-padding="2">
+							<value-of name="X-TELEFON" />
+						</style>
+						<style width="2%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="9%" font-face="arial" horizontal-align="center" vertical-align="center" border-width="2" top-padding="2" bottom-padding="2">
+							<value-of name="ID-SCHRAN" />
+						</style>
+						<style width="3%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="37%" font-face="arial" vertical-align="center" border-width="2" top-padding="2" bottom-padding="2">
+							<value-of name="X-E-MAIL" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" height="1.5mm" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="98%" height="1.5mm" font-face="arial" font-size="1" vertical-align="center" bottom-border-width="3" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="1%" height="1.5mm" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="100%" height="1mm" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="98%" font-face="arial" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="PROHLAŠUJI, ŽE VŠECHNY MNOU UVEDENÉ ÚDAJE V ODDÍLECH A, B, C TOHOTO HLÁŠENÍ JSOU PRAVDIVÉ A ÚPLNÉA STVRZUJI JE SVÝM PODPISEM" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" left-border-width="2" top-border-width="2">
+							<text value="" />
+						</style>
+						<style width="51%" font-face="arial" font-size="1" font-bold="true" vertical-align="center" top-border-width="2" left-padding="1" right-padding="0">
+							<text value="Údaje o podepisující osobě:" />
+						</style>
+						<style width="45%" font-face="arial" font-size="1" vertical-align="center" top-border-width="2" left-padding="0" right-padding="10">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" right-border-width="2" top-border-width="2">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" left-border-width="2">
+							<text value="" />
+						</style>
+						<style width="11%" font-face="arial" font-size="1" vertical-align="center" left-padding="0" right-padding="10">
+							<text value="Kód podepisující osoby:" />
+						</style>
+						<style width="40%" font-face="arial" font-size="1" vertical-align="center" left-padding="0" right-padding="10">
+							<text value="Jméno(-a) a příjmení / Název právnické osoby" />
+						</style>
+						<style width="2%" font-face="arial" font-size="1" vertical-align="center" left-padding="0" right-padding="10">
+							<text value="" />
+						</style>
+						<style width="43%" font-face="arial" font-size="1" vertical-align="center" left-padding="0" right-padding="10">
+							<text value="Datum narození / Evidenční číslo osvědčení daňového poradce / IČ právnické osoby" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" right-border-width="2">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" left-border-width="2">
+							<text value="" />
+						</style>
+						<style width="4%" font-face="arial" horizontal-align="center" vertical-align="center" border-width="2" top-padding="2" bottom-padding="2">
+							<value-of name="KOD-POD-OS" />
+						</style>
+						<style width="7%" font-face="arial" font-size="1" vertical-align="center" right-border-width="2">
+							<text value="" />
+						</style>
+						<style width="40%" font-face="arial" vertical-align="center" border-width="2" top-padding="2" bottom-padding="2">
+							<value-of name="JM-POD-OS-N-PO" />
+						</style>
+						<style width="2%" font-face="arial" font-size="1" vertical-align="center" right-border-width="2">
+							<text value="" />
+						</style>
+						<style width="43%" font-face="arial" vertical-align="center" border-width="2" top-padding="2" bottom-padding="2">
+							<value-of name="DAT-NAR-EV-CIS" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" right-border-width="2">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" left-border-width="2">
+							<text value="" />
+						</style>
+						<style width="32%" font-face="arial" font-size="1" font-bold="true" vertical-align="center" left-padding="0" right-padding="1">
+							<text value="Fyzická osoba oprávněná k podpisu s uvedením vztahu k právnické osobě" />
+						</style>
+						<style width="64%" font-face="arial" font-size="1" vertical-align="center" left-padding="0">
+							<text value=" (je-li daňový subjekt či zástupce právnickou osobou), (např. jednatel, pověřený pracovník apod.)" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" right-border-width="2">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" left-border-width="2">
+							<text value="" />
+						</style>
+						<style width="96%" font-face="arial" font-size="1" vertical-align="center" left-padding="0" right-padding="10">
+							<text value="Jméno(-a) a příjmení / Vztah k právnické osobě" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" right-border-width="2">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" left-border-width="2">
+							<text value="" />
+						</style>
+						<style width="96%" font-face="arial" vertical-align="center" border-width="2" top-padding="2" bottom-padding="2">
+							<value-of name="" onData="self.value=KH-HLAVICKA.JM-OPR-OS+' ' +KH-HLAVICKA.PRIJ-OPR-OS +', '+KH-HLAVICKA.VZTAH-OPR-OS" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" right-border-width="2">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" height="1mm" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="1%" height="1mm" font-face="arial" font-size="1" vertical-align="center" left-border-width="2" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="96%" height="1mm" font-face="arial" font-size="1" vertical-align="center" bottom-border-width="3" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="1%" height="1mm" font-face="arial" font-size="1" vertical-align="center" right-border-width="2" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="1%" height="1mm" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" left-border-width="2">
+							<text value="" />
+						</style>
+						<style width="48%" font-face="arial" font-size="1" font-bold="true" vertical-align="center" left-padding="0" right-padding="1">
+							<text value="Daňový subjekt / Osoba oprávněná k podpisu" />
+						</style>
+						<style width="7%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-padding="0">
+							<text value="" />
+						</style>
+						<style width="41%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-padding="0">
+							<text value="Vlastnoruční podpis" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" right-border-width="2">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" left-border-width="2">
+							<text value="" />
+						</style>
+						<style width="17%" font-face="arial" font-size="1" vertical-align="center" left-padding="0" right-padding="10">
+							<text value="Datum" />
+						</style>
+						<style width="31%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-padding="0" right-padding="10">
+							<text value="Otisk razítka" />
+						</style>
+						<style width="7%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-padding="0" right-padding="10">
+							<text value="" />
+						</style>
+						<style width="41%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-padding="0" right-padding="10">
+							<text value="daňového subjektu / osoby oprávněné k podpisu" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" right-border-width="2">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" left-border-width="2">
+							<text value="" />
+						</style>
+						<style width="10%" font-face="arial" horizontal-align="center" vertical-align="center" border-width="2" top-padding="2" bottom-padding="2">
+							<value-of name="DATUM" />
+						</style>
+						<style width="7%" font-face="arial" font-size="1" vertical-align="center" right-border-width="2">
+							<text value="" />
+						</style>
+						<style width="31%" font-face="arial" font-size="1" vertical-align="center" right-border-width="2" top-border-width="2">
+							<text value="" />
+						</style>
+						<style width="7%" font-face="arial" font-size="1" vertical-align="center" right-border-width="2">
+							<text value="" />
+						</style>
+						<style width="41%" font-face="arial" font-size="1" vertical-align="center" right-border-width="2" top-border-width="2">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" right-border-width="2">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" height="4mm" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="1%" height="4mm" font-face="arial" font-size="1" vertical-align="center" left-border-width="2">
+							<text value="" />
+						</style>
+						<style width="10%" height="4mm" font-face="arial" font-size="1" vertical-align="center" top-padding="2" bottom-padding="2">
+							<text value="" />
+						</style>
+						<style width="7%" height="4mm" font-face="arial" font-size="1" vertical-align="center" right-border-width="2">
+							<text value="" />
+						</style>
+						<style width="31%" height="4mm" font-face="arial" font-size="1" vertical-align="center" right-border-width="2">
+							<text value="" />
+						</style>
+						<style width="7%" height="4mm" font-face="arial" font-size="1" vertical-align="center" right-border-width="2">
+							<text value="" />
+						</style>
+						<style width="41%" height="4mm" font-face="arial" font-size="1" vertical-align="center" right-border-width="2">
+							<text value="" />
+						</style>
+						<style width="1%" height="4mm" font-face="arial" font-size="1" vertical-align="center" right-border-width="2">
+							<text value="" />
+						</style>
+						<style width="1%" height="4mm" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" height="4mm" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="1%" height="4mm" font-face="arial" font-size="1" vertical-align="center" left-border-width="2">
+							<text value="" />
+						</style>
+						<style width="10%" height="4mm" font-face="arial" font-size="1" vertical-align="center" top-padding="2" bottom-padding="2">
+							<text value="" />
+						</style>
+						<style width="7%" height="4mm" font-face="arial" font-size="1" vertical-align="center" right-border-width="2">
+							<text value="" />
+						</style>
+						<style width="31%" height="4mm" font-face="arial" font-size="1" vertical-align="center" right-border-width="2">
+							<text value="" />
+						</style>
+						<style width="7%" height="4mm" font-face="arial" font-size="1" vertical-align="center" right-border-width="2">
+							<text value="" />
+						</style>
+						<style width="41%" height="4mm" font-face="arial" font-size="1" vertical-align="center" right-border-width="2">
+							<text value="" />
+						</style>
+						<style width="1%" height="4mm" font-face="arial" font-size="1" vertical-align="center" right-border-width="2">
+							<text value="" />
+						</style>
+						<style width="1%" height="4mm" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" height="4mm" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="1%" height="4mm" font-face="arial" font-size="1" vertical-align="center" left-border-width="2">
+							<text value="" />
+						</style>
+						<style width="10%" height="4mm" font-face="arial" font-size="1" vertical-align="center" top-padding="2" bottom-padding="2">
+							<text value="" />
+						</style>
+						<style width="7%" height="4mm" font-face="arial" font-size="1" vertical-align="center" right-border-width="2">
+							<text value="" />
+						</style>
+						<style width="31%" height="4mm" font-face="arial" font-size="1" vertical-align="center" right-border-width="2" bottom-border-width="2">
+							<text value="" />
+						</style>
+						<style width="7%" height="4mm" font-face="arial" font-size="1" vertical-align="center" right-border-width="2">
+							<text value="" />
+						</style>
+						<style width="41%" height="4mm" font-face="arial" font-size="1" vertical-align="center" right-border-width="2" bottom-border-width="2">
+							<text value="" />
+						</style>
+						<style width="1%" height="4mm" font-face="arial" font-size="1" vertical-align="center" right-border-width="2">
+							<text value="" />
+						</style>
+						<style width="1%" height="4mm" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" height="1mm" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="1%" height="1mm" font-face="arial" font-size="1" vertical-align="center" left-border-width="2" bottom-border-width="2" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="96%" height="1mm" font-face="arial" font-size="1" vertical-align="center" bottom-border-width="2" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="1%" height="1mm" font-face="arial" font-size="1" vertical-align="center" right-border-width="2" bottom-border-width="2" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="1%" height="1mm" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" height="1mm" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="1%" height="1mm" font-face="arial" font-size="1" vertical-align="center" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="96%" height="1mm" font-face="arial" font-size="1" vertical-align="center" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="1%" height="1mm" font-face="arial" font-size="1" vertical-align="center" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="1%" height="1mm" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="7%" font-face="arial" font-size="1" vertical-align="center" right-border-width="2" right-padding="1">
+							<text value="Kontaktní osoba" />
+						</style>
+						<style width="21%" font-face="arial" horizontal-align="center" vertical-align="center" border-width="2" top-padding="2" bottom-padding="2">
+							<value-of name="" onData="self.value=KH-HLAVICKA.JM-KONT-OS+' ' +KH-HLAVICKA.PRIJ-KONT-OS" />
+						</style>
+						<style width="5%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center">
+							<text value="Telefon" />
+						</style>
+						<style width="16%" font-face="arial" horizontal-align="center" vertical-align="center" border-width="2" top-padding="2" bottom-padding="2">
+							<value-of name="TEL-KONT-OS" />
+						</style>
+						<style width="50%" font-face="arial" font-size="1" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+				</head>
+				<body>
+					<line>
+						<style width="100%" height="3mm" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" top-padding="1" bottom-padding="1">
+							<text value="1" />
+						</style>
+					</line>
+				</body>
+			</region>
+			<region name="A1">
+				<head>
+					<line break-page-before="always">
+						<style width="28%" font-face="arial" font-size="1" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="44%" font-face="arial" font-size="3" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="KONTROLNÍ OPIS" />
+						</style>
+						<style width="21%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center">
+							<text value="Pořadové číslo strany / Celkový počet stran" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" border-width="2">
+							<value-of name="" onData="self.value=ROOT.PAGE+' / '+ROOT.PAGES" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="98%" font-face="arial" font-bold="true" vertical-align="center">
+							<text value="A. ODDÍL - Plnění, u kterých je plátce povinen přiznat daň a uskutečněná plnění v režimu přenesení daňové povinnosti" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="98%" font-face="arial" vertical-align="center" bottom-border-width="3">
+							<text value="A. 1. - Uskutečněná zdanitelná plnění v režimu přenesení daňové povinnosti, u kterých je povinen přiznat daň příjemce plnění podle § 92a" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="100%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="3" top-border-width="3" bottom-border-width="3">
+							<text value="Číslo řádku" />
+						</style>
+						<style width="10%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="DIČ odběratele" />
+						</style>
+						<style width="40%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Evidenční číslo daňového dokladu" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="DUZP" />
+						</style>
+						<style width="16%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Základ daně" />
+						</style>
+						<style width="11%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" right-border-width="3" top-border-width="3" bottom-border-width="3">
+							<text value="Kód předmětu plnění" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="3" top-border-width="2" bottom-border-width="3">
+							<text value="1" />
+						</style>
+						<style width="10%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="2" />
+						</style>
+						<style width="40%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="3" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="4" />
+						</style>
+						<style width="16%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="5" />
+						</style>
+						<style width="11%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" right-border-width="3" top-border-width="2" bottom-border-width="3">
+							<text value="6" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+					</line>
+				</head>
+				<body>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-border-width="3" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="CIS-RADKU" />
+						</style>
+						<style width="10%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="DIC" />
+						</style>
+						<style width="40%" font-face="arial" font-size="1" vertical-align="center" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="ECDD" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="DUZP" />
+						</style>
+						<style width="16%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="ZAKLAD" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="11%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-border-width="2" right-border-width="3" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="KOD-PP" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+					</line>
+					<region name="A1-S">
+						<body>
+							<line>
+								<style width="1%" font-face="arial" font-bold="true" vertical-align="center" top-padding="3" bottom-padding="3">
+									<text value="" />
+								</style>
+								<style width="71%" font-face="arial" font-bold="true" horizontal-align="center" vertical-align="center" left-border-width="3" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="TEXT" />
+								</style>
+								<style width="16%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="ZAKLAD" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="11%" font-face="arial" font-bold="true" horizontal-align="center" vertical-align="center" left-border-width="2" right-border-width="3" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<text value="" />
+								</style>
+								<style width="1%" font-face="arial" font-bold="true" horizontal-align="right" vertical-align="center" top-padding="3" bottom-padding="3">
+									<text value="" />
+								</style>
+							</line>
+						</body>
+					</region>
+				</body>
+				<foot>
+					<line endpage="false" on-each-page="true">
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="98%" font-face="arial" font-size="1" top-border-width="3" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+				</foot>
+			</region>
+			<region name="A2">
+				<head>
+					<line break-page-before="always">
+						<style width="28%" font-face="arial" font-size="1" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="44%" font-face="arial" font-size="3" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="KONTROLNÍ OPIS" />
+						</style>
+						<style width="21%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center">
+							<text value="Pořadové číslo strany / Celkový počet stran" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" border-width="2">
+							<value-of name="" onData="self.value=ROOT.PAGE+' / '+ROOT.PAGES" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="98%" font-face="arial" font-bold="true" vertical-align="center">
+							<text value="A. ODDÍL - Plnění, u kterých je plátce povinen přiznat daň a uskutečněná plnění v režimu přenesení daňové povinnosti" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="98%" font-face="arial" vertical-align="center" bottom-border-width="3">
+							<text value="A.2. Přijatá zdanitelná plnění, u kterých je povinen přiznat daň příjemce dle § 108 odst. 1 písm. b), c) a d) (§ 24, § 25) (v případě plnění podle § 108 odst. 1 písm. d) jde o plnění přijatá od 29.7.2016)" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="100%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="4%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="3" top-border-width="3" bottom-border-width="3">
+							<text value="Číslo&#xA;řádku" />
+						</style>
+						<style width="8%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Identifikace&#xA;dodavatele&#xA;(VAT ID)" />
+						</style>
+						<style width="26%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Evidenční číslo daňového dokladu" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="DPPD**" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Základ daně 1" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Daň 1" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Základ daně 2" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Daň 2" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Základ daně 3" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" right-border-width="3" top-border-width="3" bottom-border-width="3">
+							<text value="Daň 3" />
+						</style>
+						<style width="1%" font-face="arial" horizontal-align="right" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="4%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="3" top-border-width="2" bottom-border-width="3">
+							<text value="1" />
+						</style>
+						<style width="8%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="2" />
+						</style>
+						<style width="26%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="3" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="4" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="5" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="6" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="7" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="8" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="9" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" right-border-width="3" top-border-width="2" bottom-border-width="3">
+							<text value="10" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+					</line>
+				</head>
+				<body>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+						<style width="4%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-border-width="3" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="CIS-RADKU" />
+						</style>
+						<style width="8%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="VAT-ID" />
+						</style>
+						<style width="26%" font-face="arial" font-size="1" vertical-align="center" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="ECDD" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="DUZP" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="ZAKLAD-1" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="DAN-1" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="ZAKLAD-2" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="DAN-2" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="ZAKLAD-3" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" right-border-width="3" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="DAN-3" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+					</line>
+					<region name="A2-S">
+						<body>
+							<line>
+								<style width="1%" font-face="arial" font-bold="true" vertical-align="center" top-padding="3" bottom-padding="3">
+									<text value="" />
+								</style>
+								<style width="44%" font-face="arial" font-bold="true" horizontal-align="center" vertical-align="center" left-border-width="3" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="TEXT" />
+								</style>
+								<style width="9%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="ZAKLAD-1" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="9%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" right-border-width="2" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="DAN-1" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="9%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="ZAKLAD-2" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="9%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="DAN-2" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="9%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="ZAKLAD-3" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="9%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" right-border-width="3" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="DAN-3" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="1%" font-face="arial" font-bold="true" horizontal-align="right" vertical-align="center" top-padding="3" bottom-padding="3">
+									<text value="" />
+								</style>
+							</line>
+						</body>
+					</region>
+				</body>
+				<foot>
+					<line endpage="false" on-each-page="true">
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="98%" height="8mm" font-face="arial" font-size="1" top-border-width="3">
+							<text value="Základ daně/Daň 1 - základní sazba daně, 2 - první snížená sazba daně, 3 - druhá snížená sazba daně&#xA;** Datum povinnosti přiznat daň dle § 24 nebo § 25 ZDPH" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+				</foot>
+			</region>
+			<region name="A3">
+				<head>
+					<line break-page-before="always">
+						<style width="28%" font-face="arial" font-size="1" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="44%" font-face="arial" font-size="3" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="KONTROLNÍ OPIS" />
+						</style>
+						<style width="21%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center">
+							<text value="Pořadové číslo strany / Celkový počet stran" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" border-width="2">
+							<value-of name="" onData="self.value=ROOT.PAGE+' / '+ROOT.PAGES" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="98%" font-face="arial" font-bold="true" vertical-align="center">
+							<text value="A. ODDÍL - Plnění, u kterých je plátce povinen přiznat daň a uskutečněná plnění v režimu přenesení daňové povinnosti" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="98%" font-face="arial" vertical-align="center" bottom-border-width="3">
+							<text value="A. 3. - Uskutečněná plnění ve zvláštním režimu pro investiční zlato podle § 101c odst. 1 písm. c) bod 2" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="100%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="1%" height="4mm" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" padding="2">
+							<text value="" />
+						</style>
+						<style width="4%" height="4mm" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="bottom" left-border-width="3" top-border-width="3" padding="2">
+							<text value="Číslo" />
+						</style>
+						<style width="6%" height="4mm" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="bottom" left-border-width="2" top-border-width="3" padding="2">
+							<text value="Identifikace" />
+						</style>
+						<style width="50%" height="4mm" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="1" padding="2">
+							<text value="Odběratel bez DIČ / VAT ID" />
+						</style>
+						<style width="23%" height="4mm" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" padding="2">
+							<text value="" />
+						</style>
+						<style width="6%" height="4mm" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" padding="2">
+							<text value="" />
+						</style>
+						<style width="9%" height="4mm" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="bottom" ellipsis-style="cut" left-border-width="2" right-border-width="3" top-border-width="3" padding="2">
+							<text value="Hodnota osvoboz.&#xA;" />
+						</style>
+						<style width="1%" height="4mm" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" padding="2">
+							<text value="" />
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="4%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="3" bottom-border-width="3">
+							<text value="řádku" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" bottom-border-width="3">
+							<text value="odběratele&#xA;(DIČ/VAT ID)" />
+						</style>
+						<style width="20%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="1" bottom-border-width="3">
+							<text value="Jméno, příjmení / obchodní jméno" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" right-border-width="2" top-border-width="1" bottom-border-width="3">
+							<text value="Datum&#xA;narození" />
+						</style>
+						<style width="24%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" right-border-width="2" top-border-width="1" bottom-border-width="3">
+							<text value="Místo pobytu / Sídlo" />
+						</style>
+						<style width="23%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" bottom-border-width="3">
+							<text value="Evidenční číslo daňového dokladu" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" bottom-border-width="3">
+							<text value="DUP" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" right-border-width="3" bottom-border-width="3">
+							<text value="plnění" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="4%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="3" top-border-width="2" bottom-border-width="3">
+							<text value="1" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="2" />
+						</style>
+						<style width="20%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="3" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="4" />
+						</style>
+						<style width="24%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="5" />
+						</style>
+						<style width="23%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="6" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="7" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" right-border-width="3" top-border-width="2" bottom-border-width="3">
+							<text value="8" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+					</line>
+				</head>
+				<body>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+						<style width="4%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-border-width="3" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="CIS-RADKU" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="VAT-ID" />
+						</style>
+						<style width="20%" font-face="arial" font-size="1" vertical-align="center" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="JM-PRIJ-JMENO" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="NAROZENI" />
+						</style>
+						<style width="24%" font-face="arial" font-size="1" vertical-align="center" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="SIDLO" />
+						</style>
+						<style width="23%" font-face="arial" font-size="1" vertical-align="center" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="ECDD" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="DUZP" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" right-border-width="3" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="HODNOTA" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+					</line>
+					<region name="A3-S">
+						<body>
+							<line>
+								<style width="1%" font-face="arial" font-bold="true" vertical-align="center" top-padding="3" bottom-padding="3">
+									<text value="" />
+								</style>
+								<style width="83%" font-face="arial" font-bold="true" horizontal-align="center" vertical-align="center" left-border-width="3" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="TEXT" />
+								</style>
+								<style width="15%" font-face="arial" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" right-border-width="3" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="HODNOTA" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="1%" font-face="arial" font-bold="true" horizontal-align="right" vertical-align="center" top-padding="3" bottom-padding="3">
+									<text value="" />
+								</style>
+							</line>
+						</body>
+					</region>
+				</body>
+				<foot>
+					<line endpage="false" on-each-page="true">
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="98%" font-face="arial" font-size="1" top-border-width="3" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+				</foot>
+			</region>
+			<region name="A4">
+				<head>
+					<line break-page-before="always">
+						<style width="28%" font-face="arial" font-size="1" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="44%" font-face="arial" font-size="3" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="KONTROLNÍ OPIS" />
+						</style>
+						<style width="21%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center">
+							<text value="Pořadové číslo strany / Celkový počet stran" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" border-width="2">
+							<value-of name="" onData="self.value=ROOT.PAGE+' / '+ROOT.PAGES" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="98%" font-face="arial" font-bold="true" vertical-align="center">
+							<text value="A. ODDÍL - Plnění, u kterých je plátce povinen přiznat daň a uskutečněná plnění v režimu přenesení daňové povinnosti" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="98%" font-face="arial" vertical-align="center" bottom-border-width="3">
+							<text value="A. 4. - Uskutečněná zdanitelná plnění s povinností přiznat daň dle § 108 odst. 1 písm. a) s hodnotou nad 10.000,- Kč včetně daně a všechny provedené opravy podle § 44&#xA;bez ohledu na limit" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="100%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="4%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="3" top-border-width="3" bottom-border-width="3">
+							<text value="Číslo&#xA;řádku" />
+						</style>
+						<style width="8%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="DIČ&#xA;odběratele" />
+						</style>
+						<style width="19%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Evidenční číslo daňového dokladu" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="DPPD*" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Základ daně 1" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Daň 1" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Základ daně 2" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Daň 2" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Základ daně 3" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Daň 3" />
+						</style>
+						<style width="4%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3" left-padding="2" right-padding="2">
+							<text value="Kód&#xA;režimu&#xA;plnění" />
+						</style>
+						<style width="3%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" right-border-width="3" top-border-width="3" bottom-border-width="3" left-padding="2" right-padding="2">
+							<text value="§ 44&#xA;ZDPH" />
+						</style>
+						<style width="1%" font-face="arial" horizontal-align="right" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="4%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="3" top-border-width="2" bottom-border-width="3">
+							<text value="1" />
+						</style>
+						<style width="8%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="2" />
+						</style>
+						<style width="19%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="3" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="4" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="5" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="6" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="7" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="8" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="9" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="10" />
+						</style>
+						<style width="4%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="11" />
+						</style>
+						<style width="3%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" right-border-width="3" top-border-width="2" bottom-border-width="3">
+							<text value="12" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+					</line>
+				</head>
+				<body>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+						<style width="4%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-border-width="3" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="CIS-RADKU" />
+						</style>
+						<style width="8%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="DIC" />
+						</style>
+						<style width="19%" font-face="arial" font-size="1" vertical-align="center" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="ECDD" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="DUZP" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="ZAKLAD-1" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="DAN-1" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="ZAKLAD-2" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="DAN-2" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="ZAKLAD-3" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="DAN-3" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="4%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="KOD-RP" />
+						</style>
+						<style width="3%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-border-width="2" right-border-width="3" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="INSOL" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+					</line>
+					<region name="A4-S">
+						<body>
+							<line>
+								<style width="1%" font-face="arial" font-bold="true" vertical-align="center" top-padding="3" bottom-padding="3">
+									<text value="" />
+								</style>
+								<style width="37%" font-face="arial" font-bold="true" horizontal-align="center" vertical-align="center" left-border-width="3" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="TEXT" />
+								</style>
+								<style width="9%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="ZAKLAD-1" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="9%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" right-border-width="2" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="DAN-1" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="9%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="ZAKLAD-2" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="9%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="DAN-2" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="9%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="ZAKLAD-3" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="9%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" right-border-width="2" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="DAN-3" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="7%" font-face="arial" font-bold="true" horizontal-align="center" vertical-align="center" left-border-width="2" right-border-width="3" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<text value="" />
+								</style>
+								<style width="1%" font-face="arial" font-bold="true" horizontal-align="right" vertical-align="center" top-padding="3" bottom-padding="3">
+									<text value="" />
+								</style>
+							</line>
+						</body>
+					</region>
+				</body>
+				<foot>
+					<line endpage="false" on-each-page="true">
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="98%" height="8mm" font-face="arial" font-size="1" top-border-width="3">
+							<text value="Základ daně/Daň 1 - základní sazba daně, 2 - první snížená sazba daně, 3 - druhá snížená sazba daně&#xA;* Datum povinnosti přiznat daň dle § 21 ZDPH" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+				</foot>
+			</region>
+			<region name="A5">
+				<body>
+					<line>
+						<style width="100%" height="0mm" font-face="arial" font-size="1" top-padding="3" bottom-padding="3">
+							<value-of name="" onData="A5_1=A5.ZAKLAD-1;A5_2=A5.DAN-1;A5_3=A5.ZAKLAD-2;A5_4=A5.DAN-2;A5_5=A5.ZAKLAD-3;A5_6=A5.DAN-3" />
+						</style>
+					</line>
+				</body>
+			</region>
+			<region name="B1">
+				<head>
+					<line break-page-before="always">
+						<style width="28%" font-face="arial" font-size="1" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="44%" font-face="arial" font-size="3" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="KONTROLNÍ OPIS" />
+						</style>
+						<style width="21%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center">
+							<text value="Pořadové číslo strany / Celkový počet stran" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" border-width="2">
+							<value-of name="" onData="self.value=ROOT.PAGE+' / '+ROOT.PAGES" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="98%" font-face="arial" font-bold="true" vertical-align="center" top-padding="3" bottom-padding="3">
+							<text value="B. ODDÍL - Přijatá zdanitelná plnění s místem plnění v tuzemsku" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="98%" font-face="arial" vertical-align="center" bottom-border-width="3" top-padding="3" bottom-padding="3">
+							<text value="B. 1. - Přijatá zdanitelná plnění v režimu přenesení daňové povinnosti, u kterých je povinen přiznat daň příjemce podle § 92a" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="100%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="4%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="3" top-border-width="3" bottom-border-width="3">
+							<text value="Číslo&#xA;řádku" />
+						</style>
+						<style width="8%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="DIČ&#xA;dodavatele" />
+						</style>
+						<style width="21%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Evidenční číslo daňového dokladu" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="DUZP" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Základ daně 1" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Daň 1" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Základ daně 2" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Daň 2" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Základ daně 3" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Daň 3" />
+						</style>
+						<style width="5%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" right-border-width="3" top-border-width="3" bottom-border-width="3">
+							<text value="Kód&#xA;předmětu&#xA;plnění" />
+						</style>
+						<style width="1%" font-face="arial" horizontal-align="right" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="4%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="3" top-border-width="2" bottom-border-width="3">
+							<text value="1" />
+						</style>
+						<style width="8%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="2" />
+						</style>
+						<style width="21%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="3" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="4" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="5" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="6" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="7" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="8" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="9" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="10" />
+						</style>
+						<style width="5%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" right-border-width="3" top-border-width="2" bottom-border-width="3">
+							<text value="11" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+					</line>
+				</head>
+				<body>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+						<style width="4%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-border-width="3" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="CIS-RADKU" />
+						</style>
+						<style width="8%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="DIC" />
+						</style>
+						<style width="21%" font-face="arial" font-size="1" vertical-align="center" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="ECDD" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="DUZP" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="ZAKLAD-1" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="DAN-1" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="ZAKLAD-2" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="DAN-2" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="ZAKLAD-3" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="DAN-3" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="5%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-border-width="2" right-border-width="3" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="KOD-PP" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+					</line>
+					<region name="B1-S">
+						<body>
+							<line>
+								<style width="1%" font-face="arial" font-bold="true" vertical-align="center" top-padding="3" bottom-padding="3">
+									<text value="" />
+								</style>
+								<style width="39%" font-face="arial" font-bold="true" horizontal-align="center" vertical-align="center" left-border-width="3" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="TEXT" />
+								</style>
+								<style width="9%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="ZAKLAD-1" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="9%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" right-border-width="2" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="DAN-1" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="9%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="ZAKLAD-2" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="9%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="DAN-2" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="9%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="ZAKLAD-3" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="9%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" right-border-width="2" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="DAN-3" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="5%" font-face="arial" font-bold="true" horizontal-align="center" vertical-align="center" left-border-width="2" right-border-width="3" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<text value="" />
+								</style>
+								<style width="1%" font-face="arial" font-bold="true" horizontal-align="right" vertical-align="center" top-padding="3" bottom-padding="3">
+									<text value="" />
+								</style>
+							</line>
+						</body>
+					</region>
+				</body>
+				<foot>
+					<line endpage="false" on-each-page="true">
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="98%" height="3mm" font-face="arial" font-size="1" top-border-width="3">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+				</foot>
+			</region>
+			<region name="B2">
+				<head>
+					<line break-page-before="always">
+						<style width="28%" font-face="arial" font-size="1" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="44%" font-face="arial" font-size="3" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="KONTROLNÍ OPIS" />
+						</style>
+						<style width="21%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center">
+							<text value="Pořadové číslo strany / Celkový počet stran" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" border-width="2">
+							<value-of name="" onData="self.value=ROOT.PAGE+' / '+ROOT.PAGES" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="98%" font-face="arial" font-bold="true" vertical-align="center">
+							<text value="B. ODDÍL - Přijatá zdanitelná plnění s místem plnění v tuzemsku" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="98%" font-face="arial" vertical-align="center" bottom-border-width="3">
+							<text value="B. 2. - Přijatá zdanitelná plnění, u kterých příjemce uplatňuje nárok na odpočet daně dle § 73 odst. 1 písm. a) s hodnotou nad 10.000,- Kč včetně daně a všechny přijaté opravy podle § 44 bez ohledu na limit" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="100%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="4%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="3" top-border-width="3" bottom-border-width="3">
+							<text value="Číslo&#xA;řádku" />
+						</style>
+						<style width="8%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="DIČ&#xA;dodavatele" />
+						</style>
+						<style width="19%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Evidenční číslo daňového dokladu" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="DPPD*" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Základ daně 1" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Daň 1" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Základ daně 2" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Daň 2" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Základ daně 3" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Daň 3" />
+						</style>
+						<style width="4%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3" left-padding="2" right-padding="2">
+							<text value="Použitý&#xA;poměr" />
+						</style>
+						<style width="3%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" right-border-width="3" top-border-width="3" bottom-border-width="3" left-padding="0" right-padding="0">
+							<text value="§ 44&#xA;ZDPH" />
+						</style>
+						<style width="1%" font-face="arial" horizontal-align="right" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="4%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="3" top-border-width="2" bottom-border-width="3">
+							<text value="1" />
+						</style>
+						<style width="8%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="2" />
+						</style>
+						<style width="19%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="3" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="4" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="5" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="6" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="7" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="8" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="9" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="10" />
+						</style>
+						<style width="4%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="11" />
+						</style>
+						<style width="3%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" right-border-width="3" top-border-width="2" bottom-border-width="3">
+							<text value="12" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+					</line>
+				</head>
+				<body>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" vertical-align="center" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+						<style width="4%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-border-width="3" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="CIS-RADKU" />
+						</style>
+						<style width="8%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="DIC" />
+						</style>
+						<style width="19%" font-face="arial" font-size="1" vertical-align="center" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="ECDD" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="DUZP" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="ZAKLAD-1" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="DAN-1" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="ZAKLAD-2" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="DAN-2" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="ZAKLAD-3" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="9%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="DAN-3" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="4%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="POUZ-POM" />
+						</style>
+						<style width="3%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" left-border-width="2" right-border-width="3" top-border-width="2" bottom-border-width="2" top-padding="3" bottom-padding="3">
+							<value-of name="INSOL" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+					</line>
+					<region name="B2-S">
+						<body>
+							<line>
+								<style width="1%" font-face="arial" font-bold="true" vertical-align="center" top-padding="3" bottom-padding="3">
+									<text value="" />
+								</style>
+								<style width="37%" font-face="arial" font-bold="true" horizontal-align="center" vertical-align="center" left-border-width="3" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="TEXT" />
+								</style>
+								<style width="9%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="ZAKLAD-1" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="9%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" right-border-width="2" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="DAN-1" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="9%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="ZAKLAD-2" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="9%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="DAN-2" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="9%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="ZAKLAD-3" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="9%" font-face="arial" font-size="1" font-bold="true" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" right-border-width="2" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<value-of name="DAN-3" format="# 0,00;-# 0,00;" onData="cisla()" />
+								</style>
+								<style width="7%" font-face="arial" font-bold="true" horizontal-align="center" vertical-align="center" left-border-width="2" right-border-width="3" top-border-width="3" bottom-border-width="2" top-padding="3" bottom-padding="3">
+									<text value="" />
+								</style>
+								<style width="1%" font-face="arial" font-bold="true" horizontal-align="right" vertical-align="center" top-padding="3" bottom-padding="3">
+									<text value="" />
+								</style>
+							</line>
+						</body>
+					</region>
+				</body>
+				<foot>
+					<line endpage="false" on-each-page="true">
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="98%" height="8mm" font-face="arial" font-size="1" top-border-width="3">
+							<text value="Základ daně/Daň 1 - základní sazba daně, 2 - první snížená sazba daně, 3 - druhá snížená sazba daně&#xA;* Datum povinnosti přiznat daň dle § 21 ZDPH" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+				</foot>
+			</region>
+			<region name="B3">
+				<body>
+					<line>
+						<style width="100%" height="0mm" font-face="arial" font-size="1" top-padding="3" bottom-padding="3">
+							<value-of name="" onData="B3_1=B3.ZAKLAD-1;B3_2=B3.DAN-1;B3_3=B3.ZAKLAD-2;B3_4=B3.DAN-2;B3_5=B3.ZAKLAD-3;B3_6=B3.DAN-3" />
+						</style>
+					</line>
+				</body>
+			</region>
+			<region name="C">
+				<head>
+					<line break-page-before="always">
+						<style width="28%" font-face="arial" font-size="1" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="44%" font-face="arial" font-size="3" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="KONTROLNÍ OPIS" />
+						</style>
+						<style width="21%" font-face="arial" font-size="1" horizontal-align="right" vertical-align="center">
+							<text value="Pořadové číslo strany / Celkový počet stran" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" horizontal-align="center" vertical-align="center" border-width="2">
+							<value-of name="" onData="self.value=ROOT.PAGE+' / '+ROOT.PAGES" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+				</head>
+				<body>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="98%" font-face="arial" font-bold="true" vertical-align="center">
+							<text value="A. ODDÍL - Plnění, u kterých je plátce povinen přiznat daň a uskutečněná plnění v režimu přenesení daňové povinnosti" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="98%" font-face="arial" vertical-align="center" bottom-border-width="3">
+							<text value="A. 5. - Ostatní uskutečněná zdanitelná plnění s povinností přiznat daň dle § 108 odst. 1 písm. a) s hodnotou do 10.000,- Kč včetně daně, nebo plnění,&#xA;u nichž nevznikla povinnost vystavit daňový doklad" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="100%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="2%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="3" top-border-width="3" bottom-border-width="3">
+							<text value="Základ daně 1" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Daň 1" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Základ daně 2" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Daň 2" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Základ daně 3" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" right-border-width="3" top-border-width="3" bottom-border-width="3">
+							<text value="Daň 3" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" horizontal-align="right" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="2%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="3" top-border-width="2" bottom-border-width="3">
+							<text value="1" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="2" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="3" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="4" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="5" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" right-border-width="3" top-border-width="2" bottom-border-width="3">
+							<text value="6" />
+						</style>
+						<style width="7%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="2%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="3" top-border-width="2" bottom-border-width="2">
+							<value-of name="" format="# 0,00;-# 0,00;" onData="self.value=A5_1" onPrint="cisla()" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" border-width="2">
+							<value-of name="" format="# 0,00;-# 0,00;" onData="self.value=A5_2" onPrint="cisla()" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2">
+							<value-of name="" format="# 0,00;-# 0,00;" onData="self.value=A5_3" onPrint="cisla()" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2">
+							<value-of name="" format="# 0,00;-# 0,00;" onData="self.value=A5_4" onPrint="cisla()" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2">
+							<value-of name="" format="# 0,00;-# 0,00;" onData="self.value=A5_5" onPrint="cisla()" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" right-border-width="3" top-border-width="2" bottom-border-width="2">
+							<value-of name="" format="# 0,00;-# 0,00;" onData="self.value=A5_6" onPrint="cisla()" />
+						</style>
+						<style width="7%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="28%" font-face="arial" font-size="1" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="72%" font-face="arial" font-size="1" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="28%" font-face="arial" font-size="1" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="72%" font-face="arial" font-size="1" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="98%" font-face="arial" font-bold="true" vertical-align="center">
+							<text value="B. ODDÍL - Přijatá zdanitelná plnění s místem plnění v tuzemsku" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="98%" font-face="arial" vertical-align="center" bottom-border-width="3">
+							<text value="B. 3. - Přijatá zdanitelná plnění, u kterých příjemce uplatňuje nárok na odpočet daně dle § 73 odst. 1 písm. a) s hodnotoudo 10.000,- Kč včetně daně" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="100%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="2%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="3" top-border-width="3" bottom-border-width="3">
+							<text value="Základ daně 1" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Daň 1" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Základ daně 2" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Daň 2" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" top-border-width="3" bottom-border-width="3">
+							<text value="Základ daně 3" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center" left-border-width="2" right-border-width="3" top-border-width="3" bottom-border-width="3">
+							<text value="Daň 3" />
+						</style>
+						<style width="6%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" horizontal-align="right" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="2%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="3" top-border-width="2" bottom-border-width="3">
+							<text value="1" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="2" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="3" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="4" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" top-border-width="2" bottom-border-width="3">
+							<text value="5" />
+						</style>
+						<style width="15%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" left-border-width="2" right-border-width="3" top-border-width="2" bottom-border-width="3">
+							<text value="6" />
+						</style>
+						<style width="7%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="2%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="3" top-border-width="2" bottom-border-width="2">
+							<value-of name="" format="# 0,00;-# 0,00;" onData="self.value=B3_1" onPrint="cisla()" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" border-width="2">
+							<value-of name="" format="# 0,00;-# 0,00;" onData="self.value=B3_2" onPrint="cisla()" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2">
+							<value-of name="" format="# 0,00;-# 0,00;" onData="self.value=B3_3" onPrint="cisla()" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2">
+							<value-of name="" format="# 0,00;-# 0,00;" onData="self.value=B3_4" onPrint="cisla()" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" top-border-width="2" bottom-border-width="2">
+							<value-of name="" format="# 0,00;-# 0,00;" onData="self.value=B3_5" onPrint="cisla()" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" right-border-width="3" top-border-width="2" bottom-border-width="2">
+							<value-of name="" format="# 0,00;-# 0,00;" onData="self.value=B3_6" onPrint="cisla()" />
+						</style>
+						<style width="7%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="28%" font-face="arial" font-size="1" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="72%" font-face="arial" font-size="1" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="28%" font-face="arial" font-size="1" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="72%" font-face="arial" font-size="1" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+						<style width="98%" font-face="arial" font-bold="true" vertical-align="center" bottom-border-width="3">
+							<text value="C. ODDÍL - Kontrolní řádky na Daňové přiznání k DPH (DaP)" />
+						</style>
+						<style width="1%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="100%" font-face="arial" font-size="1" top-padding="1" bottom-padding="1">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="2%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="15%" font-face="arial" font-bold="true" horizontal-align="center" vertical-align="center" left-border-width="3" top-border-width="3" bottom-border-width="3">
+							<text value="řádek DaP" />
+						</style>
+						<style width="60%" font-face="arial" font-bold="true" horizontal-align="right" vertical-align="center" left-border-width="2" right-border-width="3" top-border-width="3" bottom-border-width="3" right-padding="390tw">
+							<text value="Základ daně" />
+						</style>
+						<style width="21%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="1%" font-face="arial" horizontal-align="right" top-padding="3" bottom-padding="3">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="2%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" left-border-width="3" top-border-width="2" bottom-border-width="2" right-padding="490tw">
+							<text value="1" />
+						</style>
+						<style width="45%" font-face="arial" vertical-align="center" border-width="2" left-padding="290tw">
+							<text value="A.4. + A.5. celkem základy daně u základní sazby DPH" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" right-border-width="3" top-border-width="2" bottom-border-width="2">
+							<value-of name="ZAKLAD-1" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="22%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="2%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" left-border-width="3" top-border-width="2" bottom-border-width="2" right-padding="490tw">
+							<text value="2" />
+						</style>
+						<style width="45%" font-face="arial" vertical-align="center" border-width="2" left-padding="290tw">
+							<text value="A.4. + A.5. celkem základy daně u první snížené a druhé snížené sazby DPH" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" right-border-width="3" top-border-width="2" bottom-border-width="2">
+							<value-of name="ZAKLAD-2" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="22%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="2%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" left-border-width="3" top-border-width="2" bottom-border-width="2" right-padding="490tw">
+							<text value="40" />
+						</style>
+						<style width="45%" font-face="arial" vertical-align="center" border-width="2" left-padding="290tw">
+							<text value="B.2. + B.3. celkem základy daně u základní sazby DPH" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" right-border-width="3" top-border-width="2" bottom-border-width="2">
+							<value-of name="ZAKLAD-3" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="22%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="2%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" left-border-width="3" top-border-width="2" bottom-border-width="2" right-padding="490tw">
+							<text value="41" />
+						</style>
+						<style width="45%" font-face="arial" vertical-align="center" border-width="2" left-padding="290tw">
+							<text value="B.2. + B.3. celkem základy daně u první snížené a druhé snížené sazby DPH" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" right-border-width="3" top-border-width="2" bottom-border-width="2">
+							<value-of name="ZAKLAD-4" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="22%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="2%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" left-border-width="3" top-border-width="2" bottom-border-width="2" right-padding="490tw">
+							<text value="25" />
+						</style>
+						<style width="45%" font-face="arial" vertical-align="center" border-width="2" left-padding="290tw">
+							<text value="A.1 celkem základy daně" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" right-border-width="3" top-border-width="2" bottom-border-width="2">
+							<value-of name="ZAKLAD-5" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="22%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="2%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" left-border-width="3" top-border-width="2" bottom-border-width="2" right-padding="490tw">
+							<text value="10" />
+						</style>
+						<style width="45%" font-face="arial" vertical-align="center" border-width="2" left-padding="290tw">
+							<text value="B.1 celkem základy daně u základní sazby DPH" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" right-border-width="3" top-border-width="2" bottom-border-width="2">
+							<value-of name="ZAKLAD-6" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="22%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="2%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" left-border-width="3" top-border-width="2" bottom-border-width="2" right-padding="490tw">
+							<text value="11" />
+						</style>
+						<style width="45%" font-face="arial" vertical-align="center" border-width="2" left-padding="290tw">
+							<text value="B.1 celkem základy daně u první snížené a druhé snížené sazby DPH" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" right-border-width="3" top-border-width="2" bottom-border-width="2">
+							<value-of name="ZAKLAD-7" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="22%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="1%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="2%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" left-border-width="3" top-border-width="2" bottom-border-width="3" right-padding="490tw">
+							<text value="3+4+5+6+9+12+13" />
+						</style>
+						<style width="45%" font-face="arial" vertical-align="center" left-border-width="2" right-border-width="2" top-border-width="2" bottom-border-width="3" left-padding="290tw">
+							<text value="A.2 celkem základy daně" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" vertical-align="center" format="# 0,00;-# 0,00;" left-border-width="2" right-border-width="3" top-border-width="2" bottom-border-width="3">
+							<value-of name="ZAKLAD-8" format="# 0,00;-# 0,00;" onData="cisla()" />
+						</style>
+						<style width="22%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+							<text value="" />
+						</style>
+					</line>
+					<line>
+						<style width="28%" font-face="arial" font-size="1" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+						<style width="72%" font-face="arial" font-size="1" font-bold="true" horizontal-align="center" vertical-align="center">
+							<text value="" />
+						</style>
+					</line>
+				</body>
+			</region>
+			<region name="MASKA-REF">
+				<body>
+					<line break-page-before="always">
+						<style width="100%" font-size="1">
+							<text value="" />
+						</style>
+					</line>
+					<region name="MASKA-RADEK">
+						<body>
+							<line>
+								<style width="100%" font-face="courier" font-size="125tw" font-color="red">
+									<value-of name="RADEK" />
+								</style>
+							</line>
+						</body>
+					</region>
+				</body>
+			</region>
+		</body>
+		<foot>
+			<line on-each-page="true">
+				<style width="25%" font-face="arial" font-size="1" font-italic="true" ellipsis-style="cut" multiline="false" top-border-width="1">
+					<value-of name="" onData="self.value=''+KH1.DATUM+' '+KH1.CAS" />
+				</style>
+				<style width="50%" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" multiline="false" top-border-width="1">
+					<value-of name="" onData="self.value='Zpracováno systémem  '+KH1.VERZE-GINIS+'  GORDIC spol. s  r. o.'" />
+				</style>
+				<style width="25%" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" multiline="false" top-border-width="1">
+					<value-of name="" onData="self.value='strana '+ROOT.PAGE+' / '+ROOT.PAGES" />
+				</style>
+			</line>
+		</foot>
+	</region>
+</format>

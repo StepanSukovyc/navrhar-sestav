@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="windows-1250"?>
+
+<format type="grr" xmlns="http://www.gordic.cz/TR/alf/1.3/">
+
+	<info
+		licence_od="0000"
+		licence_pro="S006"
+		type_cust="L"
+		ixs_xme="0000ALX0AB27"
+		xmeta_ver="1"
+		xmeta_subver_min="6"
+		nazev="MAJINO6X Inventurní soupis dle položky středisko ke dni - tříděný dle EVS,BUD,MIS,SUAUevi - MUDO"
+		ixs_alv="0000ALV0322J"
+		allowed_output="htm,xls,doc,frm"
+		ixs_frm="0000ALF016M5"
+		maker="0431"
+		dat_modif="20061115"
+		rokmes_od="199801"
+		rokmes_do="999913"
+	/>
+
+<script><![CDATA[
+def sjoin(seznam):
+	ret=''
+	for s in seznam:
+		ret = ret + s + """
+"""
+	return ret
+def djoin(seznam):
+	ret=''
+	for s in seznam:
+		ret = ret + s.format('# 0,00') + """
+"""
+	return ret
+]]></script>
+
+	<paper-setting paper-width="297mm" paper-height="210mm"/>
+	<region name="VYBER">
+		<head>
+			<line on-each-page="true" endpage="false">
+				<style width="18%" bottom-border-width="1" font-face="arial" font-size="1" font-italic="true">
+					<value-of name="" onData="self.value=&apos;Licence: &apos;+ &apos;: &apos;+ VYBER.LIC"/>
+				</style>
+				<style width="82%" bottom-border-width="1" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+					<value-of name="" onData="self.value=&apos;IDENTIFIKACE SESTAVY / &apos; +format.info[&apos;ixs_frm&apos;] +&apos;  (&apos;+format.info[&apos;dat_modif&apos;]+&apos;)&apos;"/>
+				</style>
+			</line>
+			<line on-each-page="true">
+				<style width="18%">
+					<image file="znak-m.bmp" image-width="25mm" image-height="25mm"/>
+				</style>
+				<style width="55%" font-face="arial" font-size="4" font-bold="true">
+					<text value="INVENTURNÍ SOUPIS MAJETKU DLE POLOŽKY STŘEDISKO K DATU "/>
+				</style>
+				<style width="27%" font-face="arial" font-size="3" font-bold="true">
+					<value-of name="" onData="self.value=VYBER.DAT_OD"/>
+				</style>
+			</line>
+			<line on-each-page="true">
+				<style width="18%" font-face="arial">
+					<text value=""/>
+				</style>
+				<style width="7%" font-face="arial">
+					<text value="IČO:"/>
+				</style>
+				<style width="75%" font-face="arial" font-size="3" font-bold="true">
+					<value-of name="" onData="self.value=VYBER.ICO+ &apos; - &apos;+ VYBER.ICO_NAZEV"/>
+				</style>
+			</line>
+			<line on-each-page="true">
+				<style width="18%" font-face="arial">
+					<text value=""/>
+				</style>
+				<style width="7%" font-face="arial">
+					<text value=""/>
+				</style>
+				<style width="74%" font-face="arial" font-size="3" font-bold="true">
+					<value-of name="ICO_ADRESA"/>
+				</style>
+				<style width="1%" font-face="arial" font-size="3" font-bold="true">
+					<text value=""/>
+				</style>
+			</line>
+			<line on-each-page="true">
+				<style width="18%" font-face="arial">
+					<text value=""/>
+				</style>
+				<style width="7%" font-face="arial">
+					<text value="NS:"/>
+				</style>
+				<style width="75%" font-face="arial" font-size="3" font-bold="true">
+					<value-of name="" onData="self.value=VYBER.NS+ &apos; - &apos;+ VYBER.NS_NAZEV"/>
+				</style>
+			</line>
+			<line on-each-page="true">
+				<style width="100%" left-border-width="1" right-border-width="1" top-border-width="1">
+					<text value=""/>
+				</style>
+			</line>
+		</head>
+		<body>
+			<region name="KARTA" order-by="NKS,EVIDSTREDISKO,BUDOVA,SEG_BUDOVA,MISTNOST,SUAUEVIDENCE,INVENTCISLO">
+			   <head>
+				<line>
+					<style width="15%" left-border-width="1" font-face="arial">
+						<text value="Budova:"/>
+					</style>
+					<style width="10%" font-face="arial" font-bold="true">
+						<value-of name="" onData="self.value=KARTA.BUDOVA"/>
+					</style>
+					<style width="75%" right-border-width="1" font-face="arial" font-bold="true">
+						<value-of name="" onData="self.value=KARTA.BUDOVA_NAZ"/>
+					</style>
+				</line>
+				<line>
+					<style width="15%" left-border-width="1" bottom-border-width="1" font-face="arial">
+						<text value="Středisko:"/>
+					</style>
+					<style width="10%" bottom-border-width="1" font-face="arial" font-bold="true">
+						<value-of name="" onData="self.value=KARTA.EVIDSTREDISKO"/>
+					</style>
+					<style width="75%" right-border-width="1" bottom-border-width="1" font-face="arial" font-bold="true">
+						<value-of name="" onData="self.value=KARTA.STREDISKO_NAZ"/>
+					</style>
+				</line>  
+				<line>
+					<style width="100%" left-border-width="1" right-border-width="1">
+						<text value=""/>
+					</style>
+				</line>
+				<line>
+					<style width="1%" left-border-width="1">
+						<text value=""/>
+					</style>
+					<style width="11%" font-bold="true">
+						<text value="Inventární číslo"/>
+					</style>
+					<style width="31%" font-bold="true">
+						<text value="Technický název"/>
+					</style>
+					<style width="4%" font-bold="true">
+						<text value="SuAu "/>
+					</style>
+					<style width="6%" font-bold="true">
+						<text value="Středisko"/>
+					</style>
+					<style width="6%" font-bold="true">
+						<text value="Budova"/>
+					</style>
+					<style width="6%" font-bold="true">
+						<text value="Místnost"/>
+					</style>
+					<style width="35%" right-border-style="double" right-border-width="1" font-bold="true" horizontal-align="right">
+						<text value="Pořizovací cena"/>
+					</style>
+				</line>			   
+			   </head>
+			   
+				<group by="NKS,EVIDSTREDISKO">
+					<group by="NKS,EVIDSTREDISKO,BUDOVA">
+						<head>
+							<line>
+								<style width="15%" left-border-width="1" font-face="arial">
+									<text value="Budova:"/>
+								</style>
+								<style width="10%" font-face="arial" font-bold="true">
+									<value-of name="" onData="self.value=KARTA.BUDOVA"/>
+								</style>
+								<style width="75%" right-border-style="double" right-border-width="1" font-face="arial" font-bold="true">
+									<value-of name="" onData="self.value=KARTA.BUDOVA_NAZ;bud_rekapitulace={}"/>
+								</style>
+							</line>
+							<line>
+								<style width="100%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+									<text value=""/>
+								</style>
+							</line>
+						</head>
+						<group by="NKS,EVIDSTREDISKO,BUDOVA,SEG_BUDOVA,MISTNOST">
+							<head>
+								<line>
+									<style width="15%" left-border-width="1" font-face="arial">
+										<text value="Mistnost:"/>
+									</style>
+									<style width="10%" font-face="arial" font-bold="true">
+										<value-of name="" onData="self.value=KARTA.MISTNOST"/>
+									</style>
+									<style width="75%" right-border-style="double" right-border-width="1" font-face="arial" font-bold="true">
+										<value-of name="" onData="self.value=KARTA.MISTNOST_NAZ"/>
+									</style>
+								</line>
+								<line>
+									<style width="100%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+										<text value=""/>
+									</style>
+								</line>
+							</head>
+							<group by="NKS,EVIDSTREDISKO,BUDOVA,SEG_BUDOVA,MISTNOST,SUAUEVIDENCE">
+								<head>
+									<line>
+										<style width="15%" left-border-width="1">
+											<text value="Skupina:"/>
+										</style>
+										<style width="85%" font-bold="true">
+											<value-of name="SUAUEVIDENCE"/>
+										</style>
+									</line>
+								</head>
+								<body>
+									<line>
+										<style width="1%" left-border-width="1">
+											<value-of name="SOUPRAVAFLAG"/>
+										</style>
+										<style width="11%">
+											<value-of name="INVENTCISLO"/>
+										</style>
+										<style width="31%">
+											<value-of name="TECHNAZEV"/>
+										</style>
+										<style width="4%">
+											<value-of name="SUAUEVIDENCE"/>
+										</style>
+										<style width="6%">
+											<value-of name="EVIDSTREDISKO"/>
+										</style>
+										<style width="6%">
+											<value-of name="BUDOVA"/>
+										</style>
+										<style width="20.5%">
+											<value-of name="PORIZCENA"/>
+										</style>
+										<style width="20.5%" horizontal-align="right">
+											<value-of name="PORIZCENA" 
+												onData="if bud_rekapitulace.has_key(KARTA.SUAUEVIDENCE): bud_rekapitulace[KARTA.SUAUEVIDENCE]=bud_rekapitulace[KARTA.SUAUEVIDENCE]+KARTA.PORIZCENA&#10;else: bud_rekapitulace[KARTA.SUAUEVIDENCE]=Decimal(str(KARTA.PORIZCENA))&#10;self.value=str(bud_rekapitulace)"/>
+											
+										</style>
+									</line>
+									<!--
+										<line break-page-before="avoid">
+										<style width="100%" left-border-width="1" right-border-width="1">
+										<text value=""/>
+										</style>
+										</line> 
+									-->
+								</body>
+								<foot>
+									<line>
+										<style width="100%" left-border-width="1" right-border-width="1">
+											<text value=""/>
+										</style>
+									</line>
+									<line>
+										<style width="100%" left-border-width="1" right-border-width="1" top-border-width="1">
+											<text value=""/>
+										</style>
+									</line>
+									<line>
+										<style width="15%" left-border-width="1" font-bold="true">
+											<text value="Celkem za Su/AU:"/>
+										</style>
+										<style width="20%" font-bold="true">
+											<value-of name="SUAUEVIDENCE"/>
+										</style>
+										<style width="15%" left-border-width="1" font-bold="true" horizontal-align="right">
+											<text value="Středisko:"/>
+										</style>
+										<style width="20%" font-bold="true">
+											<value-of name="EVIDSTREDISKO"/>
+										</style>
+										<style width="30%" font-bold="true" horizontal-align="right">
+											<value-of name="SUM(PORIZCENA)" format="# #,00"/>
+										</style>
+									</line>
+									<line>
+										<style width="15%" left-border-width="1" font-bold="true">
+											<text value="Počet položek:"/>
+										</style>
+										<style width="20%" font-bold="true">
+											<value-of name="SUM(MNOZSTVI)" format="# #,000"/>
+										</style>
+										<style width="65%" right-border-width="1">
+											<text value=""/>
+										</style>
+									</line>
+								</foot>
+								<!--  konec suau -->
+							</group>
+							<!--  konec misnost -->
+						</group>
+						<!--  sumář za budovu -->
+						<foot>
+							<line break-page-before="none">
+								<style width="100%" left-border-width="1" right-border-width="1">
+									<text value=""/>
+								</style>
+							</line>
+							<line>
+								<style width="100%" left-border-width="1" right-border-width="1" top-border-width="1">
+									<text value=""/>
+								</style>
+							</line>
+							<line>
+								<style width="15%" left-border-width="1" font-bold="true">
+									<text value="Celkem za Budovu:"/>
+								</style>
+								<style width="20%" font-bold="true">
+									<value-of name="BUDOVA"/>
+								</style>
+								<style width="15%" left-border-width="1" font-bold="true" horizontal-align="right">
+									<text value="Středisko:"/>
+								</style>
+								<style width="20%" font-bold="true">
+									<value-of name="EVIDSTREDISKO"/>
+								</style>
+								<style width="30%" font-bold="true" horizontal-align="right">
+									<value-of name="SUM(PORIZCENA)" format="# #,00"/>
+								</style>
+							</line>
+							<line>
+								<style width="15%" left-border-width="1" font-bold="true">
+									<text value="Počet položek:"/>
+								</style>
+								<style width="20%" font-bold="true">
+									<value-of name="SUM(MNOZSTVI)" format="# #,000"/>
+								</style>
+								<style width="65%" right-border-width="1">
+									<text value=""/>
+								</style>
+							</line>
+							<line>
+								<style width="100%" left-border-width="1" right-border-width="1">
+									<text value=""/>
+								</style>
+							</line>
+							<!--  rekapitulace za Budovu po SuAu -->
+							<line>
+								<style width="50%" left-border-width="1" right-border-width="1">
+									<value-of name="" onData="self.value=sjoin(sorted(bud_rekapitulace.keys()))"/>
+								</style>
+								<style width="50%" left-border-width="1" right-border-width="1">
+									<value-of name="" onData="self.value=djoin([bud_rekapitulace[k] for k in sorted(bud_rekapitulace.keys())])"/>
+								</style>
+							</line>
+
+							
+							<line>
+								<style width="60%" left-border-width="1">
+									<text value="Započato dne :"/>
+								</style>
+								<style width="40%" right-border-width="1">
+									<text value="Předseda a členové DIK"/>
+								</style>
+							</line>
+							<line>
+								<style width="100%" left-border-width="1" right-border-width="1">
+									<text value="Skončeno dne:"/>
+								</style>
+							</line>
+							<line>
+								<style width="40%" left-border-width="1" right-border-width="1">
+									<text value=""/>
+								</style>
+								<style width="20%" left-border-width="1" right-border-width="1">
+									<text value="................................................."/>
+								</style>
+								<style width="20%" left-border-width="1" right-border-width="1">
+									<text value="................................................."/>
+								</style>
+								<style width="20%" left-border-width="1" right-border-width="1">
+									<text value="................................................."/>
+								</style>
+							</line>
+							<line>
+								<style width="100%" left-border-width="1">
+									<text value="Povrzuji, že fyzická inventura se konala za mé účatsi a že jsem žádný majetek nezatajil"/>
+								</style>
+							</line>
+							<line>
+								<style width="100%" left-border-width="1" right-border-width="1">
+									<text value=""/>
+								</style>
+							</line>
+							<line>
+								<style width="80%" left-border-width="1">
+									<text value="Místo vytovení:"/>
+								</style>
+								<style width="20%" right-border-width="1">
+									<text value="Odpovědný pracovník"/>
+								</style>
+							</line>
+							<line>
+								<style width="100%" left-border-width="1">
+									<text value="Datum vytovení:"/>
+								</style>
+							</line>
+							<line>
+								<style width="100%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+									<text value=""/>
+								</style>
+							</line>
+							<line break-page-after="true">
+								<style width="80%" left-border-width="1" right-border-width="1">
+									<text value=""/>
+								</style>
+								<style width="20%" left-border-width="1" right-border-width="1">
+									<text value="................"/>
+								</style>
+							</line>
+						</foot>
+						<!--  konec budova -->
+					</group>
+					<!--  konec středisko -->
+				</group>
+			<!--  region KARTA -->		
+			<!--  součet za stránku -->
+			
+			<foot>
+				<line on-each-page="true">
+					<style width="15%" left-border-width="1" font-bold="true">
+						<text value="Součet za stranu:"/>
+					</style>
+					<style width="20%" font-bold="true">
+						<value-of name="ROOT.PAGE"/>
+					</style>
+					<style width="65%" font-bold="true" horizontal-align="right">
+						<value-of name="PAGE-SUM(KARTA.PORIZCENA)" format="# #,00"/>
+					</style>
+				</line>
+			</foot>
+			
+			</region>
+		</body>
+	<!--  region VYBER -->	
+	</region>
+</format>

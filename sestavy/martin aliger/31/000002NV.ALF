@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+#ZMENY
+-17.08.2013 - Export do MS Excel doplněn o poznámku
+-17.08.2013 - oprava přiřazení odpisových hodnot do proměnných
+#ZMENY
+-->
+<format type="oxs" xmlns="http://www.gordic.cz/TR/alf/1.4/">
+	<info type_cust="Z" />
+	<info ixs_xme="0000ALX0AB27" />
+	<info xmeta_ver="1" />
+	<info xmeta_subver_min="34" />
+	<info nazev="Přehled evidovaného majetku  včetně odpisových údajů - výstup do MS Excel" />
+	<info allowed_output="xls" />
+	<info ixs_alv="0000ALV02HXO,0000ALV04ZVQ" />
+	<info ixs_frm="0000ALF02NV8" />
+	<info maker="0431" />
+	<info dat_modif="20171201192340" />
+	<info rokmes_od="199801" />
+	<info rokmes_do="999913" />
+	<template filename="sablona.xlsx" />
+	<script>
+<![CDATA[
+sum_vst_cena=Decimal(0)
+sum_opravka=Decimal(0)
+sum_zust_cena=Decimal(0)
+skupina_odp=''
+doba_uziti=Decimal(0)
+doba_uziti_zbyv=Decimal(0)
+sum_transfer_odp=Decimal(0)
+sum_transfer_opr=Decimal(0)
+def nula():
+ global sum_vst_cena; sum_vst_cena=Decimal(0)
+ global sum_opravka; sum_opravka=Decimal(0)
+ global sum_zust_cena; sum_zust_cena=Decimal(0)
+ global skupina_odp; skupina_odp=''
+ global doba_uziti; doba_uziti=Decimal(0)
+ global doba_uziti_zbyv; doba_uziti_zbyv=Decimal(0)
+ global sum_transfer_odp; sum_transfer_odp=Decimal(0)
+ global sum_transfer_opr; sum_transfer_opr=Decimal(0)
+ return 0
+]]>
+</script>
+	<region name="VYBER">
+		<body>
+			<region name="KARTA" filter-out="nula()">
+				<head>
+					<value-of name="VYBER.LIC" cell="A15" />
+				</head>
+				<body>
+					<block/>
+					<region name="ODPIS" filter-out="ODPIS.NAZEV!='U'">
+						<body>
+                <value-of name="ODPIS.VSTCENA" cell="AS18" guid="5f36073c-2d78-44c8-9656-cfc8274ada7d" onData="sum_vst_cena=self.value;" />
+                <value-of name="ODPIS.OPRAVKA" cell="AT18" guid="c29c5da4-d075-43f7-94f3-f9495a310de0" onData="sum_opravka=self.value;" />
+                <value-of name="ODPIS.ZUSTCENA" cell="AV18" guid="2c3be8a5-0f0c-4800-b34f-242301cefdac" onData="sum_zust_cena=self.value;" />
+                <value-of name="ODPIS.SKUPINAODP" cell="CK18" guid="8246cd4f-6924-4325-9860-fbbb173ab11b" onData="skupina_odp=self.value;" />
+                <value-of name="ODPIS.DOBAUZITI" cell="CL18" guid="fba042be-ae35-43fb-8418-2f8e2fe9d273" onData="doba_uziti=self.value;" />
+                <value-of name="ODPIS.DOBAUZITIZBYV" cell="CM18" guid="97d0d73f-eec8-4cc0-b0be-2ccf605a9d15" onData="doba_uziti_zbyv=self.value;" />
+                <value-of name="ODPIS.TRANSFERODP" cell="AX18" guid="1f6a8014-cced-4f2a-afb9-397846acf7fc" onData="sum_transfer_odp=self.value;" />
+                <value-of name="ODPIS.TRANSFEROPR" cell="BQ18" guid="6560cd52-e819-4b3e-9273-12878afc18e2" onData="sum_transfer_opr=self.value;" />
+						</body>
+					</region>
+					<value-of name="SKUPINA" cell="A20" />
+					<value-of name="STAV" cell="B20" />
+					<value-of name="TYP_EVI" cell="C20" />
+					<value-of name="DRU_EVI" cell="D20" />
+					<value-of name="ZPU_EVI" cell="E20" />
+					<value-of name="DRU_MAJ" cell="F20" />
+					<value-of name="INVENTCISLO" cell="G20" />
+					<value-of name="MATCISLO" cell="H20" />
+					<value-of name="EVIDCISLO" cell="I20" />
+					<value-of name="VYROBCISLO" cell="J20" />
+					<value-of name="SERCISLO" cell="K20" />
+					<value-of name="SARZE" cell="L20" />
+					<value-of name="ROKVYROBY" cell="M20" />
+					<value-of name="SKP" cell="N20" />
+					<value-of name="NAZEV" cell="O20" />
+					<value-of name="TECHNAZEV" cell="P20" />
+					<value-of name="DATPORIZENI" cell="Q20" />
+					<value-of name="DATZARAZENI" cell="R20" />
+					<value-of name="DATVYRAZENI" cell="S20" />
+					<value-of name="DATZAUCTOVANI" cell="T20" />
+					<value-of name="NKS" cell="U20" />
+					<value-of name="TRIDA" cell="V20" />
+					<value-of name="EVIDSTREDISKO" cell="W20" />
+					<value-of name="objekt" cell="X20" />
+					<value-of name="objekt_txt" cell="Y20" />
+					<value-of name="BUDOVA" cell="Z20" />
+					<value-of name="BUDOVA_NAZ" cell="AA20" />
+					<value-of name="SEG_BUDOVA" cell="AB20" />
+					<value-of name="SEGMENT_NAZ" cell="AC20" />
+					<value-of name="MISTNOST" cell="AD20" />
+					<value-of name="MISTNOST_NAZ" cell="AE20" />
+					<value-of name="REFERAT" cell="AF20" />
+					<value-of name="ZODPOVIDA" cell="AG20" />
+					<value-of name="SUAUPORIZENI" cell="AH20" />
+					<value-of name="SUAUEVIDENCE" cell="AI20" />
+					<value-of name="SUAUOPRAVKY" cell="AJ20" />
+					<value-of name="MNOZSTVI" cell="AK20" />
+					<value-of name="PORIZCENA" cell="AL20" />
+					<value-of name="DPH" cell="AM20" />
+					<value-of name="CENASDPH" cell="AN20" />
+					<value-of name="AKCE" cell="AO20" />
+					<value-of name="SOUPRAVAFLAG" cell="AP20" />
+					<value-of name="SOUBOR_NAZEV" cell="AQ20" />
+					<value-of name="SOUBOR_INVCIS" cell="AR20" />
+					<value-of name="lhuta_zaruka" cell="AS20" />
+					<value-of name="KODPORIZENI" cell="AT20" />
+					<value-of name="KODPORIZENI_TEXT" cell="AU20" />
+					<value-of name="KODVYUZITI" cell="AV20" />
+					<value-of name="KODVYUZITI_TEXT" cell="AW20" />
+					<value-of name="KODVYRAZENI" cell="AX20" />
+					<value-of name="stat_puvod" cell="AY20" />
+					<value-of name="ixs_esu_vyr_ICO" cell="AZ20" />
+					<value-of name="ixs_esu_vyr_NAZ" cell="BA20" />
+					<value-of name="ixs_esu_vyr_ULI" cell="BB20" />
+					<value-of name="ixs_esu_vyr_MES" cell="BC20" />
+					<value-of name="ixs_esu_vyr_PSC" cell="BD20" />
+					<value-of name="ixs_esu_dod_ICO" cell="BE20" />
+					<value-of name="ixs_esu_dod_NAZ" cell="BF20" />
+					<value-of name="ixs_esu_dod_ULI" cell="BG20" />
+					<value-of name="ixs_esu_dod_MES" cell="BH20" />
+					<value-of name="ixs_esu_dod_PSC" cell="BI20" />
+					<value-of name="ixs_esu_ser_ICO" cell="BJ20" />
+					<value-of name="ixs_esu_ser_NAZ" cell="BK20" />
+					<value-of name="ixs_esu_ser_ULI" cell="BL20" />
+					<value-of name="ixs_esu_ser_MES" cell="BM20" />
+					<value-of name="ixs_esu_ser_PSC" cell="BN20" />
+					<value-of name="typ_maj" cell="BO20" />
+					<value-of name="ktg_zar" cell="BP20" />
+					<value-of name="rozmer_l" cell="BQ20" />
+					<value-of name="rozmer_w" cell="BR20" />
+					<value-of name="rozmer_h" cell="BS20" />
+					<value-of name="hmotnost" cell="BT20" />
+					<value-of name="prev_stav" cell="BU20" />
+					<value-of name="mobilita" cell="BV20" />
+					<value-of name="trida_bezp" cell="BW20" />
+					<value-of name="riziko_por" cell="BX20" />
+					<value-of name="C_PORIZ" cell="BY20" />
+					<value-of name="C_REAL" cell="BZ20" />
+					<value-of name="C_OPR_POL" cell="CA20" />
+					<value-of name="C_DOTACE" cell="CB20" />
+					<value-of name="gps_sirka" cell="CC20" />
+					<value-of name="gps_delka" cell="CD20" />
+					<value-of name="EXT_1_ZKR" cell="CE20" />
+					<value-of name="EXT_2_ZKR" cell="CF20" />
+					<value-of name="EXT_3_ZKR" cell="CG20" />
+
+            <value-of name="KARTA.PORIZCENA" cell="CH20" guid="4c1249cf-2bdc-4ef1-8a95-db7bce845506" onData="self.value=sum_vst_cena" />
+            <value-of name="KARTA.PORIZCENA" cell="CI20" guid="1fc84d2f-f90d-49ef-a170-00b3b5167a7a" onData="self.value=sum_opravka" />
+            <value-of name="KARTA.PORIZCENA" cell="CJ20" guid="945fa85c-9148-41fe-8b10-fcf72aa88928" onData="self.value=sum_zust_cena" />
+            <value-of name="KARTA.SKP" cell="CK20" guid="2826a0e0-1382-4ad5-92ba-d5cb16b2070e" onData="self.value=skupina_odp" />
+            <value-of name="KARTA.ROKVYROBY" cell="CL20" guid="5bc41b29-e644-4c21-8310-47ddd28d3cf9" onData="self.value=doba_uziti" />
+            <value-of name="KARTA.ROKVYROBY" cell="CM20" guid="f417df93-6942-4b7d-97fd-e7d1e26581b7" onData="self.value=doba_uziti_zbyv" />
+            <value-of name="KARTA.PORIZCENA" cell="CN20" guid="eaf534ea-7a6f-4a77-84c0-3ac00e838e7a" onData="self.value=sum_transfer_odp" />
+            <value-of name="KARTA.PORIZCENA" cell="CO20" guid="fbe1b83e-7289-4905-b355-e4d53a224ca8" onData="self.value=sum_transfer_opr" />
+					
+					<value-of name="C_DPH_odpocet" cell="CP20" />
+					<value-of name="POZNAMKA" cell="CQ20" />
+				</body>
+			</region>
+		</body>
+	</region>
+</format>

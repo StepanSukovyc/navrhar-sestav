@@ -1,0 +1,451 @@
+<?xml version="1.0" encoding="windows-1250"?>
+
+<!--
+	#ZMENY
+	N*27.01.2011.1- vytvoření nového formátu
+	#ZMENY
+-->
+
+<format type="grr" xmlns="http://www.gordic.cz/TR/alf/1.3/">
+
+	<info
+		ixs_xme="0000ALX0AVI3"
+		xmeta_ver="1"
+		xmeta_subver_min="1"
+		nazev="Financovani"
+		format="01"
+		ixs_alv="0000ALV04JM3"
+		allowed_output="htm,xls,doc,frm"
+		ixs_frm="0000ALF02RHE"
+		maker="0212"
+		last_modif="201101271416"
+		rokmes_od="201001"
+		rokmes_do="299999"
+	/>
+
+	<paper-setting paper-width="297mm" paper-height="210mm" left-margin="10mm" right-margin="10mm" top-margin="10mm" bottom-margin="15mm"/>
+
+<script><![CDATA[
+# -------------------------------------------  
+# funkce pro rozpocitani dynamickych sirek
+# -------------------------------------------  
+def SpocitejSirky(sirky,delka,poradi):
+  celkem_delka=0;
+  
+  #zjisteni kompletni sirky textu
+  i1=0;
+  for i in delka:
+    celkem_delka=celkem_delka+i;
+    i1=i1+1;
+    
+  pocetdelka=i1-1;
+
+  i1=0;
+  celkem_delka2=100;
+  minporadi=0;
+  max=1;
+  for i in delka:
+    if i>0:
+      subsirka=Decimal(str(round(i/celkem_delka,4)*10000))/100;
+      if pocetdelka+1==i1:
+        subsirka=Decimal(celkem_delka2);
+        celkem_delka2=0;
+      else:
+        celkem_delka2=celkem_delka2-subsirka;
+      if i1<15:
+        #tohle jsou polozky ucetni vety a ty musi byt podle poradi...
+        sirky[int(poradi[i1])-1]=subsirka
+      else:
+        sirky[i1]=subsirka;
+    i1=i1+1;
+
+  # ted se pokusim seskupit polozky bez nul
+  nuly=0;
+  koncnuly=-1;
+  if(pocetdelka>=14):
+    max=14;
+  else:
+    max=pocetdelka-1
+  while nuly<>koncnuly:
+    i1=0;
+    nuly=0;
+    koncnuly=0;
+    while i1<max:
+      if sirky[i1]==0:
+        sirky[i1]=sirky[i1+1];
+        sirky[i1+1]=Decimal(0);
+      if sirky[i1]==0:
+        koncnuly=koncnuly+1
+        nuly=nuly+1
+      else:
+        koncnuly=0;
+      i1=i1+1
+
+  return ""
+
+# -------------------------------------------  
+# funkce pro prohozeni ucetnich polozek
+# -------------------------------------------  
+def ProhodUCTPol(poradi,polozky):
+
+  minporadi=0;
+  pocet=0;
+  polozky2 = [];
+  i=0
+  while i<15:
+    polozky2.append("");
+    i=i+1;
+  
+  while pocet<15:
+    i=0;
+    while i<15:
+      if poradi[i]==pocet+1:
+        polozky2[minporadi]=polozky[i];
+        minporadi=minporadi+1;
+        break;
+      i=i+1;
+    pocet=pocet+1;
+
+  i=0    
+  while i<minporadi:
+    polozky[i]=polozky2[i];
+    i=i+1
+    
+  while minporadi<15:
+    polozky[minporadi]="";
+    minporadi=minporadi+1
+
+  return ""
+]]></script>
+
+	<region name="FINANCOVANI">
+		<head>
+			<line on-each-page="true" endpage="false">
+				<style width="18%" bottom-border-width="1" font-face="arial" font-size="1" font-italic="true">
+					<value-of name="" onData="self.value=&apos;Licence: &apos;+FINANCOVANI.LIC"/>
+				</style>
+				<style width="82%" bottom-border-width="1" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+					<value-of name="" onData="self.value=FINANCOVANI.FORMAT+&apos; / &apos; +format.info[&apos;format&apos;] +&apos;  (&apos;+FINANCOVANI.VERZE+&apos; / &apos; +format.info[&apos;last_modif&apos;]+&apos;)&apos;"/>
+				</style>
+			</line>
+		</head>
+		<body>
+			<region name="FIN-HLAVICKA">
+				<head>
+					<line on-each-page="true">
+						<style width="18%" font-face="arial">
+							<text value=""/>
+						</style>
+						<style width="82%" font-face="arial" font-size="5" font-bold="true">
+							<text value="Přehled financování"/>
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="2%" font-face="arial">
+							<text value=""/>
+						</style>
+						<style width="16%">
+							<!-- image file="znak-m.bmp" image-width="25mm" image-height="25mm"/-->
+						</style>
+						<style width="82%" font-face="arial" font-bold="true">
+							<value-of name="REZIM"/>
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="18%" font-face="arial">
+							<text value=""/>
+						</style>
+						<style width="7%" font-face="arial" vertical-align="center">
+							<text value="Období:"/>
+						</style>
+						<style width="75%" font-face="arial" font-size="3" font-bold="true">
+							<value-of name="" onData="self.value=&apos; - Financování &apos;"/>
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="18%" font-face="arial">
+							<text value=""/>
+						</style>
+						<style width="7%" font-face="arial">
+							<text value="IČO:"/>
+						</style>
+						<style width="75%" font-face="arial" font-size="3" font-bold="true">
+							<value-of name="X-ICO"/>
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="18%" font-face="arial" font-size="5">
+							<text value=""/>
+						</style>
+						<style width="7%" font-face="arial">
+							<text value="Název:"/>
+						</style>
+						<style width="75%" font-face="arial" font-size="3" font-bold="true">
+						</style>
+					</line>
+					<line>
+						<style width="100%">
+							<text value=""/>
+						</style>
+					</line>
+				</head>
+				<body>
+				<region name="HLAV-SNS">
+					<body>
+						<line on-each-page="true" endpage="false">
+							<style width="18%" font-face="arial">
+								<text value=""/>
+							</style>
+							<style width="7%" font-face="arial">
+								<text value="SNS:"/>
+							</style>
+							<style width="75%" font-face="arial" font-size="3" font-bold="true">
+								<value-of name="N"/>
+							</style>
+						</line>
+					</body>
+				</region>
+				<region name="HLAV-UCS">
+					<body>
+						<line on-each-page="true" endpage="false">
+							<style width="18%" font-face="arial">
+								<text value=""/>
+							</style>
+							<style width="7%" font-face="arial">
+								<text value="UCS:"/>
+							</style>
+							<style width="11%" font-face="arial" font-size="3">
+								<value-of name="I"/>
+							</style>
+							<style width="64%" font-face="arial" font-size="3" font-bold="true">
+								<value-of name="N"/>
+							</style>
+						</line>
+					</body>
+				</region>
+				<region name="HLAV-UUS">
+					<body>
+						<line on-each-page="true" endpage="false">
+							<style width="18%" font-face="arial">
+								<text value=""/>
+							</style>
+							<style width="7%" font-face="arial">
+								<text value="UUS:"/>
+							</style>
+							<style width="11%" font-face="arial">
+								<value-of name="I"/>
+							</style>
+							<style width="64%" font-face="arial">
+								<value-of name="N"/>
+							</style>
+						</line>
+					</body>
+				</region>
+				<region name="HLAV-NKS">
+					<body>
+						<line on-each-page="true" endpage="false">
+							<style width="18%" font-face="arial">
+								<text value=""/>
+							</style>
+							<style width="7%" font-face="arial">
+								<text value="NS:"/>
+							</style>
+							<style width="11%" font-face="arial" font-italic="true">
+								<value-of name="I"/>
+							</style>
+							<style width="64%" font-face="arial" font-italic="true">
+								<value-of name="N"/>
+							</style>
+						</line>
+					</body>
+				</region>
+				</body>
+			</region>
+			<region name="FIN">
+				<body>
+					<line>
+						<style width="100%" height="0mm">
+							<value-of name="" onData="sirky=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];poradi=[FINANCOVANI.UCE_POR_UEA,FINANCOVANI.UCE_POR_UEB,FINANCOVANI.UCE_POR_UEC,FINANCOVANI.UCE_POR_UED,FINANCOVANI.UCE_POR_UEE,FINANCOVANI.UCE_POR_UEF,FINANCOVANI.UCE_POR_UEG,FINANCOVANI.UCE_POR_UEH,FINANCOVANI.UCE_POR_UEI,FINANCOVANI.UCE_POR_UEJ,FINANCOVANI.UCE_POR_TE0,FINANCOVANI.UCE_POR_TE1,FINANCOVANI.UCE_POR_TE2,FINANCOVANI.UCE_POR_TE3,FINANCOVANI.UCE_POR_TE4,10,15,15];delky=[FINANCOVANI.UCE_SIR_A_UEA,FINANCOVANI.UCE_SIR_A_UEB,FINANCOVANI.UCE_SIR_A_UEC,FINANCOVANI.UCE_SIR_A_UED,FINANCOVANI.UCE_SIR_A_UEE,FINANCOVANI.UCE_SIR_A_UEF,FINANCOVANI.UCE_SIR_A_UEG,FINANCOVANI.UCE_SIR_A_UEH,FINANCOVANI.UCE_SIR_A_UEI,FINANCOVANI.UCE_SIR_A_UEJ,FINANCOVANI.UCE_SIR_A_TE0,FINANCOVANI.UCE_SIR_A_TE1,FINANCOVANI.UCE_SIR_A_TE2,FINANCOVANI.UCE_SIR_A_TE3,FINANCOVANI.UCE_SIR_A_TE4,10,8,8,12,12,12];SpocitejSirky(sirky,delky,poradi)"/>
+						</style>
+					</line>
+					<region name="FIN-STAV">
+						<head>
+							<line>
+							  <style font-size="1">
+								<style width="3%" font-face="arial">
+									<value-of name="" onData="self.value=&apos;ICO&apos;;self.style.width=str(sirky[15])+&apos;%&apos;;"/>
+								</style>
+								<style width="3%" font-face="arial">
+									<value-of name="" onData="self.value=&apos;UCS&apos;;self.style.width=str(sirky[16])+&apos;%&apos;;"/>
+								</style>
+								<style width="3%" font-face="arial">
+									<value-of name="" onData="self.value=&apos;NKS&apos;;self.style.width=str(sirky[17])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" vertical-align="bottom">
+									<value-of name="FINANCOVANI.AN01_NAZ" onData="self.style.width=str(sirky[0])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="FINANCOVANI.AN02_NAZ" onData="self.style.width=str(sirky[1])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="FINANCOVANI.AN03_NAZ" onData="self.style.width=str(sirky[2])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="FINANCOVANI.AN04_NAZ" onData="self.style.width=str(sirky[3])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="FINANCOVANI.AN05_NAZ" onData="self.style.width=str(sirky[4])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="7" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="FINANCOVANI.AN06_NAZ" onData="self.style.width=str(sirky[5])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="FINANCOVANI.AN07_NAZ" onData="self.style.width=str(sirky[6])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="FINANCOVANI.AN08_NAZ" onData="self.style.width=str(sirky[7])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="FINANCOVANI.AN09_NAZ" onData="self.style.width=str(sirky[8])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="FINANCOVANI.AN10_NAZ" onData="self.style.width=str(sirky[9])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="FINANCOVANI.AN11_NAZ" onData="self.style.width=str(sirky[10])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="FINANCOVANI.AN12_NAZ" onData="self.style.width=str(sirky[11])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="FINANCOVANI.AN13_NAZ" onData="self.style.width=str(sirky[12])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="FINANCOVANI.AN14_NAZ" onData="self.style.width=str(sirky[13])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="FINANCOVANI.AN15_NAZ" onData="self.style.width=str(sirky[14])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="" onData="self.value=&apos;DRD02&apos;;self.style.width=str(sirky[18])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="" onData="self.value=&apos;DRD03&apos;;self.style.width=str(sirky[19])+&apos;%&apos;;"/>
+								</style>
+								<style width="6%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="" onData="self.value=&apos;DRD14&apos;;self.style.width=str(sirky[20])+&apos;%&apos;;"/>
+								</style>
+							</style>
+							</line>
+						</head>
+						<body>
+							<line>
+							<style font-size="1">
+								<style width="3%" font-face="arial">
+									<value-of name="I" onData="self.style.width=str(sirky[15])+&apos;%&apos;;"/>
+								</style>
+								<style width="3%" font-face="arial">
+									<value-of name="U" onData="self.style.width=str(sirky[16])+&apos;%&apos;;"/>
+								</style>
+								<style width="3%" font-face="arial">
+									<value-of name="N" onData="self.style.width=str(sirky[17])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="AN01" onData="self.style.width=str(sirky[0])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="AN02" onData="self.style.width=str(sirky[1])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="AN03" onData="self.style.width=str(sirky[2])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="AN04" onData="self.style.width=str(sirky[3])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="AN05" onData="self.style.width=str(sirky[4])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="AN06" onData="self.style.width=str(sirky[5])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="AN07" onData="self.style.width=str(sirky[6])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="AN08" onData="self.style.width=str(sirky[7])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="AN09" onData="self.style.width=str(sirky[8])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="AN10" onData="self.style.width=str(sirky[9])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="AN11" onData="self.style.width=str(sirky[10])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="AN12" onData="self.style.width=str(sirky[11])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="AN13" onData="self.style.width=str(sirky[12])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="AN14" onData="self.style.width=str(sirky[13])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="AN15" onData="self.style.width=str(sirky[14])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="C_2" onData="self.style.width=str(sirky[18])+&apos;%&apos;;"/>
+								</style>
+								<style width="5%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="C_3" onData="self.style.width=str(sirky[19])+&apos;%&apos;;"/>
+								</style>
+								<style width="6%" left-padding="2" right-padding="0" top-padding="2" bottom-padding="2" font-face="arial" horizontal-align="right" vertical-align="bottom">
+									<value-of name="C_14" onData="self.style.width=str(sirky[20])+&apos;%&apos;;" format="# 0,00_-;[red]# 0,00-"/>
+								</style>
+							</style>
+							</line>
+						</body>
+					</region>
+				</body>
+			</region>
+			<region name="MASKA-REF">
+				<body>
+					<line>
+						<style width="100%" font-size="1">
+							<text value=""/>
+						</style>
+					</line>
+					<region name="MASKA-RADEK">
+						<body>
+							<line>
+								<style width="100%" font-face="courier" font-size="125tw" font-color="red">
+									<value-of name="RADEK"/>
+								</style>
+							</line>
+						</body>
+					</region>
+				</body>
+			</region>
+		</body>
+		<foot>
+			<line>
+				<style width="100%" font-face="arial">
+					<text value=""/>
+				</style>
+			</line>
+			<line on-each-page="true">
+				<style width="30%" top-border-width="1" font-face="arial" font-size="1" font-italic="true" ellipsis-style="cut">
+					<value-of name="" onData="self.value=&apos;&apos;+FINANCOVANI.DATUM+&apos; &apos;+FINANCOVANI.CAS"/>
+				</style>
+				<style width="40%" top-border-width="1" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+					<text value="Zpracováno systémem  GINIS® GORDIC® spol. s  r. o."/>
+				</style>
+				<style width="30%" top-border-width="1" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+					<value-of name="" onData="self.value=&apos;strana &apos;+ROOT.PAGE+&apos; / &apos;+ROOT.PAGES"/>
+				</style>
+			</line>
+		</foot>
+	</region>
+</format>

@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="windows-1250"?>
+
+<format type="grr" xmlns="http://www.gordic.cz/TR/alf/1.3/">
+
+	<info
+		ixs_xme="0000ALX0ANM3"
+		xmeta_ver="2"
+		xmeta_subver_min="2"
+		nazev="Přehled financování vybraných akcí-doklady"
+		poznamka=""
+		allowed_output="htm,xls,doc,frm"
+		ixs_alv="0000ALV03NNJ"
+		ixs_frm="0000ALF01ROS"
+		maker="0431"
+		dat_modif="20081014"
+		rokmes_od="199801"
+		rokmes_do="999913"
+		type_cust="X"
+	/>
+
+	<paper-setting paper-width="297mm" paper-height="210mm"/>
+
+<script><![CDATA[
+def getktg(ktg_sml):
+  if (int(ktg_sml)==10 or int(ktg_sml)==20 or int(ktg_sml)==90):
+    return "smlouvy, LP"
+  else:
+    if (int(ktg_sml)==50 or int(ktg_sml)==60):
+      return "objednávky"    
+    else:
+      return ""
+]]></script>
+
+	<region name="VYBER">
+		<body>
+			<line on-each-page="true" endpage="false">
+				<style width="18%" bottom-border-width="1" font-face="arial" font-size="1" font-italic="true">
+					<value-of name="" onData="self.value=&apos;Licence &apos;+ &apos;: &apos;+ VYBER.LIC"/>
+				</style>
+				<style width="82%" bottom-border-width="1" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+					<value-of name="" onData="self.value=&apos;IDENTIFIKACE SESTAVY / &apos; +format.info[&apos;ixs_frm&apos;] +&apos;  (&apos;+format.info[&apos;dat_modif&apos;]+&apos;)&apos;"/>
+				</style>
+			</line>
+			<line on-each-page="true">
+				<style width="18%">
+					<image file="znak-m.BMP" image-width="25mm" image-height="25mm"/>
+				</style>
+				<style width="82%" font-face="arial" font-size="4" font-bold="true">
+					<value-of name="" onData="self.value=&apos;Přehled financování vybraných akcí-doklady&apos;"/>
+				</style>
+			</line>
+			<line on-each-page="true">
+				<style width="18%" font-face="arial">
+					<text value=""/>
+				</style>
+				<style width="7%" font-face="arial">
+					<text value="IČO:"/>
+				</style>
+				<style width="75%" font-face="arial" font-size="3" font-bold="true">
+					<value-of name="" onData="self.value=VYBER.ICO+ &apos; - &apos;+ VYBER.ICO_NAZEV"/>
+				</style>
+			</line>
+			<line on-each-page="true">
+				<style width="18%" font-face="arial">
+					<text value=""/>
+				</style>
+				<style width="7%" font-face="arial">
+					<text value=""/>
+				</style>
+				<style width="74%" font-face="arial" font-size="3" font-bold="true">
+					<value-of name="ICO_ADRESA"/>
+				</style>
+				<style width="1%" font-face="arial" font-size="3" font-bold="true">
+					<text value=""/>
+				</style>
+			</line>
+			<line on-each-page="true">
+				<style width="18%" font-face="arial">
+					<text value=""/>
+				</style>
+				<style width="7%" font-face="arial">
+					<text value="NS:"/>
+				</style>
+				<style width="75%" font-face="arial" font-size="3" font-bold="true">
+					<value-of name="" onData="self.value=VYBER.NS+ &apos; - &apos;+ VYBER.NS_NAZEV"/>
+				</style>
+			</line>
+			<line on-each-page="true">
+				<style width="100%">
+					<text value=""/>
+				</style>
+			</line>
+			<line>
+				<style width="100%">
+					<text value=""/>
+				</style>
+			</line>
+			<region name="SML_AKCE">
+				<body>
+					<line>
+						<style width="10%" left-border-width="2" top-border-width="2" bottom-border-width="1" background-color="#e5e5e5" font-size="1" font-bold="true">
+							<text value="Číslo akce"/>
+						</style>
+						<style width="49%" top-border-width="2" bottom-border-width="1" background-color="#e5e5e5" font-size="1" font-bold="true">
+							<text value="Název akce"/>
+						</style>
+						<style width="10%" top-border-width="2" bottom-border-width="1" background-color="#e5e5e5" font-size="1" font-bold="true" horizontal-align="right">
+							<text value="Rozpočtováno"/>
+						</style>
+						<style width="10%" top-border-width="2" bottom-border-width="1" background-color="#e5e5e5" font-size="1" font-bold="true" horizontal-align="right">
+							<text value="Rozpočtováno za daný rok"/>
+						</style>
+						<style width="11%" top-border-width="2" bottom-border-width="1" background-color="#e5e5e5" font-size="1" font-bold="true" horizontal-align="right">
+							<text value="Rezervováno"/>
+						</style>
+						<style width="10%" right-border-width="2" top-border-width="2" bottom-border-width="1" background-color="#e5e5e5" font-size="1" font-bold="true" horizontal-align="right">
+							<text value="Čerpáno"/>
+						</style>
+					</line>
+					<line>
+						<style width="10%" left-border-width="2" background-color="#e5e5e5" font-size="1">
+							<value-of name="SML_AKCE_CPP"/>
+						</style>
+						<style width="49%" background-color="#e5e5e5" font-size="1">
+							<value-of name="SML_AKCE_NAZEV"/>
+						</style>
+						<style width="10%" background-color="#e5e5e5" font-size="1" horizontal-align="right">
+							<value-of name="SML_AKCE_C_ALL_ROZ"/>
+						</style>
+						<style width="10%" background-color="#e5e5e5" font-size="1" horizontal-align="right">
+							<value-of name="SML_AKCE_C_ROZ"/>
+						</style>
+						<style width="11%" background-color="#e5e5e5" font-size="1" horizontal-align="right">
+							<value-of name="SML_AKCE_C_ALL_REZ"/>
+						</style>
+						<style width="10%" right-border-width="2" background-color="#e5e5e5" font-size="1" horizontal-align="right">
+							<value-of name="SML_AKCE_C_ALL_UCT"/>
+						</style>
+					</line>
+					<line>
+						<style width="100%" left-border-width="2" right-border-width="2" bottom-border-width="2" background-color="#e5e5e5" font-size="1" horizontal-align="justify">
+							<text value=""/>
+						</style>
+					</line>
+					<region name="SML_HLA">
+						<body>
+							<line>
+								<style width="1%" left-border-width="1" background-color="#e5e5e5" font-bold="true">
+									<text value=""/>
+								</style>
+								<style width="10%" background-color="#eff0ca" font-size="1" font-bold="true">
+									<text value="Agendové číslo"/>
+								</style>
+								<style width="24%" background-color="#eff0ca" font-size="1" font-bold="true">
+									<text value="Dodavatel/Odběratel"/>
+								</style>
+								<style width="24%" background-color="#eff0ca" font-size="1" font-bold="true">
+									<text value="Popis"/>
+								</style>
+								<style width="10%" background-color="#eff0ca" font-size="1" font-bold="true" horizontal-align="right">
+									<text value="Celková částka"/>
+								</style>
+								<style width="10%" background-color="#eff0ca" font-size="1" font-bold="true" horizontal-align="right">
+									<text value="Částka za daný rok"/>
+								</style>
+								<style width="11%" background-color="#eff0ca" font-size="1" font-bold="true" horizontal-align="right">
+									<text value="Rezervováno"/>
+								</style>
+								<style width="10%" right-border-width="1" background-color="#eff0ca" font-size="1" font-bold="true" horizontal-align="right">
+									<text value="Čerpáno"/>
+								</style>
+							</line>
+							<line>
+								<style width="1%" left-border-width="1" background-color="#e5e5e5">
+									<text value=""/>
+								</style>
+								<style width="10%" background-color="#eff0ca" font-size="1">
+									<value-of name="SML_HLA_AC_SML"/>
+								</style>
+								<style width="24%" background-color="#eff0ca" font-size="1">
+									<value-of name="" onData="self.value=SML_HLA.SML_HLA_DOD_NAZ+&apos;, &apos;+SML_HLA.SML_HLA_DOD_ULI+&apos;, &apos;+SML_HLA.SML_HLA_DOD_PSC+&apos; &apos;+SML_HLA.SML_HLA_DOD_MES"/>
+								</style>
+								<style width="24%" background-color="#eff0ca" font-size="1">
+									<value-of name="SML_HLA_POP"/>
+								</style>
+								<style width="10%" background-color="#eff0ca" font-size="1" horizontal-align="right">
+									<value-of name="SML_HLA_CMENA"/>
+								</style>
+								<style width="10%" background-color="#eff0ca" font-size="1" horizontal-align="right">
+									<value-of name="SML_HLN_ROZAKT"/>
+								</style>
+								<style width="11%" background-color="#eff0ca" font-size="1" horizontal-align="right">
+									<value-of name="SML_HLA_CFAK"/>
+								</style>
+								<style width="10%" right-border-width="1" background-color="#eff0ca" horizontal-align="right">
+									<text value=""/>
+								</style>
+							</line>
+							<region name="SML_POL">
+								<body>
+									<region name="SML_POL_REZ_KRY">
+										<body>
+											<line only-if="SML_POL_REZ_KRY.REZ_AC_AG!=&apos; &apos;">
+												<style width="1%" left-border-width="1" background-color="#e5e5e5" font-size="1" font-bold="true">
+													<text value=""/>
+												</style>
+												<style width="1%" background-color="#eff0ca" font-size="1" font-bold="true">
+													<text value=""/>
+												</style>
+												<style width="3%" font-size="1" font-bold="true">
+													<text value="AG"/>
+												</style>
+												<style width="10%" font-size="1" font-bold="true">
+													<text value="Agendové číslo"/>
+												</style>
+												<style width="22%" font-size="1" font-bold="true">
+													<text value="Dodavatel/Odběratel"/>
+												</style>
+												<style width="22%" font-size="1" font-bold="true">
+													<text value="Popis"/>
+												</style>
+												<style width="10%" font-size="1" font-bold="true" horizontal-align="right">
+													<text value="Celková částka"/>
+												</style>
+												<style width="10%" font-size="1" font-bold="true">
+													<text value=" "/>
+												</style>
+												<style width="11%" font-size="1" font-bold="true" horizontal-align="right">
+													<text value="Rezervováno"/>
+												</style>
+												<style width="10%" right-border-width="1" font-size="1" font-bold="true" horizontal-align="right">
+													<text value="Čerpáno"/>
+												</style>
+											</line>
+											<line>
+												<style width="1%" left-border-width="1" background-color="#e5e5e5">
+													<text value=""/>
+												</style>
+												<style width="1%" background-color="#eff0ca">
+													<text value=""/>
+												</style>
+												<style width="3%" font-size="1">
+													<value-of name="REZ_AG"/>
+												</style>
+												<style width="10%" font-size="1">
+													<value-of name="REZ_AC_AG"/>
+												</style>
+												<style width="22%" font-size="1">
+													<value-of name="" onData="self.value=SML_POL_REZ_KRY.REZ_ESU_NAZ+&apos;, &apos;+SML_POL_REZ_KRY.REZ_ESU_ULI+&apos;, &apos;+SML_POL_REZ_KRY.REZ_ESU_PSC+&apos; &apos;+SML_POL_REZ_KRY.REZ_ESU_MES"/>
+												</style>
+												<style width="22%" font-size="1">
+													<value-of name="REZ_POPIS_DOK"/>
+												</style>
+												<style width="10%" font-size="1" horizontal-align="right">
+													<value-of name="REZ_C_MENA"/>
+												</style>
+												<style width="10%" font-size="1" horizontal-align="right">
+													<text value=" "/>
+												</style>
+												<style width="11%" font-size="1" horizontal-align="right">
+													<value-of name="REZ_C_KRY"/>
+												</style>
+												<style width="10%" right-border-width="1" font-size="1" horizontal-align="right">
+													<value-of name="REZ_C_UHR"/>
+												</style>
+											</line>
+										</body>
+									</region>
+								</body>
+							</region>
+						</body>
+					</region>
+				</body>
+			</region>
+		</body>
+	</region>
+</format>

@@ -1,0 +1,780 @@
+<?xml version="1.0" encoding="utf-8"?>
+<format type="grr" xmlns="http://www.gordic.cz/TR/alf/1.4/">
+  <info poznamka=""
+	ixs_frm="GKMSALF0A6O8"
+	ixs_alv="0000ALV03HR5"
+	ixs_xme="0000ALX0AMU6"
+	xmeta_ver="1"
+	xmeta_subver_min="1"
+	rokmes_od="199801"
+	last_modif="20090513"
+	create_date="201012182204"
+	dat_modif="201012300248"
+	maker="4002"
+	rokmes_do="999913"
+	allowed_output="htm,xls,doc,frm"
+	nazev="Košilka pro ERU"
+	/>
+  <paper-setting paper-width="210.08mm" />
+  <script><![CDATA[
+
+def Ulice(*Argumenty):   
+#--------------------------------------------------------------------
+#
+# [0] - ulice
+# [1] - číslo popisné
+# [2] - číslo orientační
+#
+#--------------------------------------------------------------------
+
+  	if Argumenty[1]=='': return Argumenty[0]+' '+Argumenty[2]
+	if Argumenty[2]=='': return Argumenty[0]+' '+Argumenty[1]
+	if Argumenty[1]=='' and Argumenty[2]=='': return Argumenty[0]+' '+Argumenty[1]+'/'+Argumenty[2] 	
+	if (Argumenty[1]=='' and Argumenty[2])!='': return Argumenty[0]+' '+Argumenty[1]+'/'+Argumenty[2] 
+	return  
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++
+  
+def Desetiny(*Argumenty):
+#--------------------------------------------------------------------
+#
+# [0] - Částaka v měně
+#
+#--------------------------------------------------------------------
+	if str((Argumenty[0])).split(',')[1]=='00': return (Argumenty[0].split(','))[0]+',-'
+	else: return str(Argumenty[0])
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+def Delka(*Delky):
+#""" Procedura Delka """
+#--------------------------------------------------------------------
+#
+# Delky - Jednotlivé délky se uloží do pole, přepočítají se na procenta zobrazení, 
+# 		  Delky_1, a přidají se dvě velikosti pro MD a Dal, které jsou stejné a 
+# 		  jejich velikost je v proměnné MDDal. Vše se uloží nového pole Delky_1.
+#
+#--------------------------------------------------------------------
+	global Delky_1;	#v procentech
+	global Delky_2;
+	global D;
+	Rozsah=100; #v %
+	RozsahAnal=0;
+	CelkDel=0;
+	MDDal=17.5; #v %
+	MDDal_=0;
+	D=len(Delky);
+	Delky_1=[0]*(D);
+	Delky_2=[0]*(D);
+	if D<=15:
+		RozsahAnal=Rozsah-(2*MDDal);	#zbývá %
+	#v CelkDel je fyzický součet délek analytik
+	for i in range (D):
+		CelkDel=CelkDel+Delky[i];
+		# Provedu kopii Delky do Delky_2
+		Delky_2[i]=int(Delky[i]);
+		#CelkDel je rovno RozsahAnal v procentech
+	Procento=RozsahAnal/CelkDel;
+	for i in range (D):
+		if Delky[i]>0:
+			Delky_1[i]=(round(int(Delky[i]*Procento*10),-1))/10;	#asi spravedlivé zaokrouhlení
+	#na konec přidám dvě buňky pro MD a Dal
+	for i in range (2):
+		Delky_1.append(MDDal);
+		Delky_2.append(0);
+	return
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++	
+	
+def Nazev(*Naz):
+#--------------------------------------------------------------------
+#
+	global Naz_1;
+	global D1;
+	Naz_1=[0]*(D+2);
+#	Naz_1=[Naz[:] for i in range (1)];
+	for i in range (D):
+		Naz_1[i]=Naz[i];
+	Naz_1[D]=('MD');
+	Naz_1[D+1]=('Dal');
+	D1=len(Naz_1);
+	return
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++	
+
+def Poradi(*Por):
+#--------------------------------------------------------------------
+#
+# Por - pole, kam se uloží všechny proměnné
+# Por_1 - kopie Por
+# Por_2 - přetříděná kopie
+#
+#--------------------------------------------------------------------
+
+	global Por_1;
+	global Por_2;
+	Por_1=[0]*(D+2);
+	Por_2=[0]*(D+2);
+	X=1;
+	for i in range (D):
+		Por_1[i]=Por[i];
+	while X==0:
+		for i in range (D):
+			if (Por[i]<Por[i+1] or Por[i]==Por[i+1] or Por[i]=='0'):
+				X=0;
+			if Por[i]>Por[i+1]:
+				Por[i],Por[i+1]=Por[i+1],Por[i];
+				X=1;
+	for i in range (D):
+		Por_2[i]=Por[i];
+	return	
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+def TabZob(Vstup_1,Vstup_2,):
+#--------------------------------------------------------------------
+#
+#	Rozložení n-tice Tab:
+#		i		0		1			2		3		4			5		6		7			8
+#	j	|		-		-			-		-		-			-		-		-			-
+#	0	|	[nazev_0],[Nuly_0],[del_0],[del_p_0],[styl_0_n],[styl_0_h],[c_0],[puv_por_0],[nov_por_0]
+#	1	|	[nazev_1],[Nuly_1],[del_1],[del_p_1],[styl_1_n],[styl_1_h],[c_1],[puv_por_1],[nov_por_1]
+#	2	|	[nazev_2],[Nuly_2],[del_2],[del_p_2],[styl_2_n],[styl_2_h],[c_2],[puv_por_2],[nov_por_2]
+#
+#	Tab[i][j]
+#	Tab[2][3] --> [styl_p_2]
+#	Tab[2] --> [nazev_2],[hodnota_2],[del_2],[del_p_2],[styl_2_n],[styl_2_h]
+#
+#--------------------------------------------------------------------
+	global Tab;
+	Tab=[(['']*(9)) for i in range (D1)];
+	for j in range (D1):
+		Tab[j][0]=Naz_1[j];
+		Tab[j][2]=round(Delky_2[j]);
+		Tab[j][3]=Delky_1[j];
+		if (Tab[j][0]=='MD' or Tab[j][0]=='Dal'):
+			Tab[j][1]='0,00';
+		else:
+			Tab[j][1]='0'*int(Tab[j][2]);
+		Tab[j][4]=str(Tab[j][3])+'%';
+		Tab[j][6]=j;
+		Tab[j][7]=Por_1[j];
+		Tab[j][8]=Por_2[j];
+# Tady by mělo následovat prohození sloupců
+	return Tab[Vstup_1][Vstup_2]
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++
+	
+
+]]></script>
+  <region name="LIK_HLA">
+    <body>
+      <line>
+        <value-of name="" width="71%" height="3.44mm" onData="Delka(LIK_HLA.FAK_SIR_A_UEA,LIK_HLA.FAK_SIR_A_UEB,LIK_HLA.FAK_SIR_A_UEC,LIK_HLA.FAK_SIR_A_UED,LIK_HLA.FAK_SIR_A_UEE,LIK_HLA.FAK_SIR_A_UEF,LIK_HLA.FAK_SIR_A_UEG,LIK_HLA.FAK_SIR_A_UEH,LIK_HLA.FAK_SIR_A_UEI,LIK_HLA.FAK_SIR_A_UEJ,LIK_HLA.FAK_SIR_A_TE0,LIK_HLA.FAK_SIR_A_TE1,LIK_HLA.FAK_SIR_A_TE2,LIK_HLA.FAK_SIR_A_TE3,LIK_HLA.FAK_SIR_A_TE4)&#xA;Nazev(LIK_HLA.FAK_NAZ_UEA,LIK_HLA.FAK_NAZ_UEB,LIK_HLA.FAK_NAZ_UEC,LIK_HLA.FAK_NAZ_UED,LIK_HLA.FAK_NAZ_UEE,LIK_HLA.FAK_NAZ_UEF,LIK_HLA.FAK_NAZ_UEG,LIK_HLA.FAK_NAZ_UEH,LIK_HLA.FAK_NAZ_UEI,LIK_HLA.FAK_NAZ_UEJ,LIK_HLA.FAK_NAZ_TE0,LIK_HLA.FAK_NAZ_TE1,LIK_HLA.FAK_NAZ_TE2,LIK_HLA.FAK_NAZ_TE3,LIK_HLA.FAK_NAZ_TE4)&#xA;Poradi(LIK_HLA.FAK_POR_UEA,LIK_HLA.FAK_POR_UEB,LIK_HLA.FAK_POR_UEC,LIK_HLA.FAK_POR_UED,LIK_HLA.FAK_POR_UEE,LIK_HLA.FAK_POR_UEF,LIK_HLA.FAK_POR_UEG,LIK_HLA.FAK_POR_UEH,LIK_HLA.FAK_POR_UEI,LIK_HLA.FAK_POR_UEJ,LIK_HLA.FAK_POR_TE0,LIK_HLA.FAK_POR_TE1,LIK_HLA.FAK_POR_TE2,LIK_HLA.FAK_POR_TE3,LIK_HLA.FAK_POR_TE4)" />
+        <image file="orx_cb.bmp" width="29%" height="3.44mm" />
+      </line>
+      <line>
+        <style font-size="5" font-bold="true">
+          <value-of name="FAK_UCS" width="100%" />
+        </style>
+      </line>
+      <line>
+        <style font-size="3" font-bold="true">
+          <value-of name="" width="100%" onData="self.value='Masarykovo náměstí 91/5'" />
+        </style>
+      </line>
+      <line>
+        <style font-size="3" font-bold="true" font-italic="true" horizontal-align="center" top-padding="20">
+          <text value="Účetní doklad č." width="100%" height="12mm" />
+        </style>
+      </line>
+      <line>
+        <style font-size="3">
+          <value-of name="FAK_ICO" width="100%" onData="self.value='IČO: '+self.value" />
+        </style>
+      </line>
+      <line>
+        <style font-size="3" vertical-align="center" left-padding="0">
+          <value-of name="FAK_DEV" width="38.31%" height="10mm" onData="self.value='Faktura přijatá dne: '+self.value" format="dd. mm. yyyy" />
+        </style>
+        <style font-size="3" vertical-align="center">
+          <value-of name="FAK_ACAG" width="38.04%" height="10mm" onData="self.value='Čísko KDF: '+self.value" />
+        </style>
+        <style font-size="3" vertical-align="center">
+          <value-of name="FAK_DSP" width="23.65%" height="10mm" onData="self.value='Splatnost dne: '+self.value" />
+        </style>
+      </line>
+      <line>
+        <style font-size="3" font-bold="true" top-border-width="3">
+          <text value="1. Dodávku (službu) jsem pro ERÚ převzal a potvrzuji, že účtované množství, druh, jakost, cena," width="100%" />
+        </style>
+      </line>
+      <line>
+        <style font-size="3" font-bold="true" vertical-align="bottom" left-padding="25" right-padding="0">
+          <value-of name="" width="100%" onData="self.value='termín dodání, dopravné, DPH *)'" />
+        </style>
+      </line>
+      <line>
+        <style left-padding="25" right-padding="0">
+          <value-of name="" width="33%" onData="self.value='odpovídá připojené objednávce *)'" />
+        </style>
+        <style left-padding="0">
+          <value-of name="" width="67%" onData="self.value='smlouvě *)'" />
+        </style>
+      </line>
+      <line>
+        <style left-padding="25" right-padding="0">
+          <value-of name="" width="33%" onData="self.value='Předběžného odsouhlasení návrhu úkonu *)'" />
+        </style>
+        <style left-padding="0">
+          <value-of name="" width="67%" onData="self.value='Limitovaného příslibu *)'" />
+        </style>
+      </line>
+      <line>
+        <text value="Fakturu jsem zkontroloval a souhlasím s úhradou těchto položek:" width="100%" />
+      </line>
+      <line>
+        <style font-size="3" left-border-width="3" top-border-width="3">
+          <text value="Položka" width="30mm" />
+        </style>
+        <style font-size="3" left-border-width="3" top-border-width="3">
+          <text value="Středisko" width="30mm" />
+        </style>
+        <style font-size="3" horizontal-align="center" left-border-width="3" top-border-width="3">
+          <text value="Kč" width="30mm" />
+        </style>
+        <style font-size="3" left-border-width="3" top-border-width="3">
+          <text value="Položka" width="30mm" />
+        </style>
+        <style font-size="3" left-border-width="3" top-border-width="3">
+          <text value="Středisko" width="30mm" />
+        </style>
+        <style font-size="3" horizontal-align="center" left-border-width="3" right-border-width="3" top-border-width="3">
+          <text value="Kč" width="40.07mm" />
+        </style>
+      </line>
+      <line>
+        <style left-border-width="3" top-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" top-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" top-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" top-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" top-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" right-border-width="3" top-border-width="3">
+          <text value="" width="40.07mm" />
+        </style>
+      </line>
+      <line>
+        <style left-border-width="3" top-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" top-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" top-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" top-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" top-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" right-border-width="3" top-border-width="3">
+          <text value="" width="40.07mm" />
+        </style>
+      </line>
+      <line>
+        <style left-border-width="3" top-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" top-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" top-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" top-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" top-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" right-border-width="3" top-border-width="3">
+          <text value="" width="40.07mm" />
+        </style>
+      </line>
+      <line>
+        <style left-border-width="3" top-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" top-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" top-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" top-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" top-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" right-border-width="3" top-border-width="3">
+          <text value="" width="40.07mm" />
+        </style>
+      </line>
+      <line>
+        <style left-border-width="3" top-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" top-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" top-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" top-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" top-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" right-border-width="3" top-border-width="3">
+          <text value="" width="40.07mm" />
+        </style>
+      </line>
+      <line>
+        <style left-border-width="3" top-border-width="3" bottom-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" top-border-width="3" bottom-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" top-border-width="3" bottom-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" top-border-width="3" bottom-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style left-border-width="3" top-border-width="3" bottom-border-width="3">
+          <text value="" width="30mm" />
+        </style>
+        <style border-width="3">
+          <text value="" width="40.07mm" />
+        </style>
+      </line>
+      <line>
+        <style font-size="1">
+          <text value="" width="100%" height="3mm" />
+        </style>
+      </line>
+      <line>
+        <style right-padding="0">
+          <value-of name="" width="15%" onData="self.value='Údaje o dodávce *)'" />
+        </style>
+        <style left-padding="15">
+          <value-of name="" width="85%" onData="self.value=187*'.'" />
+        </style>
+      </line>
+      <line>
+        <style right-padding="0">
+          <text value="(neopisujte fakturu)" width="16%" />
+        </style>
+        <value-of name="" width="84%" onData="self.value=187*'.'" />
+      </line>
+      <line>
+        <text value="Datum:" width="23.5%" />
+        <text value="Podpis za věc. správnost:" width="39%" />
+        <text value="podpis za hosp. oper. (příkazce operace):" width="37.5%" />
+      </line>
+      <line>
+        <text value="" width="100%" height="3.17mm" />
+      </line>
+      <line>
+        <style bottom-border-width="3">
+          <text value="Datum:" width="23%" />
+        </style>
+        <style bottom-border-width="3">
+          <text value="Podpis gestora:" width="77%" />
+        </style>
+      </line>
+      <line>
+        <style font-size="1">
+          <text value="" width="100%" height="3mm" />
+        </style>
+      </line>
+      <line>
+        <style font-size="3" font-bold="true" right-padding="0">
+          <text value="2. Zapsáno do majetku v pořizovací ceně Kč:" width="39%" />
+        </style>
+        <style font-bold="true" left-padding="0">
+          <value-of name="" width="59.99%" onData="self.value=30*'.'" />
+        </style>
+        <style font-size="3">
+          <text value="" width="1.01%" />
+        </style>
+      </line>
+      <line>
+        <text value="Druh majetku: DHM, DNM, aj." width="36%" />
+        <text value="Umístění: Ji, Praha ÚP, Li, Re, St, Kú, číslo kanceláře" width="64%" />
+      </line>
+      <line>
+        <text value="Inventární číslo:" width="100%" />
+      </line>
+      <line>
+        <style bottom-border-width="3">
+          <text value="Datum:" width="25%" />
+        </style>
+        <style bottom-border-width="3">
+          <text value="podpis" width="25%" />
+        </style>
+        <style bottom-border-width="3">
+          <text value="na účet" width="50%" />
+        </style>
+      </line>
+      <line>
+        <style font-size="1">
+          <text value="" width="100%" height="3mm" />
+        </style>
+      </line>
+      <line>
+        <style font-size="3" font-bold="true">
+          <value-of name="" width="100%" onData="self.value='3. Z účtu ERÚ '+LIK_HLA.FAK_BAN_VL+' uhraďte částku Kč: '+Desetiny(LIK_HLA.FAK_CEN)" />
+        </style>
+      </line>
+      <line>
+        <style font-size="1">
+          <text value="" width="100%" height="3mm" />
+        </style>
+      </line>
+      <line>
+        <text value="Datum:" width="50%" />
+        <text value="Podpis rozpočtáře:" width="50%" />
+      </line>
+      <line>
+        <style bottom-border-width="3">
+          <text value="Datum:" width="50%" />
+        </style>
+        <style bottom-border-width="3">
+          <text value="Podpis hlavního účetního:" width="50%" />
+        </style>
+      </line>
+      <line>
+        <style font-size="1">
+          <text value="" width="100%" height="3mm" />
+        </style>
+      </line>
+      <line>
+        <style font-size="3" font-bold="true">
+          <text value="4. Účtovací předpis: zaúčtování předpisu a úhrady" width="50%" />
+        </style>
+        <style font-size="3">
+          <text value="" width="50%" />
+        </style>
+      </line>
+      <line>
+        <text value="" width="100%" height="3mm" />
+      </line>
+      <line>
+        <text value="Zaúčtování předpisu faktury:" width="100%" height="5.03mm" />
+      </line>
+      <line>
+        <style left-border-width="1" top-border-width="1" bottom-border-width="1">
+          <text value="Čís. úč. dokladu:" width="16%" height="5.03mm" />
+        </style>
+        <style border-width="1">
+          <value-of name="" width="84%" height="5.03mm" onData="self.value=&quot;ZDC&quot;" />
+        </style>
+      </line>
+      <region name="KRY_DEF_UCT">
+        <head>
+          <line>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" height="5mm" onData="self.value=TabZob(0,0)&#xA;self.style.width=TabZob(0,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(1,0)&#xA;self.style.width=TabZob(1,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(2,0)&#xA;self.style.width=TabZob(2,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(3,0)&#xA;self.style.width=TabZob(3,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(4,0)&#xA;self.style.width=TabZob(4,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(5,0)&#xA;self.style.width=TabZob(5,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(6,0)&#xA;self.style.width=TabZob(6,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(7,0)&#xA;self.style.width=TabZob(7,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(8,0)&#xA;self.style.width=TabZob(8,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(9,0)&#xA;self.style.width=TabZob(9,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(10,0)&#xA;self.style.width=TabZob(10,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(11,0)&#xA;self.style.width=TabZob(11,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(12,0)&#xA;self.style.width=TabZob(12,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(13,0)&#xA;self.style.width=TabZob(13,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(14,0)&#xA;self.style.width=TabZob(14,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="right" border-width="1">
+              <value-of name="" onData="self.value=TabZob(15,0)&#xA;self.style.width=TabZob(15,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="right" border-width="1">
+              <value-of name="" onData="self.value=TabZob(16,0)&#xA;self.style.width=TabZob(16,4)" />
+            </style>
+          </line>
+        </head>
+        <body>
+          <line>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="KRY_DEF_UCT.KRY_UEA" height="5mm" onData="self.style.width=TabZob(0,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="KRY_DEF_UCT.KRY_UEB" onData="if self.value==TabZob(1,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(1,4);self.style.font_bold=1" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="KRY_DEF_UCT.KRY_UEC" onData="if self.value==TabZob(2,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(2,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="KRY_DEF_UCT.KRY_UED" onData="if self.value==TabZob(3,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(3,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="KRY_DEF_UCT.KRY_UEE" onData="if self.value==TabZob(4,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(4,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="KRY_DEF_UCT.KRY_UEF" onData="if self.value==TabZob(5,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(5,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="KRY_DEF_UCT.KRY_UEG" onData="if self.value==TabZob(6,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(6,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="KRY_DEF_UCT.KRY_UEH" onData="if self.value==TabZob(7,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(7,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="KRY_DEF_UCT.KRY_UEI" onData="if self.value==TabZob(8,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(8,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="KRY_DEF_UCT.KRY_UEJ" onData="if self.value==TabZob(9,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(9,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="KRY_DEF_UCT.KRY_TE0" onData="if self.value==TabZob(10,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(10,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="KRY_DEF_UCT.KRY_TE1" onData="if self.value==TabZob(11,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(11,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="KRY_DEF_UCT.KRY_TE2" onData="if self.value==TabZob(12,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(12,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="KRY_DEF_UCT.KRY_TE3" onData="if self.value==TabZob(13,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(13,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="KRY_DEF_UCT.KRY_TE4" onData="if self.value==TabZob(14,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(14,4)" />
+            </style>
+            <style horizontal-align="right" border-width="1">
+              <value-of name="KRY_DEF_UCT.KRY_MD" onData="if self.value==TabZob(15,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(15,4)" />
+            </style>
+            <style horizontal-align="right" border-width="1">
+              <value-of name="KRY_DEF_UCT.KRY_DAL" onData="if self.value==TabZob(16,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(16,4)" />
+            </style>
+          </line>
+        </body>
+      </region>
+      <line>
+        <style top-border-width="2">
+          <value-of name="FAK_DEV" width="37.5%" onData="self.value='Datum evidence: '+self.value" />
+        </style>
+        <style top-border-width="2">
+          <value-of name="FAK_DEN" width="37.5%" />
+        </style>
+        <style top-border-width="2">
+          <text value="Zaúčtoval - datum a podpis:" width="25%" />
+        </style>
+      </line>
+      <line>
+        <text value="Zaúčtování úhrady faktury:" width="100%" />
+      </line>
+      <line>
+        <style left-border-width="1" top-border-width="1" bottom-border-width="1">
+          <text value="Čís. úč. dokladu:" width="16%" height="5.03mm" />
+        </style>
+        <style border-width="1">
+          <value-of name="" width="84%" height="5.03mm" onData="self.value=&quot;ZDC&quot;" />
+        </style>
+      </line>
+      <region name="LIK_DEF_UCT">
+        <head>
+          <line>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" height="5mm" onData="self.value=TabZob(0,0)&#xA;self.style.width=TabZob(0,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(1,0)&#xA;self.style.width=TabZob(1,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(2,0)&#xA;self.style.width=TabZob(2,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(3,0)&#xA;self.style.width=TabZob(3,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(4,0)&#xA;self.style.width=TabZob(4,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(5,0)&#xA;self.style.width=TabZob(5,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(6,0)&#xA;self.style.width=TabZob(6,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(7,0)&#xA;self.style.width=TabZob(7,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(8,0)&#xA;self.style.width=TabZob(8,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(9,0)&#xA;self.style.width=TabZob(9,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(10,0)&#xA;self.style.width=TabZob(10,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(11,0)&#xA;self.style.width=TabZob(11,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(12,0)&#xA;self.style.width=TabZob(12,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(13,0)&#xA;self.style.width=TabZob(13,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="center" border-width="1">
+              <value-of name="" onData="self.value=TabZob(14,0)&#xA;self.style.width=TabZob(14,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="right" border-width="1">
+              <value-of name="" onData="self.value=TabZob(15,0)&#xA;self.style.width=TabZob(15,4)" />
+            </style>
+            <style font-bold="true" horizontal-align="right" border-width="1">
+              <value-of name="" onData="self.value=TabZob(16,0)&#xA;self.style.width=TabZob(16,4)" />
+            </style>
+          </line>
+        </head>
+        <body>
+          <line>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="LIK_DEF_UCT.LIK_UEA" height="5mm" onData="self.style.width=TabZob(0,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="LIK_DEF_UCT.LIK_UEB" onData="if self.value==TabZob(1,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(1,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="LIK_DEF_UCT.LIK_UEC" onData="if self.value==TabZob(2,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(2,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="LIK_DEF_UCT.LIK_UED" onData="if self.value==TabZob(3,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(3,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="LIK_DEF_UCT.LIK_UEE" onData="if self.value==TabZob(4,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(4,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="LIK_DEF_UCT.LIK_UEF" onData="if self.value==TabZob(5,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(5,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="LIK_DEF_UCT.LIK_UEG" onData="if self.value==TabZob(6,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(6,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="LIK_DEF_UCT.LIK_UEH" onData="if self.value==TabZob(7,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(7,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="LIK_DEF_UCT.LIK_UEI" onData="if self.value==TabZob(8,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(8,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="LIK_DEF_UCT.LIK_UEJ" onData="if self.value==TabZob(9,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(9,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="LIK_DEF_UCT.LIK_TE0" onData="if self.value==TabZob(10,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(10,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="LIK_DEF_UCT.LIK_TE1" onData="if self.value==TabZob(11,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(11,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="LIK_DEF_UCT.LIK_TE2" onData="if self.value==TabZob(12,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(12,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="LIK_DEF_UCT.LIK_TE3" onData="if self.value==TabZob(13,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(13,4)" />
+            </style>
+            <style horizontal-align="center" border-width="1">
+              <value-of name="LIK_DEF_UCT.LIK_TE4" onData="if self.value==TabZob(14,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(14,4)" />
+            </style>
+            <style horizontal-align="right" border-width="1">
+              <value-of name="LIK_DEF_UCT.LIK_MD" onData="if self.value==TabZob(15,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(15,4)" />
+            </style>
+            <style horizontal-align="right" border-width="1">
+              <value-of name="LIK_DEF_UCT.LIK_DAL" onData="if self.value==TabZob(16,1): self.value=''&#xA;else: self.value=self.value&#xA;self.style.width=TabZob(16,4)" />
+            </style>
+          </line>
+        </body>
+      </region>
+      <region name="VYPIS_BU">
+        <body>
+          <line>
+            <value-of name="LIK_HLA.FAK_HLA_SCHLIK" onData="self.value=self.value+' '+LIK_HLA.FAK_HLA_SCHLIK_DT" />
+          </line>
+        </body>
+      </region>
+      <region name="VAZFAK">
+        <body>
+          <line>
+            <text value="Bankou provedeno dne:" />
+            <value-of name="FAK_DAT_UHR" />
+          </line>
+        </body>
+      </region>
+      <line>
+        <style top-border-width="2">
+          <value-of name="" width="100%" onData="self.value='Formálně přezkoušel a zúčtoval - datum a podpis:'" />
+        </style>
+      </line>
+      <line>
+        <style font-size="1" font-bold="true" left-padding="0" right-padding="0">
+          <text value="*)" width="2%" />
+        </style>
+        <style font-italic="true" left-padding="0">
+          <text value="Chybějící údaje doplňte, nehodící se škrtněte." width="98%" />
+        </style>
+      </line>
+      <line>
+        <style font-face="arial" font-size="1" font-color="silver">
+          <value-of name="ROOT.NOW" width="14.65%" />
+        </style>
+        <style font-face="arial" font-size="1" font-color="silver" horizontal-align="center">
+          <value-of name="" width="72.25%" onData="self.value='LastModif='+format.info['dat_modif']+' '+format.info['ixs_xme']+' © 21. prosince 2010 Zbyněk Michálek, KDF GINIS® GORDIC®'" />
+        </style>
+        <style font-face="arial" font-size="1" font-color="silver" horizontal-align="right">
+          <value-of name="ROOT.NOW" width="13.1%" />
+        </style>
+      </line>
+    </body>
+  </region>
+</format>

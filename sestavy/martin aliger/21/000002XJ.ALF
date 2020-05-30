@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="windows-1250"?>
+
+
+<format type="grr" xmlns="http://www.gordic.cz/TR/alf/1.3/">
+
+	<info
+		ixs_xme="0000ALX0AN2V"
+		xmeta_ver="1"
+		xmeta_subver_min="1"
+		nazev="Souhrnný tisk dokladů bez popisu"
+		format="UXNDU040"
+		poznamka="distribuce GINIS 3.44"
+		ixs_alv="0000ALV03M8T"
+		allowed_output="htm,xls,doc,frm"
+		ixs_frm="0000ALF02XJY"
+		maker="0202,0206,0212"
+		last_modif="201108011401"
+		rokmes_od="199801"
+		rokmes_do="299913"
+	/>
+
+	<paper-setting paper-width="210mm" paper-height="297mm" left-margin="10mm" right-margin="10mm" top-margin="15mm" bottom-margin="15mm"/>
+
+<script><![CDATA[
+def cisla():
+ if self.value=='X':
+  self.style.font_color='black'
+  self.style.align='right'
+  self.value='X '
+ else:
+  num=Decimal(self.value)
+  self.value=num.format("# 0,00 ;# 0,00-;0,00 ")
+  if num<0:
+   self.style.font_color='red'
+  else:
+   self.style.font_color='black'
+def soucty():
+ if self.value=='X':
+  self.style.font_color='black'
+  self.style.align='right'
+  self.value='X '
+ else:
+  num=Decimal(self.value)
+  self.value=num.format("# 0,00 ;# 0,00-;0,00 ")
+  if num<0:
+   self.style.font_color='red'
+  else:
+   self.style.font_color='black'
+
+def ZjistiSirky(sirky):
+  sirky_celkem=0
+  for i in sirky:
+    sirky_celkem=sirky_celkem+Decimal(i)
+
+  return sirky_celkem
+]]></script>
+
+	<region name="SESTAVA">
+		<head>
+			<line on-each-page="true" endpage="false">
+				<style width="18%" bottom-border-width="1" font-face="arial" font-size="1" font-italic="true" multiline="false">
+					<value-of name="" onData="self.value=&apos;Licence: &apos;+SESTAVA.LIC"/>
+				</style>
+				<style width="82%" bottom-border-width="1" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+					<value-of name="" onData="self.value=format.info[&apos;format&apos;]+ &apos;  (&apos;+format.info[&apos;last_modif&apos;]+&apos;)&apos;"/>
+				</style>
+			</line>
+			<line>
+				<style width="18%" font-face="arial">
+					<text value=""/>
+				</style>
+				<style width="82%" font-face="arial" font-size="5" font-bold="true">
+					<text value="TISK ÚČETNÍCH DOKLADŮ"/>
+				</style>
+			</line>
+			<line>
+				<style width="2%" font-face="arial">
+					<text value=""/>
+				</style>
+				<style width="16%">
+					<image file="znak-m.BMP" image-width="25mm" image-height="25mm"/>
+				</style>
+				<style width="82%" font-face="arial" font-bold="true">
+					<value-of name="IDENT"/>
+				</style>
+			</line>
+			<line>
+				<style width="18%" font-face="arial">
+					<text value=""/>
+				</style>
+				<style width="82%" font-face="arial">
+					<text value=""/>
+				</style>
+			</line>
+			<line>
+				<style width="18%" font-face="arial">
+					<text value=""/>
+				</style>
+				<style width="7%" right-padding="2" font-face="arial" vertical-align="center">
+					<text value="Rok:"/>
+				</style>
+				<style width="75%" font-face="arial" font-size="3" font-bold="true">
+					<value-of name="Y"/>
+				</style>
+			</line>
+			<line>
+				<style width="18%" font-face="arial">
+					<text value=""/>
+				</style>
+				<style width="7%" font-face="arial">
+					<text value="IČO:"/>
+				</style>
+				<style width="75%" font-face="arial" font-size="3" font-bold="true">
+					<value-of name="I"/>
+				</style>
+			</line>
+			<line>
+				<style width="18%" font-face="arial">
+					<text value=""/>
+				</style>
+				<style width="7%" font-face="arial">
+					<text value="Název:"/>
+				</style>
+				<style width="75%" font-face="arial" font-size="3" font-bold="true">
+					<value-of name="" onData="self.value=SESTAVA.N"/>
+				</style>
+			</line>
+			<line>
+				<style width="100%">
+					<text value=""/>
+				</style>
+			</line>
+		</head>
+		<body>
+			<region name="D-C-M">
+				<body>
+					<region name="HLAV-SNS">
+						<body>
+							<line on-each-page="true" endpage="false">
+								<style width="18%" font-face="arial">
+									<text value=""/>
+								</style>
+								<style width="7%" font-face="arial">
+									<text value="SNS:"/>
+								</style>
+								<style width="75%" font-face="arial" font-size="3" font-bold="true">
+									<value-of name="N"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<region name="HLAV-UCS">
+						<body>
+							<line on-each-page="true" endpage="false">
+								<style width="18%" font-face="arial">
+									<text value=""/>
+								</style>
+								<style width="7%" font-face="arial">
+									<text value="UCS:"/>
+								</style>
+								<style width="11%" font-face="arial" font-size="3">
+									<value-of name="I"/>
+								</style>
+								<style width="64%" font-face="arial" font-size="3" font-bold="true">
+									<value-of name="N"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<region name="HLAV-UUS">
+						<body>
+							<line on-each-page="true" endpage="false">
+								<style width="18%" font-face="arial">
+									<text value=""/>
+								</style>
+								<style width="7%" font-face="arial">
+									<text value="UUS:"/>
+								</style>
+								<style width="11%" font-face="arial">
+									<value-of name="I"/>
+								</style>
+								<style width="64%" font-face="arial">
+									<value-of name="N"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<region name="HLAV-NKS">
+						<body>
+							<line on-each-page="true" endpage="false">
+								<style width="18%" font-face="arial">
+									<text value=""/>
+								</style>
+								<style width="7%" font-face="arial">
+									<text value="NS:"/>
+								</style>
+								<style width="11%" font-face="arial" font-italic="true">
+									<value-of name="I"/>
+								</style>
+								<style width="64%" font-face="arial" font-italic="true">
+									<value-of name="N"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<region name="DOKLAD">
+						<head>
+							<line>
+								<style width="100%" top-border-width="1">
+									<text value=""/>
+								</style>
+							</line>
+							<line on-each-page="true" endpage="false">
+								<style width="1%" left-padding="2" right-padding="2" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="center">
+									<text value="h"/>
+								</style>
+								<style width="4.3%" left-padding="2" right-padding="2" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<text value="M/Den"/>
+								</style>
+								<style width="8%" left-padding="2" right-padding="2" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+									<value-of name="" onData="self.value=&apos;Č.dokl.&apos;;self.style.width=SESTAVA.W16+&apos;%&apos;"/>
+								</style>
+								<style width="5%" left-padding="0" right-padding="0" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" ellipsis-style="cut">
+									<value-of name="SESTAVA.AN01_NAZ" onData="self.style.width=SESTAVA.W01+&apos;%&apos;"/>
+								</style>
+								<style width="5%" left-padding="0" right-padding="0" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" ellipsis-style="cut">
+									<value-of name="SESTAVA.AN02_NAZ" onData="self.style.width=SESTAVA.W02+&apos;%&apos;"/>
+								</style>
+								<style width="5%" left-padding="0" right-padding="0" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" ellipsis-style="cut">
+									<value-of name="SESTAVA.AN03_NAZ" onData="self.style.width=SESTAVA.W03+&apos;%&apos;"/>
+								</style>
+								<style width="5%" left-padding="0" right-padding="0" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" ellipsis-style="cut">
+									<value-of name="SESTAVA.AN04_NAZ" onData="self.style.width=SESTAVA.W04+&apos;%&apos;"/>
+								</style>
+								<style width="5%" left-padding="0" right-padding="0" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" ellipsis-style="cut">
+									<value-of name="SESTAVA.AN05_NAZ" onData="self.style.width=SESTAVA.W05+&apos;%&apos;"/>
+								</style>
+								<style width="5%" left-padding="0" right-padding="0" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" ellipsis-style="cut">
+									<value-of name="SESTAVA.AN06_NAZ" onData="self.style.width=SESTAVA.W06+&apos;%&apos;"/>
+								</style>
+								<style width="5%" left-padding="0" right-padding="0" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" ellipsis-style="cut">
+									<value-of name="SESTAVA.AN07_NAZ" onData="self.style.width=SESTAVA.W07+&apos;%&apos;"/>
+								</style>
+								<style width="5%" left-padding="0" right-padding="0" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" ellipsis-style="cut">
+									<value-of name="SESTAVA.AN08_NAZ" onData="self.style.width=SESTAVA.W08+&apos;%&apos;"/>
+								</style>
+								<style width="5%" left-padding="0" right-padding="0" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" ellipsis-style="cut">
+									<value-of name="SESTAVA.AN09_NAZ" onData="self.style.width=SESTAVA.W09+&apos;%&apos;"/>
+								</style>
+								<style width="5%" left-padding="0" right-padding="0" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" ellipsis-style="cut">
+									<value-of name="SESTAVA.AN10_NAZ" onData="self.style.width=SESTAVA.W10+&apos;%&apos;"/>
+								</style>
+								<style width="4%" left-padding="0" right-padding="0" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" ellipsis-style="cut">
+									<value-of name="SESTAVA.AN11_NAZ" onData="self.style.width=SESTAVA.W11+&apos;%&apos;"/>
+								</style>
+								<style width="4%" left-padding="0" right-padding="0" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" ellipsis-style="cut">
+									<value-of name="SESTAVA.AN12_NAZ" onData="self.style.width=SESTAVA.W12+&apos;%&apos;"/>
+								</style>
+								<style width="4%" left-padding="0" right-padding="0" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" ellipsis-style="cut">
+									<value-of name="SESTAVA.AN13_NAZ" onData="self.style.width=SESTAVA.W13+&apos;%&apos;"/>
+								</style>
+								<style width="4%" left-padding="0" right-padding="0" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" ellipsis-style="cut">
+									<value-of name="SESTAVA.AN14_NAZ" onData="self.style.width=SESTAVA.W14+&apos;%&apos;"/>
+								</style>
+								<style width="4%" left-padding="0" right-padding="0" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" ellipsis-style="cut">
+									<value-of name="SESTAVA.AN15_NAZ" onData="self.style.width=SESTAVA.W15+&apos;%&apos;"/>
+								</style>
+								<style width="3%" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" ellipsis-style="cut">
+									<value-of name="" onData="self.value=&apos;MD&apos;;self.style.width=SESTAVA.WS2+&apos;%&apos;"/>
+								</style>
+								<style width="3%" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" ellipsis-style="cut">
+									<value-of name="" onData="self.value=&apos;DAL&apos;;self.style.width=SESTAVA.WS3+&apos;%&apos;"/>
+								</style>
+								<style width="5%" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" ellipsis-style="cut">
+									<value-of name="" onData="self.value=&apos;Datum&apos;;self.style.width=SESTAVA.W17+&apos;%&apos;"/>
+								</style>
+								<style width="5.7%" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" ellipsis-style="cut">
+									<value-of name="" onData="self.value=&apos;Čas&apos;;self.style.width=SESTAVA.W18+&apos;%&apos;"/>
+								</style>
+							</line>
+						</head>
+						<body>
+							<region name="UCTY">
+								<body>
+									<line>
+										<style width="1%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial" font-size="125tw" horizontal-align="center" vertical-align="center">
+											<value-of name="H"/>
+										</style>
+										<style width="4.3%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial" font-size="165tw" horizontal-align="right">
+											<value-of name="" onData="self.value=UCTY.M+&apos;/&apos;+UCTY.D"/>
+										</style>
+										<style width="8%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial" font-size="165tw" horizontal-align="right" ellipsis-style="cut">
+											<value-of name="C" onData="self.style.width=SESTAVA.W16+&apos;%&apos;"/>
+										</style>
+										<style width="5%" left-padding="1" right-padding="1" top-padding="3" bottom-padding="3" font-face="arial" font-size="165tw" horizontal-align="right">
+											<value-of name="AN01" onData="self.style.width=SESTAVA.W01+&apos;%&apos;"/>
+										</style>
+										<style width="5%" left-padding="1" right-padding="1" top-padding="3" bottom-padding="3" font-face="arial" font-size="165tw" horizontal-align="right">
+											<value-of name="AN02" onData="self.style.width=SESTAVA.W02+&apos;%&apos;"/>
+										</style>
+										<style width="5%" left-padding="1" right-padding="1" top-padding="3" bottom-padding="3" font-face="arial" font-size="165tw" horizontal-align="right">
+											<value-of name="AN03" onData="self.style.width=SESTAVA.W03+&apos;%&apos;"/>
+										</style>
+										<style width="5%" left-padding="1" right-padding="1" top-padding="3" bottom-padding="3" font-face="arial" font-size="165tw" horizontal-align="right">
+											<value-of name="AN04" onData="self.style.width=SESTAVA.W04+&apos;%&apos;"/>
+										</style>
+										<style width="5%" left-padding="1" right-padding="1" top-padding="3" bottom-padding="3" font-face="arial" font-size="165tw" horizontal-align="right">
+											<value-of name="AN05" onData="self.style.width=SESTAVA.W05+&apos;%&apos;"/>
+										</style>
+										<style width="5%" left-padding="1" right-padding="1" top-padding="3" bottom-padding="3" font-face="arial" font-size="165tw" horizontal-align="right">
+											<value-of name="AN06" onData="self.style.width=SESTAVA.W06+&apos;%&apos;"/>
+										</style>
+										<style width="5%" left-padding="1" right-padding="1" top-padding="3" bottom-padding="3" font-face="arial" font-size="165tw" horizontal-align="right">
+											<value-of name="AN07" onData="self.style.width=SESTAVA.W07+&apos;%&apos;"/>
+										</style>
+										<style width="5%" left-padding="1" right-padding="1" top-padding="3" bottom-padding="3" font-face="arial" font-size="165tw" horizontal-align="right">
+											<value-of name="AN08" onData="self.style.width=SESTAVA.W08+&apos;%&apos;"/>
+										</style>
+										<style width="5%" left-padding="1" right-padding="1" top-padding="3" bottom-padding="3" font-face="arial" font-size="165tw" horizontal-align="right">
+											<value-of name="AN09" onData="self.style.width=SESTAVA.W09+&apos;%&apos;"/>
+										</style>
+										<style width="5%" left-padding="1" right-padding="1" top-padding="3" bottom-padding="3" font-face="arial" font-size="165tw" horizontal-align="right">
+											<value-of name="AN10" onData="self.style.width=SESTAVA.W10+&apos;%&apos;"/>
+										</style>
+										<style width="4%" left-padding="1" right-padding="1" top-padding="3" bottom-padding="3" font-face="arial" font-size="165tw" horizontal-align="right">
+											<value-of name="AN11" onData="self.style.width=SESTAVA.W11+&apos;%&apos;"/>
+										</style>
+										<style width="4%" left-padding="1" right-padding="1" top-padding="3" bottom-padding="3" font-face="arial" font-size="165tw" horizontal-align="right">
+											<value-of name="AN12" onData="self.style.width=SESTAVA.W12+&apos;%&apos;"/>
+										</style>
+										<style width="4%" left-padding="1" right-padding="1" top-padding="3" bottom-padding="3" font-face="arial" font-size="165tw" horizontal-align="right">
+											<value-of name="AN13" onData="self.style.width=SESTAVA.W13+&apos;%&apos;"/>
+										</style>
+										<style width="4%" left-padding="1" right-padding="1" top-padding="3" bottom-padding="3" font-face="arial" font-size="165tw" horizontal-align="right">
+											<value-of name="AN14" onData="self.style.width=SESTAVA.W14+&apos;%&apos;"/>
+										</style>
+										<style width="4%" left-padding="1" right-padding="1" top-padding="3" bottom-padding="3" font-face="arial" font-size="165tw" horizontal-align="right">
+											<value-of name="AN15" onData="self.style.width=SESTAVA.W15+&apos;%&apos;"/>
+										</style>
+										<style width="3%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial" font-size="165tw" horizontal-align="right">
+											<value-of name="MD" onData="self.style.width=SESTAVA.WS2+&apos;%&apos;" onPrint="cisla()"/>
+										</style>
+										<style width="3%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial" font-size="165tw" horizontal-align="right">
+											<value-of name="DAL" onData="self.style.width=SESTAVA.WS3+&apos;%&apos;" onPrint="cisla()"/>
+										</style>
+										<style width="5%" left-padding="0" right-padding="0" top-padding="3" bottom-padding="3" font-face="arial" font-size="125tw" font-italic="true" horizontal-align="right" vertical-align="center">
+											<value-of name="DAT" onData="self.style.width=SESTAVA.W17+&apos;%&apos;"/>
+										</style>
+										<style width="5.7%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial" font-size="125tw" font-italic="true" horizontal-align="right" vertical-align="center">
+											<value-of name="CAS" onData="self.style.width=SESTAVA.W18+&apos;%&apos;"/>
+										</style>
+									</line>
+								</body>
+							</region>
+						</body>
+					</region>
+					<region name="SOUCET">
+						<body>
+							<line break-page-before="avoid">
+								<style width="57%" top-border-width="1" background-color="#d3d3d3" font-face="arial" font-bold="true">
+									<value-of name="" onData="self.value=&apos;Součty obratů&apos;;sirky=[SESTAVA.W16,SESTAVA.W01,SESTAVA.W02,SESTAVA.W03,SESTAVA.W04,SESTAVA.W05,SESTAVA.W06,SESTAVA.W07,SESTAVA.W08,SESTAVA.W09,SESTAVA.W10,SESTAVA.W11,SESTAVA.W12,SESTAVA.W13,SESTAVA.W14,SESTAVA.W15];sirky_celkem=ZjistiSirky(sirky)+5.3;self.style.width=str(sirky_celkem)+&apos;%&apos;"/>
+								</style>
+								<style width="15%" top-border-width="1" left-padding="2" right-padding="2" background-color="#d3d3d3" font-face="arial" font-size="165tw" font-bold="true" horizontal-align="right" vertical-align="bottom">
+									<value-of name="SUMAMD" onData="self.style.width=SESTAVA.WS2+&apos;%&apos;" onPrint="soucty()"/>
+								</style>
+								<style width="15%" top-border-width="1" left-padding="2" right-padding="2" background-color="#d3d3d3" font-face="arial" font-size="165tw" font-bold="true" horizontal-align="right" vertical-align="bottom">
+									<value-of name="SUMADAL" onData="self.style.width=SESTAVA.WS3+&apos;%&apos;" onPrint="soucty()"/>
+								</style>
+								<style width="13%" top-border-width="1" background-color="#d3d3d3">
+									<text value=""/>
+								</style>
+							</line>
+							<line break-page-before="avoid">
+								<style width="57%" bottom-border-width="1" background-color="#d3d3d3" font-face="arial" font-bold="true">
+									<value-of name="" onData="self.value=&apos;MD - DAL&apos;;sirky=[SESTAVA.W16,SESTAVA.W01,SESTAVA.W02,SESTAVA.W03,SESTAVA.W04,SESTAVA.W05,SESTAVA.W06,SESTAVA.W07,SESTAVA.W08,SESTAVA.W09,SESTAVA.W10,SESTAVA.W11,SESTAVA.W12,SESTAVA.W13,SESTAVA.W14,SESTAVA.W15];sirky_celkem=ZjistiSirky(sirky)+5.3;self.style.width=str(sirky_celkem)+&apos;%&apos;"/>
+								</style>
+								<style width="30%" bottom-border-width="1" left-padding="2" right-padding="2" background-color="#d3d3d3" font-face="arial" font-size="165tw" font-bold="true" horizontal-align="right" vertical-align="bottom">
+									<value-of name="ROZDIL" onData="self.style.width=str(Decimal(SESTAVA.WS2) + Decimal(SESTAVA.WS3))+&apos;%&apos;" onPrint="soucty()"/>
+								</style>
+								<style width="13%" bottom-border-width="1" background-color="#d3d3d3">
+									<text value=""/>
+								</style>
+							</line>
+						</body>
+					</region>
+				</body>
+			</region>
+			<region name="MASKA-HL">
+				<body>
+					<line>
+						<style width="100%" font-face="arial" font-size="1">
+							<text value=""/>
+						</style>
+					</line>
+					<line>
+						<style width="100%" font-face="arial" font-size="1">
+							<text value="Zadaná maska:"/>
+						</style>
+					</line>
+					<line>
+						<style width="8%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="C"/>
+						</style>
+						<style width="6%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="SU"/>
+						</style>
+						<style width="5%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="AU"/>
+						</style>
+						<style width="5%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="ODPA"/>
+						</style>
+						<style width="5%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="POL"/>
+						</style>
+						<style width="4%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="ZJ"/>
+						</style>
+						<style width="8%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="UZ"/>
+						</style>
+						<style width="4%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="ORJ"/>
+						</style>
+						<style width="12%" left-padding="0" right-padding="0" top-padding="3" bottom-padding="3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="ORG"/>
+						</style>
+						<style width="15%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="MD"/>
+						</style>
+						<style width="15%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="DAL"/>
+						</style>
+						<style width="13%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value=""/>
+						</style>
+					</line>
+				</body>
+			</region>
+			<region name="MASKA-OD">
+				<body>
+					<line>
+						<style width="8%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f3f3f3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="C"/>
+						</style>
+						<style width="6%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f3f3f3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="SU"/>
+						</style>
+						<style width="5%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f3f3f3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="AU"/>
+						</style>
+						<style width="5%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f3f3f3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="ODPA"/>
+						</style>
+						<style width="5%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f3f3f3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="POL"/>
+						</style>
+						<style width="4%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f3f3f3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="ZJ"/>
+						</style>
+						<style width="8%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f3f3f3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="UZ"/>
+						</style>
+						<style width="4%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f3f3f3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="ORJ"/>
+						</style>
+						<style width="12%" left-padding="0" right-padding="0" top-padding="3" bottom-padding="3" background-color="#f3f3f3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="ORG"/>
+						</style>
+						<style width="15%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f3f3f3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="MD" onPrint="cisla()"/>
+						</style>
+						<style width="15%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f3f3f3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="DAL" onPrint="cisla()"/>
+						</style>
+						<style width="13%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f3f3f3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value=""/>
+						</style>
+					</line>
+				</body>
+			</region>
+			<region name="MASKA-DO">
+				<body>
+					<line>
+						<style width="8%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f3f3f3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="C"/>
+						</style>
+						<style width="6%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f3f3f3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="SU"/>
+						</style>
+						<style width="5%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f3f3f3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="AU"/>
+						</style>
+						<style width="5%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f3f3f3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="ODPA"/>
+						</style>
+						<style width="5%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f3f3f3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="POL"/>
+						</style>
+						<style width="4%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f3f3f3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="ZJ"/>
+						</style>
+						<style width="8%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f3f3f3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="UZ"/>
+						</style>
+						<style width="4%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f3f3f3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="ORJ"/>
+						</style>
+						<style width="12%" left-padding="0" right-padding="0" top-padding="3" bottom-padding="3" background-color="#f3f3f3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="ORG"/>
+						</style>
+						<style width="15%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f3f3f3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="MD" onPrint="cisla()"/>
+						</style>
+						<style width="15%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f3f3f3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="DAL" onPrint="cisla()"/>
+						</style>
+						<style width="13%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" background-color="#f3f3f3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<text value=""/>
+						</style>
+					</line>
+				</body>
+			</region>
+			<region name="MASKA-REF">
+				<body>
+					<line>
+						<style width="100%" font-size="1">
+							<text value=""/>
+						</style>
+					</line>
+					<region name="MASKA-RADEK">
+						<body>
+							<line>
+								<style width="100%" font-face="courier" font-size="125tw" font-color="red">
+									<value-of name="RADEK"/>
+								</style>
+							</line>
+						</body>
+					</region>
+				</body>
+			</region>
+		</body>
+		<foot>
+			<line on-each-page="true">
+				<style width="27%" top-border-width="1" font-face="arial" font-size="1" font-italic="true" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.value=&apos;&apos;+SESTAVA.DATUM+&apos; &apos;+SESTAVA.CAS"/>
+				</style>
+				<style width="46%" top-border-width="1" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" multiline="false">
+					<text value="Tento doklad byl vystaven v systému  GINIS® GORDIC® spol. s  r. o."/>
+				</style>
+				<style width="27%" top-border-width="1" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" multiline="false">
+					<value-of name="" onData="self.value=&apos;strana &apos;+ROOT.PAGE+&apos; / &apos;+ROOT.PAGES"/>
+				</style>
+			</line>
+		</foot>
+	</region>
+</format>

@@ -1,0 +1,701 @@
+;---------------------------------------------
+;  Øídící soubor k sestavì "Žádost o zveøejnìní - obraz + fixace metadat"
+;---------------------------------------------
+; Vstup: X0000 - identifikátor ixp_zve - žádosti ke zveøejnìní
+;        X0001 - identifikátor ixp_orig - smlouvy ke zveøejnìní
+;        X0002 - identifikátor ixs_zve - zveøejnìní wfldzve
+;        X0009 - parametr pro Aligera
+;
+; VYTVORIL:   David Brychta
+;---------------------------------------------
+
+#INFO type_cust="X"
+#INFO faze="GMSSSLS1"
+#INFO NAZEV="Žádost o zveøejnìní - Stažení"
+#INFO MAKER="0546"
+#INFO DAT_MODIF="201601180812"
+#INFO create_date="20160118"
+#INFO ROKMES_OD="200507"
+#INFO ROKMES_DO="999913"
+#INFO IXS_ALV="0000ALV06DJY"
+#INFO ID_SES="UDEZVE02"
+#INFO TEMA="gin_ptm_zves1"
+#INFO TYP_ALG="0"
+#INFO TYP_VYST="XME"
+#INFO PRIZ_SOR="0"
+#INFO VERZE_DB_MIN="374GIN00"           ; Minimalni verze databaze
+#INFO ktg_typ="0"
+#INFO IXS_TYP="00000400000G"
+#INFO PRI_VAZ="1"
+#INFO ZPU_ULO="10"
+#INFO PRI_ZME="0"
+#INFO PRI_DOT="1"
+#INFO IXS_STR="0000STR00PVM"
+#PRAGMA OUTNAME="000006DJ.ALV"
+#info ixs_frm="0000ALF03VX1"
+#info ixs_xme="0000ALX0B2J8"
+#INFO machine="IOM"
+#info xmeta_ver="1"
+#info xmeta_subver="1"
+#INFO ODLOZ="0"
+
+#declares V_NAZEV_ORIG
+#declares V_NAZEV_ZVE
+#declares V_IXS_FUN_AKT
+
+#declares V_NAZEV_FUN
+#declares V_OFIC_NAZEV_FUN
+#declares V_TITPRE
+#declares V_JMENO
+#declares V_PRIJMENI
+#declares V_TITZA
+#declares V_SU_NAZEV
+#declares V_TEL
+#declares V_FAX
+#declares V_MAIL
+
+#declarep V_CELKOVA_CASTKA
+#declarep V_CASTKA_S_DPH
+#declarep V_CASTKA_BEZ_DPH
+#declares V_PARTNER_ICO
+#declares V_PARTNER_NAZEV
+#declares V_PARTNER_ADRESA
+#declares V_NAZEV_SCHVALIL
+#declares V_ID_OPERACE_ZVE
+#declares V_PREDMET
+#declares V_POPIS
+
+#declares V_IXS_ESU
+#declares V_LIC_ZAST_ESU
+#declares V_POR_ZAST_ESU
+#declares V_TIT_ZAST_P
+#declares V_TIT_ZAST_Z
+#declares V_JMENO_ZAST
+#declares V_PRIJMENI_ZAST
+#declares V_IXS_REF_SCHVAL
+#declares V_SCHVAL_TITP
+#declares V_SCHVAL_JMENO
+#declares V_SCHVAL_PRIJMENI
+#declares V_SCHVAL_TITZ
+
+#declares V_IXB
+#declares V_IXB_NAZEV
+
+#declares V_ZVE_IXS_ZPV
+#declares V_ZVE_ZPV_NAZEV
+#declares V_ZVE_KAT_ID
+#declares V_ZVE_KAT
+#declares V_ZVE_ZPV_OPERACE_ID
+#declares V_ZVE_ZPV_OPERACE_NAZEV
+
+#DECLARES _fun_komu_fr
+#DECLARES _nazev_role
+#DECLARES _ktg_sch_role
+
+#DECLARES V_PREDMET_SML
+#DECLARES V_CIS_SML
+#DECLARES V_IXS_TYP
+#DECLARES V_TYP_DOK
+#DECLARES V_DAT_UZAV
+#DECLARES VS_DAT_UZAV
+;#DECLARES VS_DAT_UZAV_VLA
+;#DECLARES VS_DAT_UZAV_VLA_T
+#DECLARES V_DAT_UCIN
+#DECLARES VS_DAT_UCIN
+;#DECLARES VS_DAT_UCIN_VLA
+;#DECLARES VS_DAT_UCIN_VLA_T
+#DECLARES V_DAT_PLAT
+#DECLARES VS_DAT_PLAT
+;#DECLARES VS_DAT_PLAT_VLA
+;#DECLARES VS_DAT_PLAT_VLA_T
+#DECLARES V_PARTNER_SCHVAL
+#DECLARES V_REAL_NAZEV
+#DECLARES V_REAL_CISLO
+#DECLARES V_KOMPETENT
+#DECLARES V_REFERENT
+#DECLARES V_CIS_VZ
+
+#DECLAREP V_POM_C
+
+#DECLARES SSL_SML_PLATNOST
+#DECLARES SSL_SML_UCINNTOS
+#DECLARES SSL_SML_UKONCENI
+#DECLARES SSL_SML_CASTKA_KC
+#DECLARES SSL_SML_POPIS_CASTKA_KC
+#DECLARES SSL_SML_POCET_DODATKU
+
+#declares V_DAT_OD
+#declares V_DAT_ODS
+
+#declares V_DAT_DO
+#declares V_DAT_DOS
+
+#RESOURCEXME 00000B2J.XME
+#manyuservars
+;---- include pro vycteni devateho parametru
+#INCLUDE OBEX25.G00
+#INCLUDE ObeX34.G00
+#INCLUDE OBEX37X.G00
+
+;#FUNCDATXME PredelejKonceRadku
+
+{
+CREATE DBA PROCEDURE XSP_ADD_VLA_02(
+	a_ixp			CHAR(12),
+	a_ixs_vla			CHAR(12),
+	a_hovla			CHAR(50),
+	a_hovla_txt		CHAR(50),
+	a_cs_hovla_txt		CHAR(50),
+	a_por_cislo		SMALLINT,
+	a_radek			SMALLINT,
+	a_k_v_pro			INTEGER			-- pøedchozí øádek jeho k_v_pro,  0 èi null jestliže pøidat na konec
+	
+)
+-- -----------RETURNING--------------------------------
+    RETURNING	INTEGER,					-- v_err_code
+			INTEGER,					-- v_sql_err
+			INTEGER,					-- v_isam_err
+			CHAR(254),				-- v_err_txt
+			SMALLINT;				-- por_cislo
+
+CREATE DBA PROCEDURE XSP_DEL_VLA_01(
+	a_ixp				CHAR(12),
+	a_ixs_pro			CHAR(12),
+	a_ixs_stv			CHAR(12),
+	a_ixs_vla			CHAR(12),
+	a_por_cislo		SMALLINT
+)
+-- -----------RETURNING--------------------------------
+    RETURNING	INTEGER,					-- v_err_code
+			INTEGER,					-- v_sql_err
+			INTEGER,					-- v_isam_err
+			CHAR(254);				-- v_err_txt
+}
+{
+CREATE DBA PROCEDURE spg_copy_vla_01(
+  a_log_por_cislo        integer,
+  a_com_mode             smallint,
+  a_ixp_zdroj            char(12),
+  a_ixp_cil              char(12),
+  a_ixs_pro              char(12),
+  a_ixs_stv              char(12),
+  a_ixs_vla              char(12)
+)
+RETURNING
+  integer,                                                                     -- v_err_code
+  integer,                                                                     -- v_sql_err
+  integer,                                                                     -- v_isam_err
+  char(254),                                                                   -- v_err_txt
+  varchar(254);                                                                -- o_lok_err
+}
+
+proc stored copy_vla(in datatype "integer" P0099, in datatype "smallint" P0100, in S0101,in S0102,in S0103,in S0104,in S0105,\
+            out datatype "integer" P0209,out datatype "integer" P0210,out datatype "integer" P0211,\
+            out S0212,out S0213) name "vas.spg_copy_vla_01"
+
+
+proc stored spg_add_vla(in datatype "integer" P0099, in datatype "smallint" P0100, in S0101,in S0102,in S0103,in S0104,in S0105,\
+            in datatype "smallint" P0106,in datatype "smallint" P0107,in datatype "integer" P0107,\
+            out datatype "integer" P0209,out datatype "integer" P0210,out datatype "integer" P0211,\
+            out S0212,out S0213,out datatype "smallint" P0214) name "vas.spg_add_vla_02"
+
+proc stored spg_del_vla(in datatype "integer" P0099, in datatype "smallint" P0100, in S0101,in S0102,in S0103,in S0104,\
+            in datatype "smallint" P0105,\
+            out datatype "integer" P0209,out datatype "integer" P0210,out datatype "integer" P0211,\
+            out S0212,out S0213) name "vas.spg_del_vla_01"
+
+PROC del_vla(IN S0102,IN S0103,IN S0104,IN P0105)
+
+   CALL spg_del_vla(S0960, 1, X0000,S0102, S0103, S0104, P0105,\
+                    P0209, P0210, P0211, S0212, S0213)
+
+   IF P0209 <> 0
+      S0209 = P0209
+      S0210 = P0210
+      S0215 = "Chyba [" + S0102 + "]: " + S0209 + "/" + S0210 + " - " + S0212 + " / " + S0213
+      Messagebox S0215, "Nepodaøilo se odmazat vlastnosti dokumentu"
+   ENDIF
+ENDP
+
+PROC new_copy_vla(in S0103,in S0104,in S0105)
+     CALL copy_vla(S0960, 1, X0001, X0000, S0103, S0104, S0105, P0209, P0210, P0211, S0212, S0213)
+     IF P0209 <> 0
+        S0209 = P0209
+        S0210 = P0210
+        S0215 = "Chyba [ z:"+X0001+" na:"+X0000+"-"+S0103+"/"+S0104+"/"+S0105 + "]: " + S0209 + "/" + S0210 + " - " + S0212 + " / " + S0213
+        Messagebox S0215, "Nepodaøilo se zkopírovat vlastnost dokumentu"
+     ENDIF
+ENDP
+
+Proc add_vla(in S0102,in S0103,in S0104,in S0105)
+   #declares V_IXS_PRO
+   #declares V_IXS_STV
+   #declarep V_POR_CISLO_VLA
+
+   CYCLE \
+   	SELECT 	V_IXS_PRO = ginvvla.ixs_pro, \
+   	        V_IXS_STV = ginvvla.ixs_stv, \
+   	        V_POR_CISLO_VLA = ginvvla.por_cislo \
+   	FROM	vas.ginvvla ginvvla \
+   	WHERE	ginvvla.ixx = '@X0000' AND ginvvla.ixs_vla = '@S0102'
+    call del_vla( V_IXS_PRO, V_IXS_STV, S0102, V_POR_CISLO_VLA)	
+   ENDC
+
+   #declares V_HOVLA
+   #declares V_HOVLA_TXT
+   #declares V_CS_HOVLA_TXT
+   #declarep V_POM
+   #declarep V_COUNT
+   #declarep V_I
+   
+   V_POM = LEN(S0103)
+   IF V_POM > 50
+   	IF (v_pom%50) = 0
+   		V_COUNT = (V_POM / 50)
+   	ELSE
+   		V_COUNT = TRUNC((V_POM / 50),0)  + 1
+   	ENDIF
+   ELSE
+   	V_COUNT = 1
+   ENDIF
+   
+   V_POR_CISLO_VLA = -1
+
+   FOR V_I=1 TO V_COUNT
+   	V_HOVLA = COPY(S0103,(V_I - 1)*50 + 1,50)
+   	V_HOVLA_TXT = COPY(S0104,(V_I - 1)*50 + 1,50)
+   	V_CS_HOVLA_TXT = ""
+   	
+   	call spg_add_vla(S0960, 1, X0000, S0102, V_HOVLA, V_HOVLA_TXT, V_CS_HOVLA_TXT, V_POR_CISLO_VLA, V_I, 0,\
+                    P0209, P0210, P0211, S0212, S0213, V_POR_CISLO_VLA)
+
+    if P0209 <> 0
+       S0209 = P0209
+       S0210 = P0210
+       S0215 = "Chyba [" + S0102 + "]: " + S0209 + "/" + S0210 + " - " + S0212 + " / " + S0213
+       Messagebox S0215, "Nepodaøilo se pøidat vlastnost dokumentu"
+    endif
+
+   ENDF
+endp
+
+set rtfstyle=0
+?ixs_xme|@GetInfo("IXS_XME"),12.|@GetInfo("XMETA_VER"),1.|@GetInfo("XMETA_SUBVER"),1.|
+
+S0960=VratParamX0009("LPC")
+S0961=VratParamX0009("ZMP")
+
+; nazev organizace
+SELECT	S0962=ginsfun.nazev_ref, \
+		S0963=ginsfun.nazev_rf, \
+		S0964=ginsfun.nazev, \
+		S0965=ginsfun.ofic_nazev, \
+		S0966=ginspod.nazev, \
+		S0967=ginspod.ofic_nazev, \
+		S0990= ginsfun.ixs_orj \
+FROM vas.ginszmp ginszmp, vas.ginsfun ginsfun, vas.ginspod ginspod \
+WHERE ginszmp.ixs_zmp='@S0961' AND ginszmp.ixs_fun = ginsfun.ixs_fun AND \
+      ginsfun.ixs_su = ginspod.ixs_su
+
+SELECT S0991= ginsorj.ixs_isu \
+FROM vas.ginsorj ginsorj \
+WHERE (ginsorj.ixs_orj='@S0990')
+
+SELECT	S0101= ginsesu.ob_jmeno, \
+		S0098=ginsesu.ico, \
+		S0099=ginsesu.esu_txt, \
+		S0102= ginsesu.st2, \
+		S0103= ginsesu.st3, \
+		S0104= ginsesu.st4, \
+		S0105= ginsesu.st5, \
+		S0106= ginsesu.st6 \
+FROM	vas.ginsesu ginsesu \
+WHERE	(ginsesu.ixs_esu='@S0991')
+
+SELECT	V_NAZEV_ORIG=wflspid.nazev, \
+		V_IXS_FUN_AKT=wflspid.ixs_fun_akt, \
+		V_CIS_SML=wflspid.akt_znacka, \
+		V_PREDMET_SML=wflspid.nazev, \
+		P0150=wflspid.s_ssl, \
+		P0160=wflspid.s_prij, \
+  V_IXS_TYP = wflspid.ixs_typ, \
+  V_TYP_DOK = (select nazev from vas.sslstyp f where f.ixs_typ = wflspid.ixs_typ )\
+FROM	vas.wflspid wflspid \
+WHERE	wflspid.ixp = '@X0001'
+
+SELECT	V_NAZEV_ZVE=wflspid.nazev \
+FROM	vas.wflspid wflspid \
+WHERE	wflspid.ixp = '@X0000'
+
+SELECT	V_ZVE_IXS_ZPV = wflsozv.ixs_zpv, \
+       V_ZVE_ZPV_NAZEV = wflszpv.nazev, \
+       V_ZVE_KAT_ID = wflszpv.ktg_zve, \
+       V_ZVE_KAT = wflczve.ktg_zve_txt, \
+       V_ZVE_ZPV_OPERACE_ID = wflsozv.operace, \
+       V_ZVE_ZPV_OPERACE_NAZEV = wflsozv.nazev \
+FROM	vas.wflsozv wflsozv, vas.wfldzve wfldzve, vas.wflszpv wflszpv, vas.wflczve wflczve \
+WHERE	wfldzve.ixs_zve = '@X0002' AND wfldzve.ixp_zve = '@X0000' AND \
+		wfldzve.ixs_zpv = wflsozv.ixs_zpv AND wfldzve.operace = wflsozv.operace AND \
+  wflsozv.ixs_zpv = wflszpv.ixs_zpv	AND wflszpv.ktg_zve = wflczve.ktg_zve
+
+; Tisk hlavicky
+WRITEXME "HLA","DOK_ORIG_PID"=X0001 ,\
+			"DOK_ZVE_PID"=X0000 ,\
+			"DOK_ORIG_NAZEV"=V_NAZEV_ORIG,\
+			"DOK_ZVE_NAZEV"=V_NAZEV_ZVE,\
+			"ZVE_IXS_ZPV"=V_ZVE_IXS_ZPV,\
+			"ZVE_ZPV_NAZEV"=V_ZVE_ZPV_NAZEV,\
+			"ZVE_ZPV_KAT_ID"=V_ZVE_KAT_ID,\
+			"ZVE_ZPV_KAT"=V_ZVE_KAT,\
+			"ZVE_ZPV_OPERACE_ID"=V_ZVE_ZPV_OPERACE_ID,\
+		"ZVE_ZPV_OPERACE_NAZEV"=V_ZVE_ZPV_OPERACE_NAZEV,\			
+			"ISU_OB_JMENO"=S0101 ,\
+			"ISU_ICO"=S0098 ,\
+			"ISU_ESU_TXT"=S0099 ,\
+			"ISU_ORG_ST2"=S0102 ,\
+			"ISU_ORG_ST3"=S0103 ,\
+			"ISU_ORG_ST4"=S0104 ,\
+			"ISU_ORG_ST5"=S0105 ,\
+			"ISU_ORG_ST6"=S0106 ,\
+			"TISK_REF"=S0962,\
+			"TISK_RF"=S0963,\
+			"TISK_FUN"=S0964,\
+			"TISK_FUN_OFIC"=S0965,\
+			"TISK_SU"=S0966,\
+		"TISK_SU_OFIC"=S0967
+			
+; výbìr a tisk dat
+
+; aktuální vlastník
+SELECT	V_NAZEV_FUN=ginsref.nazev, \
+		V_OFIC_NAZEV_FUN=ginsfun.nazev_rf, \
+		V_TITPRE=ginsref.tit_pred, \
+		V_JMENO=ginsref.jmeno, \
+		V_PRIJMENI=ginsref.prijmeni, \
+		V_TITZA=ginsref.tit_za, \
+		V_SU_NAZEV=ginspod.ofic_nazev, \
+		V_TEL=ginsref.tel, \
+		V_FAX=ginsref.fax, \
+		V_MAIL=ginsref.mail \
+FROM 	vas.ginsfun ginsfun, vas.ginsref ginsref, vas.ginspod ginspod \
+WHERE 	ginsfun.ixs_fun='@V_IXS_FUN_AKT' AND ginsfun.ixs_ref = ginsref.ixs_ref AND ginsfun.ixs_su = ginspod.ixs_su
+
+S0151 = ""
+if P0150 = 1
+   SELECT P0151 = Count(*) \
+    FROM  vas.sslspid a \
+    WHERE a.ixp = '@X0001'
+    
+   if P0151 = 1
+      SELECT S0151 = a.obsah_text, \
+             S0152 = a.obsah_text_2, \
+             S0153 = a.obsah_text_3, \
+             S0154 = a.obsah_text_4 \
+       FROM  vas.sslspid a \
+       WHERE a.ixp = '@X0001'
+       
+      S0151 = S0151+S0152+S0153+S0154
+
+   endif
+endif
+
+V_IXS_ESU = ""
+if P0160 = 1
+   SELECT P0161 = Count(*) \
+    FROM  vas.wflspio a \
+    WHERE a.ixp = '@X0001'
+
+   if P0161 = 1
+      SELECT V_IXS_ESU = a.ixs_esu, \
+           		V_LIC_ZAST_ESU = a.lic_zast, \
+           		V_POR_ZAST_ESU = a.por_zast \
+       FROM  vas.wflspio a \
+       WHERE a.ixp = '@X0001'
+       
+       SELECT	V_PARTNER_NAZEV= ginsesu.ob_jmeno, \
+        		    V_PARTNER_ADRESA=ginsesu.esu_txt, \
+        		    V_PARTNER_ICO=ginsesu.ico \
+        FROM  vas.ginsesu ginsesu \
+        WHERE	(ginsesu.ixs_esu='@V_IXS_ESU')
+
+        V_PARTNER_SCHVAL = ""
+
+        IF (V_LIC_ZAST_ESU <> "" && V_POR_ZAST_ESU <> "" && V_POR_ZAST_ESU <> "-1" && V_POR_ZAST_ESU <> "-1.00")
+           SELECT	V_POM_C= Count(*) \
+            FROM	vas.gindesu gindesu \
+            WHERE	gindesu.ixs_esu = '@V_IXS_ESU' AND gindesu.lic = '@V_LIC_ZAST_ESU' AND gindesu.por_zast = @V_POR_ZAST_ESU
+
+           IF V_POM_C = 1
+              SELECT	V_TIT_ZAST_P = gindesu.tit_pred, \
+                     V_JMENO_ZAST = gindesu.jmeno, \
+                     V_PRIJMENI_ZAST = gindesu.prijmeni, \
+                     V_TIT_ZAST_Z = gindesu.tit_za \
+               FROM	 vas.gindesu gindesu \
+               WHERE	gindesu.ixs_esu = '@V_IXS_ESU' AND gindesu.lic = '@V_LIC_ZAST_ESU' AND gindesu.por_zast = @V_POR_ZAST_ESU
+
+               V_PARTNER_SCHVAL = TRIM(V_TIT_ZAST_P) + " " + TRIM(V_JMENO_ZAST) + " " + TRIM(V_PRIJMENI_ZAST) + " " + TRIM(V_TIT_ZAST_Z)
+
+           ENDIF
+        ENDIF
+   endif
+endif
+
+SELECT	V_ID_OPERACE_ZVE = wflsozv.id_operace, \
+       V_DAT_OD = wfldzve.dat_od, \
+       V_DAT_DO = wfldzve.dat_do \
+FROM	vas.wflsozv wflsozv, vas.wfldzve wfldzve \
+WHERE	wfldzve.ixs_zve = '@X0002' AND wfldzve.ixp_zve = '@X0000' AND \
+		wfldzve.ixs_zpv = wflsozv.ixs_zpv AND wfldzve.operace = wflsozv.operace
+
+V_DAT_OD= copy(V_DAT_OD,1,19)
+V_DAT_ODS= DateToStr(V_DAT_OD,"RRRR-MM-DD HH:II:SS","DD.MM.RRRR HH:II:SS")
+V_DAT_DO= copy(V_DAT_DO,1,19)
+V_DAT_DOS= DateToStr(V_DAT_DO,"RRRR-MM-DD HH:II:SS","DD.MM.RRRR HH:II:SS")
+
+SELECT	V_PREDMET = predmet, \
+		V_POPIS = popis \
+FROM	vas.wflvzve \
+WHERE	ixp_zve = '@X0000' AND ixp_orig = '@X0001'
+
+SELECT S0051 = wfldulz.nazev \
+FROM  vas.wfldzve wfldzve, \
+      vas.wflszpv wflszpv, \
+      vas.wfldulz wfldulz \
+where wfldzve.ixs_zve = '@X0002' AND  wflszpv.ixs_zpv = wfldzve.ixs_zpv AND \
+      wfldulz.ixs_ulz = wflszpv.ixs_ulz and wfldulz.ktg_dms = wfldzve.ktg_dms
+
+;---------------------------------------------------------------------
+; Vytvoreni kopie polozek Vlastnosti pro zadost z puvodni dokladu SSL
+;---------------------------------------------------------------------
+;-- platnost
+CALL new_copy_vla("MP1200P0A01A", "MP1200S0A01P", "MP1200V0A02Z")
+
+SELECT \
+       SSL_SML_PLATNOST = hovla_txt \
+FROM \
+    vas.ginvvla \
+WHERE \
+      ixx='@X0001' AND \
+      ixs_pro='MP1200P0A01A' AND \
+      ixs_stv='MP1200S0A01P' AND \
+      ixs_vla='MP1200V0A02Z' AND \
+      por_cislo=1 AND \
+      aktivita=100
+      
+;-- ucinnost
+CALL new_copy_vla("MP1200P0A01A", "MP1200S0A01P", "MP1200V0A03U")
+
+SELECT \
+       SSL_SML_UCINNTOS = hovla_txt \
+FROM \
+     vas.ginvvla \
+WHERE  \
+     ixx='@X0001' AND \
+     ixs_pro='MP1200P0A01A' AND \
+     ixs_stv='MP1200S0A01P' AND \
+     ixs_vla='MP1200V0A03U' AND \
+     por_cislo=1 AND \
+     aktivita=100
+
+;-- Ukonèení
+CALL new_copy_vla("MP1200P0A01A", "MP1200S0A01P", "MP1200V0A04P")
+
+SELECT \
+       SSL_SML_UKONCENI = hovla_txt \
+FROM \
+     vas.ginvvla \
+WHERE \
+      ixx='@X0001' AND \
+      ixs_pro='MP1200P0A01A' AND \
+      ixs_stv='MP1200S0A01P' AND \
+      ixs_vla='MP1200V0A04P' AND \
+      por_cislo=1 AND \
+      aktivita=100
+      
+;-- Èástka Kè
+call new_copy_vla("MP1200P0A01A", "MP1200S0A02K", "MP1200V0A05K")
+
+SELECT \
+       SSL_SML_CASTKA_KC = hovla_txt \
+FROM \
+     vas.ginvvla \
+WHERE \
+      ixx='@X0001' AND \
+      ixs_pro='MP1200P0A01A' AND \
+      ixs_stv='MP1200S0A02K' AND \
+      ixs_vla='MP1200V0A05K' AND \
+      por_cislo=1 AND \
+      aktivita=100
+      
+;-- Popis èástky
+call new_copy_vla("MP1200P0A01A", "MP1200S0A02K", "MP1200V0A06F")
+
+SELECT \
+       SSL_SML_POPIS_CASTKA_KC = hovla_txt \
+FROM \
+     vas.ginvvla \
+WHERE \
+      ixx='@X0001' AND \
+      ixs_pro='MP1200P0A01A' AND \
+      ixs_stv='MP1200S0A02K' AND \
+      ixs_vla='MP1200V0A06F' AND \
+      por_cislo=1 AND \
+      radek=1 AND \
+      aktivita=100
+      
+;-- Poèet dodatkù
+call new_copy_vla("MP1200P0A01A", "MP1200S0A01P", "MP1200V0A07A")
+
+SELECT \
+       SSL_SML_POCET_DODATKU = hovla_txt \
+FROM \
+     vas.ginvvla \
+WHERE \
+      ixx='@X0001' AND \
+      ixs_pro='MP1200P0A01A' AND \
+      ixs_stv='MP1200S0A01P' AND \
+      ixs_vla='MP1200V0A07A' AND \
+      por_cislo=1 AND \
+      aktivita=100
+
+
+; Tisk ZVE
+WRITEXME "ZVE","DOK_ORIG_LOK_NAZEV"=V_NAZEV_FUN ,\
+			"DOK_ORIG_LOK_OFIC_NAZEV"=V_OFIC_NAZEV_FUN ,\
+			"DOK_ORIG_LOK_TITPRE"=V_TITPRE,\
+			"DOK_ORIG_LOK_JME"=V_JMENO,\
+			"DOK_ORIG_LOK_PRI"=V_PRIJMENI,\
+			"DOK_ORIG_LOK_TITZA"=V_TITZA,\
+			"DOK_ORIG_LOK_SU"=V_SU_NAZEV,\
+			"DOK_ORIG_LOK_TEL"=V_TEL,\
+			"DOK_ORIG_LOK_FAX"=V_FAX,\			
+			"DOK_ORIG_LOK_MAIL"=V_MAIL ,\
+			"DOK_ORIG_VEC_PODROBNE"=S0151 ,\
+			"MET_DAT_ORIG_CASTKA_S_DPH"=SSL_SML_CASTKA_KC ,\
+			"MET_DAT_ORIG_PARTNER_ICO"=V_PARTNER_ICO ,\
+			"MET_DAT_ORIG_PARTNER_NAZEV"=V_PARTNER_NAZEV ,\
+			"MET_DAT_ORIG_AGENDA"="GINIS SML" ,\
+			"MET_DAT_ORIG_PARTNER_ADRESA"=V_PARTNER_ADRESA ,\
+			"MET_DAT_ORIG_CASTKA_BEZ_DPH"=SSL_SML_CASTKA_KC ,\
+			"MET_DAT_ZVE_SCHVALIL"=V_NAZEV_SCHVALIL ,\
+			"MET_DAT_ORIG_TYP_DOKUMENTU"="1",\
+			"MET_DAT_ID_OPERACE_ZVE"=V_ID_OPERACE_ZVE,\
+			"MET_DAT_ZVE_PREDMET"=V_PREDMET,\
+			"MET_DAT_ZVE_POPIS"=V_POPIS,\
+			"MET_DAT_ORIG_CIS_SML"=V_CIS_SML,\
+   "MET_DAT_ORIG_TYP_DOK"=V_TYP_DOK,\
+   "MET_DAT_ORIG_DAT_UZAV"=VS_DAT_UZAV,\
+   "MET_DAT_ORIG_DAT_UCIN"=VS_DAT_UCIN,\
+   "MET_DAT_ORIG_DAT_PLAT"=VS_DAT_PLAT,\
+   "MET_DAT_ORIG_PARTNER_SCHVAL"=V_PARTNER_SCHVAL,\
+   "MET_DAT_ORIG_REALIZATOR_NAZEV"=V_REAL_NAZEV,\
+   "MET_DAT_ORIG_REALIZATOR_CISLO"=V_REAL_CISLO,\
+   "MET_DAT_ORIG_KOMPETENT"=V_KOMPETENT,\
+   "MET_DAT_ORIG_REFERENT"=V_REFERENT,\
+   "MET_DAT_ORIG_CIS_VZ"=V_CIS_VZ, \
+   "MET_DAT_POPIS_SML"=V_PREDMET_SML, \
+   "MET_DAT_SSL_SML_PLATNOST"=SSL_SML_PLATNOST, \
+   "MET_DAT_SSL_SML_UCINNTOS"=SSL_SML_UCINNTOS, \
+   "MET_DAT_SSL_SML_UKONCENI"=SSL_SML_UKONCENI, \
+   "MET_DAT_SSL_SML_CASTKA_KC"=SSL_SML_CASTKA_KC, \
+   "MET_DAT_SSL_SML_POPIS_CASTKA_KC"=SSL_SML_POPIS_CASTKA_KC, \
+   "MET_DAT_SSL_SML_POCET_DODATKU"=SSL_SML_POCET_DODATKU, \
+   "ZVE_NAZEV_KATEGORIE_UDE"=S0051,\
+   "ZVE_VYVESENO_DNE_UDE"=V_DAT_ODS,\
+   "ZVE_SEJMUTO_DNE_UDE"=V_DAT_DOS
+
+CYCLE \
+	SELECT	V_IXB = wflsixb.ixb,\
+			V_IXB_NAZEV= wflsixb.soubor\
+	FROM	vas.wflsixb wflsixb, vas.wflspri wflspri, vas.wflsepx wflsepx \
+	WHERE	wflsepx.ixp = '@X0000' AND \
+			wflsepx.typ_elp = 20 AND \
+			wflsepx.aktivita = 100 AND \
+			wflsepx.ixb = wflspri.ixb AND wflsepx.ixp = wflspri.ixp AND \
+			wflspri.aktivita = 100 AND\
+			wflsepx.ixb = wflsixb.ixb AND wflsixb.aktivita = 100
+	
+	WRITEXME "DOK_ZVE_PRI","DOK_ZVE_PRILOHA_IXB"= V_IXB,\
+		    				"DOK_ZVE_PRILOHA_NAZEV"= V_IXB_NAZEV
+ENDC
+
+;--- tazeni role, koho zadam o podpis,kategorie schvalovaci role
+_fun_komu_fr = ""
+_nazev_role = ""
+_ktg_sch_role = ""
+
+CYCLE \
+	SELECT 	_fun_komu_fr = (SELECT fun_komu.nazev_rf FROM vas.ginsfun fun_komu WHERE fun_komu.ixs_fun = wflszps.ixs_fun_komu ), \
+			_nazev_role = (SELECT wflssro.nazev FROM vas.wflssro wflssro WHERE wflssro.ixs_sro = wflszps.ixs_sro), \
+			_ktg_sch_role = (SELECT wflssro.ktg_sch_role FROM vas.wflssro wflssro WHERE wflssro.ixs_sro = wflszps.ixs_sro) \
+	FROM	vas.wflszps wflszps \
+	WHERE	wflszps.ixp = '@X0000' \
+	ORDER BY	wflszps.sch_uroven
+
+	WRITEXME "ZVE_EPK_ROLE","ZVE_EPK_NAZEV_ROLE"= _nazev_role,\
+						"ZVE_EPK_FUN_KOMU_FR"= _fun_komu_fr,\
+						"ZVE_EPK_KTG_SCH_ROLE"= NUMTOSTR(_ktg_sch_role,"I")
+ENDC
+
+
+;MET_DAT_ORIG_CIS_SML
+call add_vla("000000V09QLF", V_CIS_SML, V_CIS_SML, "")
+
+;MET_DAT_ORIG_TYP_DOK
+;call add_vla("000000V09QMA", V_IXS_TYP, V_TYP_DOK, "")
+
+;MET_DAT_POPIS_SML
+call add_vla("000000V09QWW", V_PREDMET_SML, V_PREDMET_SML, "")
+
+;MET_DAT_ORIG_DAT_UZAV
+;call add_vla("000000V09QN5", S0001, S0002, "")
+
+;MET_DAT_ORIG_DAT_UCIN
+;call add_vla("000000V09QO0", S0003, S0004, "")
+
+;MET_DAT_ORIG_DAT_PLAT
+;call add_vla("000000V09QPV", S0005, S0006, "")
+
+;MET_DAT_ORIG_PARTNER_ICO
+;call add_vla("000000V09QF9", V_PARTNER_ICO, V_PARTNER_ICO, "")
+
+;MET_DAT_ORIG_PARTNER_NAZEV
+;call add_vla("000000V09QG4", V_PARTNER_NAZEV, V_PARTNER_NAZEV, "")
+
+;MET_DAT_ORIG_PARTNER_ADRESA
+;call add_vla("000000V09QIU", V_PARTNER_ADRESA, V_PARTNER_ADRESA, "")
+
+;MET_DAT_ORIG_PARTNER_SCHVAL
+;call add_vla("000000V09QQQ", V_PARTNER_SCHVAL, V_PARTNER_SCHVAL, "")
+
+;"MET_DAT_ZVE_SCHVALIL"=V_NAZEV_SCHVALIL
+;call add_vla("000000V09QKK", V_NAZEV_SCHVALIL, V_NAZEV_SCHVALIL, "")
+
+;MET_DAT_ORIG_CASTKA_BEZ_DPH
+;call add_vla("000000V09QJP", V_CASTKA_BEZ_DPH, V_CASTKA_BEZ_DPH, "")
+
+;MET_DAT_ORIG_CASTKA_S_DPH
+;call add_vla("000000V09QEE", V_CASTKA_S_DPH, V_CASTKA_S_DPH, "")
+
+;MET_DAT_ORIG_AGENDA
+;call add_vla("000000V09QHZ", "GINIS SML", "GINIS SML", "")
+
+;MET_DAT_ORIG_REALIZATOR_NAZEV
+;call add_vla("000000V09QRL", V_REAL_NAZEV, V_REAL_NAZEV, "")
+
+;MET_DAT_ORIG_REALIZATOR_CISLO
+;call add_vla("000000V09QSG", V_REAL_CISLO, V_REAL_CISLO, "")
+
+;MET_DAT_ORIG_KOMPETENT
+;call add_vla("000000V09QTB", V_KOMPETENT, V_KOMPETENT, "")
+
+;MET_DAT_ORIG_REFERENT
+;call add_vla("000000V09QU6", V_REFERENT, V_REFERENT, "")
+
+;MET_DAT_ORIG_CIS_VZ
+;call add_vla("000000V09QV1", V_CIS_VZ, V_CIS_VZ, "")
+
+{#ZMENY
+*15.12.2015-vytvoreni sestavy
+#ZMENY}
+

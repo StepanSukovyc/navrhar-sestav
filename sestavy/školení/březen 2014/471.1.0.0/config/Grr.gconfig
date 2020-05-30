@@ -1,0 +1,612 @@
+﻿<AddIn name        = "Grr Formation"
+       author      = "Mgr. Stepan Sukovyč"
+       description = "Grf Editor"
+       addInManagerHidden = "preinstalled"
+       version="4.72.1.8">
+
+  <Manifest>
+    <Identity name = "Gordic.GFE.WinClient.GrrEditor"/>
+  </Manifest>
+
+  <Runtime>
+    <Import assembly=":Gordic.GFE.WinClient"/>
+  </Runtime>
+
+  <Path name="/Pad/VariablesView/Dialogs" >
+    <DialogPanel id="EditDialog"
+                 label="editace proměnné"
+                  class = "Gordic.GFE.WinClient.Gui.PropertyPanels.VariablePanel"/>
+  </Path>
+
+  <!-- řádky -->
+  <Path name="/ReportDesigner/ToolBarMenu/Standard">
+    <Include id="Line" path="/ReportDesigner/ToolBarMenu/Standard/Line"/>
+    <Include id="Cell" path="/ReportDesigner/ToolBarMenu/Standard/Cell"/>
+  </Path>
+
+  <Path name="/ReportDesigner/ToolBarMenu/Standard/Line">
+    <ComplexCondition action="Exclude">
+      <Or>
+        <Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.GrrEditor.GrrViewContent"/>
+        <Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.GrfEditor.GrfViewContent"/>
+      </Or>
+      <ToolbarItem id = "LineSeparator" type = "Separator"  />
+      <ToolbarItem id      = "InsertLineBefore"
+          icon    = "Icons__Ost__vlozit_radek_pred"
+          tooltip = "vložení řádku před vybraný objekt"
+          loadclasslazy = "false"
+          class   = "Gordic.GFE.WinClient.Gui.InsertLineBefore"/>
+      <ToolbarItem id      = "InsertLineAfter"
+         icon    = "Icons__Ost__vlozit_radek_za"
+         tooltip = "vložení řádku za aktuální objekt"
+          loadclasslazy = "false"
+         class   = "Gordic.GFE.WinClient.Gui.InsertLineAfter"/>
+      <ToolbarItem id      = "ShiftUp"
+             icon    = "Icons__Gin__sipka_nahoru"
+             tooltip = "posun vybraných objektů o jednu pozici nahoru"
+                loadclasslazy = "false"
+             class   = "Gordic.GFE.WinClient.Gui.ShiftUp"/>
+      <ToolbarItem id      = "ShiftDown"
+               icon    = "Icons__Gin__sipka_dolu"
+               tooltip = "posun vybraných objektů o jednu pozici dolů"
+                loadclasslazy = "false"
+               class   = "Gordic.GFE.WinClient.Gui.ShiftDown"/>
+      <ToolbarItem id      = "MoveHead"
+         icon    = "Icons__Gin__sipka_nahoru_uplne"
+         tooltip = "přesun vybraných objektů do hlavičky"
+         loadclasslazy = "false"
+         class   = "Gordic.GFE.WinClient.Gui.MoveHead"/>
+      <ToolbarItem id      = "MoveBody"
+               icon    = "Icons__Ost__presunout_do_tela"
+               tooltip = "přesun vybraných objektů do těla"
+                loadclasslazy = "false"
+               class   = "Gordic.GFE.WinClient.Gui.MoveBody"/>
+      <ToolbarItem id      = "MoveFoot"
+               icon    = "Icons__Gin__sipka_dolu_uplne"
+               tooltip = "přesun vybraných objektů do patičky"
+                loadclasslazy = "false"
+               class   = "Gordic.GFE.WinClient.Gui.MoveFoot"/>
+      <ToolbarItem id = "MoveToRegionSeparator" type = "Separator"  />
+      <ToolbarItem id      = "HeightByContent"
+               icon    = "Icons__Ost__radek"
+               tooltip = "nastavit/zrušit výšku řádku dle obsahu"
+               type = "CheckBox"
+               loadclasslazy = "false"
+               class   = "Gordic.GFE.WinClient.Gui.HeightByContent"/>
+    </ComplexCondition>
+  </Path>
+
+  <!-- konec řádky -->
+  <!-- buňky -->
+  <Path name="/ReportDesigner/ToolBarMenu/Standard/Cell">
+    <ComplexCondition action="Exclude">
+      <Or>
+        <Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.GrrEditor.GrrViewContent"/>
+        <Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.GrfEditor.GrfViewContent"/>
+      </Or>
+      <ToolbarItem id = "CellSeparator" type = "Separator"  />
+      <ToolbarItem id = "InsertCellBefore"
+            tooltip = "vložení buňky před vybraný objekt"
+            icon = "Icons__Ost__vlozit_bunku_pred"
+            loadclasslazy = "false"
+            class = "Gordic.GFE.WinClient.Gui.InsertCellBefore"/>
+      <ToolbarItem id = "InsertCellAfter"
+          tooltip = "vložení buňky za vybraný objekt"
+          icon = "Icons__Ost__vlozit_bunku_za"
+          loadclasslazy = "false"
+          class = "Gordic.GFE.WinClient.Gui.InsertCellAfter"/>
+      <ToolbarItem id = "ShiftLeft"
+          tooltip = "posun vybraných objektů o jednu pozici doleva"
+          icon = "Icons__Gin__sipka_doleva"
+          loadclasslazy = "false"
+          class = "Gordic.GFE.WinClient.Gui.ShiftLeft"/>
+      <ToolbarItem id = "ShiftRight"
+            tooltip = "posun vybraných objektů o jednu pozici doprava"
+            icon = "Icons__Gin__sipka_doprava"
+            loadclasslazy = "false"
+            class = "Gordic.GFE.WinClient.Gui.ShiftRight"/>
+    </ComplexCondition>
+  </Path>
+  <!-- konec buňky -->
+
+  <Path name = "/ReportDesigner/Desktop/Pads">
+    <Pad id       = "VariablesBrowser"
+     category = "Tools"
+     title    = "proměnné"
+     icon     = "Icons__Gin__ciselniky"
+     class    = "Gordic.GFE.WinClient.VariablesView.VariablesViewPad"
+         insertafter="CompilerMessageView"/>
+  </Path>
+
+  <Path name="/Pad/VariablesView/ContextMenu">
+    <MenuItem id="NewVariable"
+          label="nová proměnná"
+          icon="Icons__Gin__pridat_ze_seznamu"
+          type="Item"
+          loadclasslazy="false"
+          class="Gordic.GFE.WinClient.VariablesView.NewVariable"/>
+    <MenuItem id="EditVariable"
+          label="editovat"
+          icon="Icons__Gin__editace"
+          type="Item"
+          loadclasslazy="false"
+          class="Gordic.GFE.WinClient.VariablesView.EditVariable"/>
+    <MenuItem id = "DeleteSeparator" type = "Separator"  />
+    <MenuItem id="DeleteVariable"
+          label="odstranit"
+          icon="Icons__Wfl__dokument_vymazat"
+          type="Item"
+          loadclasslazy="false"
+          class="Gordic.GFE.WinClient.VariablesView.DeleteVariable"/>
+  </Path>
+  <Path name="/Pad/VariablesView/TreeNode/ContextMenu">
+    <Include id="OpenStructureFile" path="/Pad/VariablesView/ContextMenu"/>
+  </Path>
+  <Path name="/Pad/VariablesView/Toolbar">
+    <ToolbarItem id="NewVariable"
+          tooltip="vytvoření nové proměnné"
+          icon="Icons__Gin__pridat_ze_seznamu"
+          type="Item"
+          loadclasslazy="false"
+          class="Gordic.GFE.WinClient.VariablesView.NewVariable"/>
+    <ToolbarItem id="EditVariable"
+          tooltip="editace proměnné"
+          icon="Icons__Gin__editace"
+          type="Item"
+          loadclasslazy="false"
+          class="Gordic.GFE.WinClient.VariablesView.EditVariable"/>
+    <ToolbarItem id = "DeleteSeparator" type = "Separator"  />
+    <ToolbarItem id="DeleteVariable"
+          tooltip="odstranit vybranou proměnnou"
+          icon="Icons__Wfl__dokument_vymazat"
+          type="Item"
+          loadclasslazy="false"
+          class="Gordic.GFE.WinClient.VariablesView.DeleteVariable"/>
+  </Path>
+
+  <!-- kontextové menu vybraných objektů -->
+  <Path name = "/Formation/ContextMenu/SelectedObject">
+    <Include id="ContextMenuItemNewComponents" insertbefore = "SelectedObjectSeparator" path="/Formation/ContextMenu/SelectedObject/NewComponent"/>
+  </Path>
+  <!-- konec kontextové menu vybraných objektů -->
+  <!-- kontextové menu vybraných objektů -->
+  <Path name="/Formation/ContextMenu/SelectedObject">
+    <Condition name = "SelectedObject" action="Exclude" implementinterface="Gordic.GFE.Parsers.Editor.IGRR">
+      <MenuItem id = "InsertCellBefore"
+                label="vložit buňku před"
+                insertbefore = "SelectedObjectSeparator"
+            tooltip = "vložení buňky před vybraný objekt"
+            icon = "Icons__Ost__vlozit_bunku_pred"
+            loadclasslazy = "false"
+            class = "Gordic.GFE.WinClient.Gui.InsertCellBefore"/>
+      <MenuItem id = "InsertCellAfter"
+                label="vložit buňku za"
+                insertafter = "InsertCellBefore"
+                insertbefore = "SelectedObjectSeparator"
+          tooltip = "vložení buňky za vybraný objekt"
+          icon = "Icons__Ost__vlozit_bunku_za"
+          loadclasslazy = "false"
+          class = "Gordic.GFE.WinClient.Gui.InsertCellAfter"/>
+      <MenuItem id = "ShiftLeft"
+          tooltip = "posun vybraných objektů o jednu pozici doleva"
+          icon = "Icons__Gin__sipka_doleva"
+          loadclasslazy = "false"
+                label="posun doleva"
+                insertafter = "InsertCellAfter"
+                insertbefore = "SelectedObjectSeparator"
+          class = "Gordic.GFE.WinClient.Gui.ShiftLeft"/>
+      <MenuItem id = "ShiftRight"
+            tooltip = "posun vybraných objektů o jednu pozici doprava"
+            icon = "Icons__Gin__sipka_doprava"
+            loadclasslazy = "false"
+                label="posun doprava"
+                insertafter = "ShiftLeft"
+                insertbefore = "SelectedObjectSeparator"
+                class = "Gordic.GFE.WinClient.Gui.ShiftRight"/>
+    </Condition>
+
+    <ComplexCondition action="Exclude">
+      <Or>
+        <Condition name = "SelectedObject" implementinterface="Gordic.GFE.Parsers.Editor.IGRR"/>
+        <Condition name="SelectedObject" istype="GrrRegion"/>
+      </Or>
+      <MenuItem id = "LineSeparator" type = "Separator"  />
+      <MenuItem id      = "InsertLineBefore"
+          icon    = "Icons__Ost__vlozit_radek_pred"
+          tooltip = "vložení řádku před vybraný objekt"
+                label="vložit řádek před"
+                insertafter = "LineSeparator"
+                insertbefore = "SelectedObjectSeparator"
+          loadclasslazy = "false"
+          class   = "Gordic.GFE.WinClient.Gui.InsertLineBefore"/>
+      <MenuItem id      = "InsertLineAfter"
+         icon    = "Icons__Ost__vlozit_radek_za"
+         tooltip = "vložení řádku za aktuální objekt"
+                label="vložit řádek za"
+                insertafter = "InsertLineBefore"
+                insertbefore = "SelectedObjectSeparator"
+          loadclasslazy = "false"
+         class   = "Gordic.GFE.WinClient.Gui.InsertLineAfter"/>
+      <MenuItem id      = "ShiftUp"
+             icon    = "Icons__Gin__sipka_nahoru"
+             tooltip = "posun vybraných objektů o jednu pozici nahoru"
+                loadclasslazy = "false"
+                label="posun nahoru"
+                insertafter = "InsertLineAfter"
+                insertbefore = "SelectedObjectSeparator"
+             class   = "Gordic.GFE.WinClient.Gui.ShiftUp"/>
+      <MenuItem id      = "ShiftDown"
+               icon    = "Icons__Gin__sipka_dolu"
+               tooltip = "posun vybraných objektů o jednu pozici dolů"
+                loadclasslazy = "false"
+                label="posun dolů"
+                insertafter = "ShiftUp"
+                insertbefore = "SelectedObjectSeparator"
+               class   = "Gordic.GFE.WinClient.Gui.ShiftDown"/>
+      <!--<MenuItem id = "ShiftLineSeparator" type = "Separator"  />-->
+    </ComplexCondition>
+    <Condition name = "SelectedObject" action="Exclude" implementinterface="Gordic.GFE.Parsers.Editor.IGRR">
+      <MenuItem id = "ShiftLineSeparator" type = "Separator"  />
+      <MenuItem id      = "MoveHead"
+         icon    = "Icons__Gin__sipka_nahoru_uplne"
+         tooltip = "přesun vybraných objektů do hlavičky"
+         loadclasslazy = "false"
+         label="přesun do hlavičky"
+                insertafter = "ShiftLineSeparator"
+                insertbefore = "SelectedObjectSeparator"
+                class   = "Gordic.GFE.WinClient.Gui.MoveHead"/>
+      <MenuItem id      = "MoveBody"
+               icon    = "Icons__Ost__presunout_do_tela"
+               tooltip = "přesun vybraných objektů do těla"
+                loadclasslazy = "false"
+                label="přesun do těla"
+                insertafter = "MoveHead"
+                insertbefore = "SelectedObjectSeparator"
+                class   = "Gordic.GFE.WinClient.Gui.MoveBody"/>
+      <MenuItem id      = "MoveFoot"
+               icon    = "Icons__Gin__sipka_dolu_uplne"
+               tooltip = "přesun vybraných objektů do patičky"
+                label="přesun do patičky"
+                insertafter = "MoveBody"
+                insertbefore = "SelectedObjectSeparator"
+                loadclasslazy = "false"
+               class   = "Gordic.GFE.WinClient.Gui.MoveFoot"/>
+    </Condition>
+
+    <ComplexCondition action="Exclude">
+      <And>
+        <Condition name = "SelectedObject" implementinterface="ILineManipulator" />
+        <Not>
+          <Condition name = "SelectedObject" implementinterface="ILabel" />
+        </Not>
+      </And>
+      <MenuItem id = "InsertLine"
+                label = "vložit prázdný řádek"
+                icon = "Icons__Ost__vlozit_radek"
+                type = "Item"
+                loadclasslazy = "false"
+                insertbefore = "SelectedObjectSeparator"
+                class = "Gordic.GFE.WinClient.Gui.InsertLineToBody"/>
+    </ComplexCondition>
+  </Path>
+  <!-- konec kontextové menu vybraných objektů -->
+
+  <!-- nové objekty do sestav-->
+  <Path name = "/Formation/ContextMenu/SelectedObject/NewComponent">
+    <!-- nabídka se objeví pouze pro sestavy typu GRR -->
+      <Condition name= "SelectedObject" action="Exclude" implementinterface="Gordic.GFE.Parsers.Editor.ILabel">
+        <MenuItem id="NewVariable" label="proměnná" type="Item"
+                  icon="Icons__Gin__edit"
+                  loadclasslazy="false"
+                  class="Gordic.GFE.WinClient.VariablesView.NewVariable"/>
+        <MenuItem id="NewGroup" label="skupina" type="Item"
+                  icon="Icons__Esu__subjekt_externi_skupina_novy"
+                  loadclasslazy="false"
+                  class="Gordic.GFE.WinClient.GrrEditor.CreateGroup"/>
+        <MenuItem id = "GroupSeparator" type = "Separator"  />
+        <MenuItem id="LineForLabelToHead" label="řádek do hlavičky" type="Item"
+                  icon="Icons__Ost__vlozit_radek_pred"
+                  loadclasslazy="false"
+                  class="Gordic.GFE.WinClient.Gui.InsertLineToHead"/>
+        <MenuItem id="LineForLabelToBody" label="řádek do těla" type="Item"
+                  icon="Icons__Ost__vlozit_radek"
+                  loadclasslazy="false"
+                  class="Gordic.GFE.WinClient.Gui.InsertLineToBody"/>
+        <MenuItem id="LineForLabelToFoot" label="řádek do patičky" type="Item"
+                  icon="Icons__Ost__vlozit_radek_za"
+                  loadclasslazy="false"
+                  class="Gordic.GFE.WinClient.Gui.InsertLineToFoot"/>
+      </Condition>
+      <Condition name="SelectedObject" istype="ICell" action="Exclude">
+        <MenuItem id = "CellSeparator" type = "Separator"  />
+        <MenuItem id = "CellBefore"
+              label = "buňka před"
+              type = "Item"
+              icon = "Icons__Ost__vlozit_bunku_pred"
+              loadclasslazy = "false"
+              class = "Gordic.GFE.WinClient.Gui.InsertCellBefore"/>
+        <MenuItem id = "CellAfter"
+              label = "buňka za"
+              type = "Item"
+              icon = "Icons__Ost__vlozit_bunku_za"
+              loadclasslazy = "false"
+              class = "Gordic.GFE.WinClient.Gui.InsertCellAfter"/>
+        <MenuItem id = "CellSeparator" type = "Separator"  />
+      </Condition>
+  </Path>
+  <!-- konec nové objekty do sestav-->
+  <!-- posun stávajících objektu v sestavách -->
+  <Path name="/GrrFormation/PagePanel/ContextMenu/ShiftComponent">
+    <!-- nabídka se objeví pouze pro sestavy typu GRR -->
+    <ComplexCondition action="Exclude">
+      <And>
+        <Condition name = "FormationType" type="GRR" />
+      </And>
+      <MenuItem id="ShiftObject" label="Posun" type="Menu">
+        <MenuItem id = "ShiftUp"
+            label = "nahoru"
+            type = "Item"
+            icon = "Icons__Gin__sipka_nahoru"
+            loadclasslazy = "false"
+            class = "Gordic.GFE.WinClient.GrrFormation.ContextMenuCommands.ShiftUp"/>
+        <MenuItem id = "ShiftDown"
+              label = "dolů"
+              type = "Item"
+              icon = "Icons__Gin__sipka_dolu"
+              loadclasslazy = "false"
+              class = "Gordic.GFE.WinClient.GrrFormation.ContextMenuCommands.ShiftDown"/>
+        <Condition name="SelectedObject" implementinterface="Gordic.GFE.Parsers.Interface.IContentContainer">
+          <MenuItem id = "ShiftLeft"
+              label = "doleva"
+              type = "Item"
+              icon = "Icons__Gin__sipka_doleva"
+              loadclasslazy = "false"
+              class = "Gordic.GFE.WinClient.GrrFormation.ContextMenuCommands.ShiftLeft"/>
+          <MenuItem id = "ShiftRight"
+                label = "doprava"
+                type = "Item"
+                icon = "Icons__Gin__sipka_doprava"
+                loadclasslazy = "false"
+                class = "Gordic.GFE.WinClient.GrrFormation.ContextMenuCommands.ShiftRight"/>
+        </Condition>
+      </MenuItem>
+    </ComplexCondition>
+  </Path>
+  <!-- konec přesun stávajících objektu v sestavách -->
+  <!-- posun stávajících objektu v sestavách -->
+  <Path name="/GrrFormation/PagePanel/ContextMenu/MoveComponent">
+    <!-- nabídka se objeví pouze pro sestavy typu GRR -->
+    <ComplexCondition action="Exclude">
+      <And>
+        <Condition name = "FormationType" type="GRR" />
+        <Condition name="SelectedObject" implementinterface="Gordic.GFE.WinClient.Grr.ILineable"/>
+      </And>
+      <MenuItem id="MoveObject" label="Přesun" type="Menu">
+        <MenuItem id = "MoveHead"
+          label = "do hlavičky"
+          type = "Item"
+          icon = "Icons__Gin__sipka_nahoru_uplne"
+          loadclasslazy = "false"
+          class = "Gordic.GFE.WinClient.Gui.MoveHead"/>
+        <MenuItem id = "MoveBody"
+              label = "do těla"
+              type = "Item"
+              icon = "Icons__Ost__presunout_do_tela"
+              loadclasslazy = "false"
+              class = "Gordic.GFE.WinClient.Gui.MoveBody"/>
+        <MenuItem id = "MoveFoot"
+              label = "do patičky"
+              type = "Item"
+              icon = "Icons__Gin__sipka_dolu_uplne"
+              loadclasslazy = "false"
+              class = "Gordic.GFE.WinClient.Gui.MoveFoot"/>
+        <MenuItem id = "MoveSeparator" type = "Separator"  />
+        <MenuItem id = "MoveHeadRegion"
+              label = "do hlavičky regionu"
+              type = "Item"
+              icon = "Icons__Gin__sipka_nahoru_uplne"
+              loadclasslazy = "false"
+              class = "Gordic.GFE.WinClient.Gui.MoveHeadRegion"/>
+        <MenuItem id = "MoveFootRegion"
+              label = "do patičky regionu"
+              type = "Item"
+              icon = "Icons__Gin__sipka_dolu_uplne"
+              loadclasslazy = "false"
+              class = "Gordic.GFE.WinClient.Gui.MoveFootRegion"/>
+      </MenuItem>
+    </ComplexCondition>
+  </Path>
+  <!-- konec přesun stávajících objektu v sestavách -->
+
+  <!-- Dialogy nastavení Designéru -->
+  <Path name = "/ReportDesigner/Dialogs/OptionsDialog/DesignerOptions" >
+    <DialogPanel id = "INSERTCELL"
+                 label = "vložení/nahrazení (buňka)"
+                 insertafter="DOCFRM"
+                 class = "Gordic.GFE.WinClient.Dialogs.OptionPanels.DesignerInsertCellPanel"/>
+    <DialogPanel id = "INSERTLINE"
+                 label = "vložení/nahrazení (řádek)"
+                 insertafter="DOCFRM"
+                 class = "Gordic.GFE.WinClient.Dialogs.OptionPanels.DesignerInsertLinePanel"/>
+    <DialogPanel id = "RELOCATE"
+                 label = "přemístění"
+                 insertafter="INSERTCELL"
+                 class = "Gordic.GFE.WinClient.Dialogs.OptionPanels.DesignerRelocatePanel"/>
+  </Path>
+  <!-- Konec nastavení designéru -->
+
+  <!-- vlastnosti řádku v sestavách -->
+  <Path name="/GrrFormation/PagePanel/ContextMenu/LineProperties">
+    <!-- nabídka se objeví pouze pro sestavy typu GRR -->
+    <ComplexCondition action="Exclude">
+      <And>
+        <Condition name = "FormationType" type="GRR" />
+        <Condition name="SelectedObject" implementinterface="Gordic.GFE.WinClient.Grr.ILineable"/>
+      </And>
+      <MenuItem id="LineObject" label="Řádek" type="Menu">
+        <MenuItem id = "HeightIsByContent"
+          label = "výška dle obsahu"
+          type = "CheckBox"
+          icon = "Icons__Gin__sipka_o_polozku_vys"
+          loadclasslazy = "false"
+          class = "Gordic.GFE.WinClient.GrrFormation.ContextMenuCommands.HeightByContent"/>
+        <MenuItem id = "LineProperty"
+              label = "vlastnosti"
+              icon = "Icons__Gin__nastroje"
+              loadclasslazy = "false"
+              class = "Gordic.GFE.WinClient.GrrFormation.ContextMenuCommands.LineProperty"/>
+      </MenuItem>
+    </ComplexCondition>
+  </Path>
+  <!-- konec vlastnosti řádku v Grr sestavách -->
+
+  <!-- Nástrojové líšty -->
+  <Path name="/ReportDesigner/ToolBarMen/Line">
+    <ToolbarItem id      = "TBMoveHeadRegion"
+           icon    = "Icons__Gin__sipka_nahoru_uplne"
+           tooltip = "přesun vybraných objektů do hlavičky regionu"
+              loadclasslazy = "false"
+           class   = "Gordic.GFE.WinClient.Gui.MoveHeadRegion"/>
+    <ToolbarItem id      = "TBMoveFootRegion"
+             icon    = "Icons__Gin__sipka_dolu_uplne"
+             tooltip = "přesun vybraných objektů do patičky regionu"
+              loadclasslazy = "false"
+             class   = "Gordic.GFE.WinClient.Gui.MoveFootRegion"/>
+    <ToolbarItem id = "HeightByContentSeparator" type = "Separator"  />
+    <!--<ToolbarItem id      = "TBLineProperty"
+             icon    = "Icons__Gin__nastroje"
+             tooltip = "vlastnosti řádku"
+              loadclasslazy = "false"
+             class   = "Gordic.GFE.WinClient.GrrFormation.ContextMenuCommands.LineProperty"/>-->
+  </Path>
+  <Path name="/ReportDesigner/ToolBar/Label">
+    <Condition name= "SelectedObject" implementinterface="Gordic.GFE.Parsers.Editor.ILabel" action="Disable">
+      <ToolbarItem id = "TBVariable"
+          tooltip = "vytvoření nové proměnné regionu"
+          icon = "Icons__Gin__edit"
+          loadclasslazy = "false"
+          class = "Gordic.GFE.WinClient.GrrFormation.ContextMenuCommands.NewVariable"/>
+      <ToolbarItem id = "TBGroup"
+          tooltip = "vytvoření nové skupiny regionu/skupiny"
+          icon = "Icons__Esu__subjekt_externi_skupina_novy"
+          loadclasslazy = "false"
+          class = "Gordic.GFE.WinClient.GrrFormation.ContextMenuCommands.CreateGroup"/>
+      <ToolbarItem id = "GroupSeparator" type = "Separator"  />
+      <ToolbarItem id = "TBLineToHead"
+            tooltip = "vložení řádku do hlavičky regionu/skupiny"
+            icon = "Icons__Ost__vlozit_radek_pred"
+            loadclasslazy = "false"
+            class = "Gordic.GFE.WinClient.GrrFormation.ContextMenuCommands.InsertLineToHead"/>
+      <ToolbarItem id = "TBLineToBody"
+          tooltip = "vložení řádku do těla regionu/skupiny"
+          icon = "Icons__Ost__vlozit_radek"
+          loadclasslazy = "false"
+          class = "Gordic.GFE.WinClient.GrrFormation.ContextMenuCommands.InsertLineToBody"/>
+      <ToolbarItem id = "TBLineToFoot"
+          tooltip = "vložení řádku do patičky regionu/skupiny"
+          icon = "Icons__Ost__vlozit_radek_za"
+          loadclasslazy = "false"
+          class = "Gordic.GFE.WinClient.GrrFormation.ContextMenuCommands.InsertLineToFoot"/>
+    </Condition>
+  </Path>
+  <!-- konec Nástrojové líšty -->
+
+  <!-- SEZNAMY -->
+  <Path name="/ReportDesigner/GrrList">
+    <List id="ValueOfTags">
+      <ListItem value="name" />
+      <ListItem value="format"/>
+      <ListItem value="onPrint"/>
+      <ListItem value="onenter"/>
+      <ListItem value="onLoad"/>
+      <ListItem value="onData"/>
+      <ListItem value="width" />
+      <ListItem value="height" />
+      <ListItem value="style" />
+    </List>
+    <List id="ImageTags">
+      <ListItem value="file" />
+      <ListItem value="global"/>
+      <ListItem value="image-width"/>
+      <ListItem value="image-height"/>
+      <ListItem value="onLoad"/>
+      <ListItem value="width" />
+      <ListItem value="height" />
+      <ListItem value="style" />
+    </List>
+    <List id="BarcodeTags">
+      <ListItem value="file" />
+      <ListItem value="global"/>
+      <ListItem value="image-width"/>
+      <ListItem value="image-height"/>
+      <ListItem value="onLoad"/>
+      <ListItem value="width" />
+      <ListItem value="height" />
+      <ListItem value="style" />
+      <ListItem value="type" />
+    </List>
+    <List id="TextTags">
+      <ListItem value="value" />
+      <ListItem value="onLoad"/>
+      <ListItem value="width" />
+      <ListItem value="height" />
+      <ListItem value="style" />
+    </List>
+    <List id="TableTags">
+      <ListItem value="name" />
+      <ListItem value="format"/>
+      <ListItem value="onPrint"/>
+      <ListItem value="onEnter"/>
+      <ListItem value="onData"/>
+      <ListItem value="onLoad"/>
+      <ListItem value="width" />
+      <ListItem value="height" />
+      <ListItem value="style" />
+    </List>
+    <List id="ChartTags">
+      <ListItem value="type" />
+      <ListItem value="row" />
+      <ListItem value="onClick"/>
+      <ListItem value="width" />
+      <ListItem value="height" />
+      <ListItem value="style" />
+      <ListItem value="rect" />
+      <ListItem value="background-color"/>
+    </List>
+
+    <!--<List id="ChartTags">
+      <ListItem value="onData" />
+      <ListItem value="onEnter"/>
+      <ListItem value="width"/>
+      <ListItem value="height"/>
+      <ListItem value="group-small"/>
+      <ListItem value="group-limit" />
+      <ListItem value="color-palette" />
+      <ListItem value="zero-affinity" />
+      <ListItem value="label-major-step" />
+      <ListItem value="label-minor-step" />
+      <ListItem value="draw3d" />
+      <ListItem value="color" />
+      <ListItem value="name" />
+      <ListItem value="image-width" />
+      <ListItem value="image-height" />
+      <ListItem value="type" />
+    </List>-->
+    <List id="GroupTags">
+      <ListItem value="name" />
+      <ListItem value="by" />
+    </List>
+    <List id="RegionTags">
+      <ListItem value="name" />
+      <ListItem value="format"/>
+      <ListItem value="onPrint"/>
+      <ListItem value="onEnter"/>
+      <ListItem value="onData"/>
+      <ListItem value="onLoad"/>
+      <ListItem value="width" />
+      <ListItem value="height" />
+      <ListItem value="style" />
+    </List>
+    <List id="LineTags"/>
+  </Path>
+</AddIn>

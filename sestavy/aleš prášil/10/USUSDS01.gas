@@ -1,0 +1,1367 @@
+; ---------------------------------------------------------------
+; Rídící soubor k tisku pro Spis (Detail)
+; ---------------------------------------------------------------
+; Vstup: X0000 - PID spisu;
+;        X0009 - parametr pro Aligera
+;
+; VYTVORIL:   Ing. Robert Novák
+;---------------------------------------------
+
+; Obecne parametry
+#INFO NAZEV="Spis detail"  ; Jmeno
+#INFO poznamka="Sestava je dostupná pro oba klienty (pro GINUSU i GWAUSU)"  ;
+#INFO DAT_MODIF="201509291040"
+#INFO create_date="20040715"            ; Datum vytvoreni
+#INFO MAKER="0437"                      ; ORJ programatora
+#INFO TYP_ALG="0"                       ; 10-stavova maska, 20-zapisova maska
+#INFO type_cust="X"                     ; Cislo zakaznika A-Armada, B-BIS, C-Mesta, D-Prisp.org., M-Mag.Prahy, P-Urad prace, O-O.S.S.
+#INFO faze="GMSSSLS1"
+#INFO ROKMES_OD="200407"
+#INFO ROKMES_DO="299913"
+#INFO ID_SES="USUSDS01"
+#INFO TEMA="usu_ptm_sdetspi"
+#INFO TYP_VYST="XME"                    ; Typ vystupu (TXT), (XME)
+#INFO PRIZ_SOR="0"
+#INFO VERZE_DB_MIN="351GIN00"           ; Minimalni verze databaze
+#INFO ktg_typ="0"
+#INFO IXS_TYP="00000400000G"
+#INFO IXS_STR="0000STR00DKH"            ; Pevne dany PID dle sestavy (pod kapitola)
+#INFO IXS_ALV="0000ALV02IKA"            ; Jmeno PID ze souboru volnych PID "ALV.PID" (po pouziti dany PID ze souboru smazat)
+#INFO ixs_xme="0000ALX0AB32"
+#INFO PRI_VAZ="1"
+#INFO ZPU_ULO="0"
+#INFO PRI_ZME="1"
+#INFO PRI_DOT="0"
+#INFO ixs_frm="0000ALF00IOW"
+#PRAGMA OUTNAME="000002IK.ALV"
+#INFO ODLOZ="0"
+#RESOURCEXME 00000AB3.xme
+
+#INFO machine="IOM"                     ; I-Informix, O-Oracle, M-MS SQL
+#INFO xmeta_ver="2"
+#INFO xmeta_subver="15"
+
+#declarep v_poradi
+#declares v_cj_kr    ;akt podoba èj bez pøívìšku
+#declares v_cj_ext   ;pøivìšek k èj
+#declares v_jmeno
+#declares v_prijmeni
+#declares v_tit_pred
+#declares v_tit_za
+
+#declares v_jmeno2
+#declares v_prijmeni2
+#declares v_tit_pred2
+#declares v_tit_za2
+#declares v_nazev_fun
+
+#declares v_nazev_ref_tit               ; døíve S0150
+#declares v_njmeno
+#declares v_nprijmeni
+#declares v_ntit_pred
+#declares v_ntit_za
+#declares v_nnazev_ref_tit
+#declares v_skartace
+#declares v_skar_znak
+#declares v_skar_lhuta
+#declares v_rok_skartace ;
+#declares v_dat_odes_vyriz
+#declares v_dat_podscasem
+#declares v_dotc_odes
+#declares v_dotc_odes_dat_nar
+#declares v_dotc_odes_ico
+#declares v_dotc_odes_typ_esu
+#declares v_zalozil
+#declares v_schvalovatel
+#declares v_zprac_nazev_rf
+#declares v_zprac_nazev_rf_su2
+#declares v_zprac_nazev_rf_su
+#declares v_dat_pod2                    ;datum podání ve tvaru datetime
+#declares v_rok_skar_pred               ;pøedpokládaný rok skartace
+#declares v_rok_skar_predMV
+#declares v_rok_akt
+#declares v_dat_uzav
+#declares v_dat_uloz2
+#declares  v_vlastnik_su_tel
+#declares  v_vlastnik_su_fax
+#declares  v_vyriz_kopie_poznamka
+#declares  v_vyriz_kopie_poznamky
+#declares  v_odeslano_kam
+#declares  v_dat_vyriz
+#declares  v_poc_dok
+#declares  v_spis_pl
+#declares  v_spis_znak
+#declares  v_poc_priloh_dok
+#declares  v_poc_priloh
+#declares  v_prilohy
+#declares  v_prvni
+#declares  v_por_cislo
+#declares  v_ulozeno_listu
+#declares  v_odeslano_listu
+#declares  v_dat_pr_moc
+#declares  v_cj_inic
+
+#MANYUSERVARS
+
+
+#declares v_prior_cj
+#declares v_prior_1cj
+#declares v_prior_dat_do
+#declares v_denik
+#declares v_spec_mvi1
+#declares v_spec_mvi2
+#declares v_spec_mvi3
+#declares v_poc_priloh2
+#declares v_esu_jmeno
+#declares v_esu_prijmen
+#declares v_esu_typ_esu
+#declares v_esu_tit_pred
+#declares v_esu_tit_za
+#declares v_odes_kvop
+#declares v_odes_mailbox
+#declares  v_esu_cor
+#declares v_esu_cpop
+#declares v_esu_ulice
+#declares v_esu_obec
+#declares v_esu_psc
+#declares v_email
+#declares v_esu_stat
+#declares v_stat
+#declares v_esu_cislo
+
+#declares OUO1_nazev
+#declares OUO1_ucinnost
+#declares OUO1_duv_urc
+
+#declares v_dc_esu_txt
+#declares v_dc_ob_jmeno
+#declares v_dc_jmeno
+#declares v_dc_prijmeni
+#declares v_dc_tit_pred
+#declares v_dc_tit_za
+#declares v_dc_ulice
+#declares v_dc_cast_obce
+#declares v_dc_cor
+#declares v_dc_cpop
+#declares v_dc_psc
+#declares v_dc_obec
+#declares v_dc_dvazby
+#declares v_dc_tvazby
+#declares v_dc_tvazby_num
+#declares v_dc_poznamka
+#declares v_dc_lic_zast
+#declares v_dc_por_zast
+#declares v_dc_zast_jmeno
+#declares v_dc_zast_prijmeni
+#declares v_dc_zast_funkce
+#declares v_dc_st0
+#declares v_dc_st1
+#declares v_dc_st2
+#declares v_dc_st3
+#declares v_dc_st4
+#declares v_dc_st5
+#declares v_dc_st6
+#declares v_dc_st7
+#declares v_dc_esu_txt_kvop
+#declares  v_dc_stat
+#declares  v_dc_init_esu
+#declares  v_dat_podscasem3
+#declares  v_dat_vyriz_do
+
+#declares  v_dc_ds_stat_sp
+#declares  v_dc_ds_stat_sp_orig
+#declares  v_dc_ds_stat_sp_aaa
+#declared  v_dc_dat_nar
+
+#declares v_ixp
+#declares v_ixp_s
+#declares v_poznamka_s
+#declares v_akt_znacka_s
+#declares v_nazev_s
+#declares v_typ_vpp_txt_s
+#declared v_dat_pod_s
+#declares v_kl_slova
+#declares v_kl_slovo
+
+#declares v_cjd
+#declares v_cjdokumentu
+#declares v_tecky
+#declares v_zprac_nazev_su
+#declares v_stav_pis
+
+; obsah spisu
+#declares  vv_por_cis_pis
+#declares  vv_vec_pis
+#declares  vv_vec_podrobne
+#declares  vv_por_cislo_uziv
+#declares  vv_pid_pis
+#declares  vv_akt_znacka
+#declares  vv_odesilatel_pis
+#declares  vv_dat_pod_pis
+#declares  vv_poc_listu_pis
+#declares  vv_poc_lpriloh
+#declares  vv_dok_poznamka
+#declares  vv_poznamka_obsah
+#declares  vv_poc_priloh
+;#declares  vv_pozn_pis
+#declares  vv_dat_vyjm_ze_spisu
+#declares  vv_s_ele
+#declares  vv_s_fyz
+#declares  vv_s_sgn
+#declares  vv_aktivita
+#declares  vv_dok_stran
+#declares  vv_dok_priloh
+
+;---- include pro vycteni devateho parametru
+#INCLUDE OBEX25.G00
+#INCLUDE OBEX37X.G00
+;---- include pro datumy
+#INCLUDE ObeX22.G00
+;---- include pro datumy
+#INCLUDE USUSPOL.G00
+
+#include Obex46.G00
+#include obex64.g00
+  #INCLUDE ObeX34.G00
+
+#FUNCDATXME PredelejKonceRadku
+
+PROC Vlastnosti()
+     #declares _vlastnost_text
+     #declares _vlastnost_profil
+     #declares _vlastnost_struktura
+     #declares _vlastnost_nazev
+     #declares _kod
+     #declares _por_cislo
+     #declares _poradi
+     #declares _pocet_vlastnosti
+     #declares _max_por_cislo
+     #declarep _delka
+     #declarep _radek
+     _max_por_cislo = 0
+     _por_cislo = ""
+
+     StrAlloc X0042 = 1024*1024
+     StrAlloc X0043 = 1024*10
+     StrAlloc X0044 = 1024
+
+     X0042= "{"
+     X0043 = ""
+     CYCLE SELECT \
+                _kod= ginvvla.kod, \
+                _por_cislo= ginvvla.por_cislo \
+  				      FROM vas.ginvvla ginvvla \
+            WHERE ginvvla.ixx = '@X0000' \
+            GROUP BY kod, por_cislo
+
+            CYCLE SELECT \
+         		       X0044= b.hovla_txt, \
+         		       _radek= b.radek \
+                  FROM vas.ginvvla b \
+                  WHERE b.ixx = '@X0000' AND \
+                        b.kod= _kod AND \
+                        b.por_cislo= @_por_cislo AND \
+                        b.aktivita= 100 \
+                  ORDER BY radek
+                  StrCat X0043 = Trim(X0044)
+            ENDC
+
+            IF X0043 <> ""
+               StrLen X0042=_delka
+               IF _delka> 1
+   				           StrCat X0042=","
+       			     ENDIF
+
+               SELECT \
+                  _max_por_cislo= MAX(c.por_cislo) \
+                  FROM vas.ginvvla c \
+                  WHERE c.ixx = '@X0000' AND \
+                        c.kod= _kod  AND \
+                        c.aktivita= 100
+               IF _por_cislo= _max_por_cislo
+                  StrCat X0042 = "'" + Trim(_kod) + "_p':'"
+                  StrCat X0042 = X0043
+                  StrCat X0042 = "'"
+                  ELSE
+                  StrCat X0042 = "'" + Trim(_kod) + "_" + NumToStr(_por_cislo,"I") + "':'"
+                  StrCat X0042 = X0043
+                  StrCat X0042 = "'"
+               ENDIF
+               X0043 = ""
+            ENDIF
+     ENDC
+
+     StrCat X0042="}"
+
+     StrFree X0043
+     StrFree X0044
+
+ENDP
+
+PROC EsuTxtKVOP(IN P0150, IN S0201, IN S0202, IN S0203, IN S0204,   IN S0205,IN S0206,IN S0207,IN S0208,IN S0209, IN S0210, IN S0211,  IN S0212, OUT S0250)
+     v_esu_jmeno = S0201
+     v_esu_prijmen = S0202
+     v_esu_tit_pred = S0203
+     v_esu_tit_za = S0204
+     v_esu_ulice = S0205
+     v_esu_obec = S0206
+     v_esu_psc = S0207
+     v_esu_cor = S0208
+     v_esu_cpop = S0209
+     v_esu_stat = S0210
+     v_email = S0211
+       
+  IF  P0150 = 20
+    v_odes_kvop = v_esu_jmeno + " " + v_esu_prijmen
+    v_odes_kvop = trim(v_odes_kvop)
+    v_odes_kvop = v_esu_tit_pred + " " + v_odes_kvop + " " + v_esu_tit_za
+    v_odes_kvop = trim(v_odes_kvop)
+
+    v_esu_cislo = ""
+    if v_esu_cor = ""
+        v_esu_cislo  = v_esu_cpop
+    else
+       if v_esu_cpop = ""
+         v_esu_cislo  = v_esu_cor
+       else
+          v_esu_cislo  = v_esu_cpop  + "/" + v_esu_cor
+       endif
+    endif
+
+    SELECT v_esu_stat= stat_txt FROM vas.gincsta WHERE stat = P0250 ;
+    IF (v_esu_stat = "Èeská republika") | (v_esu_stat = "neurèen")
+       	v_esu_stat = ""
+    ENDIF
+    v_odes_kvop = trim(v_odes_kvop)
+    v_odes_kvop = v_odes_kvop + ", " + v_esu_ulice + " " +v_esu_cislo + ", " + v_esu_psc + " " + v_esu_obec+ " " + v_esu_stat + " " + trim(v_email)
+    S0250 =v_odes_kvop
+  ELSE
+    v_odes_kvop = S0212
+    S0250 = v_odes_kvop
+  ENDIF
+ENDP
+
+
+set rtfstyle = 0
+
+;print
+#INCLUDE ObeX51.G00
+
+; vycet dat z databaze
+; --------------------
+
+; S0990 az S0999 - pomocne promenne
+
+; Vrati ID aktualne prihlaseneho uzivatele z X0009
+S0001= VratParamX0009("ZMP")
+
+; nalezeni ginsesu.ob_jmeno a ginsfun.nazev_rf
+; pres tabulky ginsfun, ginsorj a ginsesu
+; vysledek se ulozi do ginsesu.ob_jmeno - S0101 a ginsfun.nazev_rf - S0107
+CYCLE SELECT S0990= ginsfun.ixs_orj, \
+             S0107= ginsfun.nazev_rf, \
+             S0147= ginsfun.nazev_ref \
+      FROM vas.ginsfun  ginsfun, \
+           vas.ginszmp  ginszmp  \
+      WHERE (ginszmp.ixs_zmp = '@S0001') AND (ginszmp.ixs_fun = ginsfun.ixs_fun)
+ENDC
+CYCLE SELECT S0991= ginsorj.ixs_isu \
+      FROM vas.ginsorj ginsorj \
+      WHERE (ginsorj.ixs_orj='@S0990')
+ENDC
+CYCLE SELECT S0101= ginsesu.ob_jmeno \
+      FROM vas.ginsesu ginsesu \
+      WHERE (ginsesu.ixs_esu='@S0991')
+ENDC
+
+       StrAlloc X0021 = 1024
+       StrAlloc X0022 = 1024
+       StrAlloc X0023 = 1024
+       StrAlloc X0024 = 1024
+       StrAlloc X0025 = 2048
+
+
+; vysledek se ulozi do sslstyp.nazev - S0103 a sslpid.1 - S0106
+CYCLE SELECT S0106= sslspid.obsah_text,\
+             S0112= sslspid.dat_prij_pod, \
+             S0125= sslspid.poznamka, \
+             S0128= sslspid.ixs_fun_schval, \
+             S0129= sslspid.ixs_fun_resitel, \
+             S0995= sslspid.s_uzav, \
+             S0130= sslspid.dat_pr_moc, \
+             X0021= sslspid.obsah_text, \
+                     X0022= sslspid.obsah_text_2, \
+                     X0023= sslspid.obsah_text_3, \
+                     X0024= sslspid.obsah_text_4, \
+             v_dat_uzav= sslspid.dat_uzav \
+      FROM vas.sslspid sslspid \
+      WHERE (sslspid.ixp='@X0000')
+ENDC
+
+
+       StrCat X0025 = X0021
+       StrCat X0025 = X0022
+       StrCat X0025 = X0023
+       StrCat X0025 = X0024
+
+     IF (S0130 <> "" )
+       v_dat_pr_moc = copy(S0130,1,19)
+       v_dat_pr_moc = DateToStr(v_dat_pr_moc,"RRRR-MM-DD HH:II:SS","RRRRMMDDHHIISS")
+     ELSE
+       v_dat_pr_moc = ""
+     ENDIF
+
+; nalezeni sslspid.cj_spis a sslspid.dat_uloz
+; vysledek se ulozi do sslspid.cj_spis - S0104 a sslspid.dat_uloz - S0113
+CYCLE SELECT S0104= sslspid.cj_spis \
+      FROM vas.sslspid sslspid \
+      WHERE (sslspid.ixp='@X0000')
+ENDC
+
+CYCLE SELECT v_schvalovatel= ginsfun.nazev_rf \
+      FROM vas.ginsfun  ginsfun \
+      WHERE (ginsfun.ixs_fun = '@S0128')
+ENDC
+
+CYCLE SELECT v_zprac_nazev_rf= ginsfun.nazev_rf, \
+             v_zprac_nazev_su= ginsfun.nazev_su, \
+             v_nazev_fun= ginsfun.nazev,\
+             v_tit_pred2=ginsref.tit_pred,\
+             v_jmeno2=ginsref.jmeno,\
+             v_prijmeni2=ginsref.prijmeni,\
+             v_tit_za2=ginsref.tit_za\
+      FROM vas.ginsfun  ginsfun, vas.ginsref ginsref \
+      WHERE (ginsfun.ixs_fun = '@S0129') AND (ginsref.ixs_ref = ginsfun.ixs_ref)
+ENDC
+
+v_zprac_nazev_rf_su = v_zprac_nazev_su + ", " +v_zprac_nazev_rf
+v_zprac_nazev_rf_su2 = v_zprac_nazev_su + ", " + v_nazev_fun  + ", " +NAZEVREFTIT(v_tit_pred2,v_jmeno2,v_prijmeni2,v_tit_za2)
+; nalezeni wflspid.nazev a wflspid.misto_vzniku
+; vysledek se ulozi do wflspid.nazev - S0105 a wflspid.misto_vzniku - S0110
+; akt. znaèka - S0120, datum podání - S0121,
+CYCLE SELECT S0990= wflspid.ixs_typ, \
+             S0105= wflspid.nazev, \
+             S0110= wflspid.misto_vzniku, \
+             S0120= wflspid.akt_znacka, \
+             S0121= wflspid.dat_pod, \
+             S0122= wflspid.ixs_typ,  \
+             S0903= wflspid.ixs_fun_akt, \
+             S0113= wflspid.dat_uloz, \
+             S0108= wflspid.spis_znak, \
+             S0993= wflspid.spis_pl, \
+             v_stav_pis= wflspid.stav_pis,\
+             S0179= (SELECT gincstu.st_utaj_id_orig FROM vas.gincstu gincstu WHERE gincstu.st_utaj_id = wflspid.st_utaj_id ),\
+             v_dat_vyriz= wflspid.dat_vyriz \
+      FROM vas.wflspid wflspid \
+      WHERE (wflspid.ixp='@X0000')
+ENDC
+SELECT S0180=Max(c.st_utaj_id_orig) FROM vas.gincstu c, vas.ssldspi d, vas.wflspid w \
+WHERE c.st_utaj_id = w.st_utaj_id AND d.ixp = w.ixp AND d.ixp_spis ='@X0000' AND c.st_utaj_id_orig<=20 ;
+
+
+IF S0179>S0180
+   S0180 = S0179   ; st_utaj_id_max
+ENDIF
+
+v_spis_znak = S0108
+v_skar_znak = ""
+
+CYCLE SELECT v_skar_lhuta= sslsspz.skar_lhuta,\
+             v_skar_znak= sslsspz.skar_znak,\
+      FROM vas.sslsspz sslsspz \
+      WHERE (sslsspz.spis_pl = '@S0993') AND (sslsspz.spis_znak = '@S0108')
+ENDC
+
+if (v_skar_lhuta=0) ; pokud je skar. lhùta 0
+   v_skartace =v_skar_znak
+else
+    v_skartace =v_skar_znak+NumToStr( v_skar_lhuta, "I")
+endif
+
+; funkce z ususpol.g00
+v_rok_skar_pred = GetRokSkarPred(X0000)
+v_rok_skar_predMV = GetRokSkarPredMV(X0000)
+
+; 22.5.2015
+IF NumToStr(v_stav_pis, "I")="0"||NumToStr(v_stav_pis, "I")="10"||NumToStr(v_stav_pis, "I")="20"
+   S0113 = ""
+   v_rok_skar_pred = ""
+ENDIF
+
+; nalezeni sslsdcj.znacka_odes, sslsdcj.dat_prij_pod
+; vysledek se ulozi do sslsdcj.znacka_odes - S0111, sslsdcj.dat_prij_pod - S0112
+CYCLE SELECT S0111= sslsdcj.znacka_odes, \
+             v_cj_kr= sslsdcj.cj, \
+             v_cj_ext= sslsdcj.cj_ext, \
+             v_dat_vyriz_do= sslsdcj.dat_vyriz_do,\
+             S0159= sslsdcj.ixp_vyriz, \
+             S0169= sslsdcj.ixp_init, \
+             S0199= sslsdcj.ixp_spis, \
+             v_denik= sslsdcj.sslden \
+      FROM vas.sslsdcj sslsdcj \
+      WHERE (sslsdcj.ixp_spis='@X0000') \
+ ORDER BY sslsdcj.ixp_spis
+ENDC
+
+; nalezeni sslszvs.zp_vyriz_txt
+; vysledek se ulozi do sslszvs.zp_vyriz_txt - S0114
+CYCLE SELECT S0990= sslsdcj.zp_vyriz, \
+             S0992= sslsdcj.ixp_vyriz, \
+             S0199= sslsdcj.ixp_spis \
+      FROM vas.sslsdcj sslsdcj \
+      WHERE (sslsdcj.ixp_spis='@X0000') \
+ ORDER BY sslsdcj.ixp_spis
+ENDC
+CYCLE SELECT S0114= sslszvs.zp_vyriz_txt \
+      FROM vas.sslszvs sslszvs \
+      WHERE (sslszvs.zp_vyriz = '@S0990')
+ENDC
+
+; nalezeni sslspid.vyriz_komu
+; vysledek se ulozi do sslspid.vyriz_komu - S0115
+CYCLE SELECT S0115= sslspid.vyriz_komu \
+      FROM vas.sslspid sslspid \
+      WHERE (sslspid.ixp='@X0000')
+ENDC
+
+; odeslano_kam
+v_odeslano_kam = ""
+v_odeslano_kam =  GetOdeslanoKam( X0000 )
+
+; nalezeni cj inic dokumentu
+CYCLE SELECT v_cj_inic= wflsdcj.cj \
+      FROM vas.wflspid wflspid, vas.wflsdcj wflsdcj \
+      WHERE (wflspid.ixp='@S0169' AND wflsdcj.ixs_cj = wflspid.ixs_cj)
+ENDC
+
+; zjisteni zda se maji provest nasledujici dva SELECTy
+; podminka Zobrazit pouze kdyz (sslspid.s_vyriz==1)
+CYCLE SELECT S0990= sslspid.s_vyriz \
+      FROM vas.sslspid sslspid \
+      WHERE (sslspid.ixp='@X0000')
+ENDC
+
+if NumToStr(S0990,"I")="1"
+   ; nalezeni sslspid.nazev_schval
+   ; vysledek se ulozi do ginsfun.nazev_rf - S0116
+   CYCLE SELECT S0116= sslspid.nazev_schval \
+      FROM vas.sslspid sslspid \
+      WHERE (sslspid.ixp='@X0000')
+   ENDC
+
+   ; nalezeni sslspid.dat_vyriz
+   ; vysledek se ulozi do sslspid.dat_vyriz - S0117
+   CYCLE SELECT S0117= wflspid.dat_vyriz \
+         FROM vas.wflspid wflspid \
+         WHERE (wflspid.ixp='@X0000')
+   ENDC
+   S0117 = copy(S0117,1,10)
+
+   SELECT v_rok_skartace= spiszup.rok_skartace \
+   FROM vas.spiszup spiszup, vas.spivzup spivzup \
+   WHERE (spivzup.ixp = '@X0000') AND spivzup.ixs_zup = spiszup.ixs_zup
+
+   SELECT v_dat_odes_vyriz= MAX(wfldprj.dat_odes) \
+   FROM vas.wfldprj wfldprj  \
+   WHERE wfldprj.ixp = '@S0992' AND wfldprj.s_dor > 10
+
+else
+    S0117=""
+    S0116=""
+endif
+
+{ S0123, S0124 název a zkratka typu písemnosti }
+CYCLE SELECT S0123= sslstyp.nazev, \
+       S0124= sslstyp.zkratka  \
+  FROM vas.sslstyp sslstyp \
+ WHERE (sslstyp.ixs_typ = '@S0122')
+ENDC
+
+{ S0126, S0127 inic písmemnost }
+CYCLE SELECT S0126= wflspid.dat_pod, \
+       S0127= wflspid.nazev,  \
+       S0137= wflspid.ixs_typ, \
+       P0993= wflspid.s_prij, \
+       S0136= sslsdcj.ixs_zmp_zal, \
+       S0199= sslsdcj.ixp_spis \
+  FROM vas.sslsdcj sslsdcj, \
+       vas.wflspid wflspid   \
+ WHERE (sslsdcj.ixp_spis = '@X0000') AND \
+       (sslsdcj.ixp_init = wflspid.ixp ) \
+ ORDER BY sslsdcj.ixp_spis
+ENDC
+
+CYCLE SELECT v_zalozil= ginszmp.nazev_rf \
+      FROM vas.ginszmp  ginszmp \
+      WHERE (ginszmp.ixs_zmp = '@S0136')
+ENDC
+
+
+CYCLE SELECT S0103= sslstyp.nazev \
+      FROM vas.sslstyp sslstyp \
+      WHERE (sslstyp.ixs_typ = '@S0137')
+ENDC
+
+CYCLE SELECT S0131= Max(wflvspe.ixs_esu) \
+      FROM vas.wflvspe wflvspe \
+      WHERE (wflvspe.ixs_dva = '0000AWA00017' AND wflvspe.ixp = '@X0000')
+ENDC
+IF (S0131 <> "")
+   CYCLE SELECT v_dotc_odes= ginsesu.esu_txt, \
+                v_dotc_odes_dat_nar= ginsesu.dat_nar, \
+                v_dotc_odes_ico= ginsesu.ico, \
+                v_dotc_odes_typ_esu= ginsesu.typ_esu \
+           FROM vas.ginsesu ginsesu \
+   WHERE (ginsesu.ixs_esu = '@S0131')
+   ENDC
+   v_dotc_odes_dat_nar = copy(v_dotc_odes_dat_nar,1,19)
+   v_dotc_odes_dat_nar = DateToStr(v_dotc_odes_dat_nar,"RRRR-MM-DD HH:II:SS","RRRRMMDDHHIISS")
+ENDIF
+
+; doplnìno novì
+
+if NumToStr(P0993,"I")="1"
+  CYCLE SELECT S0110= ginsesu.esu_txt, \
+               v_esu_jmeno= ginsesu.jmeno, \
+               v_esu_prijmen= ginsesu.prijmeni, \
+               P0150= ginsesu.typ_esu, \
+               v_esu_tit_pred= ginsesu.tit_pred, \
+               v_esu_tit_za= ginsesu.tit_za, \
+               v_esu_cor= ginsesu.cor, \
+               v_esu_cpop= ginsesu.cpop, \
+               v_esu_ulice= ginsesu.ulice, \
+               v_esu_obec= ginsesu.obec,\
+               v_esu_psc= ginsesu.psc, \
+               v_email= ginsesu.mail, \
+               v_odes_mailbox= ginsesu.id_ds, \
+               P0250= ginsesu.stat \
+      FROM vas.wflspio wflspio, \
+           vas.ginsesu ginsesu  \
+      WHERE (wflspio.ixp='@S0169') AND (ginsesu.ixs_esu = wflspio.ixs_esu )
+  ENDC
+  v_esu_typ_esu = P0150
+  ;
+
+   call EsuTxtKVOP( P0150, v_esu_jmeno, v_esu_prijmen, v_esu_tit_pred, v_esu_tit_za,    v_esu_ulice, v_esu_obec, v_esu_psc, v_esu_cor, v_esu_cpop, v_esu_stat, v_email, S0110, S0250 )
+   v_odes_kvop =  S0250
+   
+  ; prohození jména a pøíjmení
+;  IF  P0150 = 20
+;    v_odes_kvop = v_esu_jmeno + " " + v_esu_prijmen
+;    v_odes_kvop = trim(v_odes_kvop)
+;    v_odes_kvop = v_esu_tit_pred + " " + v_odes_kvop + " " + v_esu_tit_za
+;    v_odes_kvop = trim(v_odes_kvop)
+;    v_esu_cislo = ""
+;    if v_esu_cor = ""
+;        v_esu_cislo  = v_esu_cpop
+;    else
+;       if v_esu_cpop = ""
+;         v_esu_cislo  = v_esu_cor
+;       else
+;          v_esu_cislo  = v_esu_cpop  + "/" + v_esu_cor
+;       endif
+;    endif
+;    SELECT v_esu_stat= stat_txt FROM vas.gincsta WHERE stat = P0250 ;
+;    IF (v_esu_stat = "Èeská republika") | (v_esu_stat = "neurèen")
+;       	v_esu_stat = ""
+;    ENDIF
+;    v_odes_kvop = trim(v_odes_kvop)
+;   v_odes_kvop = v_odes_kvop + ", " + v_esu_ulice + " " +v_esu_cislo + ", " + v_esu_psc + " " + v_esu_obec+ " " + v_esu_stat + " " + trim(v_email)
+;
+;  ELSE
+;    v_odes_kvop = S0110
+;  ENDIF
+
+else
+  v_odes_kvop = ""
+endif
+
+; nalezeni informací o vlastníkovi
+CYCLE SELECT S0150= ginsfun.nazev_ref, \
+             S0151= ginsfun.nazev, \
+             S0152= ginsfun.nazev_rf, \
+             S0153= ginsfun.nazev_su, \
+             S0154= ginspod.ofic_nazev, \
+             S0155= ginsfun.tel, \
+             S0156= ginsfun.fax, \
+             S0157= ginsfun.mail, \
+             v_jmeno= ginsref.jmeno, \
+             v_prijmeni= ginsref.prijmeni, \
+             v_tit_pred= ginsref.tit_pred, \
+             v_tit_za= ginsref.tit_za, \
+             S0158= ginsfun.ixs_nad \
+         FROM vas.ginspod  ginspod, \
+              vas.ginsfun  ginsfun, \
+              vas.ginsref  ginsref \
+         WHERE (ginsfun.ixs_fun = '@S0903') AND \
+               ginsref.ixs_ref  = ginsfun.ixs_ref AND \
+               ginsfun.ixs_su = ginspod.ixs_su
+ENDC
+
+; nalezeni informací o vlastníkovi
+  CYCLE SELECT v_vlastnik_su_tel= ginspod.tel, \
+               v_vlastnik_su_fax= ginspod.fax \
+         FROM vas.ginspod  ginspod, \
+              vas.ginsfun  ginsfun, \
+              vas.ginsref  ginsref \
+         WHERE (ginsfun.ixs_fun = '@S0903') AND \
+               ginsref.ixs_ref  = ginsfun.ixs_ref AND \
+               ginsfun.ixs_su = ginspod.ixs_su
+   ENDC
+
+
+IF (S0158<>"") ; dotažení informací o nadøízené funkci
+  CYCLE SELECT S0160= ginsfun.nazev_ref, \
+             S0161= ginsfun.nazev, \
+             S0162= ginsfun.nazev_rf, \
+             S0163= ginsfun.nazev_su, \
+             S0164= ginspod.ofic_nazev, \
+             S0165= ginsfun.tel, \
+             S0166= ginsfun.fax, \
+             S0167= ginsfun.mail, \
+             v_njmeno= ginsref.jmeno, \
+             v_nprijmeni= ginsref.prijmeni, \
+             v_ntit_pred= ginsref.tit_pred, \
+             v_ntit_za= ginsref.tit_za \
+         FROM vas.ginspod  ginspod, \
+              vas.ginsfun  ginsfun, \
+              vas.ginsref  ginsref \
+         WHERE (ginsfun.ixs_fun = '@S0158') AND \
+               ginsref.ixs_ref  = ginsfun.ixs_ref AND \
+               ginsfun.ixs_su = ginspod.ixs_su
+  ENDC
+ENDIF
+
+
+
+
+SELECT v_poc_dok=Count(*) \
+FROM vas.ssldspi ssldspi   \
+WHERE ssldspi.aktivita = 100 AND ssldspi.ixp_spis  ='@X0000';
+
+SELECT v_poc_priloh_dok=Sum(sslspid.poc_priloh) \
+FROM vas.ssldspi ssldspi, vas.sslspid sslspid   \
+WHERE ssldspi.aktivita = 100 AND ssldspi.ixp_spis  ='@X0000' AND sslspid.ixp = ssldspi.ixp ;
+
+;poèty
+StrAlloc X0020=500000
+StrAlloc X0031=500000
+v_poc_priloh = ""
+v_poc_priloh2 = ""     ; pro mv - poèet pøíloh + soupis textù
+v_cjdokumentu = "";
+v_tecky = "";
+
+CYCLE SELECT S0099= (select sslspid.poc_l_priloh from vas.sslspid sslspid where sslspid.ixp = ssldspi.ixp), \
+             S0139= ssldspi.ixp, \
+             v_cjd= wflspid.akt_znacka, \
+             S0172= wflspid.priz_cj \
+      FROM vas.ssldspi ssldspi, vas.wflspid wflspid   \
+      WHERE ssldspi.aktivita = 100 AND ssldspi.ixp_spis  ='@X0000' AND ssldspi.ixp = wflspid.ixp;
+      IF NumToStr( S0172, "I")<>"0"
+         IF Len( v_cjdokumentu ) < 200
+            v_cjdokumentu = v_cjdokumentu + v_cjd + "; "
+         ELSE
+           IF (Len( v_cjdokumentu ) > 200)&&(v_tecky = "0")
+            v_cjdokumentu = v_cjdokumentu + " ..."
+            v_tecky = "1"
+           ENDIF
+         ENDIF
+      ENDIF
+      
+      IF S0099<>""
+         v_poc_priloh = v_poc_priloh + S0099
+         S0199 = "1"
+         IF S0099<>""
+             STRCAT X0020=NumToStr(S0099, "I")
+         ENDIF
+         ; pøidáno novì
+         IF NumToStr(S0099, "I")>"0"
+            P0099 = P0099 + S0099
+         else
+            v_poc_priloh2 = v_poc_priloh2 + S0099  + ";"
+         endif
+      ELSE
+         S0199 = ""
+      ENDIF
+      v_prvni = "1"
+      S0198 = ""
+      CYCLE SELECT X0031= wflspri.obsah_text, \
+                   v_por_cislo= wflspri.por_cislo \
+           FROM vas.wflspri wflspri \
+        WHERE (wflspri.ixp = '@S0139') ORDER BY wflspri.por_cislo
+        S0198 = "1"
+        S0181 = X0031
+        S0181 = copy(S0181,1,5)
+        IF (S0171<>"")
+           S0170 = S0170 + S0171 + ","
+        ENDIF
+        IF S0199 <>""
+            STRCAT X0020= "+"
+        ENDIF
+        IF v_prvni<>"1"
+           STRCAT X0020= ","
+        ENDIF
+        STRCAT X0020=X0031
+        v_prvni = "2"
+      ENDC
+      IF (S0198<>"" ||S0199<>"")
+          STRCAT X0020= ";"
+      ENDIF
+
+ENDC
+v_prilohy = v_poc_priloh
+v_poc_priloh2 = NumToStr(P0099, "I") + ";" + v_poc_priloh2
+
+; poskládám v požadovaném formátu vèetnì titulù
+v_nazev_ref_tit=NAZEVREFTIT(v_tit_pred,v_jmeno,v_prijmeni,v_tit_za)
+v_nnazev_ref_tit=NAZEVREFTIT(v_ntit_pred,v_njmeno,v_nprijmeni,v_ntit_za)
+
+; 22.5.2015
+;      S0113 = copy(S0113,1,10)
+      v_dat_podscasem =S0112
+
+
+     IF (S0126 <> "" )
+       v_dat_podscasem3 = copy(S0126,1,19)
+       v_dat_podscasem3 = DateToStr(v_dat_podscasem3,"RRRR-MM-DD HH:II:SS","RRRRMMDDHHIISS")
+     ELSE
+       v_dat_podscasem3 = ""
+     ENDIF
+      v_dat_odes_vyriz = copy(v_dat_odes_vyriz,1,10)
+     ; doplnìno novì dat_pod inic. v datetime formátu
+     IF (S0126 <> "" )
+       v_dat_pod2 = copy(S0126,1,19)
+       v_dat_pod2 = DateToStr(v_dat_pod2,"RRRR-MM-DD HH:II:SS","RRRRMMDDHHIISS")
+     ELSE
+       v_dat_pod2 = ""
+     ENDIF
+     ;
+     IF (S0113 <> "" )
+       v_dat_uloz2 = copy(S0113,1,19)
+       v_dat_uloz2 = DateToStr(v_dat_uloz2,"RRRR-MM-DD HH:II:SS","RRRRMMDDHHIISS")
+     ELSE
+       v_dat_uloz2 = ""
+     ENDIF
+
+v_spis_pl = S0993
+
+
+IF (v_dat_vyriz_do <> "" )
+    v_dat_vyriz_do= copy(v_dat_vyriz_do,1,19)
+    v_dat_vyriz_do= DateToStr(v_dat_vyriz_do,"RRRR-MM-DD HH:II:SS","RRRRMMDDHHIISS")
+ELSE
+    v_dat_vyriz_do = ""
+ENDIF
+
+
+IF (v_dat_vyriz <> "" )
+    v_dat_vyriz= copy(v_dat_vyriz,1,19)
+    v_dat_vyriz= DateToStr(v_dat_vyriz,"RRRR-MM-DD HH:II:SS","RRRRMMDDHHIISS")
+ELSE
+    v_dat_vyriz = ""
+ENDIF
+
+IF (v_dat_uzav <> "" )
+    v_dat_uzav= copy(v_dat_uzav,1,19)
+    v_dat_uzav= DateToStr(v_dat_uzav,"RRRR-MM-DD HH:II:SS","RRRRMMDDHHIISS")
+ELSE
+    v_dat_uzav = ""
+ENDIF
+
+IF S0117 <> ""
+    S0117= copy(S0117,1,19)
+    S0117= DateToStr(S0117,"RRRR-MM-DD HH:II:SS","RRRRMMDDHHIISS")
+ENDIF
+
+; info o vyøizujícím dokumentu
+v_vyriz_kopie_poznamka = ""
+v_vyriz_kopie_poznamky = ""
+P0159 = 1
+
+; vyhrazeno pro nasèítané poznámky
+StrAlloc X0010=16384
+StrAlloc X0011=16384
+
+IF (S0159<>"")
+ CYCLE SELECT X0011= sslspid.poznamka \
+           FROM vas.wflvkop wflvkop, \
+                vas.sslspid sslspid \
+   WHERE (wflvkop.ixp_orig = '@S0159' AND wflvkop.ixp_kop = sslspid.ixp)
+;   IF (v_vyriz_kopie_poznamka<>"")
+;      v_vyriz_kopie_poznamky = v_vyriz_kopie_poznamky + NumToStr(P0159, "I") + ". stejnopis - " + v_vyriz_kopie_poznamka + "\n\r"
+;   ENDIF
+      STRCAT X0010=NumToStr(P0159, "I")
+      STRCAT X0010=". stejnopis - "
+      STRCAT X0010=X0011
+      STRCAT X0010= "\n\r"
+   P0159 = P0159 + 1
+   ENDC
+ENDIF
+
+{pøidáno novì}
+IF (VerzeSubVerzeDb()>="358.18")
+  CYCLE SELECT v_odeslano_listu= sslsdcj.odeslano_listu, \
+     v_ulozeno_listu= sslsdcj.ulozeno_listu \
+    FROM vas.sslsdcj sslsdcj \
+   WHERE (sslsdcj.ixp_spis = '@X0000') AND sslsdcj.priz_akt = 1
+  ENDC
+ENDIF
+
+
+;pùvodní pøepriorovaná ÈJ
+v_prior_cj = ""
+CYCLE SELECT DISTINCT v_prior_1cj= sslsdcj.cj,   \
+                      S0022= sslsdcj.ixp_spis \
+   FROM vas.sslsdcj sslsdcj \
+WHERE (sslsdcj.ixp_prior = '@X0000')  \
+ORDER BY sslsdcj.cj
+      IF v_prior_cj<>""
+         v_prior_cj = v_prior_cj + ", "
+      ENDIF
+      v_prior_cj = v_prior_cj + v_prior_1cj
+ENDC
+
+
+IF v_denik="IN-TC"
+   v_spec_mvi1= "Proti : "
+   v_spec_mvi2= "Pro : "
+   v_spec_mvi3= "Vyznaèení právní moci : "
+ENDIF
+
+
+
+    ; X0019 = X0019 + NumToStr(P0159, "I") + ". stejnopis - " + v_vyriz_kopie_poznamka + "\n\r"
+;     X0018 =NumToStr(P0159, "I")
+;     X0017 =v_vyriz_kopie_poznamka
+;     X0017 ="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBxxxx"
+;     strcat X0019 = X0017
+     ;strcat X0019 = X0020
+     ;strcat X0019 = ". stejnopis - "
+     ;strcat X0019 = X0031
+     ;strcat X0019 =  "\n\r"
+
+; VLASTNOSTI
+
+CALL Vlastnosti()
+
+  ; klíèová slova - pøidáno novì
+		v_kl_slova = ""
+		CYCLE SELECT v_kl_slovo= wfliixp.kl_slovo \
+			FROM vas.wfliixp wfliixp    \
+			WHERE (wfliixp.ixp = '@X0000') \
+			ORDER BY 1
+			IF (v_kl_slovo <> "")
+			   v_kl_slova = v_kl_slova + v_kl_slovo + ", "
+			ENDIF
+		ENDC
+		IF (v_kl_slova <> "")
+			v_kl_slova = copy( v_kl_slova, 1, Len( v_kl_slova ) - 2 )
+		ENDIF
+     
+; bohužel kvùli kompatibilitì se starou verzí vlastník ( v poli zpracovatel )
+WRITEXME "spis","nazev_ur"=S0101  ,\
+                "id_spisu_car"="*" + X0000 + "*" ,\
+                "id_spisu"=X0000 ,\
+                "typ_inc_pis"=S0103 ,\
+                "cj"=S0104 ,\
+                "vec"=S0105 ,\
+                "vec_pod"=S0106 ,\
+                "obsah_text"=X0025,\
+                "zpracovatel"=S0107 ,\
+                "zpracovatel_ref"=S0147 ,\
+                "spis_pl"=v_spis_pl, \
+                "sp_znak"=v_spis_znak, \
+                "skart_znak"=v_skar_znak, \
+                "spis_znak"=S0108 ,\
+                "skart_lhut"=v_skartace ,\
+                "skart_lhuta"=v_skar_lhuta ,\
+                "odesialtel"=S0110 ,\
+                "odesilatel_kvop"=v_odes_kvop,\
+                "odesilatel_mailbox"=v_odes_mailbox,\
+                "znacka"=S0111 ,\
+                "dat_pod1"=v_dat_podscasem ,\
+                "dat_pod_dt"=v_dat_podscasem3 ,\
+                "dat_vyriz_do"=v_dat_vyriz_do ,\
+                "dat_uloz"=S0113 ,\
+                "vyr_jak"=S0114 ,\
+                "vyr_komu"=S0115 ,\
+                "vyr_sch_kdo"=S0116 ,\
+                "vyr_sch_kdy"=Trim(S0117) ,\
+                "akt_znacka"=S0120 ,\
+                "dat_pod"=S0121 ,\
+                "typ_pis"=S0123 ,\
+                "typ_pis_zkr"=S0124 ,\
+                "st_utaj_id"=NumToStr( S0179, "I" ),\
+                "st_utaj_id_max"=NumToStr( S0180, "I" ),\
+                "poznamka"=S0125 ,\
+                "incpis_dat_pod"=S0126 ,\
+                "incpis_vec"=S0127 ,\
+                "vlastnik_nazev"=v_nazev_ref_tit ,\
+                "vlastnik_nazev_fun"=S0151 ,\
+                "vlastnik_nazev_rf"=S0152 ,\
+                "vlastnik_nazev_su"=S0153 ,\
+                "vlastnik_nazev_suo"=S0154 ,\
+                "vlastnik_tel"=S0155 ,\
+                "vlastnik_fax"=S0156 ,\
+                "vlastnik_mail"=S0157 ,\
+                "cj_kr"=v_cj_kr ,\
+                "cj_ext"=v_cj_ext, \
+                "rok_skartace"=v_rok_skartace, \
+                "vyr_vypraveno"=v_dat_odes_vyriz, \
+                "dotc_odes"=v_dotc_odes, \
+                "dotc_odes_dat_nar"=v_dotc_odes_dat_nar, \
+                "dotc_odes_ico"=v_dotc_odes_ico, \
+                "dotc_odes_typ_esu"=v_dotc_odes_typ_esu, \
+                "zalozil"=v_zalozil, \
+                "schvalovatel"=v_schvalovatel, \
+                "vlastnikn_nazev"=v_nnazev_ref_tit ,\
+                "vlastnikn_nazev_fun"=S0161 ,\
+                "vlastnikn_nazev_rf"=S0162, \
+                "zpracovatel1"=v_zprac_nazev_rf, \
+                "zpracovatel1su"=v_zprac_nazev_rf_su, \
+                "zpracovatel2su"=v_zprac_nazev_rf_su2, \
+                "cj_apriv"=v_cj_kr, \
+                "dat_pod2"=v_dat_pod2, \
+                "dat_uloz2"=v_dat_uloz2, \
+                "rok_skar_pred"=NumToStr( v_rok_skar_pred, "I" ),\
+                "rok_skar_pred_mv"=NumToStr( v_rok_skar_predMV, "I" ),\
+                "vlastnik_su_tel"=v_vlastnik_su_tel,\
+                "vlastnik_su_fax"=v_vlastnik_su_fax, \
+                "vyriz_kopie_poznamky"=CALL TiskniBezRidZnakuSv(X0010), \
+                "odeslano_kam"=v_odeslano_kam, \
+                "dat_uzav"=v_dat_uzav,\
+                "dat_vyriz"=v_dat_vyriz,\
+                "odeslano_listu"=NumToStr(v_odeslano_listu,"I"),\
+                "ulozeno_listu"=NumToStr(v_ulozeno_listu,"I"),  \
+                "priorovane_znacky"=v_prior_cj,        \
+                "spec_text_mvi"= v_spec_mvi1,\
+                "poc_dok"=NumToStr(v_poc_dok, "I"), \
+                "poc_priloh_dok"=NumToStr(v_poc_priloh_dok,"I"), \
+                "prilohy"=CALL TiskniBezRidZnakuSv(X0020), \
+                "VLASTNOSTI"= CALL TiskniBezRidZnakuSv(X0042),\
+                "spec_text_mvi2"= v_spec_mvi2,\
+                "spec_text_mvi3"= v_spec_mvi3,\
+                "poc_priloh2"=v_poc_priloh2, \
+                "dat_pr_moc"=v_dat_pr_moc, \
+                "kl_slova"= v_kl_slova, \
+                "cj_inic"=v_cj_inic,\
+                "cj_dokumentu"=v_cjdokumentu,\
+                "poznamka_edit"=""
+
+v_poradi = 1
+
+       v_ixp = X0000
+
+
+
+;------------------------
+; obsah spisu - pøidáno novì v rámci [REQ-31023-15]
+       
+
+CYCLE SELECT vv_por_cis_pis= ssldspi.por_cislo, \
+             vv_pid_pis= ssldspi.ixp, \
+             vv_aktivita= ssldspi.aktivita, \
+             vv_poznamka_obsah= ssldspi.poznamka,\
+             vv_por_cislo_uziv=ssldspi.por_cislo_uziv \
+        FROM vas.ssldspi ssldspi  \
+        WHERE (ssldspi.ixp_spis = '@X0000')  \
+        ORDER BY ssldspi.por_cislo ASC
+        S0182 = vv_pid_pis
+
+        CYCLE SELECT vv_vec_pis= wflspid.nazev, \
+                     vv_odesilatel_pis= wflspid.misto_vzniku, \
+                     vv_dat_pod_pis= wflspid.dat_pod, \
+                     vv_akt_znacka= wflspid.akt_znacka, \
+                     vv_s_ele= wflspid.s_ele, \
+                     vv_s_fyz= wflspid.s_fyz, \
+                     vv_s_sgn= wflspid.s_sgn \
+               FROM vas.wflspid wflspid \
+              WHERE (wflspid.ixp = '@S0182')
+        ENDC
+        
+         IF (vv_dat_pod_pis <> "" )
+          vv_dat_pod_pis = copy(vv_dat_pod_pis,1,19)
+          vv_dat_pod_pis = DateToStr(vv_dat_pod_pis,"RRRR-MM-DD HH:II:SS","RRRRMMDDHHIISS")
+         ELSE
+          vv_dat_pod_pis = ""
+         ENDIF
+
+
+        vv_dok_poznamka = ""
+        vv_poc_listu_pis = ""
+        vv_poc_lpriloh = ""
+        vv_dok_stran = ""
+        vv_dok_priloh = ""
+        vv_vec_podrobne = ""
+        CYCLE SELECT vv_poc_listu_pis= sslspid.poc_listu, \
+                     vv_poc_lpriloh= sslspid.poc_l_priloh,\
+                     vv_dok_poznamka= sslspid.poznamka, \
+                     vv_dok_stran= sslspid.poc_stran,\
+                     vv_dok_priloh= sslspid.poc_priloh,\
+                     vv_vec_podrobne= sslspid.obsah_text \
+              FROM vas.sslspid sslspid \
+              WHERE (sslspid.ixp = '@S0182')
+       ENDC
+       P0005 = NumToStr(vv_poc_lpriloh,"I")
+       WRITEXME "sberny_arch","por_cis_pis"=NumToStr(vv_por_cis_pis, "I") ,\
+                       "vec_pis"=vv_vec_pis ,\
+                       "vec_podrobne"=vv_vec_podrobne ,\
+                       "por_cislo_uziv"=vv_por_cislo_uziv ,\
+                       "pid_pis"=vv_pid_pis ,\
+                       "akt_znacka"=vv_akt_znacka ,\
+                       "odesilatel_pis"=vv_odesilatel_pis ,\
+                       "dat_pod_pis"=vv_dat_pod_pis ,\
+                       "poc_listu_pis"=vv_poc_listu_pis ,\
+                       "poc_lpriloh"=vv_poc_lpriloh ,\
+                       "poc_lpriloh_c"=NumToStr(P0005,"I"),\
+                       "dok_poznamka"=vv_dok_poznamka ,\
+                       "poc_priloh"=vv_poc_priloh ,\
+                       "pozn_pis"=vv_poznamka_obsah ,\
+                       "dat_vyjm_ze_spisu"=vv_dat_vyjm_ze_spisu ,\
+                       "s_ele"=NumToStr(vv_s_ele,"I") ,\
+                       "s_fyz"=NumToStr(vv_s_fyz,"I") ,\
+                       "s_sgn"=NumToStr(vv_s_sgn,"I")
+       
+ENDC
+;------------------------
+
+
+       ; souvisejicí dokumenty , spisy - pøidáno novì
+        CYCLE  SELECT v_ixp_s= wflvpis.ixp_1, \
+                    v_poznamka_s= wflvpis.poznamka, \
+                    v_nazev_s= wflspid.nazev, \
+                    v_dat_pod_s= wflspid.dat_pod,\
+                    v_akt_znacka_s= wflspid.akt_znacka, \
+                    v_typ_vpp_txt_s= wflcvpp.typ_vpp_txt \
+                    FROM vas.wflvpis wflvpis, vas.wflspid wflspid, vas.wflcvpp wflcvpp \
+                    WHERE ixp_1 = v_ixp AND wflvpis.aktivita =100 AND wflvpis.ixp_2 = wflspid.ixp AND wflvpis.typ_vpp = wflcvpp.typ_vpp \
+                    ORDER BY ixp_2
+
+                    WRITEXME "souvisejici","ixp"=v_ixp_s,\
+                                    "poznamka"=v_poznamka_s,\
+                                    "dat_pod"=v_dat_pod_s,\
+                                    "nazev"=v_nazev_s,\
+                                    "akt_znacka"=v_akt_znacka_s,\
+                                    "typ_vazby"=v_typ_vpp_txt_s,\
+                                    "smer_souvislosti" = "1"
+
+         ENDC
+         CYCLE  SELECT v_ixp_s= wflvpis.ixp_1, \
+                    v_poznamka_s= wflvpis.poznamka, \
+                    v_nazev_s= wflspid.nazev, \
+                    v_dat_pod_s= wflspid.dat_pod,\
+                    v_akt_znacka_s= wflspid.akt_znacka, \
+                    v_typ_vpp_txt_s= wflcvpp.typ_vpp_txt \
+                    FROM vas.wflvpis wflvpis, vas.wflspid wflspid, vas.wflcvpp wflcvpp \
+                    WHERE ixp_2 = v_ixp AND wflvpis.aktivita =100 AND wflvpis.ixp_1 = wflspid.ixp AND wflvpis.typ_vpp = wflcvpp.typ_vpp \
+                    ORDER BY ixp_1
+
+                    WRITEXME "souvisejici","ixp"=v_ixp_s,\
+                                    "poznamka"=v_poznamka_s,\
+                                    "dat_pod"=v_dat_pod_s,\
+                                    "nazev"=v_nazev_s,\
+                                    "akt_znacka"=v_akt_znacka_s,\
+                                    "typ_vazby"=v_typ_vpp_txt_s,\
+                                    "smer_souvislosti" = "2"
+
+         ENDC
+
+
+
+
+ SELECT P0181=Count(*) \
+   FROM vas.gincsmo a \
+   WHERE a.submodel = 'SPR' AND a.aktivita = 100
+   IF (P0181 = 1)
+; specialita SPR
+CYCLE SELECT        \
+    OUO1_nazev=sprsouo.nazev , \
+    OUO1_ucinnost=(SELECT sprcuci.ucinnost_txt FROM vas.sprcuci sprcuci WHERE sprcuci.ucinnost=sprvouo.ucinnost), \
+    OUO1_duv_urc=(SELECT sprcdur.duv_urc_txt FROM vas.sprcdur sprcdur WHERE sprcdur.duv_urc=sprvouo.duv_urc)     \
+  FROM \
+    vas.sprsouo sprsouo, \
+    vas.sprvouo sprvouo  \
+  WHERE \
+    sprsouo.ixs_ouo=sprvouo.ixs_ouo AND \
+    sprvouo.aktivita=100 AND            \
+    sprvouo.ixp_spis='@X0000'           \
+
+
+    v_poradi = v_poradi+1
+ WRITEXME "spr","OUO_nazev"=OUO1_nazev, \
+                "OUO_ucinnost"=OUO1_ucinnost, \
+                "OUO_duv_urc"=OUO1_duv_urc,\
+                "OUO_poradi"=v_poradi
+
+ENDC
+ENDIF
+
+S0012 = ""
+  CYCLE SELECT v_dc_esu_txt= ginsesu.esu_txt, \
+             v_dc_ob_jmeno= ginsesu.ob_jmeno, \
+             v_dc_jmeno= ginsesu.jmeno, \
+             v_dc_prijmeni= ginsesu.prijmeni, \
+             v_dc_tit_pred= ginsesu.tit_pred, \
+             P0012= ginsesu.stat_sp,\
+             v_dc_dat_nar= ginsesu.dat_nar,\
+             v_dc_tit_za= ginsesu.tit_za, \
+             v_dc_ulice= ginsesu.ulice, \
+             v_dc_cast_obce= ginsesu.cast_obce, \
+             v_dc_cor= ginsesu.cor, \
+             v_dc_cpop= ginsesu.cpop, \
+             v_dc_psc= ginsesu.psc, \
+             v_dc_obec= ginsesu.obec, \
+             v_dc_dvazby= wflsdva.nazev, \
+             v_dc_stat= ginsesu.stat, \
+             v_dc_tvazby= wflctyv.typ_vazby_txt, \
+             v_dc_tvazby_num= wflvspe.typ_vazby,\
+             v_dc_poznamka= wflvspe.poznamka,  \
+             v_dc_lic_zast= wflvspe.lic_zast, \
+             v_dc_por_zast= wflvspe.por_zast, \
+             v_dc_init_esu= wflvspe.s_init_esu, \
+             S0997= ginsesu.ixs_esu, \
+             v_dc_st0= ginsesu.st0, \
+             v_dc_st1= ginsesu.st1, \
+             v_dc_st2= ginsesu.st2, \
+             v_dc_st3= ginsesu.st3, \
+             v_dc_st4= ginsesu.st4, \
+             v_dc_st5= ginsesu.st5, \
+             v_dc_st6= ginsesu.st6, \
+             v_dc_st7= ginsesu.st7, \
+             P0150 = ginsesu.typ_esu \
+      FROM vas.wflvspe wflvspe,  \
+           vas.ginsesu ginsesu,  \
+           vas.wflsdva wflsdva,  \
+           vas.wflctyv wflctyv   \
+      WHERE (wflvspe.ixp='@X0000') AND \
+            (wflvspe.ixs_esu = ginsesu.ixs_esu) AND \
+            (wflvspe.aktivita = 100) AND \
+            (wflvspe.ixs_dva= wflsdva.ixs_dva) AND \
+            (wflvspe.typ_vazby= wflctyv.typ_vazby )
+
+      v_dc_zast_jmeno    = ""
+      v_dc_zast_prijmeni = ""
+      v_dc_zast_funkce   = ""
+      S0998              = v_dc_lic_zast
+      P0019              = v_dc_por_zast
+      S0999              = NumToStr( P0019, "I")
+      IF (v_dc_lic_zast<>"")&&(v_dc_por_zast<>"")
+         CYCLE SELECT v_dc_zast_jmeno= gindesu.jmeno, \
+                      v_dc_zast_prijmeni= gindesu.prijmeni,  \
+                      v_dc_zast_funkce= gindesu.funkce \
+               FROM vas.gindesu gindesu \
+               WHERE (gindesu.ixs_esu = '@S0997') AND (gindesu.lic = '@S0998') AND (gindesu.por_zast = '@S0999')
+         ENDC
+
+      ENDIF
+      
+    call EsuTxtKVOP( P0150, v_dc_jmeno, v_dc_prijmeni, v_dc_tit_pred, v_dc_tit_za,    v_dc_ulice, v_dc_obec, v_dc_psc, v_dc_cor, v_dc_cpop, v_dc_stat, v_email, v_dc_esu_txt, S0250 )
+     v_dc_esu_txt_kvop = S0250
+      IF  P0012<>0
+         CYCLE SELECT v_dc_ds_stat_sp= gincsta.stat_txt, \
+                      v_dc_ds_stat_sp_orig= gincsta.stat_txt_orig,\
+                      v_dc_ds_stat_sp_aaa= gincsta.stat_sis_aaa \
+               FROM vas.gincsta gincsta \
+               WHERE (gincsta.stat = @P0012)
+         ENDC
+      ELSE
+           v_dc_ds_stat_sp = ""
+           v_dc_ds_stat_sp_orig = ""
+           v_dc_ds_stat_sp_aaa = ""
+      ENDIF
+      P0012 = 0
+      WRITEXME "dotc_subjekty","ds_esu_txt"=v_dc_esu_txt ,\
+                     "ds_esu_txt_kvop"=v_dc_esu_txt_kvop ,\
+                     "ds_nazev"=v_dc_ob_jmeno ,\
+                     "ds_dat_nar"=v_dc_dat_nar,\
+                     "ds_stat_sp"=v_dc_ds_stat_sp,\
+                     "ds_stat_sp_orig"=v_dc_ds_stat_sp_orig,\
+                     "ds_stat_sp_aaa"=v_dc_ds_stat_sp_aaa,\
+                     "ds_ulice"=v_dc_ulice ,\
+                     "ds_cast_obce"=v_dc_cast_obce ,\
+                     "ds_cor"=v_dc_cor ,\
+                     "ds_cpop"=v_dc_cpop ,\
+                     "ds_psc"=v_dc_psc ,\
+                     "ds_obec"=v_dc_obec, \
+                     "ds_dvazby"=v_dc_dvazby, \
+                     "ds_tvazby"=v_dc_tvazby, \
+                     "ds_tvazby_num"=NumToStr(v_dc_tvazby_num,"I"), \
+                     "ds_poznamka"=v_dc_poznamka, \
+                     "ds_zast_jmeno"=v_dc_zast_jmeno, \
+                     "ds_zast_prijmeni"=v_dc_zast_prijmeni, \
+                     "ds_zast_funkce"=v_dc_zast_funkce, \
+                     "ds_st1"=v_dc_st0, \
+                     "ds_st2"=v_dc_st1, \
+                     "ds_st3"=v_dc_st2, \
+                     "ds_st4"=v_dc_st3, \
+                     "ds_st5"=v_dc_st4, \
+                     "ds_st6"=v_dc_st5, \
+                     "ds_st7"=v_dc_st6, \
+                     "ds_st8"=v_dc_st7, \
+                     "ds_init_esu"=NumToStr(v_dc_init_esu, "I")
+
+   ENDC
+
+                
+       StrFree X0042
+       StrFree X0031
+       StrFree X0020
+
+;ENDC
+{#ZMENY
+!18.07.2005
+*19.07.2004.1- vznik
+*21.04.2005 - zapnuta možnost zmìny typu výstupu (pomocí ADS  - el. obraz, ... ) ORJ:0423
+*26.04.2005 - drobné úpravy ORJ:0423
+*06.05.2005 - zapnuta možnost zmìny typu výstupu (pomocí ADS  - el. obraz, ... ) ORJ:0423
+*11.05.2005 - pøidána položka Èíslo jednací krátké (bez pøívìšku) ORJ:0423
+*12.05.2005 - upraveno pole vlastnik_nazev - vkládá se do nìj tit_pred jmeno prijmeni tit_za ORJ:0423
+*01.06.2005-oprava plnìní skartaèního znaku ORJ:0423
+*02.06.2005.1-oprava plnìní skartaèního znaku ORJ:0423
+*02.06.2005.2-oprava plnìní skartaèního znaku ORJ:0423
+*04.08.2005 -pøidáno generování cj_ext ORJ:0423
+*07.10.2005-úprava pro nové struktury ORJ:0423
+*31.01.2005-úprava pro nové struktury, pøidány položky rok skartace a vypraveno ORJ:0423
+*09.11.2005-oprava plnìní názvu ISU ORJ:0423
+*28.03.2006-oprava plnìní položky dat_pod1 (døíve byly chybnì v xme dvì položky dat_pod - novì dat_pod1 je vèetnì èasu), oprava selectu iniciaèního dokumentu ORJ:0423
+*05.04.2006-pøidány nové položky ORJ:0423
+*05.05.2006-drobné úpravy ORJ:0423
+*23.05.2006-doplnìno generování položky IÈO a typ_esu pro dotèený subjekt (H003633 - #003794)  ORJ:0423
+*04.09.2006-oprava v plnìní položky datum vypravení, zpracovatel, název úøadu ORJ:0423
+*04.10.2006-doplnìní položky datum podání - datetime a pøedpokládaného roku skartace ORJ:0423
+*23.04.2007-doplnìny položky tel a fax ze spisového uzlu ORJ:0423
+*02.06.2007-doplnìna položky poznámký z kopií vyøiz. dokumentu (H004943  - #006642) vyriz_kopie_poznamky ORJ:0423
+*07.06.2007-upraveno dotahování odesílatele - novì 254 znakù, døíve jen 100 znakù ORJ:0423
+*08.06.2007-upraveno dotahování odesílatele - novì 254 znakù, døíve jen 100 znakù ORJ:0423
+*13.06.2007-pole vyriz_kopie_poznamky rozšíøeno na více než 254 znakù ORJ:0423
+*04.09.2007-pøidáno pole odeslano_kam (max 254 znakù) ORJ:0423
+*26.11.2007-pøidána obsluha více záznamù v pro jeden spis (pøeevidování spisù použité v Bratislavì) (H006531) ORJ:0423
+*01.03.2008-pøidána položka VLASTNOSTI ORJ:0527
+*15.04.2008-úprava popisu
+*09.06.2008.1-úprava include souborù procedur a volání konverzních funkcí ORJ:0527
+*09.06.2008.2-doplnìní nových položek pro MVI ORJ:0423
+*18.07.2008-oprava plnìní dat_vyriz a dat_uzav pro MVI ORJ:0423
+*26.09.2008-oprava plnìní pøedpokládaného roku skartace ORJ:0423
+*15.01.2009-doplnìna položka odesláno listù, uloženo listù,  priorované spisy ORJ:0423
+*20.01.2009-doplnìní položky poèet pøíloh 2 ORJ:0423
+*20.11.2009-doplnìny položky dle požadavkù KVOP ORJ:0423
+*1.12.2009-oprava vyhodnocení typu ESU - pro jistotu pøes promìnnou typu INT pro ORJ:0423
+*14.01.2010-doplnìny položky dle požadavkù KVOP - pøidán e-mail do odes_kvop ORJ:0527 pro KVOP
+*02.02.2010-doplnìna položka ID datová schránky odesílatele ORJ:0527 pro KVOP
+*03.08.2010-úpravy kvùli padání na MV (dle rad J. Gotha)
+*15.11.2010-doplnìna vìc podrobnì až 900 znakù ORJ: 423
+*23.11.2010-doplnìn region dotèených subjektù ORJ: 423
+*12.09.2011-opraveno skládání dotè. subjektù pro kvop- neselectovalo se typ ESU ORJ: 423
+*23.04.2011-doplnìna skart_lhuta ORJ:423
+*02.05.2011-upraven pøedpokládaný rok skartace pro MV pro uložené spisy ORJ:423
+*05.11.2012-doplnìn datum podání/vytvoøení datetime; ORJ:423
+*01.11.2013-doplnìna státní pøíslušnost a datum narození [REQ-18343-13] ORJ: 423
+*29.01.2014- oprava formátovacích øetìzcù na RRRRMMDDHHIISS ORJ:0423
+*20.03.2014- doplnìna klíèová slova a související [CHG-6666-14] ORJ:0423
+*19.12.2014- doplnìn st_utaj_id_max ORJ:0423
+*15.05.2015- [CHG-8298-15] doplnit ÈJ èísla jednací ze sbìrného všech dokumentù (stejné jako dotèené subjekty), ale jen do zhruba 200 znakù (oddìlené støedním a pokud se nevejdou, tak na konci 3 teèky).Není u nich výjimkou, že jejich spisy mají pøes 900 dokumentù, takže by celý seznam ÈJ by hodnì dlouhý, proto to omezení. ORJ:0423
+*21.05.2015- doplnìn zpracovatel1su pro MHMP ORJ: 423
+*22.05.2015- dat_uloz a rok_skar_pred se plní až v pøípadì, kdy je uzavøen nebo uložen ORJ: 0423
+*11.06.2015- doplnìno prázdné pole poznamka_edit pro možnost GFRM editovatelného políèka - pro MHMP ORJ: 0423
+*25.09.2015- nový region obsah spisu - pøidáno novì v rámci [REQ-31023-15]
+#ZMENY}

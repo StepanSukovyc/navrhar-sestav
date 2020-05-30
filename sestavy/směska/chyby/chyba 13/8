@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="windows-1250"?>
+
+<format xmlns="http://www.gordic.cz/TR/alf/1.3/" type="grr">
+
+  <info ixs_xme="MATMBC"/>
+  <info xmeta_ver="1"/>
+  <info xmeta_subver_min="1"/>
+  <info nazev="základní ALF"/>
+  <info maker="0443"/>
+  
+<script><![CDATA[ 
+def obarvi(podleceho):
+   if podleceho=='1':
+   		format.radek.font_color='red'
+   else:
+        format.radek.font_color='black'
+]]></script>
+   
+
+  <region name="MAJETEK">
+    <body>
+		<region name="KARTA" qorder-by="CEN">
+			<variable name="CEN2" value="KARTA.CEN*2"/>
+        <head>
+          <line on-each-page="true" endpage="false">
+            <style width="19%" border-width="1" font-size="5" font-color="blue" font-bold="true" font-italic="true">
+              <text value="Ev. číslo"/>
+            </style>
+            <style width="39%" bottom-border-width="5" font-size="5" font-color="blue" font-bold="true" font-italic="true">
+              <text value="Název Datum"/>
+            </style>
+            <style width="29%" bottom-border-width="5" font-size="5" font-color="blue" font-bold="true" font-italic="true" horizontal-align="right">
+              <text value="Cena"/>
+            </style>
+            <style width="13%" bottom-border-width="5" font-size="5">
+              <text value="budova a místnost"/>
+            </style>
+		</line>
+		<line>
+			<text value="celkový součet:"/>
+			<value-of name="TOTAL-SUM(CEN)"/>
+			<value-of name="TOTAL-COUNT"/>
+		</line>
+        </head>
+        <body>
+			<line>
+		      <value-of name="ROWNUM"/>
+		      <value-of name="SUM(CEN)"/>
+			  <style id="radek">
+
+				  <style width="10%">
+					  <value-of name="EVC"/>
+				  </style>
+				  <style width="0%">
+					 <value-of format="d. mmmmm yyyy" name="DPO"/>
+				 </style>
+				  <style width="10%">
+					  <value-of name="CEN" onData="obarvi(KARTA.BUD)"/>
+				 </style>
+	
+				<style width="13%" horizontal-align="center">
+					<value-of name="BUD"/>					
+				</style>
+			</style>
+       </line>
+   </body>
+   <foot>
+	   <line>
+		   <value-of name="ROWNUM"/>
+		   <value-of name="SUM(CEN)"/>
+		   <value-of name="MIN(CEN)"/>
+		   <value-of name="MAX(CEN)"/>
+	   </line>
+   </foot>
+      </region>
+    </body>
+  </region>
+</format>

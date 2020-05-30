@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+#ZMENY
+30.10.2012 - přidány sloupce Druh majetku a SuAu evidence
+#ZMENY
+-->
+<format type="grr" xmlns="http://www.gordic.cz/TR/alf/1.4/">
+  <info type_cust="Z" ixs_xme="0000ALX0AB27" xmeta_ver="1" xmeta_subver_min="20" nazev="Přehled účetních odpisových údajů II" ixs_alv="0000ALV02HXO,0000ALV04ZVQ,0000ALV04ZWL,0000ALV02VMH,0000ALV05A7K" allowed_output="htm,xls,doc,frm" ixs_frm="0000ALF03373" maker="0431" dat_modif="201210300844" rokmes_od="199801" rokmes_do="999913" />
+  <paper-setting paper-width="297mm" paper-height="210mm" />
+  <region name="VYBER">
+    <head>
+      <line on-each-page="true">
+        <style font-face="arial" font-size="1" font-italic="true" bottom-border-width="1">
+          <value-of name="" width="18%" onData="self.value='Licence: '+ ': '+ VYBER.LIC" />
+        </style>
+        <style font-face="arial" font-size="1" font-italic="true" horizontal-align="right" bottom-border-width="1">
+          <value-of name="" width="82%" onData="self.value='IDENTIFIKACE SESTAVY / ' +format.info['ixs_frm'] +'  ('+format.info['dat_modif']+')'" />
+        </style>
+      </line>
+      <line on-each-page="true">
+        <image file="znak-m.bmp" image-width="25mm" image-height="25mm" width="18%" />
+        <!-- <text value="OSOBNÍ KARTA PRACOVNÍKA"/> -->
+        <style font-face="arial" font-size="4" font-bold="true">
+          <value-of name="" width="82%" onData="if VYBER.DAT_OD.year==0 : self.value='Přehled účetních odpisových údajů vybraného '+ VYBER.STAV_MAJ+ ' majetku I'&#xA;else: self.value=value='Přehled účetních odpisových údajů vybraného '+ VYBER.STAV_MAJ+ ' majetku II  ke dni '+ VYBER.DAT_OD.format('dd.mm.yyyy')&#xA;" />          
+        </style>
+      </line>
+      <line on-each-page="true">
+        <style font-face="arial">
+          <text value="" width="18%" />
+        </style>
+        <style font-face="arial">
+          <text value="IČO:" width="7%" />
+        </style>
+        <style font-face="arial" font-size="3" font-bold="true">
+          <value-of name="" width="75%" onData="self.value=VYBER.ICO+ ' - '+ VYBER.ICO_NAZEV" />
+        </style>
+      </line>
+      <line on-each-page="true">
+        <style font-face="arial">
+          <text value="" width="18%" />
+        </style>
+        <style font-face="arial">
+          <text value="" width="7%" />
+        </style>
+        <style font-face="arial" font-size="3" font-bold="true">
+          <value-of name="ICO_ADRESA" width="74%" />
+        </style>
+        <style font-face="arial" font-size="3" font-bold="true">
+          <text value="" width="1%" />
+        </style>
+      </line>
+      <line on-each-page="true">
+        <style font-face="arial">
+          <text value="" width="18%" />
+        </style>
+        <style font-face="arial">
+          <text value="NS:" width="7%" />
+        </style>
+        <style font-face="arial" font-size="3" font-bold="true">
+          <value-of name="" width="75%" onData="self.value=VYBER.NS+ ' - '+ VYBER.NS_NAZEV" />
+        </style>
+      </line>
+      <line on-each-page="true">
+        <style left-border-width="1" right-border-width="1" top-border-width="1">
+          <text value="" width="100%" />
+        </style>
+      </line>
+    </head>
+    <body>
+      <region name="KARTA" order-by="INVENTCISLO">
+       <group name="KARTA_1" by="NKS">      
+        <head>
+          <line>
+            <style left-border-width="1" bottom-border-width="1">
+              <text value="" width="1%" />
+            </style>
+            <style font-bold="true" bottom-border-width="1">
+              <text value="Inventární číslo" width="11%" />
+            </style>
+              <style font-bold="true" bottom-border-width="1">
+              <text value="Druh" width="4%" />
+            </style>
+            <style font-bold="true" bottom-border-width="1">
+              <text value="Technický název" width="29%" />
+            </style>
+              <style font-bold="true" bottom-border-width="1">
+                <text value="SuAu evi" width="5%" />
+              </style>            
+            <style font-bold="true" bottom-border-width="1">
+              <text value="Typ odpisu" width="7%" />
+            </style>
+            <style font-bold="true" bottom-border-width="1">
+              <text value="OS" width="3%" />
+            </style>
+              <style font-bold="true" horizontal-align="right" bottom-border-width="1">
+                <text value="DP&#xA;*" width="3%" />
+              </style>
+              <style font-bold="true" horizontal-align="right" bottom-border-width="1">
+                <text value="ZDP&#xA;**" width="3%" />
+              </style>
+            <style font-bold="true" horizontal-align="right" bottom-border-width="1">
+              <text value="Pořizovací cena" width="13%" />
+            </style>
+            <style font-bold="true" horizontal-align="right" bottom-border-width="1">
+              <text value="Oprávka" width="11%" />
+            </style>
+            <style font-bold="true" horizontal-align="right" right-border-width="1" bottom-border-width="1">
+              <text value="Zbytková hodnota" width="10%" />
+            </style>
+          </line>
+          <line>
+            <style left-border-width="1" right-border-width="1">
+              <text value="" width="100%" />
+            </style>
+          </line>
+            <line>
+              <value-of name="" width="50%" height="0mm" onData="nks_opravka=Decimal(0)" />
+              <value-of name="" width="50%" height="0mm" onData="nks_c_zbytek=Decimal(0)" />
+            </line>
+        </head>
+        <body>
+          <line>
+            <value-of name="" width="10%" height="0mm" onData="skupina_odp=Decimal(0)" />
+            <value-of name="" width="10%" height="0mm" onData="doba_uziti=Decimal(0)" />
+            <value-of name="" width="10%" height="0mm" onData="doba_uziti_zbyv=Decimal(0)" />
+            <value-of name="" width="10%" height="0mm" onData="c_opravka=Decimal(0)" />
+            <value-of name="" width="10%" height="0mm" onData="c_transfer_opr=Decimal(0)" />
+            <value-of name="" width="10%" height="0mm" onData="c_zbytek=Decimal(0)" />
+            <value-of name="" width="40%" height="0mm" onData="typ_odp=Decimal(0)" />
+          </line>
+          <region name="ODPIS" filter-out="ODPIS.NAZEV!='U'">
+            <body>
+              <line>
+                <style background-color="yellow">
+                  <value-of name="SKUPINAODP" width="10%" height="0mm" onData="skupina_odp=self.value" />
+                </style>
+                <style background-color="yellow">
+                  <value-of name="DOBAUZITI" width="10%" height="0mm" onData="doba_uziti=self.value" />
+                </style>
+                <style background-color="yellow">
+                  <value-of name="DOBAUZITIZBYV" width="10%" height="0mm" onData="doba_uziti_zbyv=self.value" />
+                </style>
+                <style background-color="yellow">
+                  <value-of name="OPRAVKA" width="10%" height="0mm" onData="if (KARTA.SOUPRAVAFLAG == 'P' and KARTA.TYP_SOUBOR == 'Uct'): c_opravka=self.value&#10;else: c_opravka=self.value;nks_opravka+=self.value&#10;" />
+                </style>
+                <style right-border-width="1" background-color="yellow">
+                  <value-of name="ZBYTKOVAHODNOTA" width="10%" height="0mm" onData="if (KARTA.SOUPRAVAFLAG == 'P' and KARTA.TYP_SOUBOR == 'Uct'): c_zbytek=self.value&#10;else: c_zbytek=self.value;nks_c_zbytek+=self.value&#10;" />
+                </style>
+                <style background-color="yellow">
+                  <value-of name="TYPODP" width="50%" height="0mm" onData="typ_odp=self.value" />
+                </style>
+              </line>
+            </body>
+          </region>
+          <line>
+            <style left-border-width="1">
+              <value-of name="SOUPRAVAFLAG" width="1%" onData="if KARTA.SOUPRAVAFLAG == 'P' : self.style.font_color='gray'" />
+            </style>
+            <value-of name="INVENTCISLO" width="11%" onData="if KARTA.SOUPRAVAFLAG == 'P' : self.style.font_color='gray'" />
+              <value-of name="DRU_MAJ" width="4%" />            
+            <value-of name="TECHNAZEV" width="29%" onData="if KARTA.SOUPRAVAFLAG == 'P' : self.style.font_color='gray'" />
+              <value-of name="SUAUEVIDENCE" width="5%" />            
+            <value-of name="" width="7%" onData="self.value=typ_odp" />
+            <value-of name="" width="3%" onData="self.value=skupina_odp" />
+              <style horizontal-align="right">
+                <value-of name="" width="3%" onData="self.value=doba_uziti" format="#0,##" />
+              </style>
+              <style horizontal-align="right">
+                <value-of name="" width="3%" onData="self.value=doba_uziti_zbyv" format="#0,##" />
+              </style>
+            <style horizontal-align="right">
+              <value-of name="C_PORIZ" width="13%" format="# 0,00" onData="if KARTA.SOUPRAVAFLAG == 'P' : self.style.font_color='gray'" />
+            </style>
+            <style horizontal-align="right">
+              <value-of name="" width="11%" onData="self.value=c_opravka" format="# 0,00" />
+            </style>
+            <style horizontal-align="right" right-border-width="1">
+              <value-of name="" width="10%" onData="self.value=c_zbytek" format="# 0,00" />
+            </style>
+          </line>
+        </body>
+        <foot>
+          <line>
+            <style left-border-width="1" right-border-width="1" top-border-width="1">
+              <text value="" width="100%" />
+            </style>
+          </line>
+            <line>
+              <style font-bold="true" font-color="blue" left-border-width="1" background-color="#faf785">
+                <text value="Celkem" width="66%" />
+              </style>
+              <style font-bold="true" font-color="blue" horizontal-align="right" background-color="#faf785">
+                <value-of name="SUM(C_PORIZ)" width="13%" format="# #,00" />
+              </style>
+              <style font-bold="true" font-color="blue" horizontal-align="right" background-color="#faf785">
+                <value-of name="" width="11%" onData="self.value=nks_opravka" format="# #,00" />
+              </style>
+              <style font-bold="true" font-color="blue" horizontal-align="right" right-border-width="1" background-color="#faf785">
+                <value-of name="" width="10%" onData="self.value=nks_c_zbytek" format="# #,00" />
+              </style>
+            </line>
+            <line>
+              <style left-border-width="1" right-border-width="1" bottom-border-width="1">
+                <text value="* Doba použití majetku, ** Zbývající použití majetku" width="100%" />
+              </style>
+            </line>
+        </foot>
+        </group>
+      </region>
+    </body>
+  </region>
+</format>

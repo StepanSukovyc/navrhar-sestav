@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="utf-8"?>
+<format type="grr" xmlns="http://www.gordic.cz/TR/alf/1.4/">
+  <info type_cust="Z" ixs_xme="0000ALX0AB27" xmeta_ver="1" xmeta_subver_min="20" nazev="MAJINV61-INVENTARIZAČNÍ POLOŽKA tříděná dle NS, EVS, budovy, segmentu, místnosti" ixs_alv="0000ALV02R7C,0000ALV0322J" allowed_output="htm,xls,doc,frm" ixs_frm="0000ALF034NO" maker="0431" dat_modif="201205161415" rokmes_od="199801" rokmes_do="999913" />
+  <paper-setting paper-width="297mm" paper-height="210mm" />
+  <region name="VYBER">
+    <head>
+      <line on-each-page="true">
+        <style font-face="arial" font-size="1" font-italic="true" bottom-border-width="1">
+          <value-of name="" width="18%" onData="self.value='Licence: '+ ': '+ VYBER.LIC" />
+        </style>
+        <style font-face="arial" font-size="1" font-italic="true" horizontal-align="right" bottom-border-width="1">
+          <value-of name="" width="82%" onData="self.value='IDENTIFIKACE SESTAVY / ' +format.info['ixs_frm'] +'  ('+format.info['dat_modif']+')'" />
+        </style>
+      </line>
+      <line on-each-page="true">
+        <image file="znak-m.bmp" image-width="25mm" image-height="25mm" width="18%" />
+        <style font-face="arial" font-size="4" font-bold="true">          
+          <value-of name="" width="82%" onData="if VYBER.DAT_OD.year==0 : self.value='Inventarizační položka '+ VYBER.STAV_MAJ+ ' majetku - tříděná dle NS, EVS, místností'&#xA;else: self.value=value='Inventarizační položka '+ VYBER.STAV_MAJ+ ' majetku - tříděná dle NS, EVS, místností -  ke dni '+ VYBER.DAT_OD.format('dd.mm.yyyy')&#xA;" />                    
+        </style>
+      </line>
+      <line on-each-page="true">
+        <style font-face="arial">
+          <text value="" width="18%" />
+        </style>
+        <style font-face="arial">
+          <text value="IČO:" width="7%" />
+        </style>
+        <style font-face="arial" font-size="3" font-bold="true">
+          <value-of name="" width="75%" onData="self.value=VYBER.ICO+ ' - '+ VYBER.ICO_NAZEV" />
+        </style>
+      </line>
+      <line on-each-page="true">
+        <style font-face="arial">
+          <text value="" width="18%" />
+        </style>
+        <style font-face="arial">
+          <text value="" width="7%" />
+        </style>
+        <style font-face="arial" font-size="3" font-bold="true">
+          <value-of name="ICO_ADRESA" width="74%" />
+        </style>
+        <style font-face="arial" font-size="3" font-bold="true">
+          <text value="" width="1%" />
+        </style>
+      </line>
+      <line on-each-page="true">
+        <style font-face="arial">
+          <text value="" width="18%" />
+        </style>
+        <style font-face="arial">
+          <text value="NS:" width="7%" />
+        </style>
+        <style font-face="arial" font-size="3" font-bold="true">
+          <value-of name="" width="75%" onData="self.value=VYBER.NS+ ' - '+ VYBER.NS_NAZEV" />
+        </style>
+      </line>
+      <line on-each-page="true">
+        <style left-border-width="1" right-border-width="1" top-border-width="1">
+          <text value="" width="100%" />
+        </style>
+      </line>
+    </head>
+    <body>
+      <region name="KARTA" order-by="NKS,EVIDSTREDISKO,BUDOVA,SEG_BUDOVA,MISTNOST,INVENTCISLO">
+        <variable name="KEY" value="KARTA.BUDOVA+KARTA.SEG_BUDOVA+KARTA.MISTNOST" />
+        <group name="KARTA_1" by="NKS,EVIDSTREDISKO">
+          <head>
+            <line>
+              <style font-bold="true" left-border-width="1" background-color="silver">
+                <text value="EVS:" width="12%" />
+              </style>
+              <style font-bold="true" right-border-width="1" background-color="silver">
+                <value-of name="" width="88%" onData="self.value=KARTA.EVIDSTREDISKO" />
+              </style>
+            </line>
+            <line>
+              <value-of name="" width="100%" height="0mm" onData="nks_opravka=Decimal(0)" />
+            </line>
+          </head>
+          <group name="KARTA_2" by="NKS,EVIDSTREDISKO,BUDOVA,SEG_BUDOVA,MISTNOST">
+            <head>
+              <line>
+                <style left-border-width="1">
+                  <text value="Budova:" width="12%" />
+                </style>
+                <style font-bold="true">
+                  <value-of name="BUDOVA" width="7%" />
+                </style>
+                <style font-bold="true" right-border-width="1">
+                  <value-of name="BUDOVA_NAZ" width="81%" />
+                </style>
+              </line>
+              <line>
+                <style left-border-width="1">
+                  <text value="Místnost:" width="12%" />
+                </style>
+                <style font-bold="true">
+                  <value-of name="MISTNOST" width="7%" />
+                </style>
+                <style font-bold="true" right-border-width="1">
+                  <value-of name="MISTNOST_NAZ" width="81%" />
+                </style>
+              </line>
+              <line>
+                <style left-border-width="1" right-border-width="1">
+                  <text value="" width="100%" />
+                </style>
+                <!--
+							<style width="23%" right-border-width="1" font-color="white" font-bold="true">
+							<value-of name="TOTAL-SUM(PORIZCENA)"/>
+							</style> 
+						-->
+              </line>
+              <line>
+                <style left-border-width="1">
+                  <text value="" width="1%" />
+                </style>
+                <style font-bold="true">
+                  <text value="Inventární číslo" width="11%" />
+                </style>
+                <style font-bold="true">
+                  <text value="Technický název" width="29%" />
+                </style>
+                <style font-bold="true">
+                  <text value="SuAu evi" width="5%" />
+                </style>
+                <style font-bold="true" horizontal-align="right">
+                  <text value="Počet" width="4%" />
+                </style>
+                <style font-bold="true" horizontal-align="right">
+                  <text value="Inventurní stav" width="10%" />
+                </style>
+                <style font-bold="true" horizontal-align="right">
+                  <text value="Inventarizační" width="8%" />
+                </style>
+                <style font-bold="true" horizontal-align="right">
+                  <text value="Stav oprávek" width="9%" />
+                </style>
+                <style font-bold="true" horizontal-align="right">
+                  <text value="Stav opravných" width="10%" />
+                </style>
+                <style font-bold="true" horizontal-align="right">
+                  <text value="Zúčtovatelný" width="7%" />
+                </style>
+                <style font-bold="true" horizontal-align="right">
+                  <text value="DP" width="3%" />
+                </style>
+                <style font-bold="true" horizontal-align="right" right-border-width="1">
+                  <text value="ZDP" width="3%" />
+                </style>
+              </line>
+              <line>
+                <style left-border-width="1" bottom-border-width="1">
+                  <text value="" width="46%" />
+                </style>
+                <style font-bold="true" horizontal-align="right" bottom-border-width="1">
+                  <text value="MJ" width="4%" />
+                </style>
+                <style font-bold="true" horizontal-align="right" bottom-border-width="1">
+                  <text value="" width="10%" />
+                </style>
+                <style font-bold="true" horizontal-align="right" bottom-border-width="1">
+                  <text value="rozdíl" width="8%" />
+                </style>
+                <style font-bold="true" horizontal-align="right" bottom-border-width="1">
+                  <text value="" width="9%" />
+                </style>
+                <style font-bold="true" horizontal-align="right" bottom-border-width="1">
+                  <text value="položek" width="10%" />
+                </style>
+                <style font-bold="true" horizontal-align="right" bottom-border-width="1">
+                  <text value="rozdíl" width="7%" />
+                </style>
+                <style font-bold="true" horizontal-align="right" bottom-border-width="1">
+                  <text value="*" width="3%" />
+                </style>
+                <style font-bold="true" horizontal-align="right" right-border-width="1" bottom-border-width="1">
+                  <text value="**" width="3%" />
+                </style>
+              </line>
+              <line>
+                <value-of name="" width="10%" height="0mm" onData="sum_opravka=Decimal(0)" />
+                <value-of name="" width="10%" height="0mm" onData="doba_uziti=Decimal(0)" />
+                <value-of name="" width="80%" height="0mm" onData="doba_uziti_zbyv=Decimal(0)" />
+              </line>
+            </head>
+            <body>
+              <line>
+                <value-of name="" width="100%" height="0mm" onData="c_opravka=Decimal(0)" />
+              </line>
+              <region name="ODPIS" filter-out="ODPIS.NAZEV!='U'">
+                <body>
+                  <line>
+                    <style background-color="yellow">
+                      <value-of name="OPRAVKA" width="10%" height="0mm" onData="c_opravka=self.value;sum_opravka+=self.value;nks_opravka+=self.value" />
+                    </style>
+                    <style background-color="yellow">
+		      <value-of name="DOBAUZITI" width="10%" height="0mm" onData="doba_uziti=self.value" />
+		    </style>
+		    <style background-color="yellow">
+		      <value-of name="DOBAUZITIZBYV" width="80%" height="0mm" onData="doba_uziti_zbyv=self.value" />
+		    </style>
+                  </line>
+                </body>
+              </region>
+              <line>
+                <style left-border-width="1">
+                  <value-of name="SOUPRAVAFLAG" width="1%" />
+                </style>
+                <value-of name="INVENTCISLO" width="11%" />
+                <value-of name="TECHNAZEV" width="29%" />
+                <value-of name="SUAUEVIDENCE" width="5%" />
+                <style horizontal-align="right">
+                  <value-of name="MNOZSTVI" width="4%" format="# #,000" />
+                </style>
+                <style horizontal-align="right">
+                  <value-of name="PORIZCENA" width="10%" format="# #,00" />
+                </style>
+                <text value="" width="8%" />
+                <style horizontal-align="right">
+                  <value-of name="" width="9%" onData="self.value=c_opravka" format="# #,00;-# #,00;" />
+                </style>
+                <style horizontal-align="right">
+                  <value-of name="C_OPR_POL" width="10%" format="# #,00" />
+                </style>
+                <text value="" width="7%" />
+                <style horizontal-align="right">
+                  <value-of name="" width="3%" onData="self.value=doba_uziti" format="#0;" />
+                </style>
+                <style horizontal-align="right" right-border-width="1">
+                  <value-of name="" width="3%" onData="self.value=doba_uziti_zbyv" format="#0;" />
+                </style>
+              </line>
+              <!-- <line break-page-before="avoid">
+						<style width="100%" left-border-width="1" right-border-width="1">
+							<text value=""/>
+						</style>
+					</line> -->
+            </body>
+            <foot>
+              <line>
+                <style left-border-width="1" right-border-width="1">
+                  <text value="" width="100%" />
+                </style>
+              </line>
+              <line>
+                <style left-border-width="1" right-border-width="1" top-border-width="1">
+                  <text value="" width="100%" />
+                </style>
+              </line>
+              <line>
+                <style font-bold="true" left-border-width="1">
+                  <text value="Celkem za místnost:" width="12%" />
+                </style>
+                <style font-bold="true">
+                  <value-of name="MISTNOST" width="32%" />
+                </style>
+                <style font-bold="true" horizontal-align="right">
+                  <value-of name="SUM(MNOZSTVI)" width="6%" format="# #,000" />
+                </style>
+                <style font-bold="true" horizontal-align="right">
+                  <value-of name="SUM(PORIZCENA)" width="10%" format="# #,00" />
+                </style>
+                <text value="" width="8%" />
+                <style font-bold="true" horizontal-align="right">
+                  <value-of name="" width="9%" onData="self.value=sum_opravka" format="# #,00" />
+                </style>
+                <style font-bold="true" horizontal-align="right">
+                  <value-of name="SUM(C_OPR_POL)" width="10%" format="# #,00" />
+                </style>
+                <style right-border-width="1">
+                  <text value="" width="13%" />
+                </style>
+              </line>
+              <line>
+                <style left-border-width="1" right-border-width="1">
+                  <text value="" width="100%" />
+                </style>
+              </line>
+              <line>
+                <style font-bold="true" left-border-width="1">
+                  <text value="Okamžik zahájení inventury:" width="17%" />
+                </style>
+                <style right-border-width="1">
+                  <text value=".............................." width="83%" />
+                </style>
+              </line>
+              <line>
+                <style font-bold="true" left-border-width="1">
+                  <text value="Okamžik ukončení inventury:" width="17%" />
+                </style>
+                <style right-border-width="1">
+                  <text value=".............................." width="83%" />
+                </style>
+              </line>
+              <line>
+                <style left-border-width="1" right-border-width="1">
+                  <text value="" width="100%" />
+                </style>
+              </line>
+              <line>
+                <style font-bold="true" left-border-width="1" right-border-width="1">
+                  <text value="Členové inventarizační komise:" width="100%" />
+                </style>
+              </line>
+              <line>
+                <style left-border-width="1">
+                  <text value="" width="12%" />
+                </style>
+                <text value="Jméno:" width="5%" />
+                <text value=".............................." width="15%" />
+                <text value="Podpis:" width="5%" />
+                <text value=".............................." width="15%" />
+                <text value="Okamžik připojení podpisového záznamu:" width="20%" />
+                <style right-border-width="1">
+                  <text value=".............................." width="28%" />
+                </style>
+              </line>
+              <line>
+                <style left-border-width="1">
+                  <text value=" " width="17%" />
+                </style>
+                <text value=".............................." width="15%" />
+                <text value="" width="5%" />
+                <text value=".............................." width="15%" />
+                <text value="" width="20%" />
+                <style right-border-width="1">
+                  <text value=".............................." width="28%" />
+                </style>
+              </line>
+              <line>
+                <style left-border-width="1">
+                  <text value=" " width="17%" />
+                </style>
+                <text value=".............................." width="15%" />
+                <text value="" width="5%" />
+                <text value=".............................." width="15%" />
+                <text value="" width="20%" />
+                <style right-border-width="1">
+                  <text value=".............................." width="28%" />
+                </style>
+              </line>
+              <line break-page-after="always">
+                <style left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <text value="" width="100%" />
+                </style>
+              </line>
+            </foot>
+          </group>
+          <foot>
+            <line>
+              <style left-border-width="1" right-border-width="1">
+                <text value="" width="100%" />
+              </style>
+            </line>
+            <line>
+              <style left-border-width="1" right-border-width="1" top-border-width="1">
+                <text value="" width="100%" />
+              </style>
+            </line>
+            <line>
+              <style font-bold="true" font-color="blue" left-border-width="1" background-color="#faf785">
+                <text value="Celkem za EVS" width="12%" />
+              </style>
+              <style font-bold="true" font-color="blue" background-color="#faf785">
+                <value-of name="EVIDSTREDISKO" width="32%" />
+              </style>
+              <style font-bold="true" font-color="blue" horizontal-align="right" background-color="#faf785">
+                <value-of name="SUM(MNOZSTVI)" width="4%"  format="# #,000" />
+              </style>
+              <style font-bold="true" font-color="blue" horizontal-align="right" background-color="#faf785">
+                <value-of name="SUM(PORIZCENA)" width="10%"  format="# #,00" />
+              </style>
+              <style font-color="blue" background-color="#faf785">
+                <text value="" width="8%" />
+              </style>
+              <style font-bold="true" font-color="blue" horizontal-align="right" background-color="#faf785">
+                <value-of name="" width="9%" onData="self.value=nks_opravka"  format="# #,00" />
+              </style>
+              <style font-bold="true" font-color="blue" horizontal-align="right" background-color="#faf785">
+                <value-of name="SUM(C_OPR_POL)" width="10%"  format="# #,00" />
+              </style>
+              <style font-color="blue" right-border-width="1" background-color="#faf785">
+                <text value="" width="13%" />
+              </style>
+            </line>
+            <line>
+              <style left-border-width="1" right-border-width="1">
+                <text value="" width="100%" />
+              </style>
+            </line>
+            <line>
+              <style left-border-width="1" right-border-width="1" bottom-border-width="1">
+                <text value="* Doba používání majetku, ** Zbývající doba používání majetku" width="100%" />
+              </style>
+            </line>
+          </foot>
+        </group>
+      </region>
+    </body>
+  </region>
+</format>

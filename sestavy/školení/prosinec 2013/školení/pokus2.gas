@@ -1,0 +1,82 @@
+FUNC VratNazevNks(IN DECLAREP _handlelist,IN DECLARES _nks)
+  #DECLARES _nazev
+  #DECLAREP _posice
+
+  GETLISTKEY _handlelist,_nks,_nazev,_posice
+  if _posice<0
+    SELECT _nazev=nazev FROM zekosnks WHERE nks='@_nks'
+    
+    ADDLIST _handlelist,_nks,_nazev
+  endif
+  RETURN _nazev
+ENDP
+
+#declares hod_uea,hod_ueb
+#declarep hod_md,hod_dal
+#declares hod_nks
+#declarep hod_drd
+#declarep celkem_md,celkem_dal
+#DECLARES hod_nks_nazev
+#DECLAREP handlelistnks
+
+SET RTFStyle=0
+SET FullBarTopLabel="Probíhá generování sestavy MO"
+SET FullBarPos=7
+
+CREATELIST handlelistnks,1,1
+
+CYCLE \
+   SELECT hod_nks=zucta0ar.nks,\
+     hod_drd=zucta0ar.drd {drd}, \
+     hod_uea=zucta0ar.uea {su},\
+     hod_ueb=zucta0ar.ueb {au},\
+     hod_md=sum(zucta0ar.kc0),\
+     hod_dal=sum(zucta0ar.kc1) \
+   FROM zucta0ar \
+   WHERE rok=2013 and \
+         mesic=11 and uea='223' and ueb='2103' \
+   GROUP BY zucta0ar.nks,uea,ueb,zucta0ar.drd \
+  UNION ALL \
+   SELECT zroza0ar.nks,\
+     zroza0ar.drd {drd}, \
+     zroza0ar.uea {su},\
+     zroza0ar.ueb {au},\
+     sum(zroza0ar.kc0),\
+     sum(zroza0ar.kc1) \
+   FROM zroza0ar \
+   WHERE rok=2013 and \
+         mesic=11 and uea='223' and ueb='2103' and drd in (2,3,7,8,23,25) \
+   GROUP BY zroza0ar.nks,uea,ueb,zroza0ar.drd \
+  ORDER BY zucta0ar.nks,uea,ueb,zucta0ar.drd \
+   KEY hod_nks,hod_uea
+
+  GROUPBY hod_nks,hod_uea SUM hod_md,hod_dal
+    PRINT hod_nks+" "+hod_uea+"/"+"**** "+Right(NumToStr(hod_md-hod_dal,"P"),20)
+  GROUPBY hod_nks SUM hod_md,hod_dal
+    ?Celkem: @hod_md-hod_dal,P.
+  ENDG
+ {
+  ON OLD KEY hod_nks
+    ?Celkem: @celkem_md-celkem_dal,P.
+    celkem_md=0
+    celkem_dal=0
+  ENDON
+ }
+
+  ON NEW KEY hod_nks
+
+    ?NKS: @hod_nks. @VratNazevNks(handlelistnks,hod_nks)<<<<<<.
+  ENDON
+
+  if hod_md-hod_dal< 0 then STYLE BOLD
+  
+  PRINT hod_nks+" "+NumToStr(hod_drd,"I")+ " "+ hod_uea+"/"+hod_ueb+" "+Right(NumToStr(hod_md-hod_dal,"P"),20)
+  STYLE NORM
+  
+{
+  celkem_md=celkem_md+hod_md
+  celkem_dal=celkem_dal+hod_dal
+  }
+ENDC
+    ?Celkem: @celkem_md-celkem_dal,P.
+FREELIST handlelistnks

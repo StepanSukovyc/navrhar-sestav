@@ -1,0 +1,780 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<format type="grr" xmlns="http://www.gordic.cz/TR/alf/1.4/">
+  <info ixs_xme="0000ALX0ASCI"
+	xmeta_ver="1"
+	xmeta_subver_min="1"
+	nazev="Podklad pro RO (RRJZ)"
+	poznamka="distribuce GINIS 3.46"
+	ixs_alv="0000ALV042FD"
+	allowed_output="htm,xls,doc,frm"
+	ixs_frm="GKMSALF00FPY"
+	maker="0432"
+	create_date="20090617"
+	last_modif="20090617"
+	rokmes_od="199801"
+	rokmes_do="999913"
+	/>
+  <paper-setting paper-width="209mm" />
+  <script><![CDATA[
+# -------------------------------------------  
+# funkce uprava popisu
+# -------------------------------------------  
+def OrezatPopis(Popis):hledam ="projektu";index = Popis.find(hledam);Popis = Popis[:index];return Popis
+# -------------------------------------------  
+# funkce pro určení ORJ podle UZ
+# -------------------------------------------  
+def VratPOL_UZ(vstup):
+      UZ = 'X'
+      POL= 'X'
+      if (vstup=='8500'):
+           UZ='38517083';
+           POL='5901'
+
+      if (vstup=='8600'):
+           UZ='38517850';
+           POL='6901'
+			 
+      if (vstup=='9000'):
+           UZ='38100000';
+           POL='5901'
+				 
+      if (vstup=='9500'):
+           UZ='38117377';
+           POL='5901'
+				 
+      if (vstup=='9531'):
+           UZ='38100531';
+           POL='5901'
+				
+      if (vstup=='9532'):
+           UZ='38100532';
+           POL='5901'
+
+      if (vstup=='9600'):
+           UZ='38117841';
+           POL='6901'
+
+      if (vstup=='9631'):
+           UZ='38100631';
+           POL='6901'
+
+      if (vstup=='9632'):
+           UZ='38100632';
+           POL='6901'
+			  
+      return UZ, POL
+  
+# -------------------------------------------  
+# funkce pro určení ORJ podle UZ
+# -------------------------------------------  
+def UrciORJ(UZ):
+      pom='0000'
+	  
+      if (UZ=='38100000'):
+           pom='9000'
+
+      if (UZ=='38100531'):
+           pom='9531'
+			 
+      if (UZ=='38100532'):
+           pom='9532'
+				 
+      if (UZ=='38100631'):
+           pom='9631'
+				 
+      if (UZ=='38100632'):
+           pom='9632'
+				
+      if (UZ=='38183001'):
+           pom='9500'
+
+      if (UZ=='38183501'):
+           pom='9600'
+
+      if (UZ=='38583005'):
+           pom='8500'
+
+      if (UZ=='38583505'):
+           pom='8600'
+			  
+      return pom
+
+
+# -------------------------------------------  
+# funkce pro rozpocitani dynamickych sirek
+# -------------------------------------------  
+def SpocitejSirky(sirky,delka,poradi):
+  celkem_delka=0;
+  
+  #zjisteni kompletni sirky textu
+  i1=0;
+  for i in delka:
+    celkem_delka=celkem_delka+i;
+    i1=i1+1;
+    
+  pocetdelka=i1-1;
+
+  i1=0;
+  celkem_delka2=100;
+  minporadi=0;
+  max=1;
+  for i in delka:
+    if i>0:
+      subsirka=int(round(i/celkem_delka,2)*100);
+      if pocetdelka==i1:
+        subsirka=int(celkem_delka2);
+        celkem_delka2=0;
+      else:
+        celkem_delka2=celkem_delka2-subsirka;
+      if i1<15:
+        #tohle jsou polozky ucetni vety a ty musi byt podle poradi...
+        sirky[int(poradi[i1])-1]=subsirka
+      else:
+        sirky[i1]=subsirka;
+    i1=i1+1;
+
+  # ted se pokusim seskupit polozky bez nul
+  nuly=0;
+  koncnuly=-1;
+  max=14;
+  while nuly<>koncnuly:
+    i1=0;
+    nuly=0;
+    koncnuly=0;
+    while i1<max:
+      if sirky[i1]==0:
+        sirky[i1]=sirky[i1+1];
+        sirky[i1+1]=0;
+      if sirky[i1]==0:
+        koncnuly=koncnuly+1
+        nuly=nuly+1
+      else:
+        koncnuly=0;
+      i1=i1+1
+
+  return ""
+
+# -------------------------------------------  
+# funkce pro prohozeni ucetnich polozek
+# -------------------------------------------  
+def ProhodUCTPol(poradi,polozky):
+
+  minporadi=0;
+  pocet=0;
+  polozky2 = [];
+  i=0
+  while i<15:
+    polozky2.append("");
+    i=i+1;
+  
+  while pocet<15:
+    i=0;
+    while i<15:
+      if poradi[i]==pocet+1:
+        polozky2[minporadi]=polozky[i];
+        minporadi=minporadi+1;
+        break;
+      i=i+1;
+    pocet=pocet+1;
+
+  i=0    
+  while i<minporadi:
+    polozky[i]=polozky2[i];
+    i=i+1
+    
+  while minporadi<15:
+    polozky[minporadi]="";
+    minporadi=minporadi+1
+
+  return ""
+]]></script>
+  <region name="AKTINF">
+    <head>
+      <line on-each-page="true">
+        <style font-face="arial" font-bold="true" horizontal-align="right">
+          <text value="IČO:" width="8%" />
+        </style>
+        <style font-face="arial">
+          <text value="75086999 - RR Jihozápad" width="45%" />
+        </style>
+        <style font-face="arial" font-bold="true" horizontal-align="right">
+          <text value="Strana:" width="36%" />
+        </style>
+        <style font-face="arial">
+          <value-of name="" width="11%" onData="self.value=ROOT.PAGE+'/'+ROOT.PAGES" />
+        </style>
+      </line>
+      <line on-each-page="true">
+        <style font-face="arial" font-bold="true" horizontal-align="right">
+          <text value="UCS:" width="8%" />
+        </style>
+        <style font-face="arial">
+          <text value="75086999 - Regionální rada regionu soudržnosti Jihozápad" width="92%" />
+        </style>
+      </line>
+      <line on-each-page="true">
+        <style font-face="arial" font-bold="true" horizontal-align="right" vertical-align="bottom">
+          <text value="" width="100%" />
+        </style>
+      </line>
+      <line>
+        <style font-face="arial" font-size="5" horizontal-align="center" vertical-align="center">
+          <text value="Podkladový formulář  na provedení rozpočtového opatření " width="100%" />
+        </style>
+      </line>
+    </head>
+    <body>
+      <line>
+        <value-of name="" width="100%" height="0mm" onData="radek=0;celkem_c_upo=0" />
+      </line>
+      <line>
+        <text value="" width="100%" height="3mm" />
+      </line>
+      <region name="PRIPAD">
+        <body>
+          <region name="PREDPIS_UHRADA">
+            <body>
+              <region name="POHYB">
+                <head>
+                  <line>
+                    <style font-face="arial" font-bold="true" horizontal-align="center" vertical-align="center">
+                      <text value="Číslo RO : " width="100%" />
+                    </style>
+                  </line>
+                  <line>
+                    <text value="" width="100%" />
+                  </line>
+                  <line>
+                    <style font-face="arial" horizontal-align="right" vertical-align="center" left-border-width="1" top-border-width="1">
+                      <text value="Subjekt:" width="10%" />
+                    </style>
+                    <style font-face="arial" vertical-align="center" top-border-width="1">
+                      <value-of name="PRIPAD.EXS_NAZ" width="35%" />
+                    </style>
+                    <style font-face="arial" vertical-align="center" top-border-width="1">
+                      <text value="Částka v Kč:" width="11%" />
+                    </style>
+                    <style font-face="arial" font-bold="true" vertical-align="center" right-border-width="1" top-border-width="1">
+                      <value-of name="PREDPIS_UHRADA.C" width="44%" format="# 0,00" />
+                    </style>
+                  </line>
+                  <line>
+                    <style font-face="arial" horizontal-align="right" vertical-align="center" left-border-width="1" bottom-border-width="1">
+                      <text value="IČO:" width="10%" />
+                    </style>
+                    <style font-face="arial" vertical-align="center" right-border-width="1" bottom-border-width="1">
+                      <value-of name="PRIPAD.EXS_ICO" width="90%" />
+                    </style>
+                  </line>
+                  <line>
+                    <style font-face="arial" vertical-align="center">
+                      <text value="" width="100%" />
+                    </style>
+                  </line>
+                  <line>
+                    <style font-face="arial" vertical-align="center">
+                      <text value="" width="100%" />
+                    </style>
+                  </line>
+                  <line>
+                    <style font-face="arial" vertical-align="center">
+                      <text value="Popis:" width="10%" />
+                    </style>
+                    <style font-face="arial" vertical-align="center">
+                      <value-of name="PRIPAD.POPIS_UPR" width="45%" />
+                    </style>
+                    <style font-face="arial" vertical-align="center">
+                      <text value="" width="45%" />
+                    </style>
+                  </line>
+                  <line>
+                    <style font-face="arial" vertical-align="center">
+                      <text value="Rozpočtové opatření je schvalováno ředitelem ÚRR na základě zmocnění VRR v usnesení č. 464/2010 ze dne 13. 12. 2010. Rozpočtové opatření je předkládáno z důvodu zajištění poskytování dotací příjemcům z rozpočtu RRRSJ v návaznosti na usnesení Výboru RRRSJ o schválení výběru projektů k financování z jednotlivých výzev pro prioritní osy 1-3." width="100%" />
+                    </style>
+                  </line>
+                  <line>
+                    <style font-face="arial" font-bold="true" vertical-align="center">
+                      <text value="Částka je kryta jako:" width="100%" />
+                    </style>
+                  </line>
+                  <line>
+                    <style font-face="arial" font-bold="true" vertical-align="center">
+                      <text value="" width="100%" height="2mm" />
+                    </style>
+                  </line>
+                  <line>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1">
+                      <value-of name="" width="7%" onData="self.value='SU '&#xA;radek=0&#xA;c1=0&#xA;c2=0&#xA;c3=0&#xA;c4=0&#xA;c5=0&#xA;c6=0&#xA;c7=0&#xA;c8=0&#xA;c9=0&#xA;c10=0&#xA;c11=0&#xA;c12=0&#xA;c13=0&#xA;c14=0&#xA;c15=0&#xA;c16=0&#xA;o1=0&#xA;o2=0&#xA;o3=0&#xA;o4=0&#xA;o5=0&#xA;o6=0&#xA;o7=0&#xA;o8=0&#xA;o9=0&#xA;o10=0&#xA;u1=1&#xA;u2=2&#xA;u3=30&#xA;u4=40&#xA;u5=50&#xA;u6=60&#xA;u7=70&#xA;u8=80&#xA;u9=90&#xA;u10=100&#xA;pol1=110&#xA;pol2=220&#xA;pol3=330&#xA;pol4=440&#xA;pol5=550&#xA;pol6=660&#xA;pol7=770&#xA;pol8=880&#xA;pol9=990&#xA;pol10=1110&#xA;" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1">
+                      <text value="AU" width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1">
+                      <text value="ODPA" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1">
+                      <text value="POL" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1">
+                      <text value="ZJ" width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1">
+                      <text value="UZ" width="9%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1">
+                      <text value="ORJ" width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1">
+                      <text value="ORG" width="14%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" right-border-width="1" top-border-width="1">
+                      <text value="Částka" width="41%" />
+                    </style>
+                  </line>
+                </head>
+                <body>
+                  <line>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="UEA" width="7%" onData="radek=radek+1" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="0000" width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="UED" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="UEE" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="UEF" width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="UEG" width="9%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="5%" onData="self.value=UrciORJ(POHYB.UEG)&#xA;if (radek==1) : o1=UrciORJ(POHYB.UEG)&#xA;if (radek==2) : o2=UrciORJ(POHYB.UEG)&#xA;if (radek==3) : o3=UrciORJ(POHYB.UEG)&#xA;if (radek==4) : o4=UrciORJ(POHYB.UEG)&#xA;if (radek==5) : o5=UrciORJ(POHYB.UEG)&#xA;if (radek==6) : o6=UrciORJ(POHYB.UEG)&#xA;if (radek==7) : o7=UrciORJ(POHYB.UEG)&#xA;if (radek==8) : o8=UrciORJ(POHYB.UEG)&#xA;if (radek==9) : o9=UrciORJ(POHYB.UEG)&#xA;if (radek==10) : o10=UrciORJ(POHYB.UEG)&#xA;if (radek==11) : o11=UrciORJ(POHYB.UEG)&#xA;if (radek==12) : o12=UrciORJ(POHYB.UEG)&#xA;if (radek==13) : o13=UrciORJ(POHYB.UEG)&#xA;if (radek==14) : o14=UrciORJ(POHYB.UEG)&#xA;if (radek==15) : o15=UrciORJ(POHYB.UEG)&#xA;if (radek==16) : o16=UrciORJ(POHYB.UEG)&#xA;" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="TE1" width="14%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="right" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="C_UPO" width="37%" onData="if (radek==1) : c1=c1-POHYB.C_UPO&#xA;if (radek==2) : c2=c2-POHYB.C_UPO &#xA;if (radek==3) : c3=c3-POHYB.C_UPO &#xA;if (radek==4) : c4=c4-POHYB.C_UPO &#xA;if (radek==5) : c5=c5-POHYB.C_UPO &#xA;if (radek==6) : c6=c6-POHYB.C_UPO&#xA;if (radek==7) : c7=c7-POHYB.C_UPO &#xA;if (radek==8) : c8=c8-POHYB.C_UPO &#xA;if (radek==9) : c9=c9-POHYB.C_UPO &#xA;if (radek==10) : c10=c10-POHYB.C_UPO &#xA;if (radek==11) : c11=c11-POHYB.C_UPO&#xA;if (radek==12) : c12=c12-POHYB.C_UPO&#xA;if (radek==13) : c13=c13-POHYB.C_UPO&#xA;if (radek==14) : c14=c14-POHYB.C_UPO&#xA;if (radek==15) : c15=c15-POHYB.C_UPO&#xA;if (radek==16) : c16=c16-POHYB.C_UPO&#xA;" format="# 0,00" />
+                    </style>
+                    <style font-face="arial" horizontal-align="right" vertical-align="center" right-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="Kč" width="4%" />
+                    </style>
+                  </line>
+                </body>
+                <foot>
+                  <line>
+                    <style font-face="arial" horizontal-align="right" vertical-align="center">
+                      <value-of name="" width="100%" onData="u1,pol1=VratPOL_UZ(o1)&#xA;u2,pol2=VratPOL_UZ(o2)&#xA;u3,pol3=VratPOL_UZ(o3)&#xA;u4,pol4=VratPOL_UZ(o4)&#xA;u5,pol5=VratPOL_UZ(o5)&#xA;u6,pol6=VratPOL_UZ(o6)&#xA;u7,pol7=VratPOL_UZ(o7)&#xA;u8,pol8=VratPOL_UZ(o8)&#xA;u9,pol9=VratPOL_UZ(o9)&#xA;u10,pol10=VratPOL_UZ(o10)" />
+                    </style>
+                  </line>
+                  <line>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1">
+                      <text value="SU" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1">
+                      <text value="AU" width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1">
+                      <text value="ODPA" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1">
+                      <text value="POL" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1">
+                      <text value="ZJ" width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1">
+                      <text value="UZ" width="9%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1">
+                      <text value="ORJ" width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1">
+                      <text value="ORG" width="14%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1">
+                      <text value="Částka" width="37%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" right-border-width="1" top-border-width="1">
+                      <text value="" width="4%" />
+                    </style>
+                  </line>
+                  <line only-if="radek&gt;=1">
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="231" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="0000" width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="3639" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="7%" onData="self.value=pol1" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value=" 000 " width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="9%" onData="self.value=u1" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="5%" onData="self.value=o1" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="" width="14%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="right" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="37%" onData="self.value=c1" format="# 0,00" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" right-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="Kč" width="4%" />
+                    </style>
+                  </line>
+                  <line only-if="radek&gt;=2">
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="231" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="0000" width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="3639" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="7%" onData="self.value=pol2" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value=" 000 " width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="9%" onData="self.value=u2" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="5%" onData="self.value=o2" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="" width="14%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="right" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="37%" onData="self.value=c2" format="# 0,00" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" right-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="Kč" width="4%" />
+                    </style>
+                  </line>
+                  <line only-if="radek&gt;=3">
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="231" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="0000" width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="3639" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="7%" onData="self.value=pol3" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value=" 000 " width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="9%" onData="self.value=u3" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="5%" onData="self.value=o3" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="" width="14%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="right" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="37%" onData="self.value=c3" format="# 0,00" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" right-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="Kč" width="4%" />
+                    </style>
+                  </line>
+                  <line only-if="radek&gt;=4">
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="231" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="0000" width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="3639" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="7%" onData="self.value=pol4" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value=" 000 " width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="9%" onData="self.value=u4" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="5%" onData="self.value=o4" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="" width="14%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="right" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="37%" onData="self.value=c4" format="# 0,00" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" right-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="Kč" width="4%" />
+                    </style>
+                  </line>
+                  <line only-if="radek&gt;=5">
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="231" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="0000" width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="3639" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="7%" onData="self.value=pol5" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value=" 000 " width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="9%" onData="self.value=u5" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="5%" onData="self.value=o5" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="" width="14%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="right" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="37%" onData="self.value=c5" format="# 0,00" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" right-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="Kč" width="4%" />
+                    </style>
+                  </line>
+                  <line only-if="radek&gt;=6">
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="231" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="0000" width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="3639" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="7%" onData="self.value=pol6" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value=" 000 " width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="9%" onData="self.value=u6" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="5%" onData="self.value=o6" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="" width="14%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="right" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="37%" onData="self.value=c6" format="# 0,00" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" right-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="Kč" width="4%" />
+                    </style>
+                  </line>
+                  <line only-if="radek&gt;=7">
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="231" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="0000" width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="3639" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="7%" onData="self.value=pol7" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value=" 000 " width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="9%" onData="self.value=u7" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="5%" onData="self.value=o7" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="" width="14%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="right" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="37%" onData="self.value=c7" format="# 0,00" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" right-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="Kč" width="4%" />
+                    </style>
+                  </line>
+                  <line only-if="radek&gt;=8">
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="231" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="0000" width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="3639" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="7%" onData="self.value=pol8" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value=" 000 " width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="9%" onData="self.value=u8" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="5%" onData="self.value=o8" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="" width="14%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="right" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="37%" onData="self.value=c8" format="# 0,00" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" right-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="Kč" width="4%" />
+                    </style>
+                  </line>
+                  <line only-if="radek&gt;=9">
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="231" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="0000" width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="3639" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="7%" onData="self.value=pol9" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value=" 000 " width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="9%" onData="self.value=u9" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="5%" onData="self.value=o9" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="" width="14%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="right" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="37%" onData="self.value=c9" format="# 0,00" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" right-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="Kč" width="4%" />
+                    </style>
+                  </line>
+                  <line only-if="radek&gt;=10">
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="231" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="0000" width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="3639" width="7%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="7%" onData="self.value=pol10" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value=" 000 " width="5%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="9%" onData="self.value=u10" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="5%" onData="self.value=o10" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="" width="14%" />
+                    </style>
+                    <style font-face="arial" horizontal-align="right" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <value-of name="" width="37%" onData="self.value=c10" format="# 0,00" />
+                    </style>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center" right-border-width="1" top-border-width="1" bottom-border-width="1">
+                      <text value="Kč" width="4%" />
+                    </style>
+                  </line>
+                  <line>
+                    <style font-face="arial" horizontal-align="center" vertical-align="center">
+                      <text value="" width="100%" />
+                    </style>
+                  </line>
+                </foot>
+              </region>
+            </body>
+          </region>
+        </body>
+      </region>
+    </body>
+    <foot>
+      <line>
+        <style font-face="arial" font-bold="true" vertical-align="center">
+          <text value="Schvalovací doložka" width="100%" />
+        </style>
+      </line>
+      <line>
+        <style font-face="arial" vertical-align="center" left-border-width="1" right-border-width="1" top-border-width="1">
+          <text value="" width="100%" height="3mm" />
+        </style>
+      </line>
+      <line>
+        <style font-face="arial" vertical-align="center" left-border-width="1" right-border-width="1">
+          <text value="Datum:" width="100%" />
+        </style>
+      </line>
+      <line>
+        <style font-face="arial" vertical-align="center" left-border-width="1" right-border-width="1">
+          <text value="" width="100%" />
+        </style>
+      </line>
+      <line>
+        <style font-face="arial" vertical-align="center" left-border-width="1" right-border-width="1">
+          <text value="" width="100%" />
+        </style>
+      </line>
+      <line>
+        <style font-face="arial" vertical-align="center" left-border-width="1">
+          <text value="Provedení rozpočtového opatření schvaluje ředitel Úřadu RRRSJ" width="58%" />
+        </style>
+        <style font-face="arial" vertical-align="center" right-border-width="1">
+          <text value="       Podpis" width="42%" />
+        </style>
+      </line>
+      <line>
+        <style font-face="arial" vertical-align="center" left-border-width="1" right-border-width="1" bottom-border-width="1">
+          <text value="" width="100%" height="3mm" />
+        </style>
+      </line>
+    </foot>
+  </region>
+</format>

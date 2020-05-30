@@ -1,0 +1,562 @@
+<?xml version="1.0" encoding="windows-1250"?>
+
+<format type="grr" xmlns="http://www.gordic.cz/TR/alf/1.3/">
+
+	<info
+		ixs_xme="0000ALX0AXGZ"
+		xmeta_ver="1"
+		xmeta_subver_min="6"
+		nazev="Doklad o kontrolním zajištění finančního krytí připravovaného závazku - individuální příslib"
+		poznamka=""
+		ixs_alv="0000ALV04ZRA"
+		allowed_output="htm,xls,doc,frm"
+		ixs_frm="0000ALF0310G"
+		maker="0431"
+		dat_modif="20121017"
+		create_date="20111111"
+		rokmes_od="199801"
+		rokmes_do="999913"
+		filtr_frm="110"
+		form_vyst="pdf"
+	/>
+
+	<paper-setting paper-width="210mm" paper-height="297mm"/>
+
+  <script><![CDATA[
+def SpoctiProcenta(sirkyproc,sirkyadd,procenta):
+  pridano=0
+
+  #zjisteni celkoveho poctu procent
+  celkemprocentabs=Decimal(0)
+  for i in sirkyproc:
+    celkemprocentabs=celkemprocentabs+Decimal(i);
+
+  #napocet pridanych procent (k zakladnim celkemprocentabs)
+  for i in sirkyadd:
+    pridano=pridano+i;
+  #ziskani pomeru celkovych procent
+  pomerpridano=Decimal(Decimal(100-pridano)/100)
+  pomer=Decimal(Decimal(100/celkemprocentabs)*pomerpridano)*100
+  pocetsirky=0
+  lastindex=-1
+  for i in sirkyproc:
+    if Decimal(i)!=0:
+      lastindex=pocetsirky
+    pocetsirky=pocetsirky+1
+
+  #spocitam procenta do vysledku
+  celkemprocent2=0
+  index=0
+  for i in sirkyproc:
+    if (index<lastindex):
+      i=Decimal(i)
+      if (i!=0):  #vypocet provedu pouze v pripade kde neni nulova sirka
+        d=Decimal(Decimal(int(round(i*pomer,0)))/100)
+        procenta[index]=d
+
+        celkemprocent2=celkemprocent2+d
+    index=index+1
+
+
+  #dopocteni posledniho procenta
+  procenta[lastindex]=Decimal(100-pridano-celkemprocent2)
+
+def NastavProcenta(self,procenta):
+
+   #self.value=Decimal(procenta).format('##0.00')+'%'
+   self.style.width=Decimal(procenta).format('##0.00')+'%'
+
+]]></script>
+
+	<region name="VYBER">
+		<body>
+			<region name="SML_PRI">
+				<head>
+					<line on-each-page="true" endpage="false">
+						<style width="18%" bottom-border-width="1" font-face="arial" font-size="1" font-italic="true">
+							<value-of name="" onData="self.value=&apos;Licence: &apos;+ &apos;: &apos;+ VYBER.LIC"/>
+						</style>
+						<style width="82%" bottom-border-width="1" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+							<value-of name="" onData="self.value=&apos;IDENTIFIKACE FORMÁTU   &apos; +format.info[&apos;ixs_frm&apos;] +&apos;  (&apos;+format.info[&apos;dat_modif&apos;]+&apos;)&apos;"/>
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="18%">
+							<image file="znak-m.BMP" image-width="25mm" image-height="25mm"/>
+						</style>
+						<!-- <value-of name="" onData="self.value=&apos;Případ SML &apos;+ SML_PRI.SML_PRI_IXP_SML_PRI+&apos;  AČ &apos;+ SML_PRI.SML_PRI_AC_SML"/> -->
+						<style width="82%" font-bold="true">
+							<text value="Návrh kontrolního zajištění finančního krytí připravovaného závazku - Individuální příslib"/>
+						</style>
+					</line>
+					<line>
+						<style width="18%" font-bold="true">
+							<text value=""/>
+						</style>
+						<style width="9%" font-bold="true">
+							<text value="za období "/>
+						</style>
+						<style width="73%" font-bold="true">
+							<value-of name="VYBER.ROK"/>
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="18%" font-face="arial">
+							<text value=""/>
+						</style>
+						<style width="7%" font-face="arial">
+							<text value="IČO:"/>
+						</style>
+						<style width="75%" font-face="arial" font-bold="true">
+							<value-of name="" onData="self.value=VYBER.ICO+ &apos; - &apos;+ VYBER.ICO_NAZEV"/>
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="18%" font-face="arial">
+							<text value=""/>
+						</style>
+						<style width="7%" font-face="arial">
+							<text value=""/>
+						</style>
+						<style width="74%" font-face="arial" font-bold="true">
+							<value-of name="VYBER.ICO_ADRESA"/>
+						</style>
+						<style width="1%" font-face="arial" font-size="3" font-bold="true">
+							<text value=""/>
+						</style>
+					</line>
+					<!--
+						<line on-each-page="true">
+						<style width="18%" font-face="arial">
+						<text value=""/>
+						</style>
+						<style width="7%" font-face="arial">
+						<text value="NS:"/>
+						</style>
+						<style width="75%" font-face="arial" font-size="3" font-bold="true">
+						<value-of name="" onData="self.value=VYBER.NS+ &apos; - &apos;+ VYBER.NS_NAZEV"/>
+						</style>
+						</line> 
+					-->
+					<line on-each-page="true">
+						<style width="100%">
+							<text value=""/>
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="100%">
+							<text value=""/>
+						</style>
+					</line>
+					<!-- head SML_PRI - end -->
+				</head>
+				<!-- body SML_PRI - start -->
+				<body>
+					<line>
+						<style width="100%">
+							<text value=""/>
+						</style>
+					</line>
+					<line>
+						<style width="19%" font-bold="true">
+							<text value="Identifikátor případu:"/>
+						</style>
+						<style width="31%" font-bold="true">
+							<value-of name="SML_PRI_IXP_SML_PRI"/>
+						</style>
+						<style width="13%" font-bold="true">
+							<text value="Agendové číslo:"/>
+						</style>
+						<style width="37%" font-bold="true">
+							<value-of name="SML_PRI_AC_SML"/>
+						</style>
+					</line>
+					<region name="SML_DFK">
+						<body>
+							<line>
+								<style width="19%" font-bold="true">
+									<text value="Identifikátor dokladu:"/>
+								</style>
+								<style width="31%" font-bold="true">
+									<value-of name="SML_DFK_IXP"/>
+								</style>
+								<style width="13%" font-bold="true">
+									<text value="Značka:"/>
+								</style>
+								<style width="37%" font-bold="true">
+									<value-of name="SML_DFK_AC_AG"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<line>
+						<style width="100%">
+							<text value=""/>
+						</style>
+					</line>
+					<!--
+						<line>
+						<style width="100%" font-size="4" font-bold="true" horizontal-align="center">
+						<text value="INDIVIDUÁLNÍ PŘÍSLIB ( dle vyhlášky MF č. 416/2004 Sb. )"/>
+						</style>
+						</line> 
+					-->
+					<line>
+						<style width="100%">
+							<text value=""/>
+						</style>
+					</line>
+					<line>
+						<style width="19%" font-bold="true">
+							<text value="Druh veřejného výdaje:"/>
+						</style>
+						<style width="81%">
+							<value-of name="SML_PRI_POP"/>
+						</style>
+					</line>
+					<line>
+						<style width="100%" font-bold="true">
+							<text value="Věcný popis výdaje:"/>
+						</style>
+					</line>
+					<line>
+						<style width="8%" left-border-width="1" top-border-width="1" bottom-border-width="2" font-bold="true">
+							<text value="Typ "/>
+						</style>
+						<style width="7%" left-border-width="1" right-border-width="1" top-border-width="1" bottom-border-width="2" font-bold="true">
+							<text value="NS"/>
+						</style>
+						<style width="45%" top-border-width="1" bottom-border-width="2" font-bold="true">
+							<text value="Název položky"/>
+						</style>
+						<style width="14%" left-border-width="1" right-border-width="1" top-border-width="1" bottom-border-width="2" font-bold="true">
+							<text value="Klasifikace"/>
+						</style>
+						<style width="10%" top-border-width="1" bottom-border-width="2" font-bold="true">
+							<text value="Množství"/>
+						</style>
+						<style width="16%" left-border-width="1" right-border-width="1" top-border-width="1" bottom-border-width="2" font-bold="true">
+							<text value="Částka"/>
+						</style>
+					</line>
+					<region name="SML_PRI_VP">
+						<body>
+							<line>
+								<style width="8%" left-border-width="1" bottom-border-width="1">
+									<value-of name="SML_PRI_VP_TYP_DUP"/>
+								</style>
+								<style width="7%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+									<value-of name="SML_PRI_VP_NKS"/>
+								</style>
+								<style width="45%" bottom-border-width="1">
+									<value-of name="SML_PRI_VP_NAZEV"/>
+								</style>
+								<style width="14%" left-border-width="1" bottom-border-width="1">
+									<value-of name="SML_PRI_VP_SKP"/>
+								</style>
+								<style width="10%" left-border-width="1" bottom-border-width="1">
+									<value-of name="SML_PRI_VP_MSML"/>
+								</style>
+								<style width="16%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+									<value-of name="SML_PRI_VP_CSML"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<line>
+						<style width="100%">
+							<text value=""/>
+						</style>
+					</line>
+					<line>
+						<style width="100%">
+							<text value=""/>
+						</style>
+					</line>
+					<line>
+						<style width="17%" font-bold="true">
+							<text value="Dodavatel - věřitel"/>
+						</style>
+						<style width="67%">
+							<value-of name="SML_PRI_DOD_NAZ"/>
+						</style>
+						<style width="5%">
+							<text value="IČO:"/>
+						</style>
+						<style width="11%">
+							<value-of name="SML_PRI_DOD_ICO"/>
+						</style>
+					</line>
+					<line>
+						<style width="17%" font-bold="true">
+							<text value="podle  § 13 odst. 7:"/>
+						</style>
+						<style width="67%">
+							<value-of name="SML_PRI_DOD_ULI"/>
+						</style>
+						<style width="5%">
+							<text value="DIČ:"/>
+						</style>
+						<style width="11%">
+							<value-of name="SML_PRI_DOD_DIC"/>
+						</style>
+					</line>
+					<line>
+						<style width="17%">
+							<text value=""/>
+						</style>
+						<style width="83%">
+							<value-of name="SML_PRI_DOD_MES"/>
+						</style>
+					</line>
+					<line>
+						<style width="17%">
+							<text value=""/>
+						</style>
+						<style width="83%">
+							<value-of name="SML_PRI_DOD_PSC"/>
+						</style>
+					</line>
+					<line>
+						<style width="100%">
+							<text value=""/>
+						</style>
+					</line>
+					<line>
+						<style width="17%" font-bold="true">
+							<text value="Částka v Kč:"/>
+						</style>
+						<style width="83%">
+							<value-of name="SML_PRI_C"/>
+						</style>
+					</line>
+					<line>
+						<style width="100%">
+							<text value=""/>
+						</style>
+					</line>
+          <line>
+            <value-of name="" onData="sirkyproc=[SML_PRI.W01,SML_PRI.W02,SML_PRI.W03,SML_PRI.W04,SML_PRI.W05,SML_PRI.W06,SML_PRI.W07,SML_PRI.W08,SML_PRI.W09,SML_PRI.W10,SML_PRI.W11,SML_PRI.W12,SML_PRI.W13,SML_PRI.W14,SML_PRI.W15,SML_PRI.WS1];sirkyadd=[14];procenta=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];SpoctiProcenta(sirkyproc,sirkyadd,procenta)"/>
+          </line>
+					<line>
+						<style width="100%" font-bold="true">
+							<text value="Stanovený celkový limit výdajů případu:"/>
+						</style>
+					</line>
+					<region name="SML_PRI_POL">
+						<head>
+							<line>
+								<style width="7%" left-border-width="1" top-border-width="3" bottom-border-width="3" font-bold="true">
+									<text value="UCS"/>
+								</style>
+								<style width="7%" left-border-width="1" top-border-width="3" bottom-border-width="3" font-bold="true">
+									<text value="NS"/>
+								</style>
+								<style width="5%" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0" font-bold="true" ellipsis-style="cut" multiline="false">
+									<value-of name="AN01_NAZ" onData="NastavProcenta(self,procenta[0])"/>
+								</style>
+								<style width="5%" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0" font-bold="true" ellipsis-style="cut" multiline="false">
+									<value-of name="AN02_NAZ" onData="NastavProcenta(self,procenta[1])"/>
+								</style>
+								<style width="5%" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0" font-bold="true" ellipsis-style="cut" multiline="false">
+									<value-of name="AN03_NAZ" onData="NastavProcenta(self,procenta[2])"/>
+								</style>
+								<style width="5%" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0" font-bold="true" ellipsis-style="cut" multiline="false">
+									<value-of name="AN04_NAZ" onData="NastavProcenta(self,procenta[3])"/>
+								</style>
+								<style width="5%" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0" font-bold="true" ellipsis-style="cut" multiline="false">
+									<value-of name="AN05_NAZ" onData="NastavProcenta(self,procenta[4])"/>
+								</style>
+								<style width="5%" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0" font-bold="true" ellipsis-style="cut" multiline="false">
+									<value-of name="AN06_NAZ" onData="NastavProcenta(self,procenta[5])"/>
+								</style>
+								<style width="5%" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0" font-bold="true" ellipsis-style="cut" multiline="false">
+									<value-of name="AN07_NAZ" onData="NastavProcenta(self,procenta[6])"/>
+								</style>
+								<style width="5%" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0" font-bold="true" ellipsis-style="cut" multiline="false">
+									<value-of name="AN08_NAZ" onData="NastavProcenta(self,procenta[7])"/>
+								</style>
+								<style width="5%" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0" font-bold="true" ellipsis-style="cut" multiline="false">
+									<value-of name="AN09_NAZ" onData="NastavProcenta(self,procenta[8])"/>
+								</style>
+								<style width="5%" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0" font-bold="true" ellipsis-style="cut" multiline="false">
+									<value-of name="AN10_NAZ" onData="NastavProcenta(self,procenta[9])"/>
+								</style>
+								<style width="4%" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0" font-bold="true" ellipsis-style="cut" multiline="false">
+									<value-of name="AN11_NAZ" onData="NastavProcenta(self,procenta[10])"/>
+								</style>
+								<style width="4%" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0" font-bold="true" ellipsis-style="cut" multiline="false">
+									<value-of name="AN12_NAZ" onData="NastavProcenta(self,procenta[11])"/>
+								</style>
+								<style width="4%" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0" font-bold="true" ellipsis-style="cut" multiline="false">
+									<value-of name="AN13_NAZ" onData="NastavProcenta(self,procenta[12])"/>
+								</style>
+								<style width="4%" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0" font-bold="true" ellipsis-style="cut" multiline="false">
+									<value-of name="AN14_NAZ" onData="NastavProcenta(self,procenta[13])"/>
+								</style>
+								<style width="4%" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0" font-bold="true" ellipsis-style="cut" multiline="false">
+									<value-of name="AN15_NAZ" onData="NastavProcenta(self,procenta[14])"/>
+								</style>
+								<style width="16%" left-border-width="1" right-border-width="3" top-border-width="3" bottom-border-width="3" right-padding="0" font-bold="true" horizontal-align="right" ellipsis-style="cut" multiline="false">
+									<value-of name="" onData="self.value=&apos;Částka v Kč&apos;;NastavProcenta(self,procenta[15])"/>
+								</style>
+							</line>
+						</head>
+						<body>
+							<line only-if="SML_PRI_POL.SML_PRI_POL_C&lt;&gt;0">
+								<style width="7%" left-border-width="3" font-size="1">
+									<value-of name="SML_PRI_POL_UCS"/>
+								</style>
+								<style width="7%" left-border-width="1" font-size="1">
+									<value-of name="SML_PRI_POL_NKS"/>
+								</style>
+								<style width="5%" left-border-width="1" right-padding="0" font-size="1" ellipsis-style="cut" multiline="false">
+									<value-of name="AN01" onData="NastavProcenta(self,procenta[0])"/>
+								</style>
+								<style width="5%" left-border-width="1" right-padding="0" font-size="1" ellipsis-style="cut" multiline="false">
+									<value-of name="AN02" onData="NastavProcenta(self,procenta[1])"/>
+								</style>
+								<style width="5%" left-border-width="1" right-padding="0" font-size="1" ellipsis-style="cut" multiline="false">
+									<value-of name="AN03" onData="NastavProcenta(self,procenta[2])"/>
+								</style>
+								<style width="5%" left-border-width="1" right-padding="0" font-size="1" ellipsis-style="cut" multiline="false">
+									<value-of name="AN04" onData="NastavProcenta(self,procenta[3])"/>
+								</style>
+								<style width="5%" left-border-width="1" right-padding="0" font-size="1" ellipsis-style="cut" multiline="false">
+									<value-of name="AN05" onData="NastavProcenta(self,procenta[4])"/>
+								</style>
+								<style width="5%" left-border-width="1" right-padding="0" font-size="1" ellipsis-style="cut" multiline="false">
+									<value-of name="AN06" onData="NastavProcenta(self,procenta[5])"/>
+								</style>
+								<style width="5%" left-border-width="1" right-padding="0" font-size="1" ellipsis-style="cut" multiline="false">
+									<value-of name="AN07" onData="NastavProcenta(self,procenta[6])"/>
+								</style>
+								<style width="5%" left-border-width="1" right-padding="0" font-size="1" ellipsis-style="cut" multiline="false">
+									<value-of name="AN08" onData="NastavProcenta(self,procenta[7])"/>
+								</style>
+								<style width="5%" left-border-width="1" right-padding="0" font-size="1" ellipsis-style="cut" multiline="false">
+									<value-of name="AN09" onData="NastavProcenta(self,procenta[8])"/>
+								</style>
+								<style width="5%" left-border-width="1" right-padding="0" font-size="1" ellipsis-style="cut" multiline="false">
+									<value-of name="AN10" onData="NastavProcenta(self,procenta[9])"/>
+								</style>
+								<style width="4%" left-border-width="1" right-padding="0" font-size="1" ellipsis-style="cut" multiline="false">
+									<value-of name="AN11" onData="NastavProcenta(self,procenta[10])"/>
+								</style>
+								<style width="4%" left-border-width="1" right-padding="0" font-size="1" ellipsis-style="cut" multiline="false">
+									<value-of name="AN12" onData="NastavProcenta(self,procenta[11])"/>
+								</style>
+								<style width="4%" left-border-width="1" right-padding="0" font-size="1" ellipsis-style="cut" multiline="false">
+									<value-of name="AN13" onData="NastavProcenta(self,procenta[12])"/>
+								</style>
+								<style width="4%" left-border-width="1" right-padding="0" font-size="1" ellipsis-style="cut" multiline="false">
+									<value-of name="AN14" onData="NastavProcenta(self,procenta[13])"/>
+								</style>
+								<style width="4%" left-border-width="1" right-padding="0" font-size="1" ellipsis-style="cut" multiline="false">
+									<value-of name="AN15" onData="NastavProcenta(self,procenta[14])"/>
+								</style>
+								<style width="16%" left-border-width="1" right-border-width="3" right-padding="0" font-size="1" horizontal-align="right" ellipsis-style="cut" multiline="false">
+									<value-of name="SML_PRI_POL_C" onData="NastavProcenta(self,procenta[15])" format="# 0,00"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<line>
+						<style width="2%" top-border-width="3">
+							<text value=""/>
+						</style>
+						<style width="96%" top-border-width="3">
+							<text value=""/>
+						</style>
+						<style width="2%" top-border-width="3">
+							<text value=""/>
+						</style>
+					</line>
+					<line>
+						<style width="100%">
+							<text value=""/>
+						</style>
+					</line>
+					<line>
+						<style width="100%" right-border-width="3" font-size="3">
+							<text value="Svým podpisem potvrzuji, že předané podklady k proplacení výdaje jsou úplné a splňují podmínky stanovené ve schvalovacím postupu ve smyslu § 14 odst. 4 vyhlášky MF č. 416/2004 Sb., kterou se provádí zákon č. 320/2001 Sb."/>
+						</style>
+					</line>
+					<line>
+						<style width="100%">
+							<text value=""/>
+						</style>
+					</line>
+					<region name="SML_DFK">
+						<body>
+							<region name="SML_DFK_UK">
+								<body>
+									<line>
+										<style width="20%">
+											<value-of name="SML_DFK_UK_ROLE_NAZEV"/>
+										</style>
+										<style width="52%">
+											<value-of name="SML_DFK_UK_FUN_NAZEV"/>
+										</style>
+										<style width="13%" horizontal-align="center">
+											<value-of name="SML_DFK_UK_DAT_VYRIZ"/>
+										</style>
+										<style width="15%">
+											<text value="  "/>
+										</style>
+									</line>
+									<line>
+										<style width="72%" font-size="1">
+											<text value=""/>
+										</style>
+										<style width="13%" font-size="1" horizontal-align="center">
+											<text value=".................................."/>
+										</style>
+										<style width="15%" font-size="1" horizontal-align="center">
+											<text value=".................................."/>
+										</style>
+									</line>
+									<line>
+										<style width="72%">
+											<text value=""/>
+										</style>
+										<style width="13%" horizontal-align="center">
+											<text value="Datum podpisu"/>
+										</style>
+										<style width="15%" horizontal-align="center">
+											<text value="Podpis"/>
+										</style>
+									</line>
+									<line>
+										<style width="100%">
+											<text value=""/>
+										</style>
+									</line>
+									<line>
+										<style width="100%">
+											<text value=""/>
+										</style>
+									</line>
+								</body>
+							</region>
+						</body>
+					</region>
+					<line>
+						<style width="100%">
+							<text value=""/>
+						</style>
+					</line>
+					<line>
+						<style width="100%">
+							<text value=""/>
+						</style>
+					</line>
+					<!-- body SML_PRI - end -->
+				</body>
+				<!-- region SML_PRI - end -->
+			</region>
+			<!-- body vyber - end -->
+		</body>
+		<!-- region vyber - end -->
+	</region>
+</format>

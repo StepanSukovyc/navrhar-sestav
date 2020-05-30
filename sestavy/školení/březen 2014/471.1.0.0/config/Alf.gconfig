@@ -1,0 +1,653 @@
+﻿<AddIn name        = "GRF Binding"
+       author      = "Mgr. Stepan Sukovyč"
+       addInManagerHidden = "preinstalled"
+       version="4.72.1.6">
+
+  <Manifest>
+    <Identity name = "Gordic.GFE.WinClient.ALF"/>
+  </Manifest>
+
+  <Runtime>
+    <Import assembly=":Gordic.GFE.WinClient"/>
+    <Import assembly=":Gordic.GFE.Parsers"/>
+  </Runtime>
+  
+  <Path name = "/ReportDesigner/RDTextEditor/Formatter/ALF">
+    <Class id ="ALFFormatter" class = "Gordic.GFE.WinClient.ALF.AlfFormattingStrategy"/>
+  </Path>
+
+  <!-- editor -->
+  <Path name = "/Desktop/DisplayBindings">
+    <DisplayBinding id = "AlfBinding"
+		                insertbefore = "AlfxBinding"
+		                fileNamePattern="\.alf"
+		                title = "Vazba na 'alf' soubor"
+		                class = "Gordic.GFE.WinClient.Editor.AlfDisplayBinding"/>
+    <DisplayBinding id    = "AlfxBinding"
+		                insertbefore = "GfrmBinding"
+		                fileNamePattern="\.alfx"
+                    title = "Vazba na 'alfx' soubor"
+		                class = "Gordic.GFE.WinClient.Editor.AlfxDisplayBinding" />
+    <DisplayBinding id    = "GfrmBinding"
+		                insertbefore = "Text"
+		                fileNamePattern="\.gfrm"
+                    title = "Vazba na projekt 'gfrm'"
+		                class = "Gordic.GFE.WinClient.Editor.GfrmDisplayBinding" />
+  </Path>
+  <!-- konec editor -->
+
+  <!-- Main menu -->
+  <Path name = "/ReportDesigner/MainMenu">
+    <ComplexCondition action="Exclude">
+      <Or>
+        <Condition name="WindowActive" activewindow="Gordic.GFE.WinClient.GrrEditor.GrrViewContent"/>
+        <Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.GrfEditor.GrfViewContent"/>
+      </Or>
+      <MenuItem id = "MmGrf" insertafter="View" insertbefore="Tools" label="Fo&amp;rmát" type = "Menu">
+        <MenuItem id="FormatBlock" label="formátování bloku" type="Menu" icon="Icons__Ost__text_zarovnat_doleva">
+          <MenuItem id="ContentAlignTop"
+                    shortcut = "Shift|Alt|Up"
+                    label="zarovnat nahoru"
+                    type="Item"
+                    loadclasslazy="false"
+                    icon="Icons__Ost__text_zarovnat_nahoru"
+                    class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignTop"/>
+          <MenuItem id="ContentAlignMiddle"
+                    label="zarovnat na střed"
+                    type="Item"
+                    loadclasslazy="false"
+                    icon="Icons__Ost__text_zarovnat_na_stred_vertikal"
+                    class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignMiddle"/>
+          <MenuItem id="ContentAlignBottom"
+                    shortcut = "Shift|Alt|Down"
+                    label="zarovnat dolů"
+                    type="Item"
+                    loadclasslazy="false"
+                    icon="Icons__Ost__text_zarovnat_dolu"
+                    class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignBottom"/>
+          <MenuItem id = "AlignSeparator" type = "Separator"  />
+          <MenuItem id="ContentAlignLeft"
+                    shortcut = "Shift|Alt|Left"
+                    label="zarovnat vlevo"
+                    type="Item"
+                    loadclasslazy="false"
+                    icon="Icons__Ost__text_zarovnat_doleva"
+                    class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignLeft"/>
+          <MenuItem id="ContentAlignCenter"
+                    label="zarovnat na střed"
+                    type="Item"
+                    loadclasslazy="false"
+                    icon="Icons__Ost__text_zarovnat_na_stred_horizont"
+                    class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignCenter"/>
+          <MenuItem id="ContentAlignRight"
+                    shortcut = "Shift|Alt|Right"
+                    label="zarovnat vpravo"
+                    type="Item"
+                    loadclasslazy="false"
+                    icon="Icons__Ost__text_zarovnat_doprava"
+                    class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignRight"/>
+          <MenuItem id="ContentAlignJustify"
+                    label="zarovnat justify"
+                    type="Item"
+                    loadclasslazy="false"
+                    class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignJustify"/>
+        </MenuItem>
+        <MenuItem id="FontStyle"
+                label="řez písma"
+                icon="Icons__Ost__registr_uprava_pismen"
+                type="Menu">
+          <MenuItem id="FontRegular"
+                    shortcut = "Control|Shift|R"
+                    label="obyčejné"
+                    type="Item"
+                    loadclasslazy="false"
+                    class="Gordic.GFE.WinClient.TextContentCommands.ContentRegular"/>
+          <MenuItem id="FontBold"
+                    shortcut = "Control|Shift|B"
+                    label="tučné"
+                    type="Item"
+                    loadclasslazy="false"
+                    class="Gordic.GFE.WinClient.TextContentCommands.ContentBold"/>
+          <MenuItem id="FontItalic"
+                    shortcut = "Control|Shift|I"
+                    label="kurzíva"
+                    type="Item"
+                    loadclasslazy="false"
+                    class="Gordic.GFE.WinClient.TextContentCommands.ContentItalic"/>
+          <MenuItem id="FontUnderline"
+                    shortcut = "Control|Shift|U"
+                    label="podtržené"
+                    type="Item"
+                    loadclasslazy="false"
+                    class="Gordic.GFE.WinClient.TextContentCommands.ContentUnderline"/>
+          <MenuItem id="FontStrikeout"
+                    shortcut = "Control|Shift|W"
+                    label="přeškrtnuté"
+                    type="Item"
+                    loadclasslazy="false"
+                    class="Gordic.GFE.WinClient.TextContentCommands.ContentStrikeout"/>
+        </MenuItem>
+        <MenuItem id="Surround" label="orámování" type="Menu" icon="Icons__Ost__oramovani_dokola_vnitrek">
+          <MenuItem id="SurroundNothing"
+                              label="žádné"
+                              type="Item"
+                              loadclasslazy="false"
+                              icon="Icons__Ost__oramovani_zadne"
+                              class="Gordic.GFE.WinClient.SurroundCommands.SurroundNothing"/>
+          <MenuItem id="SurroundAround"
+                              label="dokola"
+                              type="Item"
+                              loadclasslazy="false"
+                              icon="Icons__Ost__oramovani_dokola"
+                              class="Gordic.GFE.WinClient.SurroundCommands.SurroundAround"/>
+          <MenuItem id = "SurroundCommonSeparator" type = "Separator"  />
+          <MenuItem id="SurroundLeft"
+                              label="levé"
+                              type="Item"
+                              loadclasslazy="false"
+                              icon="Icons__Ost__oramovani_left"
+                              class="Gordic.GFE.WinClient.SurroundCommands.SurroundLeft"/>
+          <MenuItem id="SurroundRight"
+                              label="pravé"
+                              type="Item"
+                              loadclasslazy="false"
+                              icon="Icons__Ost__oramovani_right"
+                              class="Gordic.GFE.WinClient.SurroundCommands.SurroundRight"/>
+          <MenuItem id="SurroundTop"
+                              label="horní"
+                              type="Item"
+                              loadclasslazy="false"
+                              icon="Icons__Ost__oramovani_top"
+                              class="Gordic.GFE.WinClient.SurroundCommands.SurroundTop"/>
+          <MenuItem id="SurroundBottom"
+                              label="dolní"
+                              type="Item"
+                              loadclasslazy="false"
+                              icon="Icons__Ost__oramovani_bottom"
+                              class="Gordic.GFE.WinClient.SurroundCommands.SurroundBottom"/>
+          <MenuItem id = "SurroundSimpleSeparator" type = "Separator"  />
+          <MenuItem id="SurroundInside"
+                              label="vnitřní"
+                              type="Item"
+                              loadclasslazy="false"
+                              icon="Icons__Ost__oramovani_vnitrek"
+                              class="Gordic.GFE.WinClient.SurroundCommands.SurroundInside"/>
+          <MenuItem id="SurroundAroundInside"
+                              label="vnitřní/dokola"
+                              type="Item"
+                              loadclasslazy="false"
+                              icon="Icons__Ost__oramovani_dokola_vnitrek"
+                              class="Gordic.GFE.WinClient.SurroundCommands.SurroundAroundInside"/>
+          <MenuItem id="SurroundMiddleHorizontal"
+                              label="horizontální"
+                              type="Item"
+                              loadclasslazy="false"
+                              icon="Icons__Ost__oramovani_horizontalne"
+                              class="Gordic.GFE.WinClient.SurroundCommands.SurroundMiddleHorizontal"/>
+          <MenuItem id="SurroundMiddleVertical"
+                              label="vertikální"
+                              type="Item"
+                              loadclasslazy="false"
+                              icon="Icons__Ost__oramovani_vertikalne"
+                              class="Gordic.GFE.WinClient.SurroundCommands.SurroundMiddleVertical"/>
+        </MenuItem>
+        <!--<MenuItem id = "ArgumentSeparator" type = "Separator"  />
+        <MenuItem id = "ShowGrid"
+                  label = "zobrazit/skrýt mřížku"
+                  type = "CheckBox"
+                  shortcut = "Control|G"
+                  icon ="Icons__Gin__format_sloupce"
+                  loadclasslazy = "false"
+                  class = "Gordic.GFE.Parsers.Core.ShowGrid"/>-->
+        <MenuItem id = "FormatSeparator" type = "Separator"  />
+        <MenuItem id = "CopyFormat"
+                  label = "kopírovat formát vybraného objektu"
+                  type = "Item"
+                  icon ="Icons__Wfl__dokument_kopie"
+                  loadclasslazy = "false"
+                  class = "Gordic.GFE.WinClient.SpecificFormatCommands.CopyFormat"/>
+        <MenuItem id = "PasteFormat"
+                  label = "aplikovat formát na vybrané objekty"
+                  type = "Item"
+                  icon ="Icons__Gin__zaznam_novy_vlozit_pred"
+                  loadclasslazy = "false"
+                  class = "Gordic.GFE.WinClient.SpecificFormatCommands.ApplyFormat"/>
+        <MenuItem id = "PropertySeparator" type = "Separator"  />
+        <MenuItem id = "ShowProperty"
+                  label = "vlastnosti vybraného/ých objektu/ů"
+                  type = "Item"
+                  shortcut = "Control|D"
+                  icon ="Icons__Gin__vlastnosti"
+                  loadclasslazy = "false"
+                  class = "Gordic.GFE.WinClient.Gui.ShowProperty"/>
+      </MenuItem>
+    </ComplexCondition>
+  </Path>
+  <!-- konec Main menu -->
+  
+  <!-- nástrojové líšty -->
+  <Path name = "/ReportDesigner/ToolBarMenu/Standard">
+    <ComplexCondition action="Exclude">
+      <Or>
+        <Condition name="WindowActive" activewindow="Gordic.GFE.WinClient.GrrEditor.GrrViewContent"/>
+        <Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.GrfEditor.GrfViewContent"/>
+      </Or>
+
+      <ToolbarItem id = "GRFSeparator" type = "Separator" insertafter="Redo" />
+      <!--<ToolbarItem id = "ShowGrid"
+          tooltip = "zobrazit/skrýt mřížku"
+          type = "CheckBox"
+          icon ="Icons__Gin__format_sloupce"
+          loadclasslazy = "false"
+          class = "Gordic.GFE.Parsers.Core.ShowGrid"/>-->
+      <ToolbarItem id="ZoomValue"
+                  tooltip="lupa"
+                  type="ComboBox"
+                  loadclasslazy="false"
+                  width="25"
+                  class="Gordic.GFE.Parsers.Core.Zoom">
+        <IncludeList id = "ListOfZoom" item="/GlobalList/Zoom"/>
+      </ToolbarItem>
+      <ToolbarItem id = "ShowGridSeparator" type = "Separator"  />
+      <ToolbarItem id = "Cut"
+                tooltip = "vyjmout vybrané objekty"
+                icon = "Icons__Gin__vyjmout"
+                type = "Item"
+                shortcut = "Control|X"
+                loadclasslazy = "false"
+                class = "Gordic.GFE.WinClient.EditCommands.Cut"/>
+      <ToolbarItem id = "Copy"
+                tooltip = "kopírovat vybrané objekty (Ctrl + C)"
+                icon = "Icons__Gin__kopirovat"
+                type = "Item"
+                shortcut = "Control|C"
+                loadclasslazy = "false"
+                class = "Gordic.GFE.WinClient.EditCommands.Copy"/>
+      <ToolbarItem id = "Paste"
+                tooltip = "vložit zkopírované/vyjmuté objekty (Ctrl + V)"
+                icon = "Icons__Gin__vlozit"
+                type = "Item"
+                shortcut = "Control|V"
+                loadclasslazy = "false"
+                class = "Gordic.GFE.WinClient.EditCommands.Paste"/>
+      <ToolbarItem id = "DeleteSelected"
+                 tooltip = "odstranit vybrané objekty (Del)"
+                 icon ="Icons__Gin__vymazat"
+                 loadclasslazy = "false"
+                 type = "Item"
+                 shortcut = "Delete"
+                 class = "Gordic.GFE.WinClient.EditCommands.Delete"/>
+      <Condition name = "WindowActive" activewindow="GrrViewContent">
+        <ToolbarItem id = "DeleteSelectedContent"
+                   tooltip = "odstranit pouze obsah vybraných objektů (Ctrl + Del)"
+                   icon ="Icons__Wfl__dokument_vymazat"
+                   loadclasslazy = "false"
+                   type = "Item"
+                   shortcut = "Control|Delete"
+                   class = "Gordic.GFE.WinClient.EditCommands.DeleteContent"/>
+      </Condition>
+      <Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.GrfEditor.GrfViewContent">
+        <ToolbarItem id = "CopyPasteCutDeleteSeparator" type = "Separator"  />
+        <ToolbarItem id = "Anchor"
+                  tooltip = "ukotvit/odkotvit"
+                  icon ="Icons__Gin__stav_uzamceno"
+                  loadclasslazy = "false"
+                  type = "CheckBox"
+                  class = "Gordic.GFE.WinClient.GrfEditor.Anchor"/>
+        <ToolbarItem id="ArgumentEdit"
+                  tooltip = "změna argumentu 'edit'"
+                  icon = "Icons__Gin__editace"
+                  loadclasslazy = "false"
+                  class = "Gordic.GFE.WinClient.GrfEditor.ArgumentEdit"/>
+      </Condition>
+      <ToolbarItem id = "ArgumentSeparator" type = "Separator"  />
+      <ToolbarItem id="CopyFormat"
+                tooltip ="kopírovat formát vybraného objektu"
+                loadclasslazy = "false"
+                icon="Icons__Wfl__dokument_kopie"
+                class = "Gordic.GFE.WinClient.SpecificFormatCommands.CopyFormat"/>
+      <ToolbarItem id="PasteFormat"
+                tooltip ="aplikovat formát na vybrané objekty"
+                loadclasslazy = "false"
+                icon="Icons__Gin__zaznam_novy_vlozit_pred"
+                class = "Gordic.GFE.WinClient.SpecificFormatCommands.ApplyFormat"/>
+      <ToolbarItem id = "PropertySeparator" type = "Separator"  />
+      <ToolbarItem id = "ShowProperty"
+                tooltip = "vlastnosti vybraného/ých objektu/ů"
+                type = "Item"
+                icon ="Icons__Gin__vlastnosti"
+                loadclasslazy = "false"
+                class = "Gordic.GFE.WinClient.Gui.ShowProperty"/>
+    </ComplexCondition>
+  </Path>
+  <!-- pozor od Názvu se vyvijí ve kterém řádku se nachází lišta objektů -->
+  <Path name = "/ReportDesigner/ToolBarMenu/Format">
+    <ComplexCondition action="Exclude">
+      <Or>
+        <Condition name="WindowActive" activewindow="Gordic.GFE.WinClient.GrrEditor.GrrViewContent"/>
+        <Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.GrfEditor.GrfViewContent"/>
+      </Or>
+      <!-- Formátování bloku-->
+      <ToolbarItem id="ContentAlignTop"
+                tooltip="zarovnat nahoru"
+                type="Item"
+                loadclasslazy="false"
+                icon="Icons__Ost__text_zarovnat_nahoru"
+                class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignTop"/>
+      <ToolbarItem id="ContentAlignMiddle"
+                tooltip="zarovnat na střed"
+                type="Item"
+                loadclasslazy="false"
+                icon="Icons__Ost__text_zarovnat_na_stred_vertikal"
+                class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignMiddle"/>
+      <ToolbarItem id="ContentAlignBottom"
+                tooltip="zarovnat dolů"
+                type="Item"
+                loadclasslazy="false"
+                icon="Icons__Ost__text_zarovnat_dolu"
+                class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignBottom"/>
+      <ToolbarItem id = "AlignSeparator" type = "Separator"  />
+      <ToolbarItem id="ContentAlignLeft"
+                tooltip="zarovnat vlevo"
+                type="Item"
+                loadclasslazy="false"
+                icon="Icons__Ost__text_zarovnat_doleva"
+                class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignLeft"/>
+      <ToolbarItem id="ContentAlignCenter"
+                tooltip="zarovnat na střed"
+                type="Item"
+                loadclasslazy="false"
+                icon="Icons__Ost__text_zarovnat_na_stred_horizont"
+                class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignCenter"/>
+      <ToolbarItem id="ContentAlignRight"
+                tooltip="zarovnat vpravo"
+                type="Item"
+                loadclasslazy="false"
+                icon="Icons__Ost__text_zarovnat_doprava"
+                class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignRight"/>
+      <!-- konec Formátování bloku-->
+      <ToolbarItem id = "FontSeparator" type = "Separator"  />
+      <!-- řez písma -->
+      <ToolbarItem id="FontRegular"
+                shortcut = "Control|Shift|R"
+                tooltip="obyčejné"
+                label="R"
+                fontstyle="Regular"
+                type="Item"
+                loadclasslazy="false"
+                class="Gordic.GFE.WinClient.TextContentCommands.ContentRegular"/>
+      <ToolbarItem id="FontBold"
+                shortcut = "Control|Shift|B"
+                tooltip="tučné"
+                label="B"
+                fontstyle="Bold"
+                type="Item"
+                loadclasslazy="false"
+                class="Gordic.GFE.WinClient.TextContentCommands.ContentBold"/>
+      <ToolbarItem id="FontItalic"
+                shortcut = "Control|Shift|I"
+                tooltip="kurzíva"
+                type="Item"
+                label="I"
+                fontstyle="Italic"
+                loadclasslazy="false"
+                class="Gordic.GFE.WinClient.TextContentCommands.ContentItalic"/>
+      <ToolbarItem id="FontUnderline"
+                shortcut = "Control|Shift|U"
+                tooltip="podtržené"
+                label="U"
+                fontstyle="Underline"
+                type="Item"
+                loadclasslazy="false"
+                class="Gordic.GFE.WinClient.TextContentCommands.ContentUnderline"/>
+      <ToolbarItem id="FontStrikeout"
+                shortcut = "Control|Shift|W"
+                tooltip="přeškrtnuté"
+                fontstyle="Strikeout"
+                label="W"
+                type="Item"
+                loadclasslazy="false"
+                class="Gordic.GFE.WinClient.TextContentCommands.ContentStrikeout"/>
+      <!-- konec řez písma -->
+      <ToolbarItem id = "ArgumentSeparator" type = "Separator"  />
+      <!-- orámování výběru -->
+      <ToolbarItem id="SurroundWidth"
+            tooltip="šířka rámečku"
+            type="ComboBox"
+            loadclasslazy="false"
+            width="10"
+            class="Gordic.GFE.WinClient.SurroundCommands.SurroundWidth">
+        <IncludeList id = "ListOfSurroundWidth" item="/GlobalList/SurroundWidth"/>
+      </ToolbarItem>
+      <ToolbarItem id="DashStyle"
+                     tooltip="styl rámečku"
+                     type="ComboBox"
+                     loadclasslazy="false"
+                     class="Gordic.GFE.WinClient.SurroundCommands.SurroundDashStyle">
+        <IncludeList id = "ListOfDashStyle" item="/GlobalList/DashStyle"/>
+      </ToolbarItem>
+      <ToolbarItem id="Color"
+                   tooltip="barva rámečku"
+                   type="ComboBox"
+                   loadclasslazy="false"
+                   class="Gordic.GFE.WinClient.SurroundCommands.SurroundColor">
+        <IncludeList id = "ListOfColors" item="/GlobalList/ColorNameCZEN"/>
+      </ToolbarItem>
+
+      <ToolbarItem id="SurroundNothing"
+                tooltip="žádné (použijte v kombinaci s CTRL pro opačný efekt)"
+                type="Item"
+                loadclasslazy="false"
+                icon="Icons__Ost__oramovani_zadne"
+                class="Gordic.GFE.WinClient.SurroundCommands.SurroundNothing"/>
+      <ToolbarItem id="SurroundAround"
+                tooltip="dokola (použijte v kombinaci s CTRL pro opačný efekt)"
+                type="Item"
+                loadclasslazy="false"
+                icon="Icons__Ost__oramovani_dokola"
+                class="Gordic.GFE.WinClient.SurroundCommands.SurroundAround"/>
+      <ToolbarItem id = "SurroundCommonSeparator" type = "Separator"  />
+      <ToolbarItem id="SurroundLeft"
+                tooltip="levé (použijte v kombinaci s CTRL pro opačný efekt)"
+                type="Item"
+                loadclasslazy="false"
+                icon="Icons__Ost__oramovani_left"
+                class="Gordic.GFE.WinClient.SurroundCommands.SurroundLeft"/>
+      <ToolbarItem id="SurroundRight"
+                tooltip="pravé (použijte v kombinaci s CTRL pro opačný efekt)"
+                type="Item"
+                loadclasslazy="false"
+                icon="Icons__Ost__oramovani_right"
+                class="Gordic.GFE.WinClient.SurroundCommands.SurroundRight"/>
+      <ToolbarItem id="SurroundTop"
+                tooltip="horní (použijte v kombinaci s CTRL pro opačný efekt)"
+                type="Item"
+                loadclasslazy="false"
+                icon="Icons__Ost__oramovani_top"
+                class="Gordic.GFE.WinClient.SurroundCommands.SurroundTop"/>
+      <ToolbarItem id="SurroundBottom"
+                tooltip="dolní (použijte v kombinaci s CTRL pro opačný efekt)"
+                type="Item"
+                loadclasslazy="false"
+                icon="Icons__Ost__oramovani_bottom"
+                class="Gordic.GFE.WinClient.SurroundCommands.SurroundBottom"/>
+      <ComplexCondition action="Exclude">
+        <Not>
+          <Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.GrfEditor.GrfViewContent"/>
+        </Not>
+      <ToolbarItem id = "SurroundSimpleSeparator" type = "Separator"  />
+      <ToolbarItem id="SurroundInside"
+          tooltip="vnitřní"
+          type="Item"
+          loadclasslazy="false"
+          icon="Icons__Ost__oramovani_vnitrek"
+          class="Gordic.GFE.WinClient.SurroundCommands.SurroundInside"/>
+      <ToolbarItem id="SurroundAroundInside"
+          tooltip="vnitřní/dokola (použijte v kombinaci s CTRL pro opačný efekt)"
+          type="Item"
+          loadclasslazy="false"
+          icon="Icons__Ost__oramovani_dokola_vnitrek"
+          class="Gordic.GFE.WinClient.SurroundCommands.SurroundAroundInside"/>
+      <ToolbarItem id="SurroundMiddleHorizontal"
+          tooltip="horizontální"
+          type="Item"
+          loadclasslazy="false"
+          icon="Icons__Ost__oramovani_horizontalne"
+          class="Gordic.GFE.WinClient.SurroundCommands.SurroundMiddleHorizontal"/>
+      <ToolbarItem id="SurroundMiddleVertical"
+          tooltip="vertikální"
+          type="Item"
+          loadclasslazy="false"
+          icon="Icons__Ost__oramovani_vertikalne"
+          class="Gordic.GFE.WinClient.SurroundCommands.SurroundMiddleVertical"/>
+      </ComplexCondition>
+      <!-- orámování výběru ^^^-->
+    </ComplexCondition>
+  </Path>
+      <!-- konec nástrojové líšty -->
+
+  <!-- Kontextové menu textového editoru -->
+  <Path name = "/ReportDesigner/RDTextEditor/ContextMenu">
+    <Include id = "Cut" item = "/ReportDesigner/MainMenu/Edit/Cut"/>
+    <Include id = "Copy" item = "/ReportDesigner/MainMenu/Edit/Copy"/>
+    <Include id = "Paste" item = "/ReportDesigner/MainMenu/Edit/Paste"/>
+    <Include id = "Delete" item = "/ReportDesigner/MainMenu/Edit/Delete"/>
+    <MenuItem id = "Separator1" type = "Separator"/>
+    <Include id = "Save" item = "/ReportDesigner/MainMenu/File/Save"/>
+    <Include id = "SaveAs" item = "/ReportDesigner/MainMenu/File/SaveAs"/>
+    <Include id = "SaveDb" item = "/ReportDesigner/MainMenu/File/SaveDb"/>
+    <Include id = "CloseFile" item = "/ReportDesigner/MainMenu/File/Close/CloseFile"/>
+    <MenuItem id = "Separator2" type = "Separator"/>
+    <MenuItem id = "Comment"
+              icon  = "Icons.16x16.CommentRegion"
+              label = "zakomentovat/odkomentovat blok"
+              shortcut = "Control|/"
+              class= "Gordic.GFE.WinClient.DefaultTextEditorCommands.CommentRegion"/>
+    <MenuItem id = "Indent"
+		          label = "odsazení"
+              icon  = "Icons__Gin__posun_doprava"
+		          shortcut = "Control|I"
+		          class = "Gordic.GFE.WinClient.DefaultTextEditorCommands.IndentSelection" />
+    <MenuItem id = "FileMode" label = "syntaxe" type="Menu">
+      <MenuItem id = "HighlightBuilder" type="Builder" class = "Gordic.GFE.WinClient.DefaultTextEditorCommands.HighlightingTypeBuilder" />
+    </MenuItem>
+    <MenuItem id = "Separator3" type = "Separator"/>
+    <MenuItem id = "Options"
+		          label = "možnosti..."
+		          icon = "Icons.16x16.PropertiesIcon"
+		          class ="Gordic.GFE.WinClient.ToolsCommands.ShowTextEditorOptions"/>
+  </Path>
+  <!-- konec Kontextové menu textového editoru -->
+
+  <!-- kontextové menu vybraných objektů -->
+  <Path name="/Formation/ContextMenu/SelectedObject">
+    <!-- ICloneable -->
+    <Condition name = "SelectedObject" implementinterface="System.ICloneable" >
+      <MenuItem id = "SelectedObjectSeparator" type = "Separator"  />
+      <MenuItem id = "Cut"
+                label = "vyjmout"
+                icon = "Icons__Gin__vyjmout"
+                type = "Item"
+                shortcut = "Control|X"
+                loadclasslazy = "false"
+                class = "Gordic.GFE.WinClient.EditCommands.Cut"/>
+      <MenuItem id = "Copy"
+                label = "kopírovat"
+                icon = "Icons__Gin__kopirovat"
+                type = "Item"
+                shortcut = "Control|C"
+                loadclasslazy = "false"
+                class = "Gordic.GFE.WinClient.EditCommands.Copy"/>
+    </Condition>
+    <!-- konec IFormationObject -->
+    <MenuItem id = "Paste"
+              label = "vložit"
+              icon = "Icons__Gin__vlozit"
+              type = "Item"
+              shortcut = "Control|V"
+              loadclasslazy = "false"
+              class = "Gordic.GFE.WinClient.EditCommands.Paste"/>
+    <MenuItem id = "Delete"
+              label = "odstranit"
+              icon = "Icons__Gin__vymazat"
+              type = "Item"
+              shortcut = "Delete"
+              loadclasslazy = "false"
+              class = "Gordic.GFE.WinClient.EditCommands.Delete"/>
+    
+    <ComplexCondition action = "Exclude">
+      <Or>
+        <And>
+          <Condition name = "SelectedObject" implementinterface="Gordic.GFE.Parsers.Gui.IBackground"/>
+          <Not>
+            <Condition name="SelectedObject" implementinterface="Gordic.GFE.Parsers.Editor.ILabel"/>
+          </Not>
+        </And>
+        <And>
+          <Or>
+            <Condition name="SelectedObject" implementinterface="Gordic.GFE.Parsers.Gui.IParentable"/>
+            <Condition name = "WindowActive" activewindow="GrrViewContent"/>
+          </Or>
+          <Not>
+            <Condition name="SelectedObject" implementinterface="Gordic.GFE.Parsers.Editor.ILabel"/>
+          </Not>
+        </And>
+      </Or>
+      <MenuItem id = "PropertySeparator" type = "Separator"  />
+    </ComplexCondition>
+
+    <ComplexCondition action = "Exclude" >
+      <And>
+        <Condition name = "SelectedObject" implementinterface="Gordic.GFE.Parsers.Gui.IBackground"/>
+        <Not>
+          <Condition name="SelectedObject" implementinterface="Gordic.GFE.Parsers.Editor.ILabel"/>
+        </Not>
+      </And>
+      <MenuItem id = "DeleteBackImage"
+              label = "odstranit obrázek pozadí"
+              icon = "Icons__Gin__oblibene_vymazat"
+              type = "Item"
+              loadclasslazy="false"
+              class = "Gordic.GFE.WinClient.EditCommands.DeleteBackImage"/>
+    </ComplexCondition>
+    <ComplexCondition action = "Exclude" >
+      <And>
+        <Or>
+          <Condition name="SelectedObject" implementinterface="Gordic.GFE.Parsers.Gui.IParentable"/>
+          <Condition name = "WindowActive" activewindow="GrrViewContent"/>
+        </Or>
+        <Not>
+          <Condition name="SelectedObject" implementinterface="Gordic.GFE.Parsers.Editor.ILabel"/>
+        </Not>
+      </And>
+      <MenuItem id = "DeleteSelectedContent"
+                  tooltip = "odstranit pouze obsah vybraných objektů"
+                  icon ="Icons__Wfl__dokument_vymazat"
+                  loadclasslazy = "false"
+                  type = "Item"
+                  label="odstranit obsah vyběru"
+                  shortcut = "Control|Delete"
+                  class = "Gordic.GFE.WinClient.EditCommands.DeleteContent"/>
+    </ComplexCondition>
+    <Condition name = "SelectedObject" implementinterface="Gordic.GFE.Parsers.Dom.ITagComponent">
+      <!-- ICloneable -->
+      <MenuItem id = "PropertySeparator" type = "Separator"  />
+      <MenuItem id="Property"
+                  type="Item"
+                  label="vlastnosti"
+                  shortcut="Control|D"
+                  loadclasslazy="false"
+                  icon="Icons__Gin__vlastnosti"
+                  class="Gordic.GFE.WinClient.Gui.ShowProperty"/>
+    </Condition>
+    <!-- konec IFormationObject -->
+  </Path>
+  <!-- konec kontextové menu vybraných objektů -->
+  
+  <!-- Edit akce XML editoru 
+  <Path path = "/AddIns/AlfEditor/EditActions">
+    <EditAction id = "XmlCompletionPopup" class = "Gordic.GFE.WinClient.ALF.Commands.CodeCompletionPopupCommand"  keys = "Control|Space"/>
+    <EditAction id = "GoToDefinition" class = "Gordic.GFE.WinClient.ALF.Commands.GoToSchemaDefinitionEditAction" keys = "Control|Enter"/>
+  </Path>
+  konec -->
+</AddIn>

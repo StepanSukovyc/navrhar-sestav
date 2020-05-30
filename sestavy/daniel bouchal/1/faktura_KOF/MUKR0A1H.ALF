@@ -1,0 +1,1275 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<!--
+#ZMENY
+*15.09.2004-přepsán vzorec pro zaokrouhlení, aby dával výsledky i na starších prohlížečích (verze 4.1.5...)
+  -29.10.2004-přepsána podmínka při vyhledávání DAŇOV v typu dokladu - vždycky to DAŇOV nenašlo, i když tam bylo...
+  *10.01.2005-na základě proměnné FAK_HLA.FAK_ZOB_RC zobrazováno nebo nezobrazováno RČ
+  *20.01.2005-na základě ZON GPVPX000A96L přepsán text "Kupní smlouva č." na "Smlouva č."
+  *20.01.2005.1-na základě ZON GPVPX000A96L přepsán text "Datum odeslání" na "Datum vystavení". Současně s tím datum odeslání změněn za datum vystavení.
+  *20.01.2005.2-na základě ZON GPVPX000A96L přepsán text "Datum zdanitelného plnění" na "Datum uskutečnění zdanitelného plnění"
+  *20.01.2005.3-na základě ZON GPVPX000A96L do spodní části dopracován text "Vystavil" a jeho "Telefon". Do hodnot se dotahují položky vystavil.
+  *26.01.2005-na základě ZON GPVPX000A96L dodána podmínka na fak_hla_typ_pdd (typ daňového dokladu) - text daňový doklad se tak nezobrazuje u některých typů dokladů
+  *01.02.2005-na základě ZON GPVPX000A96L - pokud je dobropis, pak se místo Faktura číslo zobrazuje Evidenční číslo dokladu
+  *28.07.2005-dodán region FAK_HLA_USP a přidány položky "Uskutečněné plnění..."
+  *08.09.2005-typ dokladu změněn na FAK_HLA_KTG_TYP_OFIC
+  P*14.10.2005-dopracováno formátování výpis částky celkem v případě Vyúčtování s dopl. - k zálohové faktuře
+  *20.02.2006-speciální výpis při Zálohové faktuře- daňovém dokladu
+  *24.02.2006-při výpisu pouhého popisu se na faktuře rozšíří políčko pro popis
+  *24.02.2006.1-upraveny výpisy položek a daňové rekapitulace
+  P*18.08.2006-dopracován výpočet "správné" částky před zaokrouhlením v případě typů 1481-1483 (Vyúčtování k zálohové faktuře)
+  P*23.10.2006-ke "správné" částce před zaokrouhlením doplněn typ dokladu 1480 (Vyúčtování k zálohové faktuře)
+  P*23.10.2006.1-opraveny problémy formátu při zaokrouhlování u dobropisu
+  P*02.07.2007-provedny úpravy pro typy dokladu 1480-1482, 1490-1492
+  P*18.03.2008-oprava zaokrouhlení u dobropisu
+  P*26.06.2008-opraveny problémy se zaokrouhlením u typu dokladu 1480
+  P*14.07.2008-zrušena podmínka před zaokrouhlením, kvůli vyúčtování k záloze  ORJ: 0432
+  N*30.10.2008-dopracován region pro penalizaci+výpis plateb navázané faktury pro penalizace ORJ: 0432
+  P*05.03.2009-opraven problém s vyúčtování s přeplatkem - napočítávalo se 2x zaokrouhlení ORJ: 0432  
+  N*20.03.2009-dosazeny varianty zahraničních měn ORJ: 0432
+  N-10.04.2009-použity zjednodušující položky pro zaokrouhlení apod. ORJ: 0432
+  P*25.03.2010-do daňových položek při nedaňovém tisku dodána zkratka měny (byla pouze v nadpisu). ORJ: 0432
+  N*17.03.2011-dopracování příznaku přenesení daňové povinnosti. ORJ: 0432
+  N*20.10.2011-doplnění zkratky měrné jednotky do výpisu řádků ORJ: 0432
+  N*12.01.2012-doplnění přenesené daňové povinnosti ORJ: 0432
+  N*18.01.2012-do regionu přenesené daňové povinnosti doplněna MJ ORJ: 0432
+  N*20.02.2012-přidána varianta tisku adresy odběratele do obálky ORJ: 0432
+  N*26.03.2012-u vyúčtování dopracována rekapitulace daňových zálohových dokladů (pokud takové doklady byly navázány) ORJ: 0432
+  P*12.04.2012-oprava chyby s výpisem DIČ u odběratele ORJ: 0432
+  P*12.06.2012-oprava hlavičky u přenesené daňové povinnosti ORJ: 0432
+#ZMENY
+-->
+<format type="grr" xmlns="http://www.gordic.cz/TR/alf/1.3/">
+	<info ixs_xme="0000ALX0A0GE" />
+	<info xmeta_ver="1" />
+	<info xmeta_subver_min="1" />
+	<info nazev="Kravaře S QR kódem" />
+	<info poznamka="Faktura" />
+	<info ixs_alv="0000ALV017YU" />
+	<info allowed_output="htm,xls,doc,frm" />
+	<info ixs_frm="MUKRALF0A1HP" />
+	<info maker="0432" />
+	<info last_modif="201506121230" />
+	<info rokmes_od="199801" />
+	<info rokmes_do="999913" />
+	<script>
+<![CDATA[
+def ZobrazICORCPop(self,tes,zobr_rc):
+    if tes=='20': 
+      if zobr_rc=='0':
+        self.value=''
+      else:
+        self.value='RČ:'
+    else:
+      self.value='IČO:'
+
+def ZobrazICORCHod(self,tes,zobr_rc,ico,rc):
+    if tes=='20': 
+      if zobr_rc=='0':
+        self.value=''
+      else:
+        self.value=rc
+    else:
+      self.value=ico
+
+def ZobrazDICOdb(self,tes,text):
+    if tes!='20': 
+      self.value=text
+    else:
+      self.value=''
+
+def TypDokladu(self,fak_hla_typ,dod_dph,fak_hla_typ_pdd):
+    import string;
+    
+    fak_hla_typ_u=fak_hla_typ.upper()
+    if ((dod_dph!='0') and (fak_hla_typ_pdd=='10') and (string.find(fak_hla_typ_u,'DAŇOV'))==-1): 
+      self.value=fak_hla_typ + '- daňový doklad'
+    else: 
+      self.value=fak_hla_typ
+      
+def VratMainVerze(retezec):
+    import string;
+    
+    vysledek=''
+    posice=string.find(retezec,'.')
+    if posice>=0:
+      vysledek=retezec[0:posice]
+    return vysledek
+      
+def GetZdanPln(self,fak_hla_zdan_pln,fak_hla_ktg_typ_num):
+    if fak_hla_zdan_pln=='':
+      self.value=''
+    else:
+      if fak_hla_ktg_typ_num=='1405':
+        self.value='Datum přijetí platby';
+      else: 
+        self.value='Datum uskutečnění zdanitelného plnění'
+      
+def JeDobropis(fak_hla_typ):
+    if ((string.find(fak_hla_typ.upper(),'DOBROPIS'))==-1):
+        return 0
+    else:
+        return 1
+        
+def VratDPH(dod_dph):
+    return dod_dph
+    
+def JeZavFaktura(ktg_typ):
+    if ((ktg_typ>='1480') and (ktg_typ<='1483')) or ((ktg_typ>='1490') and (ktg_typ<='1493')):
+        return 1
+    else:
+        return 0
+
+def JeZavFakturaBezVyu(ktg_typ):
+    if (ktg_typ=='1480') or (ktg_typ=='1490'):
+        return 1
+    else:
+        return 0
+
+def ZkratkaMena(ZkrMena):
+  if ZkrMena=='CZK':
+    return 'Kč'
+  else:
+    return ZkrMena
+    
+def JeCZK(ZkrMena):    
+  if ZkrMena=='CZK' or ZkrMena=='Kč':
+    return 1
+  else:
+    return 0
+
+def ZmenaSirka(self,puv_sirka,zmenasirkyadresa):
+  sirkat=str(puv_sirka)
+  #sirkat=self.style.width
+  sirkat=sirkat.replace('%','').rstrip()
+  self.style.width=str(int(sirkat)+zmenasirkyadresa)+'%'
+
+def VratPriz_oprdandph():
+  return 0 #priz_oprdandph
+   
+def JeAdresaObalka():
+  return 0 #JeAdresaObalka
+    
+]]>
+</script>
+	<region name="FAK_HLA">
+		<body>
+			<line>
+				<style width="100%" font-face="arial" font-size="5" horizontal-align="right" left-border-width="4" right-border-width="4" top-border-width="4">
+					<value-of name="" onData="bJeAdresaObalka=JeAdresaObalka();x_dod_dph=VratDPH(FAK_HLA.DOD_DPH);dobropis=JeDobropis(FAK_HLA.FAK_HLA_KTG_TYP_OFIC);TypDokladu(self,FAK_HLA.FAK_HLA_KTG_TYP_OFIC,x_dod_dph,FAK_HLA.FAK_HLA_TYP_PDD);&#xA;if(FAK_HLA.FAK_HLA_OPIS==1): self.value='* O P I S *              '+self.value;&#xA;zmenasirkyadresa=0;&#xA;if(bJeAdresaObalka==2): zmenasirkyadresa=10" />
+				</style>
+			</line>
+			<line>
+				<style width="10%" font-face="arial" left-border-width="4" top-border-width="1">
+					<text value="Dodavatel" />
+				</style>
+				<style width="5%" font-face="arial" top-border-width="1">
+					<value-of name="" onData="if FAK_HLA.DOD_TES=='20': self.value=''&#xA;else: self.value='IČO: '" />
+				</style>
+				<style width="14%" font-face="arial" font-size="3" top-border-width="1">
+					<value-of name="DOD_ICO" onData="if FAK_HLA.DOD_TES=='20': self.value=''" />
+				</style>
+				<style width="2%" font-face="arial" top-border-width="1">
+					<text value="" />
+				</style>
+				<style width="5%" font-face="arial" top-border-width="1">
+					<value-of name="" onData="if x_dod_dph!='0': self.value='DIČ: '&#xA;else: self.value=''" />
+				</style>
+				<style width="14%" font-face="arial" top-border-width="1">
+					<value-of name="" onData="if x_dod_dph!='0': self.value=FAK_HLA.DOD_DIC &#xA;else: self.value=''" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="1" top-border-width="1">
+					<text value="" />
+				</style>
+				<style width="19%" font-face="arial" font-size="1" top-border-width="1">
+					<value-of name="" onData="if(dobropis==1):self.value='Evidenční číslo dokladu' &#xA;else: self.value='Faktura číslo'" />
+				</style>
+				<style width="30%" font-face="arial" font-size="3" horizontal-align="center" left-border-width="2" right-border-width="4" top-border-width="2" bottom-border-width="2">
+					<value-of name="FAK_HLA_AC" />
+				</style>
+			</line>
+			<line>
+				<style width="12%" left-border-width="4">
+					<image file="znak-m.bmp" image-width="20mm" image-height="20mm" />
+				</style>
+				<style width="2%">
+					<text value="" />
+				</style>
+				<style width="36%" font-face="arial" font-size="3">
+					<value-of name="DOD_NAZ" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="1">
+					<text value="" />
+				</style>
+				<style width="19%" font-face="arial" font-size="1">
+					<text value="Variabilní symbol" />
+				</style>
+				<style width="30%" font-face="arial" font-size="3" font-bold="true" horizontal-align="center" right-border-width="4">
+					<value-of name="FAK_HLA_VS" />
+				</style>
+			</line>
+			<line>
+				<style width="12%" left-border-width="4">
+					<text value="" />
+				</style>
+				<style width="2%">
+					<text value="" />
+				</style>
+				<style width="36%" font-face="arial" font-size="3">
+					<value-of name="DOD_ULI" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="1">
+					<text value="" />
+				</style>
+				<style width="19%" font-face="arial" font-size="1">
+					<text value="Konstantní symbol" />
+				</style>
+				<style width="30%" font-face="arial" font-size="3" font-bold="true" horizontal-align="center" left-border-width="2" right-border-width="4" top-border-width="2" bottom-border-width="2">
+					<value-of name="FAK_HLA_KS" />
+				</style>
+			</line>
+			<line>
+				<style width="12%" font-face="arial" left-border-width="4">
+					<text value="" />
+				</style>
+				<style width="2%">
+					<text value="" />
+				</style>
+				<style width="8%" font-face="arial" font-size="3">
+					<value-of name="DOD_PSC" />
+				</style>
+				<style width="28%" font-face="arial" font-size="3">
+					<value-of name="DOD_MES" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="1">
+					<text value="" />
+				</style>
+				<style width="19%" font-face="arial" font-size="1">
+					<value-of name="" onData="if(bJeAdresaObalka==2): self.value='Smlouva č.'" />
+				</style>
+				<style width="30%" font-face="arial" font-size="3" horizontal-align="center" left-border-width="2" right-border-width="4" top-border-width="2" bottom-border-width="2">
+					<value-of name="FAK_HLA_KSM" onData="if(bJeAdresaObalka&lt;2): self.value=''" />
+				</style>
+			</line>
+			<line only-if="bJeAdresaObalka&lt;2">
+				<style width="50%" font-face="arial" left-border-width="4">
+					<text value="" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="1">
+					<text value="" />
+				</style>
+				<style width="19%" font-face="arial" font-size="1">
+					<text value="Smlouva č." />
+				</style>
+				<style width="30%" font-face="arial" font-size="3" horizontal-align="center" left-border-width="2" right-border-width="4" top-border-width="2" bottom-border-width="2">
+					<value-of name="FAK_HLA_KSM" />
+				</style>
+			</line>
+			<line>
+				<style width="50%" height="2mm" left-border-width="4">
+					<text value="" />
+				</style>
+				<style width="50%" height="2mm" left-border-width="1" right-border-width="4">
+					<value-of name="" onData="prim_opr_doklad=VratPriz_oprdandph() and (FAK_HLA.FAK_HLA_OPIS==0);seznam_vaz_oprdandoklad=''" />
+				</style>
+			</line>
+			<region name="VAZFAK" filter-out="prim_opr_doklad==0">
+				<body>
+					<line only-if="(Decimal(VAZFAK.FAK_TYPVAZ)==40) or (Decimal(VAZFAK.FAK_TYPVAZ)==60)">
+						<style height="0mm">
+							<value-of name="FAK_AC" onData="if(seznam_vaz_oprdandoklad!=''): seznam_vaz_oprdandoklad=seznam_vaz_oprdandoklad+',';&#xA;seznam_vaz_oprdandoklad=seznam_vaz_oprdandoklad+self.value" />
+						</style>
+					</line>
+				</body>
+			</region>
+			<line only-if="prim_opr_doklad&gt;0">
+				<style width="1%" font-face="arial" left-border-width="4">
+					<text value="" />
+				</style>
+				<style width="49%" font-face="arial" font-size="1">
+					<text value="" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="1">
+					<text value="" />
+				</style>
+				<style width="19%" font-face="arial" font-size="1">
+					<text value="K faktuře č.:" />
+				</style>
+				<style width="30%" font-face="arial" font-size="3" font-bold="true" horizontal-align="center" left-border-width="2" right-border-width="4" top-border-width="2" bottom-border-width="2">
+					<value-of name="" onData="self.value=seznam_vaz_oprdandoklad" />
+				</style>
+			</line>
+			<line only-if="bJeAdresaObalka&lt;2">
+				<style width="1%" font-face="arial" left-border-width="4">
+					<text value="" />
+				</style>
+				<style width="11%" font-face="arial" font-size="1">
+					<text value="Peněžní ústav" />
+				</style>
+				<style width="38%" font-face="arial">
+					<value-of name="DOD_BAN" />
+				</style>
+				<style width="50%" font-face="arial" left-border-width="1" right-border-width="4">
+					<text value="" />
+				</style>
+			</line>
+			<line only-if="bJeAdresaObalka&lt;2">
+				<style width="1%" font-face="arial" left-border-width="4" bottom-border-width="1">
+					<text value="" />
+				</style>
+				<style width="11%" font-face="arial" font-size="1" bottom-border-width="1">
+					<text value="Číslo účtu" />
+				</style>
+				<style width="38%" font-face="arial" border-width="2">
+					<value-of name="DOD_UCE" />
+				</style>
+				<style width="50%" font-face="arial" left-border-width="1" right-border-width="4">
+					<text value="" />
+				</style>
+			</line>
+			<line>
+				<style width="14%" font-face="arial" left-border-width="4" top-border-width="1">
+					<value-of name="" onData="if (bJeAdresaObalka==2): self.style.top_border_width='0';" />
+				</style>
+				<style width="10%" font-face="arial" font-size="1" top-border-width="1">
+					<value-of name="" onData="if(bJeAdresaObalka==2): self.value='Peněžní ústav';self.style.top_border_width='0';" />
+				</style>
+				<style width="16%" font-face="arial" top-border-width="1">
+					<value-of name="" onData="if(bJeAdresaObalka==2): self.value=FAK_HLA.DOD_BAN;self.style.top_border_width='0';&#xA;ZmenaSirka(self,16,+zmenasirkyadresa)" />
+				</style>
+				<style width="26%" font-face="arial" left-border-width="6" top-border-width="6">
+					<value-of name="" onData="self.value='Odběratel';ZmenaSirka(self,26,-zmenasirkyadresa);" />
+				</style>
+				<style width="5%" font-face="arial" top-border-width="6">
+					<value-of name="" onData="if(bJeAdresaObalka==2): ZobrazICORCPop(self,FAK_HLA.ODB_TES,FAK_HLA.FAK_ZOB_RC)" />
+				</style>
+				<style width="9%" font-face="arial" top-border-width="6">
+					<value-of name="" onData="if(bJeAdresaObalka==2): ZobrazICORCHod(self,FAK_HLA.ODB_TES,FAK_HLA.FAK_ZOB_RC,FAK_HLA.ODB_ICO,FAK_HLA.ODB_RC)" />
+				</style>
+				<style width="5%" font-face="arial" top-border-width="6">
+					<value-of name="" onData="if(bJeAdresaObalka==2): ZobrazDICOdb(self,FAK_HLA.ODB_TES,'DIČ: ')" />
+				</style>
+				<style width="15%" font-face="arial" right-border-width="6" top-border-width="6">
+					<value-of name="" onData="if(bJeAdresaObalka==2): ZobrazDICOdb(self,FAK_HLA.ODB_TES,FAK_HLA.ODB_DIC)" />
+				</style>
+			</line>
+			<line only-if="bJeAdresaObalka&lt;2">
+				<style width="2%" font-face="arial" left-border-width="4">
+					<value-of name="" onData="ZmenaSirka(self,2,+zmenasirkyadresa);" />
+				</style>
+				<style width="30%">
+					<image file="iso9001_mukr_300.jpg" image-width="20mm" image-height="20mm" onData="ZmenaSirka(self,30,+zmenasirkyadresa);" />
+				</style>
+				<style width="8%" font-face="arial">
+					<value-of name="" onData="ZmenaSirka(self,8,+zmenasirkyadresa);" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="6">
+					<value-of name="" />
+				</style>
+				<style width="31%" font-face="arial">
+					<text value="" />
+				</style>
+				<style width="6%" font-face="arial" font-size="1">
+					<value-of name="" onData="ZobrazICORCPop(self,FAK_HLA.ODB_TES,FAK_HLA.FAK_ZOB_RC)" />
+				</style>
+				<style width="22%" font-face="arial" font-size="3" font-bold="true" right-border-width="6">
+					<value-of name="" onData="ZobrazICORCHod(self,FAK_HLA.ODB_TES,FAK_HLA.FAK_ZOB_RC,FAK_HLA.ODB_ICO,FAK_HLA.ODB_RC);ZmenaSirka(self,22,-zmenasirkyadresa);" />
+				</style>
+			</line>
+			<line only-if="bJeAdresaObalka&lt;2">
+				<style width="40%" font-face="arial" left-border-width="4">
+					<value-of name="" onData="ZmenaSirka(self,40,+zmenasirkyadresa);" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="6">
+					<value-of name="" />
+				</style>
+				<style width="31%" font-face="arial">
+					<text value="" />
+				</style>
+				<style width="6%" font-face="arial" font-size="1">
+					<value-of name="" onData="ZobrazDICOdb(self,FAK_HLA.ODB_TES,'DIČ: ')" />
+				</style>
+				<style width="22%" font-face="arial" font-size="3" right-border-width="6">
+					<value-of name="" onData="ZobrazDICOdb(self,FAK_HLA.ODB_TES,FAK_HLA.ODB_DIC);ZmenaSirka(self,22,-zmenasirkyadresa);" />
+				</style>
+			</line>
+			<line only-if="bJeAdresaObalka==0">
+				<style width="40%" font-face="arial" left-border-width="4">
+					<value-of name="" onData="ZmenaSirka(self,40,+zmenasirkyadresa);" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="6">
+					<value-of name="" />
+				</style>
+				<style width="59%" font-face="arial" font-size="3" font-bold="true" right-border-width="6">
+					<value-of name="ODB_NAZ" onData="ZmenaSirka(self,59,-zmenasirkyadresa);" />
+				</style>
+			</line>
+			<line only-if="bJeAdresaObalka==0">
+				<style width="40%" font-face="arial" left-border-width="4">
+					<value-of name="" onData="ZmenaSirka(self,40,+zmenasirkyadresa);" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="6">
+					<value-of name="" />
+				</style>
+				<style width="59%" font-face="arial" font-size="3" font-bold="true" right-border-width="6">
+					<value-of name="ODB_ULI" onData="ZmenaSirka(self,59,-zmenasirkyadresa);" />
+				</style>
+			</line>
+			<line only-if="bJeAdresaObalka==0">
+				<style width="40%" font-face="arial" left-border-width="4">
+					<value-of name="" onData="ZmenaSirka(self,40,+zmenasirkyadresa);" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="6">
+					<value-of name="" />
+				</style>
+				<style width="11%" font-face="arial" font-size="3" font-bold="true">
+					<value-of name="ODB_PSC" />
+				</style>
+				<style width="48%" font-face="arial" font-size="3" font-bold="true" right-border-width="6">
+					<value-of name="ODB_MES" onData="ZmenaSirka(self,48,-zmenasirkyadresa);" />
+				</style>
+			</line>
+			<line only-if="bJeAdresaObalka==0">
+				<style width="40%" font-face="arial" left-border-width="4">
+					<value-of name="" onData="ZmenaSirka(self,40,+zmenasirkyadresa);" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="6">
+					<value-of name="" />
+				</style>
+				<style width="59%" font-face="arial" right-border-width="6">
+					<value-of name="" onData="ZmenaSirka(self,59,-zmenasirkyadresa);" />
+				</style>
+			</line>
+			<line only-if="(bJeAdresaObalka in (1,2))">
+				<style width="14%" font-face="arial" left-border-width="4">
+					<value-of name="" onData="if(bJeAdresaObalka==2): self.style.bottom_border_width='1';" />
+				</style>
+				<style width="10%" font-face="arial" font-size="1">
+					<value-of name="" onData="if(bJeAdresaObalka==2): self.value='Číslo účtu';self.style.bottom_border_width='1';" />
+				</style>
+				<style width="16%" font-face="arial">
+					<value-of name="" onData="if(bJeAdresaObalka==2): self.value=FAK_HLA.DOD_UCE;self.style.bottom_border_width='1';&#xA;ZmenaSirka(self,16,+zmenasirkyadresa);" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="6">
+					<value-of name="" />
+				</style>
+				<style width="59%" font-face="arial" font-size="3" font-bold="true" right-border-width="6">
+					<value-of name="ODB_ST1" onData="ZmenaSirka(self,59,-zmenasirkyadresa);" />
+				</style>
+			</line>
+			<line only-if="(bJeAdresaObalka in (1,2)) and (FAK_HLA.ODB_ST2!='')">
+				<style width="40%" font-face="arial" left-border-width="4">
+					<value-of name="" onData="ZmenaSirka(self,40,+zmenasirkyadresa);" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="6">
+					<text value="" />
+				</style>
+				<style width="59%" font-face="arial" font-size="3" font-bold="true" right-border-width="6">
+					<value-of name="ODB_ST2" onData="ZmenaSirka(self,59,-zmenasirkyadresa);" />
+				</style>
+			</line>
+			<line only-if="(bJeAdresaObalka in (1,2)) and (FAK_HLA.ODB_ST3!='')">
+				<style width="40%" font-face="arial" left-border-width="4">
+					<value-of name="" onData="ZmenaSirka(self,40,+zmenasirkyadresa);" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="6">
+					<value-of name="" />
+				</style>
+				<style width="59%" font-face="arial" font-size="3" font-bold="true" right-border-width="6">
+					<value-of name="ODB_ST3" onData="ZmenaSirka(self,59,-zmenasirkyadresa);" />
+				</style>
+			</line>
+			<line only-if="(bJeAdresaObalka in (1,2)) and (FAK_HLA.ODB_ST4!='')">
+				<style width="40%" font-face="arial" left-border-width="4">
+					<value-of name="" onData="ZmenaSirka(self,40,+zmenasirkyadresa);" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="6">
+					<value-of name="" />
+				</style>
+				<style width="59%" font-face="arial" font-size="3" font-bold="true" right-border-width="6">
+					<value-of name="ODB_ST4" onData="ZmenaSirka(self,59,-zmenasirkyadresa);" />
+				</style>
+			</line>
+			<line only-if="(bJeAdresaObalka in (1,2)) and (FAK_HLA.ODB_ST5!='')">
+				<style width="40%" font-face="arial" left-border-width="4">
+					<value-of name="" onData="ZmenaSirka(self,40,+zmenasirkyadresa);" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="6">
+					<value-of name="" />
+				</style>
+				<style width="59%" font-face="arial" font-size="3" font-bold="true" right-border-width="6">
+					<value-of name="ODB_ST5" onData="ZmenaSirka(self,59,-zmenasirkyadresa);" />
+				</style>
+			</line>
+			<line only-if="(bJeAdresaObalka in (1,2)) and (FAK_HLA.ODB_ST6!='')">
+				<style width="40%" font-face="arial" left-border-width="4">
+					<value-of name="" onData="ZmenaSirka(self,40,+zmenasirkyadresa);" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="6">
+					<value-of name="" />
+				</style>
+				<style width="59%" font-face="arial" font-size="3" font-bold="true" right-border-width="6">
+					<value-of name="ODB_ST6" onData="ZmenaSirka(self,59,-zmenasirkyadresa);" />
+				</style>
+			</line>
+			<line only-if="(bJeAdresaObalka in (1,2))">
+				<style width="40%" font-face="arial" left-border-width="4">
+					<value-of name="" onData="ZmenaSirka(self,40,+zmenasirkyadresa);" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="6">
+					<value-of name="" />
+				</style>
+				<style width="59%" font-face="arial" font-size="3" font-bold="true" right-border-width="6">
+					<value-of name="ODB_ST7" onData="ZmenaSirka(self,59,-zmenasirkyadresa);" />
+				</style>
+			</line>
+			<line>
+				<style width="5%" left-border-width="4">
+					<value-of name="" />
+				</style>
+				<!-- americky standard
+	<barcode type="qrcode,3,15" image-width="31.75mm" image-height="31.75mm" width="30%">
+		<value-of name="" onData='self.value="?%(uc)s;%(d)s;%(c)s;;%(sp)s;%(a1)s;%(a2)s;%(a3)s;%(a4)s;;%(a5)s;%(a6)s;;"%{"uc":FAK_HLA.DOD_UCE_IBAN,"d":Datetime(FAK_HLA.FAK_HLA_VYS).format("mm/dd/yyyy"),"c":Decimal(FAK_HLA.FAK_HLA_CEN),"sp":Datetime(FAK_HLA.FAK_HLA_SPL).format("mm/dd/yyyy"),"a1":FAK_HLA.DOD_NAZ,"a2":FAK_HLA.DOD_ULI,"a3":FAK_HLA.DOD_MES,"a4":FAK_HLA.DOD_STA,"a5":FAK_HLA.DOD_PSC,"a6":FAK_HLA.DOD_TEL}'/>
+	</barcode>
+	-->
+				<!-- cesky standard  http://qr-platba.cz/pro-vyvojare/specifikace-formatu/-->
+				
+				<barcode type="qrcode,2,7" image-width="36mm" image-height="36mm" width="30%">
+					<value-of name="" onData='self.value="SPD*1.0*ACC:%(uc)s*AM:%(c)s*CC:%(m)s*X-VS:%(vs)s*X-SS:%(ss)s*X-KS:%(ks)s*DT:%(sp)s"%{"uc":FAK_HLA.DOD_UCE_IBAN,"c":Decimal(FAK_HLA.FAK_HLA_CEN_MEN),"m":FAK_HLA.FAK_HLA_CEN_MEN_ZKR,"sp":Datetime(FAK_HLA.FAK_HLA_SPL).format("yyyymmdd"),"a1":FAK_HLA.DOD_NAZ,"a2":FAK_HLA.DOD_ULI,"a3":FAK_HLA.DOD_MES,"a4":FAK_HLA.DOD_STA,"a5":FAK_HLA.DOD_PSC,"a6":FAK_HLA.DOD_TEL,"vs":FAK_HLA.FAK_HLA_VS,"ks":FAK_HLA.FAK_HLA_KS,"ss":FAK_HLA.FAK_HLA_SS}'/>
+				</barcode>
+				<style width="5%">
+					<value-of name="" onData="ZmenaSirka(self,5,+zmenasirkyadresa);" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="6">
+					<value-of name="" />
+				</style>
+				<style width="11%" font-face="arial" font-size="1">
+					<text value="Bank. spoj. " />
+				</style>
+				<style width="48%" font-face="arial" right-border-width="6">
+					<value-of name="ODB_BAN" onData="ZmenaSirka(self,48,-zmenasirkyadresa);" />
+				</style>
+			</line>
+			<line>
+				<style width="40%" font-face="arial" left-border-width="4">
+					<value-of name="" onData="ZmenaSirka(self,40,+zmenasirkyadresa);" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="6" bottom-border-width="6">
+					<value-of name="" />
+				</style>
+				<style width="11%" font-face="arial" font-size="1" bottom-border-width="6">
+					<text value="Číslo účtu" />
+				</style>
+				<style width="48%" font-face="arial" right-border-width="6" bottom-border-width="6">
+					<value-of name="ODB_UCE" onData="ZmenaSirka(self,48,-zmenasirkyadresa);" />
+				</style>
+			</line>
+			<line>
+				<style width="50%" font-face="arial" left-border-width="4">
+					<text value="" />
+				</style>
+				<style width="50%" font-face="arial" left-border-width="1" right-border-width="4">
+					<text value="" />
+				</style>
+			</line>
+			<line>
+				<style width="50%" font-face="arial" left-border-width="4">
+					<text value="" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="1">
+					<text value="" />
+				</style>
+				<style width="26%" font-face="arial" font-size="1">
+					<text value="Dodací a platební podmínky" />
+				</style>
+				<style width="23%" font-face="arial" horizontal-align="center" right-border-width="4">
+					<value-of name="FAK_HLA_DPO" />
+				</style>
+			</line>
+			<line>
+				<style width="50%" font-face="arial" left-border-width="4">
+					<text value="" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="1">
+					<text value="" />
+				</style>
+				<style width="26%" font-face="arial" font-size="1">
+					<text value="Den splatnosti" />
+				</style>
+				<style width="23%" font-face="arial" horizontal-align="center" left-border-width="2" right-border-width="4" top-border-width="2" bottom-border-width="2">
+					<value-of name="FAK_HLA_SPL" />
+				</style>
+			</line>
+			<line>
+				<style width="50%" font-face="arial" left-border-width="4">
+					<text value="" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="1">
+					<text value="" />
+				</style>
+				<style width="26%" font-face="arial" font-size="1">
+					<text value="Forma úhrady" />
+				</style>
+				<style width="23%" font-face="arial" horizontal-align="center" right-border-width="4">
+					<value-of name="FAK_HLA_FUH" />
+				</style>
+			</line>
+			<line>
+				<style width="50%" font-face="arial" left-border-width="4">
+					<text value="" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="1">
+					<text value="" />
+				</style>
+				<style width="26%" font-face="arial" font-size="1">
+					<text value="Datum vystavení" />
+				</style>
+				<style width="23%" font-face="arial" horizontal-align="center" right-border-width="4">
+					<value-of name="FAK_HLA_VYS" />
+				</style>
+			</line>
+			<line>
+				<style width="50%" font-face="arial" left-border-width="4" bottom-border-width="4">
+					<text value="" />
+				</style>
+				<style width="1%" font-face="arial" left-border-width="1" bottom-border-width="4">
+					<text value="" />
+				</style>
+				<style width="26%" font-face="arial" font-size="1" bottom-border-width="4">
+					<value-of name="" onData="GetZdanPln(self,FAK_HLA.FAK_HLA_ZDA,FAK_HLA.FAK_HLA_TYP_NUM)" />
+				</style>
+				<style width="23%" font-face="arial" horizontal-align="center" right-border-width="4" bottom-border-width="4">
+					<value-of name="FAK_HLA_ZDA" onData="CastkaPol=0;FakturaCelkem=0;" />
+				</style>
+			</line>
+			<line>
+				<style height="0mm">
+					<value-of name="" onData="pdp_366=0;&#xA;if((FAK_HLA.FAK_HLA_INF_PDP==1) and (Decimal(VratMainVerze(FAK_HLA.FAK_VER_DB))&lt;=366)): pdp_366=1" />
+				</style>
+			</line>
+			<region name="FAK_HLA_POPB">
+				<body>
+					<line>
+						<style width="100%" font-face="arial" left-border-width="4" right-border-width="4" bottom-border-width="4">
+							<value-of name="POPB_POP" />
+						</style>
+					</line>
+				</body>
+			</region>
+			<region name="FAK_HLA_POL">
+				<head>
+					<line>
+						<style width="0.5%" font-face="arial" left-border-width="4" top-border-width="4" bottom-border-width="1">
+							<text value="" />
+						</style>
+						<style width="44.5%" font-face="arial" top-border-width="4" bottom-border-width="1">
+							<text value="Označení dodávky" />
+						</style>
+						<style width="10%" font-face="arial" horizontal-align="right" top-border-width="4" bottom-border-width="1">
+							<text value="Množství" />
+						</style>
+						<style width="10%" font-face="arial" horizontal-align="right" top-border-width="4" bottom-border-width="1">
+							<text value="MJ" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" top-border-width="4" bottom-border-width="1">
+							<text value="Cena za MJ" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" top-border-width="4" bottom-border-width="1">
+							<text value="Částka" />
+						</style>
+						<style width="5%" font-face="arial" horizontal-align="right" right-border-width="4" bottom-border-width="1">
+							<text value="Měna" />
+						</style>
+					</line>
+				</head>
+				<body>
+					<line>
+						<style width="0.5%" font-face="arial" left-border-width="4">
+							<text value="" />
+						</style>
+						<style width="44.5%" font-face="arial">
+							<value-of name="POL_POP" />
+						</style>
+						<style width="10%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_MNO" />
+						</style>
+						<style width="10%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_MJE" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_CMJ" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_CEN" onData="CastkaPol=CastkaPol+Decimal(FAK_HLA_POL.POL_CEN)" />
+						</style>
+						<style width="5%" font-face="arial" right-border-width="4">
+							<value-of name="FAK_HLA_CEN_MEN_ZKR" onData="self.value=ZkratkaMena(self.value)" />
+						</style>
+					</line>
+				</body>
+			</region>
+			<region name="FAK_HLA_POLDAN">
+				<head>
+					<line only-if="x_dod_dph!='0'">
+						<style width="0.5%" font-face="arial" left-border-width="4" top-border-width="4" bottom-border-width="1">
+							<text value="" />
+						</style>
+						<style width="15.5%" font-face="arial" top-border-width="4" bottom-border-width="1">
+							<text value="Označení dodávky" />
+						</style>
+						<style width="10%" font-face="arial" horizontal-align="right" top-border-width="4" bottom-border-width="1">
+							<text value="Množství" />
+						</style>
+						<style width="5%" font-face="arial" horizontal-align="right" top-border-width="4" bottom-border-width="1">
+							<text value="MJ" />
+						</style>
+						<style width="13%" font-face="arial" horizontal-align="right" top-border-width="4" bottom-border-width="1">
+							<text value="Cena za MJ" />
+						</style>
+						<style width="10%" font-face="arial" horizontal-align="right" top-border-width="4" bottom-border-width="1">
+							<text value="Sleva" />
+						</style>
+						<style width="13%" font-face="arial" horizontal-align="right" top-border-width="4" bottom-border-width="1">
+							<text value="částka bez D" />
+						</style>
+						<style width="3%" font-face="arial" horizontal-align="right" top-border-width="4" bottom-border-width="1">
+							<text value="Sz" />
+						</style>
+						<style width="12%" font-face="arial" horizontal-align="right" top-border-width="4" bottom-border-width="1">
+							<text value="Daň" />
+						</style>
+						<style width="13%" font-face="arial" horizontal-align="right" top-border-width="4" bottom-border-width="1">
+							<text value="Částka" />
+						</style>
+						<style width="5%" font-face="arial" horizontal-align="right" right-border-width="4" bottom-border-width="1">
+							<text value="Měna" />
+						</style>
+					</line>
+					<line only-if="x_dod_dph=='0'">
+						<style width="0.5%" font-face="arial" left-border-width="4" top-border-width="4" bottom-border-width="1">
+							<text value="" />
+						</style>
+						<style width="44.5%" font-face="arial" top-border-width="4" bottom-border-width="1">
+							<text value="Označení dodávky" />
+						</style>
+						<style width="10%" font-face="arial" horizontal-align="right" top-border-width="4" bottom-border-width="1">
+							<text value="Množství" />
+						</style>
+						<style width="10%" font-face="arial" horizontal-align="right" top-border-width="4" bottom-border-width="1">
+							<text value="MJ" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" top-border-width="4" bottom-border-width="1">
+							<text value="Cena za MJ" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" top-border-width="4" bottom-border-width="1">
+							<text value="Částka" />
+						</style>
+						<style width="5%" font-face="arial" horizontal-align="right" right-border-width="4" bottom-border-width="1">
+							<text value="Měna" />
+						</style>
+					</line>
+				</head>
+				<body>
+					<line only-if="FAK_HLA_POLDAN.POL_MNO!='' and x_dod_dph!='0'">
+						<style width="0.5%" font-face="arial" left-border-width="4">
+							<text value="" />
+						</style>
+						<style width="15.5%" font-face="arial" font-size="1">
+							<value-of name="POL_POP" />
+						</style>
+						<style width="10%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_MNO" />
+						</style>
+						<style width="5%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_MJE" />
+						</style>
+						<style width="13%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_CMJ" />
+						</style>
+						<style width="10%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_SLV" />
+						</style>
+						<style width="13%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_CENBDN" />
+						</style>
+						<style width="3%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_SAZ" />
+						</style>
+						<style width="12%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_DAN" onData="if(pdp_366==1): bnevypis=1;&#xA;else: bnevypis=0;&#xA;if(bnevypis==1): self.value='';" />
+						</style>
+						<style width="13%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_CEN" onData="CastkaPol=CastkaPol+Decimal(FAK_HLA_POLDAN.POL_CEN);&#xA;if(bnevypis==1): self.value='';" />
+						</style>
+						<style width="5%" font-face="arial" right-border-width="4">
+							<value-of name="FAK_HLA_CEN_MEN_ZKR" onData="self.value=ZkratkaMena(self.value)" />
+						</style>
+					</line>
+					<line only-if="FAK_HLA_POLDAN.POL_MNO!='' and x_dod_dph=='0'">
+						<style width="0.5%" font-face="arial" left-border-width="4">
+							<text value="" />
+						</style>
+						<style width="44.5%" font-face="arial">
+							<value-of name="POL_POP" />
+						</style>
+						<style width="10%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_MNO" />
+						</style>
+						<style width="10%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_MJE" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_CMJ" />
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right" right-border-width="4">
+							<value-of name="POL_CEN" onData="CastkaPol=CastkaPol+Decimal(FAK_HLA_POLDAN.POL_CEN);" />
+						</style>
+						<style width="5%" font-face="arial" right-border-width="4">
+							<value-of name="FAK_HLA_CEN_MEN_ZKR" onData="self.value=ZkratkaMena(self.value)" />
+						</style>
+					</line>
+					<line only-if="FAK_HLA_POLDAN.POL_MNO==''">
+						<style width="0.5%" font-face="arial" left-border-width="4">
+							<text value="" />
+						</style>
+						<style width="99.5%" font-face="arial" font-size="1" right-border-width="4">
+							<value-of name="POL_POP" />
+						</style>
+					</line>
+				</body>
+				<foot>
+					<line>
+						<style width="100%" left-border-width="4" right-border-width="4" top-border-width="1">
+							<text value="" />
+						</style>
+					</line>
+				</foot>
+			</region>
+			<line only-if="FAK_HLA.FAK_HLA_TYP_NUM=='1405'">
+				<style font-face="arial" left-border-width="4" right-border-width="4">
+					<text value="Přijaté platby předem:" />
+				</style>
+			</line>
+			<line>
+				<style height="0mm">
+					<value-of name="" onData="danvaz=0;pol_dan=0;" />
+				</style>
+			</line>
+			<region name="FAK_HLA_POL_CELDAN">
+				<body>
+					<line>
+						<style height="0mm">
+							<value-of name="" onData="danvaz=danvaz+Decimal(FAK_HLA_POL_CELDAN.POL_CEL_DAN_VAZ);pol_dan=pol_dan+1;" />
+						</style>
+					</line>
+				</body>
+			</region>
+			<line only-if="danvaz&gt;0">
+				<style width="54%" font-face="arial" font-italic="true" left-border-width="4">
+					<text value="Rekapitulace zálohových dokladů:" />
+				</style>
+				<style width="46%" font-face="arial" right-border-width="4">
+					<text value="Rekapitulace vyúčtování:" />
+				</style>
+			</line>
+			<region name="FAK_HLA_POL_CELDAN">
+				<body>
+					<line only-if="x_dod_dph!='0'">
+						<style width="10%" font-face="arial" font-italic="true" horizontal-align="right" left-border-width="4">
+							<value-of name="" onData="if(danvaz&gt;0): self.value=FAK_HLA_POL_CELDAN.POL_CEL_CENBDN_VAZ" />
+						</style>
+						<style width="10%" font-face="arial" font-italic="true" horizontal-align="right">
+							<value-of name="" onData="if(danvaz&gt;0): self.value=FAK_HLA_POL_CELDAN.POL_CEL_DAN_VAZ" />
+						</style>
+						<style width="10%" font-face="arial" font-italic="true" horizontal-align="right">
+							<value-of name="" onData="if(danvaz&gt;0): self.value=FAK_HLA_POL_CELDAN.POL_CEL_CEN_VAZ" />
+						</style>
+						<style width="10%" font-face="arial">
+							<text value="" />
+						</style>
+						<style width="14%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_CEL_POP" onData="if((FAK_HLA_POL_CELDAN.POL_CEL_DANPR!='' and FAK_HLA_POL_CELDAN.POL_CEL_DANPR!='0') and (pdp_366==1)): bnevypis=1;&#xA;else: bnevypis=0" />
+						</style>
+						<style width="13%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_CEL_CENBDN" />
+						</style>
+						<style width="3%" font-face="arial">
+							<text value="" />
+						</style>
+						<style width="12%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_CEL_DAN" onData="if(bnevypis==1): self.value=''" />
+						</style>
+						<style width="13%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_CEL_CEN" onData="if(bnevypis==1): self.value=''" />
+						</style>
+						<style width="5%" font-face="arial" right-border-width="4">
+							<value-of name="" onData="self.value='Kč'" />
+						</style>
+					</line>
+					<region name="FAK_HLA_POL_CELDAN_OSV">
+						<body>
+							<line only-if="(Decimal(FAK_HLA_POL_CELDAN_OSV.CEN)!=0) and (x_dod_dph!='0')">
+								<style width="54%" font-face="arial" font-italic="true" horizontal-align="right" left-border-width="4">
+									<text value="Z toho - osvobozeno od daně" />
+								</style>
+								<style width="13%" font-face="arial" font-italic="true" horizontal-align="right">
+									<text value="" />
+								</style>
+								<style width="3%" font-face="arial" font-italic="true">
+									<text value="" />
+								</style>
+								<style width="12%" font-face="arial" font-italic="true" horizontal-align="right">
+									<text value="" />
+								</style>
+								<style width="13%" font-face="arial" font-italic="true" horizontal-align="right">
+									<value-of name="CEN" />
+								</style>
+								<style width="5%" font-face="arial" font-italic="true" right-border-width="4">
+									<value-of name="" onData="self.value='Kč'" />
+								</style>
+							</line>
+						</body>
+					</region>
+				</body>
+			</region>
+			<line>
+				<style height="0mm">
+					<value-of name="" onData="bez_pdp=0" />
+				</style>
+			</line>
+			<region name="FAK_HLA_POLDAN_PDP">
+				<body>
+					<line>
+						<style height="0mm">
+							<value-of name="" onData="bez_pdp=1" />
+						</style>
+					</line>
+				</body>
+			</region>
+			<region name="FAK_HLA_POL_CELDAN_PDP">
+				<body>
+					<line>
+						<style height="0mm">
+							<value-of name="" onData="bez_pdp=1" />
+						</style>
+					</line>
+				</body>
+			</region>
+			<line only-if="bez_pdp==1">
+				<style font-face="arial" left-border-width="4" right-border-width="4" top-border-width="1">
+					<text value="Přenesená daňová povinnost" />
+				</style>
+			</line>
+			<region name="FAK_HLA_POLDAN_PDP">
+				<head>
+					<line only-if="bez_pdp==1 and pol_dan==0">
+						<style width="0.5%" font-face="arial" left-border-width="4" bottom-border-width="1">
+							<text value="" />
+						</style>
+						<style width="15.5%" font-face="arial" bottom-border-width="1">
+							<text value="Označení dodávky" />
+						</style>
+						<style width="10%" font-face="arial" horizontal-align="right" bottom-border-width="1">
+							<text value="Množství" />
+						</style>
+						<style width="5%" font-face="arial" horizontal-align="right" bottom-border-width="1">
+							<text value="MJ" />
+						</style>
+						<style width="13%" font-face="arial" horizontal-align="right" bottom-border-width="1">
+							<text value="Cena za MJ" />
+						</style>
+						<style width="10%" font-face="arial" horizontal-align="right" bottom-border-width="1">
+							<text value="Sleva" />
+						</style>
+						<style width="13%" font-face="arial" horizontal-align="right" bottom-border-width="1">
+							<text value="částka bez D" />
+						</style>
+						<style width="3%" font-face="arial" horizontal-align="right" bottom-border-width="1">
+							<text value="Sz" />
+						</style>
+						<style width="12%" font-face="arial" horizontal-align="right" bottom-border-width="1">
+							<text value="Daň" />
+						</style>
+						<style width="13%" font-face="arial" horizontal-align="right" bottom-border-width="1">
+							<text value="Částka" />
+						</style>
+						<style width="5%" font-face="arial" horizontal-align="right" right-border-width="4" bottom-border-width="1">
+							<text value="Měna" />
+						</style>
+					</line>
+				</head>
+				<body>
+					<line>
+						<style width="0.5%" font-face="arial" left-border-width="4">
+							<text value="" />
+						</style>
+						<style width="15.5%" font-face="arial" font-size="1">
+							<value-of name="POL_POP" />
+						</style>
+						<style width="10%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_MNO" />
+						</style>
+						<style width="5%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_MJE" />
+						</style>
+						<style width="13%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_CMJ" />
+						</style>
+						<style width="10%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_SLV" />
+						</style>
+						<style width="13%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_CENBDN" />
+						</style>
+						<style width="3%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_SAZ" />
+						</style>
+						<style width="12%" font-face="arial" horizontal-align="right">
+							<value-of name="" />
+						</style>
+						<style width="13%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_CENBDN" />
+						</style>
+						<style width="5%" font-face="arial" right-border-width="4">
+							<value-of name="FAK_HLA_CEN_MEN_ZKR" onData="self.value=ZkratkaMena(self.value)" />
+						</style>
+					</line>
+				</body>
+			</region>
+			<region name="FAK_HLA_POL_CELDAN_PDP">
+				<body>
+					<line>
+						<style width="54%" font-face="arial" horizontal-align="right" left-border-width="4">
+							<value-of name="POL_CEL_POP" />
+						</style>
+						<style width="13%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_CEL_CENBDN" />
+						</style>
+						<style width="3%" font-face="arial">
+							<text value="" />
+						</style>
+						<style width="12%" font-face="arial" horizontal-align="right">
+							<value-of name="" />
+						</style>
+						<style width="13%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_CEL_CENBDN" />
+						</style>
+						<style width="5%" font-face="arial" right-border-width="4">
+							<value-of name="" onData="self.value='Kč'" />
+						</style>
+					</line>
+				</body>
+			</region>
+			<region name="VAZFAK" only-if="FAK_HLA.FAK_HLA_TYP_NUM=='1470'">
+				<body>
+					<region name="PENALIZACE_VAZ" only-if="VAZFAK.FAK_TYPVAZ=='30'">
+						<body>
+							<line>
+								<style width="100%" height="0mm" font-face="arial">
+									<value-of name="" onData="typ_penalizace_txt=PENALIZACE_VAZ.TYP" />
+								</style>
+							</line>
+						</body>
+					</region>
+					<line only-if="VAZFAK.FAK_TYPVAZ=='30'">
+						<style width="100%" font-face="arial" font-bold="true" left-border-width="4" right-border-width="4">
+							<value-of name="" onData="self.value='Penalizovaná faktura - číslo: '+VAZFAK.FAK_ACAG+'  částka: '+VAZFAK.FAK_CEN+'  ('+typ_penalizace_txt+')'" />
+						</style>
+					</line>
+					<region name="PLATBA_VAZ" only-if="VAZFAK.FAK_TYPVAZ=='30' and PLATBA_VAZ.DAT_UHR &gt; PLATBA_VAZ.DAT_SPL">
+						<body>
+							<line>
+								<style width="5%" font-face="arial" left-border-width="4">
+									<text value="" />
+								</style>
+								<style width="30%" font-face="arial">
+									<value-of name="" onData="self.value='Platba - Splatnost dne: '+PLATBA_VAZ.DAT_SPL.format('dd.mm.yyyy')" />
+								</style>
+								<style width="23%" font-face="arial">
+									<value-of name="" onData="self.value='Uhrazeno dne: '+PLATBA_VAZ.DAT_UHR.format('dd.mm.yyyy')" />
+								</style>
+								<style width="23%" font-face="arial">
+									<value-of name="" onData="self.value='Zapl. částka: '+PLATBA_VAZ.C.format('# ##0,00')" />
+								</style>
+								<style width="19%" font-face="arial" font-bold="true" right-border-width="3">
+									<value-of name="" onData="import datetime;self.value='Prodlení: '+Decimal((datetime.datetime(PLATBA_VAZ.DAT_UHR.year,PLATBA_VAZ.DAT_UHR.month,PLATBA_VAZ.DAT_UHR.day)-datetime.datetime(PLATBA_VAZ.DAT_SPL.year,PLATBA_VAZ.DAT_SPL.month,PLATBA_VAZ.DAT_SPL.day)).days).format('0')+' dní'" />
+								</style>
+							</line>
+						</body>
+					</region>
+				</body>
+			</region>
+			<region name="FAK_HLA_POL_ZAL">
+				<body>
+					<line>
+						<style width="54%" font-face="arial" horizontal-align="right" left-border-width="4" top-border-width="1">
+							<text value="Faktura celkem :" />
+						</style>
+						<style width="41%" font-face="arial" horizontal-align="right" top-border-width="1">
+							<value-of name="" onData="if(JeZavFakturaBezVyu(FAK_HLA.FAK_HLA_TYP_NUM) and CastkaPol!=0): FakturaCelkem=CastkaPol&#xA;else: FakturaCelkem=Decimal(FAK_HLA.FAK_HLA_CENSVAZ_MEN)*Decimal(FAK_HLA.FAK_HLA_CZN);&#xA;self.value=FakturaCelkem.format('# 0,00')" />
+						</style>
+						<style width="5%" font-face="arial" right-border-width="4" top-border-width="1">
+							<value-of name="FAK_HLA_CEN_MEN_ZKR" onData="self.value=ZkratkaMena(self.value)" />
+						</style>
+					</line>
+					<line>
+						<style width="54%" font-face="arial" horizontal-align="right" left-border-width="4">
+							<value-of name="" onData="self.value='Na zálohách zaplaceno celkem :';&#xA;if (x_dod_dph!='0'): self.style.top_border_width='1'" />
+						</style>
+						<style width="41%" font-face="arial" horizontal-align="right">
+							<value-of name="" onData="if(JeCZK(FAK_HLA.FAK_HLA_CEN_MEN_ZKR)==0): self.value=FAK_HLA_POL_ZAL.POL_CEL_CEN_MEN;&#xA;else: self.value=FAK_HLA_POL_ZAL.POL_CEL_CEN_MEN;&#xA;if(x_dod_dph!='0'):self.style.top_border_width='1'" />
+						</style>
+						<style width="5%" font-face="arial" right-border-width="4">
+							<value-of name="FAK_HLA_CEN_MEN_ZKR" onData="self.value=ZkratkaMena(self.value)&#xA;if (x_dod_dph!='0'): self.style.top_border_width='1'" />
+						</style>
+					</line>
+				</body>
+			</region>
+			<region name="FAK_HLA_POL_PZA">
+				<body>
+					<line>
+						<style width="54%" font-face="arial" horizontal-align="right" left-border-width="4" top-border-width="1">
+							<text value="Celková částka před zaokrouhlením :" />
+						</style>
+						<style width="41%" font-face="arial" horizontal-align="right" top-border-width="1">
+							<value-of name="POL_CEL_CENSVAZ" />
+						</style>
+						<style width="5%" font-face="arial" right-border-width="4" top-border-width="1">
+							<value-of name="" onData="self.value='Kč'" />
+						</style>
+					</line>
+					<line>
+						<style width="54%" font-face="arial" horizontal-align="right" left-border-width="4">
+							<text value="Zaokrouhlení :" />
+						</style>
+						<style width="41%" font-face="arial" horizontal-align="right">
+							<value-of name="POL_CEL_ZAOKR" />
+						</style>
+						<style width="5%" font-face="arial" right-border-width="4">
+							<value-of name="" onData="self.value='Kč'" />
+						</style>
+					</line>
+				</body>
+			</region>
+			<line>
+				<style width="54%" font-face="arial" font-size="3" font-bold="true" horizontal-align="right" left-border-width="4" top-border-width="4">
+					<value-of name="FAK_HLA.FAK_CLK_TXT" />
+				</style>
+				<style width="41%" font-face="arial" font-size="3" font-bold="true" horizontal-align="right" top-border-width="4">
+					<value-of name="FAK_HLA_CEN_MEN" />
+				</style>
+				<style width="5%" font-face="arial" font-size="3" font-bold="true" vertical-align="center" right-border-width="4" top-border-width="4">
+					<value-of name="FAK_HLA_CEN_MEN_ZKR" onData="self.value=ZkratkaMena(self.value)" />
+				</style>
+			</line>
+			<line>
+				<style width="1%" font-face="arial" left-border-width="4" bottom-border-width="4">
+					<text value="" />
+				</style>
+				<style width="8%" font-face="arial" bottom-border-width="4">
+					<text value="Slovy:" />
+				</style>
+				<style width="91%" font-face="arial" right-border-width="4" bottom-border-width="4">
+					<value-of name="FAK_HLA.FAK_HLA_CSL_MEN" />
+				</style>
+			</line>
+			<region name="FAK_HLA_POPE">
+				<body>
+					<line>
+						<style width="100%" font-face="arial" left-border-width="4" right-border-width="4" bottom-border-width="4">
+							<value-of name="POPE_POP" />
+						</style>
+					</line>
+				</body>
+			</region>
+			<region name="FAK_HLA_USP">
+				<body>
+					<line>
+						<style width="100%" font-face="arial" left-border-width="4" right-border-width="4">
+							<value-of name="POPIS" />
+						</style>
+					</line>
+				</body>
+			</region>
+			<line>
+				<style width="100%" font-face="arial" left-border-width="4" right-border-width="4">
+					<text value="" />
+				</style>
+			</line>
+			<line>
+				<style width="100%" font-face="arial" left-border-width="4" right-border-width="4">
+					<value-of name="" onData="if FAK_HLA.DOD_DPH=='0' or FAK_HLA.DOD_DPH=='5': self.value='Nejsme plátci DPH.' &#xA;else: self.value=''" />
+				</style>
+			</line>
+			<line>
+				<style width="100%" font-face="arial" left-border-width="4" right-border-width="4">
+					<text value="" />
+				</style>
+			</line>
+			<line>
+				<style width="100%" font-face="arial" left-border-width="4" right-border-width="4">
+					<text value="" />
+				</style>
+			</line>
+			<line>
+				<style width="60%" font-face="arial" left-border-width="4">
+					<text value="" />
+				</style>
+				<style width="40%" font-face="arial" right-border-width="4">
+					<text value="" />
+				</style>
+			</line>
+			<line>
+				<style width="1%" font-face="arial" left-border-width="4">
+					<text value="" />
+				</style>
+				<style width="10%" font-face="arial">
+					<text value="Vystavil:" />
+				</style>
+				<style width="39%" font-face="arial">
+					<value-of name="FAK_HLA_INF_VYS" />
+				</style>
+				<style width="50%" font-face="arial" right-border-width="4">
+					<text value="" />
+				</style>
+			</line>
+			<line>
+				<style width="1%" font-face="arial" left-border-width="4">
+					<text value="" />
+				</style>
+				<style width="10%" font-face="arial">
+					<text value="Telefon:" />
+				</style>
+				<style width="39%" font-face="arial">
+					<value-of name="FAK_HLA_INF_VYS_TEL" />
+				</style>
+				<style width="50%" font-face="arial" right-border-width="4">
+					<text value="" />
+				</style>
+			</line>
+			<line>
+				<style width="1%" font-face="arial" left-border-width="4">
+					<text value="" />
+				</style>
+				<style width="99%" font-face="arial" right-border-width="4">
+					<value-of name="" onData="if(FAK_HLA.FAK_HLA_POC_PRI_OPR_DOK&gt;0): self.value='Počet příloh celkem:'" />
+				</style>
+			</line>
+			<line>
+				<style width="1%" font-face="arial" left-border-width="4">
+					<text value="" />
+				</style>
+				<style width="59%" font-face="arial">
+					<value-of name="" onData="if(FAK_HLA.FAK_HLA_POC_PRI_OPR_DOK&gt;0): self.value='Počet přiložených opravovaných dokladů: '+str(FAK_HLA.FAK_HLA_POC_PRI_OPR_DOK);&#xA;else: self.value='Počet příloh:';" />
+				</style>
+				<style width="40%" font-face="arial" right-border-width="4">
+					<text value="Razítko a podpis:" />
+				</style>
+			</line>
+			<line break-page-after="always">
+				<style width="100%" font-face="arial" left-border-width="4" right-border-width="4" bottom-border-width="4">
+					<value-of name="FAK_TXT_OR" />
+				</style>
+			</line>
+		</body>
+	</region>
+</format>

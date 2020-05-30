@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="windows-1250"?>
+
+<format type="grr" xmlns="http://www.gordic.cz/TR/alf/1.4/">
+
+  <info
+    ixs_xme="WD_UCRGUA61"
+    xmeta_ver="1"
+    xmeta_subver_min="1"
+    format="A61"
+    maker="0206"
+    nazev="Výkaz bez hlavičky"
+    ixs_alv=""
+    allowed_output=""
+    poznamka=""
+    Dat_modif="200609260731"
+  />
+
+  <paper-setting bottom-margin="15mm" top-margin="10mm" right-margin="10mm" paper-width="210mm" left-margin="10mm" paper-height="297mm"/>
+
+<script><![CDATA[
+def cisla():
+ if self.value=='X':
+  self.style.font_color='black'
+  self.style.align='right'
+  self.value='X '
+ else:
+  num=Decimal(self.value)
+  self.value=num.format("# 0,00 ;# 0,00-; ")
+  if num<0:
+   self.style.font_color='red'
+  else:
+   self.style.font_color='black'
+]]></script>
+
+  <region name="VYSLEDOVKA">
+    <head>
+      <line on-each-page="true" endpage="false">
+        <style width="18%" bottom-border-width="1" font-face="arial" font-size="1" font-italic="true" multiline="false">
+          <value-of name="" onData="self.value=&apos;Licence: &apos;+VYSLEDOVKA.LIC"/>
+        </style>
+        <style width="82%" bottom-border-width="1" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+          <value-of name="" onData="self.value=VYSLEDOVKA.FORMAT+&apos; / &apos; +format.info[&apos;format&apos;] +&apos;  (&apos;+VYSLEDOVKA.VERZE+&apos; / &apos; +format.info[&apos;Dat_modif&apos;]+&apos;)&apos;"/>
+        </style>
+      </line>
+    </head>
+    <body>
+      <region name="V-HLAVICKA">
+        <head>
+          <line on-each-page="true">
+            <style width="18%" font-face="arial">
+              <text value=""/>
+            </style>
+            <style width="82%" font-face="arial" font-size="5" font-bold="true">
+              <text value="VÝKAZ ZISKU A ZTRÁTY"/>
+            </style>
+          </line>
+          <line on-each-page="true">
+            <style width="2%" font-face="arial">
+              <text value=""/>
+            </style>
+            <style width="16%">
+              <image file="logo.bmp" global="true" image-width="25mm" image-height="25mm"/>
+            </style>
+            <style width="82%" font-face="arial" font-bold="true">
+              <text value="organizačních složek státu, územních samosprávných celků a příspěvkových organizací"/>
+            </style>
+          </line>
+          <line>
+            <style width="18%" font-face="arial">
+              <text value=""/>
+            </style>
+            <style width="82%" font-face="arial">
+              <value-of name="REZIM"/>
+            </style>
+          </line>
+          <line on-each-page="true">
+            <style width="18%" font-face="arial">
+              <text value=""/>
+            </style>
+            <style width="7%" font-face="arial" vertical-align="center">
+              <text value="Období:"/>
+            </style>
+            <style width="75%" font-face="arial" font-size="3" font-bold="true">
+              <value-of name="" onData="self.value=V_HLAVICKA.M+&apos; / &apos;+V_HLAVICKA.Y"/>
+            </style>
+          </line>
+          <line on-each-page="true">
+            <style width="18%" font-face="arial">
+              <text value=""/>
+            </style>
+            <style width="7%" font-face="arial">
+              <text value="IČO:"/>
+            </style>
+            <style width="75%" font-face="arial" font-size="3" font-bold="true">
+              <value-of name="X-ICO"/>
+            </style>
+          </line>
+          <line on-each-page="true">
+            <style width="18%" font-face="arial">
+              <text value=""/>
+            </style>
+            <style width="7%" font-face="arial">
+              <text value="Název:"/>
+            </style>
+            <style width="75%" font-face="arial" font-size="3" font-bold="true">
+              <value-of name="" onData="self.value=V_HLAVICKA.X_N+&apos; &apos;+V_HLAVICKA.X_NPOM"/>
+            </style>
+          </line>
+          <line>
+            <style width="100%" top-border-width="1">
+              <text value=""/>
+            </style>
+          </line>
+        </head>
+      </region>
+      <region name="VGRAF">
+        <body>
+          <line>
+            <style width="50%" font-face="arial" font-size="3" horizontal-align="center">
+              <text value="Struktura nákladů dle účtových skupin"/>
+            </style>
+            <style width="50%" font-face="arial" font-size="3" horizontal-align="center">
+              <text value="Struktura výnosů dle účtových skupin"/>
+            </style>
+          </line>
+          <line>
+            <chart width="50%" type="pie" image-width="auto" image-height="auto" height="50mm" group-small="Ostatní">
+                          <layer legend="bottom" label-layout="circle" label="percent"/>
+                          <region name="VGRAFN">
+                <body>
+                  <data>
+                    <value-of name="SKUPINA"/>
+                    <value-of name="SOUCETN"/>
+                  </data>
+                </body>
+              </region>
+            </chart>
+            <chart width="50%" type="pie" image-width="auto" image-height="auto" height="50mm" group-small="Ostatní">
+                          <layer legend="bottom" label-layout="circle" label="percent"/>
+              <region name="VGRAFV">
+                <body>
+                  <data>
+                    <value-of name="SKUPINA"/>
+                    <value-of name="SOUCETV"/>
+                  </data>
+                </body>
+              </region>
+            </chart>
+          </line>
+          <line>
+            <style width="100%" font-face="arial" font-size="3" horizontal-align="center">
+              <text value=""/>
+            </style>
+          </line>
+          <line>
+            <style width="100%" font-face="arial" font-size="3" horizontal-align="center">
+              <text value="Porovnání nákladů a výnosů po zdanění"/>
+            </style>
+          </line>
+        
+                        <line>                          
+                                <text height="1tw" value=""/>
+            <chart width="80mm" height="1tw" type="bar" image-width="70mm" image-height="60mm" horizontal-align="right">
+                      <layer>
+                        <dataset series="1"/>
+                        <dataset series="2"/>
+                      </layer>
+              <data>
+                <text value="Náklady a výnosy"/>
+                <value-of name="FORW-SUM(VGRAFN.SOUCETN)"/>
+                <value-of name="FORW-SUM(VGRAFV.SOUCETV)"/>
+              </data>
+                    </chart>
+                </line>
+
+                  <region name="VGRAFN">
+            <body>
+            <line>
+                 <style font-face="arial" font-size="1" horizontal-align="left">
+                    <value-of name="SKUPINA"/>
+                 </style>               
+                 <style font-face="arial" font-size="1" horizontal-align="right">
+                    <value-of name="SOUCETN" format="# 0,00"/>
+                 </style>               
+                 <style font-face="arial" font-size="1" horizontal-align="left">
+                                <text width="100mm" value=""/>
+                 </style>               
+            </line>
+            </body>
+            </region>
+                                          <line>
+                 <style font-face="arial" font-size="1" horizontal-align="left" font-bold="true" bottom-border-width="1">
+                <text value="Náklady"/>
+                 </style>               
+                 <style font-face="arial" font-size="1" horizontal-align="right" font-bold="true" bottom-border-width="1">
+                                <value-of name="FORW-SUM(VGRAFN.SOUCETN)" format="# 0,00"/>
+                 </style>               
+                 <style font-face="arial" font-size="1" horizontal-align="left">
+                                <text width="100mm" value=""/>
+                 </style>               
+                        </line>
+                  <region name="VGRAFV">
+            <body>
+            <line>
+                 <style font-face="arial" font-size="1" horizontal-align="left">
+                    <value-of name="SKUPINA"/>
+                 </style>               
+                 <style font-face="arial" font-size="1" horizontal-align="right">
+                    <value-of name="SOUCETV" format="# 0,00"/>
+                 </style>               
+                 <style font-face="arial" font-size="1" horizontal-align="left">
+                                <text width="100mm" value=""/>
+                 </style>               
+            </line>
+            </body>
+                </region>               
+                        <line>
+                 <style font-face="arial" font-size="1" horizontal-align="left" font-bold="true" bottom-border-width="1">
+                <text value="Výnosy"/>
+                 </style>               
+                 <style font-face="arial" font-size="1" horizontal-align="right" font-bold="true" bottom-border-width="1">
+                                <value-of name="FORW-SUM(VGRAFV.SOUCETV)" format="# 0,00"/>
+                 </style>               
+                 <style font-face="arial" font-size="1" horizontal-align="left">
+                                <text width="100mm" value=""/>
+                 </style>               
+                                </line>
+        </body>
+      </region>
+      <region name="MASKA-REF">
+        <body>
+          <line>
+            <style width="100%" font-size="1">
+              <text value=""/>
+            </style>
+          </line>
+          <line>
+            <style width="100%" font-face="arial" font-color="red" font-bold="true">
+              <text value="!! POZOR, předchozí sestava (výkaz) je omezena referentskou konfigurací !!"/>
+            </style>
+          </line>
+          <line>
+            <style width="31%" font-face="arial" font-size="1" font-color="red" font-bold="true" vertical-align="center">
+              <text value="Rozsah omezení konfigurace pro referenta:"/>
+            </style>
+            <style width="22%" font-face="arial" font-color="red" font-bold="true">
+              <value-of name="USERNAME"/>
+            </style>
+            <style width="18%" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right" vertical-align="center">
+              <text value="Osobní číslo:"/>
+            </style>
+            <style width="29%" font-face="arial" font-color="red" font-bold="true">
+              <value-of name="REFERENT"/>
+            </style>
+          </line>
+          <line>
+            <style width="53%" font-face="arial" font-color="red" font-bold="true">
+              <value-of name="TEXT_REFS"/>
+            </style>
+            <style width="47%" font-color="red" font-bold="true">
+              <text value=""/>
+            </style>
+          </line>
+          <line>
+            <style width="100%" font-face="arial" font-size="1" font-color="red" font-bold="true">
+              <text value="Referentská maska:"/>
+            </style>
+          </line>
+          <region name="MASKAS-REF-">
+            <body>
+              <line>
+                <style width="100%" font-face="arial" font-size="1" font-color="red" font-bold="true" font-italic="true">
+                  <text value="Stavy:"/>
+                </style>
+              </line>
+              <region name="MASKAS-REF-OD">
+                <body>
+                  <line>
+                    <style width="3%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <text value=""/>
+                    </style>
+                    <style width="4%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <text value="SU"/>
+                    </style>
+                    <style width="5%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <text value="AU"/>
+                    </style>
+                    <style width="5%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <text value="ODPA"/>
+                    </style>
+                    <style width="5%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <text value="POL"/>
+                    </style>
+                    <style width="4%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <text value="ZJ"/>
+                    </style>
+                    <style width="6%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <text value="UZ"/>
+                    </style>
+                    <style width="5%" left-padding="2" right-padding="2" top-padding="3" bottom-padding="3" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <text value="ORJ"/>
+                    </style>
+                    <style width="11%" left-padding="0" right-padding="0" top-padding="3" bottom-padding="3" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <text value="ORG"/>
+                    </style>
+                    <style width="52%" left-padding="0" right-padding="0" top-padding="3" bottom-padding="3" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <text value=""/>
+                    </style>
+                  </line>
+                  <line>
+                    <style width="3%" font-face="arial" font-size="1" horizontal-align="right">
+                      <text value="Od"/>
+                    </style>
+                    <style width="4%" background-color="silver" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <value-of name="SU"/>
+                    </style>
+                    <style width="5%" background-color="silver" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <value-of name="AU"/>
+                    </style>
+                    <style width="5%" background-color="silver" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <value-of name="ODPA"/>
+                    </style>
+                    <style width="5%" background-color="silver" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <value-of name="POL"/>
+                    </style>
+                    <style width="4%" background-color="silver" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <value-of name="ZJ"/>
+                    </style>
+                    <style width="6%" background-color="silver" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <value-of name="UZ"/>
+                    </style>
+                    <style width="5%" background-color="silver" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <value-of name="ORJ"/>
+                    </style>
+                    <style width="11%" background-color="silver" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <value-of name="ORG"/>
+                    </style>
+                    <style width="52%" left-padding="0" right-padding="0" top-padding="3" bottom-padding="3" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <text value=""/>
+                    </style>
+                  </line>
+                </body>
+              </region>
+              <region name="MASKAS-REF-DO">
+                <body>
+                  <line>
+                    <style width="3%" font-face="arial" font-size="1" horizontal-align="right">
+                      <text value="Do"/>
+                    </style>
+                    <style width="4%" background-color="silver" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <value-of name="SU"/>
+                    </style>
+                    <style width="5%" background-color="silver" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <value-of name="AU"/>
+                    </style>
+                    <style width="5%" background-color="silver" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <value-of name="ODPA"/>
+                    </style>
+                    <style width="5%" background-color="silver" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <value-of name="POL"/>
+                    </style>
+                    <style width="4%" background-color="silver" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <value-of name="ZJ"/>
+                    </style>
+                    <style width="6%" background-color="silver" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <value-of name="UZ"/>
+                    </style>
+                    <style width="5%" background-color="silver" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <value-of name="ORJ"/>
+                    </style>
+                    <style width="11%" background-color="silver" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <value-of name="ORG"/>
+                    </style>
+                    <style width="52%" left-padding="0" right-padding="0" top-padding="3" bottom-padding="3" font-face="arial" font-size="1" font-color="red" font-bold="true" horizontal-align="right">
+                      <text value=""/>
+                    </style>
+                  </line>
+                  <line>
+                    <style width="100%" top-padding="1" bottom-padding="1" font-face="arial" font-size="1">
+                      <text value=""/>
+                    </style>
+                  </line>
+                </body>
+              </region>
+            </body>
+          </region>
+        </body>
+      </region>
+    </body>
+    <foot>
+      <line on-each-page="true">
+        <style width="30%" top-border-width="1" font-face="arial" font-size="1" font-italic="true" ellipsis-style="cut" multiline="false">
+          <value-of name="" onData="self.value=&apos;&apos;+VYSLEDOVKA.DATUM+&apos; &apos;+VYSLEDOVKA.CAS"/>
+        </style>
+        <style width="40%" top-border-width="1" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" multiline="false">
+          <text value="Zpracováno systémem  UCR® GORDIC® spol. s  r. o."/>
+        </style>
+        <style width="30%" top-border-width="1" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" multiline="false">
+          <value-of name="" onData="self.value=&apos;strana &apos;+ROOT.PAGE+&apos; / &apos;+ROOT.PAGES"/>
+        </style>
+      </line>
+    </foot>
+  </region>
+</format>

@@ -1,0 +1,1088 @@
+<?xml version="1.0" encoding="utf-8"?>
+<format type="grr" xmlns="http://www.gordic.cz/TR/alf/1.4/">
+  <info ixs_xme="0000ALX0A6RP" xmeta_ver="1" xmeta_subver_min="1" nazev="Obecný" poznamka="Grafický účetní doklad" ixs_alv="0000ALV02118" allowed_output="htm,xls,doc,frm" ixs_frm="0000ALF00AFP" maker="0432" dat_modif="201206221434" rokmes_od="199801" rokmes_do="999913" />
+  <script><![CDATA[
+# -------------------------------------------  
+# funkce pro zjisteni delek textu
+# -------------------------------------------  
+def SpocitejDelku(delka):
+  #zjisteni kompletni sirky textu
+  celkem_delka=0;
+  for i in delka:
+    celkem_delka=celkem_delka+i;
+  return celkem_delka
+
+# -------------------------------------------  
+# funkce pro rozpocitani dynamickych sirek
+# -------------------------------------------  
+def SpocitejSirky(sirky,delka,poradi):
+  celkem_delka=0;
+  
+  #zjisteni kompletni sirky textu
+  i1=0;
+  for i in delka:
+    celkem_delka=celkem_delka+i;
+    i1=i1+1;
+    
+  pocetdelka=i1-1;
+
+  i1=0;
+  celkem_delka2=100;
+  minporadi=0;
+  max=1;
+  for i in delka:
+    if i>0:
+      subsirka=Decimal(str(round(i/celkem_delka,4)*10000))/100;
+      if pocetdelka+1==i1:
+        subsirka=Decimal(celkem_delka2);
+        celkem_delka2=0;
+      else:
+        celkem_delka2=celkem_delka2-subsirka;
+      if i1<15:
+        #tohle jsou polozky ucetni vety a ty musi byt podle poradi...
+        sirky[int(poradi[i1])-1]=subsirka
+      else:
+        sirky[i1]=subsirka;
+    i1=i1+1;
+
+  # ted se pokusim seskupit polozky bez nul
+  nuly=0;
+  koncnuly=-1;
+  if(pocetdelka>=14):
+    max=14;
+  else:
+    max=pocetdelka-1
+  while nuly<>koncnuly:
+    i1=0;
+    nuly=0;
+    koncnuly=0;
+    while i1<max:
+      if sirky[i1]==0:
+        sirky[i1]=sirky[i1+1];
+        sirky[i1+1]=Decimal(0);
+      if sirky[i1]==0:
+        koncnuly=koncnuly+1
+        nuly=nuly+1
+      else:
+        koncnuly=0;
+      i1=i1+1
+
+  return ""
+
+# -------------------------------------------  
+# funkce pro prohozeni ucetnich polozek
+# -------------------------------------------  
+def ProhodUCTPol(poradi,polozky):
+
+  minporadi=0;
+  pocet=0;
+  polozky2 = [];
+  i=0
+  while i<15:
+    polozky2.append("");
+    i=i+1;
+  
+  while pocet<15:
+    i=0;
+    while i<15:
+      if poradi[i]==pocet+1:
+        polozky2[minporadi]=polozky[i];
+        minporadi=minporadi+1;
+        break;
+      i=i+1;
+    pocet=pocet+1;
+
+  i=0    
+  while i<minporadi:
+    polozky[i]=polozky2[i];
+    i=i+1
+    
+  while minporadi<15:
+    polozky[minporadi]="";
+    minporadi=minporadi+1
+
+  return ""
+
+# -------------------------------------------  
+# zjistim velikost fontu
+# -------------------------------------------  
+def DefFontSize(delka):
+    
+    font_size=2
+    if delka>100:
+      font_size=1
+      if delka>125:
+         font_size='6pt'
+
+    return font_size
+
+# -------------------------------------------  
+# sirky polozek
+# -------------------------------------------  
+def TextSirky(sirky):
+
+  text='';
+  for i in sirky:
+    text=text+Decimal(i).format('0.00')+';';
+  return text
+
+# -------------------------------------------  
+# zda-li je souvisejici dokument
+# -------------------------------------------  
+def JeSouvDokument():
+    return 0 #souvisejici-ne
+
+# -------------------------------------------  
+# speciální výpis (pouze pro AČR)
+# -------------------------------------------  
+def DefSpVypis():
+    return 0 #speciální výpis-ne
+]]></script>
+  <region name="DOKLAD">
+    <head>
+      <line on-each-page="true">
+        <style top-padding="3" bottom-padding="3">
+          <text value="" width="80%" />
+        </style>
+        <style font-bold="true" horizontal-align="right" top-padding="3" bottom-padding="3">
+          <text value="Datum:" width="10%" />
+        </style>
+        <style top-padding="3" bottom-padding="3">
+          <value-of name="ROOT.DATE" width="10%" />
+        </style>
+      </line>
+      <line on-each-page="true">
+        <style font-bold="true" top-padding="3" bottom-padding="3">
+          <value-of name="ICO_NAZEV" width="40%" />
+        </style>
+        <text value="" width="40%" />
+        <style font-bold="true" horizontal-align="right" top-padding="3" bottom-padding="3">
+          <text value="Čas:" width="10%" />
+        </style>
+        <style top-padding="3" bottom-padding="3">
+          <value-of name="ROOT.TIME" width="10%" />
+        </style>
+      </line>
+      <line on-each-page="true">
+        <style font-bold="true" top-padding="3" bottom-padding="3">
+          <text value="IČO:" width="6%" />
+        </style>
+        <style font-bold="true" top-padding="3" bottom-padding="3">
+          <value-of name="ICO" width="34%" onData="bZobrazUCS=0;" />
+        </style>
+        <text value="" width="40%" />
+        <style font-bold="true" horizontal-align="right" top-padding="3" bottom-padding="3">
+          <text value="Lic:" width="10%" />
+        </style>
+        <style top-padding="3" bottom-padding="3">
+          <value-of name="LIC" width="10%" />
+        </style>
+      </line>
+      <line on-each-page="true" only-if="DOKLAD.LIC[0:2]=='A4'">
+        <style top-padding="3" bottom-padding="3">
+          <value-of name="" width="40%" onData="self.value='ÚČS:     '+DOKLAD.UCS;bZobrazUCS=1;" />
+        </style>
+        <text value="" width="40%" />
+        <style font-bold="true" horizontal-align="right" top-padding="3" bottom-padding="3">
+          <text value="Str:" width="10%" />
+        </style>
+        <style top-padding="3" bottom-padding="3">
+          <value-of name="ROOT.PAGE" width="10%" />
+        </style>
+      </line>
+      <line on-each-page="true">
+        <style top-padding="3" bottom-padding="3">
+          <value-of name="" width="40%" onData="if(DOKLAD.UUS=='HU' or DOKLAD.UUS=='HÚ' or DOKLAD.UUS==''): self.value='';self.style.top_border_width=3;&#xA;else: self.value=DOKLAD.UUS_NAZEV;self.style.bottom_border_width=3;" />
+        </style>
+        <text value="" width="40%" />
+        <style font-bold="true" horizontal-align="right" top-padding="3" bottom-padding="3">
+          <value-of name="" width="10%" onData="if(bZobrazUCS==0): self.value='Str:'" />
+        </style>
+        <style top-padding="3" bottom-padding="3">
+          <value-of name="ROOT.PAGE" width="10%" onData="if(bZobrazUCS!=0): self.value=''" />
+        </style>
+      </line>
+    </head>
+    <body>
+      <line>
+        <style font-size="5" font-bold="true" horizontal-align="center">
+          <text value="ÚČETNÍ DOKLAD" width="100%" />
+        </style>
+      </line>
+      <line>
+        <style horizontal-align="center">
+          <value-of name="KTG_TYP_TXT" width="100%" onData="sou_doc=JeSouvDokument()" />
+        </style>
+      </line>
+      <line>
+        <text value="" width="100%" />
+      </line>
+      <line>
+        <style font-bold="true" horizontal-align="right" left-border-width="3" top-border-width="3">
+          <text value="Schvaluji:" width="10%" />
+        </style>
+        <style right-border-width="3" top-border-width="3">
+          <text value="" width="90%" />
+        </style>
+      </line>
+      <line only-if="DOKLAD.ULOHA_TXT!='DDP'">
+        <style left-border-width="3" right-border-width="3">
+          <text value="" width="100%" />
+        </style>
+      </line>
+      <line only-if="DOKLAD.ULOHA_TXT!='DDP'">
+        <style font-bold="true" horizontal-align="right" left-border-width="3" top-padding="3" bottom-padding="3">
+          <text value="Částka:" width="10%" />
+        </style>
+        <style right-border-width="3" top-padding="3" bottom-padding="3">
+          <value-of name="C" width="90%" />
+        </style>
+      </line>
+      <line only-if="DOKLAD.ULOHA_TXT!='DDP'">
+        <style font-bold="true" horizontal-align="right" left-border-width="3" top-padding="3" bottom-padding="3">
+          <text value="Slovy:" width="10%" />
+        </style>
+        <style right-border-width="3" top-padding="3" bottom-padding="3">
+          <value-of name="C_SLOVY" width="90%" />
+        </style>
+      </line>
+      <line>
+        <style left-border-width="3" right-border-width="3">
+          <text value="" width="100%" />
+        </style>
+      </line>
+      <line>
+        <style font-bold="true" horizontal-align="right" left-border-width="3" top-padding="3" bottom-padding="3">
+          <text value="Agendové číslo:" width="24%" />
+        </style>
+        <style right-border-width="3" top-padding="3" bottom-padding="3">
+          <value-of name="AC_AG" width="76%" />
+        </style>
+      </line>
+      <line>
+        <style font-bold="true" horizontal-align="right" left-border-width="3" top-padding="3" bottom-padding="3">
+          <value-of name="AC_TEXT" width="24%" />
+        </style>
+        <style right-border-width="3" top-padding="3" bottom-padding="3">
+          <value-of name="AC" width="76%" />
+        </style>
+      </line>
+      <line>
+        <style left-border-width="3" right-border-width="3">
+          <text value="" width="100%" />
+        </style>
+      </line>
+      <line>
+        <style font-bold="true" horizontal-align="right" left-border-width="3" top-padding="3" bottom-padding="3">
+          <text value="Externí subjekt:" width="24%" />
+        </style>
+        <style right-border-width="3" top-padding="3" bottom-padding="3">
+          <value-of name="NAZ_ESU" width="76%" />
+        </style>
+      </line>
+      <line only-if="DOKLAD.ULOHA_TXT!='DDP'">
+        <style font-bold="true" horizontal-align="right" left-border-width="3" top-padding="3" bottom-padding="3">
+          <text value="IČO:" width="24%" />
+        </style>
+        <style right-border-width="3" top-padding="3" bottom-padding="3">
+          <value-of name="ICO_ESU" width="76%" />
+        </style>
+      </line>
+      <line only-if="DOKLAD.ULOHA_TXT!='DDP'">
+        <style font-bold="true" horizontal-align="right" left-border-width="3" top-padding="3" bottom-padding="3">
+          <text value="Číslo dokladu:" width="24%" />
+        </style>
+        <style right-border-width="3" top-padding="3" bottom-padding="3">
+          <value-of name="AC_ESU" width="76%" />
+        </style>
+      </line>
+      <line>
+        <style left-border-width="3" right-border-width="3">
+          <text value="" width="100%" />
+        </style>
+      </line>
+      <line only-if="DOKLAD.ULOHA_TXT!='DDP'">
+        <style font-bold="true" horizontal-align="right" left-border-width="3" top-padding="3" bottom-padding="3">
+          <text value="Párovací symbol:" width="24%" />
+        </style>
+        <style right-border-width="3" top-padding="3" bottom-padding="3">
+          <value-of name="PS_FAK" width="76%" />
+        </style>
+      </line>
+      <line only-if="DOKLAD.ULOHA_TXT=='DDP'">
+        <style font-bold="true" horizontal-align="right" left-border-width="3" top-padding="3" bottom-padding="3">
+          <text value="VS:" width="24%" />
+        </style>
+        <style right-border-width="3" top-padding="3" bottom-padding="3">
+          <value-of name="VS" width="76%" />
+        </style>
+      </line>
+      <line only-if="DOKLAD.ULOHA_TXT=='DDP'">
+        <style font-bold="true" horizontal-align="right" left-border-width="3" top-padding="3" bottom-padding="3">
+          <text value="SS:" width="24%" />
+        </style>
+        <style right-border-width="3" top-padding="3" bottom-padding="3">
+          <value-of name="SS" width="76%" />
+        </style>
+      </line>
+      <line>
+        <style left-border-width="3" right-border-width="3">
+          <text value="" width="100%" />
+        </style>
+      </line>
+      <line only-if="DOKLAD.ULOHA_TXT=='DDP'">
+        <style font-bold="true" horizontal-align="right" left-border-width="3" top-padding="3" bottom-padding="3">
+          <text value="Typ pohledávky:" width="24%" />
+        </style>
+        <style right-border-width="3" top-padding="3" bottom-padding="3">
+          <value-of name="" width="76%" onData="self.value=DOKLAD.TYP_PHL_ZKR+' - '+DOKLAD.TYP_PHL_TXT" />
+        </style>
+      </line>
+      <line only-if="DOKLAD.ULOHA_TXT=='DDP'">
+        <style left-border-width="3" right-border-width="3">
+          <text value="" width="100%" />
+        </style>
+      </line>
+      <line>
+        <style font-bold="true" horizontal-align="right" left-border-width="3" bottom-border-width="3">
+          <text value="Popis:" width="10%" />
+        </style>
+        <style right-border-width="3" bottom-border-width="3">
+          <value-of name="POPIS" width="90%" />
+        </style>
+      </line>
+      <line>
+        <text value="" width="100%" />
+      </line>
+      <region name="DOKLAD_UCT">
+        <body>
+          <line>
+            <style font-italic="true" left-border-width="3" top-border-width="3">
+              <text value="PID" width="20%" />
+            </style>
+            <style font-italic="true" left-border-width="1" top-border-width="3">
+              <text value="Drd" width="5%" />
+            </style>
+            <style font-italic="true" left-border-width="1" top-border-width="3">
+              <text value="Rok" width="5%" />
+            </style>
+            <style font-italic="true" left-border-width="1" top-border-width="3">
+              <text value="Měs" width="5%" />
+            </style>
+            <style font-italic="true" left-border-width="1" top-border-width="3">
+              <text value="Den" width="5%" />
+            </style>
+            <style font-italic="true" left-border-width="1" top-border-width="3">
+              <text value="Doklad" width="20%" />
+            </style>
+            <style font-italic="true" left-border-width="1" top-border-width="3">
+              <text value="Zaúčtoval" width="25%" />
+            </style>
+            <style font-italic="true" left-border-width="1" right-border-width="3" top-border-width="3">
+              <text value="Provedeno" width="15%" />
+            </style>
+          </line>
+          <line>
+            <style left-border-width="3" top-border-width="1" bottom-border-width="3">
+              <value-of name="DOKLAD.IXP" width="20%" />
+            </style>
+            <style left-border-width="1" top-border-width="1" bottom-border-width="3">
+              <value-of name="DRD" width="5%" />
+            </style>
+            <style left-border-width="1" top-border-width="1" bottom-border-width="3">
+              <value-of name="ROK_U" width="5%" />
+            </style>
+            <style left-border-width="1" top-border-width="1" bottom-border-width="3">
+              <value-of name="MES_U" width="5%" />
+            </style>
+            <style left-border-width="1" top-border-width="1" bottom-border-width="3">
+              <value-of name="DEN_U" width="5%" />
+            </style>
+            <style left-border-width="1" top-border-width="1" bottom-border-width="3">
+              <value-of name="DOK_ZAU" width="20%" />
+            </style>
+            <style left-border-width="1" top-border-width="1" bottom-border-width="3">
+              <value-of name="OS_ZAU" width="25%" />
+            </style>
+            <style left-border-width="1" right-border-width="3" top-border-width="1" bottom-border-width="3">
+              <value-of name="DAT_ZAU" width="15%" />
+            </style>
+          </line>
+          <line>
+            <style font-italic="true" left-border-width="3" top-border-width="3">
+              <text value="Rok  zdanění" width="12%" />
+            </style>
+            <style font-italic="true" left-border-width="1" top-border-width="3">
+              <text value="Měsíc zdanění" width="13%" />
+            </style>
+            <style left-border-width="1" right-border-width="3" top-border-width="3">
+              <text value="" width="75%" />
+            </style>
+          </line>
+          <line>
+            <style left-border-width="3" top-border-width="1" bottom-border-width="3">
+              <value-of name="DAN_ROK" width="12%" />
+            </style>
+            <style left-border-width="1" right-border-width="1" top-border-width="1" bottom-border-width="3">
+              <value-of name="DAN_MES" width="13%" />
+            </style>
+            <style left-border-width="1" right-border-width="3" top-border-width="1" bottom-border-width="3">
+              <value-of name="" width="75%" onData="sp_vypis=DefSpVypis()" />
+            </style>
+          </line>
+          <line only-if="sp_vypis==0">
+            <style padding="0">
+              <value-of name="" width="100%" height="1mm" onData="sirky=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];poradi=[DOKLAD.UCE_POR_UEA,DOKLAD.UCE_POR_UEB,DOKLAD.UCE_POR_UEC,DOKLAD.UCE_POR_UED,DOKLAD.UCE_POR_UEE,DOKLAD.UCE_POR_UEF,DOKLAD.UCE_POR_UEG,DOKLAD.UCE_POR_UEH,DOKLAD.UCE_POR_UEI,DOKLAD.UCE_POR_UEJ,DOKLAD.UCE_POR_TE0,DOKLAD.UCE_POR_TE1,DOKLAD.UCE_POR_TE2,DOKLAD.UCE_POR_TE3,DOKLAD.UCE_POR_TE4,10,15,15];delky=[DOKLAD.UCE_SIR_A_UEA,DOKLAD.UCE_SIR_A_UEB,DOKLAD.UCE_SIR_A_UEC,DOKLAD.UCE_SIR_A_UED,DOKLAD.UCE_SIR_A_UEE,DOKLAD.UCE_SIR_A_UEF,DOKLAD.UCE_SIR_A_UEG,DOKLAD.UCE_SIR_A_UEH,DOKLAD.UCE_SIR_A_UEI,DOKLAD.UCE_SIR_A_UEJ,DOKLAD.UCE_SIR_A_TE0,DOKLAD.UCE_SIR_A_TE1,DOKLAD.UCE_SIR_A_TE2,DOKLAD.UCE_SIR_A_TE3,DOKLAD.UCE_SIR_A_TE4,10,15,15];SpocitejSirky(sirky,delky,poradi);nazvy_uct=[DOKLAD.UCE_NAZ_UEA,DOKLAD.UCE_NAZ_UEB,DOKLAD.UCE_NAZ_UEC,DOKLAD.UCE_NAZ_UED,DOKLAD.UCE_NAZ_UEE,DOKLAD.UCE_NAZ_UEF,DOKLAD.UCE_NAZ_UEG,DOKLAD.UCE_NAZ_UEH,DOKLAD.UCE_NAZ_UEI,DOKLAD.UCE_NAZ_UEJ,DOKLAD.UCE_NAZ_TE0,DOKLAD.UCE_NAZ_TE1,DOKLAD.UCE_NAZ_TE2,DOKLAD.UCE_NAZ_TE3,DOKLAD.UCE_NAZ_TE4];ProhodUCTPol(poradi,nazvy_uct);font_size=DefFontSize(SpocitejDelku(delky))" />
+            </style>
+          </line>
+          <line only-if="sp_vypis!=0">
+            <style padding="0">
+              <value-of name="" width="100%" height="10mm" onData="sirky1=[0,0,0,0,0,0,0,0,0,0];poradi1=[1,2,3,4,5,6,7,8,9,10];delky1=[7,DOKLAD.UCE_SIR_A_UEA,DOKLAD.UCE_SIR_A_UEB,DOKLAD.UCE_SIR_A_TE2,DOKLAD.UCE_SIR_A_TE4,DOKLAD.UCE_SIR_A_UEI,DOKLAD.UCE_SIR_A_UEC,DOKLAD.UCE_SIR_A_UED,DOKLAD.UCE_SIR_A_UEE,DOKLAD.UCE_SIR_A_UEJ];SpocitejSirky(sirky1,delky1,poradi1);sirky2=[0,0,0,0,0,0,0,0,0];poradi2=[1,2,3,4,5,6,7,8,9];delky2=[7,DOKLAD.UCE_SIR_A_UEA,DOKLAD.UCE_SIR_A_UEB,DOKLAD.UCE_SIR_A_TE1,DOKLAD.UCE_SIR_A_UEG,DOKLAD.UCE_SIR_A_UEF,15,15,15];SpocitejSirky(sirky2,delky2,poradi2);font_size=2" />
+            </style>
+          </line>
+          <region name="RADEK_UCT" filter-out="sp_vypis!=0">
+            <head>
+              <line>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="3" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="10%" onData="self.value='NS';self.style.width=str(sirky[15])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value=nazvy_uct[0];self.style.width=str(sirky[0])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value=nazvy_uct[1];self.style.width=str(sirky[1])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value=nazvy_uct[2];self.style.width=str(sirky[2])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value=nazvy_uct[3];self.style.width=str(sirky[3])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value=nazvy_uct[4];self.style.width=str(sirky[4])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value=nazvy_uct[5];self.style.width=str(sirky[5])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value=nazvy_uct[6];self.style.width=str(sirky[6])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value=nazvy_uct[7];self.style.width=str(sirky[7])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value=nazvy_uct[8];self.style.width=str(sirky[8])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value=nazvy_uct[9];self.style.width=str(sirky[9])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="4%" onData="self.value=nazvy_uct[10];self.style.width=str(sirky[10])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="4%" onData="self.value=nazvy_uct[11];self.style.width=str(sirky[11])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="4%" onData="self.value=nazvy_uct[12];self.style.width=str(sirky[12])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="4%" onData="self.value=nazvy_uct[13];self.style.width=str(sirky[13])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="4%" onData="self.value=nazvy_uct[14];self.style.width=str(sirky[14])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" horizontal-align="right" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3">
+                  <value-of name="" width="10%" onData="self.value='MD';self.style.width=str(sirky[16])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" horizontal-align="right" ellipsis-style="cut" multiline="false" left-border-width="1" right-border-width="3" top-border-width="3" bottom-border-width="3">
+                  <value-of name="" width="10%" onData="self.value='DAL';self.style.width=str(sirky[17])+'%';self.style.font_size=font_size" />
+                </style>
+              </line>
+            </head>
+            <body>
+              <line>
+                <style ellipsis-style="cut" multiline="false" left-border-width="3" right-padding="0">
+                  <value-of name="NKS" width="10%" onData="polozky_uct=[RADEK_UCT.SU,RADEK_UCT.AU,RADEK_UCT.TF,RADEK_UCT.ODPA,RADEK_UCT.POL,RADEK_UCT.ZJ,RADEK_UCT.UZ,RADEK_UCT.UEH,RADEK_UCT.PPO,RADEK_UCT.UEJ,RADEK_UCT.ORJ,RADEK_UCT.ORG,RADEK_UCT.SP,RADEK_UCT.TE3,RADEK_UCT.TE4];ProhodUCTPol(poradi,polozky_uct);self.style.width=str(sirky[15])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value=polozky_uct[0];self.style.width=str(sirky[0])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value=polozky_uct[1];self.style.width=str(sirky[1])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value=polozky_uct[2];self.style.width=str(sirky[2])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value=polozky_uct[3];self.style.width=str(sirky[3])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value=polozky_uct[4];self.style.width=str(sirky[4])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value=polozky_uct[5];self.style.width=str(sirky[5])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value=polozky_uct[6];self.style.width=str(sirky[6])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value=polozky_uct[7];self.style.width=str(sirky[7])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value=polozky_uct[8];self.style.width=str(sirky[8])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value=polozky_uct[9];self.style.width=str(sirky[9])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="" width="4%" onData="self.value=polozky_uct[10];self.style.width=str(sirky[10])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="" width="4%" onData="self.value=polozky_uct[11];self.style.width=str(sirky[11])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="" width="4%" onData="self.value=polozky_uct[12];self.style.width=str(sirky[12])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="" width="4%" onData="self.value=polozky_uct[13];self.style.width=str(sirky[13])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="" width="4%" onData="self.value=polozky_uct[14];self.style.width=str(sirky[14])+'%';self.style.font_size=font_size" />
+                </style>
+                <style horizontal-align="right" multiline="false" left-border-width="1">
+                  <value-of name="MD" width="10%" onData="self.style.width=str(sirky[16])+'%';self.style.font_size=font_size" />
+                </style>
+                <style horizontal-align="right" multiline="false" left-border-width="1" right-border-width="3">
+                  <value-of name="DAL" width="10%" onData="self.style.width=str(sirky[17])+'%';self.style.font_size=font_size" />
+                </style>
+              </line>
+              <region name="RADEK_UCT_POP">
+                <body>
+                  <line>
+                    <style left-border-width="3" right-border-width="3" bottom-border-width="1" bottom-border-style="dashed">
+                      <value-of name="POP" width="100%" />
+                    </style>
+                  </line>
+                </body>
+              </region>
+            </body>
+          </region>
+          <region name="RADEK_UCT" filter-out="sp_vypis==0">
+            <head>
+              <line>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="3" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="10%" onData="self.value='NS';self.style.width=str(sirky1[0])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value='SU';self.style.width=str(sirky1[1])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value='AU';self.style.width=str(sirky1[2])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value='COR';self.style.width=str(sirky1[3])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value='UKO';self.style.width=str(sirky1[4])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value='FIN';self.style.width=str(sirky1[5])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value='ZDR';self.style.width=str(sirky1[6])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value='ODPA';self.style.width=str(sirky1[7])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value='POL';self.style.width=str(sirky1[8])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" right-border-width="3" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="50%" onData="self.value='PRJ';self.style.width=str(sirky1[9])+'%';self.style.font_size=font_size" />
+                </style>
+              </line>
+            </head>
+            <body>
+              <line>
+                <style ellipsis-style="cut" multiline="false" left-border-width="3" right-padding="0">
+                  <value-of name="NKS" width="10%" onData="self.style.width=str(sirky1[0])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="SU" width="5%" onData="self.style.width=str(sirky1[1])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="AU" width="5%" onData="self.style.width=str(sirky1[2])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="SP" width="5%" onData="self.style.width=str(sirky1[3])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="TE4" width="5%" onData="self.style.width=str(sirky1[4])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="PPO" width="5%" onData="self.style.width=str(sirky1[5])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="TF" width="5%" onData="self.style.width=str(sirky1[6])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="ODPA" width="5%" onData="self.style.width=str(sirky1[7])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="POL" width="5%" onData="self.style.width=str(sirky1[8])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-border-width="3" right-padding="0">
+                  <value-of name="UEJ" width="50%" onData="self.style.width=str(sirky1[9])+'%';self.style.font_size=font_size" />
+                </style>
+              </line>
+              <region name="RADEK_UCT_POP">
+                <body>
+                  <line>
+                    <style left-border-width="3" right-border-width="3" bottom-border-width="1" bottom-border-style="dashed">
+                      <value-of name="POP" width="100%" />
+                    </style>
+                  </line>
+                </body>
+              </region>
+            </body>
+          </region>
+          <line only-if="sp_vypis!=0">
+            <style top-border-width="3">
+              <text value="" height="3mm" />
+            </style>
+          </line>
+          <region name="RADEK_UCT" filter-out="sp_vypis==0">
+            <head>
+              <line>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="3" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="10%" onData="self.value='NS';self.style.width=str(sirky1[0])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value='SU';self.style.width=str(sirky1[1])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value='AU';self.style.width=str(sirky1[2])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value='ORG';self.style.width=str(sirky2[3])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value='UZ';self.style.width=str(sirky2[4])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="5%" onData="self.value='ZJ';self.style.width=str(sirky2[5])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" horizontal-align="right" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="5">
+                  <value-of name="" width="5%" onData="self.value='MD';self.style.width=str(sirky2[6])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" horizontal-align="right" ellipsis-style="cut" multiline="false" left-border-width="1" top-border-width="3" bottom-border-width="3" right-padding="5">
+                  <value-of name="" width="5%" onData="self.value='DAL';self.style.width=str(sirky2[7])+'%';self.style.font_size=font_size" />
+                </style>
+                <style font-bold="true" ellipsis-style="cut" multiline="false" left-border-width="1" right-border-width="3" top-border-width="3" bottom-border-width="3" right-padding="0">
+                  <value-of name="" width="55%" />
+                </style>
+              </line>
+            </head>
+            <body>
+              <line>
+                <style ellipsis-style="cut" multiline="false" left-border-width="3" right-padding="0">
+                  <value-of name="NKS" width="10%" onData="self.style.width=str(sirky1[0])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="SU" width="5%" onData="self.style.width=str(sirky1[1])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="AU" width="5%" onData="self.style.width=str(sirky1[2])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="ORG" width="5%" onData="self.style.width=str(sirky2[3])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="UZ" width="5%" onData="self.style.width=str(sirky2[4])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-padding="0">
+                  <value-of name="ZJ" width="5%" onData="self.style.width=str(sirky2[5])+'%';self.style.font_size=font_size" />
+                </style>
+                <style horizontal-align="right" ellipsis-style="fill" left-border-width="1" right-padding="5">
+                  <value-of name="MD" width="5%" onData="self.style.width=str(sirky2[6])+'%';self.style.font_size=font_size" />
+                </style>
+                <style horizontal-align="right" ellipsis-style="fill" left-border-width="1" right-padding="5">
+                  <value-of name="DAL" width="5%" onData="self.style.width=str(sirky2[7])+'%';self.style.font_size=font_size" />
+                </style>
+                <style ellipsis-style="fill" left-border-width="1" right-border-width="3" right-padding="0">
+                  <value-of name="" width="55%" />
+                </style>
+              </line>
+            </body>
+          </region>
+          <line>
+            <style top-border-width="3">
+              <text value="" width="100%" />
+            </style>
+          </line>
+        </body>
+      </region>
+      <region name="DOKLAD_UCT_NE">
+        <body>
+          <line>
+            <style left-border-width="3" right-border-width="3" top-border-width="3">
+              <text value="" width="100%" />
+            </style>
+          </line>
+          <line>
+            <style font-size="4" font-bold="true" horizontal-align="center" left-border-width="3" right-border-width="3">
+              <text value="DOKLAD NEBYL ZAÚČTOVÁN" width="100%" />
+            </style>
+          </line>
+          <line>
+            <style left-border-width="3" right-border-width="3" bottom-border-width="3">
+              <text value="" width="100%" />
+            </style>
+          </line>
+          <line>
+            <text value="" width="100%" />
+          </line>
+        </body>
+      </region>
+      <region name="POTVRZENO">
+        <body>
+          <line>
+            <style font-bold="true">
+              <text value="Účetní doklad zaúčtoval:" width="21%" />
+            </style>
+            <value-of name="ZAUCTOVAL" width="45%" />
+            <style font-bold="true">
+              <text value="Provedeno:" width="12%" />
+            </style>
+            <value-of name="DATUM" width="22%" />
+          </line>
+          <line>
+            <text value="" width="100%" />
+          </line>
+          <line>
+            <value-of name="DOKLAD.TXT1" width="100%" />
+          </line>
+          <line>
+            <text value="" width="100%" />
+          </line>
+          <line>
+            <text value="" width="47%" />
+            <text value="Podpis:" width="29%" />
+            <text value="Dne" width="5%" />
+            <value-of name="DATUM" width="19%" />
+          </line>
+          <line>
+            <text value="" width="100%" />
+          </line>
+        </body>
+      </region>
+      <region name="POTVRZENO2">
+        <body>
+          <line>
+            <text value="" width="100%" />
+          </line>
+          <line>
+            <value-of name="TEXT1" width="76%" />
+            <text value="Dne" width="5%" />
+            <value-of name="DATUM" width="19%" />
+          </line>
+          <line>
+            <text value="" width="100%" />
+          </line>
+        </body>
+      </region>
+      <region name="VYPIS_BU">
+        <head>
+          <line>
+            <style font-bold="true" left-border-width="3" right-border-width="3" top-border-width="3">
+              <text value="Výpis z účtu:" width="100%" />
+            </style>
+          </line>
+          <line>
+            <style left-border-width="3" top-border-width="1">
+              <text value="Účet" width="27%" />
+            </style>
+            <style left-border-width="1" top-border-width="1">
+              <text value="VS" width="13%" />
+            </style>
+            <style horizontal-align="right" left-border-width="1" top-border-width="1">
+              <text value="Párováno" width="18%" />
+            </style>
+            <style horizontal-align="right" left-border-width="1" top-border-width="1">
+              <text value="Kurzový rozdíl" width="12%" />
+            </style>
+            <style horizontal-align="right" left-border-width="1" top-border-width="1">
+              <text value="Uhrazeno" width="18%" />
+            </style>
+            <style left-border-width="1" right-border-width="3" top-border-width="1">
+              <text value="Datum výpisu" width="12%" />
+            </style>
+          </line>
+        </head>
+        <body>
+          <line>
+            <style left-border-width="3" top-border-width="1" bottom-border-width="1">
+              <value-of name="CKON" width="27%" />
+            </style>
+            <style left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="VS" width="13%" />
+            </style>
+            <style horizontal-align="right" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="C_PAR" width="18%" />
+            </style>
+            <style horizontal-align="right" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="" width="12%" onData="if(VYPIS_BU.C=='' or VYPIS_BU.C=='--'): self.value='';&#xA;else: self.value=(Decimal(VYPIS_BU.C)-Decimal(VYPIS_BU.C_PAR)).format('# 0,00');" />
+            </style>
+            <style horizontal-align="right" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="C" width="18%" />
+            </style>
+            <style left-border-width="1" right-border-width="3" top-border-width="1" bottom-border-width="1">
+              <value-of name="DAT" width="12%" />
+            </style>
+          </line>
+        </body>
+        <foot>
+          <line>
+            <style top-border-width="3">
+              <text value="" width="100%" />
+            </style>
+          </line>
+        </foot>
+      </region>
+      <line>
+        <text value="" width="100%" />
+      </line>
+      <line>
+        <text value="" width="100%" />
+      </line>
+      <region name="DOKLAD_SOUVZ">
+        <head>
+          <line>
+            <style font-bold="true">
+              <text value="Souvztažné doklady zaúčtování:" width="100%" />
+            </style>
+          </line>
+          <line>
+            <style font-italic="true" left-border-width="3" top-border-width="3">
+              <text value="Agendové číslo" width="20%" />
+            </style>
+            <style font-italic="true" left-border-width="1" top-border-width="3">
+              <text value="Dat. zaúčtování" width="20%" />
+            </style>
+            <style font-italic="true" left-border-width="1" top-border-width="3">
+              <text value="Doklad zaúčtování" width="20%" />
+            </style>
+            <style font-italic="true" left-border-width="1" right-border-width="3" top-border-width="3">
+              <text value="Typ dokladu" width="40%" />
+            </style>
+          </line>
+        </head>
+        <body>
+          <line>
+            <style left-border-width="3" top-border-width="1">
+              <value-of name="AC" width="20%" />
+            </style>
+            <style left-border-width="1" top-border-width="1">
+              <value-of name="DAT_ZAU" width="20%" />
+            </style>
+            <style left-border-width="1" top-border-width="1">
+              <value-of name="UC" width="20%" />
+            </style>
+            <style left-border-width="1" right-border-width="3" top-border-width="1">
+              <value-of name="TYP_DOK" width="40%" />
+            </style>
+          </line>
+        </body>
+        <foot>
+          <line>
+            <style top-border-width="3">
+              <text value="" width="100%" />
+            </style>
+          </line>
+        </foot>
+      </region>
+      <region name="SEZ_DOK_POL" only-if="SEZ_DOK_POL.AKTIVITA=='' and sou_doc==1">
+        <head>
+          <line>
+            <style font-bold="true">
+              <text value="Související dokumenty:" width="100%" />
+            </style>
+          </line>
+          <line>
+            <style left-border-width="3" top-border-width="3" bottom-border-width="1">
+              <text value="PID Dokumentu" width="15%" />
+            </style>
+            <style left-border-width="1" top-border-width="3" bottom-border-width="1">
+              <text value="Akt. značka" width="11%" />
+            </style>
+            <style left-border-width="1" top-border-width="3" bottom-border-width="1">
+              <text value="Typ dokladu" width="23%" />
+            </style>
+            <style left-border-width="1" top-border-width="3" bottom-border-width="1">
+              <text value="Poznámka" width="16%" />
+            </style>
+            <style left-border-width="1" top-border-width="3" bottom-border-width="1">
+              <text value="Věc" width="30%" />
+            </style>
+            <style left-border-width="1" right-border-width="3" top-border-width="3" bottom-border-width="1">
+              <text value="Age." width="5%" />
+            </style>
+          </line>
+        </head>
+        <body>
+          <line>
+            <style left-border-width="3">
+              <value-of name="SEZ_DOK_POL.PID" width="15%" />
+            </style>
+            <style left-border-width="1">
+              <value-of name="SEZ_DOK_POL.AKT" width="11%" />
+            </style>
+            <style left-border-width="1">
+              <value-of name="SEZ_DOK_POL.KTG_TYP" width="23%" />
+            </style>
+            <style left-border-width="1">
+              <value-of name="SEZ_DOK_POL.POZ" width="16%" />
+            </style>
+            <style left-border-width="1">
+              <value-of name="SEZ_DOK_POL.VEC" width="30%" />
+            </style>
+            <style left-border-width="1" right-border-width="3">
+              <value-of name="SEZ_DOK_POL.AG_TYP_ZKR" width="5%" />
+            </style>
+          </line>
+        </body>
+        <foot>
+          <line>
+            <style top-border-width="3">
+              <text value="" width="100%" />
+            </style>
+          </line>
+        </foot>
+      </region>
+      <region name="DL">
+        <head>
+          <line>
+            <style font-bold="true">
+              <text value="Rozúčtování dodávek dle účetních středisek:" width="100%" />
+            </style>
+          </line>
+          <line>
+            <style font-italic="true" left-border-width="3" top-border-width="3">
+              <text value="UCS" width="15%" />
+            </style>
+            <style font-italic="true" left-border-width="1" top-border-width="3">
+              <text value="UUS" width="15%" />
+            </style>
+            <style font-italic="true" left-border-width="1" top-border-width="3">
+              <text value="NS" width="15%" />
+            </style>
+            <style font-italic="true" left-border-width="1" top-border-width="3">
+              <text value="IDED" width="20%" />
+            </style>
+            <style font-italic="true" horizontal-align="right" left-border-width="1" right-border-width="3" top-border-width="3">
+              <text value="Částka" width="15%" />
+            </style>
+            <style font-italic="true">
+              <text value="" width="20%" />
+            </style>
+          </line>
+        </head>
+        <body>
+          <line>
+            <style left-border-width="3" top-border-width="1" bottom-border-width="1">
+              <value-of name="UCS" width="15%" />
+            </style>
+            <style left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="UUS" width="15%" />
+            </style>
+            <style left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="NKS" width="15%" />
+            </style>
+            <style left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="IDED" width="20%" />
+            </style>
+            <style horizontal-align="right" left-border-width="1" right-border-width="3" top-border-width="1" bottom-border-width="1">
+              <value-of name="C" width="15%" />
+            </style>
+            <text value="" width="20%" />
+          </line>
+        </body>
+        <foot>
+          <line>
+            <style top-border-width="3" top-padding="0" bottom-padding="0">
+              <text value="" width="80%" height="5.63mm" />
+            </style>
+            <text value="" width="20%" />
+          </line>
+        </foot>
+      </region>
+      <region name="VAZ_PD">
+        <head>
+          <line>
+            <style font-bold="true">
+              <text value="Vázané primární doklady:" width="100%" />
+            </style>
+          </line>
+          <line>
+            <style font-italic="true" left-border-width="3" top-border-width="3">
+              <text value="Dat. podání" width="10%" />
+            </style>
+            <style font-italic="true" left-border-width="1" top-border-width="3">
+              <text value="Identifikátor" width="15%" />
+            </style>
+            <style font-italic="true" left-border-width="1" top-border-width="3">
+              <text value="Agenda" width="10%" />
+            </style>
+            <style font-italic="true" left-border-width="1" top-border-width="3">
+              <text value="Typ dokladu" width="25%" />
+            </style>
+            <style font-italic="true" left-border-width="1" top-border-width="3">
+              <text value="Název" width="25%" />
+            </style>
+            <style font-italic="true" left-border-width="1" right-border-width="3" top-border-width="3">
+              <text value="Agendové číslo" width="15%" />
+            </style>
+          </line>
+        </head>
+        <body>
+          <line>
+            <style left-border-width="3" top-border-width="1" bottom-border-width="1">
+              <value-of name="DAT_POD" width="10%" />
+            </style>
+            <style left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="IXP" width="15%" />
+            </style>
+            <style left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="TYP_AG" width="10%" />
+            </style>
+            <style left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="IXS_TYP_TXT" width="25%" />
+            </style>
+            <style left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="NAZEV" width="25%" />
+            </style>
+            <style left-border-width="1" right-border-width="3" top-border-width="1" bottom-border-width="1">
+              <value-of name="AC" width="15%" />
+            </style>
+          </line>
+        </body>
+        <foot>
+          <line>
+            <style top-border-width="3" top-padding="0" bottom-padding="0">
+              <text value="" width="100%" height="1mm" />
+            </style>
+          </line>
+        </foot>
+      </region>
+      <line>
+        <text value="" width="100%" />
+      </line>
+      <line>
+        <text value="Počet příloh:" width="100%" />
+      </line>
+      <line break-page-after="always">
+        <text value="" width="100%" />
+      </line>
+    </body>
+  </region>
+</format>

@@ -1,0 +1,932 @@
+<?xml version="1.0" encoding="windows-1250"?>
+
+
+<format xmlns="http://www.gordic.cz/TR/alf/1.3/" type="grr">
+
+  <info
+    ixs_xme="0000ALX0AMU6"
+    xmeta_ver="1"
+    xmeta_subver_min="1"
+    nazev="Obecný"
+    poznamka="Likvidační záznam se souv. dokumenty"
+    ixs_alv="0000ALV03HR5"
+    allowed_output="htm,xls,doc,frm"
+    ixs_frm="0000ALF01MYD"
+    maker="0432"
+    create_date="20080206"
+    last_modif="201801041546"
+    rokmes_od="199801"
+    rokmes_do="999913"
+  />
+
+  <script><![CDATA[
+def VratDolozka():
+    return 1 #vrati dolozku
+  
+    
+def ZobrazICORCPop(self,tes,zobr_rc):
+    if tes=='20': 
+      if zobr_rc=='0':
+        self.value=''
+      else:
+        self.value='RČ:'
+    else:
+      self.value='IČO:'
+
+def ZobrazICORCHod(self,tes,zobr_rc,ico,rc):
+    if tes=='20': 
+      if zobr_rc=='0':
+        self.value=''
+      else:
+        self.value=rc
+    else:
+      self.value=ico
+
+# -------------------------------------------  
+# funkce pro rozpocitani dynamickych sirek
+# -------------------------------------------  
+def SpocitejSirky(sirky,delka,poradi):
+  celkem_delka=0;
+  
+  #zjisteni kompletni sirky textu
+  i1=0;
+  for i in delka:
+    celkem_delka=celkem_delka+i;
+    i1=i1+1;
+    
+  pocetdelka=i1-1;
+
+  i1=0;
+  celkem_delka2=100;
+  minporadi=0;
+  max=1;
+  for i in delka:
+    if i>0:
+      subsirka=int(round(i/celkem_delka,2)*100);
+      if pocetdelka==i1:
+        subsirka=int(celkem_delka2);
+        celkem_delka2=0;
+      else:
+        celkem_delka2=celkem_delka2-subsirka;
+      if i1<15:
+        #tohle jsou polozky ucetni vety a ty musi byt podle poradi...
+        sirky[int(poradi[i1])-1]=subsirka
+      else:
+        sirky[i1]=subsirka;
+    i1=i1+1;
+
+  # ted se pokusim seskupit polozky bez nul
+  nuly=0;
+  koncnuly=-1;
+  max=14;
+  while nuly<>koncnuly:
+    i1=0;
+    nuly=0;
+    koncnuly=0;
+    while i1<max:
+      if sirky[i1]==0:
+        sirky[i1]=sirky[i1+1];
+        sirky[i1+1]=0;
+      if sirky[i1]==0:
+        koncnuly=koncnuly+1
+        nuly=nuly+1
+      else:
+        koncnuly=0;
+      i1=i1+1
+
+  return ""
+
+# -------------------------------------------  
+# funkce pro prohozeni ucetnich polozek
+# -------------------------------------------  
+def ProhodUCTPol(poradi,polozky):
+
+  minporadi=0;
+  pocet=0;
+  polozky2 = [];
+  i=0
+  while i<15:
+    polozky2.append("");
+    i=i+1;
+  
+  while pocet<15:
+    i=0;
+    while i<15:
+      if poradi[i]==pocet+1:
+        polozky2[minporadi]=polozky[i];
+        minporadi=minporadi+1;
+        break;
+      i=i+1;
+    pocet=pocet+1;
+
+  i=0    
+  while i<minporadi:
+    polozky[i]=polozky2[i];
+    i=i+1
+    
+  while minporadi<15:
+    polozky[minporadi]="";
+    minporadi=minporadi+1
+
+  return ""
+
+]]></script>
+
+  <region name="LIK_HLA">
+      <head>
+          <line on-each-page="true">
+            <style width="100%">
+              <text value=""/>
+            </style>
+          </line>
+          <line on-each-page="true">
+            <style width="80%">
+              <text value=""/>
+            </style>
+            <style width="10%" horizontal-align="right">
+              <text value="Ze dne: "/>
+            </style>
+            <style width="10%">
+              <text value=""/>
+            </style>
+          </line>
+          <line on-each-page="true">
+            <style width="20%" bottom-border-width="2">
+              <text value=""/>
+            </style>
+            <style width="60%">
+              <text value=""/>
+            </style>
+            <style width="10%" horizontal-align="right">
+              <text value="Počet listů:"/>
+            </style>
+            <style width="10%">
+              <text value=""/>
+            </style>
+          </line>
+          <line on-each-page="true">
+            <style width="20%" horizontal-align="center">
+              <text value="(razítko výstavce)"/>
+            </style>
+            <style width="60%">
+              <text value=""/>
+            </style>
+            <style width="10%" horizontal-align="right">
+              <text value="Přílohy:"/>
+            </style>
+            <style width="10%">
+              <text value=""/>
+            </style>
+          </line>
+          <line on-each-page="true">
+            <style width="100%">
+              <text value="Čj.:"/>
+            </style>
+          </line>
+          <line on-each-page="true">
+            <style width="100%">
+              <text value=""/>
+            </style>
+          </line>
+          <line on-each-page="true">
+            <style width="5%">
+              <text value="UCS:"/>
+            </style>
+            <style width="76%">
+              <value-of name="LIK_HLA.FAK_UCS"/>
+            </style>
+            <style width="4%">
+              <text value="PID: "/>
+            </style>
+            <style width="15%" horizontal-align="right">
+              <value-of name="LIK_HLA.FAK_PID"/>
+            </style>
+          </line>
+          <line on-each-page="true">
+            <style width="100%" left-border-width="2" right-border-width="2" top-border-width="2">
+              <text value=""/>
+            </style>
+          </line>
+          <line on-each-page="true">
+            <style width="100%" left-border-width="2" right-border-width="2" font-size="5" font-bold="true" horizontal-align="center">
+              <text value="Likvidační záznam"/>
+            </style>
+          </line>
+          <line on-each-page="true">
+            <style width="100%" left-border-width="2" right-border-width="2" font-size="5" font-bold="true" horizontal-align="center">
+              <value-of name="LIK_HLA.FAK_POP1"/>
+            </style>
+          </line>
+          <line on-each-page="true">
+            <style width="100%" left-border-width="2" right-border-width="2" bottom-border-width="2">
+              <text value=""/>
+            </style>
+          </line>
+          <line on-each-page="true">
+            <style width="100%">
+              <text value=""/>
+            </style>
+          </line>
+        </head>    
+      <body>
+      <line>
+        <style height="0mm">
+          <value-of name="" onData="sirky=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];poradi=[LIK_HLA.FAK_POR_UEA,LIK_HLA.FAK_POR_UEB,LIK_HLA.FAK_POR_UEC,LIK_HLA.FAK_POR_UED,LIK_HLA.FAK_POR_UEE,LIK_HLA.FAK_POR_UEF,LIK_HLA.FAK_POR_UEG,LIK_HLA.FAK_POR_UEH,LIK_HLA.FAK_POR_UEI,LIK_HLA.FAK_POR_UEJ,LIK_HLA.FAK_POR_TE0,LIK_HLA.FAK_POR_TE1,LIK_HLA.FAK_POR_TE2,LIK_HLA.FAK_POR_TE3,LIK_HLA.FAK_POR_TE4,16,17,18];delky=[LIK_HLA.FAK_SIR_A_UEA,LIK_HLA.FAK_SIR_A_UEB,LIK_HLA.FAK_SIR_A_UEC,LIK_HLA.FAK_SIR_A_UED,LIK_HLA.FAK_SIR_A_UEE,LIK_HLA.FAK_SIR_A_UEF,LIK_HLA.FAK_SIR_A_UEG,LIK_HLA.FAK_SIR_A_UEH,LIK_HLA.FAK_SIR_A_UEI,LIK_HLA.FAK_SIR_A_UEJ,LIK_HLA.FAK_SIR_A_TE0,LIK_HLA.FAK_SIR_A_TE1,LIK_HLA.FAK_SIR_A_TE2,LIK_HLA.FAK_SIR_A_TE3,LIK_HLA.FAK_SIR_A_TE4,12,12,15];SpocitejSirky(sirky,delky,poradi);sirky2=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];delky2=[LIK_HLA.FAK_SIR_A_UEA,LIK_HLA.FAK_SIR_A_UEB,LIK_HLA.FAK_SIR_A_UEC,LIK_HLA.FAK_SIR_A_UED,LIK_HLA.FAK_SIR_A_UEE,LIK_HLA.FAK_SIR_A_UEF,LIK_HLA.FAK_SIR_A_UEG,LIK_HLA.FAK_SIR_A_UEH,LIK_HLA.FAK_SIR_A_UEI,LIK_HLA.FAK_SIR_A_UEJ,LIK_HLA.FAK_SIR_A_TE0,LIK_HLA.FAK_SIR_A_TE1,LIK_HLA.FAK_SIR_A_TE2,LIK_HLA.FAK_SIR_A_TE3,LIK_HLA.FAK_SIR_A_TE4,12,15,15];SpocitejSirky(sirky2,delky2,poradi);nazvy_uct=[LIK_HLA.FAK_NAZ_UEA,LIK_HLA.FAK_NAZ_UEB,LIK_HLA.FAK_NAZ_UEC,LIK_HLA.FAK_NAZ_UED,LIK_HLA.FAK_NAZ_UEE,LIK_HLA.FAK_NAZ_UEF,LIK_HLA.FAK_NAZ_UEG,LIK_HLA.FAK_NAZ_UEH,LIK_HLA.FAK_NAZ_UEI,LIK_HLA.FAK_NAZ_UEJ,LIK_HLA.FAK_NAZ_TE0,LIK_HLA.FAK_NAZ_TE1,LIK_HLA.FAK_NAZ_TE2,LIK_HLA.FAK_NAZ_TE3,LIK_HLA.FAK_NAZ_TE4];ProhodUCTPol(poradi,nazvy_uct);pocet_kryti=0;"/>
+        </style>
+      </line>
+      <line>
+        <style width="13%" left-border-width="2" top-border-width="2" horizontal-align="right">
+          <text value="Dodavatel: "/>
+        </style>
+        <style width="37%" right-border-width="2" top-border-width="2">
+          <value-of name="DOD_NAZ"/>
+        </style>
+        <style width="13%" top-border-width="2" horizontal-align="right">
+          <value-of name="" onData="ZobrazICORCPop(self,LIK_HLA.DOD_TES,LIK_HLA.FAK_ZOB_RC)"/>
+        </style>
+        <style width="37%" right-border-width="2" top-border-width="2">
+          <value-of name="" onData="ZobrazICORCHod(self,LIK_HLA.DOD_TES,LIK_HLA.FAK_ZOB_RC,LIK_HLA.DOD_ICO,LIK_HLA.DOD_RC)"/>
+        </style>
+      </line>
+      <line>
+        <style width="13%" left-border-width="2" horizontal-align="right">
+          <text value="Číslo faktury: "/>
+        </style>
+        <style width="37%" right-border-width="2">
+          <value-of name="DOD_AC"/>
+        </style>
+        <style width="13%" horizontal-align="right">
+          <text value="Fakt. částka: "/>
+        </style>
+        <style width="37%" right-border-width="2">
+          <value-of name="FAK_CEN"/>
+        </style>
+      </line>
+      <line>
+        <style width="13%" left-border-width="2" bottom-border-width="2" horizontal-align="right">
+          <text value="Evid. dne: "/>
+        </style>
+        <style width="37%" right-border-width="2" bottom-border-width="2">
+          <value-of name="FAK_DEN"/>
+        </style>
+        <style width="13%" bottom-border-width="2" horizontal-align="right">
+          <text value="Splatnost dne: "/>
+        </style>
+        <style width="37%" right-border-width="2" bottom-border-width="2">
+          <value-of name="FAK_DSP"/>
+        </style>
+      </line>
+      <line>
+        <style width="100%">
+          <text value=""/>
+        </style>
+      </line>
+      <line>
+        <style width="100%">
+          <text value="Faktura je přezkoušena z věcného a číselného hlediska a je správná."/>
+        </style>
+      </line>
+      <line>
+        <style width="100%">
+          <text value=""/>
+        </style>
+      </line>
+      <region name="LIK_LIK1">
+        <body>
+          <line>
+            <style width="15%">
+              <value-of name="LIK_TXT"/>
+            </style>
+            <style width="50%">
+              <value-of name="LIK_NAZ"/>
+            </style>
+            <style width="20%" horizontal-align="right">
+              <value-of name="LIK_CEN"/>
+            </style>
+          </line>
+        </body>
+        <foot>
+          <line>
+            <style width="100%">
+              <text value=""/>
+            </style>
+          </line>
+        </foot>
+      </region>
+      <region name="LIK_LIK2">
+        <body>
+          <line>
+            <style width="15%">
+              <text value="Jedná se o:"/>
+            </style>
+            <style width="50%">
+              <text value="(likvidace)"/>
+            </style>
+          </line>
+        </body>
+        <foot>
+          <line>
+            <style width="100%">
+              <text value=""/>
+            </style>
+          </line>
+        </foot>
+      </region>
+      <region name="LIK_HLA2">
+        <body>
+          <line>
+            <style width="100%">
+              <text value="Potvrzuji, že budou (nebudou)* další pořizovací výdaje."/>
+            </style>
+          </line>
+          <line>
+            <style width="100%">
+              <text value="Majetek je (není)* určen ke komplementaci investiční akce .........."/>
+            </style>
+          </line>
+        </body>
+      </region>
+      <region name="LIK_KRY">
+        <body>
+          <line>
+            <style width="100%">
+              <text value=""/>
+            </style>
+          </line>
+          <line>
+            <style width="20%">
+              <value-of name="KRY_TXT"/>
+            </style>
+            <style width="80%">
+              <value-of name="KRY_NAZ"/>
+            </style>
+          </line>
+          <region name="LIK_KRY_UCT">
+            <head>
+             <style font-size="1" font-bold="true">
+              <line>
+                <style width="1%" border-width="1">
+                   <value-of name="" onData="self.value='UCS';self.style.width=str(sirky[15])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                   <value-of name="" onData="self.value='NS';self.style.width=str(sirky[16])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[0];self.style.width=str(sirky[0])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[1];self.style.width=str(sirky[1])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[2];self.style.width=str(sirky[2])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[3];self.style.width=str(sirky[3])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[4];self.style.width=str(sirky[4])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[5];self.style.width=str(sirky[5])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[6];self.style.width=str(sirky[6])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[7];self.style.width=str(sirky[7])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[8];self.style.width=str(sirky[8])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[9];self.style.width=str(sirky[9])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[10];self.style.width=str(sirky[10])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[11];self.style.width=str(sirky[11])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[12];self.style.width=str(sirky[12])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[13];self.style.width=str(sirky[13])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[14];self.style.width=str(sirky[14])+'%'"/>
+                </style>
+                <style width="84%" border-width="1" horizontal-align="right">
+                   <value-of name="" onData="self.value='Částka';self.style.width=str(sirky[17])+'%'"/>
+                </style>
+              </line>
+             </style>
+            </head>
+            <body>
+             <style font-size="1">
+              <line>
+                <style height="0mm">
+                  <value-of name="" onData="polozky_uct=[LIK_KRY_UCT.KRY_UEA,LIK_KRY_UCT.KRY_UEB,LIK_KRY_UCT.KRY_UEC,LIK_KRY_UCT.KRY_UED,LIK_KRY_UCT.KRY_UEE,LIK_KRY_UCT.KRY_UEF,LIK_KRY_UCT.KRY_UEG  ,LIK_KRY_UCT.KRY_UEH,LIK_KRY_UCT.KRY_UEI,LIK_KRY_UCT.KRY_UEJ,LIK_KRY_UCT.KRY_TE0,LIK_KRY_UCT.KRY_TE1,LIK_KRY_UCT.KRY_TE2,LIK_KRY_UCT.KRY_TE3,LIK_KRY_UCT.KRY_TE4];ProhodUCTPol(poradi,polozky_uct);"/>
+                </style>
+              </line>
+              <line>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=LIK_KRY_UCT.KRY_UCS;self.style.width=str(sirky[15])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=LIK_KRY_UCT.KRY_NKS;self.style.width=str(sirky[16])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[0];self.style.width=str(sirky[0])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[1];self.style.width=str(sirky[1])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[2];self.style.width=str(sirky[2])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[3];self.style.width=str(sirky[3])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[4];self.style.width=str(sirky[4])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[5];self.style.width=str(sirky[5])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[6];self.style.width=str(sirky[6])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[7];self.style.width=str(sirky[7])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[8];self.style.width=str(sirky[8])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[9];self.style.width=str(sirky[9])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[10];self.style.width=str(sirky[10])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[11];self.style.width=str(sirky[11])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[12];self.style.width=str(sirky[12])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[13];self.style.width=str(sirky[13])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[14];self.style.width=str(sirky[14])+'%'"/>
+                </style>
+                <style width="84%" left-border-width="1" right-border-width="1" bottom-border-width="1" horizontal-align="right">
+                  <value-of name="" onData="self.value=LIK_KRY_UCT.KRY_CEN;self.style.width=str(sirky[17])+'%'"/>
+                </style>
+              </line>
+             </style> 
+            </body>
+          </region>
+        </body>
+      </region>
+          <region name="KRY_DEF_UCT">
+            <head>
+              <line>
+                <style width="100%">
+                  <text value="Zaúčtované krytí:"/>
+                </style>
+              </line>
+             <style font-size="1" font-bold="true">
+              <line>
+                <style width="1%" border-width="1">
+                   <value-of name="" onData="self.value='NS';self.style.width=str(sirky[15])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[0];self.style.width=str(sirky[0])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[1];self.style.width=str(sirky[1])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[2];self.style.width=str(sirky[2])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[3];self.style.width=str(sirky[3])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[4];self.style.width=str(sirky[4])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[5];self.style.width=str(sirky[5])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[6];self.style.width=str(sirky[6])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[7];self.style.width=str(sirky[7])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[8];self.style.width=str(sirky[8])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[9];self.style.width=str(sirky[9])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[10];self.style.width=str(sirky[10])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[11];self.style.width=str(sirky[11])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[12];self.style.width=str(sirky[12])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[13];self.style.width=str(sirky[13])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[14];self.style.width=str(sirky[14])+'%'"/>
+                </style>
+                <style width="1%" border-width="1" horizontal-align="right">
+                   <value-of name="" onData="self.value='MD';self.style.width=str(sirky[16])+'%'"/>
+                </style>
+                <style width="84%" border-width="1" horizontal-align="right">
+                   <value-of name="" onData="self.value='DAL';self.style.width=str(sirky[17])+'%'"/>
+                </style>
+              </line>
+             </style>
+            </head>
+            <body>
+             <style font-size="1">
+              <line>
+                <style height="0mm">
+                  <value-of name="" onData="polozky_uct=[KRY_DEF_UCT.KRY_UEA,KRY_DEF_UCT.KRY_UEB,KRY_DEF_UCT.KRY_UEC,KRY_DEF_UCT.KRY_UED,KRY_DEF_UCT.KRY_UEE,KRY_DEF_UCT.KRY_UEF,KRY_DEF_UCT.KRY_UEG  ,KRY_DEF_UCT.KRY_UEH,KRY_DEF_UCT.KRY_UEI,KRY_DEF_UCT.KRY_UEJ,KRY_DEF_UCT.KRY_TE0,KRY_DEF_UCT.KRY_TE1,KRY_DEF_UCT.KRY_TE2,KRY_DEF_UCT.KRY_TE3,KRY_DEF_UCT.KRY_TE4];ProhodUCTPol(poradi,polozky_uct);"/>
+                </style>
+              </line>
+              <line>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=KRY_DEF_UCT.KRY_NKS;self.style.width=str(sirky[15])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[0];self.style.width=str(sirky[0])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[1];self.style.width=str(sirky[1])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[2];self.style.width=str(sirky[2])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[3];self.style.width=str(sirky[3])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[4];self.style.width=str(sirky[4])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[5];self.style.width=str(sirky[5])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[6];self.style.width=str(sirky[6])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[7];self.style.width=str(sirky[7])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[8];self.style.width=str(sirky[8])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[9];self.style.width=str(sirky[9])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[10];self.style.width=str(sirky[10])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[11];self.style.width=str(sirky[11])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[12];self.style.width=str(sirky[12])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[13];self.style.width=str(sirky[13])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[14];self.style.width=str(sirky[14])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1" horizontal-align="right">
+                  <value-of name="" onData="self.value=KRY_DEF_UCT.KRY_MD;self.style.width=str(sirky[16])+'%'"/>
+                </style>
+                <style width="84%" left-border-width="1" right-border-width="1" bottom-border-width="1" horizontal-align="right">
+                  <value-of name="" onData="self.value=KRY_DEF_UCT.KRY_DAL;self.style.width=str(sirky[17])+'%'"/>
+                </style>
+              </line>
+             </style> 
+            </body>
+          </region>
+          <region name="LIK_DEF_UCT">
+            <head>
+              <line>
+                <style width="100%">
+                  <text value="Zaúčtovaná likvidace:"/>
+                </style>
+              </line>
+             <style font-size="1" font-bold="true">
+              <line>
+                <style width="1%" border-width="1">
+                   <value-of name="" onData="self.value='NS';self.style.width=str(sirky[15])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[0];self.style.width=str(sirky[0])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[1];self.style.width=str(sirky[1])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[2];self.style.width=str(sirky[2])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[3];self.style.width=str(sirky[3])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[4];self.style.width=str(sirky[4])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[5];self.style.width=str(sirky[5])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[6];self.style.width=str(sirky[6])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[7];self.style.width=str(sirky[7])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[8];self.style.width=str(sirky[8])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[9];self.style.width=str(sirky[9])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[10];self.style.width=str(sirky[10])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[11];self.style.width=str(sirky[11])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[12];self.style.width=str(sirky[12])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[13];self.style.width=str(sirky[13])+'%'"/>
+                </style>
+                <style width="1%" border-width="1">
+                  <value-of name="" onData="self.value=nazvy_uct[14];self.style.width=str(sirky[14])+'%'"/>
+                </style>
+                <style width="1%" border-width="1" horizontal-align="right">
+                   <value-of name="" onData="self.value='MD';self.style.width=str(sirky[16])+'%'"/>
+                </style>
+                <style width="84%" border-width="1" horizontal-align="right">
+                   <value-of name="" onData="self.value='DAL';self.style.width=str(sirky[17])+'%'"/>
+                </style>
+              </line>
+             </style>
+            </head>
+            <body>
+             <style font-size="1">
+              <line>
+                <style height="0mm">
+                  <value-of name="" onData="polozky_uct=[LIK_DEF_UCT.LIK_UEA,LIK_DEF_UCT.LIK_UEB,LIK_DEF_UCT.LIK_UEC,LIK_DEF_UCT.LIK_UED,LIK_DEF_UCT.LIK_UEE,LIK_DEF_UCT.LIK_UEF,LIK_DEF_UCT.LIK_UEG  ,LIK_DEF_UCT.LIK_UEH,LIK_DEF_UCT.LIK_UEI,LIK_DEF_UCT.LIK_UEJ,LIK_DEF_UCT.LIK_TE0,LIK_DEF_UCT.LIK_TE1,LIK_DEF_UCT.LIK_TE2,LIK_DEF_UCT.LIK_TE3,LIK_DEF_UCT.LIK_TE4];ProhodUCTPol(poradi,polozky_uct);"/>
+                </style>
+              </line>
+              <line>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=LIK_DEF_UCT.LIK_NKS;self.style.width=str(sirky[15])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[0];self.style.width=str(sirky[0])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[1];self.style.width=str(sirky[1])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[2];self.style.width=str(sirky[2])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[3];self.style.width=str(sirky[3])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[4];self.style.width=str(sirky[4])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[5];self.style.width=str(sirky[5])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[6];self.style.width=str(sirky[6])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[7];self.style.width=str(sirky[7])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[8];self.style.width=str(sirky[8])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[9];self.style.width=str(sirky[9])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[10];self.style.width=str(sirky[10])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[11];self.style.width=str(sirky[11])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[12];self.style.width=str(sirky[12])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[13];self.style.width=str(sirky[13])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1">
+                  <value-of name="" onData="self.value=polozky_uct[14];self.style.width=str(sirky[14])+'%'"/>
+                </style>
+                <style width="1%" left-border-width="1" right-border-width="1" bottom-border-width="1" horizontal-align="right">
+                  <value-of name="" onData="self.value=LIK_DEF_UCT.LIK_MD;self.style.width=str(sirky[16])+'%'"/>
+                </style>
+                <style width="84%" left-border-width="1" right-border-width="1" bottom-border-width="1" horizontal-align="right">
+                  <value-of name="" onData="self.value=LIK_DEF_UCT.LIK_DAL;self.style.width=str(sirky[17])+'%'"/>
+                </style>
+              </line>
+             </style> 
+            </body>
+          </region>
+      <line>
+        <style width="100%">
+          <value-of name="" onData="dolozka=VratDolozka()"/>
+        </style>
+      </line>
+      
+      <line break-page-before="avoid">
+        <style width="50%" left-border-width="1" top-border-width="1">
+          <text value="Záznam vyhotovil:"/>
+        </style>
+        <style width="20%" top-border-width="1">
+          <text value="Dne:"/>
+        </style>
+        <style width="30%" right-border-width="1" top-border-width="1">
+          <text value="Podpis:"/>
+        </style>
+      </line>
+      <line break-page-before="avoid">
+        <style width="50%" left-border-width="1" bottom-border-width="1">
+          <text value="Záznam schválil:"/>
+        </style>
+        <style width="20%" bottom-border-width="1">
+          <text value="Dne:"/>
+        </style>
+        <style width="30%" right-border-width="1" bottom-border-width="1">
+          <text value="Podpis:"/>
+        </style>
+      </line>
+      <line only-if="dolozka==1" break-page-before="avoid">
+        <style width="100%">
+          <text value=""/>
+        </style>
+      </line>
+      <line only-if="dolozka==1" break-page-before="avoid">
+        <style width="100%">
+          <text value="DOLOŽKA podle § 3, odst.4, písm. a) zákona 320/2001 Sb"/>
+        </style>
+      </line>
+      <line only-if="dolozka==1" break-page-before="avoid">
+        <style width="10%" left-border-width="1" right-border-width="1" top-border-width="1">
+          <text value="PŘÍKAZCE"/>
+        </style>
+      </line>
+      <line only-if="dolozka==1" break-page-before="avoid">
+        <style width="50%" left-border-width="1">
+          <text value="Operaci schvaluji:"/>
+        </style>
+        <style width="20%">
+          <text value="Dne:"/>
+        </style>
+        <style width="30%" right-border-width="1">
+          <text value="Podpis:"/>
+        </style>
+      </line>
+      <line only-if="dolozka==1" break-page-before="avoid">
+        <style width="10%" left-border-width="1" right-border-width="1" top-border-width="1">
+          <text value="SPRÁVCE ROZPOČTU"/>
+        </style>
+      </line>
+      <line only-if="dolozka==1" break-page-before="avoid">
+        <style width="50%" left-border-width="1">
+          <text value="Operaci schvaluji:"/>
+        </style>
+        <style width="20%">
+          <text value="Dne:"/>
+        </style>
+        <style width="30%" right-border-width="1">
+          <text value="Podpis:"/>
+        </style>
+      </line>
+      <line only-if="dolozka==1" break-page-before="avoid">
+        <style width="10%" left-border-width="1" right-border-width="1" top-border-width="1">
+          <text value="HLAVNÍ ÚČETNÍ"/>
+        </style>
+      </line>
+      <line only-if="dolozka==1" break-page-before="avoid">
+        <style width="50%" left-border-width="1" bottom-border-width="1">
+          <text value="Operaci prověřil:"/>
+        </style>
+        <style width="20%" bottom-border-width="1">
+          <text value="Dne:"/>
+        </style>
+        <style width="30%" right-border-width="1" bottom-border-width="1">
+          <text value="Podpis:"/>
+        </style>
+      </line>
+      <line only-if="dolozka==1" break-page-before="avoid">
+        <style width="100%">
+          <text value=""/>
+        </style>
+      </line>
+      <line>
+        <style width="100%">
+          <text value=""/>
+        </style>
+      </line>
+      <line>
+        <style width="100%">
+          <text value=""/>
+        </style>
+      </line>
+      
+      <region name="SEZ_DOK_POL">
+        <head>
+          <line>
+            <style width="100%" left-border-width="2" right-border-width="2" top-border-width="2">
+              <text value="Přílohy"/>
+            </style>
+          </line>
+          <line>
+            <style width="15%" left-border-width="2" top-border-width="1" bottom-border-width="1">
+              <text value="PID Dokumentu"/>
+            </style>
+            <style width="10%" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="Akt. značka"/>
+            </style>
+            <style width="13%" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="Typ dokladu"/>
+            </style>
+            <style width="24%" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="Poznámka"/>
+            </style>
+            <style width="30%" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <text value="Věc"/>
+            </style>
+            <style width="8%" left-border-width="1" top-border-width="1" bottom-border-width="1" right-border-width="2">
+              <text value="Agenda"/>
+            </style>
+          </line>
+        </head>
+        <body>
+          <line only-if="SEZ_DOK_POL.AKTIVITA==''">
+            <style width="15%" left-border-width="2">
+              <value-of name="PID"/>
+            </style>
+            <style width="10%" left-border-width="1">
+              <value-of name="AKT"/>
+            </style>
+            <style width="13%" left-border-width="1">
+              <value-of name="KTG_TYP"/>
+            </style>
+            <style width="24%" left-border-width="1">
+              <value-of name="POZ"/>
+            </style>
+            <style width="30%" left-border-width="1">
+              <value-of name="VEC"/>
+            </style>
+            <style width="8%" left-border-width="1" right-border-width="2">
+              <value-of name="AG_TYP_ZKR"/>
+            </style>
+          </line>
+        </body>
+        <foot>
+          <line>
+            <style width="100%" top-border-width="2">
+              <text value=""/>
+            </style>
+          </line>
+          <line>
+            <style width="100%">
+              <text value=""/>
+            </style>
+          </line>
+        </foot>
+      </region>
+      <line break-page-after="true">
+        <style width="50%">
+          <text value="* nehodící škrtněte"/>
+        </style>
+        <style width="50%" horizontal-align="right">
+          <text value="GORDIC software"/>
+        </style>
+      </line>
+    </body>
+  </region>
+</format>

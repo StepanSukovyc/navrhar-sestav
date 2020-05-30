@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="windows-1250"?>
+
+
+<format type="grr" xmlns="http://www.gordic.cz/TR/alf/1.3/">
+
+	<info
+		ixs_xme="0000ALX0AWXT"
+		xmeta_ver="1"
+		xmeta_subver_min="1"
+		format="PP1"
+		nazev="Výkaz v Kč bez hlavičky"
+		poznamka="distribuce GINIS 3.44"
+		ixs_alv="0000ALV04WUG,0000ALV04V0T"
+		allowed_output="htm,xls,doc,frm"
+		ixs_frm="0000ALF02WC4"
+		maker="0202"
+		last_modif="201106171750"
+		rokmes_od="201101"
+		rokmes_do="299913"
+	/>
+
+	<paper-setting paper-width="297mm" paper-height="210mm"/>
+
+<script><![CDATA[
+#-------------------------------------------------
+# definice zobrazeni cisla
+#-------------------------------------------------
+def cisla():
+ if self.value=='X':
+  self.style.font_color='black'
+  self.style.align='right'
+  self.value='X '
+ else:
+  num=Decimal(self.value)
+  self.value=num.format("# 0,00 ;# 0,00-; ")
+  if num<0:
+   self.style.font_color='red'
+  else:
+   self.style.font_color='black'
+
+#-------------------------------------------------
+# funkce pro prevedeni cisla na pismeno organizace
+#-------------------------------------------------
+def ret_typ_org_txt(typ_txt):
+  typ_txt=typ_txt.strip()
+  if typ_txt=='1':
+    return 'U'
+  else:
+    if typ_txt=='2':
+      return 'O'
+    else:
+      if typ_txt=='3':
+        return 'P'
+      else:
+        if typ_txt=='4':
+          return 'F'
+        else:
+          if typ_txt=='5':
+            return 'S'
+
+  return ''
+]]></script>
+
+	<region name="PROSTREDKY">
+		<head>
+			<line on-each-page="true" endpage="false">
+				<style width="18%" bottom-border-width="1" font-face="arial" font-size="1" font-italic="true" multiline="false">
+					<value-of name="" onData="self.value=&apos;Licence: &apos;+PROSTREDKY.LIC"/>
+				</style>
+				<style width="82%" bottom-border-width="1" font-face="arial" font-size="1" font-italic="true" horizontal-align="right">
+					<value-of name="" onData="self.value=PROSTREDKY.FORMAT+&apos; / &apos; +format.info[&apos;format&apos;] +&apos;  (&apos;+PROSTREDKY.VERZE+&apos; / &apos; +format.info[&apos;last_modif&apos;]+&apos;)&apos;"/>
+				</style>
+			</line>
+			<line on-each-page="true" endpage="false">
+				<style width="100%" font-face="arial" font-size="1" font-italic="true" multiline="false">
+					<text value=""/>
+				</style>
+			</line>
+		</head>
+		<body>
+			<line>
+				<style width="100%" height="0mm">
+					<value-of name="" onData="typ_org_txt=ret_typ_org_txt(PROSTREDKY.TYP);self.value=typ_org_txt"/>
+				</style>
+			</line>
+			<region name="PROSTR-HLAVICKA">
+				<head>
+					<line on-each-page="true">
+						<style width="18%" font-face="arial">
+							<text value="" onLoad="sirka1=&apos;20&apos;;sirka2=&apos;0&apos;;sirka3=&apos;14&apos;;sirka4=&apos;0&apos;"/>
+						</style>
+						<style width="82%" font-face="arial" font-size="5" font-bold="true">
+							<value-of name="" onData="self.value=&apos;SOUPIS PENĚŽNÍCH PROSTŘEDKŮ &apos;+PROSTR_HLAVICKA.OPISXML"/>
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="2%" font-face="arial">
+							<text value=""/>
+						</style>
+						<style width="16%">
+							<image file="znak-m.bmp" image-width="25mm" image-height="25mm"/>
+						</style>
+						<style width="82%" font-face="arial" font-size="165tw" font-bold="true">
+							<value-of name="" onData="if PROSTREDKY.TYP==&apos;1&apos;: typ=&apos;územní samosprávné celky, svazky obcí, regionální rady&apos;&#10;if PROSTREDKY.TYP==&apos;2&apos;: typ=&apos;organizační složky státu&apos;&#10;if PROSTREDKY.TYP==&apos;3&apos;: typ=&apos;příspěvkové organizace zřizované ÚSC&apos;&#10;if PROSTREDKY.TYP==&apos;4&apos;: typ=&apos;státní fondy&apos;&#10;if PROSTREDKY.TYP==&apos;5&apos;: typ=&apos;příspěvkové organizace zřizované OSS&apos;&#10;self.value=typ"/>
+						</style>
+					</line>
+					<line>
+						<style width="18%" font-face="arial">
+							<text value=""/>
+						</style>
+						<style width="82%" font-face="arial">
+							<value-of name="REZIM"/>
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="18%" font-face="arial">
+							<text value=""/>
+						</style>
+						<style width="7%" font-face="arial" vertical-align="center">
+							<text value="Období:"/>
+						</style>
+						<style width="75%" font-face="arial" font-size="3" font-bold="true">
+							<value-of name="" onData="self.value=PROSTR_HLAVICKA.M+&apos; / &apos;+PROSTR_HLAVICKA.Y"/>
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="18%" font-face="arial">
+							<text value=""/>
+						</style>
+						<style width="7%" font-face="arial">
+							<text value="IČO:"/>
+						</style>
+						<style width="75%" font-face="arial" font-size="3" font-bold="true">
+							<value-of name="X-ICO"/>
+						</style>
+					</line>
+					<line on-each-page="true">
+						<style width="18%" font-face="arial">
+							<text value=""/>
+						</style>
+						<style width="7%" font-face="arial">
+							<text value="Název:"/>
+						</style>
+						<style width="75%" font-face="arial" font-size="3" font-bold="true">
+							<value-of name="" onData="self.value=PROSTR_HLAVICKA.X_N+&apos; &apos;+PROSTR_HLAVICKA.X_NPOM"/>
+						</style>
+					</line>
+				</head>
+				<body>
+					<line>
+						<style width="100%" font-size="1">
+							<value-of name="" onLoad="obdobipr=&apos;&apos;" onData="obdobipr=PROSTR_HLAVICKA.OBDOBI;&#10;self.value=&apos; &apos;"/>
+						</style>
+					</line>
+					<region name="HLAV-SNS">
+						<body>
+							<line on-each-page="true" endpage="false">
+								<style width="18%" font-face="arial">
+									<text value=""/>
+								</style>
+								<style width="7%" font-face="arial">
+									<text value="SNS:"/>
+								</style>
+								<style width="75%" font-face="arial" font-size="3" font-bold="true">
+									<value-of name="N"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<region name="HLAV-UCS">
+						<body>
+							<line on-each-page="true" endpage="false">
+								<style width="18%" font-face="arial">
+									<text value=""/>
+								</style>
+								<style width="7%" font-face="arial">
+									<text value="UCS:"/>
+								</style>
+								<style width="11%" font-face="arial" font-size="3">
+									<value-of name="I"/>
+								</style>
+								<style width="64%" font-face="arial" font-size="3" font-bold="true">
+									<value-of name="N"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<region name="HLAV-UUS">
+						<body>
+							<line on-each-page="true" endpage="false">
+								<style width="18%" font-face="arial">
+									<text value=""/>
+								</style>
+								<style width="7%" font-face="arial">
+									<text value="UUS:"/>
+								</style>
+								<style width="11%" font-face="arial">
+									<value-of name="I"/>
+								</style>
+								<style width="64%" font-face="arial">
+									<value-of name="N"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<region name="HLAV-NKS">
+						<body>
+							<line on-each-page="true" endpage="false">
+								<style width="18%" font-face="arial">
+									<text value=""/>
+								</style>
+								<style width="7%" font-face="arial">
+									<text value="NS:"/>
+								</style>
+								<style width="11%" font-face="arial" font-italic="true">
+									<value-of name="I"/>
+								</style>
+								<style width="64%" font-face="arial" font-italic="true">
+									<value-of name="N"/>
+								</style>
+							</line>
+						</body>
+					</region>
+					<line>
+						<style width="100%" top-border-width="1" font-size="1">
+							<text value=""/>
+						</style>
+					</line>
+				</body>
+			</region>
+			<region name="PROSTR-RAD">
+				<head>
+					<line on-each-page="true" endpage="false">
+						<style width="5%" top-border-width="1" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" vertical-align="bottom">
+							<text value="Číslo syntet. účtu"/>
+						</style>
+						<style width="15%" top-border-width="1" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" vertical-align="bottom">
+							<text value="Číslo bankovního účtu"/>
+						</style>
+						<style width="10%" top-border-width="1" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" vertical-align="bottom">
+							<text value="Datum ukončení vkladu"/>
+						</style>
+						<style width="13%" top-border-width="1" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" horizontal-align="right" vertical-align="bottom">
+							<text value="Počáteční zůstatek &#10;v Kčk 1. dni &#10;vykazovaného období"/>
+						</style>
+						<style width="13%" top-border-width="1" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" vertical-align="bottom">
+							<text value="Obrat MD &#10;v Kč"/>
+						</style>
+						<style width="13%" top-border-width="1" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" vertical-align="bottom">
+							<text value="Obrat DAL &#10;v Kč"/>
+						</style>
+						<style width="13%" top-border-width="1" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" vertical-align="bottom">
+							<text value="Konečný zůstatek &#10;v Kč"/>
+						</style>
+						<style width="5%" top-border-width="1" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" vertical-align="bottom">
+							<text value="Měna"/>
+						</style>
+						<style width="13%" top-border-width="1" bottom-border-width="1" background-color="#e3e3e3" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" vertical-align="bottom">
+							<text value="Konečný zůstatek &#10;v cizí měně"/>
+						</style>
+					</line>
+					<line on-each-page="true" endpage="false">
+						<style width="100%" font-face="arial" font-size="1">
+							<text value=""/>
+						</style>
+					</line>
+				</head>
+				<body>
+					<line>
+						<style width="5%" font-face="arial" horizontal-align="right">
+							<value-of name="SU"/>
+						</style>
+						<style width="15%" font-face="arial" horizontal-align="right">
+							<value-of name="BU"/>
+						</style>
+						<style width="10%" font-face="arial" horizontal-align="right">
+							<value-of name="DATUM"/>
+						</style>
+						<style width="13%" font-face="arial" horizontal-align="right">
+							<value-of name="POCATEK" onPrint="cisla()"/>
+						</style>
+						<style width="13%" font-face="arial" horizontal-align="right">
+							<value-of name="OBRATMD" onPrint="cisla()"/>
+						</style>
+						<style width="13%" font-face="arial" horizontal-align="right">
+							<value-of name="OBRATDAL" onPrint="cisla()"/>
+						</style>
+						<style width="13%" font-face="arial" horizontal-align="right">
+							<value-of name="KONECKC" onPrint="cisla()"/>
+						</style>
+						<style width="5%" font-face="arial" horizontal-align="right">
+							<value-of name="MENA"/>
+						</style>
+						<style width="13%" font-face="arial" horizontal-align="right">
+							<value-of name="KONECCIZI" onPrint="cisla()"/>
+						</style>
+					</line>
+					<region name="PROSTR-CELK">
+						<body>
+							<line>
+								<style width="100%" font-size="1">
+									<text value=""/>
+								</style>
+							</line>
+							<line>
+								<style width="30%" top-border-width="2" background-color="#e3e3e3" font-face="arial" font-size="3" font-color="navy" font-bold="true">
+									<value-of name="SOUCET"/>
+								</style>
+								<style width="13%" top-border-width="2" background-color="#e3e3e3" font-face="arial" font-size="3" font-color="navy" font-bold="true" horizontal-align="right">
+									<value-of name="POCATEK" onPrint="cisla()"/>
+								</style>
+								<style width="13%" top-border-width="2" background-color="#e3e3e3" font-face="arial" font-size="3" font-color="navy" font-bold="true" horizontal-align="right">
+									<value-of name="OBRATMD" onPrint="cisla()"/>
+								</style>
+								<style width="13%" top-border-width="2" background-color="#e3e3e3" font-face="arial" font-size="3" font-color="navy" font-bold="true" horizontal-align="right">
+									<value-of name="OBRATDAL" onPrint="cisla()"/>
+								</style>
+								<style width="13%" top-border-width="2" background-color="#e3e3e3" font-face="arial" font-size="3" font-color="navy" font-bold="true" horizontal-align="right">
+									<value-of name="KONECKC" onPrint="cisla()"/>
+								</style>
+								<style width="18%" top-border-width="2" background-color="#e3e3e3" font-face="arial" font-size="3" font-color="navy" font-bold="true">
+									<text value=""/>
+								</style>
+							</line>
+						</body>
+					</region>
+				</body>
+			</region>
+			<line>
+				<style width="100%" font-face="arial" font-size="8pt" font-italic="true" horizontal-align="center">
+					<text value="* Konec sestavy *"/>
+				</style>
+			</line>
+			<region name="MASKA-REF">
+				<body>
+					<line>
+						<style width="100%" font-size="1">
+							<text value=""/>
+						</style>
+					</line>
+					<region name="MASKA-RADEK">
+						<body>
+							<line>
+								<style width="100%" font-face="courier" font-size="125tw" font-color="red">
+									<value-of name="RADEK"/>
+								</style>
+							</line>
+						</body>
+					</region>
+				</body>
+			</region>
+		</body>
+		<foot>
+			<line on-each-page="true">
+				<style width="30%" top-border-width="1" font-face="arial" font-size="1" font-italic="true" ellipsis-style="cut" multiline="false">
+					<value-of name="" onData="self.value=&apos;&apos;+PROSTREDKY.DATUM+&apos; &apos;+PROSTREDKY.CAS"/>
+				</style>
+				<style width="40%" top-border-width="1" font-face="arial" font-size="1" font-italic="true" horizontal-align="center" multiline="false">
+					<text value="Zpracováno systémem  GINIS® GORDIC® spol. s  r. o."/>
+				</style>
+				<style width="30%" top-border-width="1" font-face="arial" font-size="1" font-italic="true" horizontal-align="right" multiline="false">
+					<value-of name="" onData="self.value=&apos;strana &apos;+ROOT.PAGE+&apos; / &apos;+ROOT.PAGES"/>
+				</style>
+			</line>
+		</foot>
+	</region>
+</format>

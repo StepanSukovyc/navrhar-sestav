@@ -1,0 +1,735 @@
+<?xml version="1.0" encoding="utf-8"?>
+<format type="grr" xmlns="http://www.gordic.cz/TR/alf/1.4/">
+  <info ixs_xme="0000ALX0A9TU" xmeta_ver="1" xmeta_subver_min="1" nazev="S názvem a adresou externího subjektu" poznamka="distribuce GINIS 3.48" ixs_alv="0000ALV02BTE,0000ALV02R87" allowed_output="htm,xls,doc,frm" ixs_frm="0000ALF01TUK" maker="0432" create_date="20100112" dat_modif="201402101507" rokmes_od="199801" rokmes_do="999913" />
+  <script><![CDATA[
+def DefFiltrSml():
+  return "A"
+
+def AddText(vysledek,pridej):
+  if(vysledek!=''): 
+    vysledek=vysledek+',';
+  vysledek=vysledek+pridej;
+  return vysledek
+
+def VratZpusobPlatby(zp_platby_num):
+  if zp_platby_num==0:
+    return 'H'
+  else:
+    if zp_platby_num==10:
+      return 'K'
+    else:
+      return '';
+
+]]></script>
+  <region name="HLAVICKA">
+    <body>
+      <line>
+        <style bottom-border-width="3">
+          <text value="" width="41%" />
+        </style>
+        <text value="" width="33%" />
+        <style horizontal-align="right">
+          <text value="Dne: " width="9%" />
+        </style>
+        <style bottom-border-width="1" bottom-border-style="dotted" bottom-spacing="5" bottom-padding="0">
+          <text value="" width="17%" />
+        </style>
+      </line>
+      <line>
+        <value-of name="" width="41%" onData="if(HLAVICKA.CFU!='A'): self.value='Č. j.'" />
+        <text value="" width="33%" />
+        <style horizontal-align="right">
+          <text value="Výtisk čís.:" width="17%" />
+        </style>
+        <text value="" width="9%" />
+      </line>
+      <line>
+        <text value="" width="74%" />
+        <style horizontal-align="right">
+          <text value="Počet listů:" width="17%" />
+        </style>
+        <text value="" width="9%" />
+      </line>
+      <line>
+        <style font-size="4" horizontal-align="center">
+          <value-of name="" width="100%" onData="self.value='PPPPŘEDÁVACÍ PROTOKOL - '+HLAVICKA.AG_ZKR" />
+        </style>
+      </line>
+      <line>
+        <style font-italic="true" horizontal-align="center">
+          <value-of name="" width="100%" onData="self.value='od: '+HLAVICKA.OD;&#xA;if(HLAVICKA.OD_KNIHA!=''):self.value=self.value+'; '+HLAVICKA.OD_KNIHA" />
+        </style>
+      </line>
+      <line>
+        <style font-italic="true" horizontal-align="center">
+          <value-of name="" width="100%" onData="self.value='pro: '+HLAVICKA.PRO;&#xA;if(HLAVICKA.PRO_KNIHA!=''):self.value=self.value+'; '+HLAVICKA.PRO_KNIHA" />
+        </style>
+      </line>
+      <line>
+        <text value="" width="100%" />
+      </line>
+      <region name="DOKLAD_KDF">
+        <head>
+          <line>
+            <style font-size="1" font-italic="true" bottom-padding="1" background-color="#e3e3e3">
+              <text value="PID" width="15%" />
+            </style>
+            <style font-size="1" font-italic="true" bottom-padding="1" background-color="#e3e3e3">
+              <text value="Agend. číslo" width="15%" />
+            </style>
+            <style font-size="1" font-italic="true" bottom-padding="1" background-color="#e3e3e3">
+              <text value="Popis" width="42%" />
+            </style>
+            <style font-size="1" font-italic="true" bottom-padding="1" background-color="#e3e3e3">
+              <text value="Čís. faktury dodavatele" width="16%" />
+            </style>
+            <style font-size="1" font-italic="true" horizontal-align="right" bottom-padding="1" background-color="#e3e3e3">
+              <text value="Částka Kč" width="12%" />
+            </style>
+          </line>
+          <line>
+            <style font-size="1" font-italic="true" bottom-border-width="3" top-padding="1" background-color="#e3e3e3">
+              <value-of name="HLAVICKA.ICO" width="5%" />
+            </style>
+            <style font-size="1" font-italic="true" bottom-border-width="3" top-padding="1" background-color="#e3e3e3">
+              <text value="Dodavatel - název" width="35%" />
+            </style>
+            <style font-size="1" font-italic="true" bottom-border-width="3" top-padding="1" background-color="#e3e3e3">
+              <text value="Adresa" width="60%" />
+            </style>
+          </line>
+        </head>
+        <body>
+          <line>
+            <style bottom-padding="1">
+              <value-of name="PID" width="15%" onEnter="pocet=0" onData="pocet+=1" />
+            </style>
+            <style bottom-padding="1">
+              <value-of name="AC" width="15%" />
+            </style>
+            <style bottom-padding="1">
+              <value-of name="POPIS" width="42%" />
+            </style>
+            <style bottom-padding="1">
+              <value-of name="DOD_AC" width="16%" />
+            </style>
+            <style horizontal-align="right" bottom-padding="1">
+              <value-of name="C" width="12%" onEnter="celkem=Decimal(0)" onData="celkem+=DOKLAD_KDF.C;pocet_extsub=0" format="# 0,00" />
+            </style>
+          </line>
+          <region name="EXTSUB1">
+            <body>
+              <line>
+                <style top-padding="1" bottom-padding="1">
+                  <text value="" width="5%" />
+                </style>
+                <style top-padding="1" bottom-padding="1">
+                  <value-of name="EXS_NAZ" width="35%" />
+                </style>
+                <style top-padding="1" bottom-padding="1">
+                  <value-of name="EXS_ULI" width="60%" onData="self.value=self.value+', '+EXTSUB1.EXS_MES;pocet_extsub=pocet_extsub+1" />
+                </style>
+              </line>
+            </body>
+          </region>
+          <line only-if="pocet_extsub==0">
+            <style top-padding="1" bottom-padding="1">
+              <value-of name="" width="100%" />
+            </style>
+          </line>
+          <line>
+            <style bottom-border-width="1" bottom-border-style="dotted" top-padding="1" bottom-padding="1">
+              <value-of name="" width="100%" height="2mm" />
+            </style>
+          </line>
+        </body>
+        <foot>
+          <line>
+            <style top-border-width="3">
+              <value-of name="" width="72%" onData="self.value='Celkem faktur: '+str(pocet)" />
+            </style>
+            <style horizontal-align="right" top-border-width="3">
+              <text value="Celkem v Kč:" width="16%" />
+            </style>
+            <style horizontal-align="right" top-border-width="3">
+              <value-of name="" width="12%" onData="self.value=celkem.format('# 0,00')" />
+            </style>
+          </line>
+        </foot>
+      </region>
+      <region name="DOKLAD_BPL">
+        <head>
+          <line>
+            <style font-size="1" font-bold="true" font-italic="true" bottom-padding="1" background-color="#e3e3e3">
+              <text value="PID" width="15%" />
+            </style>
+            <style font-size="1" font-italic="true" bottom-padding="1" background-color="#e3e3e3">
+              <text value="Agend. číslo" width="19%" />
+            </style>
+            <style font-size="1" font-italic="true" bottom-padding="1" background-color="#e3e3e3">
+              <text value="Dat. evid." width="9%" />
+            </style>
+            <style font-size="1" font-italic="true" bottom-padding="1" background-color="#e3e3e3">
+              <text value="Popis" width="45%" />
+            </style>
+            <style font-size="1" font-italic="true" horizontal-align="right" bottom-padding="1" background-color="#e3e3e3">
+              <text value="Částka Kč" width="12%" />
+            </style>
+          </line>
+          <line>
+            <style font-size="1" font-italic="true" bottom-border-width="3" top-padding="1" background-color="#e3e3e3">
+              <text value="" width="2.5%" />
+            </style>
+            <style font-size="1" font-italic="true" bottom-border-width="3" top-padding="1" background-color="#e3e3e3">
+              <text value="Dodavatel/Odběratel - název" width="20%" />
+            </style>
+            <style font-size="1" font-italic="true" bottom-border-width="3" top-padding="1" background-color="#e3e3e3">
+              <text value="Variabilní symbol" width="20.5%" />
+            </style>
+            <style font-size="1" font-italic="true" bottom-border-width="3" top-padding="1" background-color="#e3e3e3">
+              <text value="Adresa" width="57%" />
+            </style>
+          </line>
+        </head>
+        <body>
+          <line>
+            <style bottom-padding="1">
+              <value-of name="PID" width="15%" onEnter="pocet=0" onData="pocet+=1" />
+            </style>
+            <style bottom-padding="1">
+              <value-of name="AC" width="19%" />
+            </style>
+            <style bottom-padding="1">
+              <value-of name="DAT_EVID" width="9%" />
+            </style>
+            <style bottom-padding="1">
+              <value-of name="POPIS" width="45%" />
+            </style>
+            <style horizontal-align="right" bottom-padding="1">
+              <value-of name="C" width="12%" onEnter="celkem=Decimal(0)" onData="celkem+=DOKLAD_BPL.C;pocet_extsub=0" format="# 0,00" />
+            </style>
+          </line>
+          <region name="EXTSUB2">
+            <body>
+              <line>
+                <style top-padding="1" bottom-padding="1">
+                  <text value="" width="2.5%" />
+                </style>
+                <style top-padding="1" bottom-padding="1">
+                  <value-of name="EXS_NAZ" width="20%" />
+                </style>
+                <style top-padding="1" bottom-padding="1">
+                  <value-of name="DOKLAD_BPL.VS" width="20.5%" />
+                </style>
+                <style top-padding="1" bottom-padding="1">
+                  <value-of name="EXS_ULI" width="57%" onData="self.value=self.value+', '+EXTSUB2.EXS_MES;pocet_extsub=pocet_extsub+1" />
+                </style>
+              </line>
+            </body>
+          </region>
+          <line only-if="pocet_extsub==0">
+            <style top-padding="1" bottom-padding="1">
+              <value-of name="" width="100%" />
+            </style>
+          </line>
+          <line>
+            <style bottom-border-width="1" bottom-border-style="dotted" top-padding="1" bottom-padding="1">
+              <value-of name="" width="100%" height="2mm" />
+            </style>
+          </line>
+        </body>
+        <foot>
+          <line>
+            <style top-border-width="3">
+              <value-of name="" width="72%" onData="self.value='Celkem dokladů: '+str(pocet)" />
+            </style>
+            <style horizontal-align="right" top-border-width="3">
+              <text value="Celkem v Kč:" width="16%" />
+            </style>
+            <style horizontal-align="right" top-border-width="3">
+              <value-of name="" width="12%" onData="self.value=celkem.format('# 0,00')" />
+            </style>
+          </line>
+        </foot>
+      </region>
+      <region name="DOKLAD_POK">
+        <head>
+          <line>
+            <style bottom-padding="1">
+              <text value="PID" width="15%" />
+            </style>
+            <style bottom-padding="1">
+              <text value="Agend. číslo" width="15%" />
+            </style>
+            <style bottom-padding="1">
+              <text value="Dat. evid." width="9%" />
+            </style>
+            <style bottom-padding="1">
+              <text value="Popis" width="41%" />
+            </style>
+            <style bottom-padding="1">
+              <text value="ZP" width="4%" />
+            </style>
+            <style bottom-padding="1">
+              <text value="TD" width="4%" />
+            </style>
+            <style horizontal-align="right" bottom-padding="1">
+              <text value="Částka Kč" width="12%" />
+            </style>
+          </line>
+          <line>
+            <style bottom-border-width="3" top-padding="1">
+              <text value="" width="5%" />
+            </style>
+            <style bottom-border-width="3" top-padding="1">
+              <text value="Dodavatel/Odběratel - název" width="35%" />
+            </style>
+            <style bottom-border-width="3" top-padding="1">
+              <text value="Adresa" width="60%" />
+            </style>
+          </line>
+        </head>
+        <body>
+          <line>
+            <style bottom-padding="1">
+              <value-of name="PID" width="15%" onEnter="pocet=0" onData="pocet+=1" />
+            </style>
+            <style bottom-padding="1">
+              <value-of name="AC" width="15%" />
+            </style>
+            <style bottom-padding="1">
+              <value-of name="DAT_EVID" width="9%" />
+            </style>
+            <style bottom-padding="1">
+              <value-of name="POPIS" width="41%" />
+            </style>
+            <style bottom-padding="1">
+              <value-of name="" width="4%" onData="self.value=VratZpusobPlatby(DOKLAD_POK.ZP_PLATBY_NUM)" />
+            </style>
+            <style bottom-padding="1">
+              <value-of name="KTG_TXT" width="4%" />
+            </style>
+            <style horizontal-align="right" bottom-padding="1">
+              <value-of name="C" width="12%" onEnter="celkem=Decimal(0);" onData="celkem+=DOKLAD_POK.C;pocet_extsub=0;" format="# 0,00" />
+            </style>
+          </line>
+          <region name="EXTSUB4">
+            <body>
+              <line>
+                <style top-padding="1" bottom-padding="1">
+                  <text value="" width="5%" />
+                </style>
+                <style top-padding="1" bottom-padding="1">
+                  <value-of name="EXS_NAZ" width="35%" />
+                </style>
+                <style top-padding="1" bottom-padding="1">
+                  <value-of name="EXS_ULI" width="60%" onData="self.value=self.value+', '+EXTSUB4.EXS_MES;pocet_extsub=pocet_extsub+1" />
+                </style>
+              </line>
+            </body>
+          </region>
+          <line only-if="pocet_extsub==0">
+            <style top-padding="1" bottom-padding="1">
+              <value-of name="" width="100%" />
+            </style>
+          </line>
+          <line>
+            <style bottom-border-width="1" bottom-border-style="dotted" top-padding="1" bottom-padding="1">
+              <value-of name="" width="100%" height="2mm" />
+            </style>
+          </line>
+        </body>
+        <foot>
+          <line>
+            <style top-border-width="3">
+              <value-of name="" width="72%" onData="self.value='Celkem dokladů: '+str(pocet)" />
+            </style>
+            <style horizontal-align="right" top-border-width="3">
+              <text value="Celkem v Kč:" width="16%" />
+            </style>
+            <style horizontal-align="right" top-border-width="3">
+              <value-of name="" width="12%" onData="self.value=celkem.format('# 0,00')" />
+            </style>
+          </line>
+        </foot>
+      </region>
+      <region name="DOKLAD_POK" order-by="ZP_PLATBY_NUM">
+        <head>
+          <line>
+            <style horizontal-align="right">
+              <value-of name="" width="25%" />
+            </style>
+            <style horizontal-align="right" bottom-border-width="1">
+              <value-of name="" width="25%" />
+            </style>
+            <style horizontal-align="right" bottom-border-width="1">
+              <value-of name="" width="15%" />
+            </style>
+            <style horizontal-align="right">
+              <value-of name="" width="35%" />
+            </style>
+          </line>
+        </head>
+        <group name="DOKLAD_POK_1" by="ZP_PLATBY_NUM">
+          <head>
+            <line>
+              <value-of name="" height="0mm" onData="subcelkem=0" />
+            </line>
+          </head>
+          <body>
+            <line>
+              <value-of name="" height="0mm" onData="subcelkem=subcelkem+DOKLAD_POK.C" />
+            </line>
+          </body>
+          <foot>
+            <line>
+              <style horizontal-align="right">
+                <value-of name="" width="25%" />
+              </style>
+              <style horizontal-align="right" left-border-width="1">
+                <value-of name="" width="25%" onData="self.value=''+DOKLAD_POK.ZP_PLATBY_TXT+' :'" />
+              </style>
+              <style horizontal-align="right" right-border-width="1">
+                <value-of name="" width="15%" onData="self.value=subcelkem.format('# 0,00')" />
+              </style>
+              <style horizontal-align="right">
+                <value-of name="" width="35%" />
+              </style>
+            </line>
+          </foot>
+        </group>
+        <foot>
+          <line>
+            <style horizontal-align="right">
+              <value-of name="" width="25%" />
+            </style>
+            <style horizontal-align="right" top-border-width="1">
+              <value-of name="" width="25%" />
+            </style>
+            <style horizontal-align="right" top-border-width="1">
+              <value-of name="" width="15%" />
+            </style>
+            <style horizontal-align="right">
+              <value-of name="" width="35%" />
+            </style>
+          </line>
+        </foot>
+      </region>
+      <region name="DOKLAD_AKCE">
+        <head>
+          <line>
+            <style bottom-border-width="3">
+              <text value="Pol. plánu" width="20%" />
+            </style>
+            <style bottom-border-width="3">
+              <text value="Název" width="80%" />
+            </style>
+          </line>
+        </head>
+        <body>
+          <line>
+            <value-of name="CPP" width="20%" onEnter="pocet=0" onData="pocet+=1" />
+            <value-of name="NAZEV" width="80%" />
+          </line>
+        </body>
+        <foot>
+          <line>
+            <style top-border-width="3">
+              <value-of name="" width="100%" onData="self.value='Celkem položek: '+str(pocet)" />
+            </style>
+          </line>
+        </foot>
+      </region>
+      <region name="DOKLAD_POZ">
+        <head>
+          <line>
+            <style bottom-border-width="3">
+              <text value="PID" width="15%" />
+            </style>
+            <style horizontal-align="right" bottom-border-width="3">
+              <text value="Poř. čís." width="9%" />
+            </style>
+            <style bottom-border-width="3">
+              <text value="Typ" width="15%" />
+            </style>
+            <style bottom-border-width="3">
+              <text value="Stav" width="15%" />
+            </style>
+            <style bottom-border-width="3">
+              <text value="Dat.poř." width="15%" />
+            </style>
+            <style bottom-border-width="3">
+              <text value="Deník" width="31%" />
+            </style>
+          </line>
+        </head>
+        <body>
+          <line>
+            <value-of name="PID" width="15%" onEnter="pocet=0" onData="pocet+=1" />
+            <style horizontal-align="right">
+              <value-of name="POR_CISLO" width="9%" />
+            </style>
+            <value-of name="TYP" width="15%" />
+            <value-of name="STAV" width="15%" />
+            <value-of name="DAT_PORIZ" width="15%" format="dd.mm.yyyy" />
+            <value-of name="DEN" width="31%" />
+          </line>
+        </body>
+        <foot>
+          <line>
+            <style top-border-width="3">
+              <value-of name="" width="72%" onData="self.value='Celkem soupisek: '+str(pocet)" />
+            </style>
+            <style horizontal-align="right" top-border-width="3">
+              <text value="" width="16%" />
+            </style>
+            <style horizontal-align="right" top-border-width="3">
+              <text value="" width="12%" />
+            </style>
+          </line>
+        </foot>
+      </region>
+      <region name="DOKLAD_POZADAVEK">
+        <head>
+          <line>
+            <style bottom-border-width="3">
+              <text value="Ident. požadavku" width="20%" />
+            </style>
+            <style bottom-border-width="3">
+              <text value="Název" width="80%" />
+            </style>
+          </line>
+        </head>
+        <body>
+          <line>
+            <value-of name="IXP" width="20%" onEnter="pocet=0" onData="pocet+=1" />
+            <value-of name="NAZEV" width="80%" />
+          </line>
+        </body>
+        <foot>
+          <line>
+            <style top-border-width="3">
+              <value-of name="" width="100%" onData="self.value='Celkem požadavků: '+str(pocet)" />
+            </style>
+          </line>
+        </foot>
+      </region>
+      <region name="DOKLAD_SML" only-if="HLAVICKA.CFU!=DefFiltrSml()">
+        <head>
+          <line>
+            <text value="PID" width="15%" />
+            <text value="Agend. číslo" width="15%" />
+            <text value="Dat. evid." width="9%" />
+            <text value="Popis" width="61%" />
+          </line>
+          <line>
+            <style bottom-border-width="3" top-padding="1">
+              <text value="" width="5%" />
+            </style>
+            <style bottom-border-width="3" top-padding="1">
+              <text value="Dodavatel/Odběratel - název" width="35%" />
+            </style>
+            <style bottom-border-width="3" top-padding="1">
+              <text value="Adresa" width="60%" />
+            </style>
+          </line>
+        </head>
+        <body>
+          <line>
+            <value-of name="PID" width="15%" onEnter="pocet=0" onData="pocet+=1" />
+            <value-of name="AC" width="15%" />
+            <value-of name="DAT_EVID" width="9%" />
+            <value-of name="POPIS" width="61%" onData="pocet_extsub=0" />
+          </line>
+          <region name="EXTSUB3">
+            <body>
+              <line>
+                <style top-padding="1" bottom-padding="1">
+                  <text value="" width="5%" />
+                </style>
+                <style top-padding="1" bottom-padding="1">
+                  <value-of name="EXS_NAZ" width="35%" />
+                </style>
+                <style top-padding="1" bottom-padding="1">
+                  <value-of name="EXS_ULI" width="60%" onData="self.value=self.value+', '+EXTSUB3.EXS_MES;pocet_extsub=pocet_extsub+1" />
+                </style>
+              </line>
+            </body>
+          </region>
+          <line only-if="pocet_extsub==0">
+            <style top-padding="1" bottom-padding="1">
+              <value-of name="" width="100%" />
+            </style>
+          </line>
+          <line>
+            <style bottom-border-width="1" bottom-border-style="dotted" top-padding="1" bottom-padding="1">
+              <value-of name="" width="100%" height="2mm" />
+            </style>
+          </line>
+        </body>
+        <foot>
+          <line>
+            <style top-border-width="3">
+              <value-of name="" width="100%" onData="self.value='Celkem dokladů: '+str(pocet)" />
+            </style>
+          </line>
+        </foot>
+      </region>
+      <region name="DOKLAD_SML" only-if="HLAVICKA.CFU==DefFiltrSml()">
+        <head>
+          <line on-each-page="true">
+            <style bottom-padding="2">
+              <text value="PID" width="15%" />
+            </style>
+            <style bottom-padding="2">
+              <text value="Agend. číslo" width="15%" />
+            </style>
+            <style bottom-padding="2">
+              <text value="Dodavatel" width="40%" />
+            </style>
+            <style bottom-padding="2">
+              <text value="IČO" width="15%" />
+            </style>
+            <style bottom-padding="2">
+              <text value="Dat. evid." width="15%" />
+            </style>
+          </line>
+          <line on-each-page="true">
+            <style bottom-border-width="3" top-padding="2">
+              <text value="" width="5%" />
+            </style>
+            <style bottom-border-width="3" top-padding="2">
+              <text value="Rok" width="6%" />
+            </style>
+            <style bottom-border-width="3" top-padding="2">
+              <text value="NS" width="10%" />
+            </style>
+            <style bottom-border-width="3" top-padding="2">
+              <text value="SU/AU" width="8%" />
+            </style>
+            <style horizontal-align="right" bottom-border-width="3" top-padding="2">
+              <text value="Částka" width="15%" />
+            </style>
+            <style bottom-border-width="3" top-padding="2">
+              <text value="Popis" width="56%" />
+            </style>
+          </line>
+        </head>
+        <body>
+          <line>
+            <value-of name="" height="0mm" onData="dodavatel_nazev='';dodavatel_ico='';" />
+          </line>
+          <region name="EXTSUB3">
+            <body>
+              <line>
+                <value-of name="" height="0mm" onData="dodavatel_nazev=AddText(dodavatel_nazev,EXTSUB3.EXS_NAZ);dodavatel_ico=AddText(dodavatel_ico,EXTSUB3.EXS_ICO);" />
+              </line>
+            </body>
+          </region>
+          <line>
+            <style bottom-padding="0">
+              <value-of name="PID" width="15%" onEnter="pocet=0" onData="pocet+=1" />
+            </style>
+            <style bottom-padding="0">
+              <value-of name="AC" width="15%" />
+            </style>
+            <style bottom-padding="0">
+              <value-of name="" width="40%" onData="self.value=dodavatel_nazev" />
+            </style>
+            <style bottom-padding="0">
+              <value-of name="" width="15%" onData="self.value=dodavatel_ico" />
+            </style>
+            <style bottom-padding="0">
+              <value-of name="DAT_EVID" width="15%" />
+            </style>
+          </line>
+          <region name="SML_PRI_PZP">
+            <body>
+              <line>
+                <style top-padding="0">
+                  <text value="" width="5%" />
+                </style>
+                <style top-padding="0">
+                  <value-of name="SML_PRI_PZP_ROK_PRI" width="6%" />
+                </style>
+                <style top-padding="0">
+                  <value-of name="SML_PRI_PZP_NKS" width="10%" />
+                </style>
+                <style top-padding="0">
+                  <value-of name="" width="8%" onData="self.value=SML_PRI_PZP.UEA+'/'+SML_PRI_PZP.UEB" />
+                </style>
+                <style horizontal-align="right" top-padding="0">
+                  <value-of name="SML_PRI_PZP_C_UP" width="15%" format="# ##0,00" />
+                </style>
+                <style top-padding="0">
+                  <value-of name="POPIS" width="56%" />
+                </style>
+              </line>
+            </body>
+          </region>
+        </body>
+        <foot>
+          <line>
+            <style top-border-width="3">
+              <value-of name="" width="100%" onData="self.value='Celkem dokladů: '+str(pocet)" />
+            </style>
+          </line>
+        </foot>
+      </region>
+      <region name="DOKLAD_OBC">
+        <head>
+          <line>
+            <style bottom-border-width="3">
+              <text value="PID" width="15%" />
+            </style>
+            <style bottom-border-width="3">
+              <text value="Agend. číslo" width="15%" />
+            </style>
+            <style bottom-border-width="3">
+              <text value="Dat. evid." width="9%" />
+            </style>
+            <style bottom-border-width="3">
+              <text value="Popis" width="61%" />
+            </style>
+          </line>
+        </head>
+        <body>
+          <line>
+            <value-of name="PID" width="15%" onEnter="pocet=0" onData="pocet+=1" />
+            <value-of name="AC" width="15%" />
+            <value-of name="DAT_EVID" width="9%" />
+            <value-of name="POPIS" width="61%" />
+          </line>
+        </body>
+        <foot>
+          <line>
+            <style top-border-width="3">
+              <value-of name="" width="100%" onData="self.value='Celkem dokladů: '+str(pocet)" />
+            </style>
+          </line>
+        </foot>
+      </region>
+      <line>
+        <text value="" width="100%" />
+      </line>
+      <line>
+        <text value="Předávající" width="50%" />
+        <text value="Přebírající" width="50%" />
+      </line>
+      <line>
+        <text value="" width="100%" />
+      </line>
+      <line>
+        <text value="Podpis:" width="7%" />
+        <style bottom-border-width="2" bottom-border-style="dotted">
+          <text value="" width="39%" />
+        </style>
+        <text value="" width="4%" />
+        <text value="Podpis:" width="7%" />
+        <style bottom-border-width="2" bottom-border-style="dotted">
+          <text value="" width="43%" />
+        </style>
+      </line>
+    </body>
+  </region>
+</format>

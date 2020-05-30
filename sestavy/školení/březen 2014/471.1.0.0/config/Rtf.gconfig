@@ -1,0 +1,94 @@
+<AddIn name        = "Rtf Editor"
+       author      = "Mgr. Stepan Sukovyč"
+       description = "Rtf Editor"
+       addInManagerHidden = "preinstalled"
+       version="4.72.1.6">
+	
+	<Manifest>
+		<Identity name = "Gordic.GFE.WinClient.RtfEditor"/>
+	</Manifest>
+
+  <Runtime>
+    <Import assembly=":Gordic.GFE.WinClient"/>
+  </Runtime>
+	
+  <!-- Dialogy nastavení Designéru -->
+  <Path name = "/ReportDesigner/Dialogs/OptionsDialog/DesignerOptions" >
+    <DialogPanel id = "RTF"
+		             label = "RTF formát"
+                 insertafter="DOCFRM"
+		             class = "Gordic.GFE.WinClient.Editor.DesignerRTFPanel"/>
+  </Path>
+  <!-- Konec nastavení designéru -->
+
+  <!-- RTF menu -->
+	<Path name = "/ReportDesigner/MainMenu">
+		<Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.Editor.RtfViewContent">
+			<MenuItem id = "MmRtf" insertafter="View" insertbefore="Tools" label="Fo&amp;rmát" type = "Menu">
+        <MenuItem id = "MmRtfValidation"
+                  icon = "Icons__Gin__kontrola"
+                  loadclasslazy = "false"
+                  label = "validace dokumentu"
+                  class = "Gordic.GFE.WinClient.Editor.RtfValidateCommand"/>
+        <MenuItem id = "MmRtfForceGenerate"
+                  icon = "Icons__Gin__sestava_generovat"
+                  loadclasslazy = "false"
+                  label = "generovat znovu"
+                  class = "Gordic.GFE.WinClient.Editor.OfficeForceGenerateCommand"/>
+        <MenuItem id="MmRtfObjectProperty"
+                  icon="Icons__Gin__vlastnosti"
+                  loadclasslazy="false"
+                  label="vlastnosti výběru"
+                  class="Gordic.GFE.WinClient.Gui.ShowProperty"/>
+      </MenuItem>
+    </Condition>
+	</Path>
+  <!-- konec RTF menu -->
+  
+  <!-- ToolBar nabídka RTF sestavy -->
+  <Path name = "/ReportDesigner/ToolBarMenu/Standard">
+    <Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.Editor.RtfViewContent">
+      <ToolbarItem id = "RTFSeparator" type = "Separator" insertafter="Redo" />
+      <ToolbarItem id="TbRtfValidation"
+                   tooltip="validace dokumentu"
+                   icon = "Icons__Gin__kontrola"
+                   loadclasslazy = "false"
+                   class = "Gordic.GFE.WinClient.Editor.RtfValidateCommand"
+                   insertafter="RTFSeparator"/>
+      <ToolbarItem id="TbRtfForceGenerate"
+                   tooltip="vynucené generování alf obsahu"
+                   icon = "Icons__Gin__sestava_generovat"
+                   loadclasslazy = "false"
+                   class = "Gordic.GFE.WinClient.Editor.OfficeForceGenerateCommand"
+                   insertafter="TbRtfValidation"/>
+      <ToolbarItem id="TbRtfObjectProperty"
+                   tooltip="vlastnosti vybraného/ých objektu/ů"
+                   icon = "Icons__Gin__vlastnosti"
+                   loadclasslazy = "false"
+                   class = "Gordic.GFE.WinClient.Gui.ShowProperty"
+                   insertafter="TbRtfValidation"/>
+    </Condition>
+  </Path>
+  <!-- konec ToolBar nabídka RTF sestavy-->
+
+  <!-- SEZNAMY -->
+  <!-- TODO: Do samostatných konfiguračních souborů -->
+  <Path name="/ReportDesigner/RtfList">
+    <List id="ValueOfTags">
+      <ListItem value="name" />
+      <ListItem value="format"/>
+      <ListItem value="onPrint"/>
+      <ListItem value="onEnter"/>
+      <ListItem value="onLoad"/>
+      <ListItem value="onData"/>
+      <ListItem value="rtf" />
+      <ListItem value="type" />
+      <ListItem value="guid" />
+      <ListItem value="instance" />
+    </List>
+    <List id="RegionTags">
+      <ListItem value="name" />
+      <ListItem value="guid" />
+    </List>
+  </Path>
+</AddIn>

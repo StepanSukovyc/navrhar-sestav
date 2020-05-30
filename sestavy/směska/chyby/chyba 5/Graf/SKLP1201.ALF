@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="windows-1250"?>
+
+<format type="grr" xmlns="http://www.gordic.cz/TR/alf/1.3/">
+
+	<info
+		ixs_xme="SKLP1200"
+		xmeta_ver="1"
+		xmeta_subver_min="1"
+		nazev="Vratné obaly"
+		ixs_alv=""
+		allowed_output=""
+		poznamka=""
+		xmeta_maker="4002"
+		Dat_modif="201011121312"
+		Kod_Sestavy="SKLP1201.ALF"
+	/>
+
+
+<script><![CDATA[
+def BarvaRadku(Cislo):	
+#--------------------------------------------------------------------
+#
+# Funkce zjišťuje, zda je vstupní proměnná Cislo sudá nebo lichá. Podle to
+# se obarví podklad.
+#
+#--------------------------------------------------------------------
+
+	if (Cislo-(Cislo/2)*2)==0:
+		# Proměnná Cislo je sudá
+		self.style.background_color=mycolor
+	else:
+		# Proměnná Cislo je lichá
+		self.style.background_color=whcolor
+]]></script>
+
+	<region name="Sestava">
+		<head>
+			<line>
+				<style width="11%" left-border-width="1" top-border-width="1">
+					<value-of name="FICO"/>
+				</style>
+				<style width="39%" top-border-width="1">
+					<value-of name="FNazev"/>
+				</style>
+				<style width="50%" right-border-width="1" top-border-width="1" horizontal-align="right">
+					<value-of name="" onData="self.value=&apos;Strana: &apos;+ROOT.PAGES+&apos;/&apos;+ROOT.PAGE"/>
+				</style>
+			</line>
+			<line>
+				<style width="11%" left-border-width="1" bottom-border-width="1">
+					<text value="" onLoad="R=0&#10;whcolor=self.style.background_color&#10;mycolor=&apos;#E2E2E2&apos;"/>
+				</style>
+				<style width="39%" bottom-border-width="1">
+					<text value=""/>
+				</style>
+				<style width="25%" bottom-border-width="1">
+					<text value=""/>
+				</style>
+				<style width="25%" right-border-width="1" bottom-border-width="1">
+					<text value=""/>
+				</style>
+			</line>
+			<line on-each-page="true">
+				<style width="100%" font-size="4" font-bold="true" horizontal-align="center" vertical-align="center">
+					<value-of name="" onData="self.value= &apos;EVIDENCE VRATNÝCH OBALŮ    &apos;+Sestava.Rozmezi_Datumu[:3]+&quot; &quot;+Sestava.Rozmezi_Datumu[3:6]+&quot; &quot;+Sestava.Rozmezi_Datumu[6:16]+&quot; &quot;+Sestava.Rozmezi_Datumu[16:19]+&quot; &quot;+Sestava.Rozmezi_Datumu[19:23]"/>
+				</style>
+			</line>
+			<line>
+				<style width="14%">
+					<text value="Zůstatek k datu:"/>
+				</style>
+				<style width="17%">
+					<value-of name="ZKD_Datum"/>
+				</style>
+				<style width="58%">
+					<text value=""/>
+				</style>
+				<!-- <value-of name="ZKD_Zustatek" onData="self.value=self.value.format(&apos;# 0,00&apos;)"/> -->
+				<style width="11%" horizontal-align="right">
+					<value-of name="" onData="Zustatek=0&#10;ZustatekP=0&#10;ZustatekV=0&#10;ZustatekP1=0&#10;ZustatekV1=0&#10;ZustatekS=0&#10;self.value=Zustatek&#10;ZustatekSCP=0&#10;ZustatekSCV=0&#10;ZustatekSC=0&#10;ZustatekSCX=0" format="# 0,00"/>
+				</style>
+			</line>
+			<line on-each-page="true">
+				<style width="10%" bottom-border-style="double" bottom-border-width="1">
+					<text value="Datum"/>
+				</style>
+				<style width="7%" bottom-border-style="double" bottom-border-width="1">
+					<text value="Číslo PD"/>
+				</style>
+				<style width="43%" bottom-border-style="double" bottom-border-width="1">
+					<text value="Popis operace"/>
+				</style>
+				<style width="18%" bottom-border-style="double" bottom-border-width="1" horizontal-align="right">
+					<text value="Příjem"/>
+				</style>
+				<style width="11%" bottom-border-style="double" bottom-border-width="1" horizontal-align="right">
+					<text value="Výdej"/>
+				</style>
+				<style width="11%" bottom-border-style="double" bottom-border-width="1" horizontal-align="right">
+					<text value="Zůstatek"/>
+				</style>
+			</line>
+		</head>
+		<body>
+			<region name="Radek" order-by="KCislo_Mat,RDatum_Vydeje">
+				<group by="KCislo_Mat">
+					<body>
+						<line on-each-page="true" only-if="Radek.KCislo_Mat in range (100, 1000) and Radek.RCislo!=0 and (Radek.RDatum_Vydeje&gt;=Sestava.Prvni_Datum) and (Radek.RDatum_Vydeje&lt;=Sestava.Posledni_Datum)">
+							<style width="10%">
+								<value-of name="RDatum_Vydeje" onData="R=R+1&#10;BarvaRadku(R)"/>
+							</style>
+							<style width="7%" horizontal-align="right">
+								<value-of name="RCislo" onData="BarvaRadku(R)"/>
+							</style>
+							<style width="49%">
+								<value-of name="RPoznamka_Cela" onData="if Radek.RCena_Prijem&lt;0: self.value=&quot;Vrácení &quot;+Radek.KNazev[:1].lower()+Radek.KNazev[1:]&#10;if Radek.RCena_Prijem&gt;0: self.value=&quot;Prodej &quot;+Radek.KNazev[:1].lower()+Radek.KNazev[1:]&#10;BarvaRadku(R)"/>
+							</style>
+							<style width="12%" horizontal-align="right">
+								<value-of name="" onData="self.value=Radek.RCena_Prijem&#10;ZustatekP1=ZustatekP1+Radek.RCena_Prijem&#10;BarvaRadku(R)" format="# 0,00"/>
+							</style>
+							<style width="11%" horizontal-align="right">
+								<value-of name="" onData="self.value=Radek.RCena_Vydej&#10;ZustatekV1=ZustatekV1+Radek.RCena_Vydej&#10;BarvaRadku(R)" format="# 0,00"/>
+							</style>
+							<style width="11%" horizontal-align="right">
+								<value-of name="" onData="Zustatek=Zustatek+Radek.RCena_Prijem+Radek.RCena_Vydej&#10;self.value=Zustatek&#10;BarvaRadku(R)" format="# 0,00"/>
+							</style>
+						</line>
+					</body>
+					<foot>
+						<line only-if="Radek.KCislo_Mat in range (100, 1000)">
+							<style width="66%" top-border-width="1" font-bold="true">
+								<value-of name="" onData="self.value=&quot;Celkem za &quot;+Radek.KNazev[:1].lower()+Radek.KNazev[1:]+&quot; (&quot;+str(Radek.KCena)+&quot;,00 Kč)&quot;"/>
+							</style>
+							<style width="12%" top-border-width="1" font-bold="true" horizontal-align="right">
+								<value-of name="" onData="self.value=ZustatekP1&#10;ZustatekSCP=ZustatekSCP+ZustatekP1&#10;ZustatekP1=0" format="# 0,00"/>
+							</style>
+							<style width="11%" top-border-width="1" font-bold="true" horizontal-align="right">
+								<value-of name="" onData="self.value=ZustatekV1&#10;ZustatekSCV=ZustatekSCV+ZustatekV1&#10;ZustatekV1=0" format="# 0,00"/>
+							</style>
+							<style width="11%" top-border-width="1" font-bold="true" horizontal-align="right">
+								<value-of name="" onData="ZustatekSC=Zustatek&#10;self.value=Zustatek&#10;ZustatekSCX=ZustatekSCX+ZustatekSC&#10;ZustatekCS=0&#10;Zustatek=0" format="# 0,00"/>
+							</style>
+						</line>
+						<line>
+							<style width="100%" top-border-width="1" font-bold="true">
+								<text value=""/>
+							</style>
+						</line>
+					</foot>
+				</group>
+			</region>
+			<region name="Soucet">
+				<body>
+					<line>
+						<style width="27%" top-border-width="2" font-bold="true">
+							<text value="Celkem za všehny vratné obaly:"/>
+						</style>
+						<style width="39%" top-border-width="2" font-bold="true" horizontal-align="right">
+							<text value=""/>
+						</style>
+						<style width="12%" top-border-width="2" font-bold="true" horizontal-align="right">
+							<value-of name="" onData="self.value=ZustatekSCP" format="# 0,00"/>
+						</style>
+						<style width="11%" top-border-width="2" font-bold="true" horizontal-align="right">
+							<value-of name="" onData="self.value=ZustatekSCV" format="# 0,00"/>
+						</style>
+						<style width="11%" top-border-width="2" font-bold="true" horizontal-align="right">
+							<value-of name="" onData="self.value=ZustatekSCX" format="# 0,00"/>
+						</style>
+					</line>
+				</body>
+			</region>
+		</body>
+		<foot>
+			<line>
+				<style width="100%">
+					<text value=""/>
+				</style>
+			</line>
+			<line>
+				<style width="100%">
+					<text value="Podpis pokladníka: ............................................"/>
+				</style>
+			</line>
+			<line>
+				<style width="68%" font-face="arial" font-size="1" font-color="silver">
+					<value-of name="" onData="self.value=format.info[&apos;Kod_Sestavy&apos;]+&apos; © 6. listopadu 2010 Zbyněk Michálek, sestava vytvořena programem SKL firmy GORDIC®&apos;"/>
+				</style>
+				<style width="32%" font-face="arial" font-size="1" font-color="silver" horizontal-align="right">
+					<value-of name="ROOT.NOW" onData="self.value=self.value.format(&apos;dd.mm.yyyy&apos;)"/>
+				</style>
+			</line>
+		</foot>
+	</region>
+</format>

@@ -1,0 +1,75 @@
+<AddIn name        = "Mse Editor"
+       author      = "Mgr. Stepan Sukovyč"
+       description = "Mse Editor"
+       addInManagerHidden = "preinstalled"
+       version="4.72.1.6">
+	
+	<Manifest>
+		<Identity name = "Gordic.GFE.WinClient.MseEditor"/>
+	</Manifest>
+
+  <Runtime>
+    <Import assembly=":Gordic.GFE.WinClient"/>
+  </Runtime>
+	
+  <!-- Dialogy nastavení Designéru -->
+  <Path name = "/ReportDesigner/Dialogs/OptionsDialog/DesignerOptions" >
+    <DialogPanel id = "MSE"
+		             label = "MSE formát"
+                 insertafter="RTF"
+		             class = "Gordic.GFE.WinClient.Editor.DesignerMSEPanel"/>
+  </Path>
+  <!-- Konec nastavení designéru -->
+
+  <!-- MSE menu -->
+	<Path name = "/ReportDesigner/MainMenu">
+		<Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.Editor.MseViewContent">
+			<MenuItem id = "MmMse" insertafter="View" insertbefore="Tools" label="Fo&amp;rmát" type = "Menu">
+        <MenuItem id = "MmMseValidation"
+                  icon = "Icons__Gin__kontrola"
+                  loadclasslazy = "false"
+                  label = "validace dokumentu"
+                  class = "Gordic.GFE.WinClient.Editor.MseValidateCommand"/>
+        <MenuItem id = "MmMseForceGenerate"
+                  icon = "Icons__Gin__sestava_generovat"
+                  loadclasslazy = "false"
+                  label = "generovat znovu"
+                  class = "Gordic.GFE.WinClient.Editor.OfficeForceGenerateCommand"/>
+        <MenuItem id="MmMseObjectProperty"
+                  icon="Icons__Gin__vlastnosti"
+                  shortcut = "Control|D"
+                  loadclasslazy="false"
+                  label = "vlastnosti vybraného objektu"
+                  class="Gordic.GFE.WinClient.Gui.ShowProperty"/>
+      </MenuItem>
+    </Condition>
+	</Path>
+  <!-- konec MSE menu -->
+  
+  <!-- ToolBar nabídka MSE sestavy -->
+  <Path name = "/ReportDesigner/ToolBarMenu/Standard">
+    <Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.Editor.MseViewContent">
+      <ToolbarItem id = "MSESeparator" type = "Separator" insertafter="Redo" />
+      <ToolbarItem id="TbMseValidation"
+                   tooltip="validace dokumentu"
+                   icon = "Icons__Gin__kontrola"
+                   loadclasslazy = "false"
+                   class = "Gordic.GFE.WinClient.Editor.MseValidateCommand"
+                   insertafter="MSESeparator"/>
+      <ToolbarItem id="TbMseForceGenerate"
+                         tooltip="vynucené generování alf obsahu"
+                         icon = "Icons__Gin__sestava_generovat"
+                         loadclasslazy = "false"
+                         class = "Gordic.GFE.WinClient.Editor.OfficeForceGenerateCommand"
+                         insertafter="TbMseValidation"/>
+      <ToolbarItem id="TbMseObjectProperty"
+                   tooltip="vlastnosti vybraného/ých objektu/ů"
+                   icon = "Icons__Gin__vlastnosti"
+                   loadclasslazy = "false"
+                   class = "Gordic.GFE.WinClient.Gui.ShowProperty"
+                   insertafter="TbMseValidation"/>
+    </Condition>
+  </Path>
+  <!-- konec ToolBar nabídka MSE sestavy-->
+  
+</AddIn>

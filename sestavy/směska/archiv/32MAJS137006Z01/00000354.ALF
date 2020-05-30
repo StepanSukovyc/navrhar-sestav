@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<format type="grr" xmlns="http://www.gordic.cz/TR/alf/1.4/">
+  <info type_cust="Z" ixs_xme="0000ALX0AB27" xmeta_ver="1" xmeta_subver_min="20" nazev="PŘEHLED ROZPISU TRANSFERŮ NA POSKYTOVATALE EVIDOVANÉHO MAJETKU" ixs_alv="0000ALV02HXO,0000ALV04ZVQ,0000ALV04ZWL,0000ALV02VMH" allowed_output="htm,xls,doc,frm" ixs_frm="0000ALF03544" maker="0431" dat_modif="201302151550" rokmes_od="199801" rokmes_do="999913" />
+  <paper-setting paper-width="297mm" paper-height="297mm" />
+  <script><![CDATA[
+def sjoin(seznam):
+	ret=''
+	for s in seznam:
+		ret = ret + s + """
+"""
+	return ret
+def djoin(seznam):
+	ret=''
+	for s in seznam:
+		ret = ret + s.format('# 0,00') + """
+"""
+	return ret
+]]></script>
+  <region name="VYBER">
+    <head>
+      <line on-each-page="true">
+        <style font-face="arial" font-size="1" font-italic="true" bottom-border-width="1">
+          <value-of name="" width="18%" onData="self.value='Licence: '+ ': '+ VYBER.LIC" />
+        </style>
+        <style font-face="arial" font-size="1" font-italic="true" horizontal-align="right" bottom-border-width="1">
+          <value-of name="" width="82%" onData="self.value='IDENTIFIKACE SESTAVY / ' +format.info['ixs_frm'] +'  ('+format.info['dat_modif']+')'" />
+        </style>
+      </line>
+      <line on-each-page="true">
+        <image file="znak-m.bmp" image-width="25mm" image-height="25mm" width="18%" />
+        <!-- <text value="PŘEHLED EVIDOVANÉHO MAJETKU"/> -->
+        <style font-face="arial" font-size="4" font-bold="true">
+          <value-of name="" width="82%" onData="self.value='Přehled rozpisu transferů na poskytovatele '+ VYBER.STAV_MAJ+ ' majetku'" />
+        </style>
+      </line>
+      <line on-each-page="true">
+        <style font-face="arial">
+          <text value="" width="18%" />
+        </style>
+        <style font-face="arial">
+          <text value="I?O:" width="7%" />
+        </style>
+        <style font-face="arial" font-size="3" font-bold="true">
+          <value-of name="" width="75%" onData="self.value=VYBER.ICO+ ' - '+ VYBER.ICO_NAZEV" />
+        </style>
+      </line>
+      <line on-each-page="true">
+        <style font-face="arial">
+          <text value="" width="18%" />
+        </style>
+        <style font-face="arial">
+          <text value="" width="7%" />
+        </style>
+        <style font-face="arial" font-size="3" font-bold="true">
+          <value-of name="ICO_ADRESA" width="74%" />
+        </style>
+        <style font-face="arial" font-size="3" font-bold="true">
+          <text value="" width="1%" />
+        </style>
+      </line>
+      <line on-each-page="true">
+        <style font-face="arial">
+          <text value="" width="18%" />
+        </style>
+        <style font-face="arial">
+          <text value="NS:" width="7%" />
+        </style>
+        <style font-face="arial" font-size="3" font-bold="true">
+          <value-of name="" width="75%" onData="self.value=VYBER.NS+ ' - '+ VYBER.NS_NAZEV" />
+        </style>
+      </line>
+      <line on-each-page="true">
+        <style left-border-width="1" right-border-width="1" top-border-width="1" background-color="#e0dfde">
+          <text value="" width="100%" />
+        </style>
+        <value-of name="" onData="trf_rekap={}" />
+        <value-of name="" onData="trf_rekap_name={}" />
+        <value-of name="" onData="trf_rekap_opr={}" />
+        <value-of name="" onData="trf_sum=0" />
+        <value-of name="" onData="trf_sum_opr=0" />
+      </line>
+    </head>
+    <body>
+      <region name="KARTA">
+        <head>
+          <line on-each-page="true">
+            <style font-bold="true" left-border-width="1" background-color="#e0dfde">
+              <text value="Inventární číslo" width="11%" />
+            </style>
+            <style font-bold="true" background-color="#e0dfde">
+              <text value="Technický název" width="29%" />
+            </style>
+            <style font-bold="true" background-color="#e0dfde">
+              <text value="SuAu evi" width="5.15%" />
+            </style>
+            <style font-bold="true" horizontal-align="right" background-color="#e0dfde">
+              <text value="Množství" width="9.85%" />
+            </style>
+            <style font-bold="true" horizontal-align="right" background-color="#e0dfde">
+              <text value="Účetní cena" width="11%" />
+            </style>
+            <style background-color="#e0dfde">
+              <text value="" width="1%" />
+            </style>
+            <style font-bold="true" background-color="#e0dfde">
+              <text value="Výrobní číslo" width="12%" />
+            </style>
+            <style font-bold="true" background-color="#e0dfde">
+              <text value="Datum zařazení" width="6%" />
+            </style>
+            <style font-bold="true" right-border-width="1" background-color="#e0dfde">
+              <text value="Druh" width="15%" />
+            </style>
+          </line>
+        </head>
+        <body>
+          <line>
+            <style left-border-width="3" top-border-width="3" bottom-border-width="1" background-color="white">
+              <value-of name="INVENTCISLO" width="11%" />
+            </style>
+            <style top-border-width="3" bottom-border-width="1" background-color="white">
+              <value-of name="TECHNAZEV" width="29%" />
+            </style>
+            <style top-border-width="3" bottom-border-width="1" background-color="white">
+              <value-of name="SUAUEVIDENCE" width="5.15%" />
+            </style>
+            <style horizontal-align="right" top-border-width="3" bottom-border-width="1" background-color="white">
+              <value-of name="MNOZSTVI" width="9.85%" format="# #,000" />
+            </style>
+            <style horizontal-align="right" top-border-width="3" bottom-border-width="1" background-color="white">
+              <value-of name="PORIZCENA" width="11%" format="# #,00" />
+            </style>
+            <style top-border-width="3" bottom-border-width="1" background-color="white">
+              <text value="" width="1%" />
+            </style>
+            <style top-border-width="3" bottom-border-width="1" background-color="white">
+              <value-of name="VYROBCISLO" width="12%" />
+            </style>
+            <style top-border-width="3" bottom-border-width="1" background-color="white">
+              <value-of name="DATZARAZENI" width="6%" format="dd.mm.yyyy " />
+            </style>
+            <style right-border-width="3" top-border-width="3" bottom-border-width="1" background-color="white">
+              <value-of name="DRU_MAJ" width="15%" />
+            </style>
+          </line>
+          <region name="TRANSFER">
+            <group name="TRANSFER_1" by="TRF_INV_CIS">
+              <head>
+                <line>
+                  <style font-bold="true" left-border-width="3" bottom-border-width="1">
+                    <text value=" " width="2%" />
+                  </style>
+                  <style font-bold="true" left-border-width="1" bottom-border-width="1" background-color="#f9fdac">
+                    <text value="Poskytovatel" width="42%" />
+                  </style>
+                  <style font-bold="true" horizontal-align="right" left-border-width="1" bottom-border-width="1" background-color="#f9fdac">
+                    <text value="Transfer" width="11%" />
+                  </style>
+                  <style font-bold="true" horizontal-align="right" left-border-width="1" bottom-border-width="1" background-color="#f9fdac">
+                    <text value="Rozpuštěný transfer" width="11%" />
+                  </style>
+                  <style font-bold="true" left-border-width="1" right-border-width="1" bottom-border-width="1" background-color="#f9fdac">
+                    <text value="Au PAP/DOT" width="8%" />
+                  </style>
+                  <style font-bold="true" left-border-width="1" right-border-width="1" bottom-border-width="1" background-color="#f9fdac">
+                    <text value="Au Tran" width="5%" />
+                  </style>
+                  <style font-bold="true" left-border-width="1" right-border-width="1" bottom-border-width="1" background-color="#f9fdac">
+                    <text value="Au Výn" width="5%" />
+                  </style>
+                  <style font-bold="true" left-border-width="1" right-border-width="1" bottom-border-width="1" background-color="#f9fdac">
+                    <text value="POL" width="5%" />
+                  </style>
+                  <style font-bold="true" left-border-width="1" right-border-width="3" bottom-border-width="1" background-color="#f9fdac">
+                    <text value="UZ" width="11%" />
+                  </style>
+                </line>
+              </head>
+              <body>
+                <line>
+                  <style left-border-width="3">
+                    <text value=" " width="2%" />
+                  </style>
+                  <style left-border-width="1">
+                    <value-of name="TRF_IXS_ESU_ICO" width="8%" onData="trf_rekap_name[TRANSFER.TRF_IXS_ESU_ICO]=TRANSFER.TRF_IXS_ESU_NAZ&#xA;" />
+                  </style>
+                  <value-of name="TRF_IXS_ESU_NAZ" width="34%" onData="trf_sum=trf_sum+TRANSFER.TRF_C_DOTACE&#xA;trf_sum_opr=trf_sum_opr+TRANSFER.TRF_C_DOTACE_OPR&#xA;" />
+                  <style horizontal-align="right" left-border-width="1">
+                    <value-of name="TRF_C_DOTACE" width="11%" onData="if trf_rekap.has_key(TRANSFER.TRF_IXS_ESU_ICO): trf_rekap[TRANSFER.TRF_IXS_ESU_ICO]=trf_rekap[TRANSFER.TRF_IXS_ESU_ICO]+TRANSFER.TRF_C_DOTACE&#xA;else: trf_rekap[TRANSFER.TRF_IXS_ESU_ICO]=Decimal(TRANSFER.TRF_C_DOTACE)&#xA;selfxvalue=str(trf_rekap)" format="# 0,00;# 0,00-" />
+                  </style>
+                  <style horizontal-align="right" left-border-width="1">
+                    <value-of name="TRF_C_DOTACE_OPR" width="11%" onData="if trf_rekap_opr.has_key(TRANSFER.TRF_IXS_ESU_ICO): trf_rekap_opr[TRANSFER.TRF_IXS_ESU_ICO]=trf_rekap_opr[TRANSFER.TRF_IXS_ESU_ICO]+TRANSFER.TRF_C_DOTACE_OPR&#xA;else: trf_rekap_opr[TRANSFER.TRF_IXS_ESU_ICO]=Decimal(TRANSFER.TRF_C_DOTACE_OPR)&#xA;selfxvalue=str(trf_rekap_opr)" format="# 0,00;# 0,00-" />
+                  </style>
+                  <style left-border-width="1" right-border-width="1">
+                    <value-of name="TRF_KT_PAP" width="8%" />
+                  </style>
+                  <style left-border-width="1" right-border-width="1">
+                    <value-of name="TRF_UEB_TR" width="5%" />
+                  </style>
+                  <style left-border-width="1" right-border-width="1">
+                    <value-of name="TRF_UEB_VYN" width="5%" />
+                  </style>
+                  <style left-border-width="1" right-border-width="1">
+                    <value-of name="TRF_UEG_V" width="5%" />
+                  </style>
+                  <style left-border-width="1" right-border-width="3">
+                    <value-of name="TRF_UEG" width="11%" />
+                  </style>
+                </line>
+              </body>
+              <foot>
+                <line>
+                  <style font-bold="true" font-color="blue" left-border-width="3" top-border-width="1">
+                    <text value="" width="2%" />
+                  </style>
+                  <style font-bold="true" font-color="blue" left-border-width="1" top-border-width="1">
+                    <text value="Celkem" width="42%" />
+                  </style>
+                  <style font-bold="true" font-color="blue" horizontal-align="right" left-border-width="1" top-border-width="1">
+                    <value-of name="SUM(TRANSFER.TRF_C_DOTACE)" width="11%" format="# 0,00;# 0,00-" />
+                  </style>
+                  <style font-bold="true" font-color="blue" horizontal-align="right" left-border-width="1" top-border-width="1">
+                    <value-of name="SUM(TRANSFER.TRF_C_DOTACE_OPR)" width="11%" format="# 0,00;# 0,00-" />
+                  </style>
+                  <style font-bold="true" font-color="blue" left-border-width="1" top-border-width="1">
+                    <text value=" " width="8%" />
+                  </style>
+                  <style font-bold="true" font-color="blue" left-border-width="1" top-border-width="1">
+                    <text value=" " width="5%" />
+                  </style>
+                  <style font-bold="true" font-color="blue" left-border-width="1" top-border-width="1">
+                    <text value=" " width="5%" />
+                  </style>
+                  <style font-bold="true" font-color="blue" left-border-width="1" top-border-width="1">
+                    <text value=" " width="5%" />
+                  </style>
+                  <style font-bold="true" font-color="blue" left-border-width="1" right-border-width="3" top-border-width="1">
+                    <text value=" " width="11%" />
+                  </style>
+                </line>
+              </foot>
+            </group>
+          </region>
+        </body>
+        <foot>
+          <line>
+            <style font-face="arial" top-border-width="3">
+              <text value="" width="100%" />
+            </style>
+          </line>
+          <line>
+            <text value="" width="2%" />
+            <style font-size="3" font-bold="true" border-width="1" background-color="#e0dfde">
+              <text value="Celková rekapitulace transferů za poskytovatele" width="98%" />
+            </style>
+          </line>
+          <line>
+            <style font-bold="true">
+              <text value="" width="2%" />
+            </style>
+            <style font-bold="true" border-width="1">
+              <text value="Poskytovatel" width="42%" />
+            </style>
+            <style font-bold="true" horizontal-align="right" border-width="1">
+              <text value="Transfer" width="11%" />
+            </style>
+            <style font-bold="true" horizontal-align="right" border-width="1">
+              <text value="Rozpuštěný transfer" width="11%" />
+            </style>
+            <style font-bold="true" border-width="1">
+              <text value="" width="34%" />
+            </style>
+          </line>
+          <line>
+            <text value="" width="2%" />
+            <style left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="" width="8%" onData="self.value=sjoin(sorted(trf_rekap.keys()))" />
+            </style>
+            <style top-border-width="1" bottom-border-width="1">
+              <value-of name="" width="34%" onData="self.value=sjoin([trf_rekap_name[k] for k in sorted(trf_rekap_name.keys())])" />
+            </style>
+            <style horizontal-align="right" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="" width="11%" onData="self.value=djoin([trf_rekap[k] for k in sorted(trf_rekap.keys())])" />
+            </style>
+            <style horizontal-align="right" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="" width="11%" onData="self.value=djoin([trf_rekap_opr[k] for k in sorted(trf_rekap_opr.keys())])" />
+            </style>
+            <style border-width="1">
+              <text value="" width="34%" />
+            </style>
+          </line>
+          <line>
+            <text value="" width="2%" />
+            <style font-bold="true" border-width="1">
+              <text value="Celkem" width="42%" />
+            </style>
+            <style font-bold="true" horizontal-align="right" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="" width="11%" onData="self.value=trf_sum" format="# 0,00;# 0,00-" />
+            </style>
+            <style font-bold="true" horizontal-align="right" left-border-width="1" top-border-width="1" bottom-border-width="1">
+              <value-of name="" width="11%" onData="self.value=trf_sum_opr" format="# 0,00;# 0,00-" />
+            </style>
+            <style border-width="1">
+              <text value="" width="34%" />
+            </style>
+          </line>
+        </foot>
+      </region>
+    </body>
+  </region>
+</format>
