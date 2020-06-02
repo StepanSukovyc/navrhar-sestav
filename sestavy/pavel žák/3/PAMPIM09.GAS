@@ -1,0 +1,322 @@
+;---------------------------------------------
+#INFO type_cust="B"
+#INFO TEMA="pam_ptm_pra"
+#INFO TYP_ALG="0"
+#INFO PRIZ_SOR="0"
+#INFO VERZE_DB_MIN="333EKO00"
+#INFO IXS_STR="0000STR00A0U"
+#INFO IXS_ALV="GZNOALV0C4DL"
+#INFO ID_SES="PAMPIM09"
+#INFO NAZEV="Hlášení zamìstnavatele k DPN"
+#INFO DAT_MODIF="202002032001"
+#INFO ROKMES_OD="199801"
+#INFO ROKMES_DO="999913"
+#INFO faze="ESP05"
+#INFO machine="O"
+#INFO ktg_typ="0"
+#INFO IXS_TYP="00000400000G"
+#INFO PRI_VAZ="0"
+#INFO ZPU_ULO="0"
+#INFO PRI_ZME="1"
+#INFO PRI_DOT="0"
+#INFO MAKER="5433"
+#PRAGMA OUTNAME="GZNO0C4D.ALV"
+#INFO TYP_VYST="XME"
+#INFO create_date="20200114"
+#info ixs_frm="GZNOALF0CZSX"
+#info ixs_xme="GZNOALX0CZSF"
+#info xmeta_ver="1"
+#info xmeta_subver="1"
+#INFO ODLOZ="1"
+#INFO GDPR_SEZNAM_UDAJU="JPUC"
+
+{#ZMENY
+-20.11.2019 - vznik nove sestavy
+#ZMENY}
+
+#MANYUSERVARS
+  #include promene_pam.g00
+  #include gdpr_sestavy.g00
+  #include ObeX25.G00
+  #include ObeX22.G00
+  #include VYKOBE48.G00
+  #include VykObe29.G00 ;---- include pro inicializaci sestav
+  #include ObeX9.G00  ;---- include pro formatovani cisel
+  #include SMAZ_MEZERY.G00
+  #include procedury_pam.g00
+  #include ObeX45.G00
+  #include obedat00.g00
+  #include obalkove_adresy.g00
+  #include retezce.g00
+  #include inicializace_pam.g00
+  #include dialog_mfcr.g00
+  #include dialog_vsichni.g00
+  #include dialog_armada.g00
+  #include dialog_bis.g00
+  #include inicializace_volani.g00
+  
+  
+  {
+pamtses.char_1  --> ixs_esu
+pamtses.char_2  --> ixs_ppv
+pamtses.char_3  -->oc
+pamtses.char_4  -->rc
+pamtses.char_5  -->nazev
+pamtses.char_6  -->cs_nazev
+pamtses.char_7  --> rpnsdpn.ixp
+pamtses.char_8  --> èíslo rozhodnutí DPN
+pamtses.date_1  --> dat_od
+pamtses.date_2  --> dat_do
+pamtses.int_1 --> druh_ppv
+}
+
+#DECLARES S_VOLBA_NESCHOPENEK
+#DECLARES S_WHERE_VOLBA_NESCHOPENEK
+#DECLARES S_DATE_1
+#DECLARES S_DATE_2
+#DECLARES S_CISLO_DPN
+
+
+
+ ;nastavení globálních promìných - období aplikace, ièo,nks, funkce ....
+CALL INICIALIZACE_X0009
+
+   DIALOG CREATE 1,1,460,230,"Výbìrové podmínky zpùsobu tisku PAMPIM09",""
+
+  dialog label 5,20,160,0,"Zadejte období zpracování:","aligment=Left"
+  dialog label 180,20,60,0,"mìsíc:","aligment=left"
+  dialog pedit 235,16,22,0,2,1,12,0,P_DIALOG_MESIC_DO,"fontname=courier new;enterastab=true;tabstop=true"  ;mesic_od
+  dialog label 260,20,30,0,"rok:","aligment=left"
+  dialog pedit 285,16,40,0,4,1900,2999,0,P_DIALOG_ROK_DO,"fontname=courier new;enterastab=true;tabstop=true"; rok_od
+  
+  
+    dialog label 5,40,150,0,"Tisk neschopenek:","aligment=left"
+       S_VOLBA_NESCHOPENEK="vše"
+    dialog scombo 180,40,150,0,12,S_VOLBA_NESCHOPENEK,"name=combo1;style=dropdownlist"
+        dialog scomboadd "combo1","vše"
+        dialog scomboadd "combo1","vznik"
+        dialog scomboadd "combo1","ukonèené"
+        
+
+
+  dialog label 5,70,150,0,"Volba tøídìní výstupu:","aligment=left"
+       S_VOLBA_RAZENI="podle pøíjmení"
+    dialog scombo 180,70,150,0,12,S_VOLBA_RAZENI,"name=combo2;style=dropdownlist"
+        dialog scomboadd "combo2","podle rè"
+        dialog scomboadd "combo2","podle pøíjmení"
+   dialog execute P_DIALOG_SPUSTEN
+
+IF P_DIALOG_SPUSTEN=1
+
+P_DIALOG_MESIC_OD=P_DIALOG_MESIC_DO
+P_DIALOG_ROK_OD=P_DIALOG_ROK_DO
+
+;#############################################################################################################################################
+;#############################################################################################################################################
+; nastavení promìných na základì vstupních hodnot z dialogu
+CALL INICIALIZACE
+;#############################################################################################################################################
+CALL ZOBRAZIT_DIALOG("","","")
+;#############################################################################################################################################
+;#############################################################################################################################################
+CALL NAPLN_PAMTS00("","","");IN S0000{plnit sloupce},IN S0001{jen ke konci obdobi},IN S0002
+;#############################################################################################################################################
+;#############################################################################################################################################
+
+
+
+
+  ;---- identifikace sestavy
+  CALL InitSes( "PAMPIM09")
+     S_NAZEV_SESTAVY = "Hlášení zamìstnavatele k DPN: "+S_OBDOBI_ZVOLENE_SESTAVY+S_DIALOG_TISK
+    Set FullBarMode=0
+ SET RTFSTYLE=0
+; ?ixs_xme|@GetInfo("IXS_XME"),12.|@GetInfo("XMETA_VER"),1.|@GetInfo("XMETA_SUBVER"),1.|
+print "<?xml version="+CHAR(34)+"1.0"+CHAR(34)+" encoding="+CHAR(34)+"windows-1250"+CHAR(34)+"?>"
+
+
+IF S_VOLBA_RAZENI="podle rè"         THEN S_ORDER_BY="ORDER BY PAMTSES.char_4,PAMTSES.char_6  "
+IF S_VOLBA_RAZENI="podle pøíjmení"   THEN S_ORDER_BY="ORDER BY PAMTSES.char_6  "
+
+IF S_VOLBA_NESCHOPENEK="vše"       THEN S_WHERE_VOLBA_NESCHOPENEK=""
+IF S_VOLBA_NESCHOPENEK="vznik"     THEN S_WHERE_VOLBA_NESCHOPENEK="AND PAMTSES.date_1 is NOT null"
+IF S_VOLBA_NESCHOPENEK="ukonèené"  THEN S_WHERE_VOLBA_NESCHOPENEK="AND PAMTSES.date_2 is NOT null"
+
+ ; CALL HLAVICKA
+;----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+;                     TISK SESTAVY
+;----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  SELECT P_ZAZNAMU_CELKEM=COUNT(char_1) FROM vas.pamtses WHERE log_por_cislo=@S_X9_LPC
+
+    P_ZAZNAM_AKTUALNI=0
+    
+
+    
+SET  FullBarTopLabel =""
+    PRINT "<DPN xmlns="+CHAR(34)+"data:"+GetInfo("ixs_xme")+":1:1"+CHAR(34)+">"
+     PRINT "<TEXT>TEXT</TEXT>"
+     
+
+     
+ CYCLE\
+   SELECT  \
+    S_CISLO_DPN=PAMTSES.char_8,\
+    S_NAZEV_OSOBY=PAMTSES.char_5,\
+    S_RC=PAMTSES.char_4,\
+    S_OC=PAMTSES.char_3,\
+    S_DATE_1=PAMTSES.date_1,\
+    S_DATE_2=PAMTSES.date_2,\
+    S_CS_NAZEV=PAMTSES.char_6,\
+    P_DRUH_PPV=PAMTSES.int_1\
+   FROM\
+    vas.pamtses PAMTSES\
+   WHERE\
+    PAMTSES.log_por_cislo=@S_X9_LPC\
+    @S_WHERE_VOLBA_NESCHOPENEK\
+  ORDER BY\
+     @S_ORDER_BY
+
+
+   P_ZAZNAM_AKTUALNI=P_ZAZNAM_AKTUALNI+1
+   SET FullBarPos=P_ZAZNAM_AKTUALNI/(P_ZAZNAMU_CELKEM/100)
+   SET FullBarTopLabeL="Zpracovávám "+NumToStr(P_ZAZNAM_AKTUALNI,"I")+"/"+NumToStr(P_ZAZNAMU_CELKEM,"I")
+   SET FullBarBotLabeL=S_NAZEV_OSOBY
+
+
+
+ IF P_DRUH_PPV = 7 ;jedná se p služební pomìr
+ 
+  IF S_VOLBA_NESCHOPENEK="vše" || S_VOLBA_NESCHOPENEK="vznik"
+  if trim(S_DATE_1)<>""
+   PRINT "<OSOBA>"
+    PRINT "<NADPIS_PRVNI>HLÁŠENÍ ZAMÌSTNAVATELI O VZNIKU DOÈASNÉ PRACOVNÍ NESCHOPNOSTI</NADPIS_PRVNI>"
+    PRINT "<NADPIS_DRUHY>(služební pomìr)</NADPIS_DRUHY>"
+    PRINT "<NADPIS_TRETI>Neschopen služby od:</NADPIS_TRETI>"
+    PRINT "<TEXT_PRVNI>Pøíslušník naposledy konal službu dne:  . . . . . . . .  a odpracoval . . . . . . . .   hodin.</TEXT_PRVNI>"
+    PRINT "<TEXT_DRUHY></TEXT_DRUHY>"
+    PRINT "<TEXT_TRETI></TEXT_TRETI>"
+    PRINT "<TEXT_CTVRTY></TEXT_CTVRTY>"
+    PRINT "<CISLO_DPN>"+S_CISLO_DPN+"</CISLO_DPN>"
+    PRINT "<NAZEV>"+S_NAZEV_OSOBY+"</NAZEV>"
+    PRINT "<RC>"+S_RC+"</RC>"
+    PRINT "<OC>"+S_OC+"</OC>"
+    PRINT "<NESCHOPEN>"+DATE_TOSTRXML(S_DATE_1,"")+"</NESCHOPEN>"
+   PRINT "</OSOBA>"
+  endif
+  ENDIF
+
+
+  IF S_VOLBA_NESCHOPENEK="vše" || S_VOLBA_NESCHOPENEK="ukonèené"
+   if trim(S_DATE_2)<>"";jedná se o ukonèení DPN u služebního pomìru
+   PRINT "<OSOBA>"
+    PRINT "<NADPIS_PRVNI>HLÁŠENÍ ZAMÌSTNAVATELI O UKONÈENÍ DOÈASNÉ PRACOVNÍ NESCHOPNOSTI</NADPIS_PRVNI>"
+    PRINT "<NADPIS_DRUHY>(služební pomìr)</NADPIS_DRUHY>"
+    PRINT "<NADPIS_TRETI>Neschopen služby do:</NADPIS_TRETI>"
+    PRINT "<TEXT_PRVNI>Pøíslušník nastoupil k výkonu služby dne:  . . . . . . . .  . . . </TEXT_PRVNI>"
+    PRINT "<TEXT_DRUHY>Poslední den pracovní neschopnosti pøíslušník odpracoval . . . . . . . .   hodin.</TEXT_DRUHY>"
+    PRINT "<TEXT_TRETI>Doba služby, která pøipadala na poslední den pracovní neschopnosti podle  rozvrhu smìn pøíslušníka,&#10;èinila . . . . . . .  hodin.</TEXT_TRETI>"
+    PRINT "<TEXT_CTVRTY>Pokud pøíslušník v dobì doèasné pracovní neschopnosti vykonával službu, uveïte, ve kterých&#10;dnech: . . . . . . . . . . . . . . . . . . . . . . .</TEXT_CTVRTY>"
+    PRINT "<CISLO_DPN>"+S_CISLO_DPN+"</CISLO_DPN>"
+    PRINT "<NAZEV>"+S_NAZEV_OSOBY+"</NAZEV>"
+    PRINT "<RC>"+S_RC+"</RC>"
+    PRINT "<OC>"+S_OC+"</OC>"
+    PRINT "<NESCHOPEN>"+DATE_TOSTRXML(S_DATE_2,"")+"</NESCHOPEN>"
+   print "</OSOBA>"
+  endif
+ ENDIF
+ 
+ENDIF;P_DRUH_PPV = 7 ;jedná se p služební pomìr
+
+
+
+
+
+ IF P_DRUH_PPV <> 7 ;nejedná se o služební pomìr
+  IF S_VOLBA_NESCHOPENEK="vše" || S_VOLBA_NESCHOPENEK="vznik"
+   PRINT "<OSOBA>"
+    PRINT "<NADPIS_PRVNI>HLÁŠENÍ ZAMÌSTNAVATELI O VZNIKU DOÈASNÉ PRACOVNÍ NESCHOPNOSTI</NADPIS_PRVNI>"
+    PRINT "<NADPIS_DRUHY>(pracovní pomìr)</NADPIS_DRUHY>"
+    PRINT "<NADPIS_TRETI>Neschopen práce od:</NADPIS_TRETI>"
+    PRINT "<TEXT_PRVNI>Zamìstnanec naposledy pracoval dne:  . . . . . . . .  a odpracoval . . . . . . . .   hodin.</TEXT_PRVNI>"
+    PRINT "<TEXT_DRUHY></TEXT_DRUHY>"
+    PRINT "<TEXT_TRETI></TEXT_TRETI>"
+    PRINT "<TEXT_CTVRTY></TEXT_CTVRTY>"
+    PRINT "<CISLO_DPN>"+S_CISLO_DPN+"</CISLO_DPN>"
+    PRINT "<NAZEV>"+S_NAZEV_OSOBY+"</NAZEV>"
+    PRINT "<RC>"+S_RC+"</RC>"
+    PRINT "<OC>"+S_OC+"</OC>"
+    PRINT "<NESCHOPEN>"+DATE_TOSTRXML(S_DATE_1,"")+"</NESCHOPEN>"
+   PRINT "</OSOBA>"
+  ENDIF
+  
+  if trim(S_DATE_2)<>"";jedná se o ukonèení DPN u pracovního pomìru
+  IF S_VOLBA_NESCHOPENEK="vše" || S_VOLBA_NESCHOPENEK="ukonèené"
+   PRINT "<OSOBA>"
+    PRINT "<NADPIS_PRVNI>HLÁŠENÍ ZAMÌSTNAVATELI O UKONÈENÍ DOÈASNÉ PRACOVNÍ NESCHOPNOSTI</NADPIS_PRVNI>"
+    PRINT "<NADPIS_DRUHY>(pracovní pomìr)</NADPIS_DRUHY>"
+    PRINT "<NADPIS_TRETI>Neschopen práce do:</NADPIS_TRETI>"
+    PRINT "<TEXT_PRVNI>Zamìstnanec nastoupil do práce dne:  . . . . . . . .  . . . </TEXT_PRVNI>"
+    PRINT "<TEXT_DRUHY>Poslední den pracovní neschopnosti zamìstnanec odpracoval . . . . . . . .   hodin.</TEXT_DRUHY>"
+    PRINT "<TEXT_TRETI>Pracovní doba, která pøipadala na poslední den pracovní neschopnosti podle  rozvrhu smìn zamìstnance,&#10;èinila . . . . . . .  hodin.</TEXT_TRETI>"
+    PRINT "<TEXT_CTVRTY>Pokud zamìstnanec v dobì doèasné pracovní neschopnosti vykonával práci, uveïte, ve kterých&#10;dnech: . . . . . . . . . . . . . . . . . . . . . . .</TEXT_CTVRTY>"
+    PRINT "<CISLO_DPN>"+S_CISLO_DPN+"</CISLO_DPN>"
+    PRINT "<NAZEV>"+S_NAZEV_OSOBY+"</NAZEV>"
+    PRINT "<RC>"+S_RC+"</RC>"
+    PRINT "<OC>"+S_OC+"</OC>"
+    PRINT "<NESCHOPEN>"+DATE_TOSTRXML(S_DATE_2,"")+"</NESCHOPEN>"
+   PRINT "</OSOBA>"
+  ENDIF
+ endif
+ENDIF;P_DRUH_PPV <> 7 ;nejedná se o služební pomìr
+ ENDC
+ 
+ 
+ 
+ 
+ 
+ if P_ZAZNAM_AKTUALNI=0
+ 
+ PRINT "<OSOBA>"
+    PRINT "<NADPIS_PRVNI>HLÁŠENÍ ZAMÌSTNAVATELI O UKONÈENÍ DOÈASNÉ PRACOVNÍ NESCHOPNOSTI</NADPIS_PRVNI>"
+    PRINT "<NADPIS_DRUHY></NADPIS_DRUHY>"
+    PRINT "<NADPIS_TRETI></NADPIS_TRETI>"
+    PRINT "<TEXT_PRVNI> </TEXT_PRVNI>"
+    PRINT "<TEXT_DRUHY></TEXT_DRUHY>"
+    PRINT "<TEXT_TRETI></TEXT_TRETI>"
+    PRINT "<TEXT_CTVRTY></TEXT_CTVRTY>"
+    PRINT "<CISLO_DPN></CISLO_DPN>"
+    PRINT "<NAZEV>žádná data</NAZEV>"
+    PRINT "<RC></RC>"
+    PRINT "<NESCHOPEN></NESCHOPEN>"
+   PRINT "</OSOBA>"
+ 
+ENDIF
+ 
+ 
+ 
+     PRINT "</DPN>"
+
+
+;#########################################################################################################################################################################
+;#########################################################################################################################################################################
+   CALL ULOZENI_GDPR(S_X9_LPC,"")
+   
+   
+ if S_X9_BUG="0"
+   EXECUTE DELETE FROM vas.pamts00 WHERE log_por_cislo=@S_X9_LPC
+         if sqlerror<> 0 then runerror
+
+      EXECUTE DELETE FROM vas.pamtses WHERE log_por_cislo=@S_X9_LPC
+         if sqlerror<> 0 then runerror
+         
+    EXECUTE \
+       commit
+      if sqlerror <> 0 then runerror
+  endif
+
+ #INCLUDE pamober4.G00
+
+
+else
+    RUNABORT " Zrušena sestava uživatelem"
+endif
