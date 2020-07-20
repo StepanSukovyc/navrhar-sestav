@@ -1,0 +1,636 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<format type="grf" xmlns="http://www.gordic.cz/TR/alf/1.4/">
+	<info ixs_xme="0000ALX0BBPN" />
+	<info xmeta_ver="1" />
+	<info xmeta_subver_min="1" />
+	<info nazev="Přiznání k místnímu poplatku ze psů" />
+	<info poznamka="Přiznání k místnímu poplatku ze psů" />
+	<info ixs_frm="0000ALF04PJS" />
+	<info maker="5016" />
+	<info create_date="20160714091047" />
+	<info dat_modif="20200310131128" />
+	<info rokmes_od="199801" />
+	<info rokmes_do="999913" />
+	<info form_vyst="GFRM" />
+	<info id_form="GZIVSIT_001" />
+	<info verze_frm="1" />
+	<paper-setting page-count="2" paper-resolution="5mm" />
+	<script>
+<![CDATA[
+def VstupOK(value):
+    nevalidni = r"+*/\|_?~!@#$%^&=;¨<>[]{}"
+    return not any(znak in nevalidni for znak in value)
+
+def VstupCislice(value):
+    validni = "0123456789"
+    return all(znak in validni for znak in value)
+
+def VstupDesCislo(value):
+    validni = ",0123456789"
+    return all(znak in validni for znak in value)
+
+def VstupTelCislo(value):
+    validni = "+0123456789"
+    return all(znak in validni for znak in value)
+
+def VstupDatum(value):
+    validni = ".0123456789"
+    return all(znak in validni for znak in value)
+
+def isNoneOrEmptyOrBlankString(myString):
+    if myString:
+        if not myString.strip():
+            return True
+        else:
+            return False
+    return False
+
+def isRCValid(value):
+   	if (len(value)) == 10:
+		liche=0
+		sude=0
+		m=int((value[2])+(value[3]))
+		d=int((value[4])+(value[5]))
+		for i in range(len(value)):
+			if ((i+1)%2)==0:
+				sude+=int(value[i])
+			else:
+				liche+=int(value[i])
+		if ((liche-sude)%11)==0:
+			if (liche!=0) and (sude!=0):
+				if (m>=1) and (m<=82):
+					if (d>=1) and (d<=31):
+						return True
+					else:
+						return False
+				else:
+					return False
+			else:
+				return False
+		else:
+			return False
+	elif (len(value))==9:
+		r=int((value[0])+(value[1]))
+		m=int((value[2])+(value[3]))
+		d=int((value[4])+(value[5]))
+		if (m>=1) and (m<=82):
+				if (d>=1) and (d<=31):
+					if (r<=54):
+						return True
+					else:
+						return False
+				else:
+					return False
+		else:
+			return False			
+	else:
+		return False
+
+def mailValid(mail):
+	zav=0
+	zavin=0
+	dot=0
+	dotin=[]
+	nevalidni = "+*/\|?:~!#$%^&=;¨<>[]{}()"
+	lenght=len(mail)
+	if any(znak in nevalidni for znak in mail):
+		return False
+   	for i in range(len(mail)):
+		if mail[i]=="@":
+			if i==0 or i==(lenght-1):
+				return False
+			else:	
+				zav+=1
+				zavin=i
+		elif mail[i]==".":
+			if i==0 or i==(lenght-1) or mail[i+1]=="@" or  mail[i-1]=="@":
+				return False
+			else:
+				dot+=1
+				dotin.append(i)
+	if zav==1:
+		if dot>=1:
+			count=0
+			for i in range(len(dotin)):
+				if dotin[i]>zavin:
+					count+=1
+					if count>=1:
+						return True
+					else:
+						return False
+		else:
+			return False
+	else:	
+		return False
+]]>
+</script>
+	<region name="Zadost_hlavicka">
+		<body>
+			<grid rect="0mm,195mm,190mm,235mm" name="GPSI" interactive-overflow="grow" overflow="1">
+				<region name="PSI">
+					<head>
+						<line>
+							<style width="59mm" font-face="arial" font-bold="true" border-width="1" left-border-style="solid" right-border-style="solid" top-border-style="solid" bottom-border-style="solid">
+								<text value="Plemeno psa" />
+							</style>
+							<style width="25mm" font-face="arial" font-bold="true" border-width="1" left-border-style="solid" right-border-style="solid" top-border-style="solid" bottom-border-style="solid">
+								<text value="Číslo čipu/tetování" />
+							</style>
+							<style width="16mm" font-face="arial" font-bold="true" border-width="1" left-border-style="solid" right-border-style="solid" top-border-style="solid" bottom-border-style="solid">
+								<text value="Datum narození" />
+							</style>
+							<style width="19mm" font-face="arial" font-bold="true" border-width="1" left-border-style="solid" right-border-style="solid" top-border-style="solid" bottom-border-style="solid">
+								<text value="Pohlaví" />
+							</style>
+							<style width="30mm" font-face="arial" font-bold="true" border-width="1" left-border-style="solid" right-border-style="solid" top-border-style="solid" bottom-border-style="solid">
+								<text value="Od kdy je pes držen" />
+							</style>
+							<style width="41mm" font-face="arial" font-bold="true" border-width="1" left-border-style="solid" right-border-style="solid" top-border-style="solid" bottom-border-style="solid">
+								<text value="Poznámka" />
+							</style>
+						</line>
+					</head>
+					<body>
+						<line>
+							<style width="59mm" height="6mm" font-face="arial" vertical-align="center" border-width="1" left-border-style="solid" right-border-style="solid" top-border-style="solid" bottom-border-style="solid">
+								<value-of name="plemeno_txt" edit="true" type="list" required="true" items="0|Neznámé|5|Kříženec|10|Afgánský chrt|15|Aidi|20|Airedale terier (Erdelteriér)|25|Akita-Inu|30|Aljašský malamut|510|Dalmatin|2105|Americko-kanadský bílý ovčák|2110|Americký bezsrstý terier|2115|Americký buldok |35|Americký buldok|40|Americký foxhound|45|Americký kokršpaněl|50|Americký Mini-Pei|2120|Americký pitbullteriérr|55|Americký stafordširský terier|60|Americký vodní španěl|65|Anatolský pastevecký pes|75|Anglický buldok|80|Anglický chrt (Greyhound)|85|Anglický kokršpaněl|90|Anglický mastif|95|Anglický setr |100|Anglický špringr španěl|105|Anglický toy terier|70|Angl.-franc. honič de Petite Venerie|515|Dandie Dinmont terier|520|Dánská doga (Broholmer)|525|Dánský ohař krátkosrstý|110|Appenzellský salašnický pes|2200|Ardenský bouvier|115|Argentinská doga|120|Ariégois|125|Ariegský ohař krátkosrstý|130|Artésien Normand|135|Artésko-normandský basset|140|Artoisský basset|145|Artoisský honič|2230|Australian Stumpy Tail Cattle Dog|150|Australská kelpie|155|Australský honácký pes|160|Australský ovčák|165|Australský Silky terier|170|Australský terier|175|Auvergneský ohař krátkosrstý|180|Azavak|185|Balkánský honič|2255|Bandog|190|Barbet|195|Barevný boloňský psík|2125|Barevný boloňský psík|200|Barzoj - ruský chrt|205|Basenji|210|Basset Hound|215|Bavorský barvář|225|Beagle Harrier|220|Beagle (Bígl)|230|Bearded kolie|235|Beauceron |245|Belgický grifonek|250|Belgický ovčák|255|Belgický ovčák - Groenendael|260|Belgický ovčák - Laekenois|265|Belgický ovčák - Malinois|270|Belgický ovčák - Tervueren|240|Bedlington terier|275|Bergamský ovčák|280|Bernský salašnický pes|285|Bílá kolie|290|Billy|295|Bílý švýcarský ovčák|300|Bišonek|305|Black and Tan Coonhound|310|Bloodhound|315|Bobtail|320|Boloňský psík|325|Bordeauxská doga|330|Border kolie|335|Border terier|340|Bosenský hrubosrstý honič|345|Bostonský terier|350|Bourbonský ohař krátkosrstý|355|Brabantík|360|Brakýř jezevčíkovitý|365|Braque Dupuy|370|Brazilská fila|375|Brazilský terier|380|Bretaňský ohař dlouhosrstý|385|Briard|390|Briquet Griffon Vendéen|395|Bruselský grifonek|400|Bullmastif|405|Bullterier|410|Bullterier|415|Burgoský perdiquero|420|Búrský buldok|2130|Búrský buldok|425|Cairn Terier|430|Canaanský pes|435|Cao de Castro Laboreiro|440|Cao de Serra de Aires|2240|Cimarrón Uruguayo|445|Clumber španěl|2205|Coton de Tuléar|450|Curly Coated Retriever|530|Deerhound|565|Eskymácký pes|570|Estrelský pastevecký pes|575|Etlenbuchský salašnický pes|580|Eurasier|455|Čau Čau|2135|Čau Čau krátkosrstý|460|Černý terier|465|Československý vlčák|470|Český fousek|475|Český horský pes|2140|Český horský pes|2145|Český strakatý pes|480|Český strakatý pes|485|Český terier|490|Čínský chocholatý pes|495|Čivava|505|Čivava krátkosrstá|500|Čivava dlouhosrstá|585|Faraónský pes|590|Field španěl|595|Finský honič|600|Finský špic|605|Flanderský bouvier|610|Flat Coated Retriever|615|Foxhound|625|Foxterier hladkosrstý|620|Foxterier drsnosrstý|630|Francouzský bílo-černý honič|635|Francouzský bílo-oranžový honič|640|Francouzský buldoček|650|Francouzský ohař krátkosrstý gaskoň. typu|655|Francouzský ohař krátkosrstý pyren. typu|645|Francouzský ohař dlouhosrstý|660|Francouzský trikolorní honič|665|Frízský ohař (Stabyhoun)|670|Gaskoňsko-saintgeoiský honič|675|Gordonsetr|680|Griffon á poil laineux|685|Griffon d´Arrét á Poil Dur|690|Grónský pes|695|Hahoavu|700|Haldenův honič|705|Hamiltonův honič|710|Hannoverský barvář|715|Harrier|720|Havanský psík|725|Hokkaido-Ken|730|Holandský ovčácký pudl|735|Holandský ovčák|745|Holandský ovčák hrubosrstý|750|Holandský ovčák krátkosrstý|740|Holandský ovčák dlouhosrstý|755|Holandský pinč|2155|Holandský slídič (Holandský křepelák, Kooikerhondje)|760|Hovawart|765|Hygenův honič|770|Chambray|775|Chesapeake Bay Retriever|780|Chien Fila de Saint Miguel|790|Chortaja Borzaja|2165|Chortaja Borzaja|795|Chorvatský ovčák|785|Chodský pes|2160|Chodský pes|800|Ibizský podenco|805|Irish Glen of Imaal terier|810|Irský červenobílý setr|815|Irský jemnosrstý pšeničný teriér|820|Irský setr|825|Irský terier|830|Irský vlkodav|835|Irský vodní španěl|840|Islandský pes|845|Istrijský hrubosrstý honič|850|Istrijský krátkosrstý honič|855|Italský corso pes|860|Italský chrtík|865|Italský ohař|870|Italský Segugio|875|Italský Segugio krátkosrstý|880|Italský spinone|885|Italský volpino|890|Jack Russell Teriér|895|Jaemthund|900|Japan-chin|905|Japonský špic|910|Japonský terier|915|Jezevčík|930|Jezevčík standard hladkosrstý|920|Jezevčík standard dlouhosrstý|925|Jezevčík standard drsnosrstý|945|Jezevčík trpasličí/králičí hladkosrstý|935|Jezevčík trpasličí/králičí dlouhosrstý |940|Jezevčík trpasličí/králičí drsnosrstý |950|Jihoruský ovčák|955|Jugoslávský planinský honič|960|Jugoslávský trikolorní honič|965|Kai-Inu|970|Kanárská doga|975|Kanárský podenco|980|Karelský medvědí pes|985|Katalánský ovčák|990|Kavalír King Charles španěl|995|Kavkazský pastevecký pes|1000|Kerry blue terier|1005|King Charles španěl|1010|Kishu-Inu |1015|Knírač malý|1020|Knírač malý bílý|1025|Knírač malý černostříbřitý|1030|Knírač malý černý|1035|Knírač malý pepř a sůl|1040|Knírač střední|1045|Knírač střední černý|1050|Knírač střední pepř a sůl|1055|Knírač velký|1060|Knírač velký černý|1065|Knírač velký pepř a sůl|1075|Kolie krátkosrstá|1070|Kolie dlouhosrstá|1080|Komondor|1085|Kooikerhondje|1090|Korejský Jindo Dog|1095|Krašský ovčák|1100|Kromforländer|1105|Kuvasz|1110|Labradorský retriever|2210|Lagotto romagnolo|1115|Lajka karelo-finská|1120|Lakeland terier|1125|Landseer|1130|Lapinkoira|1135|Lapinporokoira|1140|Laponský pes |1145|Leonberger|1150|Levesque|1155|Lhasa Apso|535|Dlouhosrstý ohař z Pont-Audemer |540|Dlouhosrstý vipet|2150|Dlouhosrstý vipet|2170|Louisianský leopardí pes|1160|Louisianský leopardí pes|1165|Lvíček|1170|Maďarský chrt|1180|Maďarský ohař krátkosrstý|1175|Maďarský ohař drátosrstý|1185|Malorský ovčák|1190|Maltézský psík|1195|Malý gaskoňsko-saintgeoisský honič|1200|Malý hrubosrstý modrý gaskoňský honič|1205|Malý hrubosrstý vendéeský basset|1210|Malý kontinentální španěl|1215|Malý modrý gaskoňský honič|1220|Malý münsterlandský ohař|1225|Manchester terier|1230|Maremmansko-abruzský pastevecký pes|1235|Mexický naháč|1240|Miniaturní bullterier|1255|Mops|1245|Modrý gaskoňský basset|1250|Modrý pikardský ohař dlouhosrstý|1260|Moskevský strážní pes|2175|Moskevský strážní pes|1265|Moskevský toy terier|1270|Mudi|1275|Neapolský mastin|1280|Německá doga|1285|Německý boxer|1290|Německý honič|1295|Německý křepelák|1300|Německý lovecký terier(Jagdteriér)|1315|Německý ohař krátkosrstý|1305|Německý ohař dlouhosrstý|1320|Německý ohař ostnosrstý|1310|Německý ohař drátosrstý|1325|Německý ovčák|1330|Německý pinč|1335|Německý špic|1340|Německý špic malý|1345|Německý špic střední|1350|Německý špic trpasličí|1355|Německý špic velký|1360|Německý špic vlčí|1365|Nivernaisský hrubosrstý honič|1370|Norbotenský špic|1375|Norfolk terier|1380|Normandský Poitevin|1385|Norský buhund|1390|Norský losí pes černý|1395|Norský losí pes šedý|1400|Norský lundehund|1405|Norwich terier|1410|Nova Scotia Duck Tolling Retriever|1415|Novofundlandský pes|545|Dobrman|1420|Opičí pinč|1425|Otterhound (Vydrař)|1430|Papillon|1435|Parson Russell Teriér|1440|Patterdale terier|2180|Patterdale terier|1445|Pekingský palácový psík|1450|Perro de Presa Mallorquin|1455|Peruánský naháč|1460|Phaléne|1465|Pikardský ohař dlouhosrstý|1470|Pikardský ovčák|1475|Plavý bretaňský basset|1480|Plavý bretaňský honič|1485|Podhalaňský ovčák|1490|Pointer|1495|Poitevin|2245|Polský honič|1500|Polský chrt|1505|Polský ogar|1510|Polský ovčák nížinný|1515|Porcelaine|1520|Portugalský ohař|1525|Portugalský podengo|1530|Portugalský vodní pes|1535|Posávský honič|1540|Pražský krysařík|2185|Pražský krysařík|1545|Pudl|1550|Pudl střední aprikot|1555|Pudl střední bílý|1560|Pudl střední černý|1565|Pudl střední hnědý|1570|Pudl střední stříbrný|1575|Pudl toy aprikot|1580|Pudl toy bílý|1585|Pudl toy černý|1590|Pudl toy hnědý|1595|Pudl toy stříbrný|1600|Pudl trpasličí aprikot|1605|Pudl trpasličí bílý|1610|Pudl trpasličí černý|1615|Pudl trpasličí hnědý|1620|Pudl trpasličí stříbrný|1625|Pudl velký aprikot|1630|Pudl velký bílý|1635|Pudl velký černý|1640|Pudl velký hnědý|1645|Pudl velký stříbrný|1650|Pudl vícebarevný|2190|Pudl vícebarevný|1660|Puli|1655|Pudlpointr|1665|Pumi|1670|Pyrenejský horský pes|1675|Pyrenejský mastin|1685|Pyrenejský ovčák s kr. srstí v obličeji|1680|Pyrenejský ovčák s dl. srstí v obličeji|1690|Rafeiro do Alentejo|1695|Rakouský krátkosrstý honič|1700|Rakouský krátkosrstý pinč|550|Drentsche Patrisijshond|555|Drever|1705|Rhodézský ridgeback|2225|Romanian Carpathian Shepherd Dog|2220|Romanian Mioritic Shepherd Dog|1710|Rotvajler|1715|Ruskoevropská lajka|2235|Ruský toy|1720|Řecký honič |1725|Saarlosův vlčák|1730|Saint-Germainský ohař krátkosrstý|1735|Saluki - Perský chrt |1740|Samojed|1745|Sealyham terier|1750|Sedmihradský honič|1755|Shar-Pei|1760|Sheltie|1765|Shiba-Inu|1770|Shih-tzu|1775|Shikoku-Inu|1780|Schillerův honič|1785|Sibiřský husky|1790|Sicilský chrt|1795|Skotský terier|1800|Skye terier|1805|Sloughi|1810|Slovenský čuvač|1815|Slovenský kopov|1820|Slovenský ohař hrubosrstý|1825|Smalandský honič|1830|Stafordšírský bullterier|1835|Středoasijský pastevecký pes|1840|Sussex španěl|1855|Svatobernarský pes|1850|Svatobernardský pes krátkosrstý|1845|Svatobernardský pes dlouhosrstý|1860|Šarplaninský pastevecký pes|1865|Šiperka|1870|Španělský galgo|1875|Španělský mastin|1880|Španělský sabueso|1885|Španělský vodní pes|1890|Štýrský brakýř|1915|Švýcarský honič|1920|Švýcarský honič - Bernský honič|1925|Švýcarský honič - Jurský honič|1930|Švýcarský honič - Lucernský honič|1935|Švýcarský honič - Švycký honič|1940|Švýcarský nízkonohý honič|1910|Švýcar.n.honič - Švycký nízkonohý honič|1905|Švýc.níz.honič - Petit Courant du Jura|1895|Švýc.n.honič - Bernský nízkonohý honič|1900|Švýc.n.honič - Lucernský nízkonohý honič |2215|Taiwan Dog|1945|Thajský ridgeback|1950|Tibetská doga|1955|Tibetský španěl|1960|Tibetský terier|2250|Tornjak|1965|Tosa-Inu|1970|Trpasličí pinč|1975|Tyrolský honič|560|Dunker|2195|Vaestgoetlandský špic|1990|Velký franc.-anglický bílo-černý honič|1995|Velký gaskoňsko-saintongeoisský honič|2000|Velký hrubosrstý vendéeský basset|2005|Velký japonský pes|2010|Velký modrý gaskoňský honič|2015|Velký münsterlandský ohař|2020|Velký švýcarský salašnický pes|2025|Velký vendéeský hrubosrstý honič|1985|Vel.francouzsko-anglický trikolor.honič|1980|Vel.franc.-anglický bílo-oranžový honič|2030|Východosibiřská lajka|2035|Výmarský ohař|2045|Výmarský ohař krátkosrstý|2040|Výmarský ohař dlouhosrstý|2050|Welsh Corgi Cardigan|2055|Welsh Corgi Pembroke|2060|Welsh terier|2065|Welššpringršpaněl|2070|West Highland White Terrier|2075|Westfálský jezevčíkovitý honič|2080|Wetterhound|2085|Whippet|2090|Yorkšírský (jorkšírský) terier|2095|Západosibiřská lajka|2100|Zlatý retriever|" />
+							</style>
+							<style width="25mm" height="6mm" font-face="arial" vertical-align="center" border-width="1" left-border-style="solid" right-border-style="solid" top-border-style="solid" bottom-border-style="solid">
+								<value-of name="znamka" edit="true" required="true">
+									<validate type="required" message="&lt;zpráva&gt;" min="&lt;minimální hodnota (pokud existuje)&gt;" max="&lt;maximální hodnota (pokud existuje)&gt;" />
+								</value-of>
+							</style>
+							<style width="16mm" height="6mm" font-face="arial" vertical-align="center" format="0" border-width="1" left-border-style="solid" right-border-style="solid" top-border-style="solid" bottom-border-style="solid">
+								<value-of name="vek" format="0" edit="true" type="number" required="true" />
+							</style>
+							<style width="19mm" height="6mm" font-face="arial" vertical-align="center" border-width="1" left-border-style="solid" right-border-style="solid" top-border-style="solid" bottom-border-style="solid">
+								<value-of name="pohlavi_txt" edit="true" type="list" items="||0|Neznámé|10|Pes|20|Fena|" required="true" />
+							</style>
+							<style width="30mm" height="6mm" font-face="arial" vertical-align="center" format="dd.mm.yyyy;" border-width="1" left-border-style="solid" right-border-style="solid" top-border-style="solid" bottom-border-style="solid">
+								<value-of name="od" format="dd.mm.yyyy;" edit="true" type="datetime" datatype="datetime" required="true" />
+							</style>
+							<style width="26mm" height="6mm" font-face="arial" vertical-align="center" left-border-width="1" top-border-width="1" bottom-border-width="1" left-border-style="solid" top-border-style="solid" bottom-border-style="solid">
+								<value-of name="pozn" edit="true" onValidate="if(not VstupOK(self.value)): self.fail('Text obsahuje nepovolené znaky.')" />
+							</style>
+							<style width="7mm" height="6mm" top-border-width="1" bottom-border-width="1" top-border-style="solid" bottom-border-style="solid">
+								<button value="+" rect="170mm,165mm,195mm,170mm" onClick="if PSI.ROWNUM&lt;5: format.GPSI.addRow('PSI')" onValidate="if PSI.ROWNUM&gt;5: self.fail('Další řádky není možné přidávat.')" onData="if PSI.ROWNUM&gt;65: self.fail('Další řádky není možné přidávat.')" order="21" />
+							</style>
+							<style width="6.99mm" height="6mm" right-border-width="1" top-border-width="1" bottom-border-width="1" right-border-style="solid" top-border-style="solid" bottom-border-style="solid">
+								<button value="-" rect="170mm,165mm,195mm,170mm" onClick="if PSI.ROWNUM&gt;1: PSI.delete()" order="21" />
+							</style>
+							<style width="1.01mm" height="6mm" font-face="arial" font-bold="true" right-border-width="1" top-border-width="1" bottom-border-width="1" right-border-style="solid" top-border-style="solid" bottom-border-style="solid">
+								<text value="" />
+							</style>
+						</line>
+					</body>
+				</region>
+			</grid>
+			<style font-face="arial" horizontal-align="center" border-width="1">
+				<text value="PID žádosti" rect="120mm,0mm,189mm,24mm" order="1" />
+			</style>
+			<style font-face="arial" font-size="4" font-bold="true" vertical-align="center">
+				<value-of name="ROOT.org_name" rect="20mm,0mm,115mm,5mm" order="2" />
+			</style>
+			<style font-size="8" horizontal-align="center" vertical-align="center">
+				<value-of name="pid_zadosti" rect="120mm,3mm,189mm,24mm" onData="if len(Zadost_hlavicka.pid_zadosti)==12:&#xA; self.value='*'+Zadost_hlavicka.pid_zadosti+'*'&#xA;else:&#xA; self.value=''&#xA; " order="3" />
+			</style>
+			<style font-face="arial" font-bold="true">
+				<value-of name="" rect="20mm,5mm,120mm,10mm" onData="if (len(ROOT.org_cisor)==0 and len(ROOT.org_pracoviste)==0): &#xA; self.value=str(ROOT.org_ulice)+' '+str(ROOT.org_cispop)+', '+str(ROOT.org_psc)+' '+str(ROOT.org_mesto);&#xA;else:&#xA; if (len(ROOT.org_cisor)!=0 and len(ROOT.org_pracoviste)==0):&#xA;  self.value=str(ROOT.org_ulice)+' '+str(ROOT.org_cispop)+'/'+str(ROOT.org_cisor)+', '+str(ROOT.org_psc)+' '+str(ROOT.org_mesto);&#xA; else:&#xA;  if len(ROOT.org_cisor)==0 and len(ROOT.org_pracoviste)!=0:&#xA;   self.value=str(ROOT.org_ulice)+' '+str(ROOT.org_cispop)+', pracoviště: '+str(ROOT.org_pracoviste)+', '+str(ROOT.org_psc)+' '+str(ROOT.org_mesto);&#xA;  else:&#xA;   self.value=str(ROOT.org_ulice)+' '+str(ROOT.org_cispop)+'/'+str(ROOT.org_cisor)+', pracoviště: '+str(ROOT.org_pracoviste)+', '+str(ROOT.org_psc)+' '+str(ROOT.org_mesto);" order="4" />
+			</style>
+			<style font-face="arial" font-bold="true">
+				<value-of name="" rect="20mm,10mm,115mm,15mm" onData="self.value=str(ROOT.org_odbor)" order="5" />
+			</style>
+			<style font-face="arial" font-bold="true">
+				<value-of name="" rect="20mm,15mm,90mm,20mm" onData="if len(ROOT.org_tel)==0:&#xA; self.value=''&#xA;else:&#xA; self.value='Tel.: '+str(ROOT.org_tel)" order="6" />
+			</style>
+			<style font-face="arial" font-bold="true">
+				<value-of name="" rect="20mm,20mm,95mm,25mm" onData="if len(ROOT.org_mail)==0:&#xA; self.value=''&#xA;else:&#xA; self.value='E-mail.: '+str(ROOT.org_mail)" order="7" />
+			</style>
+			<style font-face="arial" font-bold="true">
+				<value-of name="" rect="20mm,25mm,90mm,30mm" onData="if len(ROOT.org_idds)==0:&#xA; self.value=''&#xA;else:&#xA; self.value='ID datové schránky: '+str(ROOT.org_idds)" order="8" />
+			</style>
+			<style font-face="arial" font-size="16pt" font-bold="true" font-underline="true" horizontal-align="center" multiline="false">
+				<text value="PŘIHLÁŠENÍ DRŽITELE PSA DO EVIDENCE" rect="0mm,39mm,189mm,48mm" order="9" />
+			</style>
+			<style font-face="arial" font-size="11pt" font-bold="true" horizontal-align="center" multiline="false">
+				<text value="Obecně závazná vyhláška č. 1/2019, článek 4, odstavec 5" rect="0mm,48mm,189mm,57mm" order="10" />
+			</style>
+			<style font-face="arial" font-size="11pt" font-bold="true" vertical-align="center">
+				<text value="1" rect="174mm,267mm,186mm,273mm" page="1" order="11" />
+			</style>
+			<!--<region name="BS" rect="0mm,132mm,189mm,150mm" order="16">
+				<body>
+					<style font-face="arial" font-size="11pt" font-bold="true" vertical-align="center" multiline="false" border-width="1">
+						<text value="Peněžní ústav, číslo účtu" rect="0mm,132mm,189mm,138mm" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" multiline="false" border-width="1">
+						<text value="Číslo účtu" rect="0mm,138mm,24mm,144mm" order="1" />
+					</style>
+					<style font-face="arial" font-size="11pt" multiline="false" border-width="1">
+						<value-of name="bankovni_ucet" rect="24mm,138mm,84mm,144mm" edit="true" onValidate="BS.bankovni_ucet = BS.bankovni_ucet.replace(&quot; &quot;,&quot;&quot;);&#xA;self.value = BS.bankovni_ucet.replace(&quot; &quot;,&quot;&quot;);&#xA;BS.bankovni_ucet = self.value;&#xA;&#xA;pocetPoml=0;&#xA;index=-1;&#xA;&#xA;#test, zda obsahuje jen čísla&#xA;testZnak='true';&#xA;for znak in BS.bankovni_ucet:&#xA; if znak in '0123456789' and testZnak=='true':&#xA;  testZnak='true';&#xA; else:&#xA;  if znak!='-' and testZnak=='true':&#xA;   testZnak='false';&#xA;  else:&#xA;   pocetPoml+=1;&#xA;&#xA;if(not isNoneOrEmptyOrBlankString(self.value)):&#xA; if pocetPoml&gt;1:&#xA;  testZnak='false';self.fail('Číslo účtu obsahuje nepovolené znaky');&#xA; else:&#xA;  if BS.bankovni_ucet.find('-')&lt;&gt;-1 and testZnak=='true':&#xA;   index=int(BS.bankovni_ucet.find('-'))&#xA;  else:&#xA;   index=-1;&#xA;  if index&lt;&gt;-1 and testZnak=='true':&#xA;   predcisli=BS.bankovni_ucet[0:index];&#xA;   cislo=BS.bankovni_ucet[index+1:];&#xA;  else:&#xA;   predcisli='';&#xA;   cislo=BS.bankovni_ucet[index+1:]&#xA;  &#xA;if(not isNoneOrEmptyOrBlankString(self.value)):&#xA; if testZnak=='false':&#xA;  self.fail('Číslo účtu obsahuje nepovolené znaky');&#xA; else:&#xA;  i=len(cislo);&#xA;  soucet=0;&#xA;  while(i&gt;0):&#xA;   exp=len(cislo)-i;&#xA;   soucet=soucet+int(cislo[i-1])*(2**exp);&#xA;   i-=1;&#xA;  else:&#xA;   zbytek=soucet%11;&#xA;  if zbytek&gt;0 or soucet==0 or len(cislo)&gt;10:&#xA;   self.fail('Chybné číslo bankovního účtu');&#xA;&#xA;if(not isNoneOrEmptyOrBlankString(self.value)):  &#xA; if predcisli=='' and BS.bankovni_ucet.find('-')&lt;&gt;-1:&#xA;  self.fail('Chybné číslo bankovního účtu');  &#xA;&#xA;if(not isNoneOrEmptyOrBlankString(self.value)):  &#xA; if predcisli!='':&#xA;  i=len(predcisli);&#xA;  soucet=0;&#xA;  while(i&gt;0):&#xA;   exp=len(predcisli)-i;&#xA;   soucet=soucet+int(predcisli[i-1])*(2**exp);&#xA;   i-=1;&#xA;  else:&#xA;   zbytek=soucet%11;&#xA;&#xA;if(not isNoneOrEmptyOrBlankString(self.value)):&#xA; if zbytek&gt;0 or len(predcisli)&gt;6:&#xA;  self.fail('Chybné předčíslí bankovního účtu');" required="false" tooltip="Zadejte číslo bankovního účtu (pokud má účet předčíslí, oddělte jej pomlčkou" order="2" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" multiline="false" border-width="1">
+						<text value="Kód banky" rect="84mm,138mm,107mm,144mm" order="3" />
+					</style>
+					<style font-face="arial" font-size="11pt" multiline="false" border-width="1">
+						<value-of name="smerovy_kod_banky_txt" rect="107mm,138mm,189mm,144mm" edit="true" type="list" items="||0100|0100 Komerční banka, a.s.|0300|0300 Československá obchodní banka, a.s.|0600|0600 MONETA Money Bank, a.s.|0710|0710 Česká národní banka|0800|0800 Česká spořitelna, a.s.|2010|2010 Fio banka, a.s.|2020|2020 MUFG Bank (Europe) N.V. Prague Branch|2030|2030 Československé úvěrní družstvo|2060|2060 Citfin, spořitelní družstvo|2070|2070 Moravský Peněžní Ústav – spořitelní družstvo|2100|2100 Hypoteční banka, a.s.|2200|2200 Peněžní dům, spořitelní družstvo|2220|2220 Artesa, spořitelní družstvo|2240|2240 Poštová banka, a.s., pobočka Česká republika|2250|2250 Banka CREDITAS a.s.|2260|2260 ANO spořitelní družstvo|2275|2275 Podnikatelská družstevní záložna|2310|2310 Raiffeisenbank a.s.-doběh plateb ZUNO|2600|2600 Citibank Europe plc, organizační složka|2700|2700 UniCredit Bank Czech Republic and Slovakia, a.s.|3030|3030 Air Bank a.s.|3050|3050 BNP Paribas Personal Finance SA, odštěpný závod|3060|3060 PKO BP S.A., Czech Branch|3500|3500 ING Bank N.V.|4000|4000 Expobank CZ a.s.|4300|4300 Českomoravská záruční a rozvojová banka, a.s.|5500|5500 Raiffeisenbank a.s.|5800|5800 J T BANKA, a.s.|6000|6000 PPF banka a.s.|6100|6100 Equa bank a.s.|6200|6200 COMMERZBANK Aktiengesellschaft, pobočka Praha|6210|6210 mBank S.A., organizační složka|6300|6300 BNP Paribas Fortis SA/NV, pobočka Česká republika|6700|6700 Všeobecná úverová banka a.s., pobočka Praha|6800|6800 Sberbank CZ, a.s.|7910|7910 Deutsche Bank Aktiengesellschaft Filiale Prag, organizační složka|7940|7940 Waldviertler Sparkasse Bank AG|7950|7950 Raiffeisen stavební spořitelna a.s.|7960|7960 Českomoravská stavební spořitelna, a.s.|7970|7970 Wüstenrot-stavební spořitelna a.s.|7980|7980 Wüstenrot hypoteční banka a.s.|7990|7990 Modrá pyramida stavební spořitelna, a.s.|8030|8030 Raiffeisenbank im Stiftland eG pobočka Cheb, odštěpný závod|8040|8040 Oberbank AG pobočka Česká republika|8060|8060 Stavební spořitelna České spořitelny, a.s.|8090|8090 Česká exportní banka, a.s.|8150|8150 HSBC Bank plc - pobočka Praha|8200|8200 PRIVAT BANK AG der Raiffeisenlandesbank Oberösterreich Aktiengesellschaft, pobočka Česká republika|8220|8220 Payment Execution s.r.o.|8230|8230 EEPAYS s.r.o.|8240|8240 Družstevní záložna Kredit|8250|8250 Bank of China (Hungary) Close Ltd. Prague branch, odštěpný závod|8265|8265 Industrial and Commercial Bank of China|" required="false" order="4" />
+					</style>
+				</body>
+			</region>-->
+			<image file="Logo_final_znak_1.png" image-width="auto" image-height="auto" rect="0mm,0mm,18.99mm,20mm" order="13" />
+			<style font-face="arial" font-size="11pt" font-bold="true" vertical-align="center">
+				<text value="2" rect="174mm,267mm,186mm,273mm" page="2" />
+			</style>
+			<style font-face="arial" font-size="10pt">
+				<text value="Poplatku podléhají psi starší 3 měsíců." rect="10mm,55mm,180mm,65mm" page="2" order="1" />
+			</style>
+			<style font-face="arial" font-size="10pt">
+				<text value="Poplatníkem je fyzická nebo právnická osoba, která je držitelem psa a která je přihlášena nebo má sídlo na území města Veselí nad Moravou." rect="10mm,65mm,180mm,75mm" page="2" order="2" />
+			</style>
+			<style font-face="arial" font-size="10pt">
+				<text value="Poplatník je povinen splnit ohlašovací povinnost do 15 dnů ode dne vzniku poplatkové  povinnosti, taktéž do 15 dnů oznámit správci poplatku každou skutečnost, která má vliv na výši poplatku. Formulář obdrží u správce poplatku, na ekonomickém odboru MěÚ nebo na stránkách města Veselí nad Moravou." rect="10mm,75mm,180mm,95mm" page="2" order="3" />
+			</style>
+			<style font-face="arial" font-size="10pt">
+				<text value="Požadavek na osvobození od poplatku je držitel povinen prokázat při ohlašovací povinnosti." rect="10mm,90mm,180mm,100mm" page="2" order="4" />
+			</style>
+			<style font-face="arial" font-size="10pt">
+				<text value="Splatnost poplatku:" rect="10mm,100mm,180mm,105mm" page="2" order="5" />
+			</style>
+			<style font-face="arial" font-size="10pt">
+				<text value="Poplatek je splatný nejpozději do 30. 6. příslušného kalendářního roku." rect="20mm,110mm,160mm,120mm" page="2" order="6" />
+			</style>
+			<style font-face="arial" font-size="10pt">
+				<text value="Vznikne-li poplatková povinnost po datu splatnosti uvedeném v odstavci 1 tohoto článku, je poplatek splatný do 15 dnů ode dne vzniku poplatkové povinnosti." rect="20mm,120mm,160mm,130mm" page="2" order="7" />
+			</style>
+			<style font-face="arial" font-size="10pt">
+				<text value="Poplatková povinnost vzniká v kalendářním měsíci, ve kterém pes dovršil stáří 3 měsíců, poplatek se platí za každý i započatý kalendářní měsíc.V případě držení psa po dobu kratší než jeden rok se platí poplatek v poměrné výši, která odpovídá  počtu i započatých kalendářních měsíců. Při změně trvalého pobytu platí držitel psa poplatek od počátku kalendářního měsíce následujícího po měsíci, ve kterém změna nastala, nově přísl. obci." rect="20mm,130mm,160mm,160mm" page="2" order="8" />
+			</style>
+			<style font-face="arial" font-size="10pt">
+				<text value="Zanikne-li poplatková povinnost, poplatek ze psů se platí i za započatý kalendářní měsíc. Zjištěný přeplatek se vrátí, činí-li více než 100,--Kč. " rect="20mm,155mm,160mm,165mm" page="2" order="9" />
+			</style>
+			<style font-face="arial" font-size="10pt" font-bold="true">
+				<text value="1." rect="0mm,55mm,10mm,65mm" page="2" order="10" />
+			</style>
+			<style font-face="arial" font-size="10pt" font-bold="true">
+				<text value="2." rect="0mm,65mm,10mm,75mm" page="2" order="11" />
+			</style>
+			<style font-face="arial" font-size="10pt" font-bold="true">
+				<text value="3." rect="0mm,75mm,10mm,85mm" page="2" order="12" />
+			</style>
+			<style font-face="arial" font-size="10pt" font-bold="true">
+				<text value="4." rect="0mm,90mm,10mm,100mm" page="2" order="13" />
+			</style>
+			<style font-face="arial" font-size="10pt" font-bold="true">
+				<text value="5." rect="0mm,100mm,10mm,110mm" page="2" order="14" />
+			</style>
+			<style font-face="arial" font-size="10pt" font-bold="true">
+				<text value="&#xb0;" rect="10mm,110mm,20mm,120mm" page="2" order="15" />
+			</style>
+			<style font-face="arial" font-size="10pt" font-bold="true">
+				<text value="&#xb0;" rect="10mm,120mm,20mm,130mm" page="2" order="16" />
+			</style>
+			<style font-face="arial" font-size="10pt" font-bold="true">
+				<text value="&#xb0;" rect="10mm,130mm,20mm,140mm" page="2" order="17" />
+			</style>
+			<style font-face="arial" font-size="10pt" font-bold="true">
+				<text value="&#xb0;" rect="10mm,155mm,20mm,165mm" page="2" order="18" />
+			</style>
+			<style font-face="arial" font-size="11pt" font-bold="true">
+				<text value="Poučení:" rect="0mm,49mm,25mm,55mm" page="2" order="19" />
+			</style>
+			<style font-face="arial" border-width="1">
+				<text value="" rect="0mm,55mm,190mm,175mm" page="2" order="20" />
+			</style>
+			<region name="ZADATEL" rect="5mm,49mm,70mm,60mm" order="14">
+				<body>
+					<style font-face="arial">
+						<value-of name="" rect="10mm,55mm,35mm,49mm" onValidate="global_zadatel=ZADATEL" page="1" />
+					</style>
+				</body>
+			</region>
+			<region name="ZADATEL" rect="0mm,60mm,190.01mm,104mm" order="15" page="1">
+				<body>
+					<style font-face="arial" font-size="11pt" font-bold="true" multiline="false">
+						<text value="Poplatník - držitel psa:" rect="0mm,60mm,189mm,66mm" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" horizontal-align="right" multiline="false" border-width="1">
+						<text value="Fyzická osoba" rect="0mm,66mm,51mm,72mm" order="1" />
+					</style>
+					<style border-width="1">
+						<select name="typEsu" rect="51mm,66mm,57mm,72mm" type="radio" onData="#0=ne, 1=ano&#xA;if Zadost_hlavicka.priz_anonymous==0:&#xA; self.edit=0&#xA;else:&#xA; self.edit=1" required="true" order="2">
+							<option value="20">
+								<drawing shape="check-ticked" />
+							</option>
+							<option>
+								<drawing shape="check-empty" />
+							</option>
+						</select>
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" horizontal-align="right" multiline="false" border-width="1">
+						<text value="Fyzická osoba podnikající" rect="57mm,66mm,108mm,72mm" order="3" />
+					</style>
+					<style border-width="1">
+						<select name="typEsu" rect="108mm,66mm,114mm,72mm" type="radio" onData="#0=ne, 1=ano&#xA;if Zadost_hlavicka.priz_anonymous==0:&#xA; self.edit=0&#xA;else:&#xA; self.edit=1" required="true" order="4">
+							<option value="30">
+								<drawing shape="check-ticked" />
+							</option>
+							<option>
+								<drawing shape="check-empty" />
+							</option>
+						</select>
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" horizontal-align="right" multiline="false" border-width="1">
+						<text value="Právnická osoba" rect="114mm,66mm,165mm,72mm" order="5" />
+					</style>
+					<style border-width="1">
+						<select name="typEsu" rect="165mm,66mm,171mm,72mm" type="radio" onData="#0=ne, 1=ano&#xA;if Zadost_hlavicka.priz_anonymous==0:&#xA; self.edit=0&#xA;else:&#xA; self.edit=1" required="true" order="6">
+							<option value="10">
+								<drawing shape="check-ticked" />
+							</option>
+							<option>
+								<drawing shape="check-empty" />
+							</option>
+						</select>
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" multiline="false" border-width="1">
+						<text value="" rect="171mm,66mm,189mm,72mm" order="7" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" multiline="false" border-width="1">
+						<value-of name="" rect="0mm,72mm,12mm,78mm" onData="self.value='Titul:'&#xA;if ZADATEL.typEsu=='20' or ZADATEL.typEsu=='30':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0" order="8" />
+					</style>
+					<style font-face="arial" font-size="11pt" multiline="false" border-width="1">
+						<value-of name="titul_pred_jmenem" rect="12mm,72mm,30mm,78mm" onData="if ZADATEL.typEsu=='20' or ZADATEL.typEsu=='30':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0;&#xA;&#xA;#0=ne, 1=ano&#xA;if Zadost_hlavicka.priz_anonymous==0:&#xA; self.edit=0&#xA;else:&#xA; self.edit=1" onValidate="if(not VstupOK(self.value)): self.fail('Text obsahuje nepovolené znaky.')" order="9" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" multiline="false" border-width="1">
+						<value-of name="" rect="30mm,72mm,48mm,78mm" onData="self.value='Jméno:'&#xA;if ZADATEL.typEsu=='20' or ZADATEL.typEsu=='30':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0" order="10" />
+					</style>
+					<style font-face="arial" font-size="11pt" multiline="false" border-width="1">
+						<value-of name="jmeno" rect="48mm,72mm,93mm,78mm" onData="if ZADATEL.typEsu=='20' or ZADATEL.typEsu=='30':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0&#xA; &#xA;#0=ne, 1=ano&#xA;if Zadost_hlavicka.priz_anonymous==0:&#xA; self.edit=0&#xA;else:&#xA; self.edit=1" onValidate="if(not VstupOK(self.value)): self.fail('Text obsahuje nepovolené znaky.')" required="true" order="11" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" multiline="false" border-width="1">
+						<value-of name="" rect="93mm,72mm,114mm,78mm" onData="self.value='Příjmení:'&#xA;if ZADATEL.typEsu=='20' or ZADATEL.typEsu=='30':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0" order="12" />
+					</style>
+					<style font-face="arial" font-size="11pt" multiline="false" border-width="1">
+						<value-of name="prijmeni" rect="114mm,72mm,159mm,78mm" onData="if ZADATEL.typEsu=='20' or ZADATEL.typEsu=='30':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0&#xA;&#xA;#0=ne, 1=ano&#xA;if Zadost_hlavicka.priz_anonymous==0:&#xA; self.edit=0&#xA;else:&#xA; self.edit=1" onValidate="if(not VstupOK(self.value)): self.fail('Text obsahuje nepovolené znaky.')" required="true" order="13" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" multiline="false" border-width="1">
+						<value-of name="" rect="159mm,72mm,171mm,78mm" onData="self.value='Titul:'&#xA;if ZADATEL.typEsu=='20' or ZADATEL.typEsu=='30':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0" order="14" />
+					</style>
+					<style font-face="arial" font-size="11pt" multiline="false" border-width="1">
+						<value-of name="titul_za_jmenem" rect="171mm,72mm,189mm,78mm" onData="if ZADATEL.typEsu=='20' or ZADATEL.typEsu=='30':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0;&#xA;&#xA;#0=ne, 1=ano&#xA;if Zadost_hlavicka.priz_anonymous==0:&#xA; self.edit=0&#xA;else:&#xA; self.edit=1" onValidate="if(not VstupOK(self.value)): self.fail('Text obsahuje nepovolené znaky.')" order="15" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" multiline="false" border-width="1">
+						<value-of name="" rect="0mm,78mm,21mm,84mm" onData="self.value='Název:'&#xA;if ZADATEL.typEsu=='10':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0" order="16" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" multiline="false" border-width="1">
+						<value-of name="" rect="0mm,78mm,21mm,84mm" onData="if ZADATEL.typEsu=='20' or ZADATEL.typEsu=='30':&#xA; self.value='RČ:';self.visible=1&#xA;else:&#xA; self.value='';self.visible=0&#xA;" order="17" />
+					</style>
+					<style font-face="arial" font-size="11pt">
+						<value-of name="rc" rect="21mm,78mm,54mm,84mm" edit="true" onData="if ZADATEL.typEsu=='20' or ZADATEL.typEsu=='30':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0&#xA; &#xA;#0=ne, 1=ano&#xA;#if Zadost_hlavicka.priz_anonymous==0:&#xA;# self.edit=0&#xA;#else:&#xA;# self.edit=1" onValidate="if(not isNoneOrEmptyOrBlankString(self.value)):&#xA;&#xA;  if(not(VstupCislice(self.value))):&#xA;&#xA;   self.fail('Obsahuje chybné znaky (očekávány číslice)')&#xA;&#xA;  else:&#xA;   if (not isRCValid(self.value)):&#xA;&#xA;    self.fail('Chybné rodné číslo')" required="true" order="18" />
+					</style>
+					<style font-face="arial" font-size="11pt" multiline="false" border-width="1">
+						<value-of name="nazev" rect="21mm,78mm,105mm,84mm" onData="if ZADATEL.typEsu=='10':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0&#xA; &#xA;#0=ne, 1=ano&#xA;if Zadost_hlavicka.priz_anonymous==0:&#xA; self.edit=0&#xA;else:&#xA; self.edit=1" required="true" order="19" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" multiline="false" border-width="1">
+						<value-of name="" rect="54mm,78mm,189mm,84mm" onData="if ZADATEL.typEsu=='20' or ZADATEL.typEsu=='30':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0" order="20" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" multiline="false" border-width="1">
+						<value-of name="" rect="105mm,78mm,117mm,84mm" onData="self.value='IČO:'&#xA;if ZADATEL.typEsu=='10' or ZADATEL.typEsu=='30':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0" order="21" />
+					</style>
+					<style font-face="arial" font-size="11pt" multiline="false" border-width="1">
+						<value-of name="ico" rect="117mm,78mm,141mm,84mm" onData="if ZADATEL.typEsu=='10' or ZADATEL.typEsu=='30':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0&#xA;&#xA;#0=ne, 1=ano&#xA;if Zadost_hlavicka.priz_anonymous==0:&#xA; self.edit=0&#xA;else:&#xA; self.edit=1" onValidate="if(not isNoneOrEmptyOrBlankString(self.value)):&#xA; &#xA; if (not VstupCislice(self.value)):&#xA;  &#xA;  self.fail('Obsahuje chybné znaky (očekávány číslice)')&#xA; &#xA; else:&#xA;  &#xA;  if (not(len(self.value)==8 or len(self.value)==0)):&#xA;   &#xA;   self.fail('Chybný počet znaků')" required="true" order="22" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" multiline="false" border-width="1">
+						<value-of name="" rect="141mm,78mm,159mm,84mm" onData="self.value='DIČ:'&#xA;if ZADATEL.typEsu=='10' or ZADATEL.typEsu=='30':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0" order="23" />
+					</style>
+					<style font-face="arial" font-size="11pt" multiline="false" border-width="1">
+						<value-of name="dic" rect="159mm,78mm,189mm,84mm" onData="if ZADATEL.typEsu=='10' or ZADATEL.typEsu=='30':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0&#xA; &#xA;#0=ne, 1=ano&#xA;if Zadost_hlavicka.priz_anonymous==0:&#xA; self.edit=0&#xA;else:&#xA; self.edit=1" onValidate="if(not isNoneOrEmptyOrBlankString(self.value)):&#xA; if (not(len(self.value)==10 or len(self.value)==0)):   &#xA;  self.fail('Chybný počet znaků')" order="24" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" vertical-align="center" multiline="false" border-width="1">
+						<text value="Ulice:" rect="0mm,90mm,15mm,96mm" order="25" />
+					</style>
+					<style font-face="arial" font-size="11pt" multiline="false" border-width="1">
+						<value-of name="ulice" rect="15mm,90mm,115mm,96mm" onData="#0=ne, 1=ano&#xA;if Zadost_hlavicka.priz_anonymous==0:&#xA; self.edit=0&#xA;else:&#xA; self.edit=1" onValidate="if(not VstupOK(self.value)): self.fail('Text obsahuje nepovolené znaky.')" required="false" order="26" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" vertical-align="center" multiline="false" border-width="1">
+						<text value="Č. pop.:" rect="115mm,90mm,133mm,96mm" order="27" />
+					</style>
+					<style font-face="arial" font-size="11pt" multiline="false" border-width="1">
+						<value-of name="cpop" rect="133mm,90mm,153mm,96mm" onData="#0=ne, 1=ano&#xA;if Zadost_hlavicka.priz_anonymous==0:&#xA; self.edit=0&#xA;else:&#xA; self.edit=1" onValidate="if(not isNoneOrEmptyOrBlankString(self.value)):&#xA; &#xA; if (not VstupCislice(self.value)):&#xA;  &#xA;  self.fail('Obsahuje chybné znaky (očekávány číslice)')&#xA; &#xA; else:&#xA;  &#xA;  if (not(len(self.value)&lt;=4 or len(self.value)==0)):&#xA;   &#xA;   self.fail('Chybný počet znaků')" required="true" order="28" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" vertical-align="center" multiline="false" border-width="1">
+						<text value="Č. or.:" rect="153mm,90mm,168mm,96mm" order="29" />
+					</style>
+					<style font-face="arial" font-size="11pt" multiline="false" border-width="1">
+						<value-of name="cor" rect="168mm,90mm,189mm,96mm" onData="#0=ne, 1=ano&#xA;if Zadost_hlavicka.priz_anonymous==0:&#xA; self.edit=0&#xA;else:&#xA; self.edit=1" order="30" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" vertical-align="center" multiline="false" border-width="1">
+						<text value="Obec:" rect="0mm,96mm,15mm,102mm" order="31" />
+					</style>
+					<style font-face="arial" font-size="11pt" multiline="false" border-width="1">
+						<value-of name="obec" rect="15mm,96mm,150mm,102mm" onData="#0=ne, 1=ano&#xA;if Zadost_hlavicka.priz_anonymous==0:&#xA; self.edit=0&#xA;else:&#xA; self.edit=1" onValidate="if(not VstupOK(self.value)): self.fail('Text obsahuje nepovolené znaky.')" required="true" order="32" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" vertical-align="center" multiline="false" border-width="1">
+						<text value="PSČ:" rect="150mm,96mm,165mm,102mm" order="33" />
+					</style>
+					<style font-face="arial" font-size="11pt" multiline="false" border-width="1">
+						<value-of name="psc" rect="165mm,96mm,189mm,102mm" onData="#0=ne, 1=ano&#xA;if Zadost_hlavicka.priz_anonymous==0:&#xA; self.edit=0&#xA;else:&#xA; self.edit=1" onValidate="if(not isNoneOrEmptyOrBlankString(self.value)):&#xA; if (not VstupCislice(self.value)):&#xA;  self.fail('Obsahuje chybné znaky (očekávány číslice)')&#xA; else:&#xA;  if (not(len(self.value)==5 or len(self.value)==0)):&#xA;   self.fail('Chybný počet znaků')" required="true" order="34" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" border-width="1">
+						<value-of name="" rect="0mm,84mm,189mm,90mm" onData="self.value='Adresa trvalého pobytu'&#xA;if ZADATEL.typEsu=='10':&#xA; self.value='Adresa sídla'&#xA;else:&#xA; self.value='Adresa trvalého pobytu'" order="35" />
+					</style>
+				</body>
+			</region>
+			<region name="ADRDOR" rect="0mm,102mm,189mm,120mm" order="16">
+				<body>
+					<style font-face="arial" font-size="11pt" font-bold="true" border-width="1">
+						<text value="Kontaktní adresa (neshoduje-li se s adresou místa trvalého pobytu)" rect="0mm,102mm,189mm,108mm" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" vertical-align="center" multiline="false" border-width="1">
+						<text value="Ulice:" rect="0mm,108mm,15mm,114mm" order="1" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" vertical-align="center" multiline="false" border-width="1">
+						<text value="Č. pop.:" rect="115mm,108mm,133mm,114mm" order="2" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" vertical-align="center" multiline="false" border-width="1">
+						<text value="Č. or.:" rect="153mm,108mm,168mm,114mm" order="3" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" vertical-align="center" multiline="false" border-width="1">
+						<text value="Obec:" rect="0mm,114mm,15mm,120mm" order="4" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" vertical-align="center" multiline="false" border-width="1">
+						<text value="PSČ:" rect="150mm,114mm,165mm,120mm" order="5" />
+					</style>
+					<style font-face="arial" font-size="11pt" border-width="1">
+						<value-of name="ad_ulice" rect="15mm,108mm,115mm,114mm" edit="true" order="6" />
+					</style>
+					<style font-face="arial" font-size="11pt" border-width="1">
+						<value-of name="ad_cpop" rect="133mm,108mm,153mm,114mm" edit="true" order="7" />
+					</style>
+					<style font-face="arial" font-size="11pt" border-width="1">
+						<value-of name="ad_cor" rect="168mm,108mm,189mm,114mm" edit="true" order="8" />
+					</style>
+					<style font-face="arial" font-size="11pt" border-width="1">
+						<value-of name="ad_obec" rect="15mm,114mm,150.01mm,120mm" edit="true" order="9" />
+					</style>
+					<style font-face="arial" font-size="11pt" border-width="1">
+						<value-of name="ad_psc" rect="165mm,114mm,189mm,120mm" edit="true" order="10" />
+					</style>
+				</body>
+			</region>
+			<region name="ZADATEL" rect="0mm,120mm,190mm,133mm" order="17" page="1">
+				<body>
+					<style font-face="arial" font-size="11pt" font-bold="true" border-width="1">
+						<text value="Kontaktní údaje" rect="0mm,120mm,189mm,126mm" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" vertical-align="center" multiline="false" border-width="1">
+						<text value="Telefon:" rect="0mm,126mm,24mm,132mm" order="1" />
+					</style>
+					<style font-face="arial" font-size="11pt" multiline="false" border-width="1">
+						<value-of name="telefon" rect="24mm,126mm,63mm,132mm" edit="true" onValidate="if(not isNoneOrEmptyOrBlankString(self.value)):&#xA; if(not VstupTelCislo(self.value)):&#xA;  self.fail('Zadané telefonní číslo obsahuje nepovolené znaky.')" order="2" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" vertical-align="center" multiline="false" border-width="1">
+						<text value="E-mail:" rect="63mm,126mm,80mm,132mm" order="3" />
+					</style>
+					<style font-face="arial" font-size="11pt" multiline="false" border-width="1">
+						<value-of name="mail" rect="80mm,126mm,189mm,132mm" edit="true" onValidate="if(not isNoneOrEmptyOrBlankString(self.value)):&#xA; if (not mailValid(self.value)):&#xA;  self.fail('Chybný e-mail')" order="4" />
+					</style>
+				</body>
+			</region>
+			<region name="ZADATEL" rect="0mm,132mm,189mm,160mm" order="18" page="1">
+				<body>
+					<style font-face="arial" font-size="11pt" font-bold="true" multiline="false">
+						<value-of name="" rect="0mm,134mm,45mm,140mm" onData="self.value='Bankovní spojení:'&#xA;if ZADATEL.typEsu=='10':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" multiline="false" border-width="1">
+						<value-of name="" rect="0mm,140mm,45mm,146mm" onData="self.value='Název banky žadatele:'&#xA;if ZADATEL.typEsu=='10':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0" order="1" />
+					</style>
+					<style font-face="arial" font-size="11pt" multiline="false" border-width="1">
+						<value-of name="banka_nazev" rect="45mm,140mm,189mm,146mm" onData="if ZADATEL.typEsu=='10':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0;&#xA;&#xA;#0=ne, 1=ano&#xA;if Zadost_hlavicka.priz_anonymous==0:&#xA; self.edit=0&#xA;else:&#xA; self.edit=1" onValidate="if(not VstupOK(self.value)): self.fail('Text obsahuje nepovolené znaky.')" required="true" order="2" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" multiline="false" border-width="1">
+						<value-of name="" rect="0mm,146mm,32mm,152mm" onData="self.value='Číslo účtu:'&#xA;if ZADATEL.typEsu=='10':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0" order="3" />
+					</style>
+					<style font-face="arial" font-size="11pt" multiline="false" border-width="1">
+						<value-of name="bankovni_ucet" rect="32mm,146mm,189mm,152mm" onData="if ZADATEL.typEsu=='10':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0;&#xA;&#xA;#0=ne, 1=ano&#xA;if Zadost_hlavicka.priz_anonymous==0:&#xA; self.edit=0&#xA;else:&#xA; self.edit=1" onValidate="ZADATEL.bankovni_ucet = ZADATEL.bankovni_ucet.replace(&quot; &quot;,&quot;&quot;);&#xA;self.value = ZADATEL.bankovni_ucet.replace(&quot; &quot;,&quot;&quot;);&#xA;ZADATEL.bankovni_ucet = self.value;&#xA;&#xA;pocetPoml=0;&#xA;index=-1;&#xA;&#xA;#test, zda obsahuje jen čísla&#xA;testZnak='true';&#xA;for znak in ZADATEL.bankovni_ucet:&#xA; if znak in '0123456789' and testZnak=='true':&#xA;  testZnak='true';&#xA; else:&#xA;  if znak!='-' and testZnak=='true':&#xA;   testZnak='false';&#xA;  else:&#xA;   pocetPoml+=1;&#xA;&#xA;if pocetPoml&gt;1:&#xA; testZnak='false';self.fail('Číslo účtu obsahuje nepovolené znaky');&#xA;else:&#xA; if ZADATEL.bankovni_ucet.find('-')&lt;&gt;-1 and testZnak=='true':&#xA;  index=int(ZADATEL.bankovni_ucet.find('-'))&#xA; else:&#xA;  index=-1;&#xA; if index&lt;&gt;-1 and testZnak=='true':&#xA;  predcisli=ZADATEL.bankovni_ucet[0:index];&#xA;  cislo=ZADATEL.bankovni_ucet[index+1:];&#xA; else:&#xA;  predcisli='';&#xA;  cislo=ZADATEL.bankovni_ucet[index+1:]&#xA;  &#xA;if testZnak=='false':&#xA; self.fail('Číslo účtu obsahuje nepovolené znaky');&#xA;else:&#xA; i=len(cislo);&#xA; soucet=0;&#xA; while(i&gt;0):&#xA;  exp=len(cislo)-i;&#xA;  soucet=soucet+int(cislo[i-1])*(2**exp);&#xA;  i-=1;&#xA; else:&#xA;  zbytek=soucet%11;&#xA; if zbytek&gt;0 or soucet==0 or len(cislo)&gt;10:&#xA;  self.fail('Chybné číslo bankovního účtu');&#xA;  &#xA; if predcisli=='' and ZADATEL.bankovni_ucet.find('-')&lt;&gt;-1:&#xA;  self.fail('Chybné číslo bankovního účtu');  &#xA;  &#xA; if predcisli!='':&#xA;  i=len(predcisli);&#xA;  soucet=0;&#xA;  while(i&gt;0):&#xA;   exp=len(predcisli)-i;&#xA;   soucet=soucet+int(predcisli[i-1])*(2**exp);&#xA;   i-=1;&#xA;  else:&#xA;   zbytek=soucet%11;&#xA;&#xA;  if zbytek&gt;0 or len(predcisli)&gt;6:&#xA;   self.fail('Chybné předčíslí bankovního účtu');" required="true" order="4" />
+					</style>
+					<style font-face="arial" font-size="11pt" font-bold="true" multiline="false" border-width="1">
+						<value-of name="" rect="0mm,152mm,32mm,158mm" onData="self.value='Kód banky:'&#xA;if ZADATEL.typEsu=='10':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0" order="5" />
+					</style>
+					<style font-face="arial" font-size="11pt" multiline="false" border-width="1">
+						<value-of name="smerovy_kod_banky_txt" rect="32mm,152mm,189mm,158mm" type="list" onData="if ZADATEL.typEsu=='10':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0;&#xA;&#xA;#0=ne, 1=ano&#xA;if Zadost_hlavicka.priz_anonymous==0:&#xA; self.edit=0&#xA;else:&#xA; self.edit=1" items="||0100|0100 Komerční banka, a.s.|0300|0300 Československá obchodní banka, a.s.|0600|0600 MONETA Money Bank, a.s.|0710|0710 Česká národní banka|0800|0800 Česká spořitelna, a.s.|2010|2010 Fio banka, a.s.|2020|2020 MUFG Bank (Europe) N.V. Prague Branch|2030|2030 Československé úvěrní družstvo|2060|2060 Citfin, spořitelní družstvo|2070|2070 Moravský Peněžní Ústav – spořitelní družstvo|2100|2100 Hypoteční banka, a.s.|2200|2200 Peněžní dům, spořitelní družstvo|2220|2220 Artesa, spořitelní družstvo|2240|2240 Poštová banka, a.s., pobočka Česká republika|2250|2250 Banka CREDITAS a.s.|2260|2260 ANO spořitelní družstvo|2275|2275 Podnikatelská družstevní záložna|2310|2310 Raiffeisenbank a.s.-doběh plateb ZUNO|2600|2600 Citibank Europe plc, organizační složka|2700|2700 UniCredit Bank Czech Republic and Slovakia, a.s.|3030|3030 Air Bank a.s.|3050|3050 BNP Paribas Personal Finance SA, odštěpný závod|3060|3060 PKO BP S.A., Czech Branch|3500|3500 ING Bank N.V.|4000|4000 Expobank CZ a.s.|4300|4300 Českomoravská záruční a rozvojová banka, a.s.|5500|5500 Raiffeisenbank a.s.|5800|5800 J T BANKA, a.s.|6000|6000 PPF banka a.s.|6100|6100 Equa bank a.s.|6200|6200 COMMERZBANK Aktiengesellschaft, pobočka Praha|6210|6210 mBank S.A., organizační složka|6300|6300 BNP Paribas Fortis SA/NV, pobočka Česká republika|6700|6700 Všeobecná úverová banka a.s., pobočka Praha|6800|6800 Sberbank CZ, a.s.|7910|7910 Deutsche Bank Aktiengesellschaft Filiale Prag, organizační složka|7940|7940 Waldviertler Sparkasse Bank AG|7950|7950 Raiffeisen stavební spořitelna a.s.|7960|7960 Českomoravská stavební spořitelna, a.s.|7970|7970 Wüstenrot-stavební spořitelna a.s.|7980|7980 Wüstenrot hypoteční banka a.s.|7990|7990 Modrá pyramida stavební spořitelna, a.s.|8030|8030 Raiffeisenbank im Stiftland eG pobočka Cheb, odštěpný závod|8040|8040 Oberbank AG pobočka Česká republika|8060|8060 Stavební spořitelna České spořitelny, a.s.|8090|8090 Česká exportní banka, a.s.|8150|8150 HSBC Bank plc - pobočka Praha|8200|8200 PRIVAT BANK AG der Raiffeisenlandesbank Oberösterreich Aktiengesellschaft, pobočka Česká republika|8220|8220 Payment Execution s.r.o.|8230|8230 EEPAYS s.r.o.|8240|8240 Družstevní záložna Kredit|8250|8250 Bank of China (Hungary) Close Ltd. Prague branch, odštěpný závod|8265|8265 Industrial and Commercial Bank of China|" required="true" order="6" />
+					</style>
+				</body>
+			</region>
+			<region name="BS" rect="0mm,153mm,189mm,174mm" order="19">
+				<body>
+					<style font-face="arial" font-size="11pt" font-bold="true" multiline="false">
+						<text value="Držitel psa:" rect="0mm,165mm,45mm,171mm" />
+					</style>
+				</body>
+			</region>
+			<region name="ZADATEL" rect="0mm,170mm,190mm,200mm" order="20">
+				<body>
+					<style border-width="1">
+						<select name="priz_zam" rect="65mm,174mm,70mm,179mm" type="check" onData="if ZADATEL.typEsu!='10':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0" edit="true" required="true">
+							<option value="1">
+								<drawing shape="check-ticked" />
+							</option>
+							<option value="0">
+								<drawing shape="check-empty" />
+							</option>
+						</select>
+					</style>
+					<style border-width="1">
+						<select name="priz_osvob" rect="65mm,180mm,70mm,185mm" type="check" onData="if ZADATEL.typEsu!='10':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0" edit="true" required="true" order="1">
+							<option value="1">
+								<drawing shape="check-ticked" />
+							</option>
+							<option value="0">
+								<drawing shape="check-empty" />
+							</option>
+						</select>
+					</style>
+					<style font-face="arial" font-size="11pt" border-width="1">
+						<value-of name="" rect="0mm,173mm,63mm,179mm" onData="self.value='Důchodce nad 65 let*'&#xA;if ZADATEL.typEsu!='10':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0" order="2" />
+					</style>
+					<style font-face="arial" font-size="11pt" border-width="1">
+						<value-of name="" rect="0mm,180mm,63mm,185mm" onData="self.value='Nárok na osvobození*'&#xA;if ZADATEL.typEsu!='10':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0" order="3" />
+					</style>
+					<style font-face="arial" font-size="11pt">
+						<value-of name="" rect="100mm,170mm,150mm,175mm" onData="self.value='*  Hodící se zaškrtněte'&#xA;if ZADATEL.typEsu!='10':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0" order="4" />
+					</style>
+					<style font-face="arial" font-size="11pt">
+						<value-of name="" rect="70mm,179mm,90mm,184mm" onData="self.value='důvod'&#xA;if ZADATEL.priz_osvob==1:&#xA; self.visible=1&#xA;else:&#xA; self.visible=0" order="5" />
+					</style>
+					<style font-face="arial" border-width="1">
+						<value-of name="duvod_osvob" rect="90mm,179mm,190mm,190mm" edit="true" type="list" onData="if ZADATEL.priz_osvob==1:&#xA; self.visible=1&#xA;else:&#xA; self.visible=0" items="||1|Držitel psa je osoba nevidomá|2|Držitel psa je osoba, která je považována za závislou na pomoci jiné fyzické osoby|3|Držitelem psa je osoba, která je držitelem průkazu ZTP nebo ZTP/P|4|Držitel psa je osoba provádějící výcvik psů určených k doprovodu těchto osob|5|Držitel psa je osoba provozující útulek pro zvířata|6|Držitel psa je osoba, které stanoví povinnost držení a používání psa zvláštní právní předpis|" order="6" />
+					</style>
+					<style font-face="arial" font-size="11pt" border-width="1">
+						<value-of name="" rect="0mm,185mm,65mm,190mm" onData="self.value='Důchodce nad 65 let*'&#xA;if ZADATEL.typEsu!='10':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0" order="7" />
+					</style>
+					<style border-width="1">
+						<select name="priz_zam" rect="65mm,185mm,70mm,190mm" type="check" onData="if ZADATEL.typEsu!='10':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0" edit="true" required="true" order="8">
+							<option value="1">
+								<drawing shape="check-ticked" />
+							</option>
+							<option value="0">
+								<drawing shape="check-empty" />
+							</option>
+						</select>
+					</style>
+					<style border-width="1">
+						<select name="priz_osvob" rect="65mm,190mm,70mm,195mm" type="check" onData="if ZADATEL.typEsu!='10':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0" edit="true" required="true" order="9">
+							<option value="1">
+								<drawing shape="check-ticked" />
+							</option>
+							<option value="0">
+								<drawing shape="check-empty" />
+							</option>
+						</select>
+					</style>
+					<style font-face="arial" font-size="11pt" border-width="1">
+						<value-of name="" rect="0mm,190mm,65mm,195mm" onData="self.value='Nárok na osvobození*'&#xA;if ZADATEL.typEsu!='10':&#xA; self.visible=1&#xA;else:&#xA; self.visible=0" order="10" />
+					</style>
+				</body>
+			</region>
+			<region name="PSI" rect="0mm,230mm,195mm,265mm" order="21">
+				<body>
+					<style font-face="arial" font-size="11pt" font-bold="true" vertical-align="center" border-width="1">
+						<text value="Účel k jakému je pes držen:" rect="0mm,240mm,55mm,245mm" />
+					</style>
+					<style font-face="arial" border-width="1">
+						<value-of name="ucel" rect="55mm,240mm,190mm,245mm" edit="true" order="1" />
+					</style>
+					<select name="" rect="180mm,250mm,190mm,255mm" type="radio" order="2" />
+					<style font-face="arial">
+						<value-of name="poznamka" rect="150mm,250mm,175mm,255mm" order="3" />
+					</style>
+					<select name="" rect="80mm,250mm,105mm,255mm" type="radio" order="4" />
+				</body>
+			</region>
+			<region name="ZADATEL" rect="0mm,0mm,190mm,40mm" page="2" order="21" border-width="1">
+				<body>
+					<style font-face="arial" font-size="11pt" multiline="false" border-width="1">
+						<text value="Prohlašuji, že všechny mnou uvedené údaje v tomto přihlášení jsou pravdivé a úplné." rect="0mm,6mm,189mm,12mm" page="2" />
+					</style>
+					<style font-face="arial" font-size="11pt" multiline="false" border-width="1">
+						<text value="Místo a datum:" rect="0mm,12mm,96mm,27mm" page="2" order="1" />
+					</style>
+					<style font-face="arial" font-size="11pt" multiline="false" border-width="1">
+						<text value="Podpis držitele psa:" rect="96mm,12mm,189mm,27mm" page="2" order="2" />
+					</style>
+					<style font-face="arial" font-size="11pt">
+						<value-of name="misto" rect="0mm,18mm,57mm,27mm" page="2" edit="true" onValidate="if(not VstupOK(self.value)): self.fail('Text obsahuje nepovolené znaky.')" required="true" order="3" />
+					</style>
+					<style font-face="arial" font-size="11pt">
+						<value-of name="datum" rect="60mm,18mm,95mm,24mm" page="2" format="dd.mm.yyyy;" edit="true" type="datetime" onValidate="#if(not VstupDatum(self.value)):&#xA;# self.fail('Zadané datum obsahuje nepovolené znaky.')" required="true" datatype="datetime" order="4" />
+					</style>
+					<style font-face="arial" font-size="11pt">
+						<value-of name="opravnena_osoba" rect="96mm,18mm,189mm,27mm" page="2" edit="true" order="5" />
+					</style>
+				</body>
+			</region>
+		</body>
+	</region>
+</format>
