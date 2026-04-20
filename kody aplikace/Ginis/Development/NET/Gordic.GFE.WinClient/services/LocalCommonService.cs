@@ -1317,5 +1317,38 @@ namespace Gordic.GFE.WinClient.Services
 
             return result;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="textHandler"></param>
+        /// <param name="actualXmlStyle"></param>
+        /// <returns></returns>
+        public static string GetSerializedFontFamilyName(ITextHandler textHandler, GFEList actualXmlStyle)
+        {
+            if (textHandler?.Text?.TextFont?.FontFamily == null)
+                return string.Empty;
+
+            string fontName = textHandler.Text.TextFont.FontFamily.Name;
+            if (!"times".Equals(fontName, StringComparison.InvariantCultureIgnoreCase)
+                && !"arial".Equals(fontName, StringComparison.InvariantCultureIgnoreCase)
+                && !"courier".Equals(fontName, StringComparison.InvariantCultureIgnoreCase))
+                return fontName;
+
+            if (actualXmlStyle != null
+                && actualXmlStyle.Count != 0
+                && actualXmlStyle.ContainsKey("font-face")
+                && actualXmlStyle.ContainsKey("font-name")
+                && "custom".Equals(Convert.ToString(actualXmlStyle["font-face"]), StringComparison.InvariantCultureIgnoreCase))
+            {
+                string actualFontName = Convert.ToString(actualXmlStyle["font-name"]);
+                if (!string.IsNullOrEmpty(actualFontName)
+                    && actualFontName.Equals(textHandler.Text.TextFont.FontFamily.FontFamily.Name, StringComparison.InvariantCultureIgnoreCase))
+                    return actualFontName;
+            }
+
+            return fontName;
+        }
+
     }
 }

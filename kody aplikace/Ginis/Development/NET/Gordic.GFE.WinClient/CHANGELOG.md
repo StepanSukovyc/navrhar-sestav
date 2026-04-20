@@ -2,6 +2,12 @@
 
 ## 2026-04-20
 
+### 19:51:51 Oprava zachovani custom fontu pri presunu objektu
+
+- Opravena serializace stylu v grafickem editoru, aby se puvodni `font-face="custom"` s `font-name` pri posunu nebo jine uprave objektu neprepisoval na alias `arial`.
+- Doplnena pomocna logika ve WinClientu, ktera pri generovani XML umi zachovat puvodni custom font ze stylu nacteneho do editoru.
+- Upraven zapis stylu v `AbstractContent` a `ContentPArea`, aby custom fonty korektne prosly round-tripem mezi nactenim, editaci a ulozenim sestavy.
+
 ### 18:48:32 Oprava MSE embedu Excelu
 
 - Zjednodusen `MseContainerControl`, aby pri otevreni MSE sestavy pouzival standardni zobrazeni dokumentu bez vlastni retry a reattach logiky.

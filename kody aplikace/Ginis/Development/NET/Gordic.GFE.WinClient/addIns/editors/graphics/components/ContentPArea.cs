@@ -101,8 +101,7 @@ namespace Gordic.GFE.WinClient.Editor
 #pragma warning disable CS0618 // Typ nebo člen je zastaralý.
                 CommonService.ApplayStyleSizable(this, AttrList);
 #pragma warning restore CS0618 // Typ nebo člen je zastaralý.
-            if (FormatTag != null)
-                FormatTag.Children.ForEach((item) => LocalCommonService.ParseContent(this, item, Page));
+            FormatTag?.Children.ForEach((item) => LocalCommonService.ParseContent(this, item, Page));
         }
         #endregion
 
@@ -139,15 +138,17 @@ namespace Gordic.GFE.WinClient.Editor
 
             // STYL
             XmlElement xmlStyle = xmlDoc.CreateElement("style", ReportDesignerProperties.Instance.AlfReportXmlns);
+            GFEList actualXmlStyle = FormatTag is GFEFormatContent content && content.Style != null ? content.Style.Attributes : null;
+            string serializedFontName = LocalCommonService.GetSerializedFontFamilyName(this, actualXmlStyle);
             if (Text != null && Text.TextFont != null)
-                if (!"times".Equals(Text.TextFont.FontFamily.Name))
-                    if (!"arial".Equals(Text.TextFont.FontFamily.Name) && !"courier".Equals(Text.TextFont.FontFamily.Name))
+                if (!"times".Equals(serializedFontName))
+                    if (!"arial".Equals(serializedFontName) && !"courier".Equals(serializedFontName))
                     {
                         xmlStyle.SetAttribute("font-face", "custom");
-                        xmlStyle.SetAttribute("font-name", Text.TextFont.FontFamily.Name);
+                        xmlStyle.SetAttribute("font-name", serializedFontName);
                     }
                     else
-                        xmlStyle.SetAttribute("font-face", Text.TextFont.FontFamily.Name);
+                        xmlStyle.SetAttribute("font-face", serializedFontName);
 
             string gcs = Convert.ToString(Text.TextFont.GdiCharSet).Replace("_CHARSET", "").ToLower();
             if (Text.TextFont.GdiCharSet != ECharSet.EASTEUROPE_CHARSET)

@@ -6,29 +6,30 @@
 //    <Created>     2013-02-08                                                  </Created>
 //  </FileHeader>
 
+using Gordic.General;
+using Gordic.GFE.Parsers;
+using Gordic.GFE.Parsers.AddIns;
+using Gordic.GFE.Parsers.Core;
+using Gordic.GFE.Parsers.Dom;
+using Gordic.GFE.Parsers.Editor;
+using Gordic.GFE.Parsers.Gui;
+using Gordic.GFE.Parsers.Hosting;
+using Gordic.GFE.Parsers.Light;
+using Gordic.GFE.Parsers.Services;
+using Gordic.GFE.Parsers.UndoRedoFramework;
+using Gordic.GFE.Parsers.Utils;
+using Gordic.GFE.WinClient.Designer.Gui;
+using Gordic.GFE.WinClient.Gui;
+using Gordic.GFE.WinClient.Services;
+using Gordic.GFE.WinClient.VariablesView;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Linq;
-using System.Xml;
-using Gordic.GFE.Parsers;
-using Gordic.GFE.Parsers.Utils;
-using Gordic.GFE.WinClient.Gui;
-using Gordic.GFE.Parsers.Services;
-using Gordic.GFE.Parsers.UndoRedoFramework;
-using Gordic.GFE.Parsers.Gui;
-using Gordic.GFE.Parsers.Core;
 using System.Windows.Forms;
-using Gordic.GFE.Parsers.Dom;
-using Gordic.GFE.Parsers.Hosting;
-using Gordic.GFE.WinClient.Designer.Gui;
-using Gordic.GFE.Parsers.Editor;
-using Gordic.GFE.Parsers.Light;
-using Gordic.General;
-using Gordic.GFE.Parsers.AddIns;
-using Gordic.GFE.WinClient.VariablesView;
+using System.Xml;
 
 namespace Gordic.GFE.WinClient.Editor
 {
@@ -71,14 +72,14 @@ namespace Gordic.GFE.WinClient.Editor
         /// <summary>
         /// Vytvoření nové instance třídy
         /// </summary>
-        /// <param name="container">Kontejner vytvářeného objektu</param>
-        /// <param name="component">Komponenta objektu</param>
-        public ComponentSite(IContainer container, IComponent component)
+        /// <param name="pContainer">Kontejner vytvářeného objektu</param>
+        /// <param name="pComponent">Komponenta objektu</param>
+        public ComponentSite(IContainer pContainer, IComponent pComponent)
         {
-            this.container = container;
-            this.component = component;
+            this.container = pContainer;
+            this.component = pComponent;
             designMode = false;
-            name = NamedService.CreateUniqueName(container.Components, component.GetType());
+            name = NamedService.CreateUniqueName(pContainer.Components, pComponent.GetType());
         }
     }
 
@@ -870,6 +871,8 @@ namespace Gordic.GFE.WinClient.Editor
                 {
                     if (text.TextFont != null)
                     {
+                        string serializedFontName = LocalCommonService.GetSerializedFontFamilyName(this as ITextHandler, _actualXmlStyle);
+
                         #region font-name, font-face
                         if (_actualXmlStyle.Count != 0 && _actualXmlStyle.ContainsKey("font-name"))
                             _actualValue = _actualXmlStyle["font-name"];
@@ -879,51 +882,51 @@ namespace Gordic.GFE.WinClient.Editor
                             if (_actualXmlStyle.Count != 0 && _actualXmlStyle.ContainsKey("font-face"))
                                 _actualValue = _actualXmlStyle["font-face"];
 
-                            if (!"times".Equals(text.TextFont.FontFamily.Name))
-                                if (!"arial".Equals(text.TextFont.FontFamily.Name) && !"courier".Equals(text.TextFont.FontFamily.Name))
+                            if (!"times".Equals(serializedFontName))
+                                if (!"arial".Equals(serializedFontName) && !"courier".Equals(serializedFontName))
                                 {
-                                    if (_actualValue != text.TextFont.FontFamily.Name)
+                                    if (_actualValue != serializedFontName)
                                     {
                                         xmlStyle.SetAttribute("font-face", "custom");
-                                        xmlStyle.SetAttribute("font-name", text.TextFont.FontFamily.Name);
+                                        xmlStyle.SetAttribute("font-name", serializedFontName);
                                     }
 
                                     _newXmlStyle.Add("font-face", "custom");
                                 }
                                 else
                                 {
-                                    if (_actualValue != text.TextFont.FontFamily.Name)
-                                        xmlStyle.SetAttribute("font-face", text.TextFont.FontFamily.Name);
+                                    if (_actualValue != serializedFontName)
+                                        xmlStyle.SetAttribute("font-face", serializedFontName);
 
-                                    _newXmlStyle.Add("font-face", text.TextFont.FontFamily.Name);
+                                    _newXmlStyle.Add("font-face", serializedFontName);
                                 }
                         }
-                        else if (_actualValue != text.TextFont.FontFamily.Name)
+                        else if (_actualValue != serializedFontName)
                         {
                             if (_actualXmlStyle.Count != 0 && _actualXmlStyle.ContainsKey("font-face"))
                                 _actualValue = _actualXmlStyle["font-face"];
 
-                            if (!"arial".Equals(text.TextFont.FontFamily.Name) && !"courier".Equals(text.TextFont.FontFamily.Name))
+                            if (!"arial".Equals(serializedFontName) && !"courier".Equals(serializedFontName))
                             {
                                 if (string.IsNullOrEmpty(_actualValue) || !"custom".Equals(_actualValue))
                                 {
                                     xmlStyle.SetAttribute("font-face", "custom");
-                                    xmlStyle.SetAttribute("font-name", text.TextFont.FontFamily.Name);
+                                    xmlStyle.SetAttribute("font-name", serializedFontName);
                                 }
 
                                 _newXmlStyle.Add("font-face", "custom");
                             }
                             else
                             {
-                                if (_actualValue != text.TextFont.FontFamily.Name)
-                                    xmlStyle.SetAttribute("font-face", text.TextFont.FontFamily.Name);
+                                if (_actualValue != serializedFontName)
+                                    xmlStyle.SetAttribute("font-face", serializedFontName);
 
-                                _newXmlStyle.Add("font-face", text.TextFont.FontFamily.Name);
+                                _newXmlStyle.Add("font-face", serializedFontName);
                             }
 
                         }
 
-                        _newXmlStyle.Add("font-name", text.TextFont.FontFamily.Name);
+                        _newXmlStyle.Add("font-name", serializedFontName);
                         #endregion
 
                         #region font-charset
@@ -2855,6 +2858,8 @@ namespace Gordic.GFE.WinClient.Editor
                 var text = (this as ITextHandler).Text;
                 if (text != null)
                 {
+                    string serializedFontName = LocalCommonService.GetSerializedFontFamilyName(this as ITextHandler, _actualXmlStyle);
+
                     #region font-name, font-face
                     if (_actualXmlStyle.Count != 0 && _actualXmlStyle.ContainsKey("font-name"))
                         actualValue = _actualXmlStyle["font-name"];
@@ -2864,14 +2869,14 @@ namespace Gordic.GFE.WinClient.Editor
                         if (_actualXmlStyle.Count != 0 && _actualXmlStyle.ContainsKey("font-face"))
                             actualValue = _actualXmlStyle["font-face"];
 
-                        if (text.TextFont.FontFamily.Name != "times")
-                            if (text.TextFont.FontFamily.Name != "arial" && text.TextFont.FontFamily.Name != "courier")
+                        if (serializedFontName != "times")
+                            if (serializedFontName != "arial" && serializedFontName != "courier")
                             {
-                                if (actualValue != text.TextFont.FontFamily.Name)
+                                if (actualValue != serializedFontName)
                                 {
                                     if (!string.IsNullOrEmpty(actualValue))
                                         xmlStyle.SetAttribute("font-face", "custom");
-                                    xmlStyle.SetAttribute("font-name", text.TextFont.FontFamily.Name);
+                                    xmlStyle.SetAttribute("font-name", serializedFontName);
                                 }
 
                                 _newXmlStyle.Add("font-face", "custom");
@@ -2879,38 +2884,38 @@ namespace Gordic.GFE.WinClient.Editor
                             else
                             {
                                 if (string.IsNullOrEmpty(actualValue)
-                                    || (!string.IsNullOrEmpty(actualValue) && actualValue != text.TextFont.FontFamily.Name))
-                                    xmlStyle.SetAttribute("font-face", text.TextFont.FontFamily.Name);
+                                    || (!string.IsNullOrEmpty(actualValue) && actualValue != serializedFontName))
+                                    xmlStyle.SetAttribute("font-face", serializedFontName);
 
-                                _newXmlStyle.Add("font-face", text.TextFont.FontFamily.Name);
+                                _newXmlStyle.Add("font-face", serializedFontName);
                             }
 
                     }
-                    else if (actualValue != text.TextFont.FontFamily.Name)
+                    else if (actualValue != serializedFontName)
                     {
                         if (_actualXmlStyle.Count != 0 && _actualXmlStyle.ContainsKey("font-face"))
                             actualValue = _actualXmlStyle["font-face"];
 
-                        if (text.TextFont.FontFamily.Name != "arial" && text.TextFont.FontFamily.Name != "courier")
+                        if (serializedFontName != "arial" && serializedFontName != "courier")
                         {
                             if (string.IsNullOrEmpty(actualValue) || (actualValue != "custom"))
                             {
                                 xmlStyle.SetAttribute("font-face", "custom");
-                                xmlStyle.SetAttribute("font-name", text.TextFont.FontFamily.Name);
+                                xmlStyle.SetAttribute("font-name", serializedFontName);
                             }
 
                             _newXmlStyle.Add("font-face", "custom");
                         }
                         else
                         {
-                            if (actualValue != text.TextFont.FontFamily.Name)
-                                xmlStyle.SetAttribute("font-face", text.TextFont.FontFamily.Name);
+                            if (actualValue != serializedFontName)
+                                xmlStyle.SetAttribute("font-face", serializedFontName);
 
-                            _newXmlStyle.Add("font-face", text.TextFont.FontFamily.Name);
+                            _newXmlStyle.Add("font-face", serializedFontName);
                         }
                     }
 
-                    _newXmlStyle.Add("font-name", text.TextFont.FontFamily.Name);
+                    _newXmlStyle.Add("font-name", serializedFontName);
                     #endregion
 
                     #region font-charset

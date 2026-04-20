@@ -386,7 +386,13 @@ namespace Gordic.GFE.Parsers.Dom
             {
                 if (style.Font != null)
                 {
-                    FontFamily.Initialize(style.Font.FontFamily.Name);
+                    string fontFamilyName = style.Attributes.ContainsKey("font-name")
+                        ? style.Attributes["font-name"]
+                        : style.Attributes.ContainsKey("font-face")
+                            ? style.Attributes["font-face"]
+                            : style.Font.FontFamily.Name;
+
+                    FontFamily.Initialize(fontFamilyName);
                     _Size = style.Font.Size.Value;
                     Style = (FontStyleEnum)style.Font.Style.Style;
                     m_charset = (ECharSet)style.Font.GdiCharSet;
