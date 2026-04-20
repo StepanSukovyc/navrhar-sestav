@@ -1,0 +1,1324 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Support.AdtScriptEngine</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Support.AdtScriptEngine.AdtDbLogHelper">
+            <summary>
+            Pomocná třída pro propojení ScriptEngine logováním do GINIS databáze do tabulky ginlgdt a případně i do gintgdl ( to záleží na typu balíčku )
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.AdtDbLogHelper._zamekDbLog">
+            <summary>
+            Pomocný objekt pro zámek přístupu k tomuto logování
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.AdtDbLogHelper._run_id">
+            <summary>
+            ID spuštění - je přidělováno z centrálního portálu
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.AdtDbLogHelper._dat_start">
+            <summary>
+            Čas spuštění scriptu - slouží jako PK pro identifikování opakovaného spouštění scriptů
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.AdtDbLogHelper._database">
+            <summary>
+            Pointer na připojený databázový objekt
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.AdtDbLogHelper._ixs_gdt">
+            <summary>
+            ID v DB registrovaného GDT scirptu
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.AdtDbLogHelper._verze">
+            <summary>
+            Verze balíčku
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.AdtDbLogHelper._nazev">
+            <summary>
+            Název balíčku
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.AdtDbLogHelper._popis">
+            <summary>
+            Popis balíčku
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.AdtDbLogHelper._orj">
+            <summary>
+            ORJ autora balíčku
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.AdtDbLogHelper._typ_gdt">
+            <summary>
+            Typ balíčku
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.AdtDbLogHelper._priorita_gdt">
+            <summary>
+            Priorita balíčku
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.AdtDbLogHelper._logovat">
+            <summary>
+            Příznak, že se do této DB může logovat - existují tam tabulky
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptEngine.AdtDbLogHelper.dat_start">
+            <summary>
+            Čas spuštění scriptu - slouží jako PK pro identifikování opakovaného spouštění scriptů
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.AdtDbLogHelper.#ctor(Gordic.Support.Database.GDatabase,System.String,System.Int32,System.String,System.String,System.String,System.Int32,System.Int32,System.Int32,System.String)">
+            <summary>
+            Konstruktor pro variantu, kdy spouštím script a mám ixs_gdt
+            </summary>
+            <param name="a_database">Připojená databáze, na které mám realizovat logování</param>
+            <param name="a_ixs_gdt">IXS scriptu, pokud je známé - odpovídá IXS v tabulce ginsgdt. Pokud je NULL, potom musí být zadán následující argument a IXS bude vygenerováno a zaregistrováno.</param>
+            <param name="a_verze">Verze scriptu</param>
+            <param name="a_nazev">Název scriptu</param>
+            <param name="a_popis">Programátorem uvedený popis scriptu</param>
+            <param name="a_orj">ORJ programátora</param>
+            <param name="a_typ_gdt">Typ balíčku</param>
+            <param name="a_priorita_gdt">Priorita balíčku</param>
+            <param name="a_run_id">ID spuštění</param>
+            <param name="a_ixs_zmp">ID změnu prov - nemusí být známo a tedy uvedeno</param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.AdtDbLogHelper.WriteLogSuccess(Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Zápis úspěšně realizovaného SQL příkazu
+            </summary>
+            <param name="a_command">ADT command</param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.AdtDbLogHelper.WriteLogError(Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Zápis neúspěšně realizovaného SQL příkazu
+            </summary>
+            <param name="a_command">ADT command</param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.AdtDbLogHelper.StopLog(System.String)">
+            <summary>
+            Zastavení logování s odpojením od databáze
+            </summary>
+            <param name="a_vysledek_txt">Text popisující výsledek akce</param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.AdtDbLogHelper.AfterCommandExecuted(Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Funkce volaná z ScriptEngine po vykonání příkazu
+            </summary>
+            <param name="a_command">Objekt obsahující popis ADT příkazu</param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.AdtDbLogHelper.AfterCommandExecutedWithErrorQuiet(Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Funkce volaná z ScriptEngine po vykonání příkazu, která skončil s chybou
+            </summary>
+            <param name="a_command">Objekt obsahující popis ADT příkazu při jehož výkonu došlo k chybě - popis chyby je součástí tohoto objektu</param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.AdtDbLogHelper.Dispose(System.Boolean)">
+            <summary>
+            Sem by to mělo vlítnout a zapsat do DB pouze v případě, že jsem to řádně neukončil funkcí StopLog
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.AdtDbLogHelper.Dispose">
+            <summary>
+            This code added to correctly implement the disposable pattern.
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtScriptEngine.AdtEventLogHelper">
+            <summary>
+             Pomocná třída pro propojení ScriptEngine s Windows Event logem
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.AdtEventLogHelper._zamekEventLog">
+            <summary>
+            Pomocný objekt pro zámek 
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.AdtEventLogHelper.AfterCommandExecuted(Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Funkce volaná z ScriptEngine po vykonání příkazu
+            </summary>
+            <param name="a_command">Objekt obsahující popis ADT příkazu</param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.AdtEventLogHelper.AfterCommandExecutedWithErrorQuiet(Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Funkce volaná z ScriptEngine po vykonání příkazu, která skončil s chybou
+            </summary>
+            <param name="a_command">Objekt obsahující popis ADT příkazu při jehož výkonu došlo k chybě - popis chyby je součástí tohoto objektu</param>
+        </member>
+        <member name="T:Gordic.Support.AdtScriptEngine.GAdt">
+            <summary>
+            Zkrácená forma volání ADT scriptů obsažených v assembly jako embedded resource
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdt.Run(System.Reflection.Assembly,System.String,System.String,System.String,Gordic.Support.Database.GDatabase,System.Collections.Generic.Dictionary{System.String,Gordic.General.IGDbType},System.Object)">
+            <summary>
+            Vykonání zadaného ADT scriptu
+            
+            Můžete zachytávat specifické chyby: GAdtSqlCommandException, GAdtException, Exception 
+            </summary>
+            <param name="a_knihovna">Knihovna, ve které je script soubor jako Embedded Resource</param>
+            <param name="a_namespace">NameSpace souboru scriptu. 
+            Pokud není u scriptu uvedeno, potom se jedná o NameSpace celé knohivny</param>
+            <param name="a_folder">Adresář(-e) ve které je script v knihovně umístěn. 
+            Jednotlivé úrovně mohou být odděleny zpětným lomítkem nebo tečkou</param>
+            <param name="a_script">Jméno souboru scriptu. Pozor! Předchozí tři argumenty jsou case sensitive</param>
+            <param name="a_database">Připojená databáze, která se má použít pro vykonání ADT scriptu. 
+            Pozor!! V rámci scriptu mohl autor scriptu použít příkaz COMMIT nebo ROLLBACK. Toto je nutné zvážit a pohlídat.
+            Pozor!! Není garantováno, v jakém stavu DB připojení zůstane - záleží na obsahu scriptu. ADT samo nerealizuje ani commit, rollback, disconnect atd..
+            </param>
+            <param name="a_params">Pojmenované vstupní parametry scriptu. 
+            V rámci scriptu jsou tyto proměnné dostupné pod stejným jménem, ale vždy se musí předřadit prefix Var. 
+            Např. proměnné ixs_ref bude v rámci scriptu dostupná vždy jako Var.ixs_ref</param>
+            <param name="a_dataContext">Nepovinný argument - objekt, jehož property budou přímo přístupné pro čtení v rámci ADT scriptu - určeno pro předání GINIS kontextu</param>
+            <returns>Pole pojmenovaných výstupních proměnných typi IGDbType. 
+            Autor scriptu musí voláním funkce ExportVar() vrátit hodnoty potřebných proměnných. 
+            Při volání této funkce určuje jméno a může určit i typ proměnné.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdt.Run(System.String,Gordic.Support.Database.GDatabase,System.Collections.Generic.Dictionary{System.String,Gordic.General.IGDbType},System.Object)">
+            <summary>
+            Vykonání zadaného ADT scriptu
+            
+            Můžete zachytávat specifické chyby: GAdtSqlCommandException, GAdtException, Exception 
+            </summary>
+            <param name="a_script_file_name">Plné jméno souboru scriptu. </param>
+            <param name="a_database">Připojená databáze, která se má použít pro vykonání ADT scriptu. 
+            Pozor!! V rámci scriptu mohl autor scriptu použít příkaz COMMIT nebo ROLLBACK. Toto je nutné zvážit a pohlídat.
+            Pozor!! Není garantováno, v jakém stavu DB připojení zůstane - záleží na obsahu scriptu. ADT samo nerealizuje ani commit, rollback, disconnect atd..
+            </param>
+            <param name="a_params">Pojmenované vstupní parametry scriptu. 
+            V rámci scriptu jsou tyto proměnné dostupné pod stejným jménem, ale vždy se musí předřadit prefix Var. 
+            Např. proměnné ixs_ref bude v rámci scriptu dostupná vždy jako Var.ixs_ref</param>
+            <param name="a_dataContext">Nepovinný argument - objekt, jehož property budou přímo přístupné pro čtení v rámci ADT scriptu - určeno pro předání GINIS kontextu</param>
+            <returns>Pole pojmenovaných výstupních proměnných typů podle definice v ADT scriptu - nemusí se ale jednat o IGDbType. 
+            Autor scriptu musí voláním funkce ExportVar() vrátit hodnoty potřebných proměnných. 
+            Při volání této funkce určuje jméno a může určit i typ proměnné.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdt.Run(System.String,Gordic.Support.Database.GDatabase,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Vykonání zadaného ADT scriptu
+            
+            Můžete zachytávat specifické chyby: GAdtSqlCommandException, GAdtException, Exception 
+            </summary>
+            <param name="a_script_file_name">Plné jméno souboru scriptu. </param>
+            <param name="a_database">Připojená databáze, která se má použít pro vykonání ADT scriptu. 
+            Pozor!! V rámci scriptu mohl autor scriptu použít příkaz COMMIT nebo ROLLBACK. Toto je nutné zvážit a pohlídat.
+            Pozor!! Není garantováno, v jakém stavu DB připojení zůstane - záleží na obsahu scriptu. ADT samo nerealizuje ani commit, rollback, disconnect atd..
+            </param>
+            <param name="a_params">Pojmenované vstupní parametry scriptu. 
+            V rámci scriptu jsou tyto proměnné dostupné pod stejným jménem, ale vždy se musí předřadit prefix Var. 
+            Např. proměnné ixs_ref bude v rámci scriptu dostupná vždy jako Var.ixs_ref</param>
+            <returns>Pole pojmenovaných výstupních proměnných. 
+            Autor scriptu musí voláním funkce ExportVar() vrátit hodnoty potřebných proměnných. 
+            Při volání této funkce určuje jméno a může určit i typ proměnné.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdt.RunScriptFile(System.String,Gordic.Support.Database.GDatabase,System.Collections.Generic.Dictionary{System.String,System.Object},System.Object)">
+            <summary>
+            Vykonání zadaného ADT scriptu
+            
+            Můžete zachytávat specifické chyby: GAdtSqlCommandException, GAdtException, Exception 
+            </summary>
+            <param name="a_script_file_name">Plné jméno souboru scriptu. </param>
+            <param name="a_database">Připojená databáze, která se má použít pro vykonání ADT scriptu. 
+            Pozor!! V rámci scriptu mohl autor scriptu použít příkaz COMMIT nebo ROLLBACK. Toto je nutné zvážit a pohlídat.
+            Pozor!! Není garantováno, v jakém stavu DB připojení zůstane - záleží na obsahu scriptu. ADT samo nerealizuje ani commit, rollback, disconnect atd..
+            </param>
+            <param name="a_params">Pojmenované vstupní parametry scriptu. 
+            V rámci scriptu jsou tyto proměnné dostupné pod stejným jménem, ale vždy se musí předřadit prefix Var. 
+            Např. proměnné ixs_ref bude v rámci scriptu dostupná vždy jako Var.ixs_ref</param>
+            <param name="a_dataContext">Nepovinný argument - objekt, jehož property budou přímo přístupné pro čtení v rámci ADT scriptu - určeno pro předání GINIS kontextu</param>
+            <returns>Pole pojmenovaných výstupních proměnných typů podle definice v ADT scriptu - nemusí se ale jednat o IGDbType.  
+            Autor scriptu musí voláním funkce ExportVar() vrátit hodnoty potřebných proměnných. 
+            Při volání této funkce určuje jméno a může určit i typ proměnné.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdt.AddComputeField(System.Collections.Generic.List{System.Collections.Generic.Dictionary{System.String,System.Object}},System.String,System.String,System.Collections.Generic.List{System.String}@,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Do listu dictionary se přidá nový sloupec jehož hodnota je vypočtena z hodnot sloupců a to na základě zadaného výrazu.
+            </summary>
+            <param name="a_list">list dictionary - tedy list řádků, obsahujících pojmenované sloupce</param>
+            <param name="a_target_field">Jméno cílového sloupce. Pokud jiý existuje, potom se nastaví jeho hodnota. Pokud neexistuje, potom se přidá jako nový sloupce na konec řádku</param>
+            <param name="a_vyraz">Text ADT výrazu, podle kterého se má hodnota sloupce vypočítat </param>
+            <param name="a_var_list">out seznam použitých proměnných a sloupců.</param>
+            <param name="parameters">Pole pojmenovaných vvstupmních hodnot. Nepovinný parametr.</param>
+            <returns>Délka nejdelší přidávané hodnoty (v případě netextových hodnot převedeno na string)</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdt.AddComputeField(System.Collections.Generic.List{System.Collections.Generic.Dictionary{System.String,System.Object}},System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Do listu dictionary se přidá nový sloupec jehož hodnota je vypočtena z hodnot sloupců a to na základě zadaného výrazu.
+            </summary>
+            <param name="a_list">list dictionary - tedy list řádků, obsahujících pojmenované sloupce</param>
+            <param name="a_target_field">Jméno cílového sloupce. Pokud jiý existuje, potom se nastaví jeho hodnota. Pokud neexistuje, potom se přidá jako nový sloupce na konec řádku</param>
+            <param name="a_vyraz">Text ADT výrazu, podle kterého se má hodnota sloupce vypočítat </param>
+            <param name="parameters">Pole pojmenovaných vvstupmních hodnot. Nepovinný parametr.</param>
+            <returns>Délka nejdelší přidávané hodnoty (v případě netextových hodnot převedeno na string)</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdt.Run(System.String,System.Collections.Generic.Dictionary{System.String,System.Object},Gordic.Support.Database.GDatabase,System.Object)">
+            <summary>
+            Vykonání zadaného ADT scriptu
+            
+            Můžete zachytávat specifické chyby: GAdtSqlCommandException, GAdtException, Exception 
+            </summary>
+            <param name="a_script_text">Text scriptu</param>
+            <param name="a_params">Pojmenované vstupní parametry scriptu. 
+            V rámci scriptu jsou tyto proměnné dostupné pod stejným jménem, ale vždy se musí předřadit prefix Var. 
+            Např. proměnné ixs_ref bude v rámci scriptu dostupná vždy jako Var.ixs_ref</param>
+            <param name="a_database">Připojená databáze, která se má použít pro vykonání ADT scriptu. 
+            Pozor!! V rámci scriptu mohl autor scriptu použít příkaz COMMIT nebo ROLLBACK. Toto je nutné zvážit a pohlídat.
+            Pozor!! Není garantováno, v jakém stavu DB připojení zůstane - záleží na obsahu scriptu. ADT samo nerealizuje ani commit, rollback, disconnect atd..
+            </param>
+            <param name="a_dataContext">Nepovinný argument - objekt, jehož property budou přímo přístupné pro čtení v rámci ADT scriptu - určeno pro předání GINIS kontextu</param>
+            <returns>Pole pojmenovaných výstupních proměnných typů podle definice v ADT scriptu - nemusí se ale jednat o IGDbType.  
+            Autor scriptu musí voláním funkce ExportVar() vrátit hodnoty potřebných proměnných. 
+            Při volání této funkce určuje jméno a může určit i typ proměnné.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdt.Run(System.Reflection.Assembly,System.String,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.Object},Gordic.Support.Database.GDatabase,System.Object)">
+            <summary>
+            Vykonání zadaného ADT scriptu
+            
+            Můžete zachytávat specifické chyby: GAdtSqlCommandException, GAdtException, Exception 
+            </summary>
+            <param name="a_knihovna">Knihovna, ve které je script soubor jako Embedded Resource</param>
+            <param name="a_namespace">NameSpace souboru scriptu. 
+            Pokud není u scriptu uvedeno, potom se jedná o NameSpace celé knohivny</param>
+            <param name="a_folder">Adresář(-e) ve které je script v knihovně umístěn. 
+            Jednotlivé úrovně mohou být odděleny zpětným lomítkem nebo tečkou</param>
+            <param name="a_script">Jméno souboru scriptu. Pozor! Předchozí tři argumenty jsou case sensitive</param>
+            <param name="a_params">Pojmenované vstupní parametry scriptu. 
+            V rámci scriptu jsou tyto proměnné dostupné pod stejným jménem, ale vždy se musí předřadit prefix Var. 
+            Např. proměnné ixs_ref bude v rámci scriptu dostupná vždy jako Var.ixs_ref</param>
+            <param name="a_database">Nepovinný argument - Připojená databáze, která se má použít pro vykonání ADT scriptu. 
+            Pozor!! V rámci scriptu mohl autor scriptu použít příkaz COMMIT nebo ROLLBACK. Toto je nutné zvážit a pohlídat.
+            Pozor!! Není garantováno, v jakém stavu DB připojení zůstane - záleží na obsahu scriptu. ADT samo nerealizuje ani commit, rollback, disconnect atd..
+            </param>
+            <param name="a_dataContext">Nepovinný argument - objekt, jehož property budou přímo přístupné pro čtení v rámci ADT scriptu - určeno pro předání GINIS kontextu</param>
+            <returns>Pole pojmenovaných výstupních proměnných většinou zákoadních hodnotových typu - určuje autor ADT scriptu na základě volání ADT funkce --## ExportVar( Var.varname );;
+            Při volání této funkce určuje jméno a může určit i typ proměnné.</returns>
+        </member>
+        <member name="T:Gordic.Support.AdtScriptEngine.GAdtScriptEngine">
+            <summary>
+            Třída pro práci s ADT scriptem - obsah scriptu, pointer na aktuální pozici, vnoření, lokální proměnné atd..
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_Function(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+             <summary>   Vykonání ADT výrazu ( funkce ) a to bez návratu nějaké hodnoty. </summary>
+            
+             <remarks>   Ffiala, 6.3.2017. </remarks>
+            
+             <exception cref="T:Gordic.Support.EvaluationEngine.GAdtException">    Thrown when a G Adt error condition occurs. </exception>
+            
+             <param name="a_AdtEvalEng"> The adt eval eng. </param>
+             <param name="a_prikaz">     Text příkazu. </param>
+            
+             <returns>   Příznak, že vykonávání scriptu za tímto příkazem může pokračovat. </returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_Let(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+             <summary>   Realizace příkazu LET. </summary>
+            
+             <remarks>   Ffiala, 6.3.2017. </remarks>
+            
+             <exception cref="T:Gordic.Support.EvaluationEngine.GAdtSqlNoConnectException">    Thrown when a G Adt SQL No Connect error
+                                                             condition occurs. </exception>
+             <exception cref="T:Gordic.Support.EvaluationEngine.GAdtInvalidSyntaxException">   Thrown when a G Adt Invalid Syntax error
+                                                             condition occurs. </exception>
+             <exception cref="T:Gordic.Support.EvaluationEngine.GAdtException">                Thrown when a G Adt error condition occurs. </exception>
+            
+             <param name="a_AdtEvalEng"> The adt eval eng. </param>
+             <param name="a_prikaz">     Text příkazu. </param>
+            
+             <returns>   Příznak, že vykonávání scriptu za tímto příkazem může pokračovat. </returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_Define(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+             <summary>   Zpracování příkazu DEFINE a ZUDPARAM. </summary>
+            
+             <param name="a_AdtEvalEng"> The adt eval eng. </param>
+             <param name="a_prikaz"> Příkaz DEFINE, který se má vykonat </param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.DefineDefaultValueForCompileOnlyMode(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,System.String)">
+            <summary>
+            Definuje výchozí hodnotu pro proměnnou v případě, že běžíme v režimu CompileOnly
+            </summary>
+            <param name="a_AdtEvalEng"></param>
+            <param name="varName"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_Zudparam(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+             <summary>Zpracování příkazu ZUDPARAM</summary>
+            
+             <param name="a_AdtEvalEng"> The adt eval eng. </param>
+             <param name="a_prikaz"> Příkaz DEFINE, který se má vykonat </param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_Guiparam(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+             <summary>Zpracování příkazu GUIPARAM</summary>
+            
+             <param name="a_AdtEvalEng"> The adt eval eng. </param>
+             <param name="a_prikaz"> Příkaz DEFINE, který se má vykonat </param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_Sysparam(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+             <summary>Zpracování příkazu SYSPARAM</summary>
+            
+             <param name="a_AdtEvalEng"> The adt eval eng. </param>
+             <param name="a_prikaz"> Příkaz DEFINE, který se má vykonat </param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_While(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+             <summary>
+             Pokud je aktuální příkaz WHILE, vyhodnotí podmínku a vykoná tělo nebo zajistí posun za konev
+             cyklu.
+             </summary>
+            
+             <remarks>   Ffiala, 6.3.2017. </remarks>
+            
+             <exception cref="T:Gordic.Support.EvaluationEngine.GAdtInvalidTypeException"> Thrown when a G Adt Invalid Type error condition
+                                                         occurs. </exception>
+            
+             <param name="a_AdtEvalEng"> The adt eval eng. </param>
+             <param name="a_prikaz">     WHILE příkaz. </param>
+            
+             <returns>   Příznak, že vykonávání scriptu za tímto příkazem může pokračovat. </returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_Exit(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Realizace ADT příkazu EXIT nalezeného uvnitř WHILE_LOOP cyklu
+            </summary>
+            <param name="a_AdtEvalEng"></param>
+            <param name="a_prikaz"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_Continue(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Realizace ADT příkazu EXIT nalezeného uvnitř WHILE_LOOP cyklu
+            </summary>
+            <param name="a_AdtEvalEng"></param>
+            <param name="a_prikaz"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_EndWhile(Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Pokud při vykonávání řádků mám vykonat LOOP, tak to znamená, že jsem právě vykonával tělo nějakého LOOP cyklu ( a je tedy uložen v _while_stack )
+            </summary>
+            <param name="a_prikaz">     Text příkazu. </param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_If(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+             <summary>
+             Pokud je aktuální příkaz IF, vyhodnotí podmínku a vykoná tělo nebo zajistí posun na ELSE nebo
+             za konec těla if.
+             </summary>
+            
+             <remarks>   Ffiala, 6.3.2017. </remarks>
+            
+             <exception cref="T:Gordic.Support.EvaluationEngine.GAdtInvalidTypeException"> Thrown when a G Adt Invalid Type error condition
+                                                         occurs. </exception>
+            
+             <param name="a_AdtEvalEng"> The adt eval eng. </param>
+             <param name="a_prikaz">     Příkaz IF. </param>
+            
+             <returns>   Příznak, že vykonávání scriptu za tímto příkazem může pokračovat. </returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_ElseIf(Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Pokud je volána tato funkce, potom to znamená, že jsem vykonával blok IF platný pro TRUE a dojel jsem na jeho konec - takže mám zajistit přeskočení bloku ELSEIF a ELSE a to bez jejich vykonání
+            </summary>
+            <param name="a_prikaz">  Příkaz ELSEIF </param>
+            <returns>   Příznak, že vykonávání scriptu za tímto příkazem může pokračovat. </returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_Else(Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Pokud je volána tao funkce, potom to znamená, že jsem vykonával blok IF platný pro TRUE a dojel jsem na jeho konec - takže mám zajistit přeskočení bloku ELSE a to bez jeho vukonání
+            </summary>
+            <param name="a_prikaz">  Příkaz ELSE </param>
+            <returns>   Příznak, že vykonávání scriptu za tímto příkazem může pokračovat. </returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_EndIf(Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Pokud je volána tao funkce, potom to znamená, že jsem vykonával blok IF platný pro FALSE a dojel jsem na jeho konec - takže mám zajistit pouze vyzvednutí IF ze stacku
+            </summary>
+            <param name="a_prikaz">     Příkaz END IF</param>
+            <returns>   Příznak, že vykonávání scriptu za tímto příkazem může pokračovat. </returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_Try(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Vykonání TRY příkazu - pouze uloží do zásobníku začátek TRY bloku
+            </summary>
+            <param name="a_AdtEvalEng"></param>
+            <param name="a_prikaz"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_Catch(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Vykonání příkazu CATCH - to že jsem k němu doputoval při výkonu jednotlivých řádků znamená, že tento TRY-CATCH blok proběhl bez chyb
+            Proto musím zajistit přeskočení CATCH blok a postavit se na ENDTRY
+            </summary>
+            <param name="a_AdtEvalEng"></param>
+            <param name="a_prikaz"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_EndTry(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Vykonání příkazu EndTry - to že jsem k němu doputoval při výkonu jednotlivých řádků znamená, že jsem zpracovával příkazy v rámci CATCH bloku ( tedy blok ošetřená chyby )
+            Proto musím zajistit vyjmutí příkazu TRY ze zásobníku
+            </summary>
+            <param name="a_AdtEvalEng"></param>
+            <param name="a_prikaz"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_Error(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+             <summary>   Nastavení globálního chování při vzniku chyby. </summary>
+            
+             <remarks>   Ffiala, 6.3.2017. </remarks>
+            
+             <exception cref="T:Gordic.Support.EvaluationEngine.GAdtInvalidSyntaxException">   Thrown when a G Adt Invalid Syntax error
+                                                             condition occurs. </exception>
+            
+             <param name="a_AdtEvalEng"> The adt eval eng. </param>
+             <param name="a_prikaz">    Příkazy: Přepínače v oblasti ERROR chování jako je 
+                          --##ERROR STOP;;
+                          --##ERROR IGNORE;;
+                          --##ERROR NEPIS;;
+                          --##ERROR PIS;;</param>
+            
+             <returns>   Příznak, že po tomto příkazu se má pokračovat. </returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_Separ(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            ADT příkaz pro přepínání typů ukončovacích znaků
+            </summary>
+            <param name="a_AdtEvalEng"></param>
+            <param name="a_prikaz"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_Ignore(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+             <summary>
+             Nastavení seznamu čísel chyb, které se mají v rámci běhu scriptu ignorovat.
+             </summary>
+            
+             <remarks>   Ffiala, 6.3.2017. </remarks>
+            
+             <param name="a_AdtEvalEng"> The adt eval eng. </param>
+             <param name="a_prikaz">    Příkaze IGNORE: Nastavení čísel SQL chyb, které se mají ignorovat. </param>
+            
+             <returns>   Příznak, že po tomto příkazu se má pokračovat. </returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_Nepis(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+             <summary>
+             Nastavení seznamu čísel chyb, které se mají v rámci běhu scriptu nemají zaposovat do
+             výstupních souborů.
+             </summary>
+            
+             <remarks>   Ffiala, 6.3.2017. </remarks>
+            
+             <param name="a_AdtEvalEng"> The adt eval eng. </param>
+             <param name="a_prikaz">   Příkaz NEPIS. </param>
+            
+             <returns>   Příznak, že po tomto příkazu se má pokračovat. </returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_Include(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Realizace příkazu INCLUDE - zde to ale pouze převedu na funkci
+            </summary>
+            <param name="a_AdtEvalEng"></param>
+            <param name="a_prikaz"></param>
+            <returns>Příznak, že za tímto příkazem script může pokračovat</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_Return(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            
+            </summary>
+            <param name="a_AdtEvalEng"></param>
+            <param name="a_prikaz"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_Throw(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Realizuje ADT příkaz THROW
+            </summary>
+            <param name="a_AdtEvalEng"></param>
+            <param name="a_prikaz"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_MessageBox(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Realizuje ADT příkaz MESSAGEBOX
+            </summary>
+            <param name="a_AdtEvalEng"></param>
+            <param name="a_prikaz"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_Pause(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Realizuje ADT příkaz STOP
+            </summary>
+            <param name="a_AdtEvalEng"></param>
+            <param name="a_prikaz"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_OnError(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Realizuje ADT příkaz ON_ERROR
+            </summary>
+            <param name="a_AdtEvalEng"></param>
+            <param name="a_prikaz"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Hledej_ElseOrEndIf(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine)">
+            <summary>
+            Prochází script a bez vykonání příkazů se posouvá tak dlouho, dokud nenajde odpovídající ELSE, ELSEIF nebo konec IF bloku - to je ENDIF
+            Vnořené další IF musím přeskočit
+            </summary>
+            <returns>Příznak, že script ještě po této akci pokračuje a má tedy cenu pokračovat v jeho čtení</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Hledej_EndIf">
+            <summary>
+            Prochází script a bez vykonání příkazů se posouvá tak dlouho, dokud nenajde odpovídající IF bloku - to je ENDIF ( přitom míjím ELSE, protože tento IF celý přeskakuji )
+            </summary>
+            <returns>Příznak, že script ještě pokračuje</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Hledej_Catch">
+            <summary>
+            Hledání CATCH příkazu, který odpovídá úrovni aktuálního TRY
+            Rekursivně přeskakuje další vnořené TRY-ENTRY bloky
+            </summary>
+            <returns>Vrátí jméno pro uložení ERROR state. Pokud vrátí NULL, potom je syntax chybně - nenalezen CATCH blok a nebo není správně uvedeno jméno pro save </returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Hledej_EndTry">
+            <summary>
+            Hledání ENDTRY příkazu, který odpovídá úrovni aktuálního TRY
+            Rekursivně přeskakuje další vnořené TRY-ENTRY bloky
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Hledej_Loop">
+            <summary>
+            Prochází script a bez vykonání příkazů se posouvá tak dlouho, dokud nenajde odpovídající LOOP
+            </summary>
+            <returns>   Příznak, že vykonávání scriptu za tímto příkazem může pokračovat. </returns>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine._Logger">
+            <summary>
+            Logování
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine._script_engine_version">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine._string_constant_with_escape">
+            <summary>
+            Přínak, že v rámci stringových konstant se mohou ( musí ) používat escape sekvence 
+            Pokud ano, potom se počítá pouze s možnostmi //  /'  /"
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine._is_find_end_block">
+            <summary>
+            Příznak, že se nevykonávají příkazy scriptu, pouze se hledá konec bloku IF, ELSE, WHILE, TRY
+            v tomto režimu se přechází dočasně na režim ukončovače příkazu ;;
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.double_separ_znak">
+            <summary>
+            Přepínač typu ukončovacích znaků příkazů
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine._is_halt">
+            <summary>
+            Příznak, že byl kdekoliv realizován příkaz HALT
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine._AdtScriptSourceManager">
+            <summary>
+            Třída, která se nastaví pouze u hlavního ScriptEngine - do dalších se potom předává z nadřízeného objektu ( jendá se o třídu, která podle svého typu a kontextu buduje specifické ScriptReadery - napr. standardní je z disku, další zajímavý bude z databáze, atd.. )
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine._AdtEvalEng">
+            <summary>
+            Interní pointer na ADT interpret výrazů + pole proměnných
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine._ParentAdtScrEng">
+            <summary>
+            pointer na nadřízený script engine
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine._AdtScriptReader">
+            <summary>   
+            Objekt pro načítání znaků příkazů ze vstupního proudu 
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.m_symbol_size">
+            <summary>
+            Délka zástupných symbolů
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.m_argument_count">
+            <summary>
+            Počet argumentů právě realizovaného SQL příkazu
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine._script_name">
+            <summary>
+            Jméno scriptu/souboru, který se aktuálně vykonává
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine._while_stack">
+            <summary>
+            Zásobník na návratové body pro WHILE cykly
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine._if_stack">
+            <summary>
+            Zásobník na zahájené bloky příkazů IF - nebo ELSE ( ze zásobníku se vyjmou na konci vykonávaného bloku)
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine._try_stack">
+            <summary>
+            Zásobník na zahájené bloky TRY- nebo CATCH nebo FINALLY
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine._cancelation_token">
+            <summary>
+            token za zastaveni akce
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine._synchronization_context">
+            <summary>
+            synchronizacni kontext
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine._skip_command">
+            <summary>
+            Příznak, že se příkazy načítají z readeru ale pouze proto, aby se přeskočily - to znemaná, že se u nich nebude např. kontrolovat nastavení substitučních proměnných atd..
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.total_command_time">
+            <summary>
+            Celkový čas na zpracování příkazů
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.total_sql_command_time">
+            <summary>
+            Celkový čas na zpracování DB příkazů
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.total_command_time_obj_lock">
+            <summary>
+            Zámkový objekt pro přístup k total_command_time a total_sql_command_time
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.thisDisplayRequredLock">
+            <summary>
+            Objekt pro exklusivní zámek přístupu na obrazovku
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Left(System.String,System.Int32)">
+            <summary>
+            Vyříznutí prvních n znaků podle konvence PowerBuilder
+            </summary>
+            <param name="a_text">Text ze kterého se má řezat</param>
+            <param name="a_delka">Počet znaků z leva, které se mají vrátit. Pokud je počet znaků větší jak délka celého stringu, potom to není považováno za chybu.</param>
+            <returns>Vrácených prvních x znaků.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.VarChanged(System.String,System.Object,Gordic.Support.EvaluationEngine.VTYPE,System.Nullable{System.Int32},Gordic.Support.EvaluationEngine.VSCOPE,System.Int32)">
+            <summary>
+            Můstek pro předání události o změně hodnoty proměnné
+            </summary>
+            <param name="a_var_name"></param>
+            <param name="a_var_value"></param>
+            <param name="a_var_type"></param>
+            <param name="a_var_prec"></param>
+            <param name="a_platnost">Rozsah platnosti</param>
+            <param name="a_task_id"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.DatabaseChanged(System.String,System.String,System.Int32)">
+            <summary>
+            Můstek pro předání události o změně aktuální databáze
+            </summary>
+            <param name="a_profile">Profil databaze</param>
+            <param name="a_login">Login</param>
+            <param name="a_task_id"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.DisplayRequred(Gordic.Support.EvaluationEngine.GAdtDisplayRequest)">
+            <summary>
+            Můstek pro předání události žádosti o zobrazení dat v EvalEng na klienta
+            </summary>
+            <param name="a_request">Objekt žádosti</param>
+            <returns>Objekt odpovědi na žádost</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.IncludeRequred(Gordic.Support.EvaluationEngine.GAdtIncludeRequest)">
+            <summary>
+            Funkce pro realizaci požadavku na INCLUDE akci
+            </summary>
+            <param name="a_request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.LoadRequred(Gordic.Support.EvaluationEngine.GAdtLoadScriptRequest)">
+            <summary>
+            
+            </summary>
+            <param name="a_request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.UnLoadRequred(Gordic.Support.EvaluationEngine.GAdtUnLoadScriptRequest)">
+            <summary>
+            
+            </summary>
+            <param name="a_request"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Script_engine_version">
+            <summary>
+            Verze ADT script engine - podle této verze lze rozpoznat zda jsou již přítomny nové vlastnosti
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.IsHalt">
+            <summary>
+            Příznak, že script skončil příkazem HALT
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.AdtScriptSourceManager">
+            <summary>
+            Třída, která se nastaví pouze u hlavního ScriptEngine - do dalších se potom předává z nadřízeného objektu ( jendá se o třídu, která podle svého typu a kontextu buduje specifické ScriptReadery - napr. standardní je z disku, další zajímavý bude z databáze, atd.. )
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.AdtScriptReader">
+            <summary>   
+            Objekt pro načítání znaků příkazů ze vstupního proudu 
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.stream_end_position">
+            <summary>
+            koncová pozice readeru
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.AdtEvalEng">
+            <summary>
+            Pointer na Adt interpret tohoto script engine
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.OutputVariables">
+            <summary>
+            Pole pojmenovaných proměnných, které jsou exportovány z ADT scriptů funkcí ExportVar( name, value )
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.ParentAdtScrEng">
+            <summary>
+            Pointer na Adt interpret nadřízeného scriptu k tomuto script engine
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.script_name">
+            <summary>
+            Jméno scriptu nebo plná cesta na soubor, který se vykonává
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.script_stack">
+            <summary>
+            Cesta otevírání jednotlivých scriptů. V hranatých závorkách obsahuje čísla řádku. V kulatých závorkách obsahuje procentní pozici v rámci scriptu
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.percent_position">
+            <summary>
+            Text popisující procentuálně pozici aktuálně zpracovávaného příkazu.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.is_gui">
+            <summary>
+            Příznak, že ADT běží v rámcí hosta, který má přístup k GUI ( může tedy např. dělat Mapi atd.. )
+            Na základě tohoto příznaku následně mohou ADT funkce vyhlásit chybu - v případě že jsou založeny na uživatelské interakci a přístupu ke GUI
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.ExternalDatabase">
+            <summary>
+            Slouží pro nastavení pointru na databázový objekt vytvořený mimo tento engine - tedy z pohledu ADT engine se jedná o externí DB objekt
+            Takto nastavená databáze se nesmí v rámci Dispose ničit ani odpojovat ani commitovat/rollbackovat
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Database">
+            <summary>
+            Pointer na hlavní databázový objekt v hlavním AdtEvalEngine - potomci jej pouze již převezmou
+            Může se jednat o DB objekt vytvořený v rámci konstruktoru hlavního ADT engine, nebo o z venku zadaný DB objekt
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.DbConnect(System.String,System.String,System.String,System.String)">
+            <summary>
+            Na hlavním databázovém konektu ustaví konekt - je použita z ADT funkce DB_Connect ale je určena také pro volání z hostitele před zahájením vykonávání ADT scriptu - tedy pro ustavení konektu před spuštěním scriptu
+            Pokud při volání této funkce byl již konek ustaven, potom se provede jeho odpojení.
+            </summary>
+            <param name="a_profil">Jméno DB profilu podle GINIS standardu</param>
+            <param name="a_login">Login uživatelského účtu - standardně se bude jednat většinou o vas nebo ginis01</param>
+            <param name="a_passwd">Heslo</param>
+            <param name="a_faze">Fáze aplikace, která ustavuje konekt</param>
+            <returns>Příznak, zda se konetk podařilo ustavit</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.DbConnect(System.String,System.String,Gordic.General.IPasswordSecret,System.String)">
+            <summary>
+            Na hlavním databázovém konektu ustaví konekt - je použita z ADT funkce DB_Connect ale je určena také pro volání z hostitele před zahájením vykonávání ADT scriptu - tedy pro ustavení konektu před spuštěním scriptu
+            Pokud při volání této funkce byl již konek ustaven, potom se provede jeho odpojení.
+            </summary>
+            <param name="a_profil">Jméno DB profilu podle GINIS standardu</param>
+            <param name="a_login">Login uživatelského účtu - standardně se bude jednat většinou o vas nebo ginis01</param>
+            <param name="a_passwd">Heslo</param>
+            <param name="a_faze">Fáze aplikace, která ustavuje konekt</param>
+            <returns>Příznak, zda se konetk podařilo ustavit</returns>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.BeforCommandExecute">
+            <summary>
+            Pointer na funkci, která se volá před vykonáním každého příkazu
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.AfterCommandExecuted">
+            <summary>
+            Pointer na funkci, která se volá po vykonání každého příkazu, který skončil bez chyb
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.AfterCommandExecutedWithError">
+            <summary>
+            Pointer na funkci, která se volá po vykonání příkazu, které skončilo chybou
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.AfterVarValueChanged">
+            <summary>
+            Pointer na funkci, která se volá po změně hodnoty ADT proměnné
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.AfterDatabaseChanged">
+            <summary>
+            Pointer na funkci, která se volá po změně database
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.OnDisplayRequred">
+            <summary>
+            Pointer na funkci, která je volána z evaluateengine s požadavkem na klienta a to o zobrazení dat/dotazu. Očekává se případné naplnění odpovědi.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.OnSqlParseRequred">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Cancelation_token">
+            <summary>
+            token za zastaveni akce
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Synchronization_context">
+            <summary>
+            synchronizacni kontext
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.#ctor(Gordic.Support.AdtScriptSourceManager.IGAdtScriptSourceManager,Gordic.Support.AdtScriptSourceManager.IGAdtScriptReader,System.Threading.CancellationToken)">
+             <summary>   Konstruktor pro případ, že script je hlavním scriptem. </summary>
+             <remarks>   Ffiala, 8.3.2017. </remarks>
+             <param name="a_scriptManager">Manager poskytující zdrojové kódy</param>
+             <param name="a_AdtScriptReader">    Stream obsahující text scriptu, který se má vykonat. </param>
+             <param name="a_cancelation_token">  Token na zastavení běhu scriptu. </param>
+            
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.#ctor(Gordic.Support.AdtScriptSourceManager.IGAdtScriptSourceManager,Gordic.Support.AdtScriptSourceManager.IGAdtScriptReader,System.Threading.CancellationToken,System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Konstruktor pro případ, že script je je hlavním scriptem a chci mu přednastavit některé proměnné
+            
+            Zatím nebyl použit
+            </summary>
+            <param name="a_scriptManager">Manager poskytující zdrojové kódy</param>
+            <param name="a_AdtScriptReader">Stream obsahující text scriptu, který se má vykonat</param>
+            <param name="a_cancelation_token"> Token na zastavení běhu scriptu</param>
+            <param name="a_values">Pole pojmenovaných hodnot, které se mají pro ADT přednastavit</param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.#ctor(Gordic.Support.AdtScriptSourceManager.IGAdtScriptSourceManager,Gordic.Support.AdtScriptSourceManager.IGAdtScriptReader,System.Threading.CancellationToken,System.Collections.Generic.Dictionary{System.String,System.Object},Gordic.Support.Database.GDatabase)">
+            <summary>
+            Konstruktor pro případ, že script je je hlavním scriptem a chci mu přednastavit některé proměnné
+            
+            Zatím nebyl použit
+            </summary>
+            <param name="a_scriptManager">Manager poskytující zdrojové kódy</param>
+            <param name="a_AdtScriptReader">Stream obsahující text scriptu, který se má vykonat</param>
+            <param name="a_cancelation_token"> Token na zastavení běhu scriptu</param>
+            <param name="a_values">Pole pojmenovaných hodnot, které se mají pro ADT přednastavit</param>
+            <param name="database">Pointer na databázový objekt</param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.#ctor(Gordic.Support.AdtScriptSourceManager.IGAdtScriptSourceManager,Gordic.Support.AdtScriptSourceManager.IGAdtScriptReader,System.Threading.CancellationToken,Gordic.Support.AdtScriptEngine.GAdtScriptEngine,Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Boolean)">
+            <summary>
+            Konstruktor pro případ, že script je podřízeným scriptem k jinému scriptu
+            </summary>
+            <param name="a_scriptManager">Manager poskytující zdrojové kódy</param>
+            <param name="a_AdtScriptReader">Stream obsahující text scriptu, který se má vykonat</param>
+            <param name="a_cancelation_token"> Token na zastavení běhu scriptu</param>
+            <param name="a_ParentAdtScrEng">Pointer na nadřízený script engine</param>
+            <param name="a_ParentEventEngin">parent event engine</param>
+            <param name="a_is_macro">Příznak, že otevřený script má sdílet lokální proměnné</param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.ReadNextCommand">
+            <summary>
+            Funkce slouzi pro načtení dalšího příkazu z scriptu + vyhozeni komentaru a substringu z příkazu. Ty jsou nahrazeny zastupnym symbolem.
+            Skutecny obsah komentářů a substringů je plnen do tabulky zastupnych symbolu - HashTable, kde jsou přístupné na základě svého zástupního symbolu.
+            </summary>
+            <returns>Adt příkaz, který je na řadě, nebo null v případě, že jsme na konci scriptu</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.ReadNextAdtCommand_internal">
+            <summary>
+            Zrychlené čtení příkazů a to po řádcích - rozebírají se pouze ADT příkazy
+            </summary>
+            <returns>rozpoznaný příkaz</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.VyhodKomentarRadek(System.String)">
+            <summary>
+            Vyhodí z konce řádku komentářovou část typu "--" tedy SQL komentáře veřejné i neveřejné 
+            </summary>
+            <param name="a_radek">Vstupní řádek.</param>
+            <returns>Výstupní řádek s odstraněným komentářem.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.VyhodKomentarRadek(System.String,System.Boolean@,System.Boolean@)">
+            <summary>
+            Vyhodí z konce řádku komentářovou část typu "--" tedy SQL komentáře veřejné i neveřejné 
+            </summary>
+            <param name="a_radek">Vstupní řádek.</param>
+            <param name="v_je_komentar"></param>
+            <param name="v_je_retezec"></param>
+            <returns>Výstupní řádek s odstraněným komentářem.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.IsFirstCharForArgumentName(System.Char)">
+            <summary>
+            Test zda zadaný znak může být prvním znakem argumentu
+            </summary>
+            <param name="znak"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.IsCharForBindingValue(System.Char)">
+            <summary>
+            
+            </summary>
+            <param name="znak"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.IsFirstCharForSqlCommand(System.Char)">
+            <summary>
+            Test zda zadaný znak může být prvním znakem SQL příkazu
+            </summary>
+            <param name="znak"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.ReadNextCommand_internal">
+            <summary>
+            Funkce slouzi pro načtení dalšího příkazu z scriptu + vyhozeni komentaru a substringu z příkazu. Ty jsou nahrazeny zastupnym symbolem.
+            Skutecny obsah komentářů a substringů je plnen do tabulky zastupnych symbolu - HashTable, kde jsou přístupné na základě svého zástupního symbolu.
+            </summary>
+            <returns>Adt příkaz, který je na řadě, nebo null v případě, že jsme na konci scriptu</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.MainRun(Gordic.Support.EvaluationEngine.GAdtRunContext)">
+            <summary>
+            Hlavní spuštěcí bod výkonu celého ADT scriptu - pro případ ADTxx aplikací
+            </summary>
+            <returns>Příznak, že po vykonání tohoto kroku je možné pokračovat na další krok nadřízeného scriptu. Pokud je false, potom to znamená, že se dále již pokračovat nemá</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.StepOne(Gordic.Support.EvaluationEngine.GAdtRunContext)">
+            <summary>
+            Hlavní spuštěcí bod výkonu jednoho příkazu ADT scriptu - pro případ ADTxx aplikací
+            </summary>
+            <returns>Příznak, že po vykonání tohoto kroku je možné pokračovat na další krok nadřízeného scriptu. Pokud je false, potom to znamená, že se dále již pokračovat nemá</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Run">
+            <summary>
+            Spuštění výkonu celého ADT scriptu
+            </summary>
+            <returns>Příznak, že po vykonání tohoto kroku je možné pokračovat na další krok nadřízeného scriptu. Pokud je false, potom to znamená, že se dále již pokračovat nemá</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.RunMultiTask(Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Spuštění výkonu celého ADT scriptu
+            </summary>
+            <param name="a_prikaz">ADT příkaz, který spustil multitask</param>
+            <returns>Příznak, že po vykonání tohoto kroku je možné pokračovat na další krok. Pokud je false, potom to znamená, že se dále již pokračovat nemá</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.RunInclude(Gordic.Support.EvaluationEngine.GAdtIncludeRequest)">
+            <summary>
+            Funkce pro realizaci požadavku na INCLUDE akci
+            </summary>
+            <param name="a_request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.DoLoad(Gordic.Support.EvaluationEngine.GAdtLoadScriptRequest)">
+            <summary>
+            
+            </summary>
+            <param name="a_request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.DoUnLoad(Gordic.Support.EvaluationEngine.GAdtUnLoadScriptRequest)">
+            <summary>
+            
+            </summary>
+            <param name="a_request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.StepOne">
+            <summary>
+            Vykonání jednoho příkazu - který je na řadě
+            </summary>
+            <returns>Příznak, že po vykonání tohoto kroku je možné pokračovat na další krok. Pokud je false, potom to znamená, že se dále již pokračovat nemá</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.ExecuteCommand(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Vykonání jednoho zadaného ADT příkazu
+            </summary>
+            <param name="a_AdtEvalEng"></param>
+            <param name="a_prikaz"></param>
+            <returns>Příznak, že se může pokračovat ve výkonu scriptu</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.ExecuteAdtCommand(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Vykonání jednoho ADT příkazu
+            </summary>
+            <param name="a_AdtEvalEng"></param>
+            <param name="a_prikaz"></param>
+            <returns>Příznak, že se může pokračovat ve výkonu scriptu</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.ExecuteSqlCommand(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Vykonání jednoho SQL příkazu
+            </summary>
+            <param name="a_AdtEvalEng"></param>
+            <param name="a_prikaz"></param>
+            <returns>Příznak, že se může pokračovat ve výkonu scriptu</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.RunReadFromSql(Gordic.Support.EvaluationEngine.GAdtVarReadFromSqlRequest)">
+            <summary>
+            Realizace načtení proměnné z hlavičky scriptu - ADT funkce Var_Read_From_Sql
+            Proměnná v hlavičce musí mít formát:
+            --VARNAME:   VARVALUE
+            </summary>
+            <param name="a_request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.RunGetFile(Gordic.Support.EvaluationEngine.GAdtGetFileRequredRequest)">
+            <summary>
+            Vykopírování souboru z úložiště scriptů na disk
+            </summary>
+            <param name="a_request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Dispose(System.Boolean)">
+            <summary>
+            Uvolnění prostředků - především DB
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Dispose">
+            <summary>
+            Úklid - odpojení DB atd...
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_DbSelect(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            ADT příkaz přiřazení výsledku jednořádkového selectu do proměnných
+            Např.:
+            --##LET Var.v_ixs_ref = ( SELECT ixs_ref FROM vas.ginsref WHERE login_name = '@(v_login)'  );;
+            </summary>
+            <param name="a_AdtEvalEng"></param>
+            <param name="a_prikaz"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_List_From_Select(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Realizace funkce List_From_Select
+            </summary>
+            <param name="a_AdtEvalEng"></param>
+            <param name="a_prikaz"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_SqlCommand(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Vykonání obecného SQL příkazu ( např. delete, update, create atd.. )
+            </summary>
+            <param name="a_AdtEvalEng"></param>
+            <param name="a_prikaz"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_Commit(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Vykonání DB commit
+            </summary>
+            <param name="a_AdtEvalEng"></param>
+            <param name="a_prikaz"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_ReConnect(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Vykonání ADT příkazu Delej_ReConnect
+            </summary>
+            <param name="a_AdtEvalEng"></param>
+            <param name="a_prikaz"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_Rollback(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Vykonání DB rollback
+            </summary>
+            <param name="a_AdtEvalEng"></param>
+            <param name="a_prikaz"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_Unload(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Vykonání UNLOAD příkazu
+            </summary>
+            <param name="a_AdtEvalEng"></param>
+            <param name="a_prikaz"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_Load(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Vykonání LOAD příkazu
+            </summary>
+            <param name="a_AdtEvalEng"></param>
+            <param name="a_prikaz"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GAdtScriptEngine.Delej_Select(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine,Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Vykonání SELECT příkazu - s výstupem na obrazovku
+            </summary>
+            <param name="a_AdtEvalEng"></param>
+            <param name="a_prikaz"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.AdtScriptEngine.BeforCommandExecuteDelegate">
+            <summary>
+            Delegát, který je volán před vykonáním příkazu
+            </summary>
+            <param name="a_command">Příkaz</param>
+        </member>
+        <member name="T:Gordic.Support.AdtScriptEngine.AfterCommandExecutedDelegate">
+            <summary>
+            Delegát, který je volán po vykonáním příkazu, který proběhl bez chyb
+            </summary>
+            <param name="a_command">Příkaz</param>
+        </member>
+        <member name="T:Gordic.Support.AdtScriptEngine.AfterCommandExecutedWithErrorDelegate">
+            <summary>
+            Delegát, který je volán po vykonáním příkazu, který proběhl s chybou
+            </summary>
+            <param name="a_command"></param>
+        </member>
+        <member name="T:Gordic.Support.AdtScriptEngine.AfterVarValueChangedDelegate">
+            <summary>
+            Delegát, který je volán po změně hodnoty proměnné
+            </summary>
+            <param name="a_variable"></param>
+        </member>
+        <member name="T:Gordic.Support.AdtScriptEngine.AfterDatabaseChangedDelegate">
+            <summary>
+            Delegát, který je volán po změně Database
+            </summary>
+            <param name="a_profile"></param>
+            <param name="a_login"></param>
+        </member>
+        <member name="T:Gordic.Support.AdtScriptEngine.GGdeladlHelper">
+            <summary>
+            Podpora pro ukládání ADL do databáze
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GGdeladlHelper.Save(Gordic.Support.Database.GDatabase,Gordic.GdtSupport.Interface.GDbInfoDto,System.String,System.Byte[])">
+            <summary>
+            Uložení informací o zaslaném ADL souboru na GDMS centrální server
+            </summary>
+            <param name="database">Připojená databáze GDEV</param>
+            <param name="dbInfo">Informace o zdroji ADL souboru</param>
+            <param name="adlName">Jméno ADL souboru, který byl uložen na GDMS serveru</param>
+            <param name="obsahAdl">Obash ADL - může být NULL</param>
+        </member>
+        <member name="T:Gordic.Support.AdtScriptEngine.GGinlgdvHelper">
+            <summary>
+            Podpora pro ukládání uživateských hodnocení spuštění GDZ balíků do databáze
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GGinlgdvHelper.Save(Gordic.Support.Database.GDatabase,Gordic.GdtSupport.Client.GdtExtSupportService.GDbInfoDto,Gordic.GdtSupport.Client.GdtExtSupportService.GGinlgdvDto)">
+            <summary>
+            
+            </summary>
+            <param name="database"></param>
+            <param name="dbInfo"></param>
+            <param name="ginlgdvDto"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GGinlgdvHelper.Load(Gordic.Support.Database.GDatabase,Gordic.GdtSupport.Client.GdtExtSupportService.GDbInfoDto,Gordic.GdtSupport.Client.GdtExtSupportService.GGinlgdvDto)">
+            <summary>
+            Načtení položek resp_stat a popis_rtf
+            podle: run_id
+            nebo podle: db_guid,ixs_gdt,dat_start
+            </summary>
+            <param name="database"></param>
+            <param name="dbInfo"></param>
+            <param name="ginlgdvDto"></param>
+        </member>
+        <member name="T:Gordic.Support.AdtScriptEngine.GWhilePoint">
+            <summary>
+            Pamatovátko pro while cyklus
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GWhilePoint._adtCommand">
+            <summary>
+            Příkaz WHILE
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GWhilePoint._if_stack">
+            <summary>
+            Aktuální obsah zásobníku pro if
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GWhilePoint._try_stack">
+            <summary>
+            Aktuální obsah zásobníku pro TRY
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GWhilePoint.#ctor(Gordic.Support.EvaluationEngine.GAdtCommand,System.Collections.Generic.Stack{Gordic.Support.EvaluationEngine.GAdtCommand},System.Collections.Generic.Stack{Gordic.Support.AdtScriptEngine.GTryCatchPoint})">
+            <summary>
+            Konstruktor pro naplnění pamatovátka try vnoření
+            </summary>
+            <param name="a_adtCommand"></param>
+            <param name="a_if_stack"></param>
+            <param name="a_try_stack"></param>
+        </member>
+        <member name="T:Gordic.Support.AdtScriptEngine.StackExtensions">
+            <summary>
+            Rozšíření Stack klonování
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.StackExtensions.Clone``1(System.Collections.Generic.Stack{``0})">
+            <summary>
+            Klonování stack
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="original"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.AdtScriptEngine.GTryCatchPoint">
+            <summary>
+            Pamatovátko pro try catch blok
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GTryCatchPoint._adtCommand">
+            <summary>
+            Příkaz TRY 
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GTryCatchPoint._while_stack">
+            <summary>
+            Aktuální obsah zásobníku pro while
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptEngine.GTryCatchPoint._if_stack">
+            <summary>
+            Aktuální obsah zásobníku pro if
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptEngine.GTryCatchPoint.#ctor(Gordic.Support.EvaluationEngine.GAdtCommand,System.Collections.Generic.Stack{Gordic.Support.AdtScriptEngine.GWhilePoint},System.Collections.Generic.Stack{Gordic.Support.EvaluationEngine.GAdtCommand})">
+            <summary>
+            Konstruktor pro naplnění pamatovátka try vnoření
+            </summary>
+            <param name="a_adtCommand"></param>
+            <param name="a_while_stack"></param>
+            <param name="a_if_stack"></param>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,3146 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Xrg.WsMudServer</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Xrg.WsMudServer.GWsMudNscAuBase">
+            <summary>
+            společné funkce pro ZaznamNscAu a ZrusZaznamNscAu
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWsMudNscAuBase.m_id_nscau">
+            <summary>id rušeného záznamu tabulky matsnsa.id_nscau</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWsMudNscAuBase.m_nsc">
+            <summary>nsc rušeného záznamu</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWsMudNscAuBase.m_dat_od">
+            <summary>m_dat_od rušeného záznamu</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWsMudNscAuBase.m_ueb">
+            <summary>m_ueb rušeného záznamu</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWsMudNscAuBase.m_dat_do">
+            <summary>m_dat_do rušeného záznamu</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWsMudNscAuBase.m_rokmes_od">
+            <summary>m_rokmes_od rušeného záznamu</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWsMudNscAuBase.m_rokmes_do">
+            <summary>m_rokmes_do rušeného záznamu</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudNscAuBase.ZaznamExistuje">
+            <summary>
+            Zjistí, jestli záznam existuje
+            provádí se to přes select count(*) nad primárním klíčem by to nemělo nijak moc zatěžovat stroj
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudNscAuBase.NacteniZaznamu">
+            <summary>
+            Načtení mazaného záznamu tabulky matsnsa
+            </summary>
+            <returns>true, když existuje aktivní záznam</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudNscAuBase.ZrusZaznamMatsnsb">
+            <summary>
+            Smazání záznamu v tabulce matsnsb, 
+            období povoluju kratší, ostatní hodnoty musí přesně odpovídat tomu co bylo načteno z matsnsa.
+            Když je rokmes_od=rokmes_do, tak zkusim najít v matsnsa jestli pro dané nsc v danym měsíci neni ještě nějaký
+            aktivní záznam s nějakým ueb - pokud ano, tak první (order by rokmes_do) vezmu a nechám řádek v matsnsb aktivní.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudNscAuBase.PrvniDenVMesici(Gordic.General.GDate,System.Boolean)">
+            <summary>
+            Posune datum na vstupu na první den příslušného měsíce, druhým parametrem je možno posunout o měsíc vpřed
+            </summary>
+            <param name="datum"></param>
+            <param name="plusMesic"></param>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.GWsMudCommon">
+            <summary>
+            Společné funkce kontrol a čtení číselníků pro MUD
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWsMudCommon.m_oStartStopovani">
+            <summary>začátek stopování nějaké akce</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWsMudCommon.m_sStopovanaAkce">
+            <summary>název stopované akce</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWsMudCommon.m_oIdCas">
+            <summary>id s časem pro určení doby trvání dané akce</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWsMudCommon.m_oUdrzovaneDatabaze">
+            <summary>seznam udržovaných db</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWsMudCommon.m_sPredponaTabulek">
+            <summary>předpona před názvem tabulky</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWsMudCommon.m_nAktualniDb">
+            <summary>pořadí právě zpracovávané db (původní=-1)</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.GWsMudCommon.LogIds">
+            <summary>
+            enumerace log id
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWsMudCommon.LogIds.GWSMUD01">
+            <summary>obecné log id pro logovací zprávy</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWsMudCommon.LogIds.GWSMUD01_START">
+            <summary>log id pro začátek stopování času</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWsMudCommon.LogIds.GWSMUD01_END">
+            <summary>log id pro konec stopování času</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWsMudCommon.LogIds.GWSMUD01_POLOZKA">
+            <summary>log id pro logovací zprávy o položce</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWsMudCommon.LogIds.GWSMUD01_POLOZKA_START">
+            <summary>log id pro začátek stopování času při zpracovávání položky</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWsMudCommon.LogIds.GWSMUD01_POLOZKA_END">
+            <summary>log id pro konec stopování času při zpracovávání položky</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.IsNull(Gordic.General.GString,System.String)">
+            <summary>
+            Pokud je oGordickyString.IsNull, tak nastavi sHodnota.
+            </summary>
+            <param name="oGordickyString">Gordic string</param>
+            <param name="sHodnota">Na co případně nastavit</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.LogException(System.Exception)">
+            <summary>
+            zaloguje výjimku
+            </summary>
+            <param name="e">výjimka</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.LogStart(System.String)">
+            <summary>
+            Zapíše do logu zprávu pod LogIds.GWSMUD01_START a zahájí stopovaní pod daným Id, tj. zprávou v logu
+            </summary>
+            <param name="id">identifikátor pro stopování = zpráva</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.LogStart(Gordic.Xrg.WsMudServer.GWsMudCommon.LogIds,System.String)">
+            <summary>
+            Zapíše do logu s příslušným logId zprávu a zahájí stopovaní pod daným Id, tj. zprávou v logu
+            </summary>
+            <param name="logId">id logu</param>
+            <param name="id">identifikátor pro stopování = zpráva</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.LogIdToString(Gordic.Xrg.WsMudServer.GWsMudCommon.LogIds)">
+            <summary>
+            převede LogId na řetězec
+            </summary>
+            <param name="logId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.LogEnd(System.String)">
+            <summary>
+            Zapíše do logu zprávu pod LogIds.GWSMUD01_END a dobu trvání dané akce, ukončí stopování daného Id (akce)
+            </summary>
+            <param name="id">identifikátor pro stopování</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.LogEnd(Gordic.Xrg.WsMudServer.GWsMudCommon.LogIds,System.String)">
+            <summary>
+            Ukončí stopování daného Id
+            </summary>
+            <param name="logId">id logu</param>
+            <param name="id">identifikátor pro stopování</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.LogTime(System.String)">
+            <summary>
+            Zapíše logovací zprávu úrovně Info, pod LogIds.GWSMUD01_START a zaznamená si čas
+            </summary>
+            <param name="text">zpráva</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.LogTime(Gordic.Xrg.WsMudServer.GWsMudCommon.LogIds,System.String)">
+            <summary>
+            Zapíše logovací zprávu úrovně Info, pod příslušným LogIds a zaznamená si čas
+            </summary>
+            <param name="logId">id logu</param>
+            <param name="text">zpráva</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.LogTime">
+            <summary>
+            zobrazí dobu, která uběhla od posledního LogTime(string text) případně LogTime(LogIds logId, string text)
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.LogTime(Gordic.Xrg.WsMudServer.GWsMudCommon.LogIds)">
+            <summary>
+            zobrazí dobu, která uběhla od posledního LogTime(string text) případně LogTime(LogIds logId, string text)
+            </summary>
+            <param name="logId">id logu</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.MudLog(System.String,System.Object[])">
+            <summary>
+            Zapíše logovací zprávu úrovně Info
+            </summary>
+            <param name="text">zpráva</param>
+            <param name="p">parametry zprávy</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.MudLog(Gordic.Xrg.WsMudServer.GWsMudCommon.LogIds,System.String,System.Object[])">
+            <summary>
+            Zapíše logovací zprávu úrovně Info, pod daným LogId
+            </summary>
+            <param name="logId">log id</param>
+            <param name="text">zpráva</param>
+            <param name="p">parametry zprávy</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.LogWarning(System.String)">
+            <summary>
+            Zapíše logovací zprávu úrovně Warning, pod LogIds.GWSMUD01
+            </summary>
+            <param name="s">zpráva</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.LogWarning(System.String,System.Object[])">
+            <summary>
+            Zapíše logovací zprávu úrovně Warning, pod LogIds.GWSMUD01
+            </summary>
+            <param name="s">zpráva</param>
+            <param name="p">parametry zprávy</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.GStr(Gordic.General.GDbType)">
+            <summary>
+            Převede DbType na hodnotu string
+            </summary>
+            <param name="oDbType">vstup</param>
+            <returns>hodnota převedená na string, a pokud je hodnota NULL, tak string 'NULL'</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.GRokMes(Gordic.General.GDateTime)">
+            <summary>
+            Převede typ GDateTime na typ GEkoDate s přesností YearToMonth
+            </summary>
+            <param name="datum">vstup</param>
+            <returns>výstup</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.GStrApo(Gordic.General.GDbType)">
+            <summary>
+            Převede DbType na hodnotu string (přes GStr) a dá ji do apostrofů - vhodné do výjimek.
+            </summary>
+            <param name="oDbType">vstup</param>
+            <returns>hodnota převedená na string v apostrofech</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.StrApo(System.String)">
+            <summary>
+            Dá string do apostrofů --> vhodné do výjimek.
+            </summary>
+            <param name="s">string</param>
+            <returns>string v apostrofech</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.PrvniPruchod">
+            <summary>
+            Jestli se zpracovává poprvé (=jsem v protně přihlašované db)
+            </summary>
+            <returns>true/false</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.PosunNaPrvotniDatabazi">
+            <summary>
+            Použije jako předponu .vas, tj. bude se zpracovávat db do které se prvotně hlásíme
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.PruchodOstatnichDb">
+            <summary>v cyklu projde všechny databáze, které jsou uvedeny v tabulce vas.katsodb</summary>
+            <returns>true, když ještě nějaká existuje</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.ZamekTabulek(System.String[])">
+            <summary>
+            Zjisti udžované db a uzamkne v nich příslušné tabulky
+            </summary>
+            <param name="t">tabulky</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.OrizniNulyZleva(Gordic.General.GString)">
+            <summary>
+            U měrných jednotek mám ořezávat nuly zleva
+            </summary>
+            <param name="mj">mj</param>
+            <returns>mj bez nul zleva</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.PrvniDvaZnaky(Gordic.General.GString)">
+            <summary>
+            U mat. uskupení budu brát jen první dva znaky
+            </summary>
+            <param name="matUsk">mat. usk.</param>
+            <returns>první dva znaky z mat. usk.</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.RemoveTabs(System.String)">
+            <summary>
+            Pro SQL, odstraní všechny tabulátory
+            </summary>
+            <param name="sql">SQL</param>
+            <returns>upravené SQL</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.PresmerovatNaJinouURL(System.String,System.String,System.Xml.XmlNode)">
+            <summary>
+            
+            </summary>
+            <param name="methodName"></param>
+            <param name="url"></param>
+            <param name="requestNode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.NaformatujVystupniDataSet(System.Data.DataSet)">
+            <summary>Naformátuje výstupní DataSet</summary>
+            <param name="outputDataSet">výstupní DataSet</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.PresmerovatNaJinouURL(System.Xml.XmlNode,System.String)">
+            <summary>
+            Přesměrování na druhou url
+            </summary>
+            <param name="requestNode"></param>
+            <param name="metoda"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudCommon.LicenceNks(Gordic.General.GString)">
+            <summary>
+            Vrátí licenci tohoto NKS
+            </summary>
+            <param name="nks">nks</param>
+            <returns>licence</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.GWsMudParamsToString">
+            <summary>
+            Převod skupiny hodnot string key + GDbType value na text
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudParamsToString.ZpracujVysledek(System.Boolean)">
+            <summary>
+            Získání textové podoby všech parametrů
+            </summary>
+            <param name="forException">do výjimek bez mezer, do logu s mezerama (zarovnání)</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.TimeMeasure">
+            <summary>
+            Měří dobu trvání jednotlivých akcí, ty je možné opakovat, pak vypíše také počet zavolání akce, u nedokončené akce je o tom také info ve výpisu.
+            Metody Start(akce) a End(akce) jsou párové. Metoda Akce(akce) měří délku do dalšího volání Akce(akce2), explicitně možno ukončit přes AkceEnd(akce).
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.TimeMeasure.m_times">
+            <summary>
+            Dictionary s informací o měřených akcích, key = akce, value = object[] {Stopwatch, count}
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.TimeMeasure.Print(System.Int32)">
+            <summary>
+            Výpis časů, pokud dojde k chybě
+            </summary>
+            <param name="minSeconds">min. doba trvání akce, aby se zobrazila ve výpisu (parametrem 'print' metody Akce() a Start() je možné výpis vynutit bez ohledu na 'minSeconds')</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.TimeMeasure.Akce(System.String,System.Boolean)">
+            <summary>
+            Změří délku akce, měření se ukončí po zavolání další metody Akce(akce) a nebo po zavolání AkceEnd(akce).
+            Pokud se volá akce opakovaně, roste čas a count dané akce.
+            </summary>
+            <param name="akce">ID akce, mělo by být unikátní (hlavně nemotat ID akce v Akce() a Start())</param>
+            <param name="print">zda bude vytištěno bez ohledu na minSeconds metody Print()</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.TimeMeasure.AkceEnd(System.String)">
+            <summary>
+            Ukončení akce, po které neprobíhá další akce, aby byla zkrátka ukončena
+            </summary>
+            <param name="akce">ID akce</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.TimeMeasure.Start(System.String,System.Boolean)">
+            <summary>
+            Změří délku akce, čas se ukončí voláním metody End(akce), současně ukončí trvání předchozí Akce(akce);
+            </summary>
+            <param name="akce">ID akce, mělo by být unikátní (hlavně nemotat ID akce v Akce() a Start())</param>
+            <param name="print">zda bude vytištěno bez ohledu na minSeconds metody Print()</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.TimeMeasure.End(System.String)">
+            <summary>
+            Ukončí čas pro akci zahájenou voláním Start(akce).
+            </summary>
+            <param name="akce">ID akce</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.MatsnsbDataSet">
+             <summary>
+            Represents a strongly typed in-memory cache of data.
+            </summary>
+             <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.MatsnsbDataSet.tableMatsnsb">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.MatsnsbDataSet.Matsnsb">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.MatsnsbDataSet._schemaSerializationMode">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.MatsnsbDataSet.SchemaSerializationMode">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.#ctor">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.InitializeDerivedDataSet">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.Clone">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.ShouldSerializeTables">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.ShouldSerializeRelations">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.ReadXmlSerializable(System.Xml.XmlReader)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.GetSchemaSerializable">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.InitVars">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.InitVars(System.Boolean)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.InitClass">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.ShouldSerializeMatsnsb">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.SchemaChanged(System.Object,System.ComponentModel.CollectionChangeEventArgs)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.GetTypedDataSetSchema(System.Xml.Schema.XmlSchemaSet)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.MatsnsbDataSet.Tables">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.MatsnsbDataSet.Relations">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbRowChangeEventHandler">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable">
+             <summary>
+            Represents the strongly named DataTable class.
+            </summary>
+             <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.columnnsc">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.columnrokmes_od">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.columnueb">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.columnrokmes_do">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.columnueb_txt">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.nscColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.rokmes_odColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.uebColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.rokmes_doColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.ueb_txtColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.Count">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.Item(System.Int32)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="E:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.MatsnsbRowChanging">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="E:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.MatsnsbRowChanged">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="E:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.MatsnsbRowDeleting">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="E:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.MatsnsbRowDeleted">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.#ctor">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.#ctor(System.Data.DataTable)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.AddMatsnsbRow(Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbRow)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.System#Collections#IEnumerable#GetEnumerator">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.Clone">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.CreateInstance">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.InitVars">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.InitClass">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.NewMatsnsbRow">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.NewRowFromBuilder(System.Data.DataRowBuilder)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.OnRowChanged(System.Data.DataRowChangeEventArgs)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.OnRowChanging(System.Data.DataRowChangeEventArgs)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.OnRowDeleted(System.Data.DataRowChangeEventArgs)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.OnRowDeleting(System.Data.DataRowChangeEventArgs)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.RemoveMatsnsbRow(Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbRow)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.GetTypedTableSchema(System.Xml.Schema.XmlSchemaSet)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.Rows">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.AddMatsnsbRow(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.AddMatsnsbRow">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbDataTable.GetEnumerator">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbRow">
+             <summary>
+            Represents strongly named DataRow class.
+            </summary>
+             <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbRow.tableMatsnsb">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbRow.#ctor(System.Data.DataRowBuilder)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbRow.nsc">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbRow.rokmes_od">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbRow.ueb">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbRow.rokmes_do">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbRow.ueb_txt">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbRowChangeEvent">
+             <summary>
+            Row event argument class
+            </summary>
+             <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbRowChangeEvent.eventRow">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbRowChangeEvent.eventAction">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbRowChangeEvent.#ctor(Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbRow,System.Data.DataRowAction)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbRowChangeEvent.Row">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.MatsnsbDataSet.MatsnsbRowChangeEvent.Action">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.MatsnsbDataSet.ColMatsnsb">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.MatsnsbDataSet.ColMatsnsb.nsc">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.MatsnsbDataSet.ColMatsnsb.rokmes_od">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.MatsnsbDataSet.ColMatsnsb.ueb">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.MatsnsbDataSet.ColMatsnsb.rokmes_do">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.MatsnsbDataSet.ColMatsnsb.ueb_txt">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.Gordic_Xrg_WsMudServer">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.Gordic_Xrg_WsMudServer.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.Gordic_Xrg_WsMudServer.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.Gordic_Xrg_WsMudServer._159">
+            <summary>
+              Looks up a localized string similar to #Majetek není v účetní evidenci..
+            </summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.GWsMudDataException">
+            <summary>Výjimka aplikační logiky pro ws Mud </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudDataException.#ctor(System.Int32,System.Int32,System.Object[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudDataException.#ctor(System.Int32,System.Int32,System.Exception,System.Object[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="innerException">vnitřní vyjímka</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.GWsMudServerException">
+            <summary> Výjimka aplikační logiky pro ws Mud </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudServerException.#ctor(System.Int32,System.Int32,System.Object[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudServerException.#ctor(System.Int32,System.Int32,System.Exception,System.Object[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="innerException">vnitřní vyjímka</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.GWsMudStatic">
+            <summary>Statická třída aplikační logiky pro WS-MUD</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudStatic.GStr(Gordic.General.GDbType)">
+            <summary>
+            Převede DbType na hodnotu string
+            </summary>
+            <param name="oDbType">GDbType hodnota</param>
+            <returns>hodnota převedená na string, a pokud je hodnota NULL, tak string 'NULL'</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudStatic.GStrApo(Gordic.General.GDbType)">
+            <summary>
+            Převede DbType na hodnotu string obalenou apostrofy "'"
+            </summary>
+            <param name="oDbType">GDbType hodnota</param>
+            <returns>hodnota převedená na string, a pokud je hodnota NULL, tak string 'NULL'</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudStatic.Str(System.Object)">
+            <summary>
+            Převede DbType na hodnotu string
+            </summary>
+            <param name="o"></param>
+            <returns>hodnota převedená na string, a pokud je hodnota NULL, tak string 'NULL'</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudStatic.StrApo(System.Object)">
+            <summary>
+            Převede DbType na hodnotu string obalenou apostrofy "'"
+            </summary>
+            <param name="o"></param>
+            <returns>hodnota převedená na string, a pokud je hodnota NULL, tak string 'NULL'</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudStatic.ObjectsToStrings(System.Object[])">
+            <summary>
+            Převede pole objektů na pole stringů do výjimek
+            </summary>
+            <param name="parameters">parametry typu objekt</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudStatic.ObjectToString(System.Object)">
+            <summary>
+            Převede objekt na string do výjimek
+            </summary>
+            <param name="o">parametry typu objekt</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWsMudStatic.GetNonNullDistinctValues(System.Data.DataTable,System.String)">
+            <summary>
+            Vrátí setříděné non null distinct hodnoty. Vhodné pro použití ve WHERE sl IN (...)
+            </summary>
+            <param name="dt">zdrojová datatable</param>
+            <param name="sl">název sloupce</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.GXrgMudServiceLogic">
+            <summary>XRG - aplikační logika služby MUD</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GXrgMudServiceLogic.m_oOriginalServiceLogic">
+            <summary>aplikační logika původní služby</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.GXrgMudServiceLogic.OriginalServiceLogic">
+            <summary>aplikační logika původní služby</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.GXrgMudServiceLogic.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GXrgMudServiceLogic.GetRequestDataset(System.String,System.String)">
+            <summary>získání prázdného datasetu pro vstupní data</summary>
+            <param name="methodName">název metody</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat</param>
+            <returns>prázdná instance datasetu pro vstupní data, v případě vrácení hodnoty null nebudou načítána žádná vstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GXrgMudServiceLogic.ProcessRequest(System.String,System.String,Gordic.General.GDataSet)">
+            <summary>zpracování vstupních dat</summary>
+            <param name="methodName">název metody</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat</param>
+            <param name="requestDataSet">dataset se vstupními daty</param>
+            <returns>dataset s výstupními daty nebo null v případě, že nemají být vrácena žádná výstupní data</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.GMudWebService">
+            <summary>
+            Server webových služeb MUD - vlastní web service
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GMudWebService.TestNamespace(System.String,System.String)">
+            <summary>
+            Test namespace.
+            </summary>
+            <param name="messageName">metoda</param>
+            <param name="requestNamespace">zadaný namespace</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GMudWebService.GetRequestSchemaFileName(System.String,System.String)">
+            <summary>získání názvu souboru obsahujícího XML schéma pro validaci vstupních dat webové služby</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <returns>název souboru s XML schématem ( tj. *.xsd ), v případě vrácení hodnoty null nebo prázdného řetězce nebmud kontrola vstupních dat webové služby provedena</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GMudWebService.GetRequestDataset(System.String,System.String)">
+            <summary>získání prázdného typového datasetu pro načtení vstupních dat</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <returns>prázdná instance typového datasetu určená pro načtení vstupních dat nebo hodnota null v případě, že aplikační logika webové služby vstupní data neočekává</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GMudWebService.ProcessRequest(System.String,System.String,System.Data.DataSet)">
+            <summary>zpracování vstupních dat webové služby</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <param name="requestDataSet">instance typového datasetu naplněná vstupními daty webové služby</param>
+            <returns>dataset s výstupními daty webové služby, nebo null v případě, že webová služba nevrací žádná data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GMudWebService.LicenceNks(Gordic.General.GString)">
+            <summary>
+            Vrátí licenci tohoto NKS
+            </summary>
+            <param name="nks">nks</param>
+            <returns>licence</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80">
+            <summary>
+            Package   : 
+            Procedure : spg_matodpmkiuo80
+            Version   : 383.1
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.a_com_mode">
+            <summary>rezim commitu po generaci IXP  0 ne, 1 commit</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.a_ixs_lpc">
+            <summary>382.2 id původce změny</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.ico_p">
+            <summary>ico_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.ucs_p">
+            <summary>ucs_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.nks_p">
+            <summary>nks_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.lic_p">
+            <summary>lic_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.ixs_fun_akt_p">
+            <summary>zpracovatel dokladu - v případě WS se jedná o a_ixs_fun procedury spg_matseglhdex72</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.ixs_su_akt_p">
+            <summary>jeho spisový uzel - v případě WS se jedná o a_ixs_su procedury spg_matseglhdex72</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.zmenu_prov_p">
+            <summary>v případě WS se jedná o a_zmenu_prov procedury spg_matseglhdex72</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.rok_p">
+            <summary>účetní období - v případě WS ho vrací spg_matseglhdko dokladu vyřazení - l_rok_obd</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.uus_p">
+            <summary>UUS - v případě WS ho vrací spg_matseglhdko dokladu vyřazení - l_uus</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.ixs_vpk_p">
+            <summary>ID způsobu účtování - v případě WS ho vrací spg_matseglhdko dokladu vyřazení - l_ixs_vpk</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.dat_uup_p">
+            <summary>datum UUP - v případě WS se jedná o datum UUP dokladu vyřazení - l_dat_uup</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.ixp_p">
+            <summary>PID dokladu - pokud je null, podá se doklad automaticky</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.a_ikc">
+            <summary>383.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.outparam_1">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.SetInParams(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GInt64)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GInt64)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matodpmkiuo80.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.gspg_matseglhdko90">
+            <summary>
+            Package   : 
+            Procedure : spg_matseglhdko90
+            Version   : 390.1
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_com_mode">
+            <summary>rezim commitu po generaci IXP  0 ne, 1 commit</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_ixs_ext">
+            <summary>383.1 identifikátor externího systému</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_lic">
+            <summary>a_lic - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_ico">
+            <summary>a_ico - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_ucs">
+            <summary>a_ucs - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_typ_volani">
+            <summary>typ volání 0 = externí ( LHD ), 1 = interní ( LHDI )</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_vyd">
+            <summary>a_vyd - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_ac_vyd">
+            <summary>a_ac_vyd - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_pri">
+            <summary>a_pri - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_ac_pri">
+            <summary>a_ac_pri - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_nks">
+            <summary>a_nks - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_dat_vyd">
+            <summary>a_dat_vyd - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_dat_pri">
+            <summary>a_dat_pri - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_dat_uup">
+            <summary>a_dat_uup - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_ps_fak">
+            <summary>a_ps_fak - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_ueg">
+            <summary>a_ueg - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_popis">
+            <summary>a_popis - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_id_dok">
+            <summary>a_id_dok - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_is_dok">
+            <summary>a_is_dok - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_ac_xxx">
+            <summary>a_ac_xxx - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_typ_poh">
+            <summary>a_typ_poh - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_status_poh">
+            <summary>a_status_poh - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_status_mud">
+            <summary>a_status_mud - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_ico_vyd">
+            <summary>a_ico_vyd - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_ico_pri">
+            <summary>a_ico_pri - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_cislo_sml">
+            <summary>390.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_sd_dat_vyd">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_sd_jmeno_vyd">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_sd_prijmeni_vyd">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_sd_id_issp_vyd">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_sd_dat_pri">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_sd_jmeno_pri">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_sd_prijmeni_pri">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.a_sd_id_issp_pri">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_err_sql">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_err_isam">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_cislo">
+            <summary>o_cislo - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_vyd">
+            <summary>o_vyd - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_ac_vyd">
+            <summary>o_ac_vyd - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_pri">
+            <summary>o_pri - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_ac_pri">
+            <summary>o_ac_pri - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_nks">
+            <summary>o_nks - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_dat_vyd">
+            <summary>o_dat_vyd - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_dat_pri">
+            <summary>o_dat_pri - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_dat_uup">
+            <summary>o_dat_uup - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_ps_fak">
+            <summary>o_ps_fak - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_ueg">
+            <summary>o_ueg - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_popis">
+            <summary>o_popis - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_id_dok">
+            <summary>o_id_dok - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_is_dok">
+            <summary>o_is_dok - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_ac_xxx">
+            <summary>o_ac_xxx - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_typ_poh">
+            <summary>o_typ_poh - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_status_poh">
+            <summary>o_status_poh - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_status_mud">
+            <summary>o_status_mud - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_ico_vyd">
+            <summary>o_ico_vyd - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_ico_pri">
+            <summary>o_ico_pri - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_cislo_sml">
+            <summary>o_cislo_sml - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_ixp">
+            <summary>o_ixp - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_ixp_den">
+            <summary>o_ixp_den - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_ixs_vpk">
+            <summary>o_ixs_vpk - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_uus">
+            <summary>o_uus - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_rok_obd">
+            <summary>o_rok_obd - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_sd_dat_vyd">
+            <summary>o_sd_dat_vyd - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_sd_jmeno_vyd">
+            <summary>o_sd_jmeno_vyd - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_sd_prijmeni_vyd">
+            <summary>o_sd_prijmeni_vyd - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_sd_id_issp_vyd">
+            <summary>o_sd_id_issp_vyd - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_sd_ixs_ref_vyd">
+            <summary>o_sd_ixs_ref_vyd - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_sd_dat_pri">
+            <summary>o_sd_dat_pri - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_sd_jmeno_pri">
+            <summary>o_sd_jmeno_pri - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_sd_prijmeni_pri">
+            <summary>o_sd_prijmeni_pri - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_sd_id_issp_pri">
+            <summary>o_sd_id_issp_pri - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.o_sd_ixs_ref_pri">
+            <summary>o_sd_ixs_ref_pri - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.SetInParams(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.DbExecute(System.Int32)">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdko90.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80">
+            <summary>
+            Package   : 
+            Procedure : spg_matseglhdzp80
+            Version   : 383.1
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_com_mode">
+            <summary>rezim commitu po generaci IXP  0 ne, 1 commit</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_ixs_ext">
+            <summary>383.1 identifikátor externího systému</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_ixs_lpc">
+            <summary>382.2 id původce změny</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_lic">
+            <summary>a_lic - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_ico">
+            <summary>a_ico - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_ucs">
+            <summary>a_ucs - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_ixs_fun">
+            <summary>a_ixs_fun - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_ixs_su">
+            <summary>a_ixs_su - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_ixs_zmp">
+            <summary>a_ixs_zmp - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_typ_volani">
+            <summary>typ volání 0 = externí ( LHD ), 1 = interní ( LHDI )</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_vyd">
+            <summary>a_vyd - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_ac_vyd">
+            <summary>a_ac_vyd - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_pri">
+            <summary>a_pri - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_ac_pri">
+            <summary>a_ac_pri - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_nks">
+            <summary>a_nks - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_dat_vyd">
+            <summary>a_dat_vyd - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_dat_pri">
+            <summary>a_dat_pri - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_dat_uup">
+            <summary>a_dat_uup - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_ps_fak">
+            <summary>a_ps_fak - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_ueg">
+            <summary>a_ueg - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_popis">
+            <summary>a_popis - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_id_dok">
+            <summary>a_id_dok - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_is_dok">
+            <summary>a_is_dok - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_ac_xxx">
+            <summary>a_ac_xxx - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_typ_poh">
+            <summary>a_typ_poh - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_status_poh">
+            <summary>a_status_poh - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_status_mud">
+            <summary>a_status_mud - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_ixp_int">
+            <summary>a_ixp_int - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_ixp_den">
+            <summary>a_ixp_den - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_ixs_vpk">
+            <summary>a_ixs_vpk - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_sd_dat_vyd">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_sd_jmeno_vyd">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_sd_prijmeni_vyd">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_sd_id_issp_vyd">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_sd_ixs_ref_vyd">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_sd_dat_pri">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_sd_jmeno_pri">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_sd_prijmeni_pri">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_sd_id_issp_pri">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_sd_ixs_ref_pri">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_ico_vyd">
+            <summary>372.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.a_ico_pri">
+            <summary>372.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.err_sql">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.err_isam">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.cislo">
+            <summary>cislo - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.ixp">
+            <summary>ixp - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.SetInParams(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdzp80.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.gspg_matodpisl">
+            <summary>
+            Package   : 
+            Procedure : spg_matodpisl
+            Version   : 382.1
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matodpisl.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matodpisl.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpisl.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpisl.a_com_mode">
+            <summary>rezim commitu po generaci IXP  0 ne, 1 commit</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpisl.a_inv_cis">
+            <summary>inventární číslo majetku</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpisl.a_doba_uziti">
+            <summary>požadovaná doba používání majetku</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpisl.a_c_zbytek_proc_u">
+            <summary>požadované procento zbytkové hodnoty</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpisl.a_zmenu_prov">
+            <summary>a_zmenu_prov - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpisl.outparam_1">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpisl.sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpisl.isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpisl.txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matodpisl.lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matodpisl.SetInParams(Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GDecimal,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matodpisl.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GDecimal,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matodpisl.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matodpisl.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.gspg_matseglhdko">
+            <summary>
+            Package   : 
+            Procedure : spg_matseglhdko
+            Version   : 383.1
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdko.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdko.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_com_mode">
+            <summary>rezim commitu po generaci IXP  0 ne, 1 commit</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_ixs_ext">
+            <summary>383.1 identifikátor externího systému</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_lic">
+            <summary>a_lic - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_ico">
+            <summary>a_ico - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_ucs">
+            <summary>a_ucs - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_typ_volani">
+            <summary>typ volání 0 = externí ( LHD ), 1 = interní ( LHDI )</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_vyd">
+            <summary>a_vyd - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_ac_vyd">
+            <summary>a_ac_vyd - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_pri">
+            <summary>a_pri - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_ac_pri">
+            <summary>a_ac_pri - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_nks">
+            <summary>a_nks - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_dat_vyd">
+            <summary>a_dat_vyd - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_dat_pri">
+            <summary>a_dat_pri - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_dat_uup">
+            <summary>a_dat_uup - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_ps_fak">
+            <summary>a_ps_fak - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_ueg">
+            <summary>a_ueg - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_popis">
+            <summary>a_popis - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_id_dok">
+            <summary>a_id_dok - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_is_dok">
+            <summary>a_is_dok - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_ac_xxx">
+            <summary>a_ac_xxx - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_typ_poh">
+            <summary>a_typ_poh - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_status_poh">
+            <summary>a_status_poh - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_status_mud">
+            <summary>a_status_mud - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_ico_vyd">
+            <summary>a_ico_vyd - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_ico_pri">
+            <summary>a_ico_pri - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_sd_dat_vyd">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_sd_jmeno_vyd">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_sd_prijmeni_vyd">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_sd_id_issp_vyd">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_sd_dat_pri">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_sd_jmeno_pri">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_sd_prijmeni_pri">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.a_sd_id_issp_pri">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_err_sql">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_err_isam">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_cislo">
+            <summary>o_cislo - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_vyd">
+            <summary>o_vyd - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_ac_vyd">
+            <summary>o_ac_vyd - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_pri">
+            <summary>o_pri - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_ac_pri">
+            <summary>o_ac_pri - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_nks">
+            <summary>o_nks - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_dat_vyd">
+            <summary>o_dat_vyd - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_dat_pri">
+            <summary>o_dat_pri - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_dat_uup">
+            <summary>o_dat_uup - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_ps_fak">
+            <summary>o_ps_fak - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_ueg">
+            <summary>o_ueg - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_popis">
+            <summary>o_popis - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_id_dok">
+            <summary>o_id_dok - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_is_dok">
+            <summary>o_is_dok - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_ac_xxx">
+            <summary>o_ac_xxx - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_typ_poh">
+            <summary>o_typ_poh - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_status_poh">
+            <summary>o_status_poh - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_status_mud">
+            <summary>o_status_mud - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_ico_vyd">
+            <summary>o_ico_vyd - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_ico_pri">
+            <summary>o_ico_pri - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_ixp">
+            <summary>o_ixp - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_ixp_den">
+            <summary>o_ixp_den - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_ixs_vpk">
+            <summary>o_ixs_vpk - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_uus">
+            <summary>o_uus - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_rok_obd">
+            <summary>o_rok_obd - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_sd_dat_vyd">
+            <summary>o_sd_dat_vyd - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_sd_jmeno_vyd">
+            <summary>o_sd_jmeno_vyd - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_sd_prijmeni_vyd">
+            <summary>o_sd_prijmeni_vyd - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_sd_id_issp_vyd">
+            <summary>o_sd_id_issp_vyd - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_sd_ixs_ref_vyd">
+            <summary>o_sd_ixs_ref_vyd - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_sd_dat_pri">
+            <summary>o_sd_dat_pri - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_sd_jmeno_pri">
+            <summary>o_sd_jmeno_pri - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_sd_prijmeni_pri">
+            <summary>o_sd_prijmeni_pri - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_sd_id_issp_pri">
+            <summary>o_sd_id_issp_pri - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdko.o_sd_ixs_ref_pri">
+            <summary>o_sd_ixs_ref_pri - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdko.SetInParams(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdko.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdko.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdko.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90">
+            <summary>
+            Package   : 
+            Procedure : spg_matseglhdzp90
+            Version   : 390.1
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_com_mode">
+            <summary>rezim commitu po generaci IXP  0 ne, 1 commit</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_ixs_ext">
+            <summary>383.1 identifikátor externího systému</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_ixs_lpc">
+            <summary>382.2 id původce změny</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_lic">
+            <summary>a_lic - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_ico">
+            <summary>a_ico - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_ucs">
+            <summary>a_ucs - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_ixs_fun">
+            <summary>a_ixs_fun - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_ixs_su">
+            <summary>a_ixs_su - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_ixs_zmp">
+            <summary>a_ixs_zmp - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_typ_volani">
+            <summary>typ volání 0 = externí ( LHD ), 1 = interní ( LHDI )</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_vyd">
+            <summary>a_vyd - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_ac_vyd">
+            <summary>a_ac_vyd - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_pri">
+            <summary>a_pri - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_ac_pri">
+            <summary>a_ac_pri - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_nks">
+            <summary>a_nks - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_dat_vyd">
+            <summary>a_dat_vyd - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_dat_pri">
+            <summary>a_dat_pri - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_dat_uup">
+            <summary>a_dat_uup - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_ps_fak">
+            <summary>a_ps_fak - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_ueg">
+            <summary>a_ueg - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_popis">
+            <summary>a_popis - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_id_dok">
+            <summary>a_id_dok - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_is_dok">
+            <summary>a_is_dok - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_ac_xxx">
+            <summary>a_ac_xxx - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_typ_poh">
+            <summary>a_typ_poh - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_status_poh">
+            <summary>a_status_poh - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_status_mud">
+            <summary>a_status_mud - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_ixp_int">
+            <summary>a_ixp_int - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_ixp_den">
+            <summary>a_ixp_den - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_ixs_vpk">
+            <summary>a_ixs_vpk - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_sd_dat_vyd">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_sd_jmeno_vyd">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_sd_prijmeni_vyd">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_sd_id_issp_vyd">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_sd_ixs_ref_vyd">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_sd_dat_pri">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_sd_jmeno_pri">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_sd_prijmeni_pri">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_sd_id_issp_pri">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_sd_ixs_ref_pri">
+            <summary>370.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_ico_vyd">
+            <summary>372.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_ico_pri">
+            <summary>372.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.a_cislo_sml">
+            <summary>390.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.err_sql">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.err_isam">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.cislo">
+            <summary>cislo - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.ixp">
+            <summary>ixp - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.SetInParams(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.DbExecute(System.Int32)">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglhdzp90.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.gspg_matseglpdex83">
+            <summary>
+            Package   : 
+            Procedure : spg_matseglpdex83
+            Version   : 383.1
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_com_mode">
+            <summary>rezim commitu po generaci IXP  0 ne, 1 commit</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_ixs_ext">
+            <summary>383.1 identifikátor externího systému</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_ixs_lpc">
+            <summary>382.1 id původce změny</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_lic">
+            <summary>a_lic - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_ico">
+            <summary>a_ico - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_ucs">
+            <summary>a_ucs - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_uus">
+            <summary>a_uus - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_zmenu_prov">
+            <summary>a_zmenu_prov - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_typ_volani">
+            <summary>typ volání 0 = externí ( LPD ), 1 = interní ( LPDI )</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_ixp">
+            <summary>a_ixp - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_id_dok">
+            <summary>a_id_dok - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_is_dok">
+            <summary>a_is_dok - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_typ_poh_dok">
+            <summary>a_typ_poh_dok - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_status_poh">
+            <summary>a_status_poh - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_nks">
+            <summary>a_nks - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_ixs_vpk">
+            <summary>a_ixs_vpk - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_dat_uup">
+            <summary>a_dat_uup - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_ixp_den">
+            <summary>a_ixp_den - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_vyd">
+            <summary>a_vyd - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_ico_vyd">
+            <summary>372.2</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_ac_vyd">
+            <summary>a_ac_vyd - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_pri">
+            <summary>a_pri - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_ac_pri">
+            <summary>a_ac_pri - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_ps_fak">
+            <summary>a_ps_fak - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_ueg">
+            <summary>a_ueg - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_dat_vyd">
+            <summary>a_dat_vyd - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_dat_pri">
+            <summary>a_dat_pri - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_rok_obd">
+            <summary>a_rok_obd - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_kod_pohyb">
+            <summary>a_kod_pohyb - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_idk">
+            <summary>a_idk - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_idk_kat">
+            <summary>ověřit, jak bylo naplněno rozborem segmentu</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_ueab_evi">
+            <summary>a_ueab_evi - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_ueab_evi_krt">
+            <summary>a_ueab_evi_krt - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_c">
+            <summary>a_c - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_m">
+            <summary>a_m - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_rok_vyr">
+            <summary>a_rok_vyr - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_ser_cis">
+            <summary>a_ser_cis - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_vyr_cis">
+            <summary>a_vyr_cis - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_evi_cis">
+            <summary>a_evi_cis - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_inv_cis">
+            <summary>a_inv_cis - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_dat_por">
+            <summary>a_dat_por - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_mj">
+            <summary>a_mj - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_id_pol">
+            <summary>a_id_pol - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_is_pol">
+            <summary>a_is_pol - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_typ_poh">
+            <summary>shodné s a_typ_poh_dok</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_skupina_id">
+            <summary>a_skupina_id - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_ser_cislo_tzh">
+            <summary>od 356 nově doplněno do LPD -- formou složeniny licence a pořadového čísla záznamu - formát LLLLXXXXXXXX</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_lic_tzh">
+            <summary>od 356 nově doplněno do LPD -- formou složeniny licence a pořadového čísla záznamu - formát LLLLXXXXXXXX</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_dat_tzh">
+            <summary>od 356 nově doplněno do LPD</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_naklad_uz">
+            <summary>od 356 nově doplněno do LPD</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_naklad_uko">
+            <summary>od 356 nově doplněno do LPD</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_naklad_cin">
+            <summary>od 356 nově doplněno do LPD</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_dev">
+            <summary>od 357 nově doplněno do LPD - dev je součástí položky dokladu</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_drh_id">
+            <summary>358.1 LPDI</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_typ_soubor">
+            <summary>358.1 LPDI</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_inv_cis_soubor">
+            <summary>358.1 LPDI</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_skupina_typ">
+            <summary>358.1 LPDI</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_tka">
+            <summary>358.2 LPDI</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_id_krt_dev">
+            <summary>364.1 identifikátor karty vzniklé v důsledku ocenění reálnou hodnotou, opravnou položkou (změnou dev)</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_c_poriz">
+            <summary>364.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_c_opr_pol">
+            <summary>364.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_c_real">
+            <summary>364.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_c_dotace">
+            <summary>365.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_last_row">
+            <summary>358.2 příznak, zda se jedná o poslední položku dokladu; poslední položka = 1, jinak 0</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_dat_pro">
+            <summary>366.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_mena">
+            <summary>366.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_c_mena_real">
+            <summary>366.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_c_opr">
+            <summary>366.3</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_ke_pap">
+            <summary>368.3</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_ico_esu">
+            <summary>372.1 LPDI</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.a_lokace">
+            <summary>374.1 LPDI</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.o_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.o_err_sql">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.o_err_isam">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.o_txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.o_cislo_chyby">
+            <summary>o_cislo_chyby - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.o_id_polozky">
+            <summary>o_id_polozky - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.o_is_polozky">
+            <summary>o_is_polozky - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.o_inventarni_cislo">
+            <summary>o_inventarni_cislo - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.o_celkova_cena">
+            <summary>o_celkova_cena - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.o_cislo_uctu_ev_krt">
+            <summary>o_cislo_uctu_ev_krt - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.o_spl_mode">
+            <summary>o_spl_mode - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.o_c_sou">
+            <summary>o_c_sou - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.SetInParams(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GInt16,Gordic.General.GDate,Gordic.General.GInt16,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GInt16,Gordic.General.GDate,Gordic.General.GInt16,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.gspg_matseglpdex83.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.GWmMudPrehledMajetkuCeny">
+            <summary>
+            Aplikační logika metody Prehled-majetku-ceny webové služby MUD
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudPrehledMajetkuCeny.m_oZaznam">
+            <summary>
+            Rušený záznam
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudPrehledMajetkuCeny.Execute(Gordic.Xrg.WsMudInterface.PrehledMajetkuCenyRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudPrehledMajetkuCeny.ExecuteWebMethod(Gordic.Xrg.WsMudInterface.PrehledMajetkuCenyRequestDataSet)">
+            <summary>Volání zpracovávajících metod</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudPrehledMajetkuCeny.ZpracujVstupniDataset(Gordic.Xrg.WsMudInterface.PrehledMajetkuCenyRequestDataSet)">
+            <summary>Otestuje a naformátuje vstupní data webové služby</summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.GWmMudZmenaOdpisovychUdaju">
+            <summary>
+            Aplikační logika metody Zmena-odpisovych-udaju webové služby MUD
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZmenaOdpisovychUdaju.m_oZaznam">
+            <summary>
+            Rušený záznam
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZmenaOdpisovychUdaju.Execute(Gordic.Xrg.WsMudInterface.ZmenaOdpisovychUdajuRequestDataSet)">
+            <summary>Provedení webové metody</summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZmenaOdpisovychUdaju.ExecuteWebMethod(Gordic.Xrg.WsMudInterface.ZmenaOdpisovychUdajuRequestDataSet)">
+            <summary>Volání zpracovávajících metod</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZmenaOdpisovychUdaju.ZpracujVstupniDataset(Gordic.Xrg.WsMudInterface.ZmenaOdpisovychUdajuRequestDataSet)">
+            <summary>Otestuje a naformátuje vstupní data webové služby</summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.GWmMudPevneOmezeniNs">
+            <summary>
+            Aplikační logika metody Pevne-omezeni-ns webové služby MUD
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudPevneOmezeniNs.m_oZaznam">
+            <summary>
+            Rušený záznam
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudPevneOmezeniNs.Execute(Gordic.Xrg.WsMudInterface.PevneOmezeniNsRequestDataSet)">
+            <summary>Provedení webové metody</summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudPevneOmezeniNs.ExecuteWebMethod(Gordic.Xrg.WsMudInterface.PevneOmezeniNsRequestDataSet)">
+            <summary>Volání zpracovávajících metod</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudPevneOmezeniNs.PevneOmezeniFunkce(Gordic.General.GString)">
+            <summary>
+            Naplnění výstupního datasetu
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudPevneOmezeniNs.ZpracujVstupniDataset(Gordic.Xrg.WsMudInterface.PevneOmezeniNsRequestDataSet)">
+            <summary>Otestuje a naformátuje vstupní data webové služby</summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.GWmMudZaznamKodRegistru">
+            <summary>
+            Aplikační logika metody Zaznam-kod-registru webové služby MUD
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKodRegistru.m_oZaznam">
+            <summary>
+            Vkládaný/opravovaný záznam číselníku kod-registru
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKodRegistru.Execute(System.String,Gordic.Xrg.WsMudInterface.ZaznamKodRegistruRequestDataSet,System.Xml.XmlNode,System.Xml.XmlNode@)">
+            <summary>
+            V závislosti na parametru Katalog-metody-url zavolá klasický Execute nebo provede přesměrování na jinou Url
+            </summary>
+            <param name="metoda">název metody</param>
+            <param name="evidenceDokladuRequestDataSet">request dataset</param>
+            <param name="requestNode">req. node</param>
+            <param name="responseNode">resp. node</param>
+            <returns>response dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKodRegistru.Execute(Gordic.Xrg.WsMudInterface.ZaznamKodRegistruRequestDataSet)">
+            <summary>Provedení webové metody</summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKodRegistru.ExecuteWebMethod(Gordic.Xrg.WsMudInterface.ZaznamKodRegistruRequestDataSet)">
+            <summary>Volání zpracovávajících metod</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKodRegistru.ZpracujVstupniDataset(Gordic.Xrg.WsMudInterface.ZaznamKodRegistruRequestDataSet)">
+            <summary>Otestuje a naformátuje vstupní data webové služby</summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKodRegistru.ZaznamExistuje">
+            <summary>
+            Zjistí, jestli už záznam existuje -> podle toho se bude provádět INSERT nebo UPDATE
+            provádí se to přes select count(*) nad primárním klíčem by to nemělo nijak moc zatěžovat stroj
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKodRegistru.VlozZaznam">
+            <summary>Vlastní vložení záznamu v číselníku kod-registru</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKodRegistru.OpravZaznam">
+            <summary>Vlastní oprava záznamu v číselníku kod-registru</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKodRegistru.VytvorVystupniDataSet">
+            <summary>Naformátuje výstupní DataSet</summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.GWmMudZrusZaznamNscAu">
+            <summary>
+            Aplikační logika metody Zaznam-nsc-au webové služby MUD
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZrusZaznamNscAu.m_oZaznam">
+            <summary>
+            Rušený záznam
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZrusZaznamNscAu.Execute(System.String,Gordic.Xrg.WsMudInterface.ZrusZaznamNscAuRequestDataSet,System.Xml.XmlNode,System.Xml.XmlNode@)">
+            <summary>
+            V závislosti na parametru Katalog-metody-url zavolá klasický Execute nebo provede přesměrování na jinou Url
+            </summary>
+            <param name="metoda">název metody</param>
+            <param name="evidenceDokladuRequestDataSet">request dataset</param>
+            <param name="requestNode">req. node</param>
+            <param name="responseNode">resp. node</param>
+            <returns>response dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZrusZaznamNscAu.Execute(Gordic.Xrg.WsMudInterface.ZrusZaznamNscAuRequestDataSet)">
+            <summary>Provedení webové metody</summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZrusZaznamNscAu.ExecuteWebMethod(Gordic.Xrg.WsMudInterface.ZrusZaznamNscAuRequestDataSet)">
+            <summary>Volání zpracovávajících metod</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZrusZaznamNscAu.ZpracujVstupniDataset(Gordic.Xrg.WsMudInterface.ZrusZaznamNscAuRequestDataSet)">
+            <summary>Otestuje a naformátuje vstupní data webové služby</summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZrusZaznamNscAu.ZrusZaznamMatsnsa">
+            <summary>Smazání záznamu v tabulce matsnsa</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZrusZaznamNscAu.VytvorVystupniDataSet">
+            <summary>Naformátuje výstupní DataSet</summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.GWmMudZaznamNscAu">
+            <summary>
+            Aplikační logika metody Zaznam-nsc-au webové služby MUD
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamNscAu.m_oZaznam">
+            <summary>
+            Vkládaný/opravovaný záznam
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNscAu.Execute(System.String,Gordic.Xrg.WsMudInterface.ZaznamNscAuRequestDataSet,System.Xml.XmlNode,System.Xml.XmlNode@)">
+            <summary>
+            V závislosti na parametru Katalog-metody-url zavolá klasický Execute nebo provede přesměrování na jinou Url
+            </summary>
+            <param name="metoda">název metody</param>
+            <param name="evidenceDokladuRequestDataSet">request dataset</param>
+            <param name="requestNode">req. node</param>
+            <param name="responseNode">resp. node</param>
+            <returns>response dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNscAu.Execute(Gordic.Xrg.WsMudInterface.ZaznamNscAuRequestDataSet)">
+            <summary>Provedení webové metody</summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNscAu.ExecuteWebMethod(Gordic.Xrg.WsMudInterface.ZaznamNscAuRequestDataSet)">
+            <summary>Volání zpracovávajících metod</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNscAu.SynchronizaceMatsnsb">
+            <summary>
+            Synchronizace tabulky matsnsb s tabulkou matsnsa.
+            Nezvládne akce typu, že přijde nějaký id_nscau a pak na něj přijde update a zmenší příslušné období - zkrátka je hraju žravou...
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNscAu.ExistujeJenRadekDo">
+            <summary>
+            Existuje jen RadekDo
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNscAu.ExistujeJenRadekOd">
+            <summary>
+            Existuje jen RadekOd
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNscAu.RadekOdARadekDoJsouRuzneRadky">
+            <summary>
+            RadekOd je jiný než RadekDo
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNscAu.RadekOdARadekDoJsouJedenRadek">
+            <summary>
+            RadekOd a RadekDo jsou jeden a ten samý řádek
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNscAu.ZneaktivniRadekDo">
+            <summary>
+            Nastavení aktivity RadkuDo na 500
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNscAu.PosunZacatkuObdobiRadkuDo">
+            <summary>
+            Posun začátku období RadkuDo o měsíc za konec RadkuNoveho,
+            pokud RadekNovy končí stejném měsíci jako RadekDo, tak nejde kam posunout a nic se neudělá.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNscAu.PosunKonceObdobiRadkuOd">
+            <summary>
+            Posun konce období RadkuOd o měsíc před začátek RadkuNoveho,
+            pokud RadekNovy začíná ve stejném měsíci jako RadekOd, tak se neudělá nic, protože bude RadekOd přemáznutý RadkemNovým
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNscAu.IsNotNull(System.Object,System.String)">
+            <summary>
+            Vrátí řetězec, který je ve druhém parametru, pokud první parametr není NULL. Jinak vrátí prázdný řetězec.
+            </summary>
+            <param name="o">testovaný objekt</param>
+            <param name="isNotNull">vrácený text když testovaný objekt není null</param>
+            <returns>string</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNscAu.UpdateRadekPodlePK(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Provede update tabulky matsnsb podle PK. Sloupce, které jsou na vstupu rovné NULL zůstávají beze změny.
+            </summary>
+            <param name="rokmes_od">rokmes_od</param>
+            <param name="ueb">ueb nebo-li Au</param>
+            <param name="ueb_txt">ueb_txt nebo-li AuTxt</param>
+            <param name="rokmes_do">rokmes_do</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNscAu.ExistujePK(Gordic.General.GString)">
+            <summary>
+            Zjistí, jestli už řádek s daným PK (nsc + radek_od) existuje
+            </summary>
+            <param name="rokmes_od">rokmes_od</param>
+            <returns>true, pokus ano</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNscAu.PosunOMesic(Gordic.General.GDateTime,System.Int32)">
+            <summary>
+            Vrátí o měsíc víc nebo o měsíc míň daného GDateTime jako GEkoDate
+            </summary>
+            <param name="gDateTime">vstupní datum</param>
+            <param name="plusMinusJedna">o kolik měsíců vpřed či vzad (smysl má jen +1/-1)</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNscAu.JsemNaZacatkuOd">
+            <summary>
+            Zda jsem na zacatku období.
+            </summary>
+            <returns>true, když ano</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNscAu.JsemNaKonciOd">
+            <summary>
+            Zda jsem na konci období.
+            </summary>
+            <returns>true, když ano</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNscAu.UpdateVnitrnichAkt500">
+            <summary>
+            Zneaktivnění všech vnitřních zánamů se stejným nsc
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNscAu.ZpracujVstupniDataset(Gordic.Xrg.WsMudInterface.ZaznamNscAuRequestDataSet)">
+            <summary>Otestuje a naformátuje vstupní data webové služby</summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNscAu.VlozZaznam">
+            <summary>Vlastní vložení záznamu</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNscAu.OpravZaznam">
+            <summary>Vlastní oprava záznamu</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNscAu.VytvorVystupniDataSet">
+            <summary>Naformátuje výstupní DataSet</summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.GWmMudZaznamKodZpusobuEvidence">
+            <summary>
+            Aplikační logika metody Zaznam-kod-zpusobu-evidence webové služby MUD
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKodZpusobuEvidence.m_oZaznam">
+            <summary>
+            Vkládaný/opravovaný záznam číselníku kod-zpusobu-evidence
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKodZpusobuEvidence.Execute(System.String,Gordic.Xrg.WsMudInterface.ZaznamKodZpusobuEvidenceRequestDataSet,System.Xml.XmlNode,System.Xml.XmlNode@)">
+            <summary>
+            V závislosti na parametru Katalog-metody-url zavolá klasický Execute nebo provede přesměrování na jinou Url
+            </summary>
+            <param name="metoda">název metody</param>
+            <param name="evidenceDokladuRequestDataSet">request dataset</param>
+            <param name="requestNode">req. node</param>
+            <param name="responseNode">resp. node</param>
+            <returns>response dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKodZpusobuEvidence.Execute(Gordic.Xrg.WsMudInterface.ZaznamKodZpusobuEvidenceRequestDataSet)">
+            <summary>Provedení webové metody</summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKodZpusobuEvidence.ExecuteWebMethod(Gordic.Xrg.WsMudInterface.ZaznamKodZpusobuEvidenceRequestDataSet)">
+            <summary>Volání zpracovávajících metod</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKodZpusobuEvidence.ZpracujVstupniDataset(Gordic.Xrg.WsMudInterface.ZaznamKodZpusobuEvidenceRequestDataSet)">
+            <summary>Otestuje a naformátuje vstupní data webové služby</summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKodZpusobuEvidence.ZaznamExistuje">
+            <summary>
+            Zjistí, jestli už záznam existuje -> podle toho se bude provádět INSERT nebo UPDATE
+            provádí se to přes select count(*) nad primárním klíčem by to nemělo nijak moc zatěžovat stroj
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKodZpusobuEvidence.VlozZaznam">
+            <summary>Vlastní vložení záznamu v číselníku kod-zpusobu-evidence</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKodZpusobuEvidence.OpravZaznam">
+            <summary>Vlastní oprava záznamu v číselníku kod-zpusobu-evidence</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKodZpusobuEvidence.VytvorVystupniDataSet">
+            <summary>Naformátuje výstupní DataSet</summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu">
+            <summary>
+            Aplikační logika metody Zaznam-Katalogu webové služby MUD
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.m_newZaznam">
+            <summary>
+            Vkládaný/opravovaný záznam číselníku Katalogu
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.m_zmeZaznam">
+            <summary>
+            Změnový záznam číselníku Katalogu -> půjde do katlkcm, má hodnotu tam, kde se hodnota mění
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.m_zaznamRpp">
+            <summary>
+            uee
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.m_oldAktivita">
+            <summary>
+            Aktivita záznamu, pokud už s daným idk existoval
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.m_zmeAktivita">
+            <summary>Změnová aktivita záznamu - null, pokud se aktivita nemění</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.m_oldSkp">
+            <summary>Staré Skp</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.m_oldDruhMajetku">
+            <summary>Starý druh majetku</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.m_oldKodDruh">
+            <summary>Starý kod druh</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.m_oldMatUsk">
+            <summary>Staré mat. usk.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.m_oldMj">
+            <summary>Stará měrná jednotka</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.m_oldZkratka">
+            <summary>Stará zkratka</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.m_oldNazev">
+            <summary>Starý název</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.m_oldStatusNsn">
+            <summary>Starý status nsn</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.m_oldNsc">
+            <summary>Staré nsc</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.m_oldZivCyklus">
+            <summary>Starý živ. cyklus</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.m_oldKodZpusobuEvidence">
+            <summary>Starý kód způsobu evidence</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.m_oldKodRegistru">
+            <summary>Starý kód registru</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.m_oldOdpSkupina">
+            <summary>Stará odpisová skupina</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.m_oldDobaOdpisu">
+            <summary>Stará doba odpisu</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.m_oldZbytHodnota">
+            <summary>Stará zbytková hodnota</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.m_sOrigPredponaTabulek">
+            <summary>předpona tabulek u původní výjimky</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.m_bNoveIdk">
+            <summary>zda se jedná o nový řádek do katalogu podle Idk</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.m_bNoveOdp">
+            <summary>zda se jedná o nové odpisy pro Idk</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.m_nServerYear">
+            <summary>pro propertu</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.Execute(System.String,Gordic.Xrg.WsMudInterface.ZaznamKataloguRequestDataSet,System.Xml.XmlNode,System.Xml.XmlNode@)">
+            <summary>
+            V závislosti na parametru Katalog-metody-url zavolá klasický Execute nebo provede přesměrování na jinou Url
+            </summary>
+            <param name="metoda">název metody</param>
+            <param name="evidenceDokladuRequestDataSet">request dataset</param>
+            <param name="requestNode">req. node</param>
+            <param name="responseNode">resp. node</param>
+            <returns>response dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.Execute(Gordic.Xrg.WsMudInterface.ZaznamKataloguRequestDataSet)">
+            <summary>Provedení webové metody</summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.VlozChybovyZaznam(System.Exception,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Vlastní vložení informací o vzniklé chybě do tabulky katlerr</summary>
+            <param name="e_orig">originální výjimka</param>
+            <param name="isam_err">isam err</param>
+            <param name="sql_err">sql err</param>
+            <param name="net_err">číslo mé .net chyby</param>
+            <param name="txt_err">můj text chyby</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.ExecuteWebMethod(Gordic.Xrg.WsMudInterface.ZaznamKataloguRequestDataSet)">
+            <summary>Volání zpracovávajících metod</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.KontrolaSkp">
+            <summary>
+            Není zavedena db integrita (cizí klíč z matskcm.ids do ekoskla.skp, tak si to takto zkontroluje web služba
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.ZjistiZmeny">
+            <summary>
+            Naplní změnový řádek katalogu m_zmeZaznam
+            Column name          Type                                    Nulls
+            ---------------------------------------------------------------------
+            idk                  char(13)                                no         (PK)
+            dat_zmena            datetime year to fraction(3)            no         (PK)
+            drh_id               smallint                                yes
+            ids                  char(8)                                 yes
+            kod_druh             char(1)                                 yes
+            mat_usk              char(6)                                 yes
+            mj                   char(5)                                 yes
+            zkratka              char(24)                                yes
+            nazev                varchar(160,0)                          yes
+            status_nsn           char(1)                                 yes
+            nsc                  char(4)                                 yes
+            ziv_cyklus           char(2)                                 yes
+            aktivita             smallint                                yes
+            zmenu_prov           char(12)                                no
+            kod_zp_evid          char(2)                                 yes
+            typ_reg              char(2)                                 no
+              sloupce dat_mpd2 si nevšímám
+            </summary>
+            <returns>řetězec změn</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.ZalogujZmeny">
+            <summary>
+            Zapíše do tabulky katlkcm změněné hodnoty (při insertu všechny)
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.ZpracujVstupniDataset(Gordic.Xrg.WsMudInterface.ZaznamKataloguRequestDataSet)">
+            <summary>Otestuje a naformátuje vstupní data webové služby</summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.NactiStaryRadek">
+            <summary>
+            Zjistí, jestli už záznam existuje -> podle toho se bude provádět INSERT nebo UPDATE.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.GetServerYear">
+            <summary>
+            vrátí aktuální datum na db serveru, s cachováním v rámci 1 requestu
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.NactiStaryRadekOdp">
+            <summary>
+            Zjistí, jestli už záznam o odpisu existuje -> podle toho se bude provádět INSERT nebo UPDATE.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.VlozZaznam">
+            <summary>Vlastní vložení záznamu v číselníku Katalogu</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.OpravZaznam">
+            <summary>Vlastní oprava záznamu v číselníku Katalogu</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKatalogu.VytvorVystupniDataSet">
+            <summary>Naformátuje výstupní DataSet</summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.GWmMudZaznamZivCyklus">
+            <summary>
+            Aplikační logika metody Zaznam-ziv-cyklus webové služby MUD
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamZivCyklus.m_oZaznam">
+            <summary>
+            Vkládaný/opravovaný záznam číselníku ziv-cyklus
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamZivCyklus.Execute(System.String,Gordic.Xrg.WsMudInterface.ZaznamZivCyklusRequestDataSet,System.Xml.XmlNode,System.Xml.XmlNode@)">
+            <summary>
+            V závislosti na parametru Katalog-metody-url zavolá klasický Execute nebo provede přesměrování na jinou Url
+            </summary>
+            <param name="metoda">název metody</param>
+            <param name="evidenceDokladuRequestDataSet">request dataset</param>
+            <param name="requestNode">req. node</param>
+            <param name="responseNode">resp. node</param>
+            <returns>response dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamZivCyklus.Execute(Gordic.Xrg.WsMudInterface.ZaznamZivCyklusRequestDataSet)">
+            <summary>Provedení webové metody</summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamZivCyklus.ExecuteWebMethod(Gordic.Xrg.WsMudInterface.ZaznamZivCyklusRequestDataSet)">
+            <summary>Volání zpracovávajících metod</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamZivCyklus.ZpracujVstupniDataset(Gordic.Xrg.WsMudInterface.ZaznamZivCyklusRequestDataSet)">
+            <summary>Otestuje a naformátuje vstupní data webové služby</summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamZivCyklus.ZaznamExistuje">
+            <summary>
+            Zjistí, jestli už záznam existuje -> podle toho se bude provádět INSERT nebo UPDATE
+            provádí se to přes select count(*) nad primárním klíčem by to nemělo nijak moc zatěžovat stroj
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamZivCyklus.VlozZaznam">
+            <summary>Vlastní vložení záznamu v číselníku ziv-cyklus</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamZivCyklus.OpravZaznam">
+            <summary>Vlastní oprava záznamu v číselníku ziv-cyklus</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamZivCyklus.VytvorVystupniDataSet">
+            <summary>Naformátuje výstupní DataSet</summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.GWmMudZaznamSkp">
+            <summary>
+            Aplikační logika metody Zaznam-skp webové služby MUD
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamSkp.m_oZaznam">
+            <summary>
+            Vkládaný/opravovaný záznam číselníku skp
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamSkp.m_gsSkp">
+            <summary>
+            hodnota SKP
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamSkp.m_agsCastiSkp">
+            <summary>
+            Z Skp ve tvaru 1234567 obsahuje pole pěti částí 12, 34, 56, 7, null
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamSkp.Execute(System.String,Gordic.Xrg.WsMudInterface.ZaznamSkpRequestDataSet,System.Xml.XmlNode,System.Xml.XmlNode@)">
+            <summary>
+            V závislosti na parametru Katalog-metody-url zavolá klasický Execute nebo provede přesměrování na jinou Url
+            </summary>
+            <param name="metoda">název metody</param>
+            <param name="evidenceDokladuRequestDataSet">request dataset</param>
+            <param name="requestNode">req. node</param>
+            <param name="responseNode">resp. node</param>
+            <returns>response dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamSkp.Execute(Gordic.Xrg.WsMudInterface.ZaznamSkpRequestDataSet)">
+            <summary>Provedení webové metody</summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamSkp.ExecuteWebMethod(Gordic.Xrg.WsMudInterface.ZaznamSkpRequestDataSet)">
+            <summary>Volání zpracovávajících metod</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamSkp.ZpracujVstupniDataset(Gordic.Xrg.WsMudInterface.ZaznamSkpRequestDataSet)">
+            <summary>Otestuje a naformátuje vstupní data webové služby</summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamSkp.ZaznamExistuje">
+            <summary>
+            Zjistí, jestli už záznam existuje -> podle toho se bude provádět INSERT nebo UPDATE
+            provádí se to přes select count(*) nad primárním klíčem by to nemělo nijak moc zatěžovat stroj
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamSkp.ZpracujSkp">
+            <summary>
+            Nastaví hodnotu proměnné m_agsCastiSkp
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamSkp.VlozZaznam">
+            <summary>Vlastní vložení záznamu v číselníku skp</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamSkp.OpravZaznam">
+            <summary>Vlastní oprava záznamu v číselníku skp</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamSkp.VytvorVystupniDataSet">
+            <summary>Naformátuje výstupní DataSet</summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.GWmMudZaznamNsc">
+            <summary>
+            Aplikační logika metody Zaznam-nsc webové služby MUD
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamNsc.m_oZaznam">
+            <summary>
+            Vkládaný/opravovaný záznam číselníku nsc
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNsc.Execute(System.String,Gordic.Xrg.WsMudInterface.ZaznamNscRequestDataSet,System.Xml.XmlNode,System.Xml.XmlNode@)">
+            <summary>
+            V závislosti na parametru Katalog-metody-url zavolá klasický Execute nebo provede přesměrování na jinou Url
+            </summary>
+            <param name="metoda">název metody</param>
+            <param name="evidenceDokladuRequestDataSet">request dataset</param>
+            <param name="requestNode">req. node</param>
+            <param name="responseNode">resp. node</param>
+            <returns>response dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNsc.Execute(Gordic.Xrg.WsMudInterface.ZaznamNscRequestDataSet)">
+            <summary>Provedení webové metody</summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNsc.ExecuteWebMethod(Gordic.Xrg.WsMudInterface.ZaznamNscRequestDataSet)">
+            <summary>Volání zpracovávajících metod</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNsc.ZpracujVstupniDataset(Gordic.Xrg.WsMudInterface.ZaznamNscRequestDataSet)">
+            <summary>Otestuje a naformátuje vstupní data webové služby</summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNsc.ZaznamExistuje">
+            <summary>
+            Zjistí, jestli už záznam existuje -> podle toho se bude provádět INSERT nebo UPDATE
+            provádí se to přes select count(*) nad primárním klíčem by to nemělo nijak moc zatěžovat stroj
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNsc.NscSkupina">
+            <summary>
+            Vrátí Skupinu z Nsc (první dva znaky)
+            </summary>
+            <returns>skupina-nsc</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNsc.NscTrida">
+            <summary>
+            Vrátí Třídu z Nsc (druhé dva znaky)
+            </summary>
+            <returns>trida-nsc</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNsc.VlozZaznam">
+            <summary>Vlastní vložení záznamu v číselníku nsc</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNsc.OpravZaznam">
+            <summary>Vlastní oprava záznamu v číselníku nsc</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamNsc.VytvorVystupniDataSet">
+            <summary>Naformátuje výstupní DataSet</summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.GWmMudZaznamMj">
+            <summary>
+            Aplikační logika metody Zaznam-mj webové služby MUD
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamMj.m_oZaznam">
+            <summary>
+            Vkládaný/opravovaný záznam číselníku mj
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamMj.Execute(System.String,Gordic.Xrg.WsMudInterface.ZaznamMjRequestDataSet,System.Xml.XmlNode,System.Xml.XmlNode@)">
+            <summary>
+            V závislosti na parametru Katalog-metody-url zavolá klasický Execute nebo provede přesměrování na jinou Url
+            </summary>
+            <param name="metoda">název metody</param>
+            <param name="evidenceDokladuRequestDataSet">request dataset</param>
+            <param name="requestNode">req. node</param>
+            <param name="responseNode">resp. node</param>
+            <returns>response dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamMj.Execute(Gordic.Xrg.WsMudInterface.ZaznamMjRequestDataSet)">
+            <summary>Provedení webové metody</summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamMj.ExecuteWebMethod(Gordic.Xrg.WsMudInterface.ZaznamMjRequestDataSet)">
+            <summary>Volání zpracovávajících metod</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamMj.ZpracujVstupniDataset(Gordic.Xrg.WsMudInterface.ZaznamMjRequestDataSet)">
+            <summary>Otestuje a naformátuje vstupní data webové služby</summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamMj.ZaznamExistuje">
+            <summary>
+            Zjistí, jestli už záznam existuje -> podle toho se bude provádět INSERT nebo UPDATE
+            provádí se to přes select count(*) nad primárním klíčem by to nemělo nijak moc zatěžovat stroj
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamMj.VlozZaznam">
+            <summary>Vlastní vložení záznamu v číselníku mj</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamMj.OpravZaznam">
+            <summary>Vlastní oprava záznamu v číselníku mj</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamMj.VytvorVystupniDataSet">
+            <summary>Naformátuje výstupní DataSet</summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.GWmMudZaznamMatUsk">
+            <summary>
+            Aplikační logika metody Zaznam-mat-usk webové služby MUD
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamMatUsk.m_oZaznam">
+            <summary>
+            Vkládaný/opravovaný záznam číselníku mat-usk
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamMatUsk.Execute(System.String,Gordic.Xrg.WsMudInterface.ZaznamMatUskRequestDataSet,System.Xml.XmlNode,System.Xml.XmlNode@)">
+            <summary>
+            V závislosti na parametru Katalog-metody-url zavolá klasický Execute nebo provede přesměrování na jinou Url
+            </summary>
+            <param name="metoda">název metody</param>
+            <param name="evidenceDokladuRequestDataSet">request dataset</param>
+            <param name="requestNode">req. node</param>
+            <param name="responseNode">resp. node</param>
+            <returns>response dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamMatUsk.Execute(Gordic.Xrg.WsMudInterface.ZaznamMatUskRequestDataSet)">
+            <summary>Provedení webové metody</summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamMatUsk.ExecuteWebMethod(Gordic.Xrg.WsMudInterface.ZaznamMatUskRequestDataSet)">
+            <summary>Volání zpracovávajících metod</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamMatUsk.ZpracujVstupniDataset(Gordic.Xrg.WsMudInterface.ZaznamMatUskRequestDataSet)">
+            <summary>Otestuje a naformátuje vstupní data webové služby</summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamMatUsk.ZaznamExistuje">
+            <summary>
+            Zjistí, jestli už záznam existuje -> podle toho se bude provádět INSERT nebo UPDATE
+            provádí se to přes select count(*) nad primárním klíčem by to nemělo nijak moc zatěžovat stroj
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamMatUsk.VlozZaznam">
+            <summary>Vlastní vložení záznamu v číselníku mat-usk</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamMatUsk.OpravZaznam">
+            <summary>Vlastní oprava záznamu v číselníku mat-usk</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamMatUsk.VytvorVystupniDataSet">
+            <summary>Naformátuje výstupní DataSet</summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.GWmMudZaznamKodDruh">
+            <summary>
+            Aplikační logika metody Zaznam-kod-druh webové služby MUD
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamKodDruh.m_oZaznam">
+            <summary>
+            Vkládaný/opravovaný záznam číselníku kod-druh
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKodDruh.Execute(System.String,Gordic.Xrg.WsMudInterface.ZaznamKodDruhRequestDataSet,System.Xml.XmlNode,System.Xml.XmlNode@)">
+            <summary>
+            V závislosti na parametru Katalog-metody-url zavolá klasický Execute nebo provede přesměrování na jinou Url
+            </summary>
+            <param name="metoda">název metody</param>
+            <param name="evidenceDokladuRequestDataSet">request dataset</param>
+            <param name="requestNode">req. node</param>
+            <param name="responseNode">resp. node</param>
+            <returns>response dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKodDruh.Execute(Gordic.Xrg.WsMudInterface.ZaznamKodDruhRequestDataSet)">
+            <summary>Provedení webové metody</summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKodDruh.ExecuteWebMethod(Gordic.Xrg.WsMudInterface.ZaznamKodDruhRequestDataSet)">
+            <summary>Volání zpracovávajících metod</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKodDruh.ZpracujVstupniDataset(Gordic.Xrg.WsMudInterface.ZaznamKodDruhRequestDataSet)">
+            <summary>Otestuje a naformátuje vstupní data webové služby</summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKodDruh.ZaznamExistuje">
+            <summary>
+            Zjistí, jestli už záznam existuje -> podle toho se bude provádět INSERT nebo UPDATE
+            provádí se to přes select count(*) nad primárním klíčem by to nemělo nijak moc zatěžovat stroj
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKodDruh.VlozZaznam">
+            <summary>Vlastní vložení záznamu v číselníku kod-druh</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKodDruh.OpravZaznam">
+            <summary>Vlastní oprava záznamu v číselníku kod-druh</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamKodDruh.VytvorVystupniDataSet">
+            <summary>Naformátuje výstupní DataSet</summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu">
+            <summary>
+            Aplikační logika metody Evidence-dokladu webové služby MUD
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.m_bEvidenceUspech">
+            <summary>výsledek evidence</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.m_nTypVolani">
+            <summary>
+            typ volání (0=externi;1=interni)
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.m_bExterniVolani">
+            <summary>
+            typ volání (true=externi;false=interni)
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.m_gsEkParIco">
+            <summary>
+            IČO zadané ve web.configu
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.m_gsEkParUcs">
+            <summary>
+            UCS zadané ve web.configu
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.h">
+            <summary>
+            m_oHlavicka - hlavička evidovaného dokladu
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.m_oPDDataTable">
+            <summary>
+            položky evidovaného dokladu
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.m_bUlozitUspesnouOdpoved">
+            <summary>
+            ukládat úspěšné odpovědi
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.m_sSetLockModeSQL">
+            <summary>
+            databázový LOCK TIMEOUT v sekundách
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.m_gnPolozekInput">
+            <summary>
+            počet položek na vstupu
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.m_gsInHash">
+            <summary>
+            starý hash toho, co bylo na vstupu, aby se nevracela -41
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.m_gnInRadky">
+            <summary>
+            starý počet položek na vstupu
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.Execute(Gordic.Xrg.WsMudInterface.EvidenceDokladuRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.GetStack(System.Exception)">
+            <summary>
+            kvůli Kůtovi, páč to ořezává! v rámci GWseArchiveOutputFilter3 
+            ve verzi 42MUD0148203X01 zde docházelo k null ref. exception... přepsáno tak aby se nestávalo
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.GetUdVystavil(Gordic.Xrg.WsMudInterface.EvidenceDokladuRequestDataSet)">
+            <summary>
+            Vytáhne z request xml UD-vystavil (včetně kontrol a trim)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.ExecuteWebMethod(Gordic.Xrg.WsMudInterface.EvidenceDokladuRequestDataSet)">
+            <summary>Evidence dokladu</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.NactiHlavickuMatlwho(Gordic.Xrg.WsMudInterface.EvidenceDokladuResponseDataSet)">
+            <summary>
+            čtení hlavičky z matlwho, pokud je nalezena, tak vrátí true
+            </summary>
+            <param name="l_o">výstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.NactiPolozkyMatlwpo(Gordic.Xrg.WsMudInterface.EvidenceDokladuResponseDataSet)">
+            <summary>
+            čtení položek z matlwpo
+            </summary>
+            <param name="l_o">výstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.Zamkni(System.String)">
+            <summary>
+            Exklizivně uzamkne tabulku
+            </summary>
+            <param name="table">název tabulky včetně vas (např. vas.gincakt)</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.TestWebConfig">
+            <summary>
+            Pokud web.config soubor neobsahuje povinné položky, tak vyhodí speciální výjimku.
+            Výjimky mají kód 24499999 až 24499997 tyto chyby mají v GSAWSM01 význam takový, že exit code se nastavuje na -1.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.ZpracujVstupniDataset(Gordic.Xrg.WsMudInterface.EvidenceDokladuRequestDataSet)">
+            <summary>Otestuje a naformátuje vstupní data webové služby</summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.OKParZnak(Gordic.General.GString)">
+            <summary>
+            Pokud bude parovaci znak nenumerická hodnota, tak je to chyba a musí to být do výstupu zapracováno.
+            </summary>
+            <param name="parZnak">párovací znak</param>
+            <returns>true, když párov. znak obsahuje jen numerické znaky</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.IsValidOLEAutDate(Gordic.General.GDateTime)">
+            <summary>
+            Kontrola možnosti převodu datumových položek na OLE Automation Date.
+             rozsah OleAut date:
+              DateTime.FromOADate(-657434,0) = 1.1.0100 0:00:00
+              DateTime.FromOADate(2958465,999999) = 31.12.9999 23:59:59
+             naproti tomu rozsah DateTime:
+              DateTime.MinValue = 1.1.0001 0:00:00
+              DateTime.MaxValue = 31.12.9999 23:59:59
+            </summary>
+            <param name="datum"></param>
+            <returns>true (OK), false (nejde převést na OleAutDate)</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.EvidenceDokladu">
+            <summary>Evidence dokladu MUD</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.MyTrim(Gordic.General.GString)">
+            <summary>
+            Vrací otrimovaný string, je-li null nebo o.IsNull, tak nechá beze změny
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudEvidenceDokladu.Exec_spg_matseglpdex83(Gordic.General.GString,Gordic.Xrg.WsMudServer.gspg_matseglhdko90,Gordic.Xrg.WsMudInterface.EvidenceDokladuRequestDataSet.PolozkaDokladuRow,System.Boolean,Gordic.General.GString,Gordic.General.GInt32)">
+            <summary>Evidence položky dokladu</summary>
+            <param name="ixp">ixp vygenerovaného dokladu</param>
+            <param name="ko">výstupní parametry z gspg_matseglhdko</param>
+            <param name="p">položka</param>
+            <param name="posledniPolozka">zda se jedná o poslední položku</param>
+            <param name="l_gsLicTzh">lic tzh</param>
+            <param name="l_gnSerCisloTzh">ser cislo tzh</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsMudServer.GWmMudZaznamStatusNsn">
+            <summary>
+            Aplikační logika metody Zaznam-status-nsn webové služby MUD
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsMudServer.GWmMudZaznamStatusNsn.m_oZaznam">
+            <summary>
+            Vkládaný/opravovaný záznam číselníku status-nsn
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamStatusNsn.Execute(System.String,Gordic.Xrg.WsMudInterface.ZaznamStatusNsnRequestDataSet,System.Xml.XmlNode,System.Xml.XmlNode@)">
+            <summary>
+            V závislosti na parametru Katalog-metody-url zavolá klasický Execute nebo provede přesměrování na jinou Url
+            </summary>
+            <param name="metoda">název metody</param>
+            <param name="evidenceDokladuRequestDataSet">request dataset</param>
+            <param name="requestNode">req. node</param>
+            <param name="responseNode">resp. node</param>
+            <returns>response dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamStatusNsn.Execute(Gordic.Xrg.WsMudInterface.ZaznamStatusNsnRequestDataSet)">
+            <summary>Provedení webové metody</summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamStatusNsn.ExecuteWebMethod(Gordic.Xrg.WsMudInterface.ZaznamStatusNsnRequestDataSet)">
+            <summary>Volání zpracovávajících metod</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamStatusNsn.ZpracujVstupniDataset(Gordic.Xrg.WsMudInterface.ZaznamStatusNsnRequestDataSet)">
+            <summary>Otestuje a naformátuje vstupní data webové služby</summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamStatusNsn.ZaznamExistuje">
+            <summary>
+            Zjistí, jestli už záznam existuje -> podle toho se bude provádět INSERT nebo UPDATE
+            provádí se to přes select count(*) nad primárním klíčem by to nemělo nijak moc zatěžovat stroj
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamStatusNsn.VlozZaznam">
+            <summary>Vlastní vložení záznamu v číselníku status-nsn</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamStatusNsn.OpravZaznam">
+            <summary>Vlastní oprava záznamu v číselníku status-nsn</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsMudServer.GWmMudZaznamStatusNsn.VytvorVystupniDataSet">
+            <summary>Naformátuje výstupní DataSet</summary>
+            <returns>výstupní dataset</returns>
+        </member>
+    </members>
+</doc>

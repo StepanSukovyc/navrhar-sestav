@@ -1,0 +1,315 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Services.EventProcessorClient</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Services.EventProcessorClient.GEventProcessorService">
+            <summary>Zpracování systémových událostí - služba operačního systému</summary>
+        </member>
+        <member name="F:Gordic.Services.EventProcessorClient.GEventProcessorService.m_cnTimerPeriod">
+            <summary>výchozí interval zpracování událostí v sekundách</summary>
+        </member>
+        <member name="F:Gordic.Services.EventProcessorClient.GEventProcessorService.m_csRestart">
+            <summary>název parametru pro požadavek na restart služby</summary>
+        </member>
+        <member name="F:Gordic.Services.EventProcessorClient.GEventProcessorService.m_csStop">
+            <summary>název parametru pro požadavek na zastavení služby</summary>
+        </member>
+        <member name="F:Gordic.Services.EventProcessorClient.GEventProcessorService.NLog">
+            <summary>podpora logování</summary>
+        </member>
+        <member name="F:Gordic.Services.EventProcessorClient.GEventProcessorService.m_oComponents">
+            <summary>kontejner pro komponenty</summary>
+        </member>
+        <member name="F:Gordic.Services.EventProcessorClient.GEventProcessorService.m_oUserProcess">
+            <summary>instance uživatelského procesu</summary>
+        </member>
+        <member name="F:Gordic.Services.EventProcessorClient.GEventProcessorService.m_oEventProcessor">
+            <summary>instance aplikační logiky pro zpracování událostí</summary>
+        </member>
+        <member name="F:Gordic.Services.EventProcessorClient.GEventProcessorService.m_oTimer">
+            <summary>časovač pro provádění periodického zpracování</summary>
+        </member>
+        <member name="F:Gordic.Services.EventProcessorClient.GEventProcessorService.m_oOnTimerEnabledEvent">
+            <summary>událost signalizující přípustnost zpracování prováděného časovačem</summary>
+        </member>
+        <member name="F:Gordic.Services.EventProcessorClient.GEventProcessorService.m_bIsRunning">
+            <summary>příznak spuštění služby</summary>
+        </member>
+        <member name="F:Gordic.Services.EventProcessorClient.GEventProcessorService.m_bIsPaused">
+            <summary>příznak pozastavení služby</summary>
+        </member>
+        <member name="F:Gordic.Services.EventProcessorClient.GEventProcessorService.m_oSystemLog">
+            <summary>objekt pro logování</summary>
+        </member>
+        <member name="P:Gordic.Services.EventProcessorClient.GEventProcessorService.UserProcess">
+            <summary>instance uživatelského procesu</summary>
+        </member>
+        <member name="P:Gordic.Services.EventProcessorClient.GEventProcessorService.EventProcessor">
+            <summary>instance aplikační logiky pro zpracování událostí</summary>
+        </member>
+        <member name="P:Gordic.Services.EventProcessorClient.GEventProcessorService.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="P:Gordic.Services.EventProcessorClient.GEventProcessorService.IsRunning">
+            <summary>příznak spuštění služby</summary>
+        </member>
+        <member name="P:Gordic.Services.EventProcessorClient.GEventProcessorService.IsPaused">
+            <summary>příznak pozastavení služby</summary>
+        </member>
+        <member name="P:Gordic.Services.EventProcessorClient.GEventProcessorService.EventProcessorStarted">
+            <summary>příznak spuštění zpracování událostí</summary>
+        </member>
+        <member name="P:Gordic.Services.EventProcessorClient.GEventProcessorService.RunBackupLogFile">
+            <summary>příznak potřeby spuštění zálohování logovacího souboru</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.#ctor">
+            <summary> veřejný konstruktor </summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.OnStart(System.String[])">
+            <summary>obsluha požadavku na start služby</summary>
+            <param name="args">vstupní parametry</param>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.OnStop">
+            <summary>obsluha požadavku na ukončení služby</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.OnPause">
+            <summary>obsluha požadavku na pozastavení činnosti služby</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.OnContinue">
+            <summary>obsluha požadavku na obnovení činnosti služby</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.InitializeComponent">
+            <summary> inicializace komponent </summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.Dispose(System.Boolean)">
+            <summary>uvolnění zdrojů</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.StartService">
+            <summary>start služby</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.StopService">
+            <summary>ukončení služby</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.PauseService">
+            <summary>pozastavení služby</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.ContinueService">
+            <summary>obnovení činnosti služby</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.StopService(Gordic.General.GException)">
+            <summary>ukončení služby při výjimce</summary>
+            <param name="exception">výjimka při běhu služby</param>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.StopService(System.Boolean)">
+            <summary>obsluha požadavku na ukončení služby</summary>
+            <param name="restart">příznak restartu služby</param>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.RestartService">
+            <summary>restart služby</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.StopServiceProcess(System.Boolean)">
+            <summary>zastavení služby</summary>
+            <param name="restart">příznak restartu služby</param>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.StartEventProcessor(System.Boolean)">
+            <summary>spuštění zpracování událostí</summary>
+            <param name="onStart">příznak volání při startu služby</param>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.OnTimer(System.Object)">
+            <summary>obsluha události generované časovačem</summary>
+            <param name="input">vstupní parametr (není využit)</param>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.OnTimer">
+            <summary>obsluha události generované časovačem</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.StartTimer">
+            <summary>start časovače</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.StopTimer">
+            <summary>ukončení časovače</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.GetTimerPeriod">
+            <summary>získání intervalu zpracování událostí</summary>
+            <returns>interval zpracování událostí</returns>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.WriteLog(Gordic.General.GException)">
+            <summary>zápis výjimky do logu</summary>
+            <param name="exception">výjimka pro zápis</param>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.OpenSystemLog">
+            <summary>inicializace systémového logu</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.CloseSystemLog">
+            <summary>uzavření logu</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.WriteSystemLog(System.String)">
+            <summary>zápis informace do logu</summary>
+            <param name="message">text pro zápis</param>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.WriteSystemLog(Gordic.General.GException)">
+            <summary>zápis chyby do logu</summary>
+            <param name="exception">výjimka pro zápis</param>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorService.BackupLogFile">
+            <summary>odzálohování logovacího souboru</summary>
+        </member>
+        <member name="T:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess">
+            <summary>zpracování událostí - uživatelský proces aplikace</summary>
+        </member>
+        <member name="F:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.NLog">
+            <summary>podpora logování</summary>
+        </member>
+        <member name="F:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.m_sServiceRunFile">
+            <summary>cesta k řídícímu souboru pro monitorování běhu služby</summary>
+        </member>
+        <member name="F:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.m_sServiceStopFile">
+            <summary>cesta k řídícímu souboru pro zastavení služby</summary>
+        </member>
+        <member name="F:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.m_sServiceRestartFile">
+            <summary>cesta k řídícímu souboru pro restartování služby</summary>
+        </member>
+        <member name="P:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.ServiceRunFile">
+            <summary>cesta k řídícímu souboru pro monitorování běhu služby</summary>
+        </member>
+        <member name="P:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.ServiceStopFile">
+            <summary>cesta k řídícímu souboru pro zastavení služby</summary>
+        </member>
+        <member name="P:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.ServiceRestartFile">
+            <summary>cesta k řídícímu souboru pro restartování služby</summary>
+        </member>
+        <member name="P:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.Current">
+            <summary>aktuální uživatelský proces</summary>
+            <remarks>v případě, že aktuální instance uživatelského procesu nebyla nalezena, je vytvořena nová a načte se do ní uložený kontext</remarks>
+        </member>
+        <member name="P:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.ManageControlFiles(System.Boolean@)">
+            <summary>zpracování řídících souborů služby</summary>
+            <param name="restart">příznak požadavku na restart služby</param>
+            <returns>true v případě, že je možno pokračovat, false v případě požadavku na zastavení služby</returns>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.CreateServiceRunFile">
+            <summary>vytvoření řídícího souboru pro monitorování běhu služby</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.DeleteServiceRunFile">
+            <summary>smazání řídícího souboru pro monitorování běhu služby</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.DeleteServiceStopFile">
+            <summary>smazání řídícího souboru pro zastavení služby</summary>
+            <returns>true v případě, že soubor byl smazán, jinak false</returns>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.DeleteServiceRestartFile">
+            <summary>smazání řídícího souboru pro restart služby</summary>
+            <returns>true v případě, že soubor byl smazán, jinak false</returns>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.SynchronizeCallContext">
+            <summary>synchronizace kontextu uživatelského procesu pro vzdálené volání</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.InitLog">
+            <summary>inicializace logování</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.CloseLog">
+            <summary>ukončení logování</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.Main">
+            <summary>hlavní smyčka procesu</summary>
+            <remarks>určené pro ladění při vývoji</remarks>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.OnLoadConfiguration(Gordic.General.IGApplicationInfo)">
+            <summary>metoda volaná při načítání konfigurace aplikace</summary>
+            <param name="applicationInfo">obecné informace o aplikaci</param>
+            <returns>tabulka lokálních konfiguračních parametrů</returns>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.Run">
+            <summary>spuštění služby</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.Start(System.String)">
+            <summary>spuštění služby - z příkazového řádku</summary>
+            <param name="serviceDisplayName">zobrazovaný název služby</param>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.Stop(System.String)">
+            <summary>zastavení služby</summary>
+            <param name="serviceDisplayName">zobrazovaný název služby</param>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.Restart(System.String)">
+            <summary>restart služby</summary>
+            <param name="serviceDisplayName">zobrazovaný název služby</param>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.Clone(System.String,System.String)">
+            <summary>vytvoření kopie služby</summary>
+            <param name="profile">název databázového profilu</param>
+            <param name="instanceId">identifikátor instance</param>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.Register">
+            <summary>registrace služby</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.Unregister">
+            <summary>odregistrace služby</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.EndRequest">
+            <summary>test uživatelského požadavku na ukončení zpracování událostí</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.ManageService(System.Boolean,System.Boolean,System.String)">
+            <summary>zastavení nebo restart služby</summary>
+            <param name="stop">příznak požadavku na zastavení služby</param>
+            <param name="start">příznak požadavku na spuštění služby</param>
+            <param name="serviceDisplayName">zobrazovaný název služby</param>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.CloneService(System.String,System.String)">
+            <summary>vytvoření kopie služby</summary>
+            <param name="profile">název databázového profilu</param>
+            <param name="instanceId">identifikátor instance</param>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.CheckProfileName(System.String)">
+            <summary>kontrola přípustnosti databázového profilu</summary>
+            <param name="profile">název databázového profilu</param>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.CopyDirectory(System.String,System.String,System.Boolean)">
+            <summary>vytvoření kopie adresáře včetně podadresářů</summary>
+            <param name="source">zdrojový adresář</param>
+            <param name="destiny">cílový adresář</param>
+            <param name="copyConfigFile">příznak kopírování konfiguračního souboru</param>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.UpdateConfigFile(System.String,System.String,System.String)">
+            <summary>úprava konfiguračního souboru</summary>
+            <param name="configFile">cesta ke konfiguračnímu souboru služby</param>
+            <param name="profile">databázový profil</param>
+            <param name="instanceId">identifikátor instance</param>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.WriteDefaultProfile(System.Xml.XmlDocument,System.String)">
+            <summary>zápis databázového profilu do konfigurace</summary>
+            <param name="document">konfigurace</param>
+            <param name="profile">databázový profil</param>
+            <returns>příznak změny konfigurace</returns>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.WriteInstanceId(System.Xml.XmlDocument,System.String)">
+            <summary>zápis identifikátoru instance do konfigurace</summary>
+            <param name="document">konfigurace</param>
+            <param name="instanceId">identifikátor instance</param>
+            <returns>příznak změny konfigurace</returns>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.WriteLogFile(System.Xml.XmlDocument,System.String,System.String)">
+            <summary>zápis názvu logovacího souboru do konfigurace</summary>
+            <param name="document">konfigurace</param>
+            <param name="profile">databázový profil</param>
+            <param name="instanceId">identifikátor instance</param>
+            <returns>příznak změny konfigurace</returns>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.RegisterService(System.Boolean)">
+            <summary>registrace nebo odregistrace služby</summary>
+            <param name="unregister">příznak požadavku na odregistraci služby</param>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.ObtainServiceRunFile">
+            <summary>získání cesty k řídícímu souboru pro monitorování běhu služby</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.ObtainServiceStopFile">
+            <summary>získání cesty k řídícímu souboru pro zastavení služby</summary>
+        </member>
+        <member name="M:Gordic.Services.EventProcessorClient.GEventProcessorUserProcess.ObtainServiceRestartFile">
+            <summary>získání cesty k řídícímu souboru pro restartování služby</summary>
+        </member>
+    </members>
+</doc>

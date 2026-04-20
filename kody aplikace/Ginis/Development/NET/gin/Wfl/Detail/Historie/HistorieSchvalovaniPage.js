@@ -1,0 +1,5 @@
+﻿var HSCH = {
+    onContentReady: function () {
+
+    }
+}

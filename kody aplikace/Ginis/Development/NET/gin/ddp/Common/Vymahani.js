@@ -1,0 +1,9 @@
+"use strict";
+//  <FileHeader xmlns="http://www.gordic.cz/shared/file-header/v_1.0.0.0">
+//    <Name>        Gordic.Ddp.WebClient.Common.Vymahani.ts                     </Name>
+//    <Description> Společné funkce pro vymáhání                                </Description>
+//    <Author>      vcech                                                       </Author>
+//    <Copyright>   © GORDIC spol. s r. o. 1993-2025                            </Copyright>
+//    <Created>     2025-05-05                                                  </Created>
+//  </FileHeader>
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiVnltYWhhbmkuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJWeW1haGFuaS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiO0FBQUEsMEVBQTBFO0FBQzFFLHVGQUF1RjtBQUN2Riw4RkFBOEY7QUFDOUYseUZBQXlGO0FBQ3pGLDRGQUE0RjtBQUM1RiwwRkFBMEY7QUFDMUYsaUJBQWlCIiwic291cmNlc0NvbnRlbnQiOlsiLy8gIDxGaWxlSGVhZGVyIHhtbG5zPVwiaHR0cDovL3d3dy5nb3JkaWMuY3ovc2hhcmVkL2ZpbGUtaGVhZGVyL3ZfMS4wLjAuMFwiPlxyXG4vLyAgICA8TmFtZT4gICAgICAgIEdvcmRpYy5EZHAuV2ViQ2xpZW50LkNvbW1vbi5WeW1haGFuaS50cyAgICAgICAgICAgICAgICAgICAgIDwvTmFtZT5cclxuLy8gICAgPERlc2NyaXB0aW9uPiBTcG9sZcSNbsOpIGZ1bmtjZSBwcm8gdnltw6Fow6Fuw60gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvRGVzY3JpcHRpb24+XHJcbi8vICAgIDxBdXRob3I+ICAgICAgdmNlY2ggICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPC9BdXRob3I+XHJcbi8vICAgIDxDb3B5cmlnaHQ+ICAgwqkgR09SRElDIHNwb2wuIHMgci4gby4gMTk5My0yMDI1ICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvQ29weXJpZ2h0PlxyXG4vLyAgICA8Q3JlYXRlZD4gICAgIDIwMjUtMDUtMDUgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIDwvQ3JlYXRlZD5cclxuLy8gIDwvRmlsZUhlYWRlcj5cclxuXHJcbi8qKlxyXG4gKiBTZMOtbGVuw6kgbWV0b2R5IGEgZnVua2NlIHBybyB2eW3DoWjDoW7DrVxyXG4gKi9cclxubmFtZXNwYWNlIEdvcmRpYy5EZHAuV2ViQ2xpZW50LkNvbW1vbi5WeW1haGFuaSB7XHJcbiAgICBcclxufSJdfQ==

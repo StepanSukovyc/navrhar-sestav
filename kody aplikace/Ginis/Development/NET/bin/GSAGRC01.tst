@@ -1,0 +1,7 @@
+[program]
+revize=40GRC0152511S01
+dat_akt=2011-12-27
+sub_verze_db_min=0
+
+[REQUIRED]
+MODULES=GINGIN01,GINGRR01

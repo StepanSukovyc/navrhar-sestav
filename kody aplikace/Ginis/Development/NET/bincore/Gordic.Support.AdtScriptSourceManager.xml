@@ -1,0 +1,1279 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Support.AdtScriptSourceManager</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Support.AdtScriptSourceManager.GAdtRC4Stream">
+            <summary>
+            Zatím jen experinet pro nahrazení ZIPů s heslem - jen zatím příprava a test
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtScriptSourceManager.GAdtResourceReader">
+            <summary>
+            Pomocná třída pro práci s resource
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtResourceReader.GetStream(System.Reflection.Assembly,System.String,System.String)">
+            <summary>
+            Načtení zadaného resource
+            </summary>
+            <param name="a_assembly"></param>
+            <param name="a_namespace"></param>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtResourceReader.GetStream(System.Reflection.Assembly,System.String)">
+            <summary>
+            Vrátí otevřený stream a nebo null
+            </summary>
+            <param name="a_assembly"></param>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader">
+             <summary>   Třída pro zapouzdení funkcionality StreamReader specifická pro potřeby čtení scriptů 
+                         
+                         Musí poskytnout především :
+                         
+                         -funkce Read(), Seek(), Peek() 
+                         -property StreamPosition a StreamPositionPeek
+                         
+                           </summary>
+            
+             <remarks>   Ffiala, 8.3.2017. </remarks>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader._script_name">
+            <summary>
+            Jméno scriptu/souboru, který se aktuálně vykonává
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader._scriptreadertype">
+            <summary>   
+            Typ inicizalizace - a tím i nutného úklidu
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader._script">
+            <summary>
+            Pointer na Stream, který obsahuje vykonávaný script ( může se jednat o File, Memory, atd.. ) - je nastaven v rámci konstruktoru
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader._encoding">
+            <summary>
+            Kódování StreamReader
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader._script_reader">
+            <summary>
+            Reader textu vykonávaného scriptu
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader._script_buffer">
+            <summary>
+            Pokud se script načte jednorázově do paměti, potom sem
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader._akt_znak">
+            <summary>
+            Aktuální znak
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader._last_char">
+            <summary>
+            Předchozí znak
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader._akt_line_num">
+            <summary>
+            Aktuální číslo řádku
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader._akt_line_char_num">
+            <summary>
+            Aktuální pozice znaku na řádku
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader._akt_char_num">
+            <summary>
+            Aktuální pozice znaku od začátku scriptu
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader._stream_position">
+            <summary>
+            Aktuální pozice začátku příkazu v rámci STREAM
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader._stream_end_position">
+            <summary>
+            Poslední pozice streamu - pokud nelze zjistit, tak bude -1
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader._stream_position_peek">
+            <summary>
+            Pozice dalšího znaku, který ještě nebyl přečten, ale který je na řadě.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader._EndOfStream">
+            <summary>
+            Příznak konce scriptu
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader._command_text_orig">
+            <summary>
+            Plný text aktuálně zpracovávaného příkazu
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader.akt_char_num">
+            <summary>   Gets the akt character number. </summary>
+            <value> The akt character number. </value>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader.akt_line_num">
+            <summary>   Gets the akt line number. </summary>
+            <value> The akt line number. </value>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader.akt_line_char_num">
+            <summary>   Gets the akt line character number. </summary>
+            <value> The akt line character number. </value>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader.stream_position">
+            <summary>   Gets the stream position. </summary>
+            <value> The stream position. </value>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader.stream_position_peek">
+            <summary>   Gets the stream position. </summary>
+            <value> The stream position. </value>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader.stream_end_position">
+            <summary>
+            Poslední pozice streamu - pokud nelze zjistit, tak bude -1
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader.percent_position">
+            <summary>
+            Text popisující procentuálně pozici aktuálně zpracovávaného příkazu.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader.EndOfStream">
+            <summary>   Gets value indicating whether the end of stream. </summary>
+            <value> True if end of stream, false if not. </value>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader.command_text_orig">
+            <summary>   Plný text aktuálně zpracovávaného příkazu </summary>
+            <value> The command text original. </value>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader.script_name">
+            <summary>
+            Jméno scriptu nebo plná reference na zpracovávaný soubor
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader.encoding">
+            <summary>
+            Kódování StreamReader
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader.scriptreadertype">
+            <summary>
+            Typ vstupního proudu
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader.#ctor(System.IO.MemoryStream,System.Text.Encoding)">
+            <summary>   Inicializace ScriptReader na základě MemoryStream objektu - ať je na jaké chce pozici, začíná se vždy od začátku</summary>
+            <param name="a_mem_stream"> Otevřený memory stream obsahující text scriptu </param>
+            <param name="a_encoding">   Kódování znaků v memory streamu </param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader.#ctor(System.IO.MemoryStream)">
+            <summary>   Inicializace ScriptReader na základě MemoryStream objektu - ať je na jaké chce pozici, začíná se vždy od začátku</summary>
+            <param name="a_mem_stream"> Otevřený memory stream obsahující text scriptu </param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader.#ctor(System.String)">
+            <summary>   Inicializace ScriptReader na základě MemoryStream objektu - ať je na jaké chce pozici, začíná se vždy od začátku</summary>
+            <param name="a_file_name"> Jméno souboru obsahujícího text scriptu </param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged
+            resources.
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader.Read">
+            <summary>
+            Přesunout do samostatné třídy !!!
+            
+            Načte a vrátí znak, který je na řadě a posune pozici
+            
+            
+            </summary>
+            <returns>Následující načtený znak</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader.Peek">
+            <summary>
+            
+            Přesunout do samostatné třídy !!!
+            
+            Načtení dalšího znaku bez posunutí pozice
+            Pokud již další soubor nelze načíst, potom se vrátí null
+            </summary>
+            <returns>následující znak nebo null</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader.Seek(System.Int64,System.Int64)">
+            <summary>
+            
+            Přesunout do samostatné třídy !!!
+            
+            Nastavení pozice čtení zpět na zadanou BYTE pozici
+            </summary>
+            <param name="a_position">current</param>
+            <param name="a_position_peek">next</param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader.GetByteCountForChar(System.Char)">
+            <summary>   Pro zadaný znak vrátí počet bytů, které v aktuálním kódování zabýrá ve streamu </summary>
+            <param name="a_znak">   Měřený znak </param>
+            <returns>   Počet bytů zadaného znaku </returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader.Set_akt_char_num(System.Int32)">
+            <summary>   Sets akt character number. </summary>
+            <param name="a_akt_char_num">  The akt character number. </param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader.Set_akt_line_char_num(System.Int32)">
+            <summary>   Sets akt line character number. </summary>
+            <param name="a_akt_line_char_num"> The akt line character number. </param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader.Set_akt_line_num(System.Int32)">
+            <summary>   Sets akt line number. </summary>
+            <param name="a_akt_line_num">   The akt line number. </param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptReader.Set_last_char(System.Nullable{System.Char})">
+            <summary>   Sets last character. </summary>
+            <param name="a_last_char">  The last character. </param>
+        </member>
+        <member name="T:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerAdz">
+            <summary>
+            Třída, která na požádání vytvoří nový GAdtScriptEngine a to nad soubory na disku
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerAdz._ZipArchive">
+            <summary>
+            Objekt pro práci s archivem
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerAdz._AdzFileName">
+            <summary>
+            Jméno ADZ souboru, který se zpracovává
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerAdz._MainFileScriptName">
+            <summary>
+            Jméno hlavního spouštěcího souboru v ADZ. Jedná se o soubor s příponou ADT, který musí být v ADZ právě jeden.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerAdz._ZipFiles">
+            <summary>
+            Seznam jmen souborů obsažených v ZIPu - klíč je jméno bez cesty, hodnota je jméno přesně tak, jak jej mám zaznamenaný ZIP
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerAdz.DefaultEncoding">
+            <summary>výchozí kódování</summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerAdz.DefaultOptions">
+            <summary>výchozí nastavení pro čtení archivu</summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerAdz.MainFileScriptName">
+            <summary>
+            Jméno hlavního spouštěcího souboru v ADZ. Jedná se o soubor s příponou ADT, který musí být v ADZ právě jeden.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerAdz.ScriptSource">
+            <summary>
+            String popisující zdroj scriptů - počítám s file, memory, adz
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerAdz.AdzFileName">
+            <summary>
+            Pokud se script spouští z disku jako ADZ script, potom tato proměnná obsahuje plné jméno ke spouštěnému ADZ souboru - jinak je to prázdný string
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerAdz.ZipFiles">
+            <summary>
+            Seznam jmen souborů obsažených v ZIPu - klíč je jméno bez cesty, hodnota je jméno přesně tak, jak jej mám zaznamenaný ZIP
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerAdz.#ctor(System.String)">
+            <summary>
+            Konstruktor musí na vstupu dostat cestu k ADZ souboru na disku
+            </summary>
+            <param name="a_adz_file">Plná cesta k existujícímu ADZ souboru</param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerAdz.Dispose">
+            <summary>
+            Uvolňovací rutina
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerAdz.MakeAdtScriptReader(System.String)">
+            <summary>
+            Funkce vytvoří třídu ScriptReader a to nad zadaným souborem na disku PC
+            </summary>
+            <param name="a_file_name">Jméno požadovaného souboru</param>
+            <returns>Vytvořená instance GAdtScriptReader</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerAdz.MakeStreamReader(System.String)">
+            <summary>
+            Nad zadaným pojmenovaným zdrojem vytvoří nový otevřený MemoryStream - může sloužit např. pro obecné čtení hlavičky scriptu atd...
+            </summary>
+            <param name="a_file_name">Jméno požadovaného souboru</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerAdz.ReadFileToBlob(System.String)">
+            <summary>
+            Pomocná funkce. Načtení souboru ze ZIPu a to do pole byte
+            </summary>
+            <param name="a_file_name">Požadované jméno souboru</param>
+            <returns>Načtené pole byte</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerAdz.ScriptExists(System.String)">
+            <summary>
+            Test, zda zadaný script existuje zaregistrovaný v poli scriptů
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerAdz.ScriptToDisc(System.String)">
+            <summary>
+            Funkce pro přenedení souboru scriptu na disk do zadané plné cesty
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerAdz.ScriptToEditor(System.String)">
+            <summary>
+            Funkce pro přenedení souboru scriptu z disku do editoru
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerAdz.ScriptShowEditor(System.String)">
+            <summary>
+            Funkce pro ukončení zobrazení scriptu v editoru
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerAdz.ScriptFromEditor(System.String)">
+            <summary>
+            Funkce pro ukončení editoru
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerAdz.GetScriptLastWriteTime(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="a_script_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerAdz.GetScriptLength(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="a_script_name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerBase">
+            <summary>
+            Společná base třída pro script managery
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerBase._ScriptsDictionary">
+            <summary>
+            Pojmenované buffery - jednotlivé pojmentované scripty načtené dopředně z ADT funkce
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerBase.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerBase.ScriptToMem(System.String,System.String)">
+            <summary>
+            Funkce pro načtení zadaného souboru do paměti do pole pojmenovaných scriptů
+            </summary>
+            <param name="a_script_name"></param>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerBase.ScriptTextToMem(System.String,System.String)">
+            <summary>
+            Funkce pro načtení zadaného souboru do paměti do pole pojmenovaných scriptů
+            </summary>
+            <param name="a_script_name"></param>
+            <param name="a_script_text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerBase.ScriptFromMem(System.String)">
+            <summary>
+            Funkce pro odstranění zadaného scriptu z paměti 
+            </summary>
+            <param name="a_script_name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDb">
+            <summary>
+            Manager scriptů kde zdojem je databáze ( tabulky ginsgdt+gindgdt ) - přidává práci s podpisem a kontrolou proti TST souboru
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDb.ScriptSource">
+            <summary>
+            String popisující zdroj scriptů - počítám s file, memory, adz
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDb.AdzFileName">
+            <summary>
+            Pokud se script spouští z disku jako ADZ script, potom tato proměnná obsahuje plné jméno ke spouštěnému ADZ souboru - jinak je to prázdný string
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDb.MainFileScriptName">
+            <summary>
+            Jméno hlavního spouštěcího souboru v ADZ. Jedná se o soubor s příponou ADT, který musí být v ADZ právě jeden.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDb._MainFileScriptName">
+            <summary>
+            Jméno hlavního spouštěcího souboru v ADZ. Jedná se o soubor s příponou ADT, který musí být v ADZ právě jeden.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDb._all_to_memory">
+            <summary>
+            Příznak, že se vše má načíst v rámci konstruktoru do paměti a DB konekt se má ukončit - je vhodné pro malé objemy dat scriptů
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDb._use_cache">
+            <summary>
+            Příznak, že se jednou načtené soubory mají ukládat do chache - pokud je _all_to_memory=true, potom toto nastavení nemá význam
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDb._database">
+            <summary>
+            Pointer na připojený databázový objekt
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDb._ixs_gdt">
+            <summary>
+            ID v DB registrovaného GDT scirptu
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDb._check_sign">
+            <summary>
+            Příznak, že se má kontrolovat elektronický podpis TST souboru a dále hash jednotlivých scriptů proti TST souboru
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDb._Scripts_Content">
+            <summary>
+            Pojmenované stringy - jednotlivé pojmentované scripty
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDb._Scripts">
+            <summary>
+            Seznam jmen souborů scriptů. V klíči je normalizované jméno, v hodnotě je originální jméno platné pro DB sloupec - pro WHERE
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDb.#ctor(Gordic.Support.Database.GDatabase,System.String,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Konstruktor musí na vstupu dostat připojený databázový objekt
+            </summary>
+            <param name="a_database">Připojený databázový objekt - musí se jednat o jiný objekt, než bude předán do GAdtScriptEngine</param>
+            <param name="a_ixs_gdt">ID v DB registrovaného scriptu</param>
+            <param name="a_all_to_memory">Příznak, že vše se má okamžitě načíst do paměti a databázové připojení se má ukončit - druhou variantou je ponechat si otevřený DB konekt a jednotlivé soubory načítat až když jsou potřeba</param>
+            <param name="a_use_cache">Příznak, že se jinou načtené scripty mají uložit do cache - pokud je scriptů extremně hodně, potom by se měla zadat hodnota false</param>
+            <param name="a_check_sign">Příznak, že se má kontrolovat elektronický podpis TST souboru a dále hash jednotlivých scriptů proti TST souboru</param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDb.ReadFileToBlob(System.String)">
+            <summary>
+            Pomocná funkce. Načtení souboru ze DB a to do pole byte
+            </summary>
+            <param name="a_soubor">Požadované jméno souboru podle PK v DB</param>
+            <returns>Načtené pole byte</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDb.ReadTstFile(System.Byte[])">
+            <summary>
+            Načte obsah TST souboru do pole jmen souborů a jejich SHA2 kontrolních součtů
+            </summary>
+            <param name="v_buffer"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDb.MakeAdtScriptReader(System.String)">
+            <summary>
+            Funkce vytvoří třídu ScriptReader a to nad zadaným souborem na disku PC
+            </summary>
+            <param name="a_file_name">Jméno požadovaného souboru</param>
+            <returns>Vytvořená instance GAdtScriptReader</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDb.MakeStreamReader(System.String)">
+            <summary>
+            Nad zadaným pojmenovaným zdrojem vytvoří nový otevřený MemoryStream - může sloužit např. pro obecné čtení hlavičky scriptu atd...
+            </summary>
+            <param name="a_file_name">Jméno požadovaného souboru</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDb.ScriptExists(System.String)">
+            <summary>
+            Test, zda zadaný script existuje zaregistrovaný v poli scriptů
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDb.ScriptToDisc(System.String)">
+            <summary>
+            Funkce pro přenedení souboru scriptu na disk do zadané plné cesty
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDb.ScriptToEditor(System.String)">
+            <summary>
+            Funkce pro přenedení souboru scriptu z disku do editoru
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDb.ScriptShowEditor(System.String)">
+            <summary>
+            Funkce pro ukončení zobrazení scriptu v editoru
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDb.ScriptFromEditor(System.String)">
+            <summary>
+            Funkce pro ukončení editoru
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDb.GetScriptLastWriteTime(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="a_script_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDb.GetScriptLength(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="a_soubor"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDb.Dispose">
+            <summary>
+            Uvolňovací rutina
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDisk">
+            <summary>
+            Třída, která na požádání vytvoří nový GAdtScriptEngine a to nad soubory na disku
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDisk._MainFileScriptName">
+            <summary>
+            Jméno hlavního spouštěcího souboru v ADZ. Jedná se o soubor s příponou ADT, který musí být v ADZ právě jeden.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDisk.ScriptSource">
+            <summary>
+            String popisující zdroj scriptů - počítám s file, memory, adz
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDisk.MainFileScriptName">
+            <summary>
+            Jméno hlavního spouštěcího souboru v ADZ. Jedná se o soubor s příponou ADT, který musí být v ADZ právě jeden.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDisk.AdzFileName">
+            <summary>
+            Pokud se script spouští z disku jako ADZ script, potom tato proměnná obsahuje plné jméno ke spouštěnému ADZ souboru - jinak je to prázdný string
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDisk.#ctor(System.String)">
+            <summary>
+            Konstruktor - musí se mu zadat jméno výchozího hlavního script souboru
+            </summary>
+            <param name="a_main_script">jméno výchozího hlavního script souboru</param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDisk.MakeAdtScriptReader(System.String)">
+            <summary>
+            Funkce vytvoří třídu ScriptReader a to nad zadaným souborem na disku PC
+            </summary>
+            <param name="a_file_name">Jméno požadovaného souboru</param>
+            <returns>Vytvořená instance GAdtScriptReader</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDisk.MakeStreamReader(System.String)">
+            <summary>
+            Nad zadaným pojmenovaným zdrojem vytvoří nový otevřený MemoryStream - může sloužit např. pro obecné čtení hlavičky scriptu atd...
+            </summary>
+            <param name="a_file_name">Jméno požadovaného souboru</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDisk.ReadFileToBlob(System.String)">
+            <summary>
+            Pomocná funkce. Načtení souboru ze ZIPu a to do pole byte
+            </summary>
+            <param name="a_file_name">Požadované jméno souboru</param>
+            <returns>Načtené pole byte</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDisk.ScriptExists(System.String)">
+            <summary>
+            Test, zda zadaný script existuje na disku
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDisk.ScriptToDisc(System.String)">
+            <summary>
+            Funkce pro přenedení souboru scriptu na disk do zadané plné cesty
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDisk.ScriptToEditor(System.String)">
+            <summary>
+            Funkce pro přenedení souboru scriptu z disku do editoru
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDisk.ScriptShowEditor(System.String)">
+            <summary>
+            Funkce pro ukončení zobrazení scriptu v editoru
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDisk.ScriptFromEditor(System.String)">
+            <summary>
+            Funkce pro ukončení editoru
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDisk.GetScriptLastWriteTime(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="a_script_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDisk.GetScriptLength(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="a_script_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerDisk.Dispose">
+            <summary>
+            Uvolňovací rutina
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerGdz">
+            <summary>
+            Manager scriptů podobný jako je ADZ manager - přidává práci s podpisem a kontrolou proti TST souboru
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerGdz._TstFileName">
+            <summary>
+            Jméno TST souboru
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerGdz._P7sFileName">
+            <summary>
+            Jméno souboru s podpisem
+            </summary>        
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerGdz._ixs_gdt">
+            <summary>
+            ID balíčku
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerGdz._verze">
+            <summary>
+            Verze balíčku
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerGdz._nazev">
+            <summary>
+            Název balíčku
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerGdz._popis">
+            <summary>
+            Programátorem uvedený popis balíčku
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerGdz._orj">
+            <summary>
+            ORJ programátora, který sestavil balíček
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerGdz._run_cond">
+            <summary>
+            Podmínka pro spuštění balíčku
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerGdz._typ_gdt">
+            <summary>
+            Typ balíčku - Definováno v <seealso href="https://robot.gordic.cz/GinisDoc/Db/ginctyg">vas.ginctyg</seealso> - <seealso href="https://robot.gordic.cz/GinisDoc/data/ginctyg">Výčet hodnot</seealso>
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerGdz._priorita_gdt">
+            <summary>
+            Priorita balíčku
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerGdz.ixs_gdt">
+            <summary>
+            ID balíčku
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerGdz.verze">
+            <summary>
+            Verze balíčku
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerGdz.nazev">
+            <summary>
+            Název balíčku
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerGdz.popis">
+            <summary>
+            Programátorem uvedený popis balíčku
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerGdz.orj">
+            <summary>
+            ORJ programátora, který sestavil balíček
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerGdz.typ_gdt">
+            <summary>
+            Typ balíčku - Definováno v<seealso href="https://robot.gordic.cz/GinisDoc/Db/ginctyg">vas.ginctyg</seealso> - <seealso href = "https://robot.gordic.cz/GinisDoc/data/ginctyg" > Výčet hodnot</seealso>
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerGdz.priorita_gdt">
+            <summary>
+            Priorita balíčku
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerGdz.run_cond">
+            <summary>
+            Podmínka pro spuštění balíčku
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerGdz._GdzFiles">
+            <summary>
+            Seznam souborů obsažených v GDZ
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerGdz.GdzFiles">
+            <summary>
+            Seznam souborů obsažených v GDZ balíku
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerGdz.#ctor(System.String)">
+            <summary>
+            Konstruktor musí na vstupu dostat cestu k ADZ souboru na disku
+            </summary>
+            <param name="a_adz_file">Plná cesta k existujícímu ADZ souboru</param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerGdz.ReadTstFile(System.Byte[])">
+            <summary>
+            Načte obsah TST souboru do pole jmen souborů a jejich SHA2 kontrolních součtů
+            </summary>
+            <param name="v_buffer"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerGdz.MakeAdtScriptReader(System.String)">
+            <summary>
+            Funkce vytvoří třídu ScriptReader a to nad zadaným souborem na disku PC
+            </summary>
+            <param name="a_file_name">Jméno požadovaného souboru</param>
+            <returns>Vytvořená instance GAdtScriptReader</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerGdz.MakeStreamReader(System.String)">
+            <summary>
+            Nad zadaným pojmenovaným zdrojem vytvoří nový otevřený MemoryStream - může sloužit např. pro obecné čtení hlavičky scriptu atd...
+            </summary>
+            <param name="a_file_name">Jméno požadovaného souboru</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerMemory">
+            <summary>
+            Třída, která na požádání vytvoří nová GAdtScriptEngine a to podle stringů obsažených v zadaném Dictionary - tedy scripty dopředu připravené v paměti
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerMemory._MainFileScriptName">
+            <summary>
+            Jméno hlavního spouštěcího souboru v ADZ. Jedná se o soubor s příponou ADT, který musí být v ADZ právě jeden.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerMemory.ScriptSource">
+            <summary>
+            String popisující zdroj scriptů - počítám s file, memory, adz
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerMemory.AdzFileName">
+            <summary>
+            Pro načítání z resource obsahuje plnou cestu k embeded souborům - tedy namespace.adr.adr...
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerMemory.MainFileScriptName">
+            <summary>
+            Jméno hlavního spouštěcího souboru v ADZ. Jedná se o soubor s příponou ADT, který musí být v ADZ právě jeden.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerMemory._Scripts">
+            <summary>
+            Pojmenované stringy - jednotlivé pojmentované scripty
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerMemory.#ctor(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Inicializace managere scriptů 
+            </summary>
+            <param name="a_scripts">Slovník obsahující pojmenované pole ADT scriptů. Klíč by měl být vždy pouze malými písmeny.</param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerMemory.Dispose">
+            <summary>
+            Uvolňovací rutina
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerMemory.MakeAdtScriptReader(System.String)">
+            <summary>
+            Funkce vytvoří třídu ScriptReader a to nad zadaným souborem v paměti případně na disku PC ( varianta s diskem je přidána navíc proto, že v rámci běhu scriptu si někteří autoři mohou pomáhat vytvořením pomocných scriptů a ty se ukládajíc do zadané cesty na disku )
+            </summary>
+            <param name="a_file_name">Jméno požadovaného souboru</param>
+            <returns>Vytvořená instance GAdtScriptReader</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerMemory.MakeStreamReader(System.String)">
+            <summary>
+            Nad zadaným pojmenovaným zdrojem vytvoří nový otevřený MemoryStream ze scriptů registrovaných v paměti, případně na disku PC ( varianta s diskem je přidána navíc proto, že v rámci běhu scriptu si někteří autoři mohou pomáhat vytvořením pomocných scriptů a ty se ukládajíc do zadané cesty na disku )
+            může sloužit např. pro obecné čtení hlavičky scriptu atd...
+            </summary>
+            <param name="a_file_name">Jméno požadovaného souboru</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerMemory.ReadFileToBlob(System.String)">
+            <summary>
+            Pomocná funkce. Načtení souboru ze ZIPu a to do pole byte
+            </summary>
+            <param name="a_file_name">Požadované jméno souboru</param>
+            <returns>Načtené pole byte</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerMemory.ScriptExists(System.String)">
+            <summary>
+            Test, zda zadaný script existuje zaregistrovaný v poli scriptů
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerMemory.ScriptToDisc(System.String)">
+            <summary>
+            Funkce pro přenedení souboru scriptu na disk do zadané plné cesty
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerMemory.ScriptToEditor(System.String)">
+            <summary>
+            Funkce pro přenedení souboru scriptu z disku do editoru
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerMemory.ScriptShowEditor(System.String)">
+            <summary>
+            Funkce pro ukončení zobrazení scriptu v editoru
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerMemory.ScriptFromEditor(System.String)">
+            <summary>
+            Funkce pro ukončení editoru
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerMemory.GetScriptLastWriteTime(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="a_script_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerMemory.GetScriptLength(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="a_script_name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerResource">
+            <summary>
+            Třída, která na požádání vytvoří nová GAdtScriptEngine a to podle embeded resources v zadané knihovně v zadaném adresáři
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerResource._assembly">
+            <summary>
+            Knihovna, ve které jsou scripty
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerResource._name_space">
+            <summary>
+            Name space knihovny, kde jsou resource
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerResource._scripts_path">
+            <summary>
+            Podadresář, nebo podadresáře - nebo prázdno. Očekává se zadání jednotlivých úrovní oddělených tečkou nebo zpětným lomítkem
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerResource._MainFileScriptName">
+            <summary>
+            Jméno hlavního spouštěcího souboru v ADZ. Jedná se o soubor s příponou ADT, který musí být v ADZ právě jeden.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerResource.ScriptSource">
+            <summary>
+            String popisující zdroj scriptů - počítám s file, memory, adz
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerResource.AdzFileName">
+            <summary>
+            Pokud se script spouští z disku jako ADZ script, potom tato proměnná obsahuje plné jméno ke spouštěnému ADZ souboru - jinak je to prázdný string
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerResource.MainFileScriptName">
+            <summary>
+            Jméno hlavního spouštěcího souboru v ADZ. Jedná se o soubor s příponou ADT, který musí být v ADZ právě jeden.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerResource._Scripts">
+            <summary>
+            Pojmenované stringy - jednotlivé pojmentované scripty
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerResource.#ctor(System.Reflection.Assembly,System.String,System.String,System.String)">
+            <summary>
+            Inicializace managere scriptů 
+            </summary>
+            <param name="a_knihovna">Knihovna, ze které se mají sctipty načítat</param>
+            <param name="a_namespace">namespace knihovny</param>
+            <param name="a_path">prázdno a nebo podadresáře k embeded souborům - jednotlivé úrovně mohou být odděleny tečkou a nebo zpětným lomítkem</param>
+            <param name="a_file_name">jméno hlavního spouštěcího sciptu - krátké jméno bez cesty - musí existovat v uvedené cestě, jinak se vyhodí chyba</param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerResource.Dispose">
+            <summary>
+            Uvolňovací rutina
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerResource.MakeAdtScriptReader(System.String)">
+            <summary>
+            Funkce vytvoří třídu ScriptReader a to nad zadaným souborem v paměti případně na disku PC ( varianta s diskem je přidána navíc proto, že v rámci běhu scriptu si někteří autoři mohou pomáhat vytvořením pomocných scriptů a ty se ukládajíc do zadané cesty na disku )
+            </summary>
+            <param name="a_file_name">Jméno požadovaného souboru</param>
+            <returns>Vytvořená instance GAdtScriptReader</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerResource.MakeStreamReader(System.String)">
+            <summary>
+            Nad zadaným pojmenovaným zdrojem vytvoří nový otevřený MemoryStream ze scriptů registrovaných v paměti, případně na disku PC ( varianta s diskem je přidána navíc proto, že v rámci běhu scriptu si někteří autoři mohou pomáhat vytvořením pomocných scriptů a ty se ukládajíc do zadané cesty na disku )
+            může sloužit např. pro obecné čtení hlavičky scriptu atd...
+            </summary>
+            <param name="a_file_name">Jméno požadovaného souboru</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerResource.ReadFileToBlob(System.String)">
+            <summary>
+            Pomocná funkce. Načtení souboru ze ZIPu a to do pole byte
+            </summary>
+            <param name="a_file_name">Požadované jméno souboru</param>
+            <returns>Načtené pole byte</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerResource.ScriptExists(System.String)">
+            <summary>
+            Test, zda zadaný script existuje zaregistrovaný v poli scriptů
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerResource.ScriptToDisc(System.String)">
+            <summary>
+            Funkce pro přenedení souboru scriptu na disk do zadané plné cesty
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerResource.ScriptToEditor(System.String)">
+            <summary>
+            Funkce pro přenedení souboru scriptu z disku do editoru
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerResource.ScriptShowEditor(System.String)">
+            <summary>
+            Funkce pro ukončení zobrazení scriptu v editoru
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerResource.ScriptFromEditor(System.String)">
+            <summary>
+            Funkce pro ukončení editoru
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerResource.GetScriptLastWriteTime(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="a_script_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.GAdtScriptSourceManagerResource.GetScriptLength(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="a_script_name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.AdtScriptSourceManager.IGAdtScriptReader">
+            <summary>
+            Interface, který musí splňovat Script reader
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.IGAdtScriptReader.command_text_orig">
+            <summary>   Plný text aktuálně zpracovávaného příkazu </summary>
+            <value> The command text original. </value>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.IGAdtScriptReader.akt_char_num">
+            <summary>   Gets the akt character number. </summary>
+            <value> The akt character number. </value>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.IGAdtScriptReader.akt_line_num">
+            <summary>   Gets the akt line number. </summary>
+            <value> The akt line number. </value>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.IGAdtScriptReader.akt_line_char_num">
+            <summary>   Gets the akt line character number. </summary>
+            <value> The akt line character number. </value>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.IGAdtScriptReader.stream_position">
+            <summary>   Gets the stream position. </summary>
+            <value> The stream position. </value>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.IGAdtScriptReader.stream_position_peek">
+            <summary>   Gets the stream position. </summary>
+            <value> The stream position. </value>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.IGAdtScriptReader.stream_end_position">
+            <summary>
+            Poslední pozice streamu - pokud nelze zjistit, tak bude -1
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.IGAdtScriptReader.EndOfStream">
+            <summary>   Gets value indicating whether the end of stream. </summary>
+            <value> True if end of stream, false if not. </value>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.IGAdtScriptReader.percent_position">
+            <summary>
+            Text popisující procentuálně pozici aktuálně zpracovávaného příkazu.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.IGAdtScriptReader.script_name">
+            <summary>
+            Jméno scriptu nebo plná reference na zpracovávaný soubor
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.IGAdtScriptReader.encoding">
+            <summary>
+            Kódování StreamReader
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.IGAdtScriptReader.scriptreadertype">
+            <summary>
+            Typ vstupního proudu
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.IGAdtScriptReader.Read">
+            <summary>
+            Načte a vrátí znak, který je na řadě a posune pozici
+            </summary>
+            <returns>Následující načtený znak</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.IGAdtScriptReader.Peek">
+            <summary>
+            Načtení dalšího znaku bez posunutí pozice
+            Pokud již další soubor nelze načíst, potom se vrátí null
+            </summary>
+            <returns>následující znak nebo null</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.IGAdtScriptReader.GetByteCountForChar(System.Char)">
+            <summary>   Pro zadaný znak vrátí počet bytů, které v aktuálním kódování zabýrá ve streamu </summary>
+            <param name="a_znak">   Měřený znak </param>
+            <returns>   Počet bytů zadaného znaku </returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.IGAdtScriptReader.Seek(System.Int64,System.Int64)">
+            <summary>
+            
+            Přesunout do samostatné třídy !!!
+            
+            Nastavení pozice čtení zpět na zadanou BYTE pozici
+            </summary>
+            <param name="a_position">current</param>
+            <param name="a_position_peek">next</param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.IGAdtScriptReader.Set_akt_char_num(System.Int32)">
+            <summary>   Sets akt character number. </summary>
+            <param name="a_akt_char_num">  The akt character number. </param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.IGAdtScriptReader.Set_akt_line_char_num(System.Int32)">
+            <summary>   Sets akt line character number. </summary>
+            <param name="a_akt_line_char_num"> The akt line character number. </param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.IGAdtScriptReader.Set_akt_line_num(System.Int32)">
+            <summary>   Sets akt line number. </summary>
+            <param name="a_akt_line_num">   The akt line number. </param>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.IGAdtScriptReader.Set_last_char(System.Nullable{System.Char})">
+            <summary>   Sets last character. </summary>
+            <param name="a_last_char">  The last character. </param>
+        </member>
+        <member name="T:Gordic.Support.AdtScriptSourceManager.IGAdtScriptSourceManager">
+            <summary>
+            Obecný interface pro poskytovatele scriptů - scripty se poskytují podle jejich jména
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.IGAdtScriptSourceManager.ScriptSource">
+            <summary>
+            String popisující zdroj scriptů - počítám s file, memory, adz, ginis (myšleno databáze GINIS - tabulky ginsgdt )
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.IGAdtScriptSourceManager.AdzFileName">
+            <summary>
+            Pokud se script spouští z disku jako ADZ script, potom tato proměnná obsahuje plné jméno ke spouštěnému ADZ souboru - jinak je to prázdný string
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtScriptSourceManager.IGAdtScriptSourceManager.MainFileScriptName">
+            <summary>
+            Jméno hlavního scriptu
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.IGAdtScriptSourceManager.MakeAdtScriptReader(System.String)">
+            <summary>
+            Funkce vytvoří třídu ScriptReader a to pro zadané jméno scriptu - zdroje souborů mohou být různé - disk, databáze, pole stringů v paměti atd..
+            </summary>
+            <param name="a_file_name">Jméno požadovaného souboru</param>
+            <returns>Vytvořená instance GAdtScriptReader</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.IGAdtScriptSourceManager.MakeStreamReader(System.String)">
+            <summary>
+            Nad zadaným pojmenovaným zdrojem vytvoří nový otevřený MemoryStream - může sloužit např. pro obecné čtení hlavičky scriptu atd...
+            </summary>
+            <param name="a_file_name">Jméno požadovaného souboru</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.IGAdtScriptSourceManager.ReadFileToBlob(System.String)">
+            <summary>
+            Načtení souboru do pole byte
+            </summary>
+            <param name="a_file_name">Požadované jméno souboru</param>
+            <returns>Načtené pole byte</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.IGAdtScriptSourceManager.ScriptExists(System.String)">
+            <summary>
+            Funkce vrátí příznak, zda script požadovaného jména existuje
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.IGAdtScriptSourceManager.ScriptToDisc(System.String)">
+            <summary>
+            Funkce pro přenedení souboru scriptu na disk do zadané plné cesty
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.IGAdtScriptSourceManager.ScriptToEditor(System.String)">
+            <summary>
+            Funkce pro přenedení souboru scriptu do editoru
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.IGAdtScriptSourceManager.ScriptShowEditor(System.String)">
+            <summary>
+            Funkce pro vytažení editoru do popředí
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.IGAdtScriptSourceManager.ScriptFromEditor(System.String)">
+            <summary>
+            Funkce pro ukončení editoru
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.IGAdtScriptSourceManager.ScriptToMem(System.String,System.String)">
+            <summary>
+            Funkce pro načtení zadaného souboru do paměti do pole pojmenovaných scriptů
+            </summary>
+            <param name="a_script_name"></param>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.IGAdtScriptSourceManager.ScriptTextToMem(System.String,System.String)">
+            <summary>
+            Funkce pro načtení zadaného souboru do paměti do pole pojmenovaných scriptů
+            </summary>
+            <param name="a_script_name"></param>
+            <param name="a_script_text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.IGAdtScriptSourceManager.ScriptFromMem(System.String)">
+            <summary>
+            Funkce pro odstranění zadaného scriptu z paměti 
+            </summary>
+            <param name="a_script_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.IGAdtScriptSourceManager.GetScriptLastWriteTime(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="a_script_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtScriptSourceManager.IGAdtScriptSourceManager.GetScriptLength(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="a_script_name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.AdtScriptSourceManager.VSCRIPTREADERTYPE">
+            <summary>   Typ vstupního stremu pro script reader </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.VSCRIPTREADERTYPE.MemoryStream">
+            <summary>   Script se čte z předaného MemoryStream </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.VSCRIPTREADERTYPE.File">
+            <summary>   Script se čte ze souboru předaného na základě jeho jména </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtScriptSourceManager.VSCRIPTREADERTYPE.Editor">
+            <summary>
+            Script se čte z editoru
+            </summary>
+        </member>
+    </members>
+</doc>

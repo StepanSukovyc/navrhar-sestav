@@ -1,0 +1,567 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.GSA.WinClient</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.GSA.WinClient.GFileWriter">
+            <summary>
+            Třída pro thread bezpečný zápis do souboru
+            </summary>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GFileWriter._zamek">
+            <summary>
+            Pomocný objekt pro zámek 
+            </summary>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GFileWriter.WriteToFileThreadSafe(System.String,System.String)">
+            <summary>
+            Zápis do souboru s ošetřením multipřístupů
+            </summary>
+            <param name="v_LogFile">Plná cesta na soubor, do kterého se má zapsat</param>
+            <param name="v_text">Text, který se má do souboru zapsat.</param>
+        </member>
+        <member name="T:Gordic.GSA.WinClient.GSetting">
+            <summary>
+            Pomocná třída pro práci s konfigurací aplikace
+            </summary>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GSetting.#ctor">
+            <summary>
+            Prázdný konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GSetting.Read">
+            <summary>
+            Načtení parametrů z registrů
+            </summary>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GSetting.GetInstallAdr(System.String)">
+            <summary>
+            Vrátí adresář s instalací GINIS
+            </summary>
+            <param name="sInFaze"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Gordic.GSA.WinClient.GSetting.TraceOutput">
+            <summary>
+            Příznak, zda se smí trasovat
+            </summary>
+        </member>
+        <member name="P:Gordic.GSA.WinClient.GSetting.ListenerPort">
+            <summary>
+            Port na kterém poslouchá aktualizační služba GINIS
+            </summary>
+        </member>
+        <member name="T:Gordic.GSA.WinClient.GInstClientTcpServ">
+            <summary>
+            Třída pro komunikaci se systémovou službou zajišťující samotnou aktualizaci aplikací systému GINIS
+            
+            Hlavním vstupním bodem pro instalaci je funkce StartInstallation()
+            </summary>
+        </member>
+        <member name="T:Gordic.GSA.WinClient.GInstClientTcpServ.NextStepDelegate">
+            <summary>
+            Prototyp delegáta pro obsluhu-zpracování přijatých informací od serveru
+            </summary>
+            <param name="total">Celkový počet kroků</param>
+            <param name="current">Aktuálně zpracovávaný krok. V případě záporné hodnoty se jedná o typ chyby</param>
+            <param name="sMessage">Vzkaz odeslaný ze serveru odpovídající aktuálně zpracovávanému kroku a nebo aktuálně přijaté chybě</param>
+            <returns></returns>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GInstClientTcpServ.moNextStepDelegate">
+            <summary>
+            Delegát na obsluhu přijatých informací od serveru
+            </summary>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GInstClientTcpServ.m_sServiceMachine">
+            <summary>
+            Jméno síťového serveru, se kterým se bude komunikovat - bude tam vždy konstanta "localhost"
+            </summary>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GInstClientTcpServ.m_nServiceport">
+            <summary>
+            Port na kterém se bude se serverem komunikovat
+            </summary>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GInstClientTcpServ.m_sInstParam">
+            <summary>
+            Parametr požadované aktualizace - má obsahovat pouze označení programové fáze. Např. GINADM01 - předává se v rámci inicializace procesu na server
+            </summary>
+        </member>
+        <member name="P:Gordic.GSA.WinClient.GInstClientTcpServ.NextStepMethod">
+            <summary>
+            Delegát na obsluhu přijatých informací od serveru
+            </summary>
+        </member>
+        <member name="P:Gordic.GSA.WinClient.GInstClientTcpServ.ServiceMachine">
+            <summary>
+            Jméno síťového serveru, se kterým se bude komunikovat - bude tam vždy konstanta "localhost"
+            </summary>
+        </member>
+        <member name="P:Gordic.GSA.WinClient.GInstClientTcpServ.Serviceport">
+            <summary>
+            Port na kterém se bude se serverem komunikovat
+            </summary>
+        </member>
+        <member name="P:Gordic.GSA.WinClient.GInstClientTcpServ.InstParam">
+            <summary>
+            Parametr požadované aktualizace - má obsahovat pouze označení programové fáze. Např. GINADM01 - předává se v rámci inicializace procesu na server
+            </summary>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GInstClientTcpServ.CallNextStepDelegate(System.Int32,System.Int32,System.String,System.Boolean)">
+            <summary>
+            Funkce pro zpracování informací přijatých od serveru po vykonání jednoho kroku 
+            </summary>
+            <param name="total">Celkový počet kroků</param>
+            <param name="current">Aktuálně vykonávaný krok ( pokud je hodnota záporná, potom se jedná o chybový stav určitého typu )</param>
+            <param name="sMessage">Text vzkazu ze serveru</param>
+            <param name="defaultval">Toto by se asi vůbec nemělo používat</param>
+            <returns>Přínak úspěchu a tím i příznak, že se může pokračovat na další krok</returns>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GInstClientTcpServ.StartInstallation(System.String,System.Boolean)">
+            <summary>
+            Spuštění procesu reinstalace - na pracovním threadu - startuje se z hlavní funkce threadu
+            
+            Tato funkce obsahuje smyčku, která cyklí tak dlouho, dokud vše není úspěšně ukončeno a nebo dojde k nějaké chybě
+            
+            Informace ven z této smyčky se odesílají přes pointer na funkci volaný v rámci funkce CallNextStepDelegate
+            </summary>
+            <param name="cfgdata">Parametry příkazové řádky</param>
+            <param name="testrun">Příznak, že se jedná pouze o testovací běh - asi se vůbec nevyužívá</param>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GInstClientTcpServ.#ctor">
+            <summary>
+            Konstruktor - prázdný
+            </summary>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GInstClientTcpServ.InitInst(System.String,System.String@,System.Int32@)">
+            <summary>
+            Aktivate připojení na server a úvodní komunikace se serverem - na jejím konci bude detekovaná chyba a nabo připravené kroky reinstalace 
+            - na straně klienta v tom případě budu znát počet kroků reinstalace
+            </summary>
+            <param name="CfgData">Parametry příkazové řádky této aplikace</param>
+            <param name="message">OUT hlášení o realizaci inicializace procesu</param>
+            <param name="TotalCount">OUT očekávaný celkový počet kroků</param>
+            <returns>Příznak úspěšné aktivace instalačního procesu na straně serveru</returns>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GInstClientTcpServ.BreakInstallation">
+            <summary>
+            Ukončení instalace ze strany klienta - musím na server poslat povel pro ukončení a přečtu z komunikačního kanálu odpověď - a zahodím ji.
+            </summary>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GInstClientTcpServ.NextInstPrev(System.Int32@,System.String@)">
+            <summary>
+            Funkce pro vyvolání (spuštění) jednoho kroku instalace na serveru
+            </summary>
+            <param name="counter">Číslo realizovaného kroku</param>
+            <param name="message">Vzkaz odeslaný ze serveru</param>
+            <returns>Příznak úspěšné realizace akce</returns>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GInstClientTcpServ.NextInstAfter(System.Int32,System.String@)">
+            <summary>
+            Funkce pro načtení a zpracování informací druhého řádku po ukončení požadovaného kroku na straně serveru
+            </summary>
+            <param name="counter">Aktuální krok</param>
+            <param name="message">Vzkaz přijatý ze server</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GInstClientTcpServ.DoneInst">
+            <summary>
+            Ukončení komunikace se serverem
+            </summary>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GQuestionForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GQuestionForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GQuestionForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GMainForm.CanRun">
+            <summary>
+            Příznak, že se může pokračovat v reinstalaci dalším krokem, který je na řadě.
+            </summary>
+        </member>
+        <member name="T:Gordic.GSA.WinClient.GMainForm.ThreadCalbackDelegate">
+            <summary>
+            Pointer na funkci pro zpětné zobrazení dat z pracovního threadu do hlavního grafického threadu
+            </summary>
+            <param name="totalcount">Celkový počet kroků reinstalace</param>
+            <param name="current">Aktuální krok reinstalace</param>
+            <param name="sInfo">Textové info</param>
+            <returns></returns>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GMainForm.mbTraceOutputEnabled">
+            <summary>
+            Příznak, že se může podrobně logovat do log souboru na disk
+            </summary>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GMainForm.mbWaitingForDialog">
+            <summary>
+            Příznak, že se čeká na odpověď uživatele
+            </summary>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GMainForm.mbInstallationSuccess">
+            <summary>
+            Příznak celkové úspěšné realizace akce
+            </summary>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GMainForm.mbDisableRunExternalExe">
+            <summary>
+            Příznak zákazu spuštění EXE na závěru akce
+            </summary>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GMainForm.timer_sec">
+            <summary>
+            Časová prodleva, která má nastat pro vykonání požadované akce
+            </summary>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GMainForm.ActionFalg">
+            <summary>
+            Příznak, jaká akce je při uplynutí zadané časové prodlevy vykonána
+            </summary>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GMainForm.msCmdLineArguments">
+            <summary>
+            Parametry příkazové řádky
+            </summary>
+        </member>
+        <member name="T:Gordic.GSA.WinClient.GMainForm.ActionType">
+            <summary>
+            Číselník možných požadovaných akcí
+            </summary>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GMainForm.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GMainForm.#ctor(System.String[])">
+            <summary>
+            Konstruktor s příjmem agrumentů - příkazové řádky
+            </summary>
+            <param name="arguments">Příkazová řádka přijatá při startu aplikace</param>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GMainForm.FormConstructor(System.String[])">
+            <summary>
+            Startovací sekvence okna a tím i celé reinstalace
+            </summary>
+            <param name="arguments">Parametry příkazové řádky</param>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GMainForm.ReadConfig(System.String[])">
+            <summary>
+            Načtení parametrů akce jak z příkazové řádky, tak z registrů
+            </summary>
+            <param name="arguments">Příkozová řádka</param>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GMainForm.StartWaitByTimer(System.Int32,Gordic.GSA.WinClient.GMainForm.ActionType)">
+            <summary>
+            Přijmutí požadavku na časovač na vykonání zadané akce
+            </summary>
+            <param name="waitsec">Požadované prodleva startu akce</param>
+            <param name="Action">Identifikace požadované akce</param>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GMainForm.CalbackMethod(System.Int32,System.Int32,System.String)">
+            <summary>
+            Funkce pro příjem informací o jednotlivých krocích ze serveru - může také přijmout povel na ukončení akce atd... 
+            Jako pointer je nastavena a přes invoke je volána z pracovního threadu 
+            </summary>
+            <param name="totalcount">Celkový počet kroků reinstalace</param>
+            <param name="current">Aktuální krok reinstalace</param>
+            <param name="sInfo">Doprovodné info ve formátu base64</param>
+            <returns>Příznak, že se může pokračovat v reinstalaci dalším krokem, který je na řadě.</returns>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GMainForm.DoNextStep(System.Int32,System.Int32,System.String)">
+            <summary>
+            Funkce, která jako pointer byla předána do třídy pracující na jiném ( pracovním ) threadu - tato funkce slouží pro příjem informací o pokroku jednotlivých instalačních kroků na straně serveru - a také slouží ke realizaci dotazů směrem k uživateli a to v případě problému nebo chyby
+            </summary>
+            <param name="total">Celkový počet kroků</param>
+            <param name="current">Aktuální krok nebo v případě záporného čísla typ chyby</param>
+            <param name="sMessage">Text popisující aktuální krok, nebo chybu</param>
+            <returns>Příznak, zda se má pokračovat v procesu reinstalace</returns>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GMainForm.DoInstall">
+            <summary>
+            Hlavní vstupní bod pracovního threadu pro komunikaci se serverem 
+            </summary>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GMainForm.QuestionForm(System.String,System.Boolean)">
+            <summary>
+            Funkce pro obsluhu dotazu uživatele
+            </summary>
+            <param name="sMessage">Dotaz</param>
+            <param name="autoendresult">Příznak automatické odpovědi v případě, že uživatel nějakou dobu neodpovídá</param>
+            <returns>odpověď</returns>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GMainForm.DoEnd">
+            <summary>
+            Pokus o ukončení celé akce
+            </summary>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GMainForm.DoStart">
+            <summary>
+            Odstartování nového threadu pro realizaci akce na pozadí - je volána z timerTest_Tick( )
+            </summary>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GMainForm.timerTest_Tick(System.Object,System.EventArgs)">
+            <summary>
+            Obsluha pípnutí časovače
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GMainForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GMainForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GMainForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.GSA.WinClient.GSupport">
+            <summary>
+            Pomocná třída pro popis stavů procesu reinstalace
+            </summary>
+        </member>
+        <member name="T:Gordic.GSA.WinClient.GSupport.InstFileResult">
+            <summary>
+            Status realizovaného kroku
+            </summary>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GSupport.InstFileResult.Installed">
+            <summary>
+            Bylo instalováno
+            </summary>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GSupport.InstFileResult.Question">
+            <summary>
+            Je potřeba odpověď uživatele
+            </summary>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GSupport.InstFileResult.Error">
+            <summary>
+            Nastala chyba
+            </summary>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GSupport.InstFileResult.Finish">
+            <summary>
+            Úspěšné a úplné ukončení procesu reinstalace
+            </summary>
+        </member>
+        <member name="T:Gordic.GSA.WinClient.GSupport.Signal">
+            <summary>
+            Výčet typů signálů, které může server vracet
+            Mimo tento výčet může server vracet také kladná čísla a to je pořadí aktuálně realizovaného kroku na straně serveru
+            </summary>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GSupport.Signal.StartError">
+            <summary>
+            Nepodařilo se nastartovat službu nebo se k ní připojit
+            </summary>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GSupport.Signal.BreakebByUser">
+            <summary>
+            Akce přerušena uživatele
+            </summary>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GSupport.Signal.Question">
+            <summary>
+            Proces se potřebuje zeptat uživatele na něco
+            </summary>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GSupport.Signal.InstallItemError">
+            <summary>
+            Krok instalace a tím i celá instalace skončila s chybou
+            </summary>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GSupport.Signal.End">
+            <summary>
+            Úspěšný konec
+            </summary>
+        </member>
+        <member name="T:Gordic.GSA.WinClient.GSupport.Status">
+            <summary>
+            Výčet aktuálních atavů aplikace
+            </summary>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GSupport.ToBase64(System.String)">
+            <summary>
+            Převod stringu na BASE64
+            </summary>
+            <param name="s">String</param>
+            <returns>base64 podoba</returns>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GSupport.FromBase64(System.String)">
+            <summary>
+            Převod base64 na string
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GSupport.ParamsToB64(System.String[])">
+            <summary>
+            Převod pole parametrů na base64 podobu
+            </summary>
+            <param name="sprm"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GSupport.B64ToParams(System.String)">
+            <summary>
+            Převod zprávy od serveru ( v BASE64 ) na pole stringových parametrů
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.GSA.WinClient.GTrace">
+            <summary>
+            Pomocný objekt pro trasování
+            </summary>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GTrace.LogFile">
+            <summary>
+            2016-01-25
+            Jméno textového log.souboru - zapisuje se do něj v případě, že TraceOutputEnabled = true
+            </summary>
+        </member>
+        <member name="F:Gordic.GSA.WinClient.GTrace.TraceOutputEnabled">
+            <summary>
+            Přepínač, zda se má trasovat ( zapíná se na základě nastavení v registrech HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Gordic\GINIS\GSSINS01\HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Gordic\GINIS[TraceOutputOn] )
+            </summary>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GTrace.DbgWriteLn(System.String)">
+            <summary>
+            Výpis trasovacího záznamu s odřádkování
+            </summary>
+            <param name="strline">text pro zápis</param>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.Program.Main(System.String[])">
+            <summary>
+            The main entry point for the application.
+            </summary>
+        </member>
+        <member name="T:Gordic.GSA.WinClient.Gordic_GSA_WinClient">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.GSA.WinClient.Gordic_GSA_WinClient.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.GSA.WinClient.Gordic_GSA_WinClient.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.GSA.WinClient.Gordic_GSA_WinClient._382">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.GSA.WinClient.Gordic_GSA_WinClient._382_gordic3_ginis_gin_3">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.GSA.WinClient.Gordic_GSA_WinClient._384_gordic3_ginis_gin_3">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.GSA.WinClient.Gordic_GSA_WinClient._386_gordic3_ginis_gin_3">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.GSA.WinClient.Gordic_GSA_WinClient.akce_zastavit">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.GSA.WinClient.Gordic_GSA_WinClient.bcg">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.GSA.WinClient.Gordic_GSA_WinClient.dialog_dotaz">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.GSA.WinClient.Gordic_GSA_WinClient.ginis">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.GSA.WinClient.Gordic_GSA_WinClient.okno_napoveda">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.GSA.WinClient.Gordic_GSA_WinClient.sipka_dolu">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="T:Gordic.GSA.WinClient.GTcpClient">
+            <summary>
+            Komunikační objekt pro ovládání aktualizační služby
+            </summary>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GTcpClient.Connect(System.String,System.Int32)">
+            <summary>
+            Pokus o otevření komunikace se zadaným cílem - případně to zkouší i na více adresách
+            </summary>
+            <param name="serveradres">Server</param>
+            <param name="serverport">Port</param>
+            <returns>Příznak úspěšného připojení</returns>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GTcpClient.ConnectSocket(System.Net.IPAddress,System.Int32)">
+            <summary>
+            Pokus o otevření komunikačního kanálu.
+            </summary>
+            <param name="aIP">Požadovaná IP adrese</param>
+            <param name="aServerport">Požadovaný port</param>
+            <returns>příznak úspěšného otevření</returns>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GTcpClient.Disconnect">
+            <summary>
+            Ukončení komunikačního kanálu
+            </summary>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GTcpClient.SendLine(System.String)">
+            <summary>
+            Oedslání jedné řádky do komunikačního kanálu
+            </summary>
+            <param name="sline"></param>
+        </member>
+        <member name="M:Gordic.GSA.WinClient.GTcpClient.ReadLine">
+            <summary>
+            Načtení jedné řádky z komunikačního kanálu
+            </summary>
+            <returns>Načtená řádka</returns>
+        </member>
+    </members>
+</doc>

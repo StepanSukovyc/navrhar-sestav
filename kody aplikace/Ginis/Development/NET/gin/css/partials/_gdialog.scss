@@ -1,0 +1,273 @@
+﻿@import "base";
+
+.gdialog.ui-dialog {
+    overflow: visible;
+    background: $base-color-content;
+    color: $base-color-text;
+    border: 1px solid opacify($base-color-dark, 0.8);
+    @include shadow(7px 7px 60px 0 rgba(0,0,0,0.3));
+
+    .ui-dialog-titlebar-close, .ui-dialog-titlebar-maximize {
+        box-sizing: border-box;
+        top: -1px;
+        height: calc(100% + 1px);
+        font-size: 16px;
+    }
+
+    .ui-dialog-titlebar-b1 {
+        right: -1px;
+    }
+
+    .ui-dialog-titlebar-b2 {
+        right: 27px;
+    }
+
+    .ui-cover {
+        z-index: 1;
+    }
+
+    .ui-dialog-titlebar {
+        background: $base-color-dark;
+        color: $base-color-content;
+        font-size: $font-size-title;
+        border: none;
+        padding: 0.2rem 0.5rem;
+        z-index: 2; // nad coverdivem
+
+        //jq-ui 1.13.0 (melo by být zpětně kompatibilní)
+        .ui-button {
+            background: transparent;
+            border-color: transparent;
+            color: inherit;
+
+            &:hover, &:focus, &:active {
+                background: $base-color-text;
+            }
+
+            &.ui-dialog-titlebar-close {
+                &:hover,
+                &:focus,
+                &:active {
+                    background: $base-color-important;
+                }
+            }
+        }
+    }
+
+    .ui-dialog-title {
+        width: 100%;
+        padding-right: 48px;
+    }
+
+    .ui-dialog-toolbar {
+        background: $base-color-tool;
+        overflow: hidden;
+        //font-size: $font-size-title;
+        font-weight: $font-weight-normal;
+
+        .g-button {
+            //font-size: $font-size-title;
+
+            &:not(.g-button--activator) {
+                min-width: 2rem;
+            }
+        }
+
+        .g-toolbar__item {
+            height: 2rem;
+        }
+        //Vyska tlacitek v toolbaru ve favorites
+        .g-button__icon {
+            font-size: $font-size-icon;
+        }
+    }
+
+    .ui-dialog-statusbar {
+        border-bottom: 1px solid $base-color-shadow;
+        padding: 0 0.25rem; //NOTE (BM): Na poz VMacy
+    }
+
+    .ui-dialog-flashbar {
+        .gflashpanel__separator:before {
+            content: "|";
+            opacity: 0.7;
+        }
+    }
+
+    .ui-dialog-content {
+        z-index: 0; // jinak resizable handles (gstringbox) se zindex:90 prosvitaji pres coverdiv
+    }
+
+    &:not(.keyboard-focus) .ui-dialog-content:focus { 
+      outline: none; 
+    }
+
+    .ui-dialog-buttonpane {
+        font-size: $font-size-title;
+        background: transparent;
+        padding: .5rem;
+        line-height: normal;
+
+        button,
+        .g-static {
+            margin: 0 0.25rem 0 0;
+            //padding: 0.4em;
+            height: 28px;
+            //NOTE: V jq-ui 1.13.0 uz ui-button-text neexistuje. Po přechodu smazat.
+            &.ui-button-text-only .ui-button-text {
+                padding: 0;
+            }
+        }
+
+        &.gbuttonpanel {
+            button {
+                margin: 0;
+            }
+
+            .g-buttonpanel__item, .g-static {
+                margin-right: 4px;
+            }
+        }
+
+        button:not(.g-button--activator):not(.g-buttonpanel__item--menu):not(.gcontrolbox-button) {
+            min-width: 54px;
+        }
+
+        //jq-ui 1.13.0 (duplicita z gbutton)
+        button:not(.g-button):not(.g-button--primary) {
+            border: none;
+            background-color: $base-color-tool;
+        }
+    }
+}
+
+.statusbar {
+  background: transparent; 
+  font-size: $font-size-title; 
+  font-weight:$font-weight-bold; 
+  min-height: 1.5rem; //Bohous (2019-11-28): Resi bug na IE, kdy se statusbar naplni pozdeji po naplneni dialogu. Dalsim resenim je, ze gbuttonpanel po upravach uvnitr vyhodi nejakou udalost, na kterou pak zareaguje dialog.
+
+  .g-button, .g-static, .g-link {
+      height: 1.5rem;
+      line-height: 1.5rem;
+      font-size: $font-size-title;
+      font-weight:inherit;  
+      padding: 0 0.25rem;
+      &:not(.g-button--primary):not(.g-button--checked) { background-color: transparent; }
+  }
+  .g-button:not(.g-button--activator),.g-static:not(.g-button--activator).g-link:not(.g-link--menu) { min-width:1.5rem; }
+  .g-link { margin: 0; }
+  .g-static { 
+      margin: 0 0.15rem; 
+      vertical-align: baseline; 
+  }
+  .g-button__text { padding: 0 }
+  &--tight { 
+      .g-link {
+          padding: 0; 
+      }
+  }
+  .g-button:not([disabled]):not(.g-button--primary) {
+      &:hover, &:focus, &.g-button--activated { color: $base-color-active; }
+  }
+  .g-toolbar__item { height: 1.5rem; } //Vyska tlacitek v toolbaru ve favorites
+  .g-button__icon, .g-static__icon { font-size: $font-size-icon; }
+
+  .gi-stack {
+      height: 1.5rem;
+      line-height: 1.25rem;
+  }
+
+  .g-buttonpanel__item {
+      line-height: 1.5rem;  
+  }
+  .g-badge {
+      line-height: 1rem;
+  }
+  .g-buttonpanel__item--separator {
+      height: 1rem;
+  }
+}
+
+.ui-dialog-titlebar-contentinfo { position: absolute; overflow:hidden; cursor:pointer; right: 60px; top: 50%; height: 22px; margin-top: -11px; }
+.contentinfo-cell { float:left; display:inline; margin: 0 5px; font-size: 10px;}
+.contentinfo-cell > h6 { font-size: 8px; margin:0; text-align:center; }
+
+.contentIframe { 
+  width:99.9%;
+  height:99.9%;
+  overflow:hidden; 
+  position:absolute;
+  top:0;
+  left:0;
+  border:none; 
+}
+.gcontent {
+}
+
+.dialog-icon { 
+  float: left;
+  margin: 0 12px 0 0;
+  //font-size: 4em; 
+
+}
+
+
+
+
+// ****************************************************
+//   COVERDIV
+//
+// ****************************************************
+
+.ui-cover { 
+  background-color: rgba($base-color-tool, 0.8);
+  position: absolute; 
+  top: 0; 
+  left: 0; 
+  width: 100%;
+  height: 100%; 
+  & > div { 
+    position: absolute; 
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    display: inline-block; 
+    text-align: center;
+    padding: 0 1em;
+    max-width: 90%; 
+
+    background-color: transparent; 
+    font-size: $font-size-base;
+    color: $base-color-dark;
+      //font-weight: $font-weight-normal;
+      text-align: center;
+  }
+  .ui-cover-text, .ui-progress, .ui-preloader, .ui-cancel { 
+    margin: 0.5rem auto;
+  }
+  .ui-progress { 
+    max-width: 100%;
+    width: 14rem; 
+  }
+}
+.ui-cover-complex > div { 
+  background-color: $base-color-content;
+  border: 1px solid $base-color-shadow; 
+}
+.ui-preloader {
+    width: 2rem;
+    height: 2rem;
+    background: url("images/preloader.gif") no-repeat;
+    display:block;
+}
+.ui-progress { 
+  height: 0.25rem; 
+  background-color: $base-color-shadow;
+  > div { 
+    height: 100%; 
+    max-width: 100%; 
+    background-color: $base-color-dark;
+  }
+}

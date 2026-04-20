@@ -1,0 +1,695 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Xrg.WsIntServer</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic">
+            <summary>aplikační logika HTTP handlerů pro MPSV</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.m_csPozadavekNaDavku">
+            <summary>obsah požadavkové dávky</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.m_csStavVystupniDavky">
+            <summary>obsah dávky se stavem zpracování výstupní dávky</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.m_sIdUradu">
+            <summary>identifikátor úřadu</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.m_nCisloDavky">
+            <summary>číslo dávky</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.m_nCisloPredchoziDavky">
+            <summary>číslo předchozí dávky</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.m_sHash">
+            <summary>kontrolní součet dávky</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.m_sErrorCode">
+            <summary>výsledek zpracování</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.m_sErrorMessage">
+            <summary>text chyby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.m_sOutputPath">
+            <summary>cesta pro vstupní dávky</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.m_bCheckHeaders">
+            <summary>příznak testování nastavení hodnot z http hlaviček</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.IdUradu">
+            <summary>identifikátor úřadu</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.CisloDavky">
+            <summary>číslo dávky</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.CisloPredchoziDavky">
+            <summary>číslo předchozí dávky</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.Hash">
+            <summary>kontrolní součet dávky</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.ErrorCode">
+            <summary>výsledek zpracování</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.ErrorMessage">
+            <summary>text chyby</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.OutputPath">
+            <summary>cesta pro vstupní dávky</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.CheckHeaders">
+            <summary>příznak testování nastavení hodnot z http hlaviček</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.#ctor">
+            <summary>veřejný konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.Gordic#Xrg#WsIntInterface#IGMpsvHandlerLogic#VstupniDavka(System.String)">
+            <summary>předání vstupní dávky určené pro import do systému modulem INT</summary>
+            <param name="filePath">soubor s daty vstupní dávky</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.Gordic#Xrg#WsIntInterface#IGMpsvHandlerLogic#StavVstupniDavky">
+            <summary>získání stavu zpracování vstupní dávky modulem INT</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.Gordic#Xrg#WsIntInterface#IGMpsvHandlerLogic#PozadavekNaDavku">
+            <summary>požadavek na export výstupní dávky modulem INT</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.Gordic#Xrg#WsIntInterface#IGMpsvHandlerLogic#VystupniDavka(System.String)">
+            <summary>získání výstupní dávky exportované modulem INT</summary>
+            <param name="filePath">soubor pro data výstupní dávky</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.Gordic#Xrg#WsIntInterface#IGMpsvHandlerLogic#StavVystupniDavky">
+            <summary>předání stavu zpracování výstupní dávky</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.StavVstupniDavky(System.String@)">
+            <summary>získání stavu zpracování výstupní dávky</summary>
+            <param name="errorMessage">text chyby nebo prázdný řetězec, pokud k chybě ve zpracování nedošlo</param>
+            <returns>true v případě, že dávka již byla zpracována, jinak false</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.StavVystupniDavky(System.String@)">
+            <summary>získání stavu zpracování výstupní dávky</summary>
+            <param name="soubor">název souboru ve kterém je výstupní dávka uložena</param>
+            <returns>true v případě, že dávka již byla zpracována, jinak false</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GMpsvHandlerLogic.CleanHeaderProperties">
+            <summary>vyčištění všech hlaviček</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsIntServer.GMs2014ServiceLogic">
+            <summary>aplikační logika služby pro komunikaci se systémem MS2014+</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GMs2014ServiceLogic.m_csDateFormat">
+            <summary>formátovací řetězec pro datum</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GMs2014ServiceLogic.m_sOutputPath">
+            <summary>cesta pro vstupní dávky</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GMs2014ServiceLogic.m_sDataPrefix">
+            <summary>předpona názvu souboru s datovými dávkami</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GMs2014ServiceLogic.m_sCommitmentPrefix">
+            <summary>předpona názvu souboru s potvrzovacími dávkami</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GMs2014ServiceLogic.OutputPath">
+            <summary>cesta pro vstupní dávky</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GMs2014ServiceLogic.DataPrefix">
+            <summary>předpona názvu souboru s datovými dávkami</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GMs2014ServiceLogic.CommitmentPrefix">
+            <summary>předpona názvu souboru s potvrzovacími dávkami</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GMs2014ServiceLogic.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GMs2014ServiceLogic.#ctor">
+            <summary>veřejný konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GMs2014ServiceLogic.SendDocument(Gordic.Xrg.Interface.GMs2014SendDocumentRequest)">
+            <summary>příjem datové dávky</summary>
+            <param name="request">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GMs2014ServiceLogic.SendCommitment(Gordic.Xrg.Interface.GMs2014SendCommitmentRequest)">
+            <summary>příjem potvrzení o zpracování</summary>
+            <param name="request">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GMs2014ServiceLogic.GetOutputFilePath(System.String,System.DateTime)">
+            <summary>získání cesty k souboru pro uložení vstupních dat</summary>
+            <param name="prefix">předpona názvu souboru</param>
+            <param name="date">datum vzniku vstupních dat</param>
+            <returns>cesta k souboru pro uložení vstupních dat</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsIntServer.GWsInt">
+            <summary>XRG - webové služby INT - aplikační logika</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsIntServer.GWsInt.TypVlozeniDoUloziste">
+            <summary>typ dat pro vložení do uložště</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.TypVlozeniDoUloziste.Nepodporovano">
+            <summary>nepodporovaný typ dat</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.TypVlozeniDoUloziste.LikvidacniZaznamFaktury">
+            <summary>likvidační záznam faktury</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.TypVlozeniDoUloziste.LikvidacniZaznamPokladnihoDokladu">
+            <summary>likvidační záznam pokladního dokladu</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.m_csOutputhPath">
+            <summary>název konfiguračního parametru s cestou pro vstupní dávky</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.m_csRecognitionRequested">
+            <summary>název konfiguračního parametru s příznakem požadavku na rozpoznání typu vstupních dat</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.m_csReply">
+            <summary>druh dávky pro odpovědní dávku</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.m_csExport">
+            <summary>druh dávky pro exportní dávku</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.m_csVlozeniDoUlozisteRequestNamespace">
+            <summary>jmenný prostor vstupních dat webové metody vlozeni-do-uloziste</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.m_oRequestData">
+            <summary>vstupní data webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.m_oResponseData">
+            <summary>výstupní data webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.m_sOutputPath">
+            <summary>cesta pro vstupní dávky</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.m_oIXrg">
+            <summary>instance rozhraní XRG</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.m_oServerContext">
+            <summary>serverový kontext aplikace</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.m_oDatabase">
+            <summary>objekt pro práci s databází</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.m_oConfiguration">
+            <summary>rozhraní na konfiguraci aplikace</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.m_oSharedLogic">
+            <summary>rozhraní na sdílenou aplikační logiku</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.m_oAttachementData">
+            <summary>data, která mají být vložena jako příloha do uložiště</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.m_oVlozeniDoUlozisteNamespaceManager">
+            <summary>správce jmenných prostorů pro metodu vložení do uložiště</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.m_oLikvidacniZaznamFaktury">
+            <summary>likvidační záznam faktury</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.m_oVlozeniDoUlozisteElement">
+            <summary>element se vstupními daty pro metodu vložení do uložiště</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GWsInt.RequestData">
+            <summary>vstupní data webové služby</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GWsInt.ResponseData">
+            <summary>výstupní data webové služby</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GWsInt.ServicePath">
+            <summary>cesta k instalaci služby</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GWsInt.OutputPath">
+            <summary>cesta pro vstupní dávky</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GWsInt.RecognitionRequested">
+            <summary>příznak požadavku na rozpoznání vstupních dat</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GWsInt.ServerContext">
+            <summary>serverový kontext aplikace</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GWsInt.Database">
+            <summary>objekt pro práci s databází</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GWsInt.Configuration">
+            <summary>rozhraní na konfiguraci aplikace</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GWsInt.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GWsInt.SharedLogic">
+            <summary>rozhraní na sdílenou aplikační logiku</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GWsInt.VlozeniDoUlozisteNamespaceManager">
+            <summary>správce jmenných prostorů pro metodu vložení do uložiště</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GWsInt.LikvidacniZaznamFaktury">
+            <summary>likvidační záznam faktury</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GWsInt.VlozeniDoUlozisteElement">
+            <summary>element se vstupními daty pro metodu vložení do uložiště</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.#ctor">
+            <summary>veřejný konstruktor</summary>
+            <remarks>veřejný konstruktor bez parametrů je povinný pro korektní inicializaci objektu aplikační logiky z prezenční vrstvy</remarks>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.GetRequestSchemaFileName(System.String,System.String)">
+            <summary>získání názvu souboru obsahujícího XML schéma pro validaci vstupních dat webové služby</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <returns>název souboru s XML schématem ( tj. *.xsd ), v případě vrácení hodnoty null nebo prázdného řetězce nebude kontrola vstupních dat webové služby provedena</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.GetRequestDataset(System.String,System.String)">
+            <summary>získání prázdného typového datasetu pro načtení vstupních dat</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <returns>prázdná instance typového datasetu určená pro načtení vstupních dat nebo hodnota null v případě, že aplikační logika webové služby vstupní data neočekává</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.ProcessRequest(System.String,System.String,System.Data.DataSet)">
+            <summary>zpracování vstupních dat webové služby</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <param name="requestDataSet">instance typového datasetu naplněná vstupními daty webové služby</param>
+            <returns>dataset s výstupními daty webové služby, nebo null v případě, že webová služba nevrací žádná data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.VstupniDavka">
+            <summary>předání vstupní dávky určené pro import do systému modulem INT</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.VystupniDavka(Gordic.Xrg.WsIntInterface.VystupniDavkaRequestDataSet)">
+            <summary>získání výstupní dávky exportované ze systému modulem INT</summary>
+            <param name="inputDataSet">instance typového datasetu naplněná vstupními daty webové služby</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.VlozeniDoUloziste">
+            <summary>vložení vstupních dat do elektronického uložiště</summary>
+            <returns>výstupní data webové služby</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.GetOutputFileName">
+            <summary>získání názvu pro vstupní dávku</summary>
+            <returns>název pro vstupní dávku</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.WriteXmlNodeToFile(System.String,System.Xml.XmlNode)">
+            <summary>zápis XML dat do souboru</summary>
+            <param name="fileName">název souboru</param>
+            <param name="node">XML data</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.DisconnectDatabase">
+            <summary>odhlášení od databáze</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.GetXmlFromFile(System.String)">
+            <summary>načtení výstupní dávky ze souboru</summary>
+            <param name="l_sInputFileName">název souboru s výstupní dávkou</param>
+            <returns>výstupní dávka ve formátu xml</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.GetOriginalBatchDescription(Gordic.Xrg.WsIntInterface.VystupniDavkaRequestDataSet.VystupniDavkaRow)">
+            <summary>nastavení údajů o původní dávce ze vstupních dat</summary>
+            <param name="inputData">vstupní data</param>
+            <returns>parametry původní dávky</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.CompleteBatchDescription(Gordic.Xrg.WsIntServer.GWsInt.BatchDescription)">
+            <summary>doplnění údajů o dávce z databáze</summary>
+            <param name="batchDescription">parametry dávky</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.SelectBatchProcessingState(Gordic.Xrg.WsIntServer.GWsInt.BatchDescription,System.Boolean)">
+            <summary>získání stavu zpracování dávky</summary>
+            <param name="batchDescription">parametry dávky</param>
+            <param name="originalBatch">příznak původní dávky</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.GetBatchProcessingStateSelect(Gordic.Xrg.WsIntServer.GWsInt.BatchDescription)">
+            <summary>konstrukce příkazu select pro získání stavu zpracování dávky</summary>
+            <param name="batchDescription">parametry dávky</param>
+            <returns>příkazu select pro získání stavu zpracování dávky</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.XrgInitialize">
+            <summary>inicializace vrstvy XRG</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.XrgRelease">
+            <summary>uvolnění vrstvy XRG</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.XrgRecognize(System.String)">
+            <summary>rozpoznání typu XML dat pomocí vrstvy XRG</summary>
+            <param name="fileName">název souboru s XML daty</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.CheckVlozeniDoUlozisteRequestData(Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary>kontrola vstupních dat webové metody pro vložení do elektronického uložiště</summary>
+            <param name="ixp">identifikátor dokumentu</param>
+            <param name="titulek">titulek přílohy</param>
+            <param name="popis">popis přílohy</param>
+            <param name="soubor">název souboru přílohy</param>
+            <returns>typ vstupních dat</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.GetDocumentProperties(Gordic.General.GString,Gordic.General.GString@,Gordic.General.GInt16@)">
+            <summary>dohledání vlastností dokumentu</summary>
+            <param name="ixp">identifikátor dokumentu</param>
+            <param name="ixsFunAkt">identifikátor funkce vlastníka</param>
+            <param name="typAg">typ agendy</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.CompleteLikvidacniZaznamFaktury">
+            <summary>kompletace vstupních dat likvidačního záznamu</summary>
+            <returns>data, která mají být vložena jako příloha do uložiště</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.GetInvoiceProperties">
+            <summary>dohledání vlastností faktury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.GetProformaInvoices">
+            <summary>dohledání zálohových faktur</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.GetReferentName(Gordic.General.GString)">
+            <summary>získání jména referenta</summary>
+            <param name="ixsFun">identifikátor funkce</param>
+            <returns>jméno referenta</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.GetReferentName(System.String)">
+            <summary>získání jména referenta</summary>
+            <param name="ocElementName">název elementu obsahujícího osobní číslo</param>
+            <returns>jméno referenta</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.GetOrganizationProperties">
+            <summary>dohledání vlastností zpracovatele</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.GetSupplierProperties">
+            <summary>dohledání vlastností dodavatele</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.SslInitialize">
+            <summary>inicializace vrstvy SSL</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.AddDocumentAttachement(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.IO.Stream)">
+            <summary>přidání elektronické přílohy</summary>
+            <param name="ixp">identifikátor dokumentu</param>
+            <param name="titulek">titulek přílohy</param>
+            <param name="popis">popis přílohy</param>
+            <param name="soubor">název souboru přílohy</param>
+            <param name="data">data přílohy</param>
+            <returns>identifikátor souboru vloženého do uložiště</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.RaiseEvent(System.String,System.String)">
+            <summary>vložení nové události do fronty</summary>
+            <param name="eventId">identifikátor události</param>
+            <param name="eventParameters">parametry události</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.AppendDoplnekLikvidacnihoZaznamFaktury">
+            <summary>připojení doplňku likvidačního záznamu faktury</summary>
+            <returns>vstupní data s doplňkem likvidačního záznamu faktury</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.FillDoplnekLikvidacnihoZaznamFaktury(System.Xml.XmlDocument)">
+            <summary>nastavení hodnot doplňku likvidačního záznamu faktury</summary>
+            <param name="document">dokument s prázdným doplňkem</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.AppendContracts(System.Xml.XmlDocument)">
+            <summary>přidání seznamu smluvních případů</summary>
+            <param name="document">dokument s doplňkem faktury</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.SetElementValue(System.Xml.XmlNode,Gordic.General.IGDbType)">
+            <summary>nastavení hodnoty elementu</summary>
+            <param name="element">element</param>
+            <param name="item">hodnota</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.FormatAddress(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary>zformátování adresy</summary>
+            <param name="ulice">ulice</param>
+            <param name="cor">číslo orientační</param>
+            <param name="cpop">číslo popisné</param>
+            <param name="castObce">část obce</param>
+            <param name="obec">obec</param>
+            <param name="addressPart1">první část adresy</param>
+            <param name="addressPart2">druhá část adresy</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.GetContracts">
+            <summary>dohledání seznamu smluvních případů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.GetContracts(System.String)">
+            <summary>dohledání seznamu smluvních případů</summary>
+            <param name="inConition">seznam identifikátorů smluvních případů ve formátu pro klauzuli where</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.CompleteLikvidacniZaznamPokladnihoDokladu">
+            <summary>kompletace vstupních dat likvidačního záznamu pokladního dokladu</summary>
+            <returns>data, která mají být vložena jako příloha do uložiště</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.GetReceiptProperties">
+            <summary>dohledání vlastností pokladního dokladu</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.GetProformaReceipts">
+            <summary>dohledání zálohových pokladních dokladů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.GetExchangeRate">
+            <summary>nastavení kurzu měny</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.GetReceiptAmounts">
+            <summary>získání celkového čerpání likvidačního záznamu pokladního dokladu</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.GetImplementerCode">
+            <summary>získání kódu realizátora</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsIntServer.GWsInt.BatchDescription">
+            <summary>popisné parametry dávky modulu INT</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.BatchDescription.m_sIxsDav">
+            <summary>identifikátor dávky</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.BatchDescription.m_sAdresat">
+            <summary>adresát dávky</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.BatchDescription.m_sOdesilatel">
+            <summary>odesílatel dávky</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.BatchDescription.m_nPoradi">
+            <summary>pořadí dávky</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.BatchDescription.m_nVerze">
+            <summary>verze dávky</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.BatchDescription.m_sPripona">
+            <summary>přípona dávky</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.BatchDescription.m_sPriponaOdp">
+            <summary>přípona odpovědní dávky</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.BatchDescription.m_bWasProcessed">
+            <summary>příznak dokončeného zpracování dávky</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.BatchDescription.m_sIxsZurPde">
+            <summary>identifikátor žurnálu exportní dávky</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.BatchDescription.m_sSoubor">
+            <summary>cesta k výstupnímu souboru</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury">
+            <summary>likvidační záznam faktury</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.Ixp">
+            <summary>identifikátor faktury</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.IxsFunAkt">
+            <summary>identifikátor funkce zpracovatele</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.ZpracovatelOsoba">
+            <summary>jméno zpracovatele</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.Ico">
+            <summary>IČO</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.Ucs">
+            <summary>účetní středisko</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.Nks">
+            <summary>nákladové středisko</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.Uus">
+            <summary>kód účtárny</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.NazevUus">
+            <summary>název účtárny</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.Ac">
+            <summary>evidenční číslo</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.AcAg">
+            <summary>agendové číslo</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.DatEvid">
+            <summary>datum evidence</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.Rok">
+            <summary>rok účetního období</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.NazevKnihy">
+            <summary>název knihy</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.CisReal">
+            <summary>kód realizátora</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.NazevReal">
+            <summary>název realizátora</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.IxsFunVyriz">
+            <summary>identifikátor funkce kompetenta</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.KompetentOsoba">
+            <summary>jméno kompetenta</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.IxsEsu">
+            <summary>identifikátor dodavatele</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.BuCi">
+            <summary>bankovní účet dodavatele</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.SkCi">
+            <summary>směrový kód dodavatele</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.AcEsu">
+            <summary>číslo dokladu dodavatele</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.DatVyst">
+            <summary>datum vystavení</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.DatSpl">
+            <summary>datum splatnosti</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.DatUup">
+            <summary>datum uskutečnění účetního případu</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.DatZdan">
+            <summary>datum zdanitelného plnění</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.Mena">
+            <summary>kód měny</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.MenaSisAaa">
+            <summary>zkratka měny</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.Kurz">
+            <summary>kurz měny</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.CelkovaCastkaVMene">
+            <summary>celková částka faktury v měně úhrady</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.CelkovaCastkaKUhradeVMene">
+            <summary>celková částka faktury s DPH v měně úhrady</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.CelkovaCastka">
+            <summary>celková částka k úhradě faktury v účetní měně</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.CelkovaCastkaKUhrade">
+            <summary>celková částka k úhradě faktury s DPH v účetní měně</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.PrikazceOperaceOsoba">
+            <summary>jméno příkazce operace</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.SpravceRozpoctu">
+            <summary>jméno správce rozpočtu</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.HlavniUcetni">
+            <summary>jméno hlavního účetního</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.ZpracovatelObJmeno">
+            <summary>obchodní jméno zpracovatele</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.ZpracovatelUlice">
+            <summary>ulice zpracovatele</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.ZpracovatelCor">
+            <summary>číslo orientační zpracovatele</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.ZpracovatelCpop">
+            <summary>číslo popisné zpracovatele</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.ZpracovatelCastObce">
+            <summary>část obce zpracovatele</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.ZpracovatelObec">
+            <summary>obes zpracovatele</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.ZpracovatelPsc">
+            <summary>psč zpracovatele</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.ZpracovatelDic">
+            <summary>DIČ zpracovatele</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.ZpracovatelStat">
+            <summary>stát zpracovatele</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.DodavatelObJmeno">
+            <summary>obchodní jméno dodavatele</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.DodavatelUlice">
+            <summary>ulice dodavatele</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.DodavatelCor">
+            <summary>číslo orientační dodavatele</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.DodavatelCpop">
+            <summary>číslo popisné dodavatele</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.DodavatelCastObce">
+            <summary>část obce dodavatele</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.DodavatelObec">
+            <summary>obes dodavatele</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.DodavatelPsc">
+            <summary>psč dodavatele</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.DodavatelIco">
+            <summary>IČ dodavatele</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.DodavatelDic">
+            <summary>DIČ dodavatele</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.DodavatelStat">
+            <summary>stát dodavatele</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.VycetZaloh">
+            <summary>výčet záloh</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GLikvidacniZaznamFaktury.SeznamPripaduSml">
+            <summary>seznam smluvnich pripadu</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsIntServer.GWsInt.GPripadSml">
+            <summary>vlastnosti smluvního případu</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GPripadSml.Id">
+            <summary>identifikátor smluvního případu</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GPripadSml.Ac">
+            <summary>číslo smluvního případu</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GWsInt.GPripadSml.Kategorie">
+            <summary>název kategorie dokumentu</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GWsInt.GPripadSml.#ctor(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>veřejný konstruktor</summary>
+            <param name="id">identifikátor smluvního případu</param>
+            <param name="ac">číslo smluvního případu</param>
+            <param name="kategorie">název kategorie dokumentu</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsIntServer.GXrgIntServiceLogic">
+            <summary>XRG - aplikační logika služby INT</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsIntServer.GXrgIntServiceLogic.m_oOriginalServiceLogic">
+            <summary>aplikační logika původní služby</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GXrgIntServiceLogic.OriginalServiceLogic">
+            <summary>aplikační logika původní služby</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GXrgIntServiceLogic.RequestData">
+            <summary>vstupní data služby</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GXrgIntServiceLogic.ResponseData">
+            <summary>výstupní data služby</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsIntServer.GXrgIntServiceLogic.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GXrgIntServiceLogic.GetRequestDataset(System.String,System.String)">
+            <summary>získání prázdného datasetu pro vstupní data</summary>
+            <param name="methodName">název metody</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat</param>
+            <returns>prázdná instance datasetu pro vstupní data, v případě vrácení hodnoty null nebudou načítána žádná vstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsIntServer.GXrgIntServiceLogic.ProcessRequest(System.String,System.String,Gordic.General.GDataSet)">
+            <summary>zpracování vstupních dat</summary>
+            <param name="methodName">název metody</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat</param>
+            <param name="requestDataSet">dataset se vstupními daty</param>
+            <returns>dataset s výstupními daty nebo null v případě, že nemají být vrácena žádná výstupní data</returns>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,392 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Xrg.WsEvzServer</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Xrg.WsEvzServer.GWsEvzCommon">
+            <summary>
+            Společné funkce kontrol a čtení číselníků pro Evz
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWsEvzCommon.VyjimkaIfNullOrEmpty(Gordic.General.GDbType,System.String)">
+            <summary>
+            Pokud je hodnota položky Null (u String položek NullOrEmpty), tak vrátí výjimku
+            </summary>
+            <param name="hodnota"></param>
+            <param name="xmlNazev"></param>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWsEvzCommon.RokToGInt16(Gordic.General.GString)">
+            <summary>
+            Z nějakýho důvodu mám rok na vstupu jako GString, zde převádím na GInt16 pro použití jako vstup storovek
+            </summary>
+            <param name="rok"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWsEvzCommon.GStr(Gordic.General.GDbType)">
+            <summary>
+            Převede DbType na hodnotu string
+            </summary>
+            <param name="oDbType">GDbType hodnota</param>
+            <returns>hodnota převedená na string, a pokud je hodnota NULL, tak string 'NULL'</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWsEvzCommon.GStrApo(Gordic.General.GDbType)">
+            <summary>
+            Převede DbType na hodnotu string obalenou apostrofy "'"
+            </summary>
+            <param name="oDbType">GDbType hodnota</param>
+            <returns>hodnota převedená na string, a pokud je hodnota NULL, tak string 'NULL'</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWsEvzCommon.KontrolaExistenceExtIdDokladu(System.Boolean,Gordic.General.GString)">
+            <summary>
+            Pokud ext. id už použito, tak výjimka
+            </summary>
+            <param name="extIdDokladu"></param>
+            <param name="idDokladu"></param>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWsEvzCommon.VratDetailAZ(Gordic.General.GString)">
+            <summary>
+            Vrátí detail akvizičního záměru
+            </summary>
+            <param name="ixs_pri">identifikátor</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWsEvzCommon.GetSkupina(Gordic.General.GInt32)">
+            <summary>
+            Vrací skupinu majetku
+            </summary>
+            <param name="l_druhMajetku"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsEvzServer.GEvidDokEkoParams">
+            <summary>
+            Třída GEvidDokEkoParams - ekonomické parametry, které jsou potřebné pro evidenci dokladu SML.
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsEvzServer.GEvidDokEkoParams.Ico">
+            <summary>Ico - zjistí se selektem na základě identifikátoru knihy</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsEvzServer.GEvidDokEkoParams.Ucs">
+            <summary>Ucs - zjistí se selektem na základě identifikátoru knihy</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsEvzServer.GEvidDokEkoParams.Nks">
+            <summary>Nks - je na vstupu web. metody</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsEvzServer.GEvidDokEkoParams.Rok_den">
+            <summary>Rok_den - zjistí se selektem na základě identifikátoru knihy</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsEvzServer.GXrgEvzServiceLogic">
+            <summary>XRG - aplikační logika služby Evz</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsEvzServer.GXrgEvzServiceLogic.m_oOriginalServiceLogic">
+            <summary>aplikační logika původní služby</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsEvzServer.GXrgEvzServiceLogic.OriginalServiceLogic">
+            <summary>aplikační logika původní služby</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsEvzServer.GXrgEvzServiceLogic.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GXrgEvzServiceLogic.GetRequestDataset(System.String,System.String)">
+            <summary>získání prázdného datasetu pro vstupní data</summary>
+            <param name="methodName">název metody</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat</param>
+            <returns>prázdná instance datasetu pro vstupní data, v případě vrácení hodnoty null nebudou načítána žádná vstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GXrgEvzServiceLogic.ProcessRequest(System.String,System.String,Gordic.General.GDataSet)">
+            <summary>zpracování vstupních dat</summary>
+            <param name="methodName">název metody</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat</param>
+            <param name="requestDataSet">dataset se vstupními daty</param>
+            <returns>dataset s výstupními daty nebo null v případě, že nemají být vrácena žádná výstupní data</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsEvzServer.GEvzWebService">
+            <summary>Server webových služeb Evz</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsEvzServer.GEvzWebService.m_csEvzAktualizaceBlokaceRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsEvzServer.GEvzWebService.m_csEvzAkvizicniZamerRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsEvzServer.GEvzWebService.m_csEvzVyhodnoceniEtenderRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GEvzWebService.GetRequestSchemaFileName(System.String,System.String)">
+            <summary>získání názvu souboru obsahujícího XML schéma pro validaci vstupních dat webové služby</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <returns>název souboru s XML schématem ( tj. *.xsd ), v případě vrácení hodnoty null nebo prázdného řetězce nebude kontrola vstupních dat webové služby provedena</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GEvzWebService.GetRequestDataset(System.String,System.String)">
+            <summary>získání prázdného typového datasetu pro načtení vstupních dat</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <returns>prázdná instance typového datasetu určená pro načtení vstupních dat nebo hodnota null v případě, že aplikační logika webové služby vstupní data neočekává</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GEvzWebService.ProcessRequest(System.String,System.String,System.Data.DataSet)">
+            <summary>zpracování vstupních dat webové služby</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <param name="requestDataSet">instance typového datasetu naplněná vstupními daty webové služby</param>
+            <returns>dataset s výstupními daty webové služby, nebo null v případě, že webová služba nevrací žádná data</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsEvzServer.GWmEvzVyhodnoceniEtender">
+            <summary>Vyhodnocení výběrového řízení</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsEvzServer.GWmEvzVyhodnoceniEtender.m_oZakazka">
+            <summary>orig. doklad ze vstupu</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzVyhodnoceniEtender.Execute(Gordic.Xrg.WsEvzInterface.VyhodnoceniEtenderRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzVyhodnoceniEtender.ExecuteWebMethod(Gordic.Xrg.WsEvzInterface.VyhodnoceniEtenderRequestDataSet)">
+            <summary>založení účetního pohybu - </summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzVyhodnoceniEtender.DoEkoInit">
+            <summary>
+            Provede ekoinicializaci, tak jak se ve WS delava.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzVyhodnoceniEtender.ZpracujVstupniDataset(Gordic.Xrg.WsEvzInterface.VyhodnoceniEtenderRequestDataSet)">
+            <summary>
+            Provede otestování validity zadaných vstupních hodnot
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzVyhodnoceniEtender.NaformatujVystupniDataSet(Gordic.Xrg.WsEvzInterface.VyhodnoceniEtenderResponseDataSet)">
+            <summary>
+            Naformátuje výstupní DataSet
+            </summary>
+            <param name="outputDataSet">Výstupní DataSet</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsEvzServer.GWmEvzSmazaniFpVpEp">
+            <summary>Smazání záznamu finančního a věcného profilu a elektronického obrazu a příloh</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsEvzServer.GWmEvzSmazaniFpVpEp.m_oFinancniProfilTbl">
+            <summary>datatable s fin. profilem</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsEvzServer.GWmEvzSmazaniFpVpEp.m_oVecnyProfilTbl">
+            <summary>datatable s vecnym profilem</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsEvzServer.GWmEvzSmazaniFpVpEp.m_oElektronickePrilohyTbl">
+            <summary>datatable s el. přílohama</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzSmazaniFpVpEp.Execute(Gordic.Xrg.WsEvzInterface.SmazaniFpVpEpRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzSmazaniFpVpEp.ExecuteWebMethod(Gordic.Xrg.WsEvzInterface.SmazaniFpVpEpRequestDataSet)">
+            <summary>založení účetního pohybu - </summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzSmazaniFpVpEp.ZpracujVstupniDataset(Gordic.Xrg.WsEvzInterface.SmazaniFpVpEpRequestDataSet)">
+            <summary>
+            Provede otestování validity zadaných vstupních hodnot
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzSmazaniFpVpEp.NaformatujVystupniDataSet(Gordic.Xrg.WsEvzInterface.SmazaniFpVpEpResponseDataSet)">
+            <summary>
+            Naformátuje výstupní DataSet
+            </summary>
+            <param name="outputDataSet">Výstupní DataSet</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsEvzServer.GWmEvzAktualizaceFpVpEp">
+            <summary>Aktualizace finančního a věcného profilu a elektronického obrazu a příloh</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsEvzServer.GWmEvzAktualizaceFpVpEp.m_oFinancniProfilTbl">
+            <summary>datatable s fin. profilem</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsEvzServer.GWmEvzAktualizaceFpVpEp.m_oVecnyProfilTbl">
+            <summary>datatable s vecnym profilem</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsEvzServer.GWmEvzAktualizaceFpVpEp.m_oElektronickePrilohyTbl">
+            <summary>datatable s el. přílohama</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzAktualizaceFpVpEp.Execute(Gordic.Xrg.WsEvzInterface.AktualizaceFpVpEpRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzAktualizaceFpVpEp.ExecuteWebMethod(Gordic.Xrg.WsEvzInterface.AktualizaceFpVpEpRequestDataSet)">
+            <summary>založení účetního pohybu - </summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzAktualizaceFpVpEp.ZpracujVstupniDataset(Gordic.Xrg.WsEvzInterface.AktualizaceFpVpEpRequestDataSet)">
+            <summary>
+            Provede otestování validity zadaných vstupních hodnot
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzAktualizaceFpVpEp.NaformatujVystupniDataSet(Gordic.Xrg.WsEvzInterface.AktualizaceFpVpEpResponseDataSet)">
+            <summary>
+            Naformátuje výstupní DataSet
+            </summary>
+            <param name="outputDataSet">Výstupní DataSet</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsEvzServer.GWmEvzAktualizaceBlokace">
+            <summary>Aktualizace blokace</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsEvzServer.GWmEvzAktualizaceBlokace.m_gsIdDokladuAZ">
+            <summary>id akvizičního záměru</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzAktualizaceBlokace.Execute(Gordic.Xrg.WsEvzInterface.EvidenceKompletnihoDokladuRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzAktualizaceBlokace.ExecuteWebMethod(Gordic.Xrg.WsEvzInterface.EvidenceKompletnihoDokladuRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzAktualizaceBlokace.ZpracujVstupniDataSet(Gordic.Xrg.WsEvzInterface.EvidenceKompletnihoDokladuRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzAktualizaceBlokace.EvidenceKompletnihoDokladu(Gordic.Xrg.WsEvzInterface.EvidenceKompletnihoDokladuResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzAktualizaceBlokace.NaformatujVystupniDataset(Gordic.Xrg.WsEvzInterface.EvidenceKompletnihoDokladuResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsEvzServer.GWmEvzAkvizicniZamer">
+            <summary>Akviziční záměr</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsEvzServer.GWmEvzAkvizicniZamer.m_oDokladEvzOrig">
+            <summary>orig. doklad ze vstupu</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsEvzServer.GWmEvzAkvizicniZamer.m_oDokladEvz">
+            <summary>dokl. už mnou změněný</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsEvzServer.GWmEvzAkvizicniZamer.m_oFinancniProfilTbl">
+            <summary>datatable s fin. profilem</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsEvzServer.GWmEvzAkvizicniZamer.m_oVecnyProfilTbl">
+            <summary>datatable s vecnym profilem</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsEvzServer.GWmEvzAkvizicniZamer.m_oElektronickePrilohyTbl">
+            <summary>datatable s el. přílohama</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsEvzServer.GWmEvzAkvizicniZamer.m_evid_obd">
+            <summary>RokToGInt16(m_oDokladEvz.EvidencniObdobi)</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsEvzServer.GWmEvzAkvizicniZamer.m_kateg_knihy">
+            <summary>CisKategorieKnihy(m_oDokladEvz.KategorieKnihy)</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsEvzServer.GWmEvzAkvizicniZamer.m_ucs">
+            <summary>úč. stř.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsEvzServer.GWmEvzAkvizicniZamer.m_gsIdDokladuAZ">
+            <summary>id akvizičního záměru</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzAkvizicniZamer.Execute(Gordic.Xrg.WsEvzInterface.AkvizicniZamerRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzAkvizicniZamer.ExecuteWebMethod(Gordic.Xrg.WsEvzInterface.AkvizicniZamerRequestDataSet)">
+            <summary>založení účetního pohybu - </summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzAkvizicniZamer.DoEkoInit">
+            <summary>
+            Provede ekoinicializaci, tak jak se ve WS delava.
+            Na vstupu mam jen Nks, protoze Ico, Ucs a Rok_deniku si nactu z tabulky knih (vas.evzsden).
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzAkvizicniZamer.KonEkoParam(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Kontrola eko parametrů
+            </summary>
+            <param name="kniha">kniha smluv</param>
+            <param name="ico">IČO</param>
+            <param name="ucs">UCS</param>
+            <param name="nks">NKS</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzAkvizicniZamer.ZpracujVstupniDataset(Gordic.Xrg.WsEvzInterface.AkvizicniZamerRequestDataSet)">
+            <summary>
+            Provede otestování validity zadaných vstupních hodnot
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzAkvizicniZamer.NaformatujVystupniDataSet(Gordic.Xrg.WsEvzInterface.AkvizicniZamerResponseDataSet)">
+            <summary>
+            Naformátuje výstupní DataSet
+            </summary>
+            <param name="outputDataSet">Výstupní DataSet</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzAkvizicniZamer.GetRealizator">
+            <summary>
+            Specifické pro MO (decentrální realizátor má číslo realizátora shodné s číslem  NS)
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzAkvizicniZamer.GetImplReal">
+            <summary>
+            Implicitní realizátor
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzAkvizicniZamer.RealizatorSelectCentralni">
+            <summary>
+            Centrální realizátor
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzAkvizicniZamer.RealizatorSelectDecentralni">
+            <summary>
+            Decentrální realizátor
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzAkvizicniZamer.TestRealizator">
+            <summary>
+            Kontrola, že zadaný realizátor existuje
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzAkvizicniZamer.GetKompetentExterni">
+            <summary>
+            Pro ixs_ref kompetenta dohledá ixs_fun
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzAkvizicniZamer.TestKompetent">
+            <summary>
+            Kontrola, že zadaný interní kompetent ixs_fun existuje
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzAkvizicniZamer.GetZpracovatelExterni">
+            <summary>
+            Pro ixs_ref zpracovatele (zjištěného z externího id zpracovatele) dohledá ixs_fun
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsEvzServer.GWmEvzAkvizicniZamer.TestZpracovatel">
+            <summary>
+            Kontrola, že zadaný interní zpracovatel ixs_fun existuje
+            </summary>
+        </member>
+    </members>
+</doc>

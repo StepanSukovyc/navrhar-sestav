@@ -1,0 +1,2890 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Epa.Server</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Epa.Server.GNatrenujML">
+            <summary> Server pro trénování modelu </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GNatrenujML.Natrenuj(System.String,System.String,System.String,System.String,System.String)">
+            <summary> Vypravení zásilek dokumentu </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Epa.Server.GNatrenujMLEventActionProvider">
+            <summary> Obslužná akce pro natrénování modelu </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GNatrenujMLEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GNatrenujMLEventActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Epa.Server.GAiRecognizerRecognizeEventActionProvider">
+            <summary>
+            Obslužná akce událostního systému pro vytěžení dat pomocí AI.
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GAiRecognizerRecognizeEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>
+            Veřejný konstruktor
+            </summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GAiRecognizerRecognizeEventActionProvider.Run">
+            <summary>
+            Hlavní smyčka obslužné akce.
+            </summary>
+            <exception cref="T:System.Exception"></exception>
+            <exception cref="T:Gordic.Epa.Server.GEpaServerException"></exception>
+        </member>
+        <member name="T:Gordic.Epa.Server.GAiRecognizerRecognize">
+            <summary> 
+            Server pro vytěžení dat pomocí AI.
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GAiRecognizerRecognize.Recognize(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GBoolean,Gordic.General.GDateTime,Gordic.General.GDateTime,Gordic.General.GInt32)">
+            <summary>
+            Vytěžení dat pomocí AI.
+            
+            Pokud je vyplněno ixsUlo, vytěží se pouze tento konkrétní soubor.
+            
+            Povinne parametry (k filtrovani): dat_pod_od, ico.
+                
+            Ostatní parametry jsou nepovinné filtry.
+            </summary>
+            <param name="ixs_ulo">Identifikátor verze elektronického souboru.</param>
+            <param name="ico">ˇpovinný param. IČ.</param>
+            <param name="typ_ag">Typ agendy.</param>
+            <param name="ixs_typ">Identifikátor typu dokumentu.</param>
+            <param name="ktg_typ">Identifikátor kategorie typu dokumentu.</param>
+            <param name="priz_isdoc">(default: false) Příznak, zda se mají vytěžit i ISDOC soubory.</param>
+            <param name="dat_pod_od">Minimální hodnota data podání dokumentu.</param>
+            <param name="dat_pod_do">Maximální hodnota data podání dokumentu.</param>
+            <param name="max_pocet_priloh">(default: int.MaxValue) Maximální počet vytěžených souborů.</param>
+            <exception cref="T:Gordic.Epa.Server.GEpaServerException"></exception>
+        </member>
+        <member name="M:Gordic.Epa.Server.GAiRecognizerRecognize.RecognizeSheduled(Gordic.General.GInt32)">
+            <summary>
+            Vytěží naplánované soubory.
+            </summary>
+            <param name="maxRequestsCount"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GAiRecognizerRecognize.RecognizeIxsUlo(Gordic.General.GString)">
+            <summary>
+            Vytěží soubor dle identifikátoru.
+            </summary>
+            <param name="ixsUlo"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GAiRecognizerRecognize.RecognizeFilters(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GBoolean,Gordic.General.GDateTime,Gordic.General.GDateTime,Gordic.General.GInt32)">
+            <summary>
+            Vytěží soubory dle filtrů.
+            </summary>
+            <param name="ico"></param>
+            <param name="typAg"></param>
+            <param name="ixsTyp"></param>
+            <param name="ktgTyp"></param>
+            <param name="prizISDOC"></param>
+            <param name="datPodOd"></param>
+            <param name="datPodDo"></param>
+            <param name="maxRequestsCount"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Epa.Server.GVypravDokument">
+            <summary> Server pro vypravení zásilek </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GVypravDokument.VypravDokument(System.String,System.String,System.String)">
+            <summary> Vypravení zásilek dokumentu </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Epa.Server.GVypravDokumentEventActionProvider">
+            <summary> Obslužná akce pro vyprávení připravených zásilek na dokumentu </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GVypravDokumentEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GVypravDokumentEventActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Epa.Server.GDSEvidujSK">
+            <summary> Server pro zpracování datových zpráv </summary>
+        </member>
+        <member name="T:Gordic.Epa.Server.GDSEvidujSK.Def_OriginalDS">
+            <summary>
+            vycet - urcuje co bude oznaceno za original datove zpravy
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GDSEvidujSK.Def_OriginalDS.orig_def_dz">
+            <summary>
+            urceni originalu urcuje datova zprava -> 0
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GDSEvidujSK.Def_OriginalDS.orig_is_zfo">
+            <summary>
+            originalem bude cela datova zprava - tedy ZFO soubor! -> 1
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEvidujSK.DSEviduj(System.String)">
+            <summary> Načtení datových zpráv </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEvidujSK.ZpracujDs">
+            <summary> hlavni smycka zpracovani datovych zprav </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEvidujSK.CallKrok5">
+            <summary> predvyplneni externiho subjektu </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEvidujSK.GetEsueDesk(Gordic.General.GString,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary>
+            Vrati info o Esupokud neexistuji, pak se je pokusi zalozit
+            </summary>
+            <param name="idDs">idDs externího subjektu</param>
+            <param name="ixsEsu">ixsEsu</param>
+            <param name="esuTxt">popis nalezeného esu</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEvidujSK.CallKrok3">
+            <summary> Provadi test zda jsou vsechny typy souboru povoleny </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEvidujSK.OverPodpisy">
+            <summary>
+            Oveřování podpisů a časových razítek priloh;
+            Naplni dataset ElPodaniPrilohyDto priznaky o stavech podpisu a cas. razitek
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEvidujSK.CallKrok4">
+            <summary> Overeni vnitrnich vnejsich podpisů a casových razitek priloh </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEvidujSK.CallKrok1">
+            <summary>
+             1. stahne datovou zpravu do tempu
+             2. parsovani datove zpravy:
+                - naplneni datasetu s vlastnostmi datove zpravy m_oEmlDataSet (zjisti zda je datova zprava podepsana - neprovadi overeni podpisu; cte polozky z datove zpravy a ulozi je)
+                - napplneni datasetu s prilohamy ( zjisti jmeno prilohy, priponu ; jak je priloha zarazena tj. jedna se o prilohu, original, podpis ....)
+             3. urceni originalu datove zpravy, urceni typu jednotlivych priloh napr. el. podpis, cas. razitko, priloha datov. zpravy
+             4. antivirovy test
+             5  test zda je nalezena pozadovana priloha
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEvidujSK.LoadSKDSMessage(System.String,System.Boolean@,System.Boolean@,Gordic.Wfl.Interface.GWflOverInfoItem@)">
+            <summary> Načtení datove zpravy do struktury </summary>
+            <param name="filename">Cesta k DZ souboru</param>
+            <param name="_DZJePodepsana">DZJePodepsana</param>
+            <param name="_podpisJeOveren">podpisJeOveren - podpis se overuje az v kroku 4</param>
+            <param name="_overInfo">informace o ověření (ixsCer...)</param>
+            <returns>tReturnedMessage</returns> 
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEvidujSK.UlozZpravuJakoElObraz(Gordic.General.GString,Gordic.General.GString,System.Boolean,Gordic.Wfl.Interface.GFileVerifInfoDto@,Gordic.General.GString@,Gordic.General.GString@,System.Boolean@)">
+            <summary>
+            Ulozi zprávu jako el.obraz
+            </summary>
+            <param name="_ixp">ixp</param>
+            <param name="_ixb">ixb</param>
+            <param name="pridatCasovaRazitko">pridatCasovaRazitko</param>
+            <param name="_overeni">GFileVerifInfoDto</param>
+            <param name="title">title</param>
+            <param name="description">description</param>
+            <param name="chybaPriPridaniCasRazitka">chybaPriPridaniCasRazitka</param>
+            <returns>ixb el.obrazu</returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEvidujSK.SetVecAPoznamku(System.String,System.String,System.Boolean,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary>
+            nastaví vec, poznámku dokumentu a poznámku doručení dle  kontextu a user settings
+            </summary>
+            <param name="textVysledkuPodani">textVysledkuPodani</param>
+            <param name="poznamkaWflsinb">poznamkaWflsinb</param>
+            <param name="rozlozeno">jedná se o rozlozené podání</param>
+            <param name="vecDokumentu">pisNazev</param>
+            <param name="poznamkaPio">poznamkaPio</param>
+            <param name="CJOdes">CJOdes</param>
+            <param name="l_oCJPrij">l_oCJPrij</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEvidujSK.SendInfoAboutPodani(Gordic.General.GString,System.Boolean)">
+            <summary>
+            Odešle potvrzení o el. podání - ud DZ se neodesílá pouze se zaznamená že se neodesílá
+            </summary>
+            <param name="l_sIxp"></param>
+            <param name="newTransaction"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEvidujSK.DecodeSKDZTemp(System.String)">
+            <summary>
+            dekodování datove zpravy:
+            - naplneni datasetu s vlastnostmi datove zpravy m_oEmlDataSet 
+            - napplneni datasetu s prilohamy
+            </summary>
+            <param name="_pathToZip">Cesta k DZ souboru</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEvidujSK.AnalyzujSKDZ(Gordic.General.GString,Gordic.Psr.Interface.UPVSRefEKSService.Message,System.String,System.Boolean,Gordic.Pod.Interface.ElPodaniDto@,System.Collections.Generic.List{Gordic.Pod.Interface.ElPodaniPrilohyDto}@,System.String@)">
+            <summary>
+            Dekodování DZ
+            </summary>
+            <param name="_ixbElPod">ixb el. podani ve wflsinb</param>
+            <param name="_oMsg">The o MSG.</param>
+            <param name="_DZPathFile">je original samotná zpráva</param>
+            <param name="_isOrigMsg">je original samotná zpráva</param>
+            <param name="_podani">The eml data set.</param>
+            <param name="_prilohy">The prilohy eml data set.</param>
+            <param name="_hlaska">The hlaska.</param>
+            <returns></returns>
+            <exception cref="T:Gordic.General.GException">
+            23800755 - 23820144
+            or
+            31964001 - 23820215
+            or
+            31964002 - 23820013
+            or
+            31964003 - 23820337
+            or
+            31964004 - 23820013
+            </exception>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEvidujSK.GetExtensionMimeByAdministrace(Gordic.General.GString,System.String,System.IO.Stream)">
+            <summary> Vráceni přípony souboru dle mimetype </summary>
+            <param name="mime">MimeType</param>
+            <param name="defaultextension">defaultní přípona</param>
+            <param name="stream">The stream.</param>
+            <returns>přípona souboru dle registrů</returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEvidujSK.PodejCiziPisemnostElPodaniDS(System.String,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.String[],Gordic.General.GString,System.Boolean,System.Boolean,System.Boolean,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,System.String,Gordic.General.GString,Gordic.General.GString@,Gordic.Wfl.Interface.GWflsinbDto,Gordic.General.GString@,Gordic.General.GDateTime@,Gordic.General.GDateTime@)">
+            <summary> Podani pisemnosti pro el.podani DS </summary>
+            <param name="_mailBox"></param>
+            <param name="_podPisNazev"></param>
+            <param name="_pioPoznamka"></param>
+            <param name="CJOdes"></param>
+            <param name="ixb"></param>
+            <param name="odesilatel"></param>
+            <param name="zastupOsobaTxt"></param>
+            <param name="_evidovat"></param>
+            <param name="_delejSpis"></param>
+            <param name="_predat"></param>
+            <param name="_plan"></param>
+            <param name="_znak"></param>
+            <param name="_stupenUtajeni"></param>
+            <param name="_ixsSu"></param>
+            <param name="_iIxsFun"></param>
+            <param name="l_oIxsTypDok"></param>
+            <param name="l_oDat_dor"></param>
+            <param name="l_oEsuTxt"></param>
+            <param name="l_oZastOsTxt"></param>
+            <param name="l_oIxsEsu"></param>
+            <param name="l_oZastOsLic"></param>
+            <param name="l_oZastOsPor"></param>
+            <param name="sSpZnOdes"></param>
+            <param name="l_oCJPrij"></param>
+            <param name="ixpSpis"></param>
+            <param name="m_oWflsinbDto"></param>
+            <param name="aktZnackaSpis"></param>
+            <param name="datumPodaniPis"></param>
+            <param name="datumVznikuSpisu"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Epa.Server.GDSEvidujSKEventActionProvider">
+            <summary> Obslužná akce událostního systému pro zpracování SK datových zprav </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEvidujSKEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEvidujSKEventActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Epa.Server.GSkTalkActionProvider">
+            <summary>
+            Obslužná akce událostního systému pro stazeni datovych zprav
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GSkTalkActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GSkTalkActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Epa.Server.GSkTalkStahuj">
+            <summary>
+            Server pro stahování zpráv EDESK
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GSkTalkStahuj.NactiZeSchranky(System.String,System.String)">
+            <summary>
+            Načtení datových zpráv ze schránky
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Epa.Server.GEpaElPodaniBase">
+            <summary> předek EPA El.podani </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.IfNSESS2023">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.VnoreneSouboryParametr">
+            <summary> PDF ZIP atd  </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.ZpracovatVnoreneSoubory">
+            <summary> PDF ZIP atd  </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.MailBox">
+             <summary>  název zpracovávané schránky </summary>
+            <summary> mail Box </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.AntivirParam">
+            <summary> IXB podani </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.WflMailInfoInst">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.InbCfgParamsByMailboxDictionary">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.InbCfgParamsByMotorinbDictionary">
+            <summary></summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.GetDbParamsAktualnihoMailboxu">
+            <summary> </summary>
+            <returns>GInbCfgParams</returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.GetParamsByMailbox(Gordic.General.GString)">
+            <summary> Get params dle schránky </summary>
+            <param name="_mailbox"></param>
+            <returns>GInbCfgParams</returns>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.csFileName">
+            <summary>  název </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.FilePathPodani">
+            <summary>  cesta k souboru podání zpracovávané schránky </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.Ixb">
+            <summary> IXB el. podaní/// </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.SeznamPriloh">
+            <summary> IXB el. podaní/// </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.ZpusobDoruceniProp">
+            <summary> zpusob doruceni /// </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.ZpusobDoruceniTypProp">
+            <summary> zpusob doruceni /// </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.Ixp">
+            <summary> Ixp vzniklého dokumentu </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.IxpImplict">
+            <summary> Ixp definovane v podaní (RAP) </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.IxsSu">
+            <summary> Ixs SU  </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.IxsFun">
+            <summary> Ixs SU  </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.m_nStavInb">
+            <summary> stav inb</summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GEpaElPodaniBase.ElPodaniData">
+            <summary> DTO el. podani </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GEpaElPodaniBase.ElPodaniPrilohyList">
+            <summary> prílohy </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.AntivirInfo">
+            <summary> info o antiviru </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.WflOverInfoElPodani">
+            <summary> Pole over InfoDZ </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GEpaElPodaniBase.IDGenerated">
+            <summary> ID prilohy generovane </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.ProvadetAntivirovouKontrolu">
+            <summary> </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GEpaElPodaniBase.m_nCountEleError">
+            <summary> </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.CountEleError">
+            <summary> </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.m_nCountEleErrorFatal">
+            <summary> </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GEpaElPodaniBase.MAX_ELE_FATAL_ERROR">
+            <summary> </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GEpaElPodaniBase.ZastOsTxt">
+            <summary> </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.EsuTxt">
+            <summary> </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.ZastOsLic">
+            <summary> </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.ZastOsPor">
+            <summary> </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GEpaElPodaniBase.IxsOdes">
+            <summary> </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.IxsEsu">
+            <summary> </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.IsEleError">
+            <summary> </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.PodElPodaniInst">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.ElPodaniServiceInst">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.WflhpisInst">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.WflsixpInst">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.DetGinsesuInst">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.DetSslspidIns">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.GinspodInst">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.HusainProp">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.PodEpaLimitDbParam">
+            <summary>POD EPA - parametr určuje kolik EPA zpracuje zpráv (DZ, e-mail, portal ...) v jednom zpracování</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.MbxPodpis">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.WfldprjInst">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.RegistredFileTypeList">
+            <summary>tegistrovane typy souboru Wflstys</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.ListPrejmenovaneSoubory">
+            <summary> Prejmenovane soubory</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.WflsinbServiceInst">
+            <summary> </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.WflsinbDtoInst">
+            <summary> </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.TypPrijmuPodaniProp">
+            <summary> Zpusob Doruceni</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.ZpusobDorElPodaniTypProp">
+            <summary> Zpusob Doruceni</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.TextDoLogu">
+            <summary> Zpusob Doruceni</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.TextDoLoguElPodani">
+            <summary> Zpusob Doruceni</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.OvereniPopisDtoProp">
+            <summary> </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.GinsfunInst">
+            <summary> </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.StUtajID">
+            <summary> Stupen utajeni ID </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.OverPodpisDBParam">
+            <summary> Over Podpis DBParam </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.PodDokumentInst">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.DetSslspidInst">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.PodAntivirusServiceInst">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.WflEleInst">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.EleInst">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.WflspriInst">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.WflSecurityInst">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.PovolenePriponySouboruList">
+            <summary> povolené přípony k uložení do ELE  </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.SeznamSUDleZkratkyVPoznamce">
+            <summary> povolené přípony k uložení do ELE  </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.InitElPodani(Gordic.Epa.Server.GEpaElPodaniBase.GEpaPodaniDto)">
+            <summary> inicialozuje start. el. podani </summary>
+            <param name="_elPodani"></param>        
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.CleanElPodani">
+            <summary> vyčistí objekty el. podání - nové podání </summary>       
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.IsPovolenaPripona(System.String)">
+            <summary> Kontrola typu souboru </summary>
+            <param name="_pripona">přípona souboru</param>
+            <returns>bool</returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.CreateUlozisteForTEMPfiles">
+            <summary> Vytvorí lokalniho uloziste v tempu pro docasne zpracovani eml </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.UlozOriginalJakoElObraz(Gordic.General.GString,Gordic.Wfl.Interface.GFileVerifInfoDto@,Gordic.General.GString@,Gordic.General.GString@,System.Boolean@)">
+            <summary> Ulozi original oznaceny DZ jako el.obraz </summary>
+            <param name="_ixp"></param>
+            <param name="_overeni">GFileVerifInfoDto</param>
+            <param name="_jmenoOriginalu"></param>
+            <param name="_poznamkaText"></param>
+            <param name="_chybaPriPridaniCasRazitka"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.IsStavElPodaniStandardni">
+            <summary> Kontrola typu souboru </summary>
+            <returns>bool</returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.GetSeznamSUDleZkratkyVPoznamce">
+            <summary> Kontrola typu souboru </summary>
+            <returns>SeznamSpisovychUzluDataSet</returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.DeleteStarsiNez2dnyInTemp(System.Collections.Generic.IList{Gordic.Epa.Server.GEpaElPodaniBase.GEpaPodaniDto})">
+            <summary> Odstraním z tempu starší poddaní než 2 dny - musi byt povolen parametr v administraci </summary>
+            <param name="_elPodaniList"></param>
+            <returns>true - pokud bylo neco smazano</returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.DeleteStarsiNez2dnyInTemp(System.String)">
+            <summary> Odstraním z tempu starší poddaní než 2 dny - musi byt povolen parametr v administraci </summary>
+            <param name="MotorInb">Identifikace motoru pro který načítám parametry atd....</param>
+            <returns>true - pokud bylo neco smazano</returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.GetHusainByDBParam">
+            <summary> Kontrola typu souboru </summary>
+            <returns>SeznamSpisovychUzluDataSet</returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.SetFlagEleError">
+            <summary> nastavim vzdy na 1 kdyz je vyvolana vyjimka od ELE </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.ResetFlagEleError">
+            <summary> Shodi priznak ze doslo k vyjimce </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.IsMaxCountFatalErrELE">
+            <summary>
+            Vrati true pokud se cely proces tahovani 5x opahoval (byla 5x volana funkce Zpracuj prilohy)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.ResetEleError">
+            <summary> </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.IncrementFatallErrorEle">
+            <summary> </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.IsAnyErrorELE">
+            <summary>
+            Vrati true pokud behem jedne udalosti ztahovani doslo k nejake chybe na zaklade ele!
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.GeneratePid">
+            <summary> Generuj PID </summary>
+            <returns>nový PID</returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.GetCilPredaniByZkratkaSU(Gordic.General.GString@,Gordic.General.GString@,System.Boolean@)">
+            <summary> Kontrola typu souboru </summary>
+            <returns>SeznamSpisovychUzluDataSet</returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.GetCilPredaniByFunkce(Gordic.General.GString,Gordic.General.GString@,Gordic.General.GString@,System.Boolean@)">
+            <summary> Kontrola typu souboru </summary>
+            <returns>SeznamSpisovychUzluDataSet</returns>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaElPodaniBase.MaxFileSizeAmsi">
+            <summary> </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.GetPodAntivirusService(System.String)">
+            <summary></summary>
+             <param name="_ginAntivir">GinAntivir</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.AddToListPrejmenovani(Gordic.Pod.Interface.ElPodaniPrilohyDto,Gordic.Pod.Interface.TypUpravyNazvyPrilohy)">
+            <summary> zapise do tabulky prejmonovani souboru </summary>
+            <param name="_priloha"></param>
+            <param name="_typUpravy"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.ResolvePrejmenovaniSystemem(Gordic.Pod.Interface.ElPodaniPrilohyDto)">
+            <summary> zapise do tabulky prejmonovani souboru </summary>
+            <param name="_priloha">ElPodaniPrilohyDto</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.ZapisZmenyNazvuPrilohElPodaniDoHistorie(Gordic.General.GString)">
+            <summary> </summary>
+            <param name="_ixp"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.UpdateVysledekOvereniZpravy(Gordic.Wfl.Interface.GWflOverInfoItem,Gordic.Pod.Interface.ElPodaniDto@)">
+            <summary>Update vysledek overeni zpravy el. podani </summary>
+            <param name="_info">GWflOverInfoItem</param>
+            <param name="_elPodaniDto">ElPodaniDto</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.GetAntivirusParam(Gordic.General.GInt32@)">
+            <summary> Adresat potvrzeni</summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.GetTypElPodpisuOfRegistredFileType(System.String)">
+            <summary> Vrati typ podpisu (nepodpisu) dle přípony souboru </summary>
+            <param name="_pripona"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.GetIxsCerHlavnihoVnitrnihoPodpisu(Gordic.Pod.Interface.ElPodaniPrilohyDto)">
+            <summary> Get IxsCer Hlavniho VnitrnihoPodpisu </summary>
+            <param name="_priloha"></param>
+            <returns>ixsCer</returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.UpdateConfigElPodani(Gordic.Pod.Interface.TypZarazeniElSouboru,Gordic.Wfl.Interface.GFileInsertConfig@,Gordic.Wfl.Interface.PrizSystem)">
+            <summary> Upravi Config pro el. podani </summary>
+            <param name="_typ">TypZarazeniElSouboru</param>
+            <param name="_config"></param>
+            <param name="prizSystem"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.RoztridPrilohy(System.Collections.Generic.List{Gordic.Pod.Interface.ElPodaniPrilohyDto}@)">
+            <summary> Roztrid prilohy </summary>
+            <param name="_prilohy">List</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.NactiMbxParamFromDb(System.String,System.String)">
+            <summary>
+            Čte admin. parametr mbx z vas.gincpar, pokud neni parametr pomoci administrace naadministrovat je zde pro jen programove nastavena hodnota
+            </summary>
+            <param name="_sMbx">Nazev administracniho parametru</param>
+            <param name="_sParamMbx">Nazev aktualni schranky</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.NactiMotorMbxParamFromDb(System.String,System.String,System.String)">
+            <summary>
+            Čte admin. parametr mbx z vas.gincpar, pokud neni parametr pomoci administrace naadministrovat je zde pro jen programove nastavena hodnota
+            </summary>
+            <param name="l_sIxs_Epa">Ixs Motoru EPA - ginsepa</param>
+            <param name="l_sMbx">Nazev administracniho parametru</param>
+            <param name="l_sParamMbx">Nazev parametru</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.ResolveAntivirTest">
+            <summary> Antivir test pokud tak administrovano </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.AntivirTest(Gordic.Pod.Interface.ElPodaniDto@,System.Collections.Generic.List{Gordic.Pod.Interface.ElPodaniPrilohyDto}@,System.String@)">
+            <summary> Antivir test </summary>
+            <param name="_elPodani"></param>
+            <param name="_prilohy"></param>
+            <param name="_hlaska"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.PovolenePriponySouboru(System.Collections.Generic.List{Gordic.Pod.Interface.ElPodaniPrilohyDto})">
+            <summary> Oveřování přípon souboru </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.ShodPriznakPrizAutomat(System.String)">
+            <summary> Pošle dané el. podání na manuální zpracování </summary>
+            <param name="_sInfoToLog">text popisujici duvod shozeni priznaku</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.UpdateElPodaniDoWflspid(Gordic.General.GString,Gordic.Wfl.Interface.TypPuvoduDokumentuEnum)">
+            <summary> Update El.podani do Wflspid je vždy prováděn commit či rollback </summary>
+            <param name="_ixp">PID</param>
+            <param name="_puvod">puvod</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.PodejCiziPisemnostElPOD(System.String,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.String[],Gordic.General.GString,System.Boolean,System.Boolean,System.Boolean,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,System.String,Gordic.General.GString@,Gordic.Wfl.Interface.GWflsinbDto,Gordic.General.GString@,Gordic.General.GDateTime@,Gordic.General.GDateTime@)">
+            <summary> Podani pisemnosti pro el.podani - obecné </summary>
+            <param name="_sMailBox"></param>
+            <param name="_podPisNazev"></param>
+            <param name="_pioPoznamka"></param>
+            <param name="_CJOdes"></param>
+            <param name="_ixb"></param>
+            <param name="_odesilatel"></param>
+            <param name="_zastupOsobaTxt"></param>
+            <param name="_bEvidovat"></param>
+            <param name="_bDelejSpis"></param>
+            <param name="_bPredat"></param>
+            <param name="_spPlan"></param>
+            <param name="_oZnak"></param>
+            <param name="_oStupenUtajeni"></param>
+            <param name="_sIxsSu"></param>
+            <param name="_sIxsFun"></param>
+            <param name="_oIxsTypDok"></param>
+            <param name="_oDat_dor"></param>
+            <param name="_oEsuTxt"></param>
+            <param name="_oZastOsTxt"></param>
+            <param name="_oIxsEsu"></param>
+            <param name="_oZastOsLic"></param>
+            <param name="_oZastOsPor"></param>
+            <param name="_sSpZnOdes"></param>
+            <param name="_ixpSpis"></param>
+            <param name="_wflsinbDto"></param>
+            <param name="_aktZnackaSpis"></param>
+            <param name="_datumPodaniPis"></param>
+            <param name="_datumVznikuSpisu"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.GenerujPDFDok2(Gordic.General.GString,Gordic.General.GString,System.String,System.String,System.String@)">
+            <summary>
+            Generování sestavy pro přidružený dokument
+            </summary>
+            <param name="ixp">PID dokumentu</param>
+            <param name="Ixp_Puv">PID dokumentu vzniklého z el. podání</param>
+            <param name="EPAalfDok2">ALF sestavy pro genrování PDF</param>
+            <param name="EPADok2NazevPDF">název souboru pro genrování PDF</param>
+            <param name="hlaska">návrat chybová hláška</param>
+            <returns>Dopadlo/Nedopadlo</returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.UpdateWflsinbElPodani(Gordic.General.GInt16,Gordic.Wfl.Interface.GFileVerifInfoDto,Gordic.General.GString)">
+            <summary> Update wflsinb el.podani</summary>
+            <param name="_stavInb"></param>
+            <param name="_dtoOver"></param>
+            <param name="_sIxsFun"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.SaveAntivirInfo(Gordic.General.GString,Gordic.Pod.Interface.ElPodaniPrilohyDto)">
+            <summary> </summary>
+            <param name="_ixb"></param>
+            <param name="_prilohaDto"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.SaveAntivirInfo(Gordic.General.GString,Gordic.Pod.Interface.ElPodaniDto)">
+            <summary> </summary>
+            <param name="_ixb"></param>
+            <param name="_elPodaniDto"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.SaveAntivirInfo(Gordic.General.GString,Gordic.General.GString)">
+            <summary> </summary>
+            <param name="_ixb"></param>
+            <param name="_poznamka"> jmeno souboru </param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.SaveAntivirInfoExternichPodpisuARazitek(System.String,Gordic.Wfl.Interface.GFileInsertConfig)">
+            <summary> </summary>
+            <param name="_jmenoSouboru"></param>
+            <param name="_insertCfg"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.AddExterniPodpisyARazitka(Gordic.General.GString,System.String,Gordic.Wfl.Interface.GFileInsertConfig@)">
+            <summary> </summary>
+            <param name="_ixp"></param>
+            <param name="_soubor"></param>
+            <param name="_insertCfg"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.SetPlatnaArchivniVerze(Gordic.General.GString,Gordic.General.GString)">
+            <summary> Nastaví platnou archivní verzi </summary>
+            <param name="_ixp">identifikátor dokumentu</param>
+            <param name="_ixb">ixb</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.GetIxsCerHlavnihoVnitrnihoCasRazitka(Gordic.Pod.Interface.ElPodaniPrilohyDto)">
+            <summary> Get IxsCer Hlavniho VnitrnihoCasRazitka </summary>
+            <param name="_priloha"></param>
+            <returns>ixsCer</returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.VytvorCasoveRazitkoZeSouboru(System.String)">
+            <summary> Vytvoření časového razítka </summary>
+            <param name="_fileName">soubor</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.IsPovolenaNevaliditaPodpisy(Gordic.Wfl.Interface.GWflOverInfoItem)">
+            <summary> </summary>
+            <param name="_infoItem"></param>
+            <returns>bool</returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.ResolveOvereniPodpisu">
+            <summary> ¨zpracuje overeni podpisu nevalidni overeni </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.ResolveNevalidniOvereni(Gordic.Wfl.Interface.StavVerif,Gordic.General.GDateTime,System.Int32@,System.Boolean@,System.String)">
+            <summary> osetri nevalidni overeni </summary>
+            <param name="_stavVerif"></param>
+            <param name="_overenoKeDni"></param>
+            <param name="_pocetPodpisu"></param>
+            <param name="_shod_na_manual"></param>
+            <param name="_logText"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.OverPodpisZpravy(System.Boolean@,System.Int32@)">
+            <summary> Over vnejsi podpisy </summary>
+            <param name="l_shod_na_manual"></param>
+            <param name="l_nPocetPodpisu"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.OverVnejsiPodpisy(System.Boolean@,System.Int32@)">
+            <summary> Over vnejsi podpisy </summary>
+            <param name="l_shod_na_manual"></param>
+            <param name="l_nPocetPodpisu"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.OverVnitrniPodpisy(System.Boolean@,System.Int32@)">
+            <summary> Over vnitrni podpisy </summary>
+            <param name="l_shod_na_manual"></param>
+            <param name="l_nPocetPodpisu"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.PridejPrilohyKElObrazu(Gordic.General.GString)">
+            <summary> Pridej prilohy k ElObrazu </summary>
+            <param name="_ixp">ixp</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.RozeberInfoItem(System.Boolean,Gordic.Pod.Interface.ElPodaniDto@,Gordic.Pod.Interface.ElPodaniPrilohyDto,Gordic.Wfl.Interface.GWflOverInfoItem,System.Boolean@,System.Boolean@,System.Boolean@,System.Boolean@,Gordic.Wfl.Interface.GFileVerifInfoDto@)">
+            <summary> </summary>
+            <param name="_overeno"></param>
+            <param name="_elPodaniDto"></param>
+            <param name="_priloha"></param>
+            <param name="_overInfoItem"></param>
+            <param name="_vnitrElPodpis"></param>
+            <param name="_vnitrCasRazitko"></param>
+            <param name="_elPodpisyVerifikovano"></param>
+            <param name="_casRazitkaVerifikovano"></param>
+            <param name="_overeni"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.RozeberInfoItemPole(System.Boolean,Gordic.Pod.Interface.ElPodaniDto@,Gordic.Pod.Interface.ElPodaniPrilohyDto,Gordic.Wfl.Interface.GWflOverInfoItem[],System.Boolean@,System.Boolean@,System.Boolean@,System.Boolean@,Gordic.Wfl.Interface.GFileVerifInfoDto@)">
+            <summary> </summary>
+            <param name="_overeno"></param>
+            <param name="_elPodani"></param>
+            <param name="_priloha"></param>
+            <param name="l_oWflOverInfoItem"></param>
+            <param name="l_bVnitrElPodpis"></param>
+            <param name="l_bVnitrCasRazitko"></param>
+            <param name="l_bElPodpisyVerifikovano"></param>
+            <param name="l_bCasRazitkaVerifikovano"></param>
+            <param name="_overeni"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.RozeberInfoItemVnitrnichVnejsiho(System.Boolean,Gordic.Pod.Interface.ElPodaniDto@,Gordic.Pod.Interface.ElPodaniPrilohyDto,System.Collections.Generic.List{Gordic.Wfl.Interface.GWflOverInfoItem},System.Boolean@,System.Boolean@,System.Boolean@,System.Boolean@,Gordic.Wfl.Interface.GFileVerifInfoDto@)">
+            <summary> </summary>
+            <param name="_overeno"></param>
+            <param name="_emlPodaniDto"></param>
+            <param name="_priloha"></param>
+            <param name="_wflOverInfoItemList"></param>
+            <param name="_vnitrElPodpis"></param>
+            <param name="_vnitrCasRazitko"></param>
+            <param name="_elPodpisyVerifikovano"></param>
+            <param name="_casRazitkaVerifikovano"></param>
+            <param name="_overeni"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.GetInfoOvereni(Gordic.Pod.Interface.ElPodaniPrilohyDto)">
+            <summary> </summary>
+            <param name="_row"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.AddNewInfoOvereni(Gordic.Wfl.Interface.GWflOverInfoItem[],Gordic.Wfl.Interface.GFileInsertConfig,Gordic.General.GDateTime,Gordic.Security.Service.GVerifiedToTimeType,Gordic.Wfl.Interface.WflchusnEnum)">
+            <summary> </summary>
+            <param name="_wflOverInfoItem"></param>
+            <param name="_insertCfg"></param>
+            <param name="_overenoKeDni"></param>
+            <param name="_verifyType"></param>
+            <param name="_husain"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.AddCasoveRazitkoSystemove(Gordic.General.GString,System.String,Gordic.Wfl.Interface.GFileInsertConfig)">
+            <summary> </summary>
+            <param name="_ixp"></param>
+            <param name="_filePath"></param>
+            <param name="_insertCfg"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.VytvorCasoveRazitko(System.String,System.String@,Gordic.Wfl.Interface.GWflOverInfoItem@)">
+            <summary> VytvorCasoveRazitko </summary>
+            <param name="_souborPath"></param>
+            <param name="_casRazitkoPath"></param>
+            <param name="_infoItem"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.VytvorCasoveRazitkoAOver(System.String,System.String@,Gordic.Wfl.Interface.GWflOverInfoItem@)">
+            <summary>Vložení časového razítka</summary>        
+            <param name="_souborPath">path k časovému razítku</param>
+            <param name="_sCasRazitkoPath"></param>
+            <param name="_infoItem">GWflOverInfoItem</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.SetDataOvereniPodpisu(Gordic.Wfl.Interface.GWflOverInfoItem,Gordic.Pod.Interface.ElPodaniPrilohyDto)">
+            <summary> </summary>
+            <param name="_wflOverInfoItem"></param>
+            <param name="_row"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.SetPopisStavuElPodpisu(Gordic.Pod.Interface.ElPodaniPrilohyDto)">
+            <summary> </summary>
+            <param name="_row"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.SetPopisStavuCasRazitka(Gordic.Pod.Interface.ElPodaniPrilohyDto)">
+            <summary> </summary>
+            <param name="_row"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.ZpracujOverInfoP7S(Gordic.Pod.Interface.ElPodaniDto@,Gordic.Pod.Interface.ElPodaniPrilohyDto,System.Collections.Generic.List{Gordic.Wfl.Interface.GWflOverInfoItem},System.Boolean)">
+            <summary> </summary>
+            <param name="_elPodaniDto"></param>
+            <param name="_row"></param>
+            <param name="_wflOverInfoItemList"></param>
+            <param name="_overeno"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.ZpracujOverInfo(Gordic.Pod.Interface.ElPodaniDto@,Gordic.Pod.Interface.ElPodaniPrilohyDto,Gordic.Wfl.Interface.GWflOverInfoItem,System.Boolean)">
+            <summary> </summary>
+            <param name="_elPodaniDto"></param>
+            <param name="_priloha"></param>
+            <param name="_wflOverInfoItem"></param>
+            <param name="_overeno"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.OverCasoveRazitko(System.String,System.String,Gordic.Wfl.Interface.GWflOverInfoItem@)">
+            <summary> Vložení časového razítka </summary>
+            <param name="_souborPath">path k časovému razítku</param>
+            <param name="_casRazitkoPath"></param>
+            <param name="_infoItem">GWflOverInfoItem</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.VytvorTempSlozkuPriloh(System.String,System.Boolean)">
+            <summary> </summary>
+            <param name="_sTempFolder"></param>
+            <param name="vymazat"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.IsMotorinb">
+            <summary> má motorinb</summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.DecodeZipTemp(Gordic.Pod.Interface.ElPodaniDto@,System.Collections.Generic.List{Gordic.Pod.Interface.ElPodaniPrilohyDto}@)">
+            <summary> Dokodování ZIP </summary>
+            <param name="_podani">EmlDataSet</param>
+            <param name="_prilohy">List</param>///         
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.GetFileNameProUlozeniBezPrepsani(System.String,System.String,System.Collections.Generic.List{System.String},System.Boolean)">
+            <summary> Upraví název souboru, aby byl validní a jedinecný </summary>
+            <param name="_path">cesta k souboru</param>
+            <param name="_fileName">jméno souboru</param>
+            <param name="UsedFileNames">jiz existujici jmena priloh</param>
+            <param name="IsFilesSaved">je jiz soubor ulozeny</param>
+            <returns>validní jméno souboru pro uložení</returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.CopyStream(System.IO.Stream,System.IO.Stream)">
+            <summary> </summary>
+            <param name="source"></param>
+            <param name="target"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.GetGinspodInfo(Gordic.General.GString)">
+            <summary> </summary>
+            <param name="_ixsSu"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.StornovaniPisemnosti(System.Boolean,System.Boolean,Gordic.General.GString,System.Boolean,System.Exception)">
+            <summary>Stornovani pisemnosti </summary>
+            <param name="_bPredat"></param>
+            <param name="_bPridel"></param>
+            <param name="_sIXPPredani"></param>
+            <param name="_bDelejSpis"></param>
+            <param name="exc"></param>
+            <exception cref="T:Gordic.Epa.Server.GEpaServerException"></exception>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.GetMailboxList">
+            <summary> data predpisu zasilky </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.ResolveExceptionPodani(System.Boolean,System.Boolean,Gordic.General.GString,System.Boolean,System.Exception)">
+            <summary>Resolve exception podani </summary>
+            <param name="_predat"></param>
+            <param name="_pridelit"></param>
+            <param name="_IXPPredani"></param>
+            <param name="_delejSpis"></param>
+            <param name="exc"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.NajdiEsuDleIxsEsu(Gordic.General.GString,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary> Najde ESU dle IxsEsu </summary>
+            <param name="_ixsEsu">IXS_ESU</param>
+            <param name="_esuTxt">_esuTxt</param>
+            <param name="_zastOsTxt">_zastOsTxt</param>
+            <returns>Identifikator ESU</returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.ResolveOpakovaneStorno">
+            <summary> Najde ESU dle IxsEsu </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.UpdatePripony(Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Update počtu příloh
+            </summary>
+            <param name="_Ixb">ixb (12)</param>
+            <param name="_Pripona">přípona přílohy</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaElPodaniBase.GetElPodaniList(Gordic.General.GString)">
+            <summary> varci seznam el. podani</summary>
+            <param name="_mailbox"></param>
+            <returns></returns>
+            <exception cref="T:Gordic.General.GArgumentException"></exception>
+        </member>
+        <member name="T:Gordic.Epa.Server.GEpaElPodaniBase.GEpaMailboxDto">
+            <summary> </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GEpaElPodaniBase.GEpaMailboxDto.mailbox">
+            <summary>mailboxx</summary>
+        </member>
+        <member name="T:Gordic.Epa.Server.GEpaElPodaniBase.GGinspodInfoDto">
+            <summary> </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GEpaElPodaniBase.GGinspodInfoDto.ixs_fun">
+            <summary>ixs_fun</summary>
+        </member>
+        <member name="T:Gordic.Epa.Server.GEpaElPodaniBase.GEpaPodaniDto">
+            <summary> </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GEpaElPodaniBase.GEpaPodaniDto.ixb">
+            <summary>ixb el.podaní</summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GEpaElPodaniBase.GEpaPodaniDto.ixs_su">
+            <summary>ixs_su</summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GEpaElPodaniBase.GEpaPodaniDto.motorinb">
+            <summary>ixs_su</summary>
+        </member>
+        <member name="T:Gordic.Epa.Server.GEpaBase">
+            <summary> předek EPA </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEpaBase.ResultInfo">
+            <summary> návratový text z akce </summary>
+        </member>
+        <member name="T:Gordic.Epa.Server.GWEBEviduj">
+            <summary> Server pro zpracování datových zpráv </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GWEBEviduj.WEBEviduj(System.String)">
+            <summary>
+            Načtení datových zpráv
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GWEBEviduj.Zpracuj">
+            <summary> hlavni smycka zpracovani WEB podání </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GWEBEviduj.CallKrok5">
+            <summary> predvyplneni externiho subjektu</summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GWEBEviduj.CallKrok4">
+            <summary> Overeni vnitrnich vnejsich podpisů a casových razitek priloh </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GWEBEviduj.CallKrok1">
+            <summary>
+             1. stahne datovou zpravu do tempu
+             2. parsovani datove zpravy:
+                - naplneni datasetu s vlastnostmi datove zpravy m_oEmlDataSet (zjisti zda je datova zprava podepsana - neprovadi overeni podpisu; cte polozky z datove zpravy a ulozi je)
+                - napplneni datasetu s prilohamy ( zjisti jmeno prilohy, priponu ; jak je priloha zarazena tj. jedna se o prilohu, original, podpis ....)
+             3. urceni originalu datove zpravy, urceni typu jednotlivych priloh napr. el. podpis, cas. razitko, priloha datov. zpravy
+             4. antivirovy test
+             5  test zda je nalezena pozadovana priloha
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GWEBEviduj.SendInfoAboutPodani(Gordic.General.GString,System.Boolean)">
+            <summary>
+            Odešle potvrzení o el. podání - ud DZ se neodesílá pouze se zaznamená že se neodesílá - metoda Udelá commit
+            </summary>
+            <param name="l_sIxp"></param>
+            <param name="newTransaction"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Epa.Server.GRAPEviduj">
+            <summary>
+            Server pro zpracování datových zpráv
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GRAPEviduj.RAPEviduj(System.String)">
+            <summary>
+            Načtení datových zpráv
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GRAPEviduj.Zpracuj">
+            <summary> hlavni smycka zpracovani WEB podání </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GRAPEviduj.CallKrok5">
+            <summary>
+            predvyplneni externiho subjektu
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GRAPEviduj.OverPodpisy">
+            <summary>
+            Oveřování podpisů a časových razítek priloh;
+            Naplni dataset ElPodaniPrilohyDto priznaky o stavech podpisu a cas. razitek
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GRAPEviduj.CallKrok4">
+            <summary>
+            Overeni vnitrnich vnejsich podpisů a casových razitek priloh
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GRAPEviduj.CallKrok1">
+            <summary>
+             1. stahne datovou zpravu do tempu
+             2. parsovani datove zpravy:
+                - naplneni datasetu s vlastnostmi datove zpravy m_oEmlDataSet (zjisti zda je datova zprava podepsana - neprovadi overeni podpisu; cte polozky z datove zpravy a ulozi je)
+                - napplneni datasetu s prilohamy ( zjisti jmeno prilohy, priponu ; jak je priloha zarazena tj. jedna se o prilohu, original, podpis ....)
+             3. urceni originalu datove zpravy, urceni typu jednotlivych priloh napr. el. podpis, cas. razitko, priloha datov. zpravy
+             4. antivirovy test
+             5  test zda je nalezena pozadovana priloha
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GRAPEviduj.SendInfoAboutPodani(Gordic.General.GString,System.Boolean)">
+            <summary>
+            Odešle potvrzení o el. podání - ud DZ se neodesílá pouze se zaznamená že se neodesílá
+            </summary>
+            <param name="l_sIxp"></param>
+            <param name="newTransaction"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GRAPEviduj.CallKrok6">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Epa.Server.GWEBEvidujEventActionProvider">
+            <summary>
+            Obslužná akce událostního systému pro zpracování el. podání z RAPu
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GWEBEvidujEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GWEBEvidujEventActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Epa.Server.GRAPEvidujEventActionProvider">
+            <summary>
+            Obslužná akce událostního systému pro zpracování el. podání z RAPu
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GRAPEvidujEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GRAPEvidujEventActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Epa.Server.GEMAILVyprav">
+            <summary>
+            Server pro vypravení datových zpráv
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GEMAILVyprav.ResultInfo">
+            <summary>
+            návratový text z akce
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEMAILVyprav.VypravEMAIL(System.String,System.String)">
+            <summary>
+            Vypravení datových zpráv
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Epa.Server.GEMAILVypEventActionProvider">
+            <summary>
+            Obslužná akce událostního systému pro vypravení e-mailových zpráv
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEMAILVypEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEMAILVypEventActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Epa.Server.GHkpOdeslaniEventActionProvider">
+            <summary>
+            Obslužná akce událostního systému pro odeslání HromadnaKonverzniPosta
+            Počítá se s navázáním na ZUD událost: ssl_uda_hkpvypr 
+            Ta má parametry IXP, LIC, POR_CISLO a to jsou souřadnice do tabulky WFLDPRJ
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GHkpOdeslaniEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GHkpOdeslaniEventActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Epa.Server.GHkpOdeslani">
+            <summary>
+            Server pro info odeslání do HKP - HromadnaKonverzniPosta
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GHkpOdeslani.m_sLicZas">
+            <summary> Licence zásilky </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GHkpOdeslani.m_nPorCisloZas">
+            <summary> Poradove cislo zasilky </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GHkpOdeslani.m_sIdOdeslani">
+            <summary> ID odeslání (zásilky) </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GHkpOdeslani.WfldprjInst">
+            <summary></summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GHkpOdeslani.Odeslat(System.String,System.String,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="ixp"></param>
+            <param name="lic"></param>
+            <param name="por_cislo"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GHkpOdeslani.OdeslaniPredpisuHKP">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Gordic.Epa.Server.GZverejni">
+            <summary>
+            Server pro automatické zveřejnění po schválení
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GZverejni.Zverejni(System.String,System.String,System.Boolean@,System.String@)">
+            <summary>
+            Zveřejnění
+            </summary>
+            
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Epa.Server.GDSEviduj">
+            <summary> Server pro zpracování datových zpráv </summary>
+        </member>
+        <member name="T:Gordic.Epa.Server.GDSEviduj.Def_OriginalDS">
+            <summary>
+            vycet - urcuje co bude oznaceno za original datove zpravy
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GDSEviduj.Def_OriginalDS.orig_def_dz">
+            <summary>
+            urceni originalu urcuje datova zprava -> 0
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GDSEviduj.Def_OriginalDS.orig_is_zfo">
+            <summary>
+            originalem bude cela datova zprava - tedy ZFO soubor! -> 1
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEviduj.DSEviduj(System.String)">
+            <summary> Načtení datových zpráv </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEviduj.ZpracujDs">
+            <summary> hlavni smycka zpracovani datovych zprav </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEviduj.AnalyzujPrilohyDZ">
+            <summary>
+            plni se dataset s prilohamy l_oPrilohyEmlTableRow
+            do datasetu priloh se uvede typ priloh  a do tempu se prida dana priloha 
+            </summary>
+            true - originalem bude cela datova zprava - je nastaveno administraci
+            false - original bude urcen dle rozboru datove zpravy - je nastaveno administraci
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEviduj.AnalyzujPrilohyDZ_O">
+            <summary>
+            plni se dataset s prilohamy l_oPrilohyEmlTableRow
+            do datasetu priloh se uvede typ priloh  a do tempu se prida dana priloha 
+            </summary>
+            true - originalem bude cela datova zprava - je nastaveno administraci
+            false - original bude urcen dle rozboru datove zpravy - je nastaveno administraci
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEviduj.CallKrok5">
+            <summary> predvyplneni externiho subjektu </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEviduj.CallKrok3">
+            <summary> Provadi test zda jsou vsechny typy souboru povoleny </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEviduj.OverPodpisy">
+            <summary>
+            Oveřování podpisů a časových razítek priloh;
+            Naplni dataset ElPodaniPrilohyDto priznaky o stavech podpisu a cas. razitek
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEviduj.CallKrok4">
+            <summary> Overeni vnitrnich vnejsich podpisů a casových razitek priloh </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEviduj.CallKrok1">
+            <summary>
+             1. stahne datovou zpravu do tempu
+             2. parsovani datove zpravy:
+                - naplneni datasetu s vlastnostmi datove zpravy m_oEmlDataSet (zjisti zda je datova zprava podepsana - neprovadi overeni podpisu; cte polozky z datove zpravy a ulozi je)
+                - napplneni datasetu s prilohamy ( zjisti jmeno prilohy, priponu ; jak je priloha zarazena tj. jedna se o prilohu, original, podpis ....)
+             3. urceni originalu datove zpravy, urceni typu jednotlivych priloh napr. el. podpis, cas. razitko, priloha datov. zpravy
+             4. antivirovy test
+             5  test zda je nalezena pozadovana priloha
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEviduj.CallKrok1_O">
+            <summary>
+             1. stahne datovou zpravu do tempu
+             2. parsovani datove zpravy:
+                - naplneni datasetu s vlastnostmi datove zpravy m_oEmlDataSet (zjisti zda je datova zprava podepsana - neprovadi overeni podpisu; cte polozky z datove zpravy a ulozi je)
+                - napplneni datasetu s prilohamy ( zjisti jmeno prilohy, priponu ; jak je priloha zarazena tj. jedna se o prilohu, original, podpis ....)
+             3. urceni originalu datove zpravy, urceni typu jednotlivych priloh napr. el. podpis, cas. razitko, priloha datov. zpravy
+             4. antivirovy test
+             5  test zda je nalezena pozadovana priloha
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEviduj.LoadMessage(System.String,System.Boolean@,System.Boolean@,Gordic.Wfl.Interface.GWflOverInfoItem@)">
+            <summary> Načtení datove zpravy do struktury </summary>
+            <param name="filename">Cesta k DZ souboru</param>
+            <param name="_DZJePodepsana">DZJePodepsana</param>
+            <param name="_podpisJeOveren">podpisJeOveren - podpis se overuje az v kroku 4</param>
+            <param name="_overInfo">informace o ověření (ixsCer...)</param>
+            <returns>tReturnedMessage</returns> 
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEviduj.UlozZpravuJakoElObraz(Gordic.General.GString,Gordic.General.GString,System.Boolean,Gordic.Wfl.Interface.GFileVerifInfoDto@,Gordic.General.GString@,Gordic.General.GString@,System.Boolean@)">
+            <summary>
+            Ulozi zprávu jako el.obraz
+            </summary>
+            <param name="_ixp">ixp</param>
+            <param name="_ixb">ixb</param>
+            <param name="pridatCasovaRazitko">pridatCasovaRazitko</param>
+            <param name="_overeni">GFileVerifInfoDto</param>
+            <param name="title">title</param>
+            <param name="description">description</param>
+            <param name="chybaPriPridaniCasRazitka">chybaPriPridaniCasRazitka</param>
+            <returns>ixb el.obrazu</returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEviduj.SetVecAPoznamku(System.String,System.String,System.Boolean,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary>
+            nastaví vec, poznámku dokumentu a poznámku doručení dle  kontextu a user settings
+            </summary>
+            <param name="textVysledkuPodani">textVysledkuPodani</param>
+            <param name="poznamkaWflsinb">poznamkaWflsinb</param>
+            <param name="rozlozeno">jedná se o rozlozené podání</param>
+            <param name="vecDokumentu">pisNazev</param>
+            <param name="poznamkaPio">poznamkaPio</param>
+            <param name="CJOdes">CJOdes</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEviduj.SendInfoAboutPodani(Gordic.General.GString,System.Boolean)">
+            <summary>
+            Odešle potvrzení o el. podání - ud DZ se neodesílá pouze se zaznamená že se neodesílá
+            </summary>
+            <param name="l_sIxp"></param>
+            <param name="newTransaction"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEviduj.NajdiEsuDleEmailAdresy(System.String,Gordic.General.GString,System.String,System.String,Gordic.General.GInt16,Gordic.General.GString@,Gordic.General.GInt16@,Gordic.General.GString@,Gordic.General.GString@,System.Boolean)">
+            <summary>
+            Najde ESU dle emailu nebo id_ds
+            </summary>
+            <param name="_email">e-mail</param>
+            <param name="_mailbox">schránka</param>
+            <param name="_idVnitrAdr">IdVnitrAdr</param>
+            <param name="_utvar">Utvar</param>
+            <param name="_zpusobDor">zpusobDor</param>
+            <param name="_zastOsLic">l_oZastOsLic</param>
+            <param name="_zastOsPor">l_oZastOsPor</param>
+            <param name="_esuTxt">esuTxt</param>
+            <param name="_zastOsTxt">zastOsTxt</param>
+            <param name="NewTransaction">je či není nová transakce</param>
+            <returns>String - ixs_esu</returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEviduj.DecodeDZTemp(System.String)">
+            <summary>
+            dekodování datove zpravy:
+            - naplneni datasetu s vlastnostmi datove zpravy m_oEmlDataSet 
+            - napplneni datasetu s prilohamy
+            </summary>
+            <param name="_pathToZip">Cesta k DZ souboru</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEviduj.DecodeDZTemp_O(System.String)">
+            <summary>
+            dekodování datove zpravy:
+            - naplneni datasetu s vlastnostmi datove zpravy m_oEmlDataSet 
+            - napplneni datasetu s prilohamy
+            </summary>
+            <param name="pathToZip">Cesta k DZ souboru</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEviduj.PodejCiziPisemnostElPodaniDS(System.String,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.String[],Gordic.General.GString,System.Boolean,System.Boolean,System.Boolean,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,System.String,Gordic.General.GString@,Gordic.Wfl.Interface.GWflsinbDto,Gordic.General.GString@,Gordic.General.GDateTime@,Gordic.General.GDateTime@)">
+            <summary> Podani pisemnosti pro el.podani DS </summary>
+            <param name="_mailBox"></param>
+            <param name="_podPisNazev"></param>
+            <param name="_pioPoznamka"></param>
+            <param name="CJOdes"></param>
+            <param name="ixb"></param>
+            <param name="odesilatel"></param>
+            <param name="zastupOsobaTxt"></param>
+            <param name="_evidovat"></param>
+            <param name="_delejSpis"></param>
+            <param name="_predat"></param>
+            <param name="_plan"></param>
+            <param name="_znak"></param>
+            <param name="_stupenUtajeni"></param>
+            <param name="_ixsSu"></param>
+            <param name="_iIxsFun"></param>
+            <param name="l_oIxsTypDok"></param>
+            <param name="l_oDat_dor"></param>
+            <param name="l_oEsuTxt"></param>
+            <param name="l_oZastOsTxt"></param>
+            <param name="l_oIxsEsu"></param>
+            <param name="l_oZastOsLic"></param>
+            <param name="l_oZastOsPor"></param>
+            <param name="sSpZnOdes"></param>
+            <param name="ixpSpis"></param>
+            <param name="m_oWflsinbDto"></param>
+            <param name="aktZnackaSpis"></param>
+            <param name="datumPodaniPis"></param>
+            <param name="datumVznikuSpisu"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Epa.Server.GZverejniEventActionProvider">
+            <summary>
+            Obslužná akce událostního systému pro automatické zveřejnění na ISRS po schválení
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GZverejniEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GZverejniEventActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Epa.Server.GDSEvidujEventActionProvider">
+            <summary> Obslužná akce událostního systému pro zpracování datových zprav </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEvidujEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEvidujEventActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Epa.Server.GDSVyprav">
+            <summary>
+            Server pro vypravení datových zpráv
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSVyprav.VypravDS(System.String,System.String)">
+            <summary>
+            Vypravení datových zpráv
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Epa.Server.GDSVypEventActionProvider">
+            <summary>
+            Obslužná akce událostního systému pro vypravení datovych zprav
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSVypEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSVypEventActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Epa.Server.GDSDorStahuj">
+            <summary>
+            Server pro info stahovani ze schranky
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GDSDorStahuj.ReturnInfo">
+            <summary>
+            návratový text z akce
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSDorStahuj.NactiZeSchranky(System.String,System.String)">
+            <summary>
+            Načtení el. podání ze schránky
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Epa.Server.GEsuPolozkaConverter">
+            <summary>
+            Objekt ktery vraci jmena Esu polozek v zavislosti na typu externiho subjektu
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GEsuPolozkaConverter.const_reg_count">
+            <summary>Pocet pouzivanych registru</summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEsuPolozkaConverter.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEsuPolozkaConverter.GetRegValue(Gordic.Esu.Interface.EsuRegistry,Gordic.Esu.Interface.ColGinsesu)">
+            <summary>
+            Vrati hodnotu polozky z pozadovaneho registru
+            </summary>
+            <param name="reg"></param>
+            <param name="polozka"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEsuPolozkaConverter.GIN(Gordic.Esu.Interface.ColGinsesu)">
+            <summary>
+            Vrati hodnotu polozky z registru GIN
+            </summary>
+            <param name="polozka"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEsuPolozkaConverter.DS(Gordic.Esu.Interface.ColGinsesu)">
+            <summary>
+            Vrati hodnotu polozky z registru DS
+            </summary>
+            <param name="polozka"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEsuPolozkaConverter.Vera(Gordic.Esu.Interface.ColGinsesu)">
+            <summary>
+            Vrati hodnotu polozky z registru Vera
+            </summary>
+            <param name="polozka"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEsuPolozkaConverter.Ares(Gordic.Esu.Interface.ColGinsesu)">
+            <summary>
+            Vrati hodnotu polozky z registru Ares
+            </summary>
+            <param name="polozka"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEsuPolozkaConverter.Gex(Gordic.Esu.Interface.ColGinsesu)">
+            <summary>
+            Vrati hodnotu polozky z registru GEX
+            </summary>
+            <param name="polozka"></param>
+            <returns></returns>
+        </member>
+        <member name="F:Gordic.Epa.Server.GESUSupport.m_bInitialised">
+            <summary>
+            Zda byl detail inicializování
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GESUSupport.GetIsdsVersion(System.Boolean)">
+            <summary>
+            Vrati zpusob prihlasovani do ISDS zda pouzivat cookie ci nikoli
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GESUSupport.IdsCookieDelegate(System.String)">
+            <summary>
+            IdsCookieDelegate
+            </summary>
+            <param name="serializedCookie"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GESUSupport.DSVysledekOK(Gordic.Support.DataMessage.tDbReqStatus,System.String@)">
+            <summary>
+            Dopadlo li hledí v isds ok (nenalezen ej považováno za ok)
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GESUSupport.ISDSGetTable(Gordic.Support.DataMessage.tDbOwnersArray,System.Boolean)">
+            <summary>
+            Vytvoří table dle informací o subejktech z isds
+            </summary>
+            <param name="Owners">Owners</param>
+            <param name="vsechny">vsechny nebo jen aktivní</param>
+            <returns>typ v ISDS</returns>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.ObalkaJmeno">
+            <summary>
+            Položka jméno v obálce
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.IxsEsu">
+            <summary>
+            Identifikátor externího subjektu
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.TypEsu">
+            <summary>
+            Typ externího subjektu
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.TypEsuString">
+            <summary>
+            Typ externího subjektu String
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.Nazev">
+            <summary>
+            Název externího subjektu
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.Zkratka">
+            <summary>
+            Zratka
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.Poznamka">
+            <summary>
+            Poznámka
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.StupenVerifikace">
+            <summary>
+            StupenVerifikace
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.Stat">
+            <summary>
+            Stat
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.Stat_String">
+            <summary>
+            Stat
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.StatSp">
+            <summary>
+            Statni prislusnost
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.Psc">
+            <summary>
+            Psc
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.Obec">
+            <summary>
+            Obec
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.CastObce">
+            <summary>
+            CastObce
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.Ulice">
+            <summary>
+            Ulice
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.CisloOrientacni">
+            <summary>
+            CisloOrientacni
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.CisloPopisne">
+            <summary>
+            CisloPopisne
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.KodUirAdr">
+            <summary>
+            KodUirAdr
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.PoBox">
+            <summary>
+            PoBox
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.Telefon">
+            <summary>
+            KodUirAdr
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.EMail">
+            <summary>
+            EMail
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.Fax">
+            <summary>
+            Fax
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.ObchodniJmeno">
+            <summary>
+            ObchodniJmeno
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.TypOrganizace">
+            <summary>
+            TypOrganizace
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.Ico">
+            <summary>
+            Ico
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.Dic">
+            <summary>
+            Dic
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.RodneCislo">
+            <summary>
+            RodneCislo
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.Jmeno">
+            <summary>
+            Jméno
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.Prijmeni">
+            <summary>
+            Prijmeni
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.TitulPred">
+            <summary>
+            TitulPred
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.TitulZa">
+            <summary>
+            TitulPred
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.St0">
+            <summary>
+            Obálková adresa řádek 0
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.St1">
+            <summary>
+            Obálková adresa řádek 1
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.St2">
+            <summary>
+            Obálková adresa řádek 2
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.ObalkaUliceCislo">
+            <summary>
+            Generuje řádek obálky, na kterém je ulice (př. část obce) a číslo
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.St3">
+            <summary>
+            Obálková adresa řádek 3
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.ObalkaCislo">
+            <summary>
+            Vrací číslo bydliště pro obálkovou adresu složení z orientačního a popisného čísla
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.ObalkaObec">
+            <summary>
+            Generuje řádek obálky, na kterém je číslo, ulice, část obce, obec
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.St4">
+            <summary>
+            Obálková adresa řádek 4
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.ObalkaPouzePosta">
+            <summary>
+            Pošta na obálku ve zkrácené verzi
+            </summary>
+            <returns>pošta</returns>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.ObalkaUliceCisloObec">
+            <summary>
+            Generuje řádek obálky, na kterém je číslo, ulice, část obce, obec
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.ObalkaPsc">
+            <summary>
+            Poštovnísměrovací číslo na obálku
+            </summary>
+            <returns>pošta nebo obec</returns>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.St5">
+            <summary>
+            Obálková adresa řádek 5
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.St6">
+            <summary>
+            Obálková adresa řádek 6
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.ObalkaStat">
+            <summary>
+            Stát na obálku
+            </summary>
+            <returns>pošta nebo obec</returns>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.St7">
+            <summary>
+            Obálková adresa řádek 7
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.UrPri">
+            <summary>
+            Úroveň přístupu
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.EsuTxt">
+            <summary>
+            Textové vyjádření esu
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.PrizDph">
+            <summary>
+            Příznak, zda je plátce DPH
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.NeaktObaInt">
+            <summary>
+            neaktualizovat obálkovou adresu z modulu INT
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.Url">
+            <summary>
+            url adresa organizace nebo občana
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.DatNar">
+            <summary>
+            datum narození 
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.Bio">
+            <summary>
+            bezvýznamový identifikátor osoby
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.KodO">
+            <summary>
+            kód oblasti (pro RRO)
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.Pco">
+            <summary>
+            kód oblasti (pro RRO)
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.ixsOso">
+            <summary>
+            idenitifikátor osoby (ROB)
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.ZmenuProv">
+            <summary>
+            změnu provedl 
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.IxsNad">
+            <summary>
+            identifikátor hlavního ESU (pro pobočky)
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.IxsEko">
+            <summary>
+            identifikátor hlavního eko ESU (pro pobočky a ekonomické subjekty)
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.TypUpadkuTxt">
+            <summary>
+            typ úpadku txt 
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.UrlUpadku">
+            <summary>
+            url úpadku
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.GpsSirka">
+            <summary>
+            gps šířka
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.GpsDelka">
+            <summary>
+            GPS délka
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.PrizUmrti">
+            <summary>
+            Příznak úmrtí
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.DatUmrti">
+            <summary>
+            Datum úmrtí
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.Oc">
+            <summary>
+            Osobní číslo
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.Pohlavi">
+            <summary>
+            m_nPohlavi 
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.RodStav">
+            <summary>
+            m_nRodStav 
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.TypAdr">
+            <summary>
+            m_nTypAdr 
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.PrizVp">
+            <summary>
+            m_nTypAdr 
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.RodPrijmeni">
+            <summary>
+            m_sRodPrijmeni
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.MistoNar">
+            <summary>
+            m_sMistoNar
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.Prezdivka">
+            <summary>
+            m_sPrezdivka
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.IxsEsuZam">
+            <summary>
+            m_sIxsEsuZam
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.IdDs">
+            <summary>
+            IdDs
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.IdGex">
+            <summary>
+            IdGex
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.Aktivita">
+            <summary>
+            Aktivita 
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.DatZmena">
+            <summary>
+            datum změny
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.Bic">
+            <summary>
+            m_sBic
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.BicPoznamka">
+            <summary>
+            m_sBic
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.BicAktivita">
+            <summary>
+            BicAktivita
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.BicTypBan">
+            <summary>
+            BicTypBan
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.GenerateStGResource">
+            <summary>
+            Automatické generování obálkové adresy
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.AutomatickeNacteniDetailu">
+            <summary>Určuje, zda se má automaticky provádět načítání detailů do objektů po volání metod, které provádí změnu dat v detailu.</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.ObalkaPosta">
+            <summary>
+            Pošta na obálku
+            </summary>
+            <returns>pošta nebo obec</returns>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.Posta">
+            <summary>
+            Vrátí poštu pro nastavené PSČ a stát
+            </summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GESUSupport.SearchByText">
+            <summary>
+            Textovy Popis podle ceho se vyhledavalo v isds
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GESUSupport.GetDatNarDleISDS(System.String)">
+            <summary>
+            GetNazevDleISDS
+            </summary>
+            <param name="datNar">nazev</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GESUSupport.GetNazevDleISDS(System.String,System.String,System.String)">
+            <summary>
+            GetNazevDleISDS
+            </summary>
+            <param name="nazev">nazev</param>
+            <param name="obJmeno">obJmeno</param>
+            <param name="typ">typ dle isds</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GESUSupport.NaplnEsuDleDataTableISDS(System.Data.DataTable,Gordic.Esu.Interface.EsuRegistry,System.Boolean)">
+            <summary>
+            Načte data z isds dle idDs
+            </summary>
+            <param name="dt">datatable se subjektem z isds</param>
+            <param name="reg">reg</param>
+            <param name="jeGex">jeGex</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GESUSupport.GetUrlWs(Gordic.Gin.Interface.TypWsIsds,System.Boolean,System.Int32)">
+            <summary>
+            Vrati url dle pozadovaneho typu operace a typu autorizace
+            </summary>
+            <param name="typWs"></param>
+            <param name="jeGex"></param>
+            <param name="typAut"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GESUSupport.NaplnEsuDleISDS(Gordic.General.GString,System.Boolean,Gordic.General.GString,Gordic.General.ApplicationServer.GServerContext)">
+            <summary>
+            Načte data z isds dle idDs
+            </summary>
+            <param name="idDs">idDs</param>
+            <param name="jeGex">jeGex</param>
+            <param name="Mailbox">PK - schránky</param>
+            <param name="ServerContext">GServerContext</param>
+            <returns>Boolean - výsledek</returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GESUSupport.SetToUnchanged(Gordic.General.IGDbType)">
+            <summary>
+            Nastaví u gordické proměnné příznak změny na unchanged
+            </summary>
+            <param name="par"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GESUSupport.ReadEkovbicDetail(Gordic.General.GString,Gordic.Esu.Server.GDetGinsesu)">
+            <summary>
+            Načte informace o bic kodu z aplikační logiky 
+            </summary>
+            <param name="keyIxsEsu"></param>
+            <param name="l_oDetGinsesu"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GESUSupport.ReadGinsesuDetail(Gordic.General.GString,Gordic.Esu.Server.GDetGinsesu,System.Boolean)">
+            <summary>
+            Načte informace o externím subjektu z aplikační logiky (podpora DS)
+            </summary>
+            <param name="ixsEsu"></param>
+            <param name="l_oDetGinsesu"></param>
+            <param name="NewTransaction">je či není nová transakce</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GESUSupport.WriteGinsesuDetail(System.Boolean)">
+            <summary>
+            Pošle data z klienta aplikačnímu serveru, aby je zapsal do DB
+            </summary>
+            <param name="NewTransaction">je či není nová transakce</param>
+            <returns>Id změněného či založenéhu subjektu</returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GESUSupport.ZalozEsuDleDS(System.String,System.Boolean,Gordic.General.GString,Gordic.General.ApplicationServer.GServerContext,System.Boolean)">
+             <summary>
+             Založí ESU dle idDs - volá služby isds
+             </summary>
+             <param name="idDs">idDs</param>
+             <param name="jeGex">jeGex</param>
+             <param name="mailbox">PK - schránky</param>
+             <param name="ServerContext">GServerContext</param>
+             <param name="NewTransaction">je či není nová transakce</param>
+             <returns>string - ixs_esu</returns>
+            TODO: doplnit obsluhu všech položek isds 
+        </member>
+        <member name="M:Gordic.Epa.Server.GESUSupport.GetZastTxt(Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16)">
+            <summary> Get zast txt </summary>
+            <param name="ixsEsu"></param>
+            <param name="licZo"></param>
+            <param name="porZo"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GESUSupport.ZalozZONaEsuDleDS(System.String,System.String,System.String,Gordic.General.GInt16@,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary> Zaloz ZONa EsuDleDS </summary>
+            <param name="ixsEsu"></param>
+            <param name="idVnitrAdr"></param>
+            <param name="nazevVnitrAdr"></param>
+            <param name="porZast"></param>
+            <param name="licZast"></param>
+            <param name="zastOsTxt"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GESUSupport.GetEsuZoIsds(Gordic.General.GString,Gordic.General.GString,System.Boolean,Gordic.General.GString,Gordic.General.GString,Gordic.General.ApplicationServer.GServerContext,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GInt16@,Gordic.General.GString@,System.Boolean)">
+            <summary> Vrati info o Esu pripadne i o Zo pokud neexistuji, pak se je pokusi zalozit </summary>
+            <param name="idDs">idDs externího subjektu</param>
+            <param name="mailbox">PK schránky</param>
+            <param name="jeGex">jeGex</param>
+            <param name="idVnitrAdr">idVnitrAdr</param>
+            <param name="textUtvar"></param>
+            <param name="ServerContext">GServerContext</param>
+            <param name="ixsEsu">ixsEsu</param>
+            <param name="esuTxt">popis nalezeného esu</param>
+            <param name="licZast">licZast</param>
+            <param name="porZast">porZast</param>
+            <param name="zastTxt">zastTxt</param>
+            <param name="NewTransaction">je či není nová transakce</param>
+        </member>
+        <member name="T:Gordic.Epa.Server.GLogFile">
+            <summary>Třida zajišťující podporu logování EPA MODULU</summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GLogFile.left_margin">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GLogFile.left_margin2">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GLogFile.left_margin3">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GLogFile.m_csERROR">
+            <summary></summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GLogFile.Init(Gordic.General.ApplicationServer.GServerContext,System.Int32)">
+            <summary>
+            Innicializace logovani
+            </summary>
+            <param name="context">rozhrani na logovaci zarizani</param>
+            <param name="nPrizLog">priznak zda se bude logovat</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GLogFile.WriteToLogFile(System.String)">
+            <summary>
+            Zapíše informaci do logu
+            </summary>
+            <param name="output"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GLogFile.WriteToLogFile1(System.String)">
+            <summary>
+            Zapíše informaci do logu s odstavcem 1 úrovně
+            </summary>
+            <param name="output"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GLogFile.WriteToLogFile2(System.String)">
+            <summary>
+            Zapíše informaci do logu s odstavcem 2 úrovně
+            </summary>
+            <param name="output"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GLogFile.WriteToLogFileError(System.String)">
+            <summary>
+            Pro vypis chyby do logu/output window
+            </summary>
+            <param name="output"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GLogFile.TraceOutputWrite(System.String)">
+            <summary>
+            výpis do output okna
+            </summary>
+            <param name="output"></param>
+        </member>
+        <member name="T:Gordic.Epa.Server.GMbx_param">
+            <summary>
+            výčet vsech administracnich parametru pro postovni schranky E-Pod
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_adresy">
+            <summary>
+            mbx_adresy
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_servprij">
+            <summary>
+            mbx_adresy
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_antivir">
+            <summary>
+            mbx_antivir
+            </summary>            
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_data_form">
+            <summary>
+            mbx_data_form
+            </summary>            
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_evidovat">
+            <summary>
+            mbx_evidovat
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_gms_hostsnd">
+            <summary>
+            mbx_gms_hostsnd
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_gms_mapiprf">
+            <summary>
+            mbx_gms_mapiprf
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_gms_prtsmtp">
+            <summary>
+            mbx_gms_prtsmtp
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_gms_pswsmtp">
+            <summary>
+            mbx_gms_pswsmtp
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_gms_sndaddr">
+            <summary>
+            mbx_gms_sndaddr
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_gms_sndcert">
+            <summary>
+            mbx_gms_sndcert
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_gms_sndname">
+            <summary>
+            mbx_gms_sndname
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_gms_typesn">
+            <summary>
+            mbx_gms_typesn
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_gms_usrsmtp">
+            <summary>
+            mbx_gms_usrsmtp
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_maxmsg">
+            <summary>
+            mbx_maxmsg
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_odpoved">
+            <summary>
+            mbx_odpoved
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_online_crl">
+            <summary>
+            mbx_online_crl
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_original">
+            <summary>
+            mbx_original
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_podpis">
+            <summary>
+            mbx_podpis
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_potvrz_pri">
+            <summary>
+            mbx_potvrz_pri
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_potvrzeni">
+            <summary>
+            mbx_potvrzeni
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_pridelit">
+            <summary>
+            mbx_pridelit
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_ixs_fun">
+            <summary>
+            mbx_ixs_fun
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_pridel_obs">
+            <summary>
+            mbx_pridel_obs
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_pridel_dle">
+            <summary>
+            mbx_pridel_dle
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_prilohy">
+            <summary>
+            mbx_prilohy
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_sel_subject">
+            <summary>
+            mbx_sel_subject
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_spis">
+            <summary>
+            mbx_spis_znak
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_spis_znak">
+            <summary>
+            mbx_st_utaj_id
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_st_utaj_id">
+            <summary>
+            mbx_st_utaj_id
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_sub_obsahuj">
+            <summary>
+            csMbx_sub_obsahuj
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_esu">
+            <summary>
+            csMbx_esu
+            </summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GMbx_param.csMbx_typ_dok">
+            <summary>
+            mbx_typ_dok
+            </summary>
+        </member>
+        <member name="T:Gordic.Epa.Server.GPoaEventActionProvider">
+            <summary>
+            Obslužná akce událostního systému pro aktualizaci EPA
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GPoaEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GPoaEventActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Epa.Server.GEpaServerException">
+            <summary> Výjimka používaná vrstvou pro komunikaci mezi objekty </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaServerException.#ctor(System.Int32,System.Int32,System.String[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GEpaServerException.#ctor(System.Int32,System.Int32,System.Exception,System.String[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="innerException">vnitřní vyjímka</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="T:Gordic.Epa.Server.GPoaStahuj">
+            <summary>
+            Server pro info stahovani ze schranky
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GPoaStahuj.NactiZeSchranky(System.String)">
+            <summary> Načtení el. podání ze schránky </summary>
+            <param name="_ixsSu">hodnota z parametru</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Epa.Server.GDSEventActionProvider">
+            <summary>
+            Obslužná akce událostního systému pro stazeni datovych zprav
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSEventActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Epa.Server.GDSStahuj">
+            <summary>
+            Server pro info stahování datových zpráv ze schránky
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSStahuj.NactiZeSchranky(System.String,System.String)">
+            <summary>
+            Načtení datových zpráv ze schránky
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Epa.Server.GDSDorEventActionProvider">
+            <summary>
+            Obslužná akce událostního systému pro stazeni dorucenek datovych zprav
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSDorEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GDSDorEventActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Epa.Server.GPozEventActionProvider">
+            <summary>
+            Obslužná akce událostního systému pro aktualizaci EPA
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GPozEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>
+            veřejný konstruktor
+            </summary>
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param>
+            <param name="eventTypeId">identifikátor typu události</param>
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param>
+            <param name="actionTypeId">identifikátor typu obslužné akce</param>
+            <param name="actionParameters">výchozí parametry obslužné akce</param>
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GPozEventActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Epa.Server.GPozZpracuj">
+            <summary> Server pro automatické zpracovani el. podani </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GPozZpracuj.#ctor">
+            <summary> konstruktor - inicializace promených </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GPozZpracuj.ZpracujPrilohy">
+            <summary> Zpracuji prilohy </summary>
+            <returns>počty zpracovaných pro výstup</returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GPozZpracuj.StahniEmlSouborZUloziste">
+            <summary> Stazeni EML souboru z El. uloziste do lokalniho tempu </summary>
+            <returns>cesta ke stazenemu EML souboru (o smazani souboru se metoda nestara)</returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GPozZpracuj.VytvorSouborOdpovedi(System.String,System.Int32,System.Int32,System.Int32,System.String,System.String@)">
+            <summary>
+            Vytvor soubor odpovedi (potvrzení)
+            </summary>
+            <param name="_text">text souboru</param>
+            <param name="_pod_odp_typ_sou">Parametr zda má být soubor potvrzení ve formátu NIC/TXT/PDF</param>
+            <param name="_pod_potv_podpis">Parametr zda má být soubor potvrzení podepsán</param>
+            <param name="_pod_potv_pdf_cr">Parametr zda má být soubor potvrzení i časově oražen</param>
+            <param name="_Otisk">Otisk certifikátu k podpisu</param>
+            <param name="_OutSouborPovrzeniPath">cesta z názvem souboru</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GPozZpracuj.GetCertInfo(Gordic.General.GString,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary> Vyber informaci o podepisovacim certifikatu </summary>
+            <param name="_ixsCer">ixscert</param>
+            <param name="_id_cert">id</param>
+            <param name="_otisk">otisk</param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GPozZpracuj.SendInfoAboutPodani(Gordic.General.GString)">
+            <summary> Odešle potvrzení o el. podání </summary>
+            <param name="_ixp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GPozZpracuj.CallKrok1">
+            <summary> Příjem el. podani parsování eml ... </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GPozZpracuj.CallKrok2">
+            <summary>
+            Antivirova kontrola
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GPozZpracuj.OverPodpisy">
+            <summary>
+            Oveřování podpisů a časových razítek priloh;
+            Naplni dataset ElPodaniPrilohyDto priznaky o stavech podpisu a cas. razitek
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GPozZpracuj.CallKrok4">
+            <summary>
+            El. podpis - overeni el. podpisu a casovych razitek příloh emailu
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GPozZpracuj.CallKrok5">
+            <summary>
+            Předvyplnění externího subjektu
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GPozZpracuj.CallKrok6">
+            <summary>
+            Podání cizího dokumentu + vytvoření spisu + odeslání el. podání
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GPozZpracuj.OverPodpisMailu(System.IO.FileInfo)">
+            <summary>Over podpis mailu</summary>
+            <param name="_emlPath"></param>
+        </member>
+        <member name="M:Gordic.Epa.Server.GPozZpracuj.DecodeEMLTemp">
+            <summary> Dokodování EML </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GPozZpracuj.UlozEmlJakoElObraz(Gordic.General.GString,Gordic.Wfl.Interface.GFileVerifInfoDto@,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary>
+            Ulozi EML jako el.obraz
+            </summary>
+            <param name="_ixp">ixp</param>
+            <param name="_overeni">GFileVerifInfoDto</param>
+            <param name="title">title</param>
+            <param name="description">description</param>
+            <returns>ixb el.obrazu</returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GPozZpracuj.GetDatumOvereniDleDbParam(Gordic.Wfl.Interface.GWflsinbDto,Gordic.Security.Service.GVerifiedToTimeType@)">
+            <summary> vrati datum overeni dle db param </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Epa.Server.GPozZpracuj.PodejCiziPisemnostElPodani(System.String,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.String[],Gordic.General.GString,System.Boolean,System.Boolean,System.Boolean,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GDateTime@,Gordic.General.GDateTime@)">
+            <summary> Podani pisemnosti pro el.podani Email </summary>
+            <param name="_mailbox"></param>
+            <param name="_podPisNazev"></param>
+            <param name="_obsahText"></param>
+            <param name="_ixb"></param>
+            <param name="_odesilatel"></param>
+            <param name="_zastupOsobaTxt"></param>
+            <param name="_zaevidujDoSsl"></param>
+            <param name="_vytvorSpis"></param>
+            <param name="_predat"></param>
+            <param name="_IxsSu"></param>
+            <param name="_IxsFun"></param>
+            <param name="_IxsTypDok"></param>
+            <param name="_spisPl"></param>
+            <param name="_spisZnak"></param>
+            <param name="_stupenUtajeni"></param>
+            <param name="_ixpSpis"></param>
+            <param name="_aktZnackaSpis"></param>
+            <param name="_datumPodaniPis"></param>
+            <param name="_datumVznikuSpisu"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Epa.Server.GSslInit">
+            <summary>inicializace vrstvy SSL</summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GSslInit.m_bInitialized">
+            <summary>příznak inicializace</summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GSslInit.m_sSsldenCj">
+            <summary>spisový deník</summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GSslInit.m_sSsldenSpz">
+            <summary>spisový deník</summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GSslInit.m_nRokCj">
+            <summary>rok</summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GSslInit.m_nRokSpz">
+            <summary>rok</summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GSslInit.m_sSpisPl">
+            <summary>spisový plán</summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GSslInit.m_sSpisGraf">
+            <summary>spisový graf</summary>
+        </member>
+        <member name="F:Gordic.Epa.Server.GSslInit.m_sIxsExt">
+            <summary>Identifikece externiho systemu pripojeneho na web sluzbu.</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GSslInit.Initialized">
+            <summary>příznak inicializace</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GSslInit.SsldenCj">
+            <summary>spisový deník</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GSslInit.RokCj">
+            <summary>rok</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GSslInit.SsldenSpz">
+            <summary>spisový deník</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GSslInit.RokSpz">
+            <summary>rok</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GSslInit.SpisPl">
+            <summary>Aktuálně platný spisový plán</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.GSslInit.SpisGraf">
+            <summary>Platný podací spisový graf</summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GSslInit.Initialize">
+            <summary>inicializace spisové služby</summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.GSslInit.RunInitProcedure">
+            <summary>Nastavení databázových globálních proměnných pro aktuální přihlášení. 
+            Slouží výhradně pro přihlášení do GINIS-SSL prostřednictvím web služeb.</summary>
+        </member>
+        <member name="T:Gordic.Epa.Server.gspg_get_sufundz_02">
+            <summary>
+            Package   : 
+            Procedure : spg_get_sufundz_02
+            Version   : 360.01.
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.gspg_get_sufundz_02.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.gspg_get_sufundz_02.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_get_sufundz_02.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_get_sufundz_02.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_get_sufundz_02.a_id_vnitr_adr">
+            <summary>ID vnitrni adresace</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_get_sufundz_02.a_utvar">
+            <summary>text ( vnitrni adresace textove )</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_get_sufundz_02.a_k_rukam">
+            <summary>text k ruk�m komu - zcela otevreny tvar</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_get_sufundz_02.a_zakon_dz">
+            <summary>dmLegalTitleLaw - Zmocn�n� - ��slo z�kona</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_get_sufundz_02.a_rok_zak_dz">
+            <summary>dmLegalTitleYear - Zmocn�n� - rok vyd�n� z�kona</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_get_sufundz_02.a_paragraf_dz">
+            <summary>dmLegalTitleSect - Zmocn�n� - paragraf v z�kon�</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_get_sufundz_02.a_odstavec_dz">
+            <summary>dmLegalTitlePar - Zmocn�n� - odstavec v paragrafu</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_get_sufundz_02.a_pismeno_dz">
+            <summary>dmLegalTitlePoint - Zmocn�n� - p�smeno v odstavci</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_get_sufundz_02.a_id_ds_odes">
+            <summary>ID datove schranky odesilatele</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_get_sufundz_02.a_typ_esu_odes">
+            <summary>typ datove schranky odesilatele</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_get_sufundz_02.a_motorinb">
+            <summary>rezerva pro dalsi zpusob rozhazovani - napr. podle poctu datovych zprav cekajicich na zpracovani</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_get_sufundz_02.a_spis_graf">
+            <summary>spisovy graf, podle ktereho se ridi rozhazovani</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_get_sufundz_02.v_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_get_sufundz_02.v_sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_get_sufundz_02.v_isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_get_sufundz_02.v_err_txt">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_get_sufundz_02.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_get_sufundz_02.a_ixs_su_cil">
+            <summary>a_ixs_su_cil - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_get_sufundz_02.a_ixs_fun_cil">
+            <summary>a_ixs_fun_cil - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_get_sufundz_02.a_ixs_su_pod">
+            <summary>a_ixs_su_pod - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_get_sufundz_02.a_ixs_fun_pod">
+            <summary>a_ixs_fun_pod - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.gspg_get_sufundz_02.SetInParams(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.gspg_get_sufundz_02.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.gspg_get_sufundz_02.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.gspg_get_sufundz_02.DbExecute(System.Int32)">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.gspg_get_sufundz_02.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Epa.Server.gspg_sslinitvalws04">
+            <summary>
+            Package   : 
+            Procedure : spg_sslinitvalws04
+            Version   : 354.02.
+            </summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.gspg_sslinitvalws04.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.gspg_sslinitvalws04.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_sslinitvalws04.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_sslinitvalws04.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_sslinitvalws04.v_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_sslinitvalws04.v_sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_sslinitvalws04.v_isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_sslinitvalws04.v_err_txt">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_sslinitvalws04.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_sslinitvalws04.o_sslden_cj">
+            <summary>o_sslden_cj - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_sslinitvalws04.o_rok_cj">
+            <summary>o_rok_cj - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_sslinitvalws04.o_sslden_spz">
+            <summary>o_sslden_spz - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_sslinitvalws04.o_rok_spz">
+            <summary>o_rok_spz - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_sslinitvalws04.o_spis_pl">
+            <summary>o_spis_pl - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_sslinitvalws04.o_spis_graf">
+            <summary>o_spis_graf - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_sslinitvalws04.g_vyp_graf">
+            <summary>g_vyp_graf - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Epa.Server.gspg_sslinitvalws04.o_ixs_ext">
+            <summary>o_ixs_ext - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.gspg_sslinitvalws04.SetInParams">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.gspg_sslinitvalws04.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.gspg_sslinitvalws04.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.gspg_sslinitvalws04.DbExecute(System.Int32)">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Epa.Server.gspg_sslinitvalws04.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+    </members>
+</doc>

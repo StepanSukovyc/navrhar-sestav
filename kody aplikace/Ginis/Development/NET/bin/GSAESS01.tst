@@ -1,0 +1,10 @@
+[program]
+revize=40ESS0152520T01
+dat_akt=2018-10-17
+datetime_akt=2018-10-17 09:18:48
+sestavy=false
+
+[REQUIRED]
+MODULES=GSAESSH1,GSAESSD1
+GSAESSH1_mandatory=FALSE
+GSAESSD1_mandatory=FALSE

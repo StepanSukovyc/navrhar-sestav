@@ -1,0 +1,422 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Test.AdtScriptEngineWinForm</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile">
+            <summary>
+            Ovládací prvek pro WinForm. 
+            Umožňuje zobrazit a zadávat existující adresář z Filesystému.
+            </summary>
+        </member>
+        <member name="F:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="T:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.IsSettingByEnum">
+            <summary>
+            Výčet typů, kdo vyvolal změnu hodnoty ovládacího prvku
+            </summary>
+        </member>
+        <member name="F:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.IsSettingByEnum.program">
+            <summary>
+            Změna byla vyvolána algoritmem programu - např. nastavení výchozí hodnoty, nebo nastavení hodnoty z DB
+            </summary>
+        </member>
+        <member name="F:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.IsSettingByEnum.user">
+            <summary>
+            Změna byla vyvolána přímým editačním zásahem uživatele nad tímto ovládacím prvkem.
+            </summary>
+        </member>
+        <member name="T:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.ValueValidEventArg">
+            <summary>
+            Struktura pro přenos údajů v rámci události "ValueIsValided" a "ValueIsInvalided"
+            </summary>
+        </member>
+        <member name="F:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.ValueValidEventArg.OldValue">
+            <summary>   The old value. </summary>
+        </member>
+        <member name="F:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.ValueValidEventArg.NewValue">
+            <summary>   The new value. </summary>
+        </member>
+        <member name="F:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.ValueValidEventArg.IsSettingBy">
+            <summary>   Amount to is setting by. </summary>
+        </member>
+        <member name="T:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.ValueIsValidCallBack">
+            <summary>
+            Obslužná funkce-delegát pro událost "ValueIsValided"
+            </summary>
+        </member>
+        <member name="E:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.ValueIsValided">
+            <summary>
+            Událost se vyvolá vždy, kdy se uživatelsky editovaná hodnota v ovládacím prvku stává validní.
+            </summary>
+        </member>
+        <member name="T:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.ValueIsInvalidCallBack">
+            <summary>
+            Obslužná funkce-delegát pro událost "ValueIsInvalided"
+            </summary>
+        </member>
+        <member name="E:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.ValueIsInvalided">
+            <summary>
+            Událost se vyvolá vždy, kdy se uživatelsky editovaná hodnota v ovládacím prvku stává nevalidní.
+            </summary>
+        </member>
+        <member name="F:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile._RegKeyLastValue">
+            <summary>
+            Interní proměnná pro vlastnost "RegKeyLastValue"
+            </summary>
+        </member>
+        <member name="P:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.RegKeyLastValue">
+            <summary>
+            Název klíče v registrech, který odkazuje na poslední uživatelem nastavenou hodnotu. 
+            V registrech se ukládá uživatelem naposledy nastavená hodnota - adresář. 
+            Programátor podle klíče v registrech určuje typ použití adresáře. Např. adresář pro importovací soubory, adresář pro uložení sestav.
+            Uživateli se potom ve stejné situaci předplní adresář, který použil posledně.
+            Pokud v registech není poslední použitá hodnota nastavena, potom se musí přednastavit výchozí hodtnota přesnastavená programátorem.
+            Poslední uložená hodnota se čte z USER registrů. Pokud není nalezena, pokouší se prvek načíst nastavení z All user a poté z Local Machine
+            </summary>
+        </member>
+        <member name="F:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile._RegKeyPathLastValue">
+            <summary>
+            Cesta v registrech pro uložení poslední uživatelem nastavené hodnoty. 
+            Zatím natvrdo s tím, že podle charakteru hodnotu ( SHARED nebo FAZE ) se cesta do registrů bude vyskládávat.
+            </summary>
+        </member>
+        <member name="F:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile._DefaultLastValue">
+            TODO: časem předělat tak, aby programátor určil, zda se jedná o obecnou GINIS hodnotu ( potom to patří do SHARE ) a nebo zda se jedná pouze o hodnotu využívanou fází ( potom se jedná o větev registrů platnou pouze pro fázi )
+            <summary>
+            Interní proměnná pro vlastnost "DefaultLastValue"
+            </summary>
+        </member>
+        <member name="P:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.DefaultLastValue">
+            TODO: Předělat na adresář Dokumenty
+            <summary>
+            Default hodnota, která se má přednastavit v v případě že není uložená uživatelem naposledy nastavená hodnota.
+            </summary>
+        </member>
+        <member name="F:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile._IsSettingBy">
+            <summary>
+            Interní stav, který označuje, zda je hodnota pole nastavována uživatelským zásahem a nebo na zásahem programu.
+            Výchozí hodnota je false - nastavení hodnoty programu je realizováno uživatelem.
+            </summary>
+        </member>
+        <member name="P:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.IsSettingBy">
+            <summary>
+            Příznak, že aktuální změna je prováděna programem a nebo zásahem uživatele.
+            Tento příznak je určen pro použití v rámci událostí "ValueIsValided" a "ValueIsInvalided"
+            </summary>
+        </member>
+        <member name="P:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.Text">
+            <summary>
+            Zobrazovaná hodnota ovládacího prvku - adresář souborového systému.
+            </summary>
+        </member>
+        <member name="P:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.Filter">
+             <summary>   Gets or sets the filter. </summary>
+            
+             <value> The filter. </value>
+        </member>
+        <member name="P:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.DefaultExt">
+             <summary>   Gets or sets the default extent. </summary>
+            
+             <value> The default extent. </value>
+        </member>
+        <member name="P:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.InitialDirectory">
+             <summary>   Gets or sets the pathname of the initial directory. </summary>
+            
+             <value> The pathname of the initial directory. </value>
+        </member>
+        <member name="P:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.IsValid">
+             <summary>   Gets a value indicating whether this object is valid. </summary>
+            
+             <value> True if this object is valid, false if not. </value>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.LoadLastValue">
+            <summary>
+            Načtení uživatelem naposledy nastavené hodnoty.
+            Pokud v registrech není poslední nastavená hodnota uložena, použije se přednastavená defaul hodnota.
+            </summary>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.SaveLastValue">
+            <summary>
+            Uložení aktuální hodnoty jako hodnoty uživatelem naposledy nastavené. ( Pro příští přednastavení naposledy použitého adresáře )
+            </summary>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.#ctor">
+            <summary>
+            Kontruktor ovládacího prvku
+            </summary>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.button1_Click(System.Object,System.EventArgs)">
+            <summary>
+            Událost kdy uživatel klikne na tlačítko 
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.ShowDialogChangeFile">
+            <summary>
+            Funkce vyvolá zobrazení systémového dialogu pro výběr adresáře.
+            </summary>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.textBox1_MouseDown(System.Object,System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Událost kdy uživatel klikne do editačního pole pravým tlačítkem myši
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.textBox1_TextChanged(System.Object,System.EventArgs)">
+            <summary>
+            Událost kdy se mění text pole. Může nastat jak programově tak zásahem uživatele.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.SetValueIsValid">
+            <summary>
+            Funkce vyvolávající událost - oznámení o změně stavu pole z neplatného na platný.
+            </summary>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.SetValueIsInvalid">
+            <summary>
+            Funkce vyvolávající událost - oznámení o změně stavu pole z platného na neplatný.
+            </summary>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.GUserControlFile.GUserControlFile_Load(System.Object,System.EventArgs)">
+            <summary>
+            Událost při vytvoření prvku. Inicializace default hodnoty.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="T:Gordic.Test.AdtScriptEngineWinForm.Form1">
+             <summary>   A form 1. </summary>
+            
+             <remarks>   Ffiala, 7.3.2017. </remarks>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.Form1.#ctor">
+             <summary>   Default constructor. </summary>
+            
+             <remarks>   Ffiala, 7.3.2017. </remarks>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.Form1.button1_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tlačítko na spuštění celého scriptu
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.Form1.button2_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tlačítko pro vykonání jednoho příkazu, který je na řadě
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.Form1.button3_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tlačítko pro vykonání všech příkazů do konce scriptu
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.Form1.AfterVarValueChanged(Gordic.Support.EvaluationEngine.GAdtVariable)">
+            <summary>
+            funkce pro zobrazeni hodnoty promenne volaná po její změně z EvaluateEngine
+            </summary>
+            <param name="a_variable"></param>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.Form1.BeforeCommandExecuted(Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Funkce která se bude volat před vykonáním příkazu
+            </summary>
+            <param name="a_command"></param>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.Form1.AfterCommandExecuted(Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Funkce volaná z ScriptEngine po vykonání příkazu
+            </summary>
+            <param name="a_command"></param>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.Form1.AfterCommandExecutedWithError(Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            Funkce volaná z ScriptEngine po vykonání příkazu, která skončil s chybou
+            </summary>
+            <param name="a_command"></param>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.Form1.OnDisplayRequred(Gordic.Support.EvaluationEngine.GAdtDisplayRequest)">
+            <summary>
+            Funkce, která se volá při požadavku o zobrazení dat/dotazu z evalengin na obrazovce
+            </summary>
+            <param name="a_request"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.Form1.UpdateCommandText(System.String)">
+            <summary>
+            Funkce pro zobrazení aktuálního textu příkazu
+            </summary>
+            <param name="a_text">Text příkazu</param>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.Form1.ConsolePrint(System.String)">
+            <summary>
+            Připojení textu do konzole na konec aktuálního řádku
+            </summary>
+            <param name="a_text"></param>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.Form1.ConsolePrintLn(System.String)">
+            <summary>
+            Připojení textu do konzole na konec aktuálního řádku a odřádkování
+            </summary>
+            <param name="a_text"></param>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.Form1.ConsolePrintCr(System.String)">
+            <summary>
+            Připojení textu do konzole na konec aktuálního řádku a odřádkování
+            </summary>
+            <param name="a_text"></param>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.Form1.ConsoleCls">
+            <summary>
+            Vymazání obsahu konzole
+            </summary>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.Form1.button4_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tlačítko RUN FAST
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.Form1.button6_Click(System.Object,System.EventArgs)">
+             <summary>   Event handler. Called by button6 for click events. 
+                         Tlačítko pro vykonání scriptu ze zadaného souboru
+                         </summary>
+            
+             <remarks>   Ffiala, 7.3.2017. </remarks>
+            
+             <param name="sender">   . </param>
+             <param name="e">        Event information. </param>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.Form1.button7_Click(System.Object,System.EventArgs)">
+            <summary>
+            minimalistická ukázka
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="F:Gordic.Test.AdtScriptEngineWinForm.Form1.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.Form1.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.Form1.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Test.AdtScriptEngineWinForm.GAdtExceptionForm">
+             <summary>   Testovací FROM pro ladění ADT motoru </summary>
+            
+             <remarks>   Ffiala, 8.3.2017. </remarks>
+        </member>
+        <member name="F:Gordic.Test.AdtScriptEngineWinForm.GAdtExceptionForm._adt_prikaz">
+            <summary>
+            ADT příkaz, jehož chyba se má zobrazit
+            </summary>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.GAdtExceptionForm.#ctor(Gordic.Support.EvaluationEngine.GAdtCommand)">
+            <summary>
+            
+            </summary>
+            <param name="a_adt_prikaz"></param>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.GAdtExceptionForm.button4_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tl. Ignore ALL
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="F:Gordic.Test.AdtScriptEngineWinForm.GAdtExceptionForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.GAdtExceptionForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.GAdtExceptionForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Test.AdtScriptEngineWinForm.GVariablesDataSet">
+             <summary>
+            Represents a strongly typed in-memory cache of data.
+            </summary>
+        </member>
+        <member name="T:Gordic.Test.AdtScriptEngineWinForm.GVariablesDataSet.ValuesTableDataTable">
+             <summary>
+            Represents the strongly named DataTable class.
+            </summary>
+        </member>
+        <member name="T:Gordic.Test.AdtScriptEngineWinForm.GVariablesDataSet.ValuesTableRow">
+             <summary>
+            Represents strongly named DataRow class.
+            </summary>
+        </member>
+        <member name="T:Gordic.Test.AdtScriptEngineWinForm.GVariablesDataSet.ValuesTableRowChangeEvent">
+             <summary>
+            Row event argument class
+            </summary>
+        </member>
+        <member name="M:Gordic.Test.AdtScriptEngineWinForm.Program.Main">
+            <summary>
+            The main entry point for the application.
+            Ukázková a ladící aplikace pro testování ADT scriptů a enginu
+            </summary>
+        </member>
+        <member name="T:Gordic.Test.AdtScriptEngineWinForm.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Test.AdtScriptEngineWinForm.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Test.AdtScriptEngineWinForm.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+    </members>
+</doc>

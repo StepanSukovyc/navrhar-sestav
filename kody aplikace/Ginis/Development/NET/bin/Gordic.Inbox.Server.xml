@@ -1,0 +1,3020 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Inbox.Server</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Inbox.Server.GBaseInbox">
+            <summary>
+            Trida obsahujici spolecny kod pro: 
+            - GDZInbox (trida pro stazeni, zpracovani datovych zprav)
+            - GInbox (třída realizující stažení el. podaní z POP3)
+            </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GBaseInbox.#ctor">
+            <summary>
+            Prázdný konstruktor pro GBaseInbox
+            </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GBaseInbox.VratiElPodDoZpracovani(Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GString@)">
+            <summary>
+            Vrátit podání ke zpracování
+            </summary>
+            <param name="ixb">ixb (12) - el. podání</param>
+            <param name="dat_zmena">datum zmeny - el. podání</param>
+            <param name="err_txt">err_txt - text chyby</param>
+            <returns>bool Dopadlo/Nedopadlo</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GBaseInbox.VratiElPodDoZpracovani(Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GString@,System.Boolean)">
+            <summary>
+            Vrátit podání ke zpracování
+            </summary>
+            <param name="ixb">ixb (12) - el. podání</param>
+            <param name="dat_zmena">datum zmeny - el. podání</param>
+            <param name="err_txt">err_txt - text chyby</param>
+            <param name="newTransaction">zda se má vytvořit nový connection</param>
+            <returns>bool Dopadlo/Nedopadlo</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GBaseInbox.OznacitAutomatManual(Gordic.General.GString,Gordic.General.GDateTime,System.Boolean,Gordic.General.GString@)">
+            <summary>
+            Označit el. podání ke zpracování manuálnímu/automatickému
+            </summary>
+            <param name="ixb">ixb (12) - el. podání</param>
+            <param name="dat_zmena">datum zmeny - el. podání</param>
+            <param name="automat_manual">automat_manual - nastavit na automat (TRUE) či manuál (FALSE)</param>
+            <param name="err_txt">err_txt - text chyby</param>
+            <returns>bool Dopadlo/Nedopadlo</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GBaseInbox.OznacitAutomatManual(Gordic.General.GString,Gordic.General.GDateTime,System.Boolean,Gordic.General.GString@,System.Boolean)">
+            <summary>
+            Označit el. podání ke zpracování manuálnímu/automatickému
+            </summary>
+            <param name="ixb">ixb (12) - el. podání</param>
+            <param name="dat_zmena">datum zmeny - el. podání</param>
+            <param name="automat_manual">automat_manual - nastavit na automat (TRUE) či manuál (FALSE)</param>
+            <param name="err_txt">err_txt - text chyby</param>
+            <param name="newTransaction">zda se má vytvořit nový connection</param>
+            <returns>bool Dopadlo/Nedopadlo</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GBaseInbox.KontrolaZamkuElPOD(Gordic.General.GString,Gordic.General.GString@)">
+            <summary>
+            Kontrola Zamčení el. podání
+            </summary>
+            <param name="ixb">ixb (12) - el. podání</param>
+            <param name="err_txt">err_txt - text chyby</param>
+            <returns>bool Odemčené/Zamčené</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GBaseInbox.KontrolaZamkuElPOD(Gordic.General.GString,Gordic.General.GString@,System.Boolean)">
+            <summary>
+            Kontrola Zamčení el. podání
+            </summary>
+            <param name="ixb">ixb (12) - el. podání</param>
+            <param name="err_txt">err_txt - text chyby</param>
+            <param name="newTransaction">zda se má vytvořit nový connection</param>
+            <returns>bool Odemčené/Zamčené</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GBaseInbox.OdemknoutZamknoutElPOD(Gordic.General.GString,Gordic.General.GDateTime@,System.Boolean,Gordic.General.GString@)">
+            <summary>
+            Odemčení či Zamčení el. podání
+            </summary>
+            <param name="ixb">ixb (12) - el. podání</param>
+            <param name="dat_zmena">datum zmeny - el. podání</param>
+            <param name="zamek">zamek - el. podání (TRUE-zamknout, FALSE-odemknout)</param>
+            <param name="err_txt">err_txt - text chyby</param>
+            <returns>bool Dopadlo/Nedopadlo</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GBaseInbox.OdemknoutZamknoutElPOD(Gordic.General.GString,Gordic.General.GDateTime@,System.Boolean,Gordic.General.GString@,System.Boolean)">
+            <summary>
+            Odemčení či Zamčení el. podání
+            </summary>
+            <param name="ixb">ixb (12) - el. podání</param>
+            <param name="dat_zmena">datum zmeny - el. podání</param>
+            <param name="zamek">zamek - el. podání (TRUE-zamknout, FALSE-odemknout)</param>
+            <param name="err_txt">err_txt - text chyby</param>
+            <param name="newTransaction">zda se má vytvořit nový connection</param>
+            <returns>bool Dopadlo/Nedopadlo</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GBaseInbox.DebugLn(System.String)">
+            <summary>
+            Pomocná funkce pro debugovaní textů
+            </summary>
+            <param name="soutput"></param>
+        </member>
+        <member name="T:Gordic.Inbox.Server.GBaseOneMessage">
+            <summary>
+            Třída pro popis vlastností el. podání
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.ixb">
+            <summary> unikatni identifikator zpravy </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.result">
+            <summary> info o zpracovani zpravy - viz. MessageStatusEnum </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.resultstr">
+            <summary> info o zpracovani zpravy - pomocný text </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.FileName">
+            <summary> nazev eml v ulozisti </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.ProcessingTime">
+            <summary> ProcessingTime </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.mailbox">
+            <summary> nazev schranky </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.uidl">
+            <summary> unikatni identifikator zpravy uidl </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.message_id">
+            <summary> unikatni identifikator zpravy message_id </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.mail_to">
+            <summary> email komu ma byt zprava zaslana (adresat) </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.mail_reply_to">
+            <summary> email reply-to z mailu</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.mail_from">
+            <summary> email od koho byla zprava zaslana do el. podatelny (odesilatel) </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.mail_name">
+            <summary> jmeno odesilatele do e-pod </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.dat_pod">
+            <summary> dat_pod </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.stav_inb">
+            <summary> priznaky stavu schranky - napr. archivovano = 0, overeno = 10, odmitnuto = 20, podano = 30,... </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.zpusob_dor">
+            <summary> napr. nosic = 1010, mail = 1020, web = 1030, ... </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.priz_elp">
+            <summary> priz_elp </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.ixs_cer">
+            <summary> ident. el. podpisu zpravy </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.priz_verif">
+            <summary> priz_verif </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.stav_verif">
+            <summary>výsledek jak dopadlo ověření</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.hu_sajn">
+            <summary> jakym zpusobem byl el. podpis overovan - napr. neovereno = 0, overeno_osobne = 10, overeno_automaticky = 20 - wflchus </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.dat_verif">
+            <summary> datum kdy doslo k stav verifikace el.podpisu nebo cas razitka </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.aktivita">
+            <summary> aktivita </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.dat_zmena">
+            <summary> dat_zmena </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.zmenu_prov">
+            <summary> zmenu_prov </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.poznamka">
+            <summary> poznamka - mail headers </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.content_type">
+            <summary> content_type </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.ixs_fun">
+            <summary> ixs_fun </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.ixs_su">
+            <summary> ident. extreniho subjektu </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.receive_mail_from">
+            <summary> receive_mail_from </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.receive_mail_to">
+            <summary> receive_mail_to </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.receive_subject">
+            <summary> receive_subject </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.receive_body">
+            <summary> receive_body </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.receive_attach">
+            <summary> receive_attach </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.stav_om">
+            <summary> stav_om </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.priz_automat">
+            <summary> zda je mail urcen pro zpracovani automatem - nastavuje se nazaklade mbx_adresy a mbx_sub_obsahuj a atd...</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.Priz_rozl">
+            <summary> rozlozeni podani do vice casti </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.Typ_ed">
+            <summary> typ el. dokumentu prijateho do el. podatelny </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.Priz_neodp">
+            <summary> priznak zda bylo odeslano potvrzeni o doruceni el. podani</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.Znacka_odes">
+            <summary> Znacka (CJ) odesilatele pro snazsi manipulaci s el. podanim</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.Log_por_cislo">
+            <summary> log_por_cislo</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.ComMode">
+            <summary> Zda se ma komitovat storovka</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.epod_s_odp">
+            <summary> priznak zda byla odeslana odpoved o zpracovani el. podani</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.priz_verif_c">
+            <summary> priznak zda byla odeslana odpoved o zpracovani el. podani</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.stav_verif_c">
+            <summary> priznak zda byla odeslana odpoved o zpracovani el. podani</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.hu_sajn_c">
+            <summary> priznak zda byla odeslana odpoved o zpracovani el. podani</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.dat_prij">
+            <summary> priznak zda byla odeslana odpoved o zpracovani el. podani</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.Id_vnitr_adr">
+            <summary>Identifikace vnitřního útvaru adresáta pro snazsi manipulaci s el. podanim</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.Utvar">
+            <summary> Útvar adresáta pro snazsi manipulaci s el. podanim</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.Motorinb">
+            <summary> Motor pro rozdělení či zpracování pro snazsi manipulaci s el. podanim</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.K_rukam">
+            <summary> K rukam pro snazší manipoulaci s el. podáním</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.Priz_dovl_rukou">
+            <summary> priznak zda byla odeslana odpoved o zpracovani el. podani</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.Id_ds_odes">
+            <summary> Odstavec pro snazsi manipulaci s el. podanim</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.Typ_ds_odes">
+            <summary> priznak zda byla odeslana odpoved o zpracovani el. podani</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.Zakon_cislo">
+            <summary> Zákon číslo pro snazsi manipulaci s el. podanim</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.Zakon_rok">
+            <summary> Zákon rok pro snazsi manipulaci s el. podanim</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.Paragraf">
+            <summary> Paragraf pro snazsi manipulaci s el. podanim</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.Odstavec">
+            <summary> Odstavec pro snazsi manipulaci s el. podanim</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.Pismeno">
+            <summary> Odstavec pro snazsi manipulaci s el. podanim</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.Sp_Zn_odes">
+            <summary> Spisová značka (sp.zn.) odesilatele pro snazsi manipulaci s el. podanim</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.Vase_Znacka">
+            <summary> Vaše Znacka (CJ) příjemce pro snazsi manipulaci s el. podanim</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.Vase_Sp_Zn">
+            <summary> Vaše spisová značka(sp.zn.) příjemce pro snazsi manipulaci s el. podanim</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.lze_smazat_z_pop3">
+            <summary> Informace zda lze smazat danou zprávu z mailserveru (POP3)</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.dat_odes">
+            <summary> dat_odes</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.ixb_el_pod_nad">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.ixs_esu">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.ixs_exu">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.ixs_typ">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.original">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.priz_odpoved">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.CorrelationID">
+            <summary>SK datovky  GUID celé konverzace nebo řízení nebo celé té komunikace</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.BusinessId">
+            <summary>SK datovky  GUID blízýe nespecifikovaný nejspíše nepotřebný</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.ReferenceId">
+            <summary>SK datovky  GUID  zorávy na kterou odpovídáme nebo u doručenky které zprávy se to týká</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.PospID">
+            <summary>SK datovky Jakoby typ formuláře řídí i druh odeslání atd</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.PospVersion">
+            <summary>SK datovky verzování PosppID</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GBaseOneMessage.MessageType">
+            <summary>SK typ formuláře, měl by být stejný jako PosppID</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GBaseOneMessage.#ctor">
+            <summary> public konstruktor </summary>
+        </member>
+        <member name="T:Gordic.Inbox.Server.GBaseSaveTo">
+            <summary>
+            Třída pro práci a ukládání nad el. podáním
+            </summary>
+        </member>
+        <member name="F:Gordic.Inbox.Server.GBaseSaveTo.m_oEleServer">
+            <summary>GEle</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GBaseSaveTo.#ctor(System.String)">
+            <summary>
+            konstruktor pro GBaseSaveTo
+            </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GBaseSaveTo.OverElPodVArch(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.Boolean)">
+            <summary>
+            Ověření existence el. podání ve wflsInb jak pro message z POP3 tak i pro message DZ
+            </summary>
+            <param name="mailbox">mailbox</param>
+            <param name="uidl">uidl</param>
+            <param name="messageid">messageid</param>
+            <param name="newTransaction">zda se má zakládat nová transakce - connect, commit, disconnect</param>
+            <returns>true, pokuď jste se pokusil sdružit zásilky s různými ixs esu v režimu 1 (s kontrolou) a sdružení nedopadlo kvůli této kontrole</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GBaseSaveTo.CallELE(Gordic.Inbox.Server.GBaseOneMessage,System.Boolean)">
+            <summary>
+            to co bylo pomoci DownloadPOP3 stazeno do lokalniho uloziste je nyni uploadovano na server
+            </summary>
+            <param name="message"></param>
+            <param name="bDownloadTest"></param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GBaseSaveTo.CheckExistInDms(Gordic.Inbox.Server.GBaseOneMessage)">
+            <summary>
+            verze funkce pro datové schránky 
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GBaseSaveTo.SaveToTable(Gordic.Inbox.Server.GBaseOneMessage)">
+            <summary>
+            volá sp pro ulozeni informaci do wflsinb - spolecne pro ukladani mesage z POP3 i DZ
+            </summary>
+            <param name="message">objekt zprávy</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GBaseSaveTo.DebugLn(System.String)">
+            <summary>
+            Pomocná funkce pro debugovaní textů
+            </summary>
+            <param name="soutput"></param>
+        </member>
+        <member name="T:Gordic.Inbox.Server.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100002">
+            <summary>
+              Looks up a localized string similar to Při zjištování zda již zpráva ze schránky [{0}] byla stažena a uloženo došlo k chybě.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100003">
+            <summary>
+              Looks up a localized string similar to Při kontrole či odemykání došlo k chybě. {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100004">
+            <summary>
+              Looks up a localized string similar to Při ověřování existence správy v archivu el. podání došlo k chybě ({0},{1},{2})..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100005">
+            <summary>
+              Looks up a localized string similar to Při ověřování existence správy v archivu el. podání došlo k chybě - {3} ({0},{1},{2})..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100006">
+            <summary>
+              Looks up a localized string similar to Chyba při vytváření předmětu zprávy : CreateMailSubject.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100009">
+            <summary>
+              Looks up a localized string similar to Při vytváření souboru potvrzení došlo k chybě.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100010">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se vytvořit TEMP adresář pro stahování..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100012">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při odeslání mailu : GMailSender.SendMail..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100013">
+            <summary>
+              Looks up a localized string similar to Chyba při čtení parametru schránky - GetMotorParamFromADM - {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100014">
+            <summary>
+              Looks up a localized string similar to Chyba při zjištění použitého zpracování pro schránku (více motorů)..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100015">
+            <summary>
+              Looks up a localized string similar to Není definován motor pro zpracování el. podání pro danou schránku [{0}]..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100016">
+            <summary>
+              Looks up a localized string similar to Chyba při načítání podmínek motorů pro rozdělení el. podání.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100017">
+            <summary>
+              Looks up a localized string similar to Chyba při načítání seznamu zásilek k vypravení pro ISDS..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100018">
+            <summary>
+              Looks up a localized string similar to Při zjišťování dat o ESU ke zveřejnění došlo k chybě.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100022">
+            <summary>
+              Looks up a localized string similar to Zprávu se nepodařilo rozebrat [{0}].
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100023">
+            <summary>
+              Looks up a localized string similar to Při načítání DZ z disku a jejím rozboru došlo k chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100024">
+            <summary>
+              Looks up a localized string similar to Při rozboru zprávy pro zjištění informací ke zveřejnění došlo ke chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100025">
+            <summary>
+              Looks up a localized string similar to Chyba při antivirové kontrole..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100026">
+            <summary>
+              Looks up a localized string similar to Při zpracování odpovědi na zveřejnění došlo k chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100027">
+            <summary>
+              Looks up a localized string similar to Při změně el. podání došlo k chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100028">
+            <summary>
+              Looks up a localized string similar to Změna el. podání nebyla provedena..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100036">
+            <summary>
+              Looks up a localized string similar to Výstupní soubor nebyl vytvořen - {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100037">
+            <summary>
+              Looks up a localized string similar to Obsah výstupního souboru nebyl vytvořen..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100038">
+            <summary>
+              Looks up a localized string similar to Výstupní soubor {0} je prázdný..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100039">
+            <summary>
+              Looks up a localized string similar to Konverze se nezdařila: {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100040">
+            <summary>
+              Looks up a localized string similar to Chyba načtení parametrů motoru [{ 0 }]..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100042">
+            <summary>
+              Looks up a localized string similar to Při podepisování souboru potvrzení došlo k výjimce..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100044">
+            <summary>
+              Looks up a localized string similar to Při rozboru DZ pro zjištění informací k odeslání pomocí HKP došlo ke chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100046">
+            <summary>
+              Looks up a localized string similar to Chyba při načítání motorů pro rozdělení el. podání dle způsobu doručení.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23100047">
+            <summary>
+              Looks up a localized string similar to Chyba při zjištění existence použitého motoru..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23920002">
+            <summary>
+              Looks up a localized string similar to Záznam o el. podání [{0}], byl změněn jiným uživatelem. Proveďte znovunačtení seznamu a operaci opakujte..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._23920003">
+            <summary>
+              Looks up a localized string similar to Chyba načtení parametrů schránek..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520005">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při nastavení příznaku o odeslání potvrzení na el. podání {0}..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520006">
+            <summary>
+              Looks up a localized string similar to Při zjištění informací o elektronickém podání {0} došlo k chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520008">
+            <summary>
+              Looks up a localized string similar to Chyba při stahování mailu ze schránky v metodě: MainDownloadMail.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520009">
+            <summary>
+              Looks up a localized string similar to Selhalo uložení datové zprávy do el. úložiště..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520010">
+            <summary>
+              Looks up a localized string similar to Chyba při ukládání zprávy do DMS a INB : DoSave.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520011">
+            <summary>
+              Looks up a localized string similar to Chyba při zjišťování zda zpráva je pro automatické zpracování : SetValuesAndCheckAutomat.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520015">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při odesílání mailu : SendMails..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520016">
+            <summary>
+              Looks up a localized string similar to Chyba při stahování zpráv z POP3 serveru ze schránky : DownloadFromPOP3..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520017">
+            <summary>
+              Looks up a localized string similar to Chyba při načítání schránek a jejich parametrů - LoadData.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520019">
+            <summary>
+              Looks up a localized string similar to Exception in GDSDownloader:DSDoParseToMessage.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520020">
+            <summary>
+              Looks up a localized string similar to Chyba při ukládání souboru zprávy do úložiště..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520021">
+            <summary>
+              Looks up a localized string similar to Error in GMsgDownLoader:GMsgDownloader:GetMaxStr.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520022">
+            <summary>
+              Looks up a localized string similar to Chyba připojení k POP3: ConnectToPOP3.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520023">
+            <summary>
+              Looks up a localized string similar to Mříže uprostřed - měkká chyba - druhá půlka textu do měkké chyby.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520027">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se uložit soubor eml do lokalního uložiště..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520028">
+            <summary>
+              Looks up a localized string similar to  Disconnecting POP3 - nepodařilo se odpojit od POP3.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520029">
+            <summary>
+              Looks up a localized string similar to Error in GMsgDownloader:GenerateValidName.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520030">
+            <summary>
+              Looks up a localized string similar to Error in GMsgDownLoader:GetAllAddress.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520031">
+            <summary>
+              Looks up a localized string similar to Chyba při inicializaci - GMsgDownloader.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520033">
+            <summary>
+              Looks up a localized string similar to Chyba při načítání infomací o certifikátu - GetCertInfo.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520034">
+            <summary>
+              Looks up a localized string similar to Chyba při čtení parametru schránky - GetMailBoxParamFromADM - {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520035">
+            <summary>
+              Looks up a localized string similar to Chyba načtení parametrů schránky :LoadDbParameters - {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520036">
+            <summary>
+              Looks up a localized string similar to Chyba při načtení nastavení schránek pro které se mají stahovat zprávy :LoadGinsmbx.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520038">
+            <summary>
+              Looks up a localized string similar to Chyba při načítání dat pro odpovědní mail - ReadReceiveMailTemplates.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520041">
+            <summary>
+              Looks up a localized string similar to Error in GDSDownloader:SaveDSToFile verze 1.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520042">
+            <summary>
+              Looks up a localized string similar to Chyba při vytváření souboru pro potvrzení : CreateMailAttache..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520043">
+            <summary>
+              Looks up a localized string similar to Chyba při vytváření těla zprávy : CreateMailBody.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520047">
+            <summary>
+              Looks up a localized string similar to Error in GMailBox:CreateMembersInstance.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520050">
+            <summary>
+              Looks up a localized string similar to Exception in GSaveToGinis:oSaveDS..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520051">
+            <summary>
+              Looks up a localized string similar to Chyba při zjišťování existence zprávy v DMS : CheckExistInDms..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520052">
+            <summary>
+              Looks up a localized string similar to Tato situace nemůže nastat pokud je správně nastaven parametr : CreateMailAttache .
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520060">
+            <summary>
+              Looks up a localized string similar to Exceptiom in ReadMsgMethod..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520062">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při odeslání mailu : CreateAndSendMail..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520064">
+            <summary>
+              Looks up a localized string similar to Exception in GMsgParser.Parse.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520065">
+            <summary>
+              Looks up a localized string similar to Exception in GParser.SaveFile.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520068">
+            <summary>
+              Looks up a localized string similar to Chyba při ukládání do wfltprm.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520076">
+            <summary>
+              Looks up a localized string similar to Zprávu se nepodařilo rozebrat. [{0}].
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520077">
+            <summary>
+              Looks up a localized string similar to Chyba při mazání cookie pro přístup do ISDS..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520085">
+            <summary>
+              Looks up a localized string similar to Chyba při vypravování datových zpráv z e-výpravny..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520086">
+            <summary>
+              Looks up a localized string similar to Není definován parametr ukončení vypravení.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520087">
+            <summary>
+              Looks up a localized string similar to Při vypravení zásilek došlo k chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520088">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se načíst parametr mbx.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520089">
+            <summary>
+              Looks up a localized string similar to Chyba při určení zda je zpráva pro automat či nikoliv..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520090">
+            <summary>
+              Looks up a localized string similar to Nepředán parametr - ixb - el.podání.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520091">
+            <summary>
+              Looks up a localized string similar to Nepředán parametr - dat_zmena - el. podání.
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520092">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se dohledat informaci o el. podání [{0}]..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520093">
+            <summary>
+              Looks up a localized string similar to Chyba při hledání informace o el. podání..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520094">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se dohledat informaci o dokumentu [{0}]..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520095">
+            <summary>
+              Looks up a localized string similar to Chyba při hledání informace o dokumentu..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520096">
+            <summary>
+              Looks up a localized string similar to Při volání vrácení el. podání ke zpracování došlo k chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520102">
+            <summary>
+              Looks up a localized string similar to Při změně nastavení způsobu zpracování el. podání došlo k chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520108">
+            <summary>
+              Looks up a localized string similar to Při kontrole zámku el. podání došlo k chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520109">
+            <summary>
+              Looks up a localized string similar to Při zamykání či odemykání el. podání došlo k chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520110">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se dohledat informaci o el. podání [{0}]..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520112">
+            <summary>
+              Looks up a localized string similar to Chyba při uložení souboru do úložiště - l_oEleServer.UploadServerFile..
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.Resources._26520114">
+            <summary>
+              Looks up a localized string similar to Selhalo uložení mailové zprávy do el. úložiště..
+            </summary>
+        </member>
+        <member name="T:Gordic.Inbox.Server.GDZOneMessage">
+            <summary> </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GDZOneMessage.#ctor">
+            <summary> public konstruktor </summary>
+        </member>
+        <member name="T:Gordic.Inbox.Server.GDZMessages">
+            <summary>
+            Trida uchovavající sadu zpráv
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GDZMessages.MessagesList">
+            <summary>Sablona uchovávající sadou zpráv</summary>
+        </member>
+        <member name="T:Gordic.Inbox.Server.GMsgParser">
+            <summary>
+            Podpora parsovani DZ
+            </summary>
+        </member>
+        <member name="T:Gordic.Inbox.Server.GMsgParser.ObjTypeEnum">
+            <summary>
+            ObjTypeEnum - pro pársování DZ
+            </summary>
+        </member>
+        <member name="F:Gordic.Inbox.Server.GMsgParser.ObjTypeEnum.STRING">
+            <summary>STRING</summary>
+        </member>
+        <member name="F:Gordic.Inbox.Server.GMsgParser.ObjTypeEnum.NUMBER">
+            <summary>NUMBER</summary>
+        </member>
+        <member name="F:Gordic.Inbox.Server.GMsgParser.ObjTypeEnum.DATE">
+            <summary>DATE</summary>
+        </member>
+        <member name="F:Gordic.Inbox.Server.GMsgParser.ObjTypeEnum.ENUM">
+            <summary>ENUM</summary>
+        </member>
+        <member name="F:Gordic.Inbox.Server.GMsgParser.ObjTypeEnum.BOOL">
+            <summary>BOOL</summary>
+        </member>
+        <member name="T:Gordic.Inbox.Server.GMsgParser.ReadMsgItemDelegate">
+            <summary>
+            ReadMsgItemDelegate
+            </summary>
+            <param name="fileIndex">fileIndex</param>
+            <param name="itemName">itemName</param>
+            <param name="itemValue">itemValue</param>
+            <param name="ObjType">ObjType</param>
+            <returns>bool</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GMsgParser.Parse(Gordic.Support.DataMessage.tReturnedMessage,System.String,Gordic.Inbox.Server.GMsgParser.ReadMsgItemDelegate)">
+            <summary>
+            Parse
+            </summary>
+            <param name="DataMessage">tReturnedMessage</param>
+            <param name="TempDir">string</param>
+            <param name="ParseDelegate">ReadMsgItemDelegate</param>
+        </member>
+        <member name="T:Gordic.Inbox.Server.GISDSmanipulation">
+            <summary>
+            Manipulace s ISDS.
+            </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.Gordic#Inbox#Interface#IGISDSmanipulation#JeEsuZverejneni(Gordic.General.GString)">
+            <summary>Je od ESU pro zveřejnění</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.JeEsuZverejneni(Gordic.General.GString,System.Boolean)">
+            <summary>Je od ESU pro zveřejnění</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.UpdateElPodaniDoWflsinb(Gordic.General.GString,Gordic.General.GString,System.Boolean)">
+            <summary>UpdateElPodaniDoWflsinb-pro odpověď na zveřejnění</summary>
+            <param name="ixb">ixb</param>
+            <param name="ixpZve">ixpZve - PId žádosti o zveřejnění ke které bylo zpárováno</param>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.UpdateElPodaniDoWflsinbHKP(Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,System.Boolean)">
+            <summary>UpdateElPodaniDoWflsinb-pro odpověď na zveřejnění</summary>
+            <param name="ixb">ixb</param>
+            <param name="_TypEd">TypEd - naplnění položky typ_ed ve wflsinb</param>
+            <param name="_StavInb">Stav_Inb - nastavení stavu ve wflsinb</param>
+            <param name="_DuvodChyby">duvod_chyby - nastavení ve wflsinb</param>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="T:Gordic.Inbox.Server.GISDSmanipulation.TypElSouboru">
+            <summary>
+            Typ elektronického dokumentu
+            </summary>
+        </member>
+        <member name="F:Gordic.Inbox.Server.GISDSmanipulation.TypElSouboru.dokument">
+            <summary> dokument </summary>
+        </member>
+        <member name="F:Gordic.Inbox.Server.GISDSmanipulation.TypElSouboru.original">
+            <summary> originál </summary>
+        </member>
+        <member name="F:Gordic.Inbox.Server.GISDSmanipulation.TypElSouboru.priloha">
+            <summary> příloha </summary>
+        </member>
+        <member name="F:Gordic.Inbox.Server.GISDSmanipulation.TypElSouboru.elPodpis">
+            <summary> el.podpis </summary>
+        </member>
+        <member name="F:Gordic.Inbox.Server.GISDSmanipulation.TypElSouboru.casoveRazitko">
+            <summary> časové razítko </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.ISDSStahniVse(System.Int32,System.String)">
+            <summary>
+            Pro stahovani a rozbor datových zpráv
+            </summary>
+            <param name="prizDebug">příznak debug</param>
+            <param name="aIxsSu">spisový uzel</param>
+            <returns>string - návratový string pro messagebox</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.ISDSOpravaELEdleUNL_Analyza">
+            <summary>
+            Zjištění počtů před voláním vlastní opravy:
+            Pro stahovani, rozbor a uložení datových zpráv pro rekonstrukci úložiště
+            Zprávy pro stažení musí být nahrány v tabulce ssltixp pod log_por_cislem = -99999 v této konvenci
+            log_por_cislo = -99999 a ixp - ixs_ulo, zbytek si již funkce dohledá a uloží na disk do TEMP adresáře ve struktuře pro úložiště.
+            </summary>
+            <returns>string - návratový string pro messagebox či dopadlo OK pokud vše OK</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.ISDSVypravVse(System.Int32,System.String)">
+            <summary>
+            Pro vypravení všech datových zpráv z danéhu SU a podřízených schránek
+            </summary>
+            <param name="prizDebug">příznak debug</param>
+            <param name="aIxsSu">spisový uzel</param>
+            <returns>string - návratový string pro messagebox</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.ISDSVypravVse(System.Int32,System.String,System.Boolean,System.Boolean,System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            Pro vypravení všech datových zpráv z danéhu SU a podřízených schránek
+            </summary>
+            <param name="prizDebug">příznak debug</param>
+            <param name="aIxsSu">spisový uzel</param>
+            <param name="aVlastni">pouze vlastní FUN (pro klienta) - muselo by dojít ke změně SP - zatím nepoužívat vždy false</param>
+            <param name="aPlnitTMP">zda plnit TMP či použít jak je naplněna (pro klienta)</param>
+            <param name="aISDSGEX">vypravit vše-3/ostatní/ pouze ISDS-1/ pouze GEX-2 (pro klienta)</param>
+            <param name="aMVyber">pouze vybrané (pro klienta)</param>
+            <param name="aVracetNevyp">zda vracet nevypravené zásilky či nikoliv (pro klienta)</param>
+            <returns>string - návratový string pro messagebox</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.SmazCookie(System.Int32,System.Int32,System.String)">
+            <summary>
+            Pro smazání cookie určitého typu v DB
+            </summary>
+            <param name="prizDebug">příznak debug</param>
+            <param name="aTypCookie">typ cookie 0=databox,1=info,2=operation</param>
+            <param name="mailbox">mailbox - DS</param>
+            <returns>bool - návratový kód</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.CheckExistMessage(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32@,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GInt16@)">
+            <summary>
+            Ověření existence DZ v úložišti a WFLSINB
+            </summary>
+            <param name="mailbox">mailová schránka + pro datové schránky ntvrdo text "ISDS"</param>
+            <param name="uidl">uidl zprávy u DZ - id_ds</param>
+            <param name="messageId">message_id zprávy u DZ - id_ds</param>
+            <param name="aReturn">návratová hodnota</param>
+            <param name="aReturnText">návratový text</param>
+            <param name="ixbInb">identifikátor IXB z wflsinb</param>
+            <param name="prizNeodp">příznak zda bylo zodpovězeno</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.CheckExistMessage(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32@,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GInt16@,System.Boolean)">
+            <summary>
+            Ověření existence DZ v úložišti a WFLSINB
+            </summary>
+            <param name="mailbox">mailová schránka + pro datové schránky ntvrdo text "ISDS"</param>
+            <param name="uidl">uidl zprávy u DZ - id_ds</param>
+            <param name="messageId">message_id zprávy u DZ - id_ds</param>
+            <param name="aReturn">návratová hodnota</param>
+            <param name="aReturnText">návratový text</param>
+            <param name="ixbInb">identifikátor IXB z wflsinb</param>
+            <param name="prizNeodp">příznak zda bylo zodpovězeno</param>
+            <param name="newTransaction">newTransaction</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.MakeWfltprm(Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32)">
+            <summary>
+            Manipulace s tabulkou Wfltprm pomoc SP
+            </summary>
+            <param name="aTypOperace">typ operace na tabulkou wfltprm D,U,I</param>
+            <param name="aLogPorCislo">log_por_cislo</param>
+            <param name="aParName">název parametru</param>
+            <param name="aParValue">hodnota parametru</param>
+            <param name="aPorCislo">pořadové číslo přílohy či -1 pr základní údaje z DZ</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.MakeWfltprm(Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,System.Boolean)">
+            <summary>
+            Manipulace s tabulkou Wfltprm pomoc SP
+            </summary>
+            <param name="aTypOperace">typ operace na tabulkou wfltprm D,U,I</param>
+            <param name="aLogPorCislo">log_por_cislo</param>
+            <param name="aParName">název parametru</param>
+            <param name="aParValue">hodnota parametru</param>
+            <param name="aPorCislo">pořadové číslo přílohy či -1 pr základní údaje z DZ</param>
+            <param name="newTransaction">newTransaction</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.DoParseToMessage(System.Int32,System.String,System.IO.Stream,Gordic.General.GString,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Parsovani datove zpravy podepsané
+            </summary>
+            <param name="prizDebug">příznak debug</param>
+            <param name="mailbox"></param>
+            <param name="aMessage"></param>
+            <param name="Ixs_su"></param>
+            <param name="aTempFolder">TEMP adresář pro ukládání DZ</param>
+            <param name="je_gex">info zda je to gex schránka</param>
+            <param name="prizVODZ">příznak VODZ</param>
+            <returns>GDZOneMessage - rozebraná zpráva</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.DoSaveDS(System.Int32,Gordic.Inbox.Server.GDZOneMessage,Gordic.Wfl.Interface.GGinsmbx)">
+            <summary>
+            Ulozi datovou zpravu - neni zde o proti stahovanio mailu nastavovani priznaku pro automat
+            </summary>
+            <param name="prizDebug">příznak debug</param>
+            <param name="message"></param>
+            <param name="mailbox">mailbox nad kterým pracuji</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.CallELE(Gordic.Inbox.Server.GBaseOneMessage,System.Boolean)">
+            <summary>
+            to co bylo stazeno do lokalniho uloziste je nyni uploadovano na server
+            </summary>
+            <param name="message"></param>
+            <param name="bDownloadTest"></param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.SaveDSToFile(System.IO.Stream,Gordic.General.GString,System.String)">
+            <summary>
+            Ulozeni datove zpravy (pouziva: DSStahniVse, service 02)
+            </summary>
+            <param name="oMessage">DZ</param>
+            <param name="aIdDs">id DZ</param>
+            <param name="temppath">TEMP path</param>
+            <returns>string - soubor</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.SaveDSToFile(System.Xml.XmlDocument,Gordic.General.GString,System.String)">
+            <summary>
+            Ulozeni datove zpravy (pouziva: DSStahniVse, service 02)
+            </summary>
+            <param name="oMessage">DZ</param>
+            <param name="aIdDs">Id. DZ</param>
+            <param name="temppath">cesta pro uložení</param>
+            <returns>string soubor name</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.DebugWrite(System.Int32,System.String)">
+            <summary>
+            Funkce pro výpis do debugu
+            </summary>
+            <param name="aPrizDebug">zda je debug či nikoliv</param>
+            <param name="aDebug">text</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.GetErrorMessage(System.Exception)">
+            <summary>
+            Funkce pro získání textu vnořených exception
+            </summary>
+            <param name="e">exception</param>
+            <returns>kompletní text chyby</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.Vyprav(Gordic.General.GInt16,System.Boolean)">
+            <summary>
+            Vypravení do wfldprj
+            </summary>
+            <param name="konec">zda se má ukončit (1)</param>
+            <param name="newTransaction">zda se mají provádět: připojení k databázi, odpojení a commit</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.NactiMbxParamMailbox(System.String,System.String,System.Boolean)">
+            <summary>
+            Čte admin. parametr mbx z vas.gincpar, pokud neni parametr pomoci administrace naadministrovat je zde pro jen programove nastavena hodnota
+            </summary>
+            <param name="l_sMbx">Nazev aktualni schranky</param>
+            <param name="l_sParamMbx">Nazev administracniho parametru</param>
+            <param name="newTransaction">zda se mají provádět: připojení k databázi, odpojení a commit</param>
+            <returns>hodnota</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.Trans_JeEsuZverejneni(Gordic.General.GString)">
+            <summary> Je od ESU pro zveřejnění </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.DecodeDZTemp(System.String,System.String@)">
+            <summary>
+            dekodování datove zpravy:
+            - naplneni datasetu s vlastnostmi datove zpravy m_oEmlDataSet 
+            - napplneni datasetu s prilohamy
+            </summary>
+            <param name="pathToZip">Cesta k DZ souboru</param>
+            <param name="aTextChyby">chybové hlášení</param>
+            <returns>bool - úspěch/neúspěch</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.LoadMessage(System.String,System.Boolean@,System.Boolean@)">
+            <summary>
+            Načtení datove zpravy do struktury
+            </summary>
+            <param name="filename">Cesta k DZ souboru</param>
+            <param name="DZJePodepsana">DZJePodepsana</param>
+            <param name="podpisJeOveren">podpisJeOveren - podpis se overuje az v kroku 4</param>
+            <returns>tReturnedMessage</returns> 
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.AnalyzujPrilohyDZ(Gordic.Support.DataMessage.tReturnedMessage,System.Boolean)">
+            <summary>
+            plni se dataset s prilohamy l_oPrilohyEmlTableRow
+            do datasetu priloh se uvede typ priloh  a do tempu se prida dana priloha 
+            </summary>
+            <param name="l_oMsg"></param>
+            <param name="isOrigMsg">true - originalem bude cela datova zprava - je nastaveno administraci; false - original bude urcen dle rozboru datove zpravy - je nastaveno administraci</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.GetPriznakTypElSouboru(Gordic.Inbox.Server.GISDSmanipulation.TypElSouboru)">
+            <summary>
+            GetPriznakTypElSouboruByEnum
+            </summary>
+            <param name="typ">TypElSouboru</param>
+            <returns>string</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.RozeberDZZVE(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,System.String@)">
+            <summary>
+             1. Rozbor návratové DZ ze zveřejnění
+             2. parsovani datove zpravy:
+                - naplneni datasetu s vlastnostmi datove zpravy m_oEmlDataSet (zjisti zda je datova zprava podepsana - neprovadi overeni podpisu; cte polozky z datove zpravy a ulozi je)
+                - napplneni datasetu s prilohamy ( zjisti jmeno prilohy, priponu ; jak je priloha zarazena tj. jedna se o prilohu, original, podpis ....)
+             3. urceni originalu datove zpravy, urceni typu jednotlivych priloh napr. el. podpis, cas. razitko, priloha datov. zpravy
+             4. antivirovy test
+             5  test zda je nalezena pozadovana priloha
+            </summary>
+            <param name="m_oMailbox">Mailbox nad kterým se to děje</param>
+            <param name="aIxb">Ixb el. podání</param>
+            <param name="aIdDZ">ID došlé DZ z el. podání</param>
+            <param name="aCestaKDZ">Cesta k DZ s odpovědí na zveřejnění</param>
+            <param name="aRezim">Režim zpracování odpovědi na zveřejnění v spg_zprac zda vyhlašovat chyby či nikoliv=1</param>
+            <param name="aTextChyby">chybové hlášení</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.RozeberDZHKP(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,System.String@)">
+            <summary>
+             1. Rozbor návratové DZ z HKP
+             2. parsovani datove zpravy:
+                - naplneni datasetu s vlastnostmi datove zpravy m_oEmlDataSet (zjisti zda je datova zprava podepsana - neprovadi overeni podpisu; cte polozky z datove zpravy a ulozi je)
+                - napplneni datasetu s prilohamy ( zjisti jmeno prilohy, priponu ; jak je priloha zarazena tj. jedna se o prilohu, original, podpis ....)
+             3. urceni originalu datove zpravy, urceni typu jednotlivych priloh napr. el. podpis, cas. razitko, priloha datov. zpravy
+             4. antivirovy test
+             5. test zda je nalezena pozadovana priloha
+             6. rozbor přísslušného XML poku je nalezeno
+            </summary>
+            <param name="m_oMailbox">Mailbox nad kterým se to děje</param>
+            <param name="aIxb">Ixb el. podání</param>
+            <param name="aIdDZ">ID došlé DZ z el. podání</param>
+            <param name="aCestaKDZ">Cesta k DZ s odpovědí na zveřejnění</param>
+            <param name="aRezim">Režim zpracování odpovědi na zveřejnění v spg_zprac zda vyhlašovat chyby či nikoliv=1</param>
+            <param name="aTextChyby">chybové hlášení</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.StahniDatovouZpravuZUloziste(Gordic.General.GString)">
+            <summary>
+             Stažení DZ el. podání
+            </summary>
+            <param name="aIxb">Ixb el. podání</param>
+            <returns>cesta na soubor + soubor</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.AntivirTest(System.String,Gordic.General.ApplicationServer.GServerContext,Gordic.Inbox.Interface.EmlDataSetINB@,Gordic.Inbox.Interface.PrilohyEmlDataSetINB@,System.String@)">
+            <summary> Zkontrolování všeho antivirem </summary>
+            <param name="_fileMaster">Cesta k základnímu souboru el. podání</param>
+            <param name="ServerContext">GServerContext</param>
+            <param name="_emlDataSet">Dataset el. podání</param>
+            <param name="_prilohyEmlDataSet">Dataset příloh el. podání</param>
+            <param name="_hlaska">hlaska</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.ZpracujOdpovedZve(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString@,System.Boolean)">
+            <summary>
+            Zpracování údajů z odpovědi na zveřejnění
+            </summary>
+            <param name="aIxb">Ixb el. podání</param>
+            <param name="aIdOdpovedi">Id DZ odpovědi od ISRS</param>
+            <param name="aIdDZ">Id DZ odeslaného zveřejněí do ISRS</param>
+            <param name="aIdZve">Id pod jakým je zveřejněno v ISRS</param>
+            <param name="aVysl">výsledek zveřejnění 1 OK ostatní odmítnuto</param>
+            <param name="aKodChyby">Kód chyby vrácené z ISRS při chybě zveřejnění</param>
+            <param name="aPopis">Popis chyby vrácené z ISRS při chybě zveřejnění, při úspěchu je to info text vrácený z ISRS</param>
+            <param name="aUrlZve">URL zveřejnění v ISRS</param>
+            <param name="aDatZve">Datum zveřejnění či akce v ISRS</param>
+            <param name="aIdDSZve">Id DS subjektu který zveřejnil</param>
+            <param name="aIdDSPod">Datum zveřejnění či akce v ISRS</param>
+            <param name="aRezim">Datum zveřejnění či akce v ISRS</param>
+            <param name="aTextHlasky">Návratová hláška logické chyby</param>
+            <param name="aIxpZve">Návratová hodnota PID žádosti z kterou bylo zpárováno</param>
+            <param name="aIxsZve">Návratová hodnota PID zveřejnění se kterým bylo zpárováno</param>
+            <param name="newTransaction">zda se mají provádět: připojení k databázi, odpojení a commit</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.Trans_Commit_UpdateElPodaniDoWflsinb(Gordic.General.GString,Gordic.General.GString)">
+            <summary> UpdateElPodaniDoWflsinb-pro odpověď na zveřejnění </summary>
+            <param name="ixb">ixb</param>
+            <param name="ixpZve">ixpZve - PId žádosti o zveřejnění ke které bylo zpárováno</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GISDSmanipulation.Trans_Commit_UpdateElPodaniDoWflsinbHKP(Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString)">
+            <summary> UpdateElPodaniDoWflsinb-pro odpověď na zveřejnění </summary>
+            <param name="ixb">ixb</param>
+            <param name="_TypEd">TypEd - naplnění položky typ_ed ve wflsinb</param>
+            <param name="_StavInb">Stav_Inb - nastavení stavu ve wflsinb</param>
+            <param name="_DuvodChyby">duvod_chyby - nastavení ve wflsinb</param>
+        </member>
+        <member name="T:Gordic.Inbox.Server.GUPSReDeskManipulation">
+            <summary>
+            Manipulace s UPSR Edesk.
+            </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GUPSReDeskManipulation.UPSReDeskStahniVse(System.Int32,System.String)">
+            <summary>
+            Pro stahovani a rozbor datových zpráv
+            </summary>
+            <param name="prizDebug">příznak debug</param>
+            <param name="aIxsSu">spisový uzel</param>
+            <returns>string - návratový string pro messagebox</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GUPSReDeskManipulation.DebugWrite(System.Int32,System.String)">
+            <summary>
+            Funkce pro výpis do debugu
+            </summary>
+            <param name="aPrizDebug">zda je debug či nikoliv</param>
+            <param name="aDebug">text</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GUPSReDeskManipulation.GetErrorMessage(System.Exception)">
+            <summary>
+            Funkce pro získání textu vnořených exception
+            </summary>
+            <param name="e">exception</param>
+            <returns>kompletní text chyby</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GUPSReDeskManipulation.CheckExistMessage(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32@,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GInt16@)">
+            <summary>
+            Ověření existence DZ v úložišti a WFLSINB
+            </summary>
+            <param name="mailbox">mailová schránka + pro datové schránky ntvrdo text "ISDS"</param>
+            <param name="uidl">uidl zprávy u DZ - id_ds</param>
+            <param name="messageId">message_id zprávy u DZ - id_ds</param>
+            <param name="aReturn">návratová hodnota</param>
+            <param name="aReturnText">návratový text</param>
+            <param name="ixbInb">identifikátor IXB z wflsinb</param>
+            <param name="prizNeodp">příznak zda bylo zodpovězeno</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GUPSReDeskManipulation.CheckExistMessage(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32@,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GInt16@,System.Boolean)">
+            <summary>
+            Ověření existence DZ v úložišti a WFLSINB
+            </summary>
+            <param name="mailbox">mailová schránka + pro datové schránky ntvrdo text "ISDS"</param>
+            <param name="uidl">uidl zprávy u DZ - id_ds</param>
+            <param name="messageId">message_id zprávy u DZ - id_ds</param>
+            <param name="aReturn">návratová hodnota</param>
+            <param name="aReturnText">návratový text</param>
+            <param name="ixbInb">identifikátor IXB z wflsinb</param>
+            <param name="prizNeodp">příznak zda bylo zodpovězeno</param>
+            <param name="newTransaction">newTransaction</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GUPSReDeskManipulation.NactiMbxParamMailbox(System.String,System.String,System.Boolean)">
+            <summary>
+            Čte admin. parametr mbx z vas.gincpar, pokud neni parametr pomoci administrace naadministrovat je zde pro jen programove nastavena hodnota
+            </summary>
+            <param name="l_sMbx">Nazev aktualni schranky</param>
+            <param name="l_sParamMbx">Nazev administracniho parametru</param>
+            <param name="newTransaction">zda se mají provádět: připojení k databázi, odpojení a commit</param>
+            <returns>hodnota</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GUPSReDeskManipulation.DoParseToMessage(System.Int32,System.String,Gordic.Psr.Interface.UPVSRefEKSService.Message,Gordic.General.GString,System.String)">
+            <summary>
+            Parsovani datove zpravy podepsané
+            </summary>
+            <param name="prizDebug">příznak debug</param>
+            <param name="mailbox"></param>
+            <param name="aMessage"></param>
+            <param name="Ixs_su"></param>
+            <param name="aTempFolder">TEMP adresář pro ukládání DZ</param>
+            <returns>GDZOneMessage - rozebraná zpráva</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GUPSReDeskManipulation.SaveDSToFile(Gordic.Psr.Interface.UPVSRefEKSService.Message,Gordic.General.GString,Gordic.General.GString,System.String)">
+            <summary>
+            Ulozeni datove zpravy (pouziva: DSStahniVse, service 02)
+            </summary>
+            <param name="oMessage">DZ</param>
+            <param name="idMessage">IDMessage</param>
+            <param name="messageID">IDMessage</param>
+            <param name="temppath">TEMP path</param>
+            <returns>string - soubor</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GUPSReDeskManipulation.DoSaveDS(System.Int32,Gordic.Inbox.Server.GDZOneMessage,Gordic.Wfl.Interface.GGinsmbx)">
+            <summary>
+            Ulozi datovou zpravu - neni zde o proti stahovanio mailu nastavovani priznaku pro automat
+            </summary>
+            <param name="prizDebug">příznak debug</param>
+            <param name="message"></param>
+            <param name="mailbox">mailbox nad kterým pracuji</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GUPSReDeskManipulation.CallELE(Gordic.Inbox.Server.GBaseOneMessage,System.Boolean)">
+            <summary>
+            to co bylo stazeno do lokalniho uloziste je nyni uploadovano na server
+            </summary>
+            <param name="message"></param>
+            <param name="bDownloadTest"></param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GUPSReDeskManipulation.MoveMessageToSpecificFolder(Gordic.General.GInt32,Gordic.Inbox.Server.GDZOneMessage,Gordic.Wfl.Interface.GSpravaSlozekDto)">
+            <summary>
+            Pokud je v ADM nastavena speciální složka pro konkrétní formulář, tak uložím do ní, jinak do defaultu
+            </summary>
+            <param name="ciloveIdFolder">The cilove identifier folder.</param>
+            <param name="l_oMessage">The l o message.</param>
+            <param name="SLozky">The s lozky.</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GUPSReDeskManipulation.Trans_Commit_UpdateElPodaniDoWflsinb(Gordic.General.GString,Gordic.General.GString)">
+            <summary> UpdateElPodaniDoWflsinb-pro odpověď na zveřejnění </summary>
+            <param name="ixb">ixb</param>
+            <param name="ixp">Pid Dokumentu</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GUPSReDeskManipulation.Trans_Commit_UpdateCisloSlozkyDoWflsinb(Gordic.General.GString,Gordic.General.GInt32)">
+            <summary> UpdateElPodaniDoWflsinb-pročíslo složky </summary>
+            <param name="ixb">ixb</param>
+            <param name="id_upvs">číslo složky do které zprávu přesouváme</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GUPSReDeskManipulation.Trans_NactiCiskloSlozky(Gordic.General.GString)">
+            <summary>
+            
+            </summary>
+            <param name="ixb"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GUPSReDeskManipulation.Trans_Commit_UpdatePrizDorFikceDoWfldprj(Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GInt16)">
+            <summary> UpdateElPodaniDoWflsinb-pro odpověď na zveřejnění </summary>
+            <param name="ixp">ixp</param>
+            <param name="lic"></param>
+            <param name="por_cislo"></param>
+            <param name="priz_dor_fikce"></param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GUPSReDeskManipulation.GetExtensionMimeByAdministrace(Gordic.General.GString,System.String,System.IO.Stream)">
+            <summary> Vráceni přípony souboru dle mimetype </summary>
+            <param name="mime">MimeType</param>
+            <param name="defaultextension">defaultní přípona</param>
+            <param name="stream">The stream.</param>
+            <returns>přípona souboru dle registrů</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GUPSReDeskManipulation.UpdateElPodaniDoWflsinb(Gordic.General.GString,Gordic.General.GString,System.Boolean)">
+            <summary>UpdateElPodaniDoWflsinb-pro odpověď na zveřejnění</summary>
+            <param name="ixb">ixb</param>
+            <param name="ixp">Pid Dokumentu</param>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GUPSReDeskManipulation.UpdateCisloSlozkyDoWflsinb(Gordic.General.GString,Gordic.General.GInt32,System.Boolean)">
+            <summary>UpdateElPodaniDoWflsinb-pročíslo složky</summary>
+            <param name="ixb">ixb</param>
+            <param name="id_upvs">číslo složky do které zprávu přesouváme</param>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GUPSReDeskManipulation.NactiCiskloSlozky(Gordic.General.GString,System.Boolean)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GUPSReDeskManipulation.UpdatePrizDorFikceDoWfldprj(Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GInt16,System.Boolean)">
+            <summary>UpdateElPodaniDoWflsinb-pro odpověď na zveřejnění</summary>
+            <param name="ixp">ixp</param>
+            <param name="lic"></param>
+            <param name="por_cislo"></param>
+            <param name="priz_dor_fikce"></param>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="T:Gordic.Inbox.Server.GInbMailSender">
+            <summary>
+            Trida pro odesilani potvrzeni o stazeni el. podani
+            </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GInbMailSender.#ctor">
+            <summary>public constructor</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GInbMailSender.GetVerifyIntParam(Gordic.General.GString,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="gstr"></param>
+            <param name="defvalue">hodnota parametru pokud neni zadana</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GInbMailSender.GetVerifyParam(Gordic.General.GString,System.String)">
+            <summary>
+            kontroluje zadani parametru z administrace pro odeslani mailu;
+            generuje text vyjimky pokud param. neni zadan
+            </summary>
+            <param name="gstr">hodnota adm. parametru pro e. pod.</param>
+            <param name="sPrmName">nazev adm. parametru</param>
+            <returns>hodnota parametru e. pod.</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GInbMailSender.PriznakPotvrzeniODoruceni(Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.Support.Database.GDatabase)">
+            <summary>
+            Příznak potvrzení o doručení
+            </summary>
+            <param name="ixb">identifikátor zásilky</param>
+            <param name="prizNeodp">příznak odpovědi</param>
+            <param name="zmenuProv">změnu provedl</param>		
+            <param name="database">kontext databaze</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GInbMailSender.GetMailFromWflsinb(Gordic.General.GString)">
+            <summary> Vrátí položku mail_from pro el.podání </summary>
+            <param name="Ixb">Ixb el. podání</param>
+            <return>mail_from</return>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GInbMailSender.CreateAndSendMailNew(Gordic.Inbox.Server.GMailBox,Gordic.Inbox.Server.GOneMessage,System.String,System.String)">
+            <summary>
+            Sestaveni a odeslani mailu
+            </summary>
+            <param name="MailBox"></param>
+            <param name="Message"></param>
+            <param name="MailSubject"></param>
+            <param name="MailBody"></param>
+            <return>zda bylo odesíláno či nikoliv</return>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GInbMailSender.VytvorSouborPrvnihoPotvrzeni(System.String,System.Int32,System.Int32,System.Int32,System.String,System.String@)">
+            <summary>
+            Vytvor soubor odpovedi (potvrzení)
+            </summary>
+            <param name="_text">text souboru</param>
+            <param name="_pod_potvrz_pdf">Parametr zda má být soubor potvrzení ve formátu NIC/TXT/PDF</param>
+            <param name="_pod_potv_podpis">Parametr zda má být soubor potvrzení podepsán</param>
+            <param name="_pod_potv_pdf_cr">Parametr zda má být soubor potvrzení i časově oražen</param>
+            <param name="_Otisk">Otisk certifikátu k podpisu</param>
+            <param name="_OutSouborPovrzeniPath">cesta z názvem souboru</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GInbMailSender.SendMails(Gordic.Inbox.Server.GMailBoxes,Gordic.Inbox.Server.GMailBox,Gordic.Inbox.Server.GMessages,Gordic.Inbox.Interface.GInbResult)">
+            <summary>
+            Odeslani mailu inboxu - cte nastaveni z adm. pro e-podatelnu a na zaklade toho provadi odeslani potvrzeni
+            </summary>
+            <param name="MailBoxes"></param>
+            <param name="MailBox"></param>
+            <param name="Messages"></param>
+            <param name="oInbResult"></param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GInbMailSender.DebugLn(System.String)">
+            <summary>
+            Pomocná funkce pro debugovaní textů
+            </summary>
+            <param name="soutput"></param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GInbMailSender.GetErrorMessage(System.Exception)">
+            <summary>
+            Funkce pro získání textu vnořených exception
+            </summary>
+            <param name="e">exception</param>
+            <returns>kompletní text chyby</returns>
+        </member>
+        <member name="T:Gordic.Inbox.Server.GMailBox">
+            <summary>
+            Trida podporujici praci s mailovými schránkami
+            </summary>
+        </member>
+        <member name="F:Gordic.Inbox.Server.GMailBox.m_oMotoryInb">
+            <summary>m_oMotoryInb</summary>
+        </member>
+        <member name="F:Gordic.Inbox.Server.GMailBox.m_oMotorCfgParams">
+            <summary>GMotorCfgParams</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GMailBox.InbCfgParams">
+            <summary> vrati nastaveni konfigurace pro danou schranku </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GMailBox.Ginsmbx">
+            <summary> vrati nastaveni administračních parametru pro danou schranku </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GMailBox.TemDirectory">
+            <summary>  </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GMailBox.#ctor">
+            <summary> kostruktor </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GMailBox.#ctor(Gordic.Inbox.Server.GMailBox)">
+            <summary> kostruktor </summary>
+            <param name="source">Schranka odkud se maji precist konfiguracni parametry </param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GMailBox.LoadFrom(Gordic.Inbox.Server.GMailBox)">
+            <summary>
+            Nastavi konf. a adm. parametry pro tuto schranku
+            </summary>
+            <param name="source"> z jake schranky se maji datove cleny nahrat </param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GMailBox.CreateMembersInstance">
+            <summary> vytvori pro mailbox tridy, kde se uchovava jejich konfigurace, administrace </summary>
+        </member>
+        <member name="T:Gordic.Inbox.Server.GMailBoxes">
+            <summary> Trida uchovavajici sadu zpracovavanych mailboxu v pameti </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GMailBoxes.MailBoxList">
+            <summary> sablona s mailboxy </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GMailBoxes.ReceiveSubj">
+            <summary>  </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GMailBoxes.ReceiveBody">
+            <summary>  </summary>
+        </member>
+        <member name="T:Gordic.Inbox.Server.GInbox">
+            <summary>
+            Třída realizující stažení el. podaní z POP3,
+            umi odesilat potvrzení o stažení el. podání
+            </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GInbox.GetErrorMessage(System.Exception)">
+            <summary>
+            Funkce pro získání textu vnořených exception
+            </summary>
+            <param name="e">exception</param>
+            <returns>kompletní text chyby</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GInbox.CheckUnlockMailboxes(Gordic.Inbox.Server.GMailBoxes,Gordic.Wfl.Interface.GinckriEnum,System.Boolean)">
+            <summary>
+            Projde vsechny schranky a pokud je nektera zamcena tak ji odemkne pokud ji zamkla EPA tj. ZUD
+            </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GInbox.MainDownloadMail(Gordic.Inbox.Interface.GInbCfgParams)">
+            <summary>
+            Tělo služby inboxu, pro shovani el. podani do podatelny
+            </summary>
+            <param name="InbCfgParams">konfiguracni parametry</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Inbox.Server.GOneMessage">
+            <summary>
+            Třída nesoucí info zpacovavanem mailu, info ziskano parsovani eml pomoci GMimeDecoder;
+            </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GOneMessage.#ctor">
+            <summary> public konstruktor </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GOneMessage.signedmail">
+            <summary> false - mail je digitalne podepsan </summary>
+        </member>
+        <member name="T:Gordic.Inbox.Server.GMessages">
+            <summary>
+            Trida uchovavající sadu zpráv
+            </summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.GMessages.MessagesList">
+            <summary>Vlastnost vracejici List objektu GOneMessage</summary>
+        </member>
+        <member name="T:Gordic.Inbox.Server.GMsgDownloader">
+            <summary> třída zaobalujici GPOP3Receiver</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GMsgDownloader.#ctor(System.String)">
+            <summary>
+            public constructor
+            </summary>
+            <param name="aTempFolder"></param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GMsgDownloader.ConnectToPOP3(Gordic.Inbox.Server.GMailBox)">
+            <summary>
+            Pripojení k POP3 serveru
+            </summary>
+            <param name="mailbox"></param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GMsgDownloader.DisconnectPOP3">
+            <summary>
+            Odpojení od POP3 serveru
+            </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GMsgDownloader.DownloadFromPOP3(Gordic.General.ApplicationServer.GServerContext,Gordic.Inbox.Server.GSaveToGinis,Gordic.Inbox.Interface.GInbResult)">
+            <summary>
+            
+            </summary>
+            <param name="context">GServerContext</param>
+            <param name="ToGinis">GSaveToGinis</param>
+            <param name="InboxResult">GInbResult</param>
+            <returns>GMessages</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GMsgDownloader.DeleteOnPOP3(Gordic.Inbox.Server.GMessages)">
+            <summary>
+            Smaže zprávy z POP3 serveru
+            </summary>
+            <param name="messages"></param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GMsgDownloader.DebugLn(System.String)">
+            <summary>
+            Pomocná funkce pro debugovaní textů
+            </summary>
+            <param name="soutput"></param>
+        </member>
+        <member name="T:Gordic.Inbox.Server.GSaveToGinis">
+            <summary>
+            Třida pro ulozeni zprav z POP3 do db GINISU
+            </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GSaveToGinis.#ctor(System.String)">
+            <summary>
+            Inicializace sp GspInbExist, GspInbInput2m, EleServer a nastaveni adresare uloziste
+            </summary>
+            <param name="GlobalTemFolder"></param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GSaveToGinis.DoSave(Gordic.Inbox.Server.GMailBox,Gordic.Inbox.Server.GMessages,Gordic.Inbox.Interface.GInbResult)">
+            <summary>
+            ulozi zpravu do ginisu
+            </summary>
+            <param name="MailBox"></param>
+            <param name="Messages"></param>
+            <param name="result"></param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GSaveToGinis.SetValuesAndCheckAutomat(Gordic.Inbox.Server.GMailBox,Gordic.Inbox.Server.GOneMessage)">
+            <summary>
+            pokud je nastaveno ze se maji zpracovavat schanky e-pod. tak zde se urci ktere maily 
+            z techto schranek budou stazeny pro zpracovani e-podatelnou a ktere ne (message.priz_automat.Value = 1). 
+            Rozhodujou o tom nastaveni adm. parametru pro konkretni schranku
+            pokud ma byt mail zpracovan e-podatelnou je pro jen nastaven priznak priz_automat ma 1 v tabulce vas.wflsinb (tab. kde se uchovavaji informace o mailech po stazeni)
+            </summary>
+            <param name="MailBox">schranka</param>
+            <param name="message">parametry vyparsovany z mailu</param>
+        </member>
+        <member name="T:Gordic.Inbox.Server.GDataLoader">
+            <summary>
+            Třída pro načtení informací ke schránkám
+            </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GDataLoader.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GDataLoader.GetMailBoxParamFromADM(System.String,System.String)">
+            <summary>
+            Cteni administracnich db parametru pro e-podatelnu podle nazvu mailboxu. V adm to je Parametry nizsich urovni/Schranky e-pod
+            </summary>
+            <param name="_mailbox">nazev mailbox</param>
+            <param name="_prmName">jmeno parametru</param>
+            <returns>hodnota nastaveneho db adm. parametru</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GDataLoader.GetMotorParamFromADM(Gordic.General.GString,System.String)">
+            <summary>
+            Cteni administracnich db parametru pro e-podatelnu podle přiřazeného motoru. V adm to je Parametry nizsich urovni/Motory pro zpracování e-podání
+            </summary>
+            <param name="_ixsEpa">identifikace motoru</param>
+            <param name="_prmName">jmeno parametru</param>
+            <returns>hodnota nastaveneho db adm. parametru</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GDataLoader.GetViceMotoru(Gordic.General.GString,System.Boolean)">
+            <summary>
+            Informace zda se jede na více motorů
+            </summary>
+            <param name="_mailbox">mailbox</param>
+            <param name="newTransaction">zda se má zakládat nová transakce - connect, commit, disconnect</param>
+            <returns>Boolean - zda našel či nikoli</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GDataLoader.ExistMotor(Gordic.General.GString,System.Boolean)">
+            <summary>
+            Informace zda se existuje motor
+            </summary>
+            <param name="_motorinb">mailbox</param>
+            <param name="newTransaction">zda se má zakládat nová transakce - connect, commit, disconnect</param>
+            <returns>Boolean - zda našel či nikoli</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GDataLoader.LoadDBMotoryMailbox(Gordic.General.GString,System.Boolean)">
+            <summary>
+            Informace zda se jede na více motorů
+            </summary>
+            <param name="_mailbox">mailbox</param>
+            <param name="newTransaction">zda se má zakládat nová transakce - connect, commit, disconnect</param>
+            <returns>GMotorCfgParams - pole - zda našel či nikoli</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GDataLoader.LoadDBMotoryZpusobDor(Gordic.General.GInt16,System.Boolean)">
+            <summary>
+            Vrátí případné motory pro automatické zpracování pro způsob doručení
+            </summary>
+            <param name="_zpusobDor">zpusobDor</param>
+            <param name="newTransaction">zda se má zakládat nová transakce - connect, commit, disconnect</param>
+            <returns>GMotorCfgParams - pole - zda našel či nikoli</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GDataLoader.GetCertInfo(Gordic.General.GString,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary>
+            Vyber informaci o podepisovacim certifikatu
+            </summary>
+            <param name="_ixsCer">ixscert</param>
+            <param name="_idCert">id</param>
+            <param name="_otisk">otisk</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GDataLoader.LoadData(Gordic.Inbox.Interface.GInbCfgParams)">
+            <summary>
+            Nahrani parametru ke vsem schrankam
+            </summary>
+            <param name="_inbCfgParams">Adm. paramertry zadane na klientovy</param>
+            <returns>sada schranek</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GDataLoader.ReadReceiveMailTemplates(Gordic.Inbox.Server.GMailBoxes)">
+            <summary>
+            Nacte data z db pro odpovědní mail
+            </summary>
+            <param name="_mailBoxes"></param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GDataLoader.LoadGinsmbx(Gordic.Inbox.Interface.GInbCfgParams)">
+            <summary>
+            Cte nastaveni schranek pro ktere se maji stahovat zpravy
+            </summary>
+            <param name="aInbCfgParams">administracni parametry definovane na klientovy</param>
+            <returns>sada mailboxů</returns>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GDataLoader.LoadDbParameters(Gordic.Inbox.Server.GMailBoxes)">
+            <summary>
+            Načtení DB parametrů schránky pokud nejsou definovány na client side
+            </summary>
+            <param name="_mailBoxes">sada mailboxu</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GDataLoader.FillDbParameters(Gordic.Inbox.Server.GMailBox@)">
+            <summary> Načtení DB parametrů schránky pokud nejsou definovány na client side </summary>
+            <param name="_mailBox"> mailbox</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GDataLoader.LoadDbParametersMotor(Gordic.General.GString,Gordic.Inbox.Interface.GInbCfgParams@)">
+            <summary>
+            Načtení DB parametrů pro definovaný motor
+            </summary>
+            <param name="_ixsEpa">identifikátor motoru</param>
+            <param name="_inbCfgParams">konfigurační parametry - budou upraveny dle parametrů pro motor</param>
+        </member>
+        <member name="M:Gordic.Inbox.Server.GDataLoader.DebugLn(System.String)">
+            <summary>
+            Pomocná funkce pro debugovaní textů
+            </summary>
+            <param name="soutput"></param>
+        </member>
+        <member name="T:Gordic.Inbox.Server.gspg_inb_exist_02">
+            <summary>
+            Package   : 
+            Procedure : spg_inb_exist_02
+            Version   : 388.01.
+            </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_exist_02.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_exist_02.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_exist_02.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_exist_02.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_exist_02.a_mailbox">
+            <summary>datová či mailová schránka (pokud DS tak zde bude text ISDS)</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_exist_02.a_uidl">
+            <summary>jednoznačné číslo zprávy</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_exist_02.a_message_id">
+            <summary>jednoznačné číslo zprávy</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_exist_02.o_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_exist_02.o_sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_exist_02.o_isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_exist_02.o_err_txt">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_exist_02.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_exist_02.o_pocet">
+            <summary>o_pocet - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_exist_02.o_ixb_epod">
+            <summary>o_ixb_epod - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_exist_02.o_priz_neodp">
+            <summary>o_priz_neodp - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_exist_02.SetInParams(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_exist_02.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_exist_02.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_exist_02.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Inbox.Server.gspg_inb_input_09">
+            <summary>
+            Package   : 
+            Procedure : spg_inb_input_09
+            Version   : 388.01.
+            </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_09.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_09.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_ixb">
+            <summary>a_ixb - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_mailbox">
+            <summary>a_mailbox - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_uidl">
+            <summary>a_uidl - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_message_id">
+            <summary>a_message_id - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_mail_to">
+            <summary>a_mail_to - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_mail_from">
+            <summary>a_mail_from - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_dat_pod">
+            <summary>a_dat_pod - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_stav_inb">
+            <summary>a_stav_inb - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_zpusob_dor">
+            <summary>a_zpusob_dor - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_priz_elp">
+            <summary>a_priz_elp - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_ixs_cer">
+            <summary>a_ixs_cer - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_priz_verif">
+            <summary>a_priz_verif - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_hu_sajn">
+            <summary>a_hu_sajn - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_dat_verif">
+            <summary>a_dat_verif - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_aktivita">
+            <summary>a_aktivita - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_dat_zmena">
+            <summary>a_dat_zmena - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_zmenu_prov">
+            <summary>a_zmenu_prov - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_poznamka">
+            <summary>a_poznamka - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_ixs_su">
+            <summary>a_ixs_su - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_ixs_fun">
+            <summary>a_ixs_fun - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_typ_ed">
+            <summary>a_typ_ed - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_stav_verif">
+            <summary>a_stav_verif - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_dat_prij">
+            <summary>a_dat_prij - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_priz_neodp">
+            <summary>a_priz_neodp - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_priz_automat">
+            <summary>a_priz_automat - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_motorinb">
+            <summary>a_motorinb - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_id_vnitr_adr">
+            <summary>a_id_vnitr_adr - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_utvar">
+            <summary>a_utvar - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_znacka_odes">
+            <summary>a_znacka_odes - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_zakon_rok">
+            <summary>a_zakon_rok - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_zakon_cislo">
+            <summary>a_zakon_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_paragraf">
+            <summary>a_paragraf - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_odstavec">
+            <summary>a_odstavec - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_pismeno">
+            <summary>a_pismeno - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_k_rukam">
+            <summary>a_k_rukam - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_id_ds_odes">
+            <summary>a_id_ds_odes - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_typ_ds_odes">
+            <summary>a_typ_ds_odes - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_priz_dovl_r">
+            <summary>a_priz_dovl_r - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_sp_zn_odes">
+            <summary>a_sp_zn_odes - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_vase_znacka">
+            <summary>a_vase_znacka - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_vase_sp_zn">
+            <summary>a_vase_sp_zn - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_correlation_id">
+            <summary>a_correlation_id - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_business_id">
+            <summary>a_business_id - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_reference_id">
+            <summary>a_reference_id - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_message_type">
+            <summary>a_message_type - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_ixs_fsk">
+            <summary>a_ixs_fsk - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_nazev_fsk">
+            <summary>a_nazev_fsk - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_eform_id">
+            <summary>a_eform_id - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_eformversion">
+            <summary>a_eformversion - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_ixb_el_pod_nad">
+            <summary>může být null pokud se na nic neváže.</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_ixs_esu">
+            <summary>ESU pro lepší předplnění u podání pokud je známé</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_ixs_exu">
+            <summary>pro zpětné dohledání pod jakým externím loginem byl přihlášen při přípravě el. podání (z něj lze vyčíst i verif_exu).</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_ixs_typ">
+            <summary>ixs_typ typ dokumentu</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_original">
+            <summary>název souboru hlavní přílohy (včetně přípony</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.a_priz_odpoved">
+            <summary>příznak zda má být na el. podání posílána odpověď či nikoliv</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.o_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.o_sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.o_isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.o_err_txt">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_09.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_09.SetInParams(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_09.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_09.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_09.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Inbox.Server.gspg_inb_input_10">
+            <summary>
+            Package   : 
+            Procedure : spg_inb_input_10
+            Version   : 524.01.
+            </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_10.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_10.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_ixb">
+            <summary>a_ixb - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_mailbox">
+            <summary>a_mailbox - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_uidl">
+            <summary>a_uidl - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_message_id">
+            <summary>a_message_id - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_mail_to">
+            <summary>a_mail_to - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_mail_from">
+            <summary>a_mail_from - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_dat_pod">
+            <summary>a_dat_pod - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_stav_inb">
+            <summary>a_stav_inb - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_zpusob_dor">
+            <summary>a_zpusob_dor - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_priz_elp">
+            <summary>a_priz_elp - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_ixs_cer">
+            <summary>a_ixs_cer - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_priz_verif">
+            <summary>a_priz_verif - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_hu_sajn">
+            <summary>a_hu_sajn - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_dat_verif">
+            <summary>a_dat_verif - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_aktivita">
+            <summary>a_aktivita - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_dat_zmena">
+            <summary>a_dat_zmena - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_zmenu_prov">
+            <summary>a_zmenu_prov - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_poznamka">
+            <summary>a_poznamka - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_ixs_su">
+            <summary>a_ixs_su - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_ixs_fun">
+            <summary>a_ixs_fun - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_typ_ed">
+            <summary>a_typ_ed - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_stav_verif">
+            <summary>a_stav_verif - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_dat_prij">
+            <summary>a_dat_prij - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_priz_neodp">
+            <summary>a_priz_neodp - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_priz_automat">
+            <summary>a_priz_automat - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_motorinb">
+            <summary>a_motorinb - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_id_vnitr_adr">
+            <summary>a_id_vnitr_adr - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_utvar">
+            <summary>a_utvar - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_znacka_odes">
+            <summary>a_znacka_odes - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_zakon_rok">
+            <summary>a_zakon_rok - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_zakon_cislo">
+            <summary>a_zakon_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_paragraf">
+            <summary>a_paragraf - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_odstavec">
+            <summary>a_odstavec - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_pismeno">
+            <summary>a_pismeno - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_k_rukam">
+            <summary>a_k_rukam - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_id_ds_odes">
+            <summary>a_id_ds_odes - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_typ_ds_odes">
+            <summary>a_typ_ds_odes - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_priz_dovl_r">
+            <summary>a_priz_dovl_r - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_sp_zn_odes">
+            <summary>a_sp_zn_odes - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_vase_znacka">
+            <summary>a_vase_znacka - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_vase_sp_zn">
+            <summary>a_vase_sp_zn - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_correlation_id">
+            <summary>a_correlation_id - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_business_id">
+            <summary>a_business_id - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_reference_id">
+            <summary>a_reference_id - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_message_type">
+            <summary>a_message_type - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_ixs_fsk">
+            <summary>a_ixs_fsk - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_nazev_fsk">
+            <summary>a_nazev_fsk - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_eform_id">
+            <summary>a_eform_id - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_eformversion">
+            <summary>a_eformversion - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_ixb_el_pod_nad">
+            <summary>m��e b�t null pokud se na nic nev�e.</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_ixs_esu">
+            <summary>ESU pro lep�� p�edpln�n� u pod�n� pokud je zn�m�</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_ixs_exu">
+            <summary>pro zp�tn� dohled�n� pod jak�m extern�m loginem byl p�ihl�en p�i p��prav� el. pod�n� (z n�j lze vy��st i verif_exu).</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_ixs_typ">
+            <summary>ixs_typ typ dokumentu</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_original">
+            <summary>n�zev souboru hlavn� p��lohy (v�etn� p��pony</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_priz_odpoved">
+            <summary>p��znak zda m� b�t na el. pod�n� pos�l�na odpov�� �i nikoliv</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_ixp">
+            <summary>potencion�ln� PID nov� vznikl�ho dokumentu pokud je ji� zn�m a chceme p�edplnit</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.a_priz_fikce_podp">
+            <summary>p��znak fikce podpisu (default 0)</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.o_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.o_sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.o_isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.o_err_txt">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_10.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_10.SetInParams(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_10.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_10.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_10.DbExecute(System.Int32)">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_10.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Inbox.Server.gspg_inb_input_11">
+            <summary>
+            Package   : 
+            Procedure : spg_inb_input_11
+            Version   : 524.02.
+            </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_11.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_11.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_ixb">
+            <summary>a_ixb - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_mailbox">
+            <summary>a_mailbox - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_uidl">
+            <summary>a_uidl - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_message_id">
+            <summary>a_message_id - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_mail_to">
+            <summary>a_mail_to - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_mail_from">
+            <summary>a_mail_from - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_dat_pod">
+            <summary>a_dat_pod - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_stav_inb">
+            <summary>a_stav_inb - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_zpusob_dor">
+            <summary>a_zpusob_dor - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_priz_elp">
+            <summary>a_priz_elp - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_ixs_cer">
+            <summary>a_ixs_cer - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_priz_verif">
+            <summary>a_priz_verif - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_hu_sajn">
+            <summary>a_hu_sajn - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_dat_verif">
+            <summary>a_dat_verif - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_aktivita">
+            <summary>a_aktivita - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_dat_zmena">
+            <summary>a_dat_zmena - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_zmenu_prov">
+            <summary>a_zmenu_prov - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_poznamka">
+            <summary>a_poznamka - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_ixs_su">
+            <summary>a_ixs_su - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_ixs_fun">
+            <summary>a_ixs_fun - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_typ_ed">
+            <summary>a_typ_ed - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_stav_verif">
+            <summary>a_stav_verif - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_dat_prij">
+            <summary>a_dat_prij - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_priz_neodp">
+            <summary>a_priz_neodp - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_priz_automat">
+            <summary>a_priz_automat - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_motorinb">
+            <summary>a_motorinb - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_id_vnitr_adr">
+            <summary>a_id_vnitr_adr - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_utvar">
+            <summary>a_utvar - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_znacka_odes">
+            <summary>a_znacka_odes - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_zakon_rok">
+            <summary>a_zakon_rok - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_zakon_cislo">
+            <summary>a_zakon_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_paragraf">
+            <summary>a_paragraf - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_odstavec">
+            <summary>a_odstavec - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_pismeno">
+            <summary>a_pismeno - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_k_rukam">
+            <summary>a_k_rukam - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_id_ds_odes">
+            <summary>a_id_ds_odes - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_typ_ds_odes">
+            <summary>a_typ_ds_odes - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_priz_dovl_r">
+            <summary>a_priz_dovl_r - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_sp_zn_odes">
+            <summary>a_sp_zn_odes - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_vase_znacka">
+            <summary>a_vase_znacka - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_vase_sp_zn">
+            <summary>a_vase_sp_zn - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_correlation_id">
+            <summary>a_correlation_id - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_business_id">
+            <summary>a_business_id - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_reference_id">
+            <summary>a_reference_id - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_message_type">
+            <summary>a_message_type - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_ixs_fsk">
+            <summary>a_ixs_fsk - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_nazev_fsk">
+            <summary>a_nazev_fsk - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_eform_id">
+            <summary>a_eform_id - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_eformversion">
+            <summary>a_eformversion - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_ixb_el_pod_nad">
+            <summary>m��e b�t null pokud se na nic nev�e.</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_ixs_esu">
+            <summary>ESU pro lep�� p�edpln�n� u pod�n� pokud je zn�m�</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_ixs_exu">
+            <summary>pro zp�tn� dohled�n� pod jak�m extern�m loginem byl p�ihl�en p�i p��prav� el. pod�n� (z n�j lze vy��st i verif_exu).</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_ixs_typ">
+            <summary>ixs_typ typ dokumentu</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_original">
+            <summary>n�zev souboru hlavn� p��lohy (v�etn� p��pony</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_priz_odpoved">
+            <summary>p��znak zda m� b�t na el. pod�n� pos�l�na odpov�� �i nikoliv</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_ixp">
+            <summary>potencion�ln� PID nov� vznikl�ho dokumentu pokud je ji� zn�m a chceme p�edplnit</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_priz_fikce_podp">
+            <summary>p��znak fikce podpisu (default 0)</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_priz_uloz_odu">
+            <summary>p��znak zda ukl�dat infomace pro Osv�d�en� o digit�ln�m �konu (default 0)</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_man_nazev">
+            <summary>mand�t n�zev - jm�no firmy nebo jm�no a p��jmen� osoby</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_man_id">
+            <summary>mand�t id - I�O firmy nebo ��slo dokladu (OP) osoby</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_man_popis">
+            <summary>mand�t popis</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_man_dat_od">
+            <summary>mand�t platn� od</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_agenda_kod">
+            <summary>k�d agendy</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_agenda_nazev">
+            <summary>n�zev agendy</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_sluzba_kod">
+            <summary>k�d slu�by</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_sluzba_nazev">
+            <summary>n�zev slu�by</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_ukon_kod">
+            <summary>k�d �konu</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_ukon_nazev">
+            <summary>n�zev �konu</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_adresat_nazev">
+            <summary>n�zev adres�ta</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_ukon_realizovan">
+            <summary>realizov�no prost�ednictv�m</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_ukon_katalogu">
+            <summary>�kon katalogu slu�eb (true/false)</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_formular_id">
+            <summary>id formul��e extern�ho syst�mu</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_formular_nazev">
+            <summary>n�zev formul��e extern�ho syst�mu</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_odeslat_ds_osp">
+            <summary>1=odeslat datovou schrankou, 0=vr�tit na OSP</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_odeslat_id_ds">
+            <summary>ID. datov� schr�nky adres�ta pro odesl�n� ODU</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_dat_realizace">
+            <summary>datum a �as realizace</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.a_pocet_priloh">
+            <summary>po�et p��loh pod�n� z OSP/RAP</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.o_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.o_sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.o_isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.o_err_txt">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_11.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_11.SetInParams(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_11.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_11.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_11.DbExecute(System.Int32)">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_11.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Inbox.Server.gspg_inb_input_12">
+            <summary>
+            Package   : 
+            Procedure : spg_inb_input_12
+            Version   : 525.01.
+            </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_12.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_12.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_ixb">
+            <summary>a_ixb - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_mailbox">
+            <summary>a_mailbox - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_uidl">
+            <summary>a_uidl - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_message_id">
+            <summary>a_message_id - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_mail_to">
+            <summary>a_mail_to - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_mail_from">
+            <summary>a_mail_from - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_dat_pod">
+            <summary>a_dat_pod - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_stav_inb">
+            <summary>a_stav_inb - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_zpusob_dor">
+            <summary>a_zpusob_dor - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_priz_elp">
+            <summary>a_priz_elp - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_ixs_cer">
+            <summary>a_ixs_cer - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_priz_verif">
+            <summary>a_priz_verif - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_hu_sajn">
+            <summary>a_hu_sajn - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_dat_verif">
+            <summary>a_dat_verif - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_aktivita">
+            <summary>a_aktivita - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_dat_zmena">
+            <summary>a_dat_zmena - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_zmenu_prov">
+            <summary>a_zmenu_prov - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_poznamka">
+            <summary>a_poznamka - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_ixs_su">
+            <summary>a_ixs_su - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_ixs_fun">
+            <summary>a_ixs_fun - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_typ_ed">
+            <summary>a_typ_ed - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_stav_verif">
+            <summary>a_stav_verif - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_dat_prij">
+            <summary>a_dat_prij - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_priz_neodp">
+            <summary>a_priz_neodp - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_priz_automat">
+            <summary>a_priz_automat - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_motorinb">
+            <summary>a_motorinb - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_id_vnitr_adr">
+            <summary>a_id_vnitr_adr - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_utvar">
+            <summary>a_utvar - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_znacka_odes">
+            <summary>a_znacka_odes - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_zakon_rok">
+            <summary>a_zakon_rok - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_zakon_cislo">
+            <summary>a_zakon_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_paragraf">
+            <summary>a_paragraf - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_odstavec">
+            <summary>a_odstavec - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_pismeno">
+            <summary>a_pismeno - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_k_rukam">
+            <summary>a_k_rukam - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_id_ds_odes">
+            <summary>a_id_ds_odes - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_typ_ds_odes">
+            <summary>a_typ_ds_odes - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_priz_dovl_r">
+            <summary>a_priz_dovl_r - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_sp_zn_odes">
+            <summary>a_sp_zn_odes - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_vase_znacka">
+            <summary>a_vase_znacka - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_vase_sp_zn">
+            <summary>a_vase_sp_zn - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_correlation_id">
+            <summary>a_correlation_id - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_business_id">
+            <summary>a_business_id - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_reference_id">
+            <summary>a_reference_id - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_message_type">
+            <summary>a_message_type - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_ixs_fsk">
+            <summary>a_ixs_fsk - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_nazev_fsk">
+            <summary>a_nazev_fsk - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_eform_id">
+            <summary>a_eform_id - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_eformversion">
+            <summary>a_eformversion - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_ixb_el_pod_nad">
+            <summary>m��e b�t null pokud se na nic nev�e.</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_ixs_esu">
+            <summary>ESU pro lep�� p�edpln�n� u pod�n� pokud je zn�m�</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_ixs_exu">
+            <summary>pro zp�tn� dohled�n� pod jak�m extern�m loginem byl p�ihl�en p�i p��prav� el. pod�n� (z n�j lze vy��st i verif_exu).</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_ixs_typ">
+            <summary>ixs_typ typ dokumentu</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_original">
+            <summary>n�zev souboru hlavn� p��lohy (v�etn� p��pony</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_priz_odpoved">
+            <summary>p��znak zda m� b�t na el. pod�n� pos�l�na odpov�� �i nikoliv</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_ixp">
+            <summary>potencion�ln� PID nov� vznikl�ho dokumentu pokud je ji� zn�m a chceme p�edplnit</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_priz_fikce_podp">
+            <summary>p��znak fikce podpisu (default 0)</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_priz_uloz_odu">
+            <summary>p��znak zda ukl�dat infomace pro Osv�d�en� o digit�ln�m �konu (default 0)</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_man_nazev">
+            <summary>mand�t n�zev - jm�no firmy nebo jm�no a p��jmen� osoby</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_man_id">
+            <summary>mand�t id - I�O firmy nebo ��slo dokladu (OP) osoby</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_man_popis">
+            <summary>mand�t popis</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_man_dat_od">
+            <summary>mand�t platn� od</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_agenda_kod">
+            <summary>k�d agendy</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_agenda_nazev">
+            <summary>n�zev agendy</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_sluzba_kod">
+            <summary>k�d slu�by</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_sluzba_nazev">
+            <summary>n�zev slu�by</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_ukon_kod">
+            <summary>k�d �konu</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_ukon_nazev">
+            <summary>n�zev �konu</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_adresat_nazev">
+            <summary>n�zev adres�ta</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_ukon_realizovan">
+            <summary>realizov�no prost�ednictv�m</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_ukon_katalogu">
+            <summary>�kon katalogu slu�eb (true/false)</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_formular_id">
+            <summary>id formul��e extern�ho syst�mu</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_formular_nazev">
+            <summary>n�zev formul��e extern�ho syst�mu</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_odeslat_ds_osp">
+            <summary>1=odeslat datovou schrankou, 0=vr�tit na OSP</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_odeslat_id_ds">
+            <summary>ID. datov� schr�nky adres�ta pro odesl�n� ODU</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_dat_realizace">
+            <summary>datum a �as realizace</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_pocet_priloh">
+            <summary>po�et p��loh pod�n� z OSP/RAP</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.a_dat_odes">
+            <summary>datum a �as odesl�n� e-mailu, pokud je zjistiteln�</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.o_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.o_sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.o_isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.o_err_txt">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_inb_input_12.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_12.SetInParams(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GDateTime)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_12.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GDateTime)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_12.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_12.DbExecute(System.Int32)">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_inb_input_12.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Inbox.Server.gspg_vyp_vyp_02">
+            <summary>
+            Package   : 
+            Procedure : spg_vyp_vyp_02
+            Version   : 360.06.
+            </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_vyp_vyp_02.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_vyp_vyp_02.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_vyp_vyp_02.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_vyp_vyp_02.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_vyp_vyp_02.a_mod">
+            <summary>0,1 - zda se jedná o ukončení dle parametru</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_vyp_vyp_02.v_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_vyp_vyp_02.v_sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_vyp_vyp_02.v_isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_vyp_vyp_02.v_err_txt">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_vyp_vyp_02.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_vyp_vyp_02.SetInParams(Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_vyp_vyp_02.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_vyp_vyp_02.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_vyp_vyp_02.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Inbox.Server.gspg_wfl_wfltprm">
+            <summary>
+            Package   : 
+            Procedure : spg_wfl_wfltprm
+            Version   : 358.01.
+            </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_wfl_wfltprm.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_wfl_wfltprm.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_wfl_wfltprm.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_wfl_wfltprm.a_iud">
+            <summary>a_iud - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_wfl_wfltprm.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_wfl_wfltprm.a_par_gr">
+            <summary>a_par_gr - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_wfl_wfltprm.a_par_name">
+            <summary>a_par_name - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_wfl_wfltprm.a_par_value">
+            <summary>a_par_value - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_wfl_wfltprm.a_por_cislo">
+            <summary>a_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_wfl_wfltprm.v_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_wfl_wfltprm.v_sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_wfl_wfltprm.v_isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_wfl_wfltprm.v_err_txt">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_wfl_wfltprm.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_wfl_wfltprm.SetInParams(Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_wfl_wfltprm.SetInParams(Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_wfl_wfltprm.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_wfl_wfltprm.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Inbox.Server.gspg_zprac_odpo_05">
+            <summary>
+            Package   : 
+            Procedure : spg_zprac_odpo_05
+            Version   : 386.01.
+            </summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_zprac_odpo_05.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_zprac_odpo_05.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.a_ixb">
+            <summary>ixb el. podání</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.a_id_odpovedi">
+            <summary>identifikace příchozí DZ s odpovědí ISRS</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.a_id_dz">
+            <summary>identifikace odchozí DZ se zveřejněním</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.a_id_zve">
+            <summary>identifikace sml ve zveřejnění</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.a_result">
+            <summary>zda dopadlo 1 či nikoliv 0</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.a_error_code">
+            <summary>číslo chyby</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.a_popis_vysl">
+            <summary>lidský popis výsledku</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.a_url_zve">
+            <summary>url odkaz na zveřejněnou sml</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.a_dat_zve">
+            <summary>datum zveřejění dle návratu z portálu</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.a_id_ds_zve">
+            <summary>datová schránka zveřejňujícího subjektu</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.a_id_ds_pod">
+            <summary>datová schránka podatelny kam přišlo potvrzení</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.a_rezim">
+            <summary>rezim zpracování 1 při stahování (maskuje chyby), 0 a ostatní ruční zpracování v POD (nemaskuje chyby)</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.a_ixs_zmp">
+            <summary>zmenu_prov dříve globální _ixs_zmp</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.a_ixs_lpc">
+            <summary>ixs_lpc místo původní globální _ixs_lpc</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.a_typ_ag">
+            <summary>typ_ag - aktuální agenda místo globální _typ_ag</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.a_ikc">
+            <summary>id kolekce</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.o_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.o_sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.o_isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.o_err_txt">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.o_vysl">
+            <summary>o_vysl - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.o_vysl_txt">
+            <summary>o_vysl_txt - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.o_ixp_zve">
+            <summary>o_ixp_zve - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Inbox.Server.gspg_zprac_odpo_05.o_ixs_zve">
+            <summary>o_ixs_zve - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_zprac_odpo_05.SetInParams(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt64)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_zprac_odpo_05.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt64)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_zprac_odpo_05.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Inbox.Server.gspg_zprac_odpo_05.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+    </members>
+</doc>

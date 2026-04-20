@@ -1,0 +1,517 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.App.Core</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.App.Core.AppDomainLoader">
+            <summary>
+            Application domain loader - prevents .NET to lock app directory
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.AppDomainLoader.GAPP_DOMAIN_DATA_KEY">
+            <summary>
+            Storage key - IApplication proxy
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.AppDomainLoader.GAPP_STARTUP_ARGS_KEY">
+            <summary>
+            Storage startup key - string[2]
+            </summary>
+        </member>
+        <member name="M:Gordic.App.Core.AppDomainLoader.LoadApplicationInAppDomain">
+            <summary>
+            Instantiate requested application in destination application domain
+            </summary>
+        </member>
+        <member name="T:Gordic.App.Core.ExtensionAttribute">
+            <summary>
+            Extension attribute - bounded to request
+            </summary>
+        </member>
+        <member name="M:Gordic.App.Core.ExtensionAttribute.#ctor(System.String,System.Object)">
+            <summary>
+            Extension attribute - bounded to request
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.ExtensionAttribute.Name">
+            <summary>
+            Name
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.ExtensionAttribute.Value">
+            <summary>
+            Value
+            </summary>
+        </member>
+        <member name="T:Gordic.App.Core.GAppApplicationEvent">
+            <summary>
+            Exchange between hosted app and host 
+              [APP.Event] -> [APG05]  -> [Client]
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.GAppApplicationEvent.Message">
+            <summary>
+            Message
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.GAppApplicationEvent.ApplicationName">
+            <summary>
+            Origin of the event
+            </summary>
+        </member>
+        <member name="T:Gordic.App.Core.IApplication2">
+            <summary>
+            Rozšíření IApplication
+            </summary>
+        </member>
+        <member name="M:Gordic.App.Core.IApplication2.GetMethodInvoker2(Gordic.App.Core.ExtensionAttribute[])">
+            <summary>
+            Get configured method invoker
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.App.Core.IGEslMetaRegisterAdvise">
+            <summary>
+            Začlenění informací do ESL registru služeb. Využívá ESLApplication.
+            </summary>
+        </member>
+        <member name="M:Gordic.App.Core.IGEslMetaRegisterAdvise.Advise(System.String[])">
+            <summary>
+            Začlenění informací do ESL registru služeb
+            </summary>
+        </member>
+        <member name="T:Gordic.App.Core.IGAppApplicationEventSink">
+            <summary>
+            Internal event system for APG and applications
+            </summary>
+        </member>
+        <member name="M:Gordic.App.Core.IGAppApplicationEventSink.CreateEvent(Gordic.App.Core.GAppApplicationEvent)">
+            <summary>
+            CreateEvent
+            </summary>
+            <param name="appEvent"></param>
+        </member>
+        <member name="T:Gordic.App.Core.IApplication">
+            <summary>
+            Container interface
+            </summary>
+        </member>
+        <member name="M:Gordic.App.Core.IApplication.Start(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Starts container
+            </summary>
+            <param name="applicationConfigSet"></param>
+        </member>
+        <member name="M:Gordic.App.Core.IApplication.Stop">
+            <summary>
+            Stops application gracefully - note: be quick
+            </summary>
+        </member>
+        <member name="M:Gordic.App.Core.IApplication.GetMethodInvoker">
+            <summary>
+            Get configured method invoker
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.App.Core.IApplication.GetConfiguration">
+            <summary>
+            Additional container configuration
+            </summary>
+        </member>
+        <member name="M:Gordic.App.Core.IApplication.GetModules">
+            <summary>
+            Get application modules - return empty list, not null
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.App.Core.IApplication.DoAction(System.String[])">
+            <summary>
+            
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.App.Core.IGConfigurable">
+            <summary>
+            Configure sink - configure your logic as requested
+            </summary>
+        </member>
+        <member name="M:Gordic.App.Core.IGConfigurable.Configure(System.Object)">
+            <summary>
+            Configure
+            </summary>
+            <param name="dependency"></param>
+        </member>
+        <member name="T:Gordic.App.Core.IMethodInvoker2">
+            <summary>
+            Remote method invoker.
+            Needs to be obsoleted - array of ExtensionAttribute with each request is better solution
+            This is statefull!
+            
+            Remove carefully.
+            </summary>
+        </member>
+        <member name="M:Gordic.App.Core.IMethodInvoker2.ExecuteExtension(System.String,System.Object)">
+            <summary>
+            ExecuteExtensions
+            </summary>
+            <param name="command"></param>
+            <param name="extension"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.App.Core.IMethodInvoker">
+            <summary>
+            Remote method invoker
+            </summary>
+        </member>
+        <member name="M:Gordic.App.Core.IMethodInvoker.InvokeMethod(Gordic.App.Core.InvokeMethodInput)">
+            <summary>
+            InvokeMethod
+            </summary>
+            <param name="invokeMethodInput"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.App.Core.InvokeMethodInput">
+            <summary>
+            Request to invoke method in hosted app-domain
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.InvokeMethodInput.BinaryRequest">
+            <summary>
+            Raw request data
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.InvokeMethodInput.LogRequest">
+            <summary>
+            Serialize request to string - for outer logger
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.InvokeMethodInput.LogResponse">
+            <summary>
+            Serialize response to string - for outer logger
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.InvokeMethodInput.Protocol">
+            <summary>
+            Inner form of binary request
+            </summary>
+        </member>
+        <member name="T:Gordic.App.Core.InvokeMethodOutput">
+            <summary>
+            Response from hosted app domain to method invoke
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.InvokeMethodOutput.BinaryResponse">
+            <summary>
+            Main response
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.InvokeMethodOutput.MethodName">
+            <summary>
+            Method name
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.InvokeMethodOutput.TextResponse">
+            <summary>
+            Response serialized to text
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.InvokeMethodOutput.TextRequest">
+            <summary>
+            Request serialized to text
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.InvokeMethodOutput.ExceptionText">
+            <summary>
+            Exception transformed to string
+            </summary>
+        </member>
+        <member name="T:Gordic.App.Core.IAppModule">
+            <summary>
+            Application module interface
+            </summary>
+        </member>
+        <member name="P:Gordic.App.Core.IAppModule.Title">
+            <summary>
+            Returns title of application module
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.App.Core.IAppModule.Start">
+            <summary>
+            Entry point for implemented module
+            </summary>
+        </member>
+        <member name="M:Gordic.App.Core.IAppModule.Stop">
+            <summary>
+            Stop module gracefully
+            </summary>
+        </member>
+        <member name="T:Gordic.App.Core.IGInvokeMethodOutput">
+            <summary>
+            Internal DTO - like method output
+            For internal use only, do not use in public API
+            </summary>
+        </member>
+        <member name="T:Gordic.App.Core.GAppServerTransportResponseBase">
+            <summary>
+            SHARED between AIB_1_0 and NET
+            in future... to be one!
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.GAppServerTransportResponseBase.retval">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.GAppServerTransportResponseBase.exc">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Gordic.App.Core.GAppServerTransportRequestBase">
+            <summary>
+            Shared between NET and AIB_1_0
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.GAppServerTransportRequestBase.ticket">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.GAppServerTransportRequestBase.type">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.GAppServerTransportRequestBase.name">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.GAppServerTransportRequestBase.signature">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.GAppServerTransportRequestBase.inargs">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Gordic.App.Core.Protocols">
+            <summary>
+            Available protocols recognized by client/server
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.Protocols.NET1_REMOTING">
+            <summary>
+            NET1_REMOTING - not remoting. But using BinaryFormatter
+            We need to get rid of it
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.Protocols.JSON_1_0">
+            <summary>
+            ESL
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.Protocols.BSON_1_0">
+            <summary>
+            BSON - deprecated. Do not use
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.Protocols.XML_1_0">
+            <summary>
+            XML - deprecated by ESL. Do not use
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.Protocols.JSON_2_0">
+            <summary>
+            AIB
+            </summary>
+        </member>
+        <member name="T:Gordic.App.Core.GAibMethodRequest">
+            <summary>
+            Base response request 
+            </summary>
+        </member>
+        <member name="T:Gordic.App.Core.GAibMethodResponse">
+            <summary>
+            Base response -- DEVELOP version!!!
+            </summary>
+        </member>
+        <member name="T:Gordic.App.Core.GAibTransportRequest">
+            <summary>
+            GAppServerTransportRequest_JSON -- DEVELOP version!!!
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.GAibTransportRequest.faze">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Gordic.App.Core.GAibTransportResponse">
+            <summary>
+            GAibTransportResponse -- DEVELOP version!!!
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.GAibTransportResponse.faze">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.GAibTransportResponse.serverMillis">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.GAibTransportResponse.serverType">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.GAibTransportResponse.serverExceptionId">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Gordic.App.Core.GAppServerTransportSharedObject">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.GAppServerTransportSharedObject.objecttype">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.GAppServerTransportSharedObject.objectid">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Gordic.App.Core.TicketRequest">
+            <summary>
+            Request for new ticket
+            </summary>
+        </member>
+        <member name="T:Gordic.App.Core.TicketRequest.TicketRequestActions">
+            <summary>
+            Available ticket actions
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.TicketRequest.TicketRequestActions.GetTicket">
+            <summary>
+            Get new Ticket
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.TicketRequest.TicketRequestActions.CloseTicket">
+            <summary>
+            Logoff
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.TicketRequest.Action">
+            <summary>
+            Ticket action
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.TicketRequest.ApplicationName">
+            <summary>
+            Name of hosted application (partial uri)
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.TicketRequest.Ticket">
+            <summary>
+            Ticket for log off
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.TicketRequest.RequestedProtocol">
+            <summary>
+            Requested protocol
+            </summary>
+        </member>
+        <member name="T:Gordic.App.Core.TicketResponse">
+            <summary>
+            Response with ticket
+            </summary>
+        </member>
+        <member name="T:Gordic.App.Core.TicketResponse.TicketResponseStates">
+            <summary>
+            TicketResponseStates
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.TicketResponse.TicketResponseStates.OK">
+            <summary>
+            OK
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.TicketResponse.TicketResponseStates.ApplicationNotFound">
+            <summary>
+            ApplicationNotFound
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.TicketResponse.TicketResponseStates.WrongTicketCredentials">
+            <summary>
+            WrongTicketCredentials
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.TicketResponse.TicketResponseStates.ProtocolDenied">
+            <summary>
+            Requested protocol was denied
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.TicketResponse.TicketResponseStates.Error">
+            <summary>
+            Generic error
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.TicketResponse.TicketID">
+            <summary>
+            Ticket
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.TicketResponse.State">
+            <summary>
+            Response status
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.TicketResponse.PossibleProtocols">
+            <summary>
+            Protocol offered by server - if requested protocol is not acceptable
+            </summary>
+        </member>
+        <member name="T:Gordic.App.Core.GAppServerTransportBase">
+            <summary>
+            Version - independent class for transports
+            Do not contain any fields, we need at least one parent
+            </summary>
+        </member>
+        <member name="T:Gordic.App.Core.GAppServerTransportRequest">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.GAppServerTransportRequest.objectId">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.GAppServerTransportRequest.cargs">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Gordic.App.Core.GAppServerTransportResponse">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.App.Core.GAppServerTransportResponse.outargs">
+            <summary>
+            
+            </summary>
+        </member>
+    </members>
+</doc>

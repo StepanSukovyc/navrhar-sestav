@@ -1,0 +1,2268 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Pdm.WinClient</name>
+    </assembly>
+    <members>
+        <member name="T:AAAA.Form1">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:AAAA.Form1.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:AAAA.Form1.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:AAAA.Form1.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:AAAA.Form1.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GPdmApplication">
+            <summary>Aplikace PDM</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GPdmApplication.Main(System.String[])">
+            <summary>hlavní smyčka aplikace</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GPdmApplication.OnCreateEkoInit(System.Windows.Forms.Form)">
+            <summary>
+            Definice chování aplikace při ekoinicializaci
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GMzCommon">
+            <summary>
+            Společné věci pro práci s měsíčními změnami na klientu
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GMzCommon.ImplementaceMo">
+            <summary>
+            Určuje, zda je aplikace spuštěna v implementaci MO
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GMzCommon._jePovolenaZadanaSlozka(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="slo_mzdy"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GMzCommon.GetMzFrmType(Gordic.General.GInt16,Gordic.General.GInt16)">
+            <summary>
+            Vrátí druh formuláře, který má být vytvořen pro určitý typ formuláře a složku mzdy 
+            (složka mzdy by fakticky být potřeba neměla, ale nakonec kvůli výjimce u form. 180 byla přidána)
+            </summary>
+            <param name="typFormulare">Typ formuláře</param>
+            <param name="slozkaMzdy">Složka mzdy</param>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GMzCommon.KontrolaSlozky(Gordic.Pam.Interface.GSlozkaMzdyKomplet,System.Boolean,System.String@)">
+            <summary>
+            Provede kontrolu, zda je možné zadat složku mzdy
+            </summary>
+            <param name="slozka">Informace o složce mzdy</param>
+            <param name="hromadneZadani">Určuje, zda se jedná o hromadné zadání</param>
+            <param name="reportText">Chybový text</param>
+            <returns>Zda proběhla kontrola v pořádku (true)</returns>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GMzPracPomer">
+            <summary>
+            Prvek pro výběr pracovního poměru a období - vázaný na měsíční změny
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GMzPracPomer.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GMzDetail">
+            <summary>
+            Prvek formuláře detailu měsíční změny
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GMzDetail.ImplementaceMo">
+            <summary>
+            Určuje, zda je aplikace spuštěna v implementaci MO
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GMzDetail.GetMzCommon">
+            <summary>
+            Vrátí virtuálně instanci pro <see cref="T:Gordic.Pam.WinClient.GMzCommon"/>
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GMzDetail.InitPosledniBlokUzavObdobi">
+            <summary>
+            Provede inicializaci proměnných pro zjištění údajů o období
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GMzDetail.LzeZpetneDoBlokovanych">
+            <summary>
+            Určuje, zda je možné zadávat MZ zpětně do blokovaných období
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GMzDetail.GetTypZpetnehoZadani">
+            <summary>
+            Určuje způsob zpětného zadání
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GMzDetail.PovoleneSlozkyMzdy(System.Data.DataTable,Gordic.General.GInt16)">
+            <summary>
+            Provede případné filtrování složek mzdy
+            </summary>
+            <param name="table"></param>
+            <param name="typSlozky"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GSoupiskaMZFrm180Zalohy">
+            <summary>
+            Formulář měsíční změny 180 - Srážky (upravený pro zadávání záloh v hotovosti)
+            </summary>
+            <remarks>
+            V PDM na MO nelze srážky zadávat s výjimkou záloh – tyto jsou ale vždy hotovostně s výjimkou stravného.
+            Stravné je upraveno speciálně, že musí být zadáno v PAM v trvalých srážkách a provazuje se příjemce 
+            na zadanou měsíční změnu stravného v PDM. 
+            V modulu PDM nelze uživatelům umožnit výběr z ESU. 
+            </remarks>
+        </member>
+        <member name="F:Gordic.Pdm.WinClient.GSoupiskaMZFrm180Zalohy.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZFrm180Zalohy.#ctor">
+            <summary>Konstruktor třídy</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZFrm180Zalohy.#ctor(Gordic.Pam.WinClient.GMzCommon)">
+            <summary>Konstruktor třídy</summary>
+            <param name="mzCommon">Objekt pro práci se seznamy měsíčních změn</param>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GSoupiskaMZFrm180Zalohy.Castka">
+            <summary>Hodnota v tabulce Částka</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZFrm180Zalohy.ResetData">
+            <summary>Vyčistí data formuláře</summary>
+        </member>
+        <member name="F:Gordic.Pdm.WinClient.GSoupiskaMZFrm180Zalohy.m_dSlo">
+            <summary>
+            slozka vybrana ve formulari
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZFrm180Zalohy.LoadData">
+            <summary>Načte data do formuláře (vyvolá se i při každé změně čísla složky)</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZFrm180Zalohy.InitData">
+            <summary>Pokud nebyl řádek zinicializován, udělá inicializaci</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZFrm180Zalohy.OnReadOnlySet">
+            <summary>Reakce na nastavení vlastnosti ReadOnly</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZFrm180Zalohy.OnObdobiChanged(System.Int32,System.Int32)">
+            <summary>
+            Reakce na změnu období
+            </summary>
+            <param name="rok"></param>
+            <param name="mesic"></param>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZFrm180Zalohy.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZFrm180Zalohy.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZFrm180Zalohy.UpdateDataValid">
+            <summary>Provede obnovení vlastnosti DataValid</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZFrm180Zalohy.LoadTbDruh">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZFrm180Zalohy.ValidniCastka(Gordic.General.GDecimal,System.Boolean)">
+            <summary>Vrací informaci, zda je zadaná částka validní</summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320001">
+            <summary>
+              Looks up a localized string similar to Probíhá načítání číselníku.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320043">
+            <summary>
+              Looks up a localized string similar to Kopie kalendáře do jiných měsíců.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320044">
+            <summary>
+              Looks up a localized string similar to Kopie kalendáře jiným osobám.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320046">
+            <summary>
+              Looks up a localized string similar to Při kopii kalendáře jedné osoby (řádek na kterém stojíte) jiným osobám (zatržené řádky) nesmí být zatržen označený řádek..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320047">
+            <summary>
+              Looks up a localized string similar to Varování.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320059">
+            <summary>
+              Looks up a localized string similar to Upozornění.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320065">
+            <summary>
+              Looks up a localized string similar to Export a import dat.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320068">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se získat výstupní dávku z databáze..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320069">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se získat pořadí výstupní dávky..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320070">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se vytvořit hlavičku výstupní dávky..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320071">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se zapsat výstupní dávku do zadaného umístění..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320072">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se provést záznam o vytvořené výstupní dávce do databáze..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320073">
+            <summary>
+              Looks up a localized string similar to Jméno souboru dávky neodpovídá předepsanému formátu..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320077">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se načíst soubor dávky..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320079">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se načíst data dávky..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320080">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se zkontrolovat hlavičku dávky..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320083">
+            <summary>
+              Looks up a localized string similar to Probíhá import dávek.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320084">
+            <summary>
+              Looks up a localized string similar to Chyba při kontrole údajů dávky pro import..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320086">
+            <summary>
+              Looks up a localized string similar to Chcete provést import těchto dávek:.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320087">
+            <summary>
+              Looks up a localized string similar to V adresáři pro import dávek nebyla nalezena žádná dávka. Adresář pro import dávek:.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320088">
+            <summary>
+              Looks up a localized string similar to Očekávané pořadí dávky je &apos;{0}&apos;, tato dávka má pořadí &apos;{1}&apos;..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320089">
+            <summary>
+              Looks up a localized string similar to Zpráva o importu dávek{0}{1}{2}Byly vytvořeny odpovědní dávky pro export..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320090">
+            <summary>
+              Looks up a localized string similar to Úspěšný import {0:d}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320093">
+            <summary>
+              Looks up a localized string similar to Chyba při zjišťování kolize s existujícími dávkami..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320095">
+            <summary>
+              Looks up a localized string similar to Chyba při kontrole pořadí dávky..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320096">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se provést import dávky..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320097">
+            <summary>
+              Looks up a localized string similar to Uložení obnovené {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320098">
+            <summary>
+              Looks up a localized string similar to odpovědní dávky.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320099">
+            <summary>
+              Looks up a localized string similar to dávky.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320100">
+            <summary>
+              Looks up a localized string similar to Obnovení dávky.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320101">
+            <summary>
+              Looks up a localized string similar to Nelze obnovit.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320102">
+            <summary>
+              Looks up a localized string similar to odpovědní dávku.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320103">
+            <summary>
+              Looks up a localized string similar to dávku.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320104">
+            <summary>
+              Looks up a localized string similar to ze složky pro obnovení.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320106">
+            <summary>
+              Looks up a localized string similar to Chyba při zjišťování existence odpovídající exportované dávky..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320109">
+            <summary>
+              Looks up a localized string similar to Zpráva o importu odpovědních dávek{0}{1}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320128">
+            <summary>
+              Looks up a localized string similar to Údaje osob (počet: {0}).
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320129">
+            <summary>
+              Looks up a localized string similar to Export údajů o osobách.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320130">
+            <summary>
+              Looks up a localized string similar to Probíhá export údajů o osobách.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320148">
+            <summary>
+              Looks up a localized string similar to Složky platu.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320150">
+            <summary>
+              Looks up a localized string similar to Druhy pracovních poměrů.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320151">
+            <summary>
+              Looks up a localized string similar to Typy složek platu.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320152">
+            <summary>
+              Looks up a localized string similar to Číselníky.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320164">
+             <summary>
+               Looks up a localized string similar to Nezdařil se přístup do adresáře &apos;{0}&apos; pro ukládání dávek. Toto okno bude uzavřeno.
+            
+            Chcete zkontrolovat nastavení tohoto adresáře (menu Volby/Uživatelské nastavení)?.
+             </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320165">
+            <summary>
+              Looks up a localized string similar to Chybný adresář dávky.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320167">
+            <summary>
+              Looks up a localized string similar to Výběr osob pro export.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320168">
+            <summary>
+              Looks up a localized string similar to Individuální kalendáře pracovního poměru.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320171">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se získat účtárnu účetního střediska..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320172">
+            <summary>
+              Looks up a localized string similar to Chyba při inicializaci aplikace.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320173">
+            <summary>
+              Looks up a localized string similar to Jste přihlášeni do období, které je uzavřené!.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320174">
+             <summary>
+               Looks up a localized string similar to Jste přihlášeni do období, které není první otevřené!
+            
+            První otevřené období je {0}..
+             </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320178">
+            <summary>
+              Looks up a localized string similar to Jste přihlášeni do období, které je zablokované!.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320179">
+            <summary>
+              Looks up a localized string similar to Příprava dokladů mezd - offline.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320206">
+            <summary>
+              Looks up a localized string similar to Zadávání srážek není povoleno.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320222">
+            <summary>
+              Looks up a localized string similar to Soupisky.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320223">
+            <summary>
+              Looks up a localized string similar to Id.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320224">
+            <summary>
+              Looks up a localized string similar to Popis.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320225">
+            <summary>
+              Looks up a localized string similar to Právní předpis.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320226">
+            <summary>
+              Looks up a localized string similar to Kalendáře osob.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320228">
+            <summary>
+              Looks up a localized string similar to Zadaný PID má špatný formát..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320229">
+            <summary>
+              Looks up a localized string similar to Zadaný PID je duplicitní..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320232">
+            <summary>
+              Looks up a localized string similar to Import dávek.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320233">
+            <summary>
+              Looks up a localized string similar to Import dávky {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320234">
+             <summary>
+               Looks up a localized string similar to 
+            Chcete provést import této dávky?
+            .
+             </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320235">
+            <summary>
+              Looks up a localized string similar to Nezdařený import.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320236">
+            <summary>
+              Looks up a localized string similar to Dávku {0} se nepodařilo naimportovat..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320237">
+             <summary>
+               Looks up a localized string similar to 
+            
+            Podrobnosti: .
+             </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320247">
+            <summary>
+              Looks up a localized string similar to Detail pracovního poměru ({0}).
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320252">
+            <summary>
+              Looks up a localized string similar to Export dat.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320253">
+            <summary>
+              Looks up a localized string similar to Došlo k úspěšnému exportu dat..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320254">
+             <summary>
+               Looks up a localized string similar to Zadaný soubor se nepodařilo vyexportovat.
+            
+            Podrobnosti: {0}.
+             </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320318">
+            <summary>
+              Looks up a localized string similar to &amp;Import soupisek.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320319">
+            <summary>
+              Looks up a localized string similar to &amp;Dávky.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320320">
+            <summary>
+              Looks up a localized string similar to Ve složce pro import soupisek nejsou žádné dávky..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320321">
+            <summary>
+              Looks up a localized string similar to Import soupisek.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320322">
+             <summary>
+               Looks up a localized string similar to Při importu dávky {0} došlo k chybě:
+            
+            {1}.
+             </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320323">
+            <summary>
+              Looks up a localized string similar to Formát neodpovídá schématu: {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320325">
+             <summary>
+               Looks up a localized string similar to Byl proveden úspěšný import dávek:
+            
+            {0}.
+             </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320326">
+             <summary>
+               Looks up a localized string similar to Dávky, které se nepodařilo naimportovat:
+            
+            {0}.
+             </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320327">
+            <summary>
+              Looks up a localized string similar to Výběr pro hromadnou operaci.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320328">
+            <summary>
+              Looks up a localized string similar to Jméno.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320329">
+            <summary>
+              Looks up a localized string similar to Rodné číslo.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320330">
+            <summary>
+              Looks up a localized string similar to Pracovní poměr.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320331">
+            <summary>
+              Looks up a localized string similar to Šablona.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320332">
+            <summary>
+              Looks up a localized string similar to Prac..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320333">
+            <summary>
+              Looks up a localized string similar to Individuální kalendáře pracovního poměru.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320339">
+             <summary>
+               Looks up a localized string similar to Měsíční změny pro zaměstnance &apos;{0}&apos; není možné předat.
+            
+            Pracovní poměr zaměstnance byl přesunut na pracoviště &apos;{1}&apos;. Měsíční změny na této soupisce vystornujte a zadejte je na soupisku pro pracoviště &apos;{1}&apos;..
+             </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320340">
+            <summary>
+              Looks up a localized string similar to Předání soupisky může provést pouze správce pracoviště &apos;{0}&apos;..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320341">
+            <summary>
+              Looks up a localized string similar to KNIHA.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320342">
+            <summary>
+              Looks up a localized string similar to OBDOBÍ.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320344">
+            <summary>
+              Looks up a localized string similar to Některé dávky  se nepodařilo naimportovat nebo obsahovaly chyby.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320345">
+            <summary>
+              Looks up a localized string similar to Druh PPV.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320346">
+            <summary>
+              Looks up a localized string similar to Tisk výpl. listin.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320347">
+            <summary>
+              Looks up a localized string similar to eNeschopenky.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320348">
+            <summary>
+              Looks up a localized string similar to Elektronické neschopenky.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320349">
+            <summary>
+              Looks up a localized string similar to Spuštění kontrolních chodů na všemi PPV.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320350">
+            <summary>
+              Looks up a localized string similar to Opravdu zahájit načítání všech osob nad kterými bude moci být spuštěn kontrolní chod ? .
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320351">
+            <summary>
+              Looks up a localized string similar to OČ.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320352">
+            <summary>
+              Looks up a localized string similar to Jméno.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320353">
+            <summary>
+              Looks up a localized string similar to Prac.poměr.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320354">
+            <summary>
+              Looks up a localized string similar to Šablona.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320355">
+            <summary>
+              Looks up a localized string similar to PPV Dat.od.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320356">
+            <summary>
+              Looks up a localized string similar to PPV Dat.do.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320357">
+             <summary>
+               Looks up a localized string similar to KCH: {6}/{7}
+            {0}/{1} {3}-{4}.
+             </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320358">
+            <summary>
+              Looks up a localized string similar to Spuštění kontrolních chodů.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320359">
+            <summary>
+              Looks up a localized string similar to Kontrolní chody/PPV.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320360">
+            <summary>
+              Looks up a localized string similar to Nemocenské dávky.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient._23320361">
+            <summary>
+              Looks up a localized string similar to Dávky Nemocenského pojištění.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient_Exceptions">
+            <summary>
+              Třída prostředků se silnými typy pro vyhledávání lokalizovaných řetězců atp.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient_Exceptions.ResourceManager">
+            <summary>
+              Vrací instanci ResourceManager uloženou v mezipaměti použitou touto třídou.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient_Exceptions.Culture">
+            <summary>
+              Potlačí vlastnost CurrentUICulture aktuálního vlákna pro všechna
+              vyhledání prostředků pomocí třídy prostředků se silnými typy.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient_Exceptions._23320075">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Dávka není určena pro tuto databázi..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient_Exceptions._23320076">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Nepodporovaný typ dávky &apos;{0}&apos;..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient_Exceptions._23320078">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Dávka nemá správný formát: {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient_Exceptions._23320081">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Údaje hlavičky dávky neodpovídají názvu dávky..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient_Exceptions._23320085">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Při načítání dávek pro import došlo k chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient_Exceptions._23320091">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Při vytváření odpovědní dávky došlo k chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient_Exceptions._23320092">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Při pokusu o vytvoření adresářů pro export a import došlo k chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient_Exceptions._23320094">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Import dávky s pořadím &apos;{0}&apos; již proběhl..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient_Exceptions._23320105">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Při obnovování dávky došlo k neočekávané chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient_Exceptions._23320107">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Nebyla nalezena odeslaná dávka k níž se tato odpovědní dávka váže..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient_Exceptions._23320108">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Tato odpovědní dávka již byla jednou přijata..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient_Exceptions._23320131">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Dávka byla modifikována. Neodpovídá kontrolní součet..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient_Exceptions._23320162">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Není možné odebrat osobu &apos;{0}&apos;, která není v seznamu osob pro export..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient_Exceptions._23320163">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Neplatný pokus o přístup k informaci o otevřenosti období..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient_Exceptions._23320324">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Pokoušíte se importovat soupisku z období &apos;{0}&apos; do období &apos;{1}&apos;..
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Gordic_Pdm_WinClient_Exceptions._23320343">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný chyba .
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GDavkyEngine">
+            <summary>
+            Třída se společnými prvky dávek na klientu
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GDavkyEngine.HlavniAdresarDavky">
+            <summary>Adresář pro ukládání dávek</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GDavkyEngine.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GDavkyEngine.CheckAndCreateFolders">
+            <summary>
+            Zkontroluje a případně vytvoří odpovídající adresáře pro dávky
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GDavkyEngine.GetFolderPath(Gordic.Pdm.WinClient.AdresarDavky)">
+            <summary>
+            Získá cestu k adresáři
+            </summary>
+            <param name="adresarDavky">Adresář dávky</param>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GDavkyEngine.GetFolderFiles(Gordic.Pdm.WinClient.AdresarDavky)">
+            <summary>
+            Získej soubory z adresáře
+            </summary>
+            <param name="adresarDavky">Adresář dávky</param>
+            <returns>Seznam seřazených souborů</returns>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GDavkyEngine.ImportSoupisek">
+            <summary>
+            Provede načtení dávek pro import soupisek
+            </summary>
+            <returns>V případě úspěšného importu alespoň jedné dávky</returns>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GDavkyBase">
+            <summary>
+            Třída se společnými prvky dávek na klientu
+            </summary>
+        </member>
+        <member name="E:Gordic.Pdm.WinClient.GDavkyBase.HlavniAdresarDavkyChanged">
+            <summary>Událost je vyvolána při změně adresáře pro ukládání dávek</summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GDavkyBase.FileNameFormat">
+            <summary>Formát souboru dávky</summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GDavkyBase.OdpFileNameFormat">
+            <summary>Formát souboru odpovědní dávky</summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GDavkyBase.HlavniAdresarDavky">
+            <summary>Adresář pro ukládání dávek</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GDavkyBase.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GDavkyBase.JeOdpovedniDavka(Gordic.General.GInt16)">
+            <summary>
+            Zjišťuje, zda je dávka se zadaným stavem odpovědní
+            </summary>
+            <param name="stavDavky">Stav dávky</param>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GDavkyBase.JeExportniDavka(Gordic.General.GInt16)">
+            <summary>
+            Zjišťuje, zda se jedná o dávku určenou k exportu (V opačném případě jde o dávku pro import).
+            </summary>
+            <param name="stavDavky">Stav dávky</param>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GDavkyBase.CheckAndCreateFolders">
+            <summary>
+            Zkontroluje a případně vytvoří odpovídající adresáře pro dávky
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GDavkyBase.GetFolderPath(Gordic.Pdm.WinClient.AdresarDavky)">
+            <summary>
+            Získá cestu k adresáři
+            </summary>
+            <param name="adresarDavky">Adresář dávky</param>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GDavkyBase.GetFolderFiles(Gordic.Pdm.WinClient.AdresarDavky)">
+            <summary>
+            Získej soubory z adresáře
+            </summary>
+            <param name="adresarDavky">Adresář dávky</param>
+            <returns>Seznam seřazených souborů</returns>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GDavkyBase.WriteXml(System.Data.DataSet,System.String)">
+            <summary>
+            Zapíše dataset do souboru a odstraní atributy xml:space="preserve" z výstupního xml (problém .net 2.0)
+            </summary>
+            <param name="dataSet"></param>
+            <param name="fileName"></param>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.AdresarDavky">
+            <summary>
+            Adresáře s dávkami pro export a import
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdm.WinClient.AdresarDavky.Export">
+            <summary>Adresář pro export dávek</summary>
+        </member>
+        <member name="F:Gordic.Pdm.WinClient.AdresarDavky.ExportAll">
+            <summary>Adresář pro archiv všech exportovaných dávek</summary>
+        </member>
+        <member name="F:Gordic.Pdm.WinClient.AdresarDavky.Import">
+            <summary>Adresář pro import dávek</summary>
+        </member>
+        <member name="F:Gordic.Pdm.WinClient.AdresarDavky.ImportAll">
+            <summary>Adresář pro archiv všech importovaných dávek</summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GDavkyExp">
+            <summary>
+            Třída zastřešující export dávek z klienta
+            </summary>
+        </member>
+        <member name="E:Gordic.Pdm.WinClient.GDavkyExp.VytvorDavkuANazev">
+            <summary>Vyvolá se v okamžiku, kdy je zapotřebí vytvořit dávku a nastavit název dávky</summary>
+        </member>
+        <member name="E:Gordic.Pdm.WinClient.GDavkyExp.VytvorHlavickuDavky">
+            <summary>Vyvolá se v okamžiku, kdy je zapotřebí vytvořit hlavičku dávku</summary>
+        </member>
+        <member name="E:Gordic.Pdm.WinClient.GDavkyExp.VytvorSoubor">
+            <summary>Vyvolá se v okamžiku, kdy je zapotřebí vytvořit soubor</summary>
+        </member>
+        <member name="E:Gordic.Pdm.WinClient.GDavkyExp.VyvolejZaverecnouAkci">
+            <summary>Vyvolá se v okamžiku, kdy je úspěšně dokončen export</summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GDavkyExp.FilePath">
+            <summary>Cesta k soubortu s dávkou</summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GDavkyExp.LicAdr">
+            <summary>Licence adresáta</summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GDavkyExp.LicOdes">
+            <summary>Licence odesílatele</summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GDavkyExp.TypDavky">
+            <summary>Typ dávky</summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GDavkyExp.IcoOdes">
+            <summary>IČO odesílatele</summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GDavkyExp.NksOdes">
+            <summary>NKS odesílatele</summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GDavkyExp.Poradi">
+            <summary>Pořadí dávky</summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GDavkyExp.Nazev">
+            <summary>Název dávky</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GDavkyExp.#ctor(Gordic.General.ApplicationClient.GUserProcess,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="userProcess">Proces aplikace</param>
+            <param name="licAdr">Licence adresáta</param>
+            <param name="licOdes">Licence odesílatele</param>
+            <param name="typDavky">Typ dávky</param>
+            <param name="icoOdes">IČO odesílatele</param>
+            <param name="nksOdes">NKS odesílatele</param>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GDavkyExp.#ctor(Gordic.General.ApplicationClient.GUserProcess,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="userProcess">Proces aplikace</param>
+            <param name="licAdr">Licence adresáta</param>
+            <param name="typDavky">Typ dávky</param>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GDavkyExp.Export(System.String@)">
+            <summary>
+            Provede export dávky
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GDavkyImp">
+            <summary>
+            Třída zastřešující import dávek z klienta
+            </summary>
+        </member>
+        <member name="E:Gordic.Pdm.WinClient.GDavkyImp.VyvolejZaverecnouAkci">
+            <summary>Vyvolá se v okamžiku, kdy je úspěšně dokončen import</summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GDavkyImp.FilePath">
+            <summary>Cesta k soubortu s dávkou</summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GDavkyImp.LicAdr">
+            <summary>Licence adresáta</summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GDavkyImp.LicOdes">
+            <summary>Licence odesílatele</summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GDavkyImp.TypDavky">
+            <summary>Typ dávky</summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GDavkyImp.IcoOdes">
+            <summary>IČO odesílatele</summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GDavkyImp.NksOdes">
+            <summary>NKS odesílatele</summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GDavkyImp.Poradi">
+            <summary>Pořadí dávky</summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GDavkyImp.Nazev">
+            <summary>Název dávky</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GDavkyImp.#ctor(Gordic.General.ApplicationClient.GUserProcess,System.String)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="userProcess">Proces aplikace</param>
+            <param name="filePath">Úplná cesta k souboru s dávkou</param>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GDavkyImp.Import(System.String@,System.String@,System.Int32@,System.Int32,System.Boolean@)">
+            <summary>
+            Provede import dávky
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GPdmWinClientException">
+            <summary>Výjimka klientské části Pdm pro WinForms</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GPdmWinClientException.#ctor(System.Int32,System.Int32,System.Object[])">
+            <summary>
+            Konstruktor výjimky
+            </summary>
+            <param name="code">Kód výjimky</param>
+            <param name="resourceCode">Kód textu výjimky v souboru se zdroji</param>
+            <param name="parameters">Parametry pro formátovaný text výjimky</param>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GPdmWinClientException.#ctor(System.Int32,System.Int32,System.Exception,System.Object[])">
+            <summary>
+            Konstruktor výjimky
+            </summary>
+            <param name="code">Kód výjimky</param>
+            <param name="resourceCode">Kód textu výjimky v souboru se zdroji</param>
+            <param name="innerException">Vnitřní výjimka</param>
+            <param name="parameters">Parametry pro formátovaný text výjimky</param>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GPdmModuleForm">
+            <summary>Hlavní formulář modulu PDM</summary>
+        </member>
+        <member name="F:Gordic.Pdm.WinClient.GPdmModuleForm.m_oActionDEBUG">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdm.WinClient.GPdmModuleForm.m_oActionVymazatZamky">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdm.WinClient.GPdmModuleForm.m_oActionTestDNPVREP">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GPdmModuleForm.PdmTask">
+            <summary>Úloha Seznam soupisek</summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GPdmModuleForm.SeznamyTask">
+            <summary>Úloha Seznamy</summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GPdmModuleForm.KalendareTask">
+            <summary>Úloha Kalendáře</summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GPdmModuleForm.CiselnikyTask">
+            <summary>Úloha Číselníky</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GPdmModuleForm.#ctor">
+            <summary>Vytvoří formulář modulu PDM</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GPdmModuleForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GPdmModuleForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GPdmModuleForm.OnGetSettings">
+            <summary>
+            Metoda sloužící k předání uživatelských nastavení aplikace
+            </summary>
+            <returns>Pole s komponentami definující uživatelská nastavení aplikace</returns>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GPdmModuleForm.InitEkoParameters">
+            <summary>Kompletně zinicializuje všechny eko proměnné.</summary>
+            <remarks>Je voláno i při změně ekonomických parametrů.</remarks>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GPdmModuleForm.ZjistiOtevrenostObdobi">
+            <summary>Lze spustit až po nastavených eko parametrech.</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GPdmModuleForm.NastavInformacniTexty">
+            <summary>Nastaví informační texty v záhlaví aplikace.</summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Properties.Resources.Icons__Gin__ciselnik">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Properties.Resources.Icons__Gin__ciselniky">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Properties.Resources.Icons__Gin__data_export_import">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Properties.Resources.Icons__Gin__kalendar">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Properties.Resources.Icons__Gin__kalendar_individualni">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Properties.Resources.Icons__Gin__okna_usporadat_vertikalne">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Properties.Resources.Icons__Gin__prehled_osob">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Properties.Resources.Icons__Gin__slozky_priznane">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Properties.Resources.Icons__Gin__tisk">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Properties.Resources.Icons__Ost__zdravotni_pojistovna_cizi">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Properties.Resources.Icons__Pam__mzdovy_doklad_zdravotni_pojistovna">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.Properties.Resources.Icons__Pam__vypocet_ano">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GExpImpTaskSetting">
+            <summary>
+            Nastavení úlohy Export a import dat
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GExpImpTaskSetting.ParametrAdresarDavky">
+            <summary>
+            Parametr adresář pro ukládání dávek
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GExpImpTaskSetting.ParametrAdresarDavkyName">
+            <summary>
+            Název - Parametr adresář pro ukládání dávek
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GExpImpTaskSetting.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GExpImpTaskSetting.OnLoadParam(System.String,System.String)">
+            <summary>
+            Obsluha získání parametru
+            </summary>
+            <param name="paramName">Název parametru</param>
+            <param name="paramValue">Hodnota parametru</param>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GExpImpTaskSetting.OnSaveParam(System.String)">
+            <summary>
+            Obsluha ukládání parametru
+            </summary>
+            <param name="paramName">Název parametru</param>
+            <returns>Hodnota parametru</returns>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GExpImpTaskSetting.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GExpImpTaskSetting.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GTestTab">
+            <summary>
+            Karta s políčkem pro zadání PIDu
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GTestTab.PidState">
+            <summary>
+            Tato událost vyvolá navěšenou metodu pro zjištění, zda
+            zadaný Pid již v databázi nefiguruje.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GTestTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GTestTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GTestTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GImpMzmResultTab">
+            <summary>
+            Karta s políčkem pro zadání PIDu
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GImpMzmResultTab.impErrList">
+            <summary>seznam chyb do gridu</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GImpMzmResultTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GImpMzmResultTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GImpMzmResultTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GPriznaneSlozkyTab">
+            <summary>
+            Seznam přiznaných složek
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GPriznaneSlozkyTab.GetSeznamSoupisekTab">
+            <summary>Vrátí odpovídající seznam soupisek</summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GSeznamyOsobTab">
+            <summary>
+            Karta se seznamy osob na pracovištích
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSeznamyOsobTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSeznamyOsobTab.GetTema">
+            <summary>
+            Vrátí název tiskového tématu
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSeznamyOsobTab.OnActionExportOsob">
+            <summary>
+            Obsluha akce Export osob
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSeznamyOsobTab.UpdateActionExportOsobVisible">
+            <summary>
+            Aktualizuje viditelnost u akce Export osob
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSeznamyOsobTab.UpdateActionKalendarVisible">
+            <summary>
+            Aktualizuje viditelnost u akce Kalendář
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSeznamyOsobTab.UpdateActionOdstranitVisible">
+            <summary>
+            Aktualizuje viditelnost u akce Odstranit
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSeznamyOsobTab.UpdateActionObnovitVisible">
+            <summary>
+            Aktualizuje viditelnost u akce Obnovit
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdm.WinClient.GSeznamyOsobTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSeznamyOsobTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSeznamyOsobTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GKopieMZTab">
+            <summary>
+            Karta pro kopii měsíčních změn z jiné soupisky
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GKopieMZTab.#ctor(Gordic.General.GString)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="filterIxsPra">Idenfikátor pracoviště, podle kterého se bude filtrovat seznam soupisek (null nebo IsNull - bez filtru)</param>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GKopieMZTab.OnGetSeznamSoupisek(System.Int32)">
+            <summary>
+            Provede načtení seznamu soupisek
+            </summary>
+            <returns>Načtený seznam</returns>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GSoupiskaMZTab">
+            <summary>
+            Karta se soupiskou měsíčních změn vycházející z předka v Pam
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZTab.OnGetKopieMZTab(Gordic.General.GString)">
+            <summary>
+            Vrátí kartu pro kopii soupisky měsíčních změn
+            </summary>
+            <param name="filterIxsPra">Filter na pracoviště</param>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZTab.GetMzCommon">
+            <summary>
+            Vrátí virtuálně instanci pro <see cref="T:Gordic.Pam.WinClient.GMzCommon"/>
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZTab.GetMzPracPomer">
+            <summary>
+            Vrátí prvek s informacemi o osobě
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZTab.GetMzDetail">
+            <summary>
+            Vrátí prvek s detailem měsíční změny
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZTab.UpdateActionZMezdEnabled">
+            <summary>
+            Aktualizuje povolení u akce Z mezd
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZTab.UpdateActionUcetniProfilEnabled">
+            <summary>
+            Aktualizuje povolení u akce Účetní profil
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZTab.UpdateActionDetailPpv">
+            <summary>
+            Aktualizuje povolení a viditelnost akce DetailPpv
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZTab.UpdateActionDochazka">
+            <summary>
+            Aktualizuje povolení a viditelnost akce Dochazka.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZTab.UpdateActionIndKalendar">
+            <summary>
+            Aktualizuje povolení a viditelnost akce IndKalendar
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZTab.OnIndKalendar">
+            <summary>
+            Reakce na akci Kalendář
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZTab.FilterVyplatniMistoVisible">
+            <summary>
+            Aktualizuje viditelnost filtru na výplatní místo
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZTab.PresunuteOsobyVisible">
+            <summary>
+            Zda zobrazovat zaškrtávátko pro výběr přesunutých osob
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZTab.GetTypZpetnehoZadani">
+            <summary>
+            Určuje způsob zpětného zadání
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdm.WinClient.GSoupiskaMZTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSoupiskaMZTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GSeznamSoupisekTab">
+            <summary>
+            Karta se seznamem soupisek vycházející z předka v Pam
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSeznamSoupisekTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GSeznamSoupisekTab.TestujIdentifikatorTisku">
+            <summary>
+            Určuje, zda se má testovat identifikátor tisku - tiskový pid
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GSeznamSoupisekTab.ZobrazSloupecVypocet">
+            <summary>
+            Určuje, zda se má zobrazovat ikona informující o úspěšném výpočtu všech osob na soupisce
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GSeznamSoupisekTab.ZobrazFiltr">
+            <summary>
+            Určuje, zda se má v záhlaví zobrazovat filtr
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GSeznamSoupisekTab.PrintAction">
+            <summary>
+            Vrací inicializovanou akci tisk
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSeznamSoupisekTab.InitReadOnly">
+            <summary>
+            Inicializace režimu ReadOnly
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSeznamSoupisekTab.GetSoupiskaMZTab">
+            <summary>
+            Vrací instanci karty soupisky měsíčních změn z Pdm
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSeznamSoupisekTab._predatAutomaticky">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSeznamSoupisekTab.OnGetSeznamSoupisek">
+            <summary>
+            Provede načtení seznamu soupisek
+            </summary>
+            <returns>Načtený seznam</returns>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSeznamSoupisekTab.PresunutePracovisteVisible">
+            <summary>
+            Zda zobrazovat v seznamu pracoviště, na které byly přesunuty osoby, které spadají pod přihlášeného uživatele
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSeznamSoupisekTab.KontrolaSoupiskyPriPredani(Gordic.Pam.Interface.MesicniZmenyDataSet.SoupiskyRow,System.String@)">
+            <summary>
+            Kontrola soupisky při předání
+            </summary>
+            <param name="row">Řádek se soupiskou</param>
+            <param name="report">Text kontroly (null - pokud kontrola proběhne bez problémů)</param>
+            <returns></returns>
+        </member>
+        <member name="F:Gordic.Pdm.WinClient.GSeznamSoupisekTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSeznamSoupisekTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSeznamSoupisekTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GCiselnikyTab">
+            <summary>
+            Univerzální karta pro zobrazení seznamu číselníků
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GCiselnikyTab.CustomTableDelegate">
+            <summary>
+            Delegát, který umožní zadat vlastní tabulku
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GCiselnikyTab.#ctor">
+            <summary>
+            Vytvoří instanci
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GCiselnikyTab.PridejCiselnik(System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Do seznamu číselníků přidá jednu položku
+            </summary>
+            <param name="jmenoTabulky">Jméno tabulky GINIS.</param>
+            <param name="sloupecId">Sloupec tabulky číselníku představující identifikátor.</param>
+            <param name="sloupecHodnota">Sloupec tabulky číselníku představující hodnotu.</param>
+            <param name="popisCiselniku">Název číselníku, který se zobrazí v seznamu.</param>
+            <param name="popisId">Text záhlaví sloupce s identifikátorem.</param>
+            <param name="popisHodnoty">Text záhlaví sloupce s hodnotou.</param>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GCiselnikyTab.PridejCiselnik(System.String,Gordic.Pdm.WinClient.GCiselnikyTab.CustomTableDelegate,Gordic.General.GGridFormat)">
+            <summary>
+            Do seznamu číselníků přidá jednu položku
+            </summary>
+            <param name="popisCiselniku">Název číselníku, který se zobrazí v seznamu.</param>
+            <param name="customTableDelegate">Odkaz na metodu, která vrátí vlastní tabulku, která se zobrazí jako číselník.</param>
+            <param name="customGridFormat">Vrátí třídu s předpisem, jak naformátovat výsledný grid</param>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GCiselnikyTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GCiselnikyTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GExpImpTab">
+            <summary>
+            Karta zobrazující dávky pro export a import
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GExpImpTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GExpImpTab.ReadOnly">
+            <summary>
+            Režim pouze ke čtení (bez aktivních operací)
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GExpImpTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GExpImpTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GExportOsobTab">
+            <summary>
+            Karta pro export údajů o osobách
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GExportOsobTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GExportOsobTab.#ctor(System.String[],System.String[])">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="ixsEsuOsob">Pole identifikátorů osob</param>
+            <param name="jmenaOsob">Pole jmen osob</param>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GExportOsobTab.TaskStore">
+            <summary>Při uzavření okna je již Task null</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GExportOsobTab.PridejOsobu(System.String,System.String)">
+            <summary>
+            Přidá do výběru osob osobu
+            </summary>
+            <param name="ixsEsuOsoby">Identifikátor osoby</param>
+            <param name="jmenoOsoby">Jméno osoby</param>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GExportOsobTab.OdeberOsobu(System.String)">
+            <summary>
+            Odebere osobu z výběru
+            </summary>
+            <param name="ixsEsuOsoby">Identifikátor osoby</param>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GExportOsobTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GExportOsobTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GKalendareTab">
+            <summary>
+            Karta umožňující operace nad kalendáři osob.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GKalendareTab.ReadOnly">
+            <summary>
+            Režim pouze ke čtení (bez aktivních operací)
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GKalendareTab.EkoParams">
+            <summary>
+            Ekonomické parametry
+            </summary>
+            <remarks>Neproběhla-li pro tuto aplikaci ekoinicializace, nastane při pokusu
+            o přečtení této vlastnosti výjimka</remarks>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GKalendareTab.EkoUserProcess">
+            <summary>
+            Ekonomický uživatelský proces aplikace
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GKalendareTab.PamClient">
+            <summary>
+            Klientská část aplikační logiky Pam
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GKalendareTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GKalendareTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GKalendareTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GKalendareTab.GetTema">
+            <summary>
+            Vrátí název tiskového tématu
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GKalendareTab.OnGetDevatyParametrTisku">
+            <summary>
+            Vrátí devátý parametr tisku
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.ValidPidEventHandler">
+            <summary>Delegát pro zjištění, zda je pid validní</summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GPidTab">
+            <summary>
+            Karta s políčkem pro zadání PIDu
+            </summary>
+        </member>
+        <member name="E:Gordic.Pdm.WinClient.GPidTab.ValidPid">
+            <summary>
+            Tato událost vyvolá navěšenou metodu pro zjištění, zda
+            zadaný Pid již v databázi nefiguruje.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GPidTab.Pid">
+            <summary>Vrací obsah textového pole pro Pid</summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GPidTab.Popisek">
+            <summary>Textový popisek</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GPidTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GPidTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GPidTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GPidTab.PidValid">
+            <summary>Otestuje, zda je pid validní</summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GVyberOsobyTab">
+            <summary>
+            Karta pro výběr osoby pro export
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GVyberOsobyTab.IxsEsuOsoby">
+            <summary>
+            Identifikátor vybraného zaměstnance
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GVyberOsobyTab.JmenoOsoby">
+            <summary>
+            Jméno vybraného zaměstnance
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GVyberOsobyTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GVyberOsobyTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GVyberOsobyTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GDznpImportTask">
+            <summary>
+            Úloha pro export a import dat
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdm.WinClient.GDznpImportTask.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GDznpImportTask.#ctor(System.ComponentModel.IContainer)">
+            <summary>Konstruktor třídy</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GDznpImportTask.#ctor">
+            <summary>Konstruktor třídy</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GDznpImportTask.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GDznpImportTask.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GDznpListTask">
+            <summary>
+            Úloha pro export a import dat
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdm.WinClient.GDznpListTask.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GDznpListTask.#ctor(System.ComponentModel.IContainer)">
+            <summary>Konstruktor třídy</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GDznpListTask.#ctor">
+            <summary>Konstruktor třídy</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GDznpListTask.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GDznpListTask.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GRunKchTask">
+            <summary>
+            Úloha pro export a import dat
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdm.WinClient.GRunKchTask.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GRunKchTask.#ctor(System.ComponentModel.IContainer)">
+            <summary>Konstruktor třídy</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GRunKchTask.#ctor">
+            <summary>Konstruktor třídy</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GRunKchTask.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GRunKchTask.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GEhpnListTask">
+            <summary>
+            Úloha pro export a import dat
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdm.WinClient.GEhpnListTask.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GEhpnListTask.#ctor(System.ComponentModel.IContainer)">
+            <summary>Konstruktor třídy</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GEhpnListTask.#ctor">
+            <summary>Konstruktor třídy</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GEhpnListTask.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GEhpnListTask.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GTestTask">
+            <summary>
+            Úloha pro zobrazení číselníků
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdm.WinClient.GTestTask.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GTestTask.#ctor(System.ComponentModel.IContainer)">
+            <summary>Vytvoří úlohu Číselníky</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GTestTask.#ctor">
+            <summary>Vytvoří úlohu Číselníky</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GTestTask.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GTestTask.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GTiskVyplTask">
+            <summary>
+            Úloha pro zobrazení číselníků
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdm.WinClient.GTiskVyplTask.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GTiskVyplTask.#ctor(System.ComponentModel.IContainer)">
+            <summary>Vytvoří úlohu Číselníky</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GTiskVyplTask.#ctor">
+            <summary>Vytvoří úlohu Číselníky</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GTiskVyplTask.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GTiskVyplTask.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GTiskTask">
+            <summary>
+            Úloha pro zobrazení číselníků
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdm.WinClient.GTiskTask.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GTiskTask.#ctor(System.ComponentModel.IContainer)">
+            <summary>Vytvoří úlohu Číselníky</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GTiskTask.#ctor">
+            <summary>Vytvoří úlohu Číselníky</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GTiskTask.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GTiskTask.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GPriznaneSlozkyTask">
+            <summary>
+            Úloha pro práci se seznamem přiznaných složek
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GPriznaneSlozkyTask.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GPriznaneSlozkyTask.#ctor(System.ComponentModel.IContainer)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="container"></param>
+        </member>
+        <member name="F:Gordic.Pdm.WinClient.GPriznaneSlozkyTask.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GPriznaneSlozkyTask.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GPriznaneSlozkyTask.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GCiselnikyTask">
+            <summary>
+            Úloha pro zobrazení číselníků
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdm.WinClient.GCiselnikyTask.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GCiselnikyTask.#ctor(System.ComponentModel.IContainer)">
+            <summary>Vytvoří úlohu Číselníky</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GCiselnikyTask.#ctor">
+            <summary>Vytvoří úlohu Číselníky</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GCiselnikyTask.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GCiselnikyTask.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GExpImpTask">
+            <summary>
+            Úloha pro export a import dat
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdm.WinClient.GExpImpTask.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.WinClient.GExpImpTask.ExpImpTaskSetting">
+            <summary>
+            Nastavení úlohy Export a import dat
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GExpImpTask.#ctor(System.ComponentModel.IContainer)">
+            <summary>Konstruktor třídy</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GExpImpTask.#ctor">
+            <summary>Konstruktor třídy</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GExpImpTask.OnGetSettings">
+            <summary>
+            Získá nastavení úlohy
+            </summary>
+            <returns>Pole nastavení úlohy</returns>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GExpImpTask.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GExpImpTask.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GKalendareTask">
+            <summary>
+            Úloha pro práci s kalendáři
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdm.WinClient.GKalendareTask.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GKalendareTask.#ctor(System.ComponentModel.IContainer)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GKalendareTask.#ctor">
+            <summary>
+            Vytvoří instanci
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GKalendareTask.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GKalendareTask.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GPdmTask">
+            <summary>
+            Hlavní úloha pro PDM
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdm.WinClient.GPdmTask.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GPdmTask.#ctor(System.ComponentModel.IContainer)">
+            <summary>Vytvoří úlohu PDM</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GPdmTask.#ctor">
+            <summary>Vytvoří úlohu PDM</summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GPdmTask.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GPdmTask.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.WinClient.GSeznamyTask">
+            <summary>
+            Úloha umožňující prohlížet seznamy pracovníků systému PAM
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdm.WinClient.GSeznamyTask.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSeznamyTask.#ctor(System.ComponentModel.IContainer)">
+            <summary>
+            Vytvoří instanci
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSeznamyTask.#ctor">
+            <summary>
+            Vytvoří instanci
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSeznamyTask.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.WinClient.GSeznamyTask.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Training.WinClient.GTestTabEhpnDzdpnB2B">
+            <summary>
+            
+            </summary>
+            <summary>
+            Testovací karta 2
+            </summary>
+        </member>
+        <member name="M:Gordic.Training.WinClient.GTestTabEhpnDzdpnB2B._simulujVratPodaniSO_REQ">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.Training.WinClient.GTestTabEhpnDzdpnB2B.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Training.WinClient.GTestTabEhpnDzdpnB2B.getCertFromStore(System.String,System.Security.Cryptography.X509Certificates.StoreLocation)">
+            <summary>
+            
+            </summary>
+            <param name="fingerprint"></param>
+            <param name="storeloc"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Training.WinClient.GTestTabEhpnDzdpnB2B.Decrypt(System.Byte[],System.Security.Cryptography.X509Certificates.X509Certificate2)">
+            <summary>
+            
+            </summary>
+            <param name="data"></param>
+            <param name="cert"></param>
+            <returns></returns>
+        </member>
+        <member name="F:Gordic.Training.WinClient.GTestTabEhpnDzdpnB2B.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Training.WinClient.GTestTabEhpnDzdpnB2B.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Training.WinClient.GTestTabEhpnDzdpnB2B.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+    </members>
+</doc>

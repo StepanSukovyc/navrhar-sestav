@@ -1,0 +1,108 @@
+<Project>
+  <PropertyGroup>
+	<WarningsAsErrors>$(WarningsAsErrors),1702</WarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DocumentationFile>..\bin\$(AssemblyName).xml</DocumentationFile>
+    <NoWarn>$(NoWarn)</NoWarn>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DocumentationFile>..\bin\$(AssemblyName).xml</DocumentationFile>
+    <NoWarn>SYSLIB0011,$(NoWarn)</NoWarn>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <DebugType>none</DebugType>
+  </PropertyGroup> 
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net48' ">
+    <ReferencePath Condition=" '$(G_SetOutputPath)' != 'true' ">$(OutputPath)</ReferencePath>
+    <OutputPath Condition=" '$(G_SetOutputPath)' != 'true' ">$(BaseOutputPath)</OutputPath>	
+    <OutDir>$(OutputPath)</OutDir>	
+	<TargetDir>$(OutDir)</TargetDir>	
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net7.0' ">
+    <BaseOutputPath Condition=" '$(BaseOutputPath)' == '..\bin\' ">..\bincore\</BaseOutputPath>	
+    <OutputPath Condition=" '$(G_SetOutputPath)' != 'true' ">$(BaseOutputPath)</OutputPath>	
+    <OutDir Condition=" '$(G_SetOutputPath)' == 'true' ">$(OutputPath.Replace('bin','bincore'))</OutDir>	
+    <OutDir Condition=" '$(G_SetOutputPath)' != 'true' ">$(OutputPath)</OutDir>	
+	<TargetDir>$(OutDir)</TargetDir>	
+    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies> 	
+  </PropertyGroup> 
+
+  <Target Name="G_GetAssemblyVersion" BeforeTargets="GenerateAssemblyInfo;GetAssemblyVersion">
+    <ItemGroup>
+      <G_VERSION Include="..\etc\VERSION" />
+    </ItemGroup>
+    <ReadLinesFromFile File="@(G_VERSION)">
+      <Output TaskParameter="Lines" PropertyName="_G_Version" />
+    </ReadLinesFromFile>
+	<PropertyGroup>
+      <Version>$(_G_Version.SubString(0,3)).$(_G_Version.SubString(3))</Version>
+	  <FileVersion>$(Version)</FileVersion>
+	  <G_BuildNumber>$(GBuildNumber)</G_BuildNumber>
+	  <G_BuildNumber Condition="$(GBuildNumber)==''">0</G_BuildNumber>
+	  <FileVersion>$(FileVersion).$(G_BuildNumber)</FileVersion>
+	  <G_SourceRevisionId>$(SourceRevisionId)</G_SourceRevisionId>
+	  <G_SourceRevisionId Condition="$(SourceRevisionId)=='LOCAL' or $(SourceRevisionId)==''">0</G_SourceRevisionId>
+	  <FileVersion>$(FileVersion).$(G_SourceRevisionId)</FileVersion>
+	  <InformationalVersion>$(Version)</InformationalVersion>
+	  <InformationalVersion Condition="$(GVersionLabel) != ''">$(InformationalVersion)-$(GVersionLabel)</InformationalVersion>
+	</PropertyGroup>		
+    <ItemGroup>
+	  <AssemblyMetadata Include="BuildDate" Value="$([System.DateTime]::UtcNow.ToString('s'))" />
+      <!--AssemblyAttribute Include="System.Reflection.AssemblyTrademarkAttribute">
+        <_Parameter1>Pokus123</_Parameter1>
+      </AssemblyAttribute-->
+    </ItemGroup>
+	<!--Message Text="VER=$(Version)/$(FileVersion)." Importance="high"/-->
+  </Target>
+
+  <Target Name="G_AddDefineConstants" DependsOnTargets="AddImplicitDefineConstants" BeforeTargets="CoreCompile">
+    <ItemGroup>
+      <G_DEFINES Include="..\etc\DEFINES" />
+    </ItemGroup>
+    <ReadLinesFromFile File="@(G_DEFINES)">
+      <Output TaskParameter="Lines" ItemName="_G_Defines" />
+    </ReadLinesFromFile>
+    <PropertyGroup>
+      <DefineConstants>$(DefineConstants);@(_G_Defines)</DefineConstants>	  
+    </PropertyGroup>
+	<!--Message Text="Defines=$(DefineConstants)." Importance="high"/-->
+  </Target>
+
+
+  <Target Name="G_AssemblySearchPaths" AfterTargets="GetReferenceAssemblyPaths">
+    <PropertyGroup>
+	  <AssemblySearchPaths>$(ReferencePath);$(OutDir);$(AssemblySearchPaths)</AssemblySearchPaths>
+    </PropertyGroup>
+
+	  <Message
+	       Importance="low"
+           Text="G_AssemblySearchPaths: $(AssemblySearchPaths) $(ReferencePath) $(BaseOutputPath) $(OutputPath) $(OutDir) $(TargetDir) $(VisualStudioVersion)"
+            />
+  </Target>
+ 
+
+  <Target
+      Name="G_CheckForInvalidConfigurationAndPlatform"
+      BeforeTargets="_CheckForInvalidConfigurationAndPlatform;Build;Rebuild;Clean">
+
+    <!-- Although we try to ensure a trailing slash, it's possible to circumvent this if the property is set on the command line -->
+    <!-- Error Condition="'$(OutDir)' != '' and !HasTrailingSlash('$(OutDir)')" Text="The OutDir property must end with a trailing slash." /-->
+
+	  <!-- Error
+	       Code="GGB0001"
+           Text="G_CheckForInvalidConfigurationAndPlatform: $(_InitialBaseIntermediateOutputPath) $(BaseIntermediateOutputPath)"
+            /-->
+
+
+  </Target>
+
+
+ 
+ 
+  <!--Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" /-->
+ 
+</Project>

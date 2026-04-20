@@ -1,0 +1,221 @@
+﻿$subtaskUnderlineHeight: 2px;
+
+.gbuttonpanel {
+    vertical-align: bottom;
+    //background: $base-color-tool; //NOTE: Barvicka by tu byt asi nemela (pak by tam nemusela byt trida gbuttonpanel--transparent)
+    //hybrid compatibility
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+
+    &__items {
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        width: 100%;
+        min-height: 1px; //resi bug na IE: V momente, kdy se vytvori buttonpanel neviditelny, nezareaguje na nej GResizeObserver, ktery to vypocitava ze sirky a vysky z clientWidth a clientHeight, ktere jsou nulove
+    }
+
+    &--vertical &__items {
+        flex-direction: column;
+        align-items: stretch;
+
+        .g-link, .g-link__text {
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+    }
+
+    &.gbuttonpanel--transparent {
+        background-color: inherit;
+    }
+
+    &--bar {
+        background: $base-color-tool;
+    }
+
+    &.gsubtasks {
+        background-color: inherit;
+        padding: 0.25rem 0.5rem;
+        margin-bottom: 0.25rem; //VMaca chted odsadit nad tabem/gridem
+        position: relative;
+        border-bottom: 0.0625rem solid $base-color-shadow;
+        overflow: hidden;
+
+        .gbuttonpanel__items {
+            overflow: visible; //Bohous: Bez tohoto nejsou, bohuzel, viditelne cary (aktivni/focus/hover). Vzhledem k tomu, ze se to asi bude prestylovavat dle noveho navrhu, tak to asi nemusi vadit.
+        }
+
+        .g-link--chbpnl-item, .g-static {
+            //font-size: $font-size-base;
+            border-bottom: none;
+            color: $dark-text-default;
+            vertical-align: baseline;
+            position: relative;
+            padding: 0 0.75rem;
+        }
+
+        .glink::after {
+            content: "";
+            display: inline-block;
+            position: absolute;
+            left: 0;
+            bottom: -0.25rem;
+            //bottom: -0.5rem;
+            //background-color: $base-color-info;
+            background-color: transparent;
+            height: $subtaskUnderlineHeight;
+            width: 100%;
+            //transition: all 0.4s;
+        }
+
+        .g-link {
+            position: relative;
+            height: 1.5rem; //Pro pripady, kdy je v subtasku pouze ikona
+
+            &__text:hover {
+                border-bottom-color: transparent;
+            }
+        }
+
+        .g-link--chbpnl-item-active {
+            position: relative;
+
+            .g-link {
+                color: $base-color-info;
+            }
+
+            &::after {
+                background-color: $base-color-info;
+                transition: all 0.4s;
+                content: "";
+                display: inline-block;
+                position: absolute;
+                left: 0;
+                //bottom: -0.5rem;
+                //bottom: -0.5625rem;
+                //bottom: -4px;
+                bottom: -0.25rem;
+                height: $subtaskUnderlineHeight;
+                width: 100%;
+            }
+        }
+
+        .g-link:hover,
+        .g-link:focus {
+            //outline: none;
+            //outline-width: 0;
+            &::after {
+                content: "";
+                display: inline-block;
+                position: absolute;
+                left: 0;
+                bottom: -0.25rem;
+                //bottom: -0.5625rem;
+                //bottom: -0.625rem; //-10px;
+                //bottom: -0.5625rem;
+                background-color: $base-color-shadow;
+                height: $subtaskUnderlineHeight;
+                width: 100%;
+                transition: width 1s;
+                //transition: all 0.4s;
+            }
+        }
+
+        .g-link + .g-badge,
+        .g-static + .g-badge {
+            position: relative;
+            left: -0.5rem;
+        }
+    }
+
+    .g-color {
+        display: inline-block;
+        width: 0.75rem;
+        height: 0.75rem;
+        border-radius: 0.5rem;
+    }
+}
+
+.gbuttonpanel .g-static {
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    margin: 0 0.5rem 0 0.5rem;
+
+    &__icon {
+        font-size: 1rem;
+    }
+}
+
+.gbuttonpanel .g-link {
+    line-height: 1.5rem;
+}
+
+.g-buttonpanel__item {
+    //display: inline-block;
+    display: inline-flex;
+    flex-shrink: 0; //IE fix?
+    align-items: center;
+    white-space: nowrap; //resi bug, kdy odskakovala sipka u menubuttonu na splitbuttonu pokud nebylo dost mista
+    //min-width: 120px; //Pokus o rizeni sirek tlacitek v gbuttonpanelu pomoci li
+    position: relative;
+
+    &:last-child {
+        margin-right: 0;
+    }
+
+    &.g-buttonpanel-item--hidden {
+        display: none;
+    }
+
+    &.g-buttonpanel__item--menu.glink a {
+        padding: 0 0.5rem;
+        height: 1.5rem;
+    }
+
+    &:focus::before {
+        content: ' ';
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        bottom: 2px;
+        left: 2px;
+        background-image: $btn-focus-image;
+        z-index: 999;
+    }
+}
+
+.g-buttonpanel__item--separator {
+    position: relative;
+    margin: 0 0.25rem;
+    
+    height: 1.5rem; //Bez nejake vysky nebude videt
+
+    &:after {
+        background-color: $base-color-shadow;
+        content: "";
+        position: absolute;
+        height: auto;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        width: 1px;
+    }
+}
+
+.g-buttonpanel__item--focused {
+    background-image: $btn-focus-image;
+    outline: none;
+}
+
+@-moz-document url-prefix() {
+    .g-buttonpanel__item--separator:after {
+        top: 0.125rem;
+        height: 100%;
+    }
+}
+
+
+

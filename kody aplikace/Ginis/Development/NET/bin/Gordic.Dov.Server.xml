@@ -1,0 +1,2785 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Dov.Server</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Dov.Server.GDovEkoInit">
+            <summary> Serverová část AL ekoinicializace DOV </summary>
+        </member>
+        <member name="T:Gordic.Dov.Server.GDovParam">
+            <summary>Serverová část app. logiky pro práci s parametry DOV</summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovParam.#ctor">
+            <summary> Konstruktor </summary>
+        </member>
+        <member name="T:Gordic.Dov.Server.GDovServer">
+            <summary>Předek všech serverových tříd AL DOV</summary>
+        </member>
+        <member name="T:Gordic.Dov.Server.GDovServerException">
+            <summary>Výjimka aplikační logiky DOV</summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovServerException.#ctor(System.Int32,System.Int32,System.Object[])">
+            <summary>Konstruktor výjimky</summary>
+            <param name="code">Kód výjimky</param>
+            <param name="resourceCode">Kód textu výjimky v souboru se zdroji</param>
+            <param name="parameters">Parametry pro formátovaný text výjimky</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovServerException.#ctor(System.Int32,System.Int32,System.Exception,System.Object[])">
+            <summary>Konstruktor výjimky</summary>
+            <param name="code">Kód výjimky</param>
+            <param name="resourceCode">Kód textu výjimky v souboru se zdroji</param>
+            <param name="innerException">Vnitřní výjimka</param>
+            <param name="parameters">Parametry pro formátovaný text výjimky</param>
+        </member>
+        <member name="T:Gordic.Dov.Server.GDovckzs">
+            <summary>Serverová AL - číselník DOVCKZS</summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovckzs.GetData(Gordic.General.GFilter{Gordic.Dov.Interface.FilterDovckzs}[])">
+            <summary>Získá data</summary>
+            <param name="filters">Filtry, podle kterých se filtrují data z databáze (nebo cache)</param>
+            <returns>Tabulka s daty</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovckzs.GetDataCached">
+            <summary>Načtení dat</summary>
+        </member>
+        <member name="T:Gordic.Dov.Server.GDovcpvs">
+            <summary>Serverová AL - číselník DOVCPVS</summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovcpvs.GetData(Gordic.General.GFilter{Gordic.Dov.Interface.FilterDovcpvs}[])">
+            <summary>Získá data</summary>
+            <param name="filters">Filtry, podle kterých se filtrují data z databáze (nebo cache)</param>
+            <returns>Tabulka s daty</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovcpvs.GetDataCached">
+            <summary>Načtení dat</summary>
+        </member>
+        <member name="T:Gordic.Dov.Server.GDovctnp">
+            <summary>Serverová AL - číselník Dovctnp</summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovctnp.GetData(Gordic.General.GFilter{Gordic.Dov.Interface.FilterDovctnp}[])">
+            <summary>Získá data</summary>
+            <param name="filters">Filtry, podle kterých se filtrují data z databáze (nebo cache)</param>
+            <returns>Tabulka s daty</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovctnp.GetDataCached">
+            <summary>Načtení dat</summary>
+        </member>
+        <member name="T:Gordic.Dov.Server.GDovAvizace">
+            <summary>aplikační logika aplikace pro správu dovolených</summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovAvizace.DovSystemizace">
+            <summary>
+            Logika systemizace
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovAvizace.AvizovatSchvalovateli(Gordic.Dov.Server.GDovNepritomnost)">
+            <summary>
+            metoda odešle e-mail schvalovateli že byla podána žádost o dovolenou 
+            </summary>
+            <param name="nepritomnost"></param>
+            <returns> </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovAvizace.AvizovatVlastnikoviSchvaleno(Gordic.Dov.Server.GDovNepritomnost)">
+            <summary>
+            metoda odešle e-mail vlastníkovi nepřítomnostoi zadané v parametru o schválení žádosti
+            </summary>
+            <param name="nepritomnost"></param>
+            <returns> </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovAvizace.AvizovatVlastnikoviZamitnuto(Gordic.Dov.Server.GDovNepritomnost)">
+            <summary>
+            metoda odešle e-mail vlastníkovi nepřítomnostoi zadané v parametru o zamítnutí žádosti
+            </summary>
+            <param name="nepritomnost"></param>
+            <returns> </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovAvizace.GetNprInfo(Gordic.Dov.Server.GDovNepritomnost)">
+            <summary>
+            vytvoří textový řetězec který obsahuje informace o nepřítomnosti zadané v parametru
+            </summary>
+            <param name="nepritomnost"></param>
+            <returns> řetězec informací o NPR</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovAvizace.VytvoreniMailu(System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Vytvoření emailu
+            </summary>
+            <param name="nameFrom"></param>
+            <param name="adresFrom"></param>
+            <param name="nameTo"></param>
+            <param name="adresTo"></param>
+            <param name="subject"></param>
+            <param name="body"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovAvizace.Trans_GetEmail(Gordic.General.GString)">
+            <summary>
+            zjistí emailovou adresu dle id osoby
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovAvizace.Trans_IxsRefOsoby(Gordic.General.GString,Gordic.General.GString@)">
+            <summary>
+            vrátí ixsref k zadanému ixsesu
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovAvizace.GetEmail(Gordic.General.GString,System.Boolean)">
+            <summary>zjistí emailovou adresu dle id osoby</summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovAvizace.IxsRefOsoby(Gordic.General.GString,Gordic.General.GString@,System.Boolean)">
+            <summary>vrátí ixsref k zadanému ixsesu</summary>
+        </member>
+        <member name="T:Gordic.Dov.Server.GDovExport">
+            <summary>aplikační logika aplikace pro správu dovolených</summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.Gordic#Dov#Interface#IGDovExport#SchvaleneZaMesic(Gordic.General.GInt32,Gordic.General.GInt32)">
+            <summary>
+            vrátí list XML seznam schválených nepřítomností za daný měsíc
+            </summary>
+            <param name="l_nRok"></param>
+            <param name="l_nMesic"></param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.SchvaleneZaMesic(Gordic.General.GInt32,Gordic.General.GInt32,System.Boolean)">
+            <summary>
+            vrátí list XML seznam schválených nepřítomností za daný měsíc
+            </summary>
+            <param name="l_nRok"></param>
+            <param name="l_nMesic"></param>
+            <param name="newTransaction">rizení transakci</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.Gordic#Dov#Interface#IGDovExport#UlozDovsnps(Gordic.General.GInt16,Gordic.General.GInt16)">
+            <summary>
+            ulozi zaznamy do tabulky DOVSNPS - seznam npr za mesic
+            </summary>
+            <param name="l_nMesic"></param>
+            <param name="l_nRok"></param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.UlozDovsnps(Gordic.General.GInt16,Gordic.General.GInt16,System.Boolean)">
+            <summary>
+            ulozi zaznamy do tabulky DOVSNPS - seznam npr za mesic
+            </summary>
+            <param name="l_nMesic"></param>
+            <param name="l_nRok"></param>
+            <param name="newTransaction">rizení transakci</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.Gordic#Dov#Interface#IGDovExport#GetDovsnps">
+            <summary>
+            Vratí obsah tabulky dovsnps
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.GetDovsnps(System.Boolean)">
+            <summary>
+            Vratí obsah tabulky dovsnps
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.Gordic#Dov#Interface#IGDovExport#GetDovsnps(Gordic.General.GInt32,Gordic.General.GInt32)">
+            <summary>
+            Vratí obsah tabulky dovsnps
+            </summary>
+            <param name="l_nRok"></param>
+            <param name="l_nMesic"></param>
+            <returns>DovsnpsDataTable</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.GetDovsnps(Gordic.General.GInt32,Gordic.General.GInt32,System.Boolean)">
+            <summary>
+            Vratí obsah tabulky dovsnps
+            </summary>
+            <param name="l_nRok"></param>
+            <param name="l_nMesic"></param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>DovsnpsDataTable</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.NaplnDovsnps(Gordic.General.GInt16,Gordic.General.GInt16,System.Boolean)">
+            <summary>
+            naplni tabulku DOVSNPS zaznamy za dany mesic
+            </summary>
+            <param name="l_nRok"></param>
+            <param name="l_nMesic"></param>
+            <param name="newTransaction">rizení transakci</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.Gordic#Dov#Interface#IGDovExport#UpravitDovsnps(Gordic.Dov.Interface.DovsnpsDataSet.DovsnpsDataTable)">
+            <summary>
+            Uloží obsah tabulky dovsnps
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.UpravitDovsnps(Gordic.Dov.Interface.DovsnpsDataSet.DovsnpsDataTable,System.Boolean)">
+            <summary>
+            Uloží obsah tabulky dovsnps
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.Gordic#Dov#Interface#IGDovExport#PocetHodin(Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GDecimal@,System.Int32,System.Int32)">
+            <summary>
+            vrátí počet hodin v daném intervalu dle kalendáře
+            </summary>
+            <param name="l_dDatDo"></param>
+            <param name="l_dDatOd"></param>
+            <param name="l_dPocetDnu"></param>
+            <param name="l_sIxsPpv"></param>
+            <param name="l_nPriz_pd_kon"></param>
+            <param name="l_nPriz_pd_zac"></param>
+            <param name="l_nRok_obd_mzdy"></param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.PocetHodin(Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GDecimal@,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            vrátí počet hodin v daném intervalu dle kalendáře
+            </summary>
+            <param name="l_dDatDo"></param>
+            <param name="l_dDatOd"></param>
+            <param name="l_dPocetDnu"></param>
+            <param name="l_sIxsPpv"></param>
+            <param name="l_nPriz_pd_kon"></param>
+            <param name="l_nPriz_pd_zac"></param>
+            <param name="l_nRok_obd_mzdy"></param>
+            <param name="newTransaction">rizení transakci</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.PocetHodinZaDen(Gordic.General.GString,Gordic.General.GDate,System.Boolean)">
+            <summary>
+            vrádí počet hodin za den dle daného kalendáře
+            </summary>
+            <param name="l_sIxskal">id kalendáře</param>
+            <param name="l_dtDatum">datum dne</param>
+            <param name="newTransaction">rizení transakci</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.Gordic#Dov#Interface#IGDovExport#GetSlozkaMzdyTxt(Gordic.General.GInt16)">
+            <summary>
+            vrátí název složky mzdy
+            </summary>
+            <param name="slozka_mzdy">kód složky mzdy</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.GetSlozkaMzdyTxt(Gordic.General.GInt16,System.Boolean)">
+            <summary>
+            vrátí název složky mzdy
+            </summary>
+            <param name="slozka_mzdy">kód složky mzdy</param>
+            <param name="newTransaction">rizení transakci</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.Gordic#Dov#Interface#IGDovExport#GetDruhSlozky(Gordic.General.GInt16)">
+            <summary>
+            vrátí druh ppv
+            </summary>
+            <param name="slozka_mzdy">identifikátor ixsppv</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.GetDruhSlozky(Gordic.General.GInt16,System.Boolean)">
+            <summary>
+            vrátí druh ppv
+            </summary>
+            <param name="slozka_mzdy">identifikátor ixsppv</param>
+            <param name="newTransaction">rizení transakci</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.Gordic#Dov#Interface#IGDovExport#GetDruhSlozkyTxt(Gordic.General.GInt16)">
+            <summary>
+            vrátí název druhuppv
+            </summary>
+            <param name="druh">kód druh_ppv</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.GetDruhSlozkyTxt(Gordic.General.GInt16,System.Boolean)">
+            <summary>
+            vrátí název druhuppv
+            </summary>
+            <param name="druh">kód druh_ppv</param>
+            <param name="newTransaction">rizení transakci</param>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovExport.DovSystemizace">
+            <summary>
+            Logika osob
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovExport.DovOsoby">
+            <summary>
+            Logika osob
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.Trans_SchvaleneZaMesic(Gordic.General.GInt32,Gordic.General.GInt32)">
+            <summary>
+            vrátí list XML seznam schválených nepřítomností za daný měsíc
+            </summary>
+            <param name="l_nRok"></param>
+            <param name="l_nMesic"></param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.Trans_Commit_UlozDovsnps(Gordic.General.GInt16,Gordic.General.GInt16)">
+            <summary>
+            ulozi zaznamy do tabulky DOVSNPS - seznam npr za mesic
+            </summary>
+            <param name="l_nMesic"></param>
+            <param name="l_nRok"></param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.Trans_GetDovsnps">
+            <summary>
+            Vratí obsah tabulky dovsnps 
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.Trans_GetDovsnps(Gordic.General.GInt32,Gordic.General.GInt32)">
+            <summary>
+            Vratí obsah tabulky dovsnps 
+            </summary>
+            <param name="l_nRok"></param>
+            <param name="l_nMesic"></param>
+            <returns>DovsnpsDataTable</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.Trans_NaplnDovsnps(Gordic.General.GInt16,Gordic.General.GInt16)">
+            <summary>
+            naplni tabulku DOVSNPS zaznamy za dany mesic
+            </summary>
+            <param name="l_nRok"></param>
+            <param name="l_nMesic"></param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.Trans_UpravitDovsnps(Gordic.Dov.Interface.DovsnpsDataSet.DovsnpsDataTable)">
+            <summary>
+            Uloží obsah tabulky dovsnps 
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.Trans_PocetHodin(Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GDecimal@,System.Int32,System.Int32)">
+            <summary>
+            vrátí počet hodin v daném intervalu dle kalendáře 
+            </summary>
+            <param name="l_dDatDo"></param>
+            <param name="l_dDatOd"></param>
+            <param name="l_dPocetDnu"></param>
+            <param name="l_sIxsPpv"></param>
+            <param name="l_nPriz_pd_kon"></param>
+            <param name="l_nPriz_pd_zac"></param>
+            <param name="l_nRok_obd_mzdy"></param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.Trans_PocetHodinZaDen(Gordic.General.GString,Gordic.General.GDate)">
+            <summary>
+            vrádí počet hodin za den dle daného kalendáře
+            </summary>
+            <param name="l_sIxskal">id kalendáře</param>
+            <param name="l_dtDatum">datum dne</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.Trans_GetSlozkaMzdyTxt(Gordic.General.GInt16)">
+            <summary>
+            vrátí název složky mzdy
+            </summary>
+            <param name="slozka_mzdy">kód složky mzdy</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.Trans_GetDruhSlozky(Gordic.General.GInt16)">
+            <summary>
+            vrátí druh ppv
+            </summary>
+            <param name="slozka_mzdy">identifikátor ixsppv</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovExport.Trans_GetDruhSlozkyTxt(Gordic.General.GInt16)">
+            <summary>
+            vrátí název druhuppv
+            </summary>
+            <param name="druh">kód druh_ppv</param>
+        </member>
+        <member name="T:Gordic.Dov.Server.GDovNepritomnost">
+            <summary>aplikační logika aplikace pro správu dovolených</summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Gordic#Dov#Interface#IGDovNepritomnost#NovaNepritomnost(Gordic.General.GString,Gordic.General.GDate,Gordic.General.GDate)">
+            <summary>
+            metoda naplní instanci třídy informacemi o osobě a nep59tomnosti
+            </summary>
+            <param name="ixsEsu">ID osoby</param>
+            <param name="datumOd">datum začátku</param>
+            <param name="datumDo">datum konce</param>
+            <returns> </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.NovaNepritomnost(Gordic.General.GString,Gordic.General.GDate,Gordic.General.GDate,System.Boolean)">
+            <summary>
+            metoda naplní instanci třídy informacemi o osobě a nep59tomnosti
+            </summary>
+            <param name="ixsEsu">ID osoby</param>
+            <param name="datumOd">datum začátku</param>
+            <param name="datumDo">datum konce</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns> </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Gordic#Dov#Interface#IGDovNepritomnost#UlozitNepritomnost">
+            <summary>
+            Ulozí NPR
+            </summary>
+            <returns> </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.UlozitNepritomnost(System.Boolean)">
+            <summary>
+            Ulozí NPR
+            </summary>
+            <returns> </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.UpdateNepritomnost(System.String@,System.String@,System.Boolean)">
+            <summary>
+            Aktualizuje narok nepřítomnosti
+            </summary>
+            <param name="chyboveHlaseni"></param>
+            <param name="ixsNpr">id updatované npr</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns> </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Gordic#Dov#Interface#IGDovNepritomnost#UlozitNepritomnost(System.String@,System.String@)">
+            <summary>
+            Ulozí NPR
+            </summary>
+            <returns> </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.UlozitNepritomnost(System.String@,System.String@,System.Boolean)">
+            <summary>
+            Ulozí NPR
+            </summary>
+            <returns> </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Gordic#Dov#Interface#IGDovNepritomnost#SeznamMistPobytu">
+            <summary>
+            vrátí seznam míst pobytu dané NPR
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.SeznamMistPobytu(System.Boolean)">
+            <summary>
+            vrátí seznam míst pobytu dané NPR
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Gordic#Dov#Interface#IGDovNepritomnost#GetKolize">
+            <summary>
+            vrátí kolize v rámci sym
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.GetKolize(System.Boolean)">
+            <summary>
+            vrátí kolize v rámci sym
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Gordic#Dov#Interface#IGDovNepritomnost#GetKolize(Gordic.General.GBoolean@)">
+            <summary>
+            vrátí kolize v rámci sym
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.GetKolize(Gordic.General.GBoolean@,System.Boolean)">
+            <summary>
+            vrátí kolize v rámci sym
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Gordic#Dov#Interface#IGDovNepritomnost#NaplnDetailOsoby">
+            <summary>
+            Naplní detail osoby
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.NaplnDetailOsoby(System.Boolean)">
+            <summary>
+            Naplní detail osoby
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Gordic#Dov#Interface#IGDovNepritomnost#NaplnDetailNepritomnosti">
+            <summary>
+            Naplní detail nepritomnosti
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.NaplnDetailNepritomnosti(System.Boolean)">
+            <summary>
+            Naplní detail nepritomnosti
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.VygenerovatData(System.Boolean)">
+            <summary>
+            Vygeneruje zaznamy pro aktualni instanci
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.AktualizovatData(System.Boolean)">
+            <summary>
+            nacte znova dovdnpr
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.ZmenaSchvalovatelem(Gordic.General.GString,Gordic.General.GInt16,System.Boolean)">
+            <summary>
+            overi prava uzivatele a provede ymenu stavu npr do ciloveho stavu
+            </summary>
+            <param name="ixsEsuSchvalovatel">id schvalovatele</param>
+            <param name="cilovyStav">cílový stav</param>
+            <param name="newTransaction">rizení transakci</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.ZmenaSchvalovatelem(Gordic.General.GString,Gordic.General.GInt16,System.String,System.Boolean)">
+            <summary>
+            overi prava uzivatele a provede ymenu stavu npr do ciloveho stavu
+            </summary>
+            <param name="ixsEsuSchvalovatel">id schvalovatele</param>
+            <param name="cilovyStav">cílový stav</param>
+            <param name="duvod">Duvod - u zamítnutí</param>
+            <param name="newTransaction">rizení transakci</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.GetTypNprTxt(System.Boolean)">
+            <summary>
+            vrací txt typ NPR instance
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.GetStavTxt(System.Boolean)">
+            <summary>
+            vrací txt název stavu
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.GetStavTxt(Gordic.General.GInt16,System.Boolean)">
+            <summary>
+            vrátí txt stav instance
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.FillDovssszTable(System.Boolean)">
+            <summary>
+            Naplní tabulku DOVSSSZ instance z DB
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.GetDovssszTable(System.Boolean)">
+            <summary>
+            Naplní tabulku DOVSSSZ instance z DB
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.FillDovDnprTable(System.Boolean)">
+            <summary>
+            vrací záznamy z tabulky DOVDNPR týkající se konkrétní dovolené - ixs_npr
+            </summary>
+            <returns>DovdnprDataTable - zaznam nepritomnosti - obsahuje poze data o osobě</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.UlozitZaznam(System.Boolean)">
+            <summary>
+            Uloží záznam - privatni metoda pro uložení dat do db
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.GetPoradiZmeny(Gordic.General.GString,System.Boolean)">
+            <summary>
+            generuje pořadí pro nový záznam o místě pobytu během dovolené
+            </summary>
+            <param name="ixsNpr">ID mepritomnosti a ppv</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>pořadí</returns>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnost.DovOrganizacniStruktura">
+            <summary>
+            Logika vlastni organizacni struktury
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnost.DovNepritomnosti">
+            <summary>
+            Logika nepritomnosti
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnost.DovOsoby">
+            <summary>
+            Logika osob
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnost.DovSystemizace">
+            <summary>
+            Logika systemizace
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnost.DovAvizace">
+            <summary>
+            Logika systemizace
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnost.DovMistaPobytu">
+            <summary>
+            Logika mist pobytu
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnost.IxsEsu">
+            <summary>
+            identifikátor osoby
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnost.IxsNpr">
+            <summary>
+            identifikátor nepřítomnosti
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnost.TypNpr">
+            <summary>
+            typ nepřítomnosti
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnost.JmenoPrijmeni">
+            <summary>
+            jméno osoby
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnost.Oc">
+            <summary>
+            osobní číslo
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnost.Rc">
+            <summary>
+            rodné číslo
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnost.DatOd">
+            <summary>
+            datum od
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnost.DatDo">
+            <summary>
+            datum do
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnost.DatZmena">
+            <summary>
+            datum změny
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnost.Priz_pd_zac">
+            <summary>
+            příznak půl den na začátku
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnost.Priz_pd_kon">
+            <summary>
+            příznak půl den na konci
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnost.Priz_stav">
+            <summary>
+            příznak stavu nepřítomnosti
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnost.Zmenu_prov">
+            <summary>
+            autor změny
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnost.DovdnprTable">
+            <summary>
+            Tabulka DOVSNPR - detail NPR - zaznam ke kazdemu PPV
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnost.DovssszTable">
+            <summary>
+            Tabulka DOVSSSZ - změny
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnost.MistaPobytuTable">
+            <summary>
+            Tabulka DOVSADO - místa pobytu
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnost.TypNpr_txt">
+            <summary>
+            Typ nepřítomnosti
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnost.Stav_txt">
+            <summary>
+             popis stavu NPR
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnost.Aktivita">
+            <summary>
+            Aktivita zaznamu npr
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.#ctor">
+            <summary>
+            konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.#ctor(System.String)">
+            <summary>
+            konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.#ctor(Gordic.General.GString,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GBoolean,Gordic.General.GBoolean)">
+            <summary>
+            konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.#ctor(Gordic.General.GString)">
+            <summary>
+            konstruktor
+            </summary>
+            <param name="ixsEsu"></param>
+            <returns> </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.NovaNepritomnost(Gordic.General.GString)">
+            <summary>
+            Naplní instanci dle parametru
+            </summary>
+            <param name="ixsEsu">id osoby</param>
+            <returns> </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.NahrejNepritomnost(Gordic.Dov.Interface.NepritomnostiDataSet.NepritomnostiRow)">
+            <summary>
+            
+            </summary>
+            <param name="nepritomnost"></param>
+            <returns> </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.GetNepritomnost">
+            <summary>
+            Vrátí aktuální instanci jako NepritomnostiRow
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Trans_NovaNepritomnost(Gordic.General.GString,Gordic.General.GDate,Gordic.General.GDate)">
+            <summary>
+            metoda naplní instanci třídy informacemi o osobě a nep59tomnosti
+            </summary>
+            <param name="ixsEsu">ID osoby</param>
+            <param name="datumOd">datum začátku</param>
+            <param name="datumDo">datum konce</param>
+            <returns> </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Zkontrolovat">
+            <summary>
+             kontrola datumu a naroku - přidat kolize a n návratovou hodnotu
+            </summary>
+            <returns> </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Zkontrolovat(System.String@)">
+            <summary>
+             kontrola datumu a naroku - přidat kolize a n návratovou hodnotu
+            </summary>
+            <returns> </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.ZkontrolovatDatum">
+            <summary>
+             kontrola intervalu nepřítomnosti
+            </summary>
+            <returns> </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Trans_Commit_UlozitNepritomnost">
+            <summary>
+             Ulozí NPR
+            </summary>
+            <returns> </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Trans_Commit_UpdateNepritomnost(System.String@,System.String@)">
+            <summary>
+             Aktualizuje narok nepřítomnosti
+            </summary>
+            <param name="chyboveHlaseni"></param>
+            <param name="ixsNpr">id updatované npr</param>
+            <returns> </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Trans_Commit_UlozitNepritomnost(System.String@,System.String@)">
+            <summary>
+             Ulozí NPR
+            </summary>
+            <returns> </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Trans_SeznamMistPobytu">
+            <summary>
+             vrátí seznam míst pobytu dané NPR
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Trans_GetKolize">
+            <summary>
+            vrátí kolize v rámci sym
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Trans_GetKolize(Gordic.General.GBoolean@)">
+            <summary>
+            vrátí kolize v rámci sym
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Trans_NaplnDetailOsoby">
+            <summary>
+            Naplní detail osoby
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Trans_NaplnDetailNepritomnosti">
+            <summary>
+            Naplní detail nepritomnosti
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Clear">
+            <summary>
+            Vymaze atributy instance
+            </summary>
+            <returns> </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.PredatKeSchvaleni">
+            <summary>
+            předání npr ke schvaleni
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Cerpano">
+            <summary>
+            zmena stavu na cerpano
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Schvalit(Gordic.General.GString)">
+            <summary>
+            schválení npr
+            </summary>
+            <param name="ixsEsuSchvalovatel"></param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Zamitnout(Gordic.General.GString)">
+            <summary>
+            metoda zamítne NPR
+            </summary>
+            <param name="ixsEsuSchvalovatel">id schvalovatele</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Zamitnout(Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            metoda zamítne NPR
+            </summary>
+            <param name="ixsEsuSchvalovatel">id schvalovatele</param>
+            <param name="duvod">duvod zamítnutí</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Opravit">
+            <summary>
+            zmena stavu na pripraveno
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Zrusit">
+            <summary>
+            zmena aktivity na 900 (zrušení)
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.TestOsobaVPam">
+            <summary>
+            zkontroluje zda osoba existuje v PAM
+            </summary>
+            <returns>true když NPR splňuje nárok, jinak false</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.KontrolovatNaroky">
+            <summary>
+            zkontroluje narok dane instance NPR
+            </summary>
+            <returns>true když NPR splňuje nárok, jinak false</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Trans_VygenerovatData">
+            <summary>
+            Vygeneruje zaznamy pro aktualni instanci
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Trans_AktualizovatData">
+            <summary>
+            nacte znova dovdnpr
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Trans_ZmenaSchvalovatelem(Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>
+            overi prava uzivatele a provede ymenu stavu npr do ciloveho stavu
+            </summary>
+            <param name="ixsEsuSchvalovatel">id schvalovatele</param>
+            <param name="cilovyStav">cílový stav</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Trans_ZmenaSchvalovatelem(Gordic.General.GString,Gordic.General.GInt16,System.String)">
+            <summary>
+            overi prava uzivatele a provede ymenu stavu npr do ciloveho stavu
+            </summary>
+            <param name="ixsEsuSchvalovatel">id schvalovatele</param>
+            <param name="cilovyStav">cílový stav</param>
+            <param name="duvod">Duvod - u zamítnutí</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Trans_GetTypNprTxt">
+            <summary>
+            vrací txt typ NPR instance
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Trans_GetStavTxt">
+            <summary>
+            vrací txt název stavu
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Trans_GetStavTxt(Gordic.General.GInt16)">
+            <summary>
+            vrátí txt stav instance 
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Trans_FillDovssszTable">
+            <summary>
+            Naplní tabulku DOVSSSZ instance z DB
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Trans_GetDovssszTable">
+            <summary>
+            Naplní tabulku DOVSSSZ instance z DB
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Trans_FillDovDnprTable">
+            <summary>
+            vrací záznamy z tabulky DOVDNPR týkající se konkrétní dovolené - ixs_npr
+            </summary>
+            <returns>DovdnprDataTable - zaznam nepritomnosti - obsahuje poze data o osobě</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Trans_Commit_UlozitZaznam">
+            <summary>
+            Uloží záznam - privatni metoda pro uložení dat do db
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.Trans_GetPoradiZmeny(Gordic.General.GString)">
+            <summary>
+            generuje pořadí pro nový záznam o místě pobytu během dovolené
+            </summary>
+            <param name="ixsNpr">ID mepritomnosti a ppv</param>
+            <returns>pořadí</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.JeSchvalovatel(Gordic.General.GString)">
+            <summary>
+            
+            </summary>
+            <param name="ixsEsu"></param>
+            <returns> </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.JeCastecneSchvaleno(Gordic.General.GString)">
+            <summary>
+            vrací true pokud je npr již částečně schválena uživatelem zadaným v parametru
+            </summary>
+            <param name="ixsEsu"></param>
+            <returns> </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.JeVlastnik(Gordic.General.GString)">
+            <summary>
+            
+            </summary>
+            <param name="ixsEsu"></param>
+            <returns> </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnost.DopocitatPracovniDny">
+            <summary>
+            
+            </summary>
+            <returns> </returns>
+        </member>
+        <member name="T:Gordic.Dov.Server.GDovNepritomnosti">
+            <summary>aplikační logika aplikace pro správu dovolených</summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovNepritomnosti.DovOsoby">
+            <summary>
+             Logika osob
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.Trans_GetStavNepritomnosti(Gordic.General.GString)">
+            <summary>
+            vrací stav záznamu o dovolené z tabulky dovsnpr s identifikátorem ixs_npr dle parametru
+            </summary>
+            <param name="ixsNpr">ID záznamu</param>
+            <returns>GInt16 - priz_stav </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.Trans_ZmenStavNepritomnosti(Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>
+            edituje stav záznamu v tabulce dovsnpr, který má ID odpovídající parametru ixsnpr na hodnotu novyStav
+            </summary>
+            <param name="ixsNpr">ID záznamu</param>
+            <param name="cilovyStav">nový stav záznamu</param>
+            <returns>boolean</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.Trans_NaplnSeznamNepritomnosti(Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GBoolean,System.Boolean,System.Boolean)">
+            <summary>
+            Naplni zaznam o dane nepritomnosti
+            </summary>
+            <param name="datumOd">datum - začátek vybraneho intervalu</param>
+            <param name="datumDo">datum - konec vybraneho intervalu</param>
+            <param name="jenAktivni">příznak aktivity</param>
+            <param name="keSchvaleni">příznak aktivity</param>
+            <param name="jenInterval">příznak jen z intervalu</param>
+            <returns>Datatable</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.Trans_NaplnSeznamNepritomnostiDleSchvalovatele(Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GBoolean,System.Boolean,System.Boolean,Gordic.General.GString)">
+            <summary>
+             vrací seznam nepřítomností
+            </summary>
+            <param name="datumOd"></param>
+            <param name="datumDo"></param>
+            <param name="jenAktivni"></param>
+            <param name="jenInterval"></param>
+            <param name="keSchvaleni"></param>
+            <param name="ixsEsu"></param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.Trans_NaplnSeznamNepritomnostiDleSym(Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GBoolean,System.Boolean,System.Boolean,Gordic.General.GString)">
+            <summary>
+            Naplni zaznam o dane nepritomnosti
+            </summary>
+            <param name="datumOd">datum - začátek vybraneho intervalu</param>
+            <param name="datumDo">datum - konec vybraneho intervalu</param>
+            <param name="jenAktivni">příznak aktivity</param>
+            <param name="keSchvaleni">příznak aktivity</param>
+            <param name="jenInterval">příznak jen z intervalu</param>
+            <param name="ixsSym"></param>
+            <returns>Datatable</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.Trans_MojeNepritomnosti(Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GBoolean,System.Boolean,System.Boolean,Gordic.General.GString)">
+            <summary>
+            Naplni zaznam o dane nepritomnosti
+            </summary>
+            <param name="datumOd">datum - začátek vybraneho intervalu</param>
+            <param name="datumDo">datum - konec vybraneho intervalu</param>
+            <param name="jenAktivni">příznak aktivity</param>
+            <param name="keSchvaleni">příznak aktivity</param>
+            <param name="jenInterval">příznak jen z intervalu</param>
+            <param name="ixsEsu"></param>
+            <returns>Datatable</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.Trans_NaplnSeznamNepritomnostiDleStavu(Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GInt16)">
+            <summary>
+            Naplni zaznam o dane nepritomnosti
+            </summary>
+            <param name="datumOd">datum - začátek vybraneho intervalu</param>
+            <param name="datumDo">datum - konec vybraneho intervalu</param>
+            <param name="prizStav">příznak stavu</param>
+            <returns>Datatable</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.Trans_GetKolizeSym(Gordic.Dov.Interface.NepritomnostiDataSet.NepritomnostiRow,Gordic.General.GDateTime,Gordic.General.GDateTime)">
+            <summary>
+            vrací záznamy z tabulky DOVSNPR které kolidují termínem a pracovištěm se záznamem předamým v parametru - ixs_npr
+            </summary>
+            <param name="detailNepritomnosti">ID nepřítomnosti</param>
+            <param name="zacatekIntervalu">začátek intervalu</param>
+            <param name="konecIntervalu">konec intervalu </param>
+            <returns>NepritomnostiDataTable - zaznam kolidujích nepřitomností</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.Trans_GetNazevStavu(Gordic.General.GInt16)">
+            <summary>
+            Vrací název stavu dle paramatru
+            </summary>
+            <param name="prizStav">příznak stavu</param>
+            <returns>string - s názvem stavu</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.Trans_GetKeSchvaleni(Gordic.General.GString)">
+            <summary>
+            Vrátí seznam nepřítomností ve stavu ke schválení - které má schvalovat osoba zadaná parametrem
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.PrekontrolovatNepritomnostiOsoby(Gordic.General.GString,Gordic.General.GString@)">
+            <summary>
+            provede kontrolu naroku a rezervovaných dnu u všech nepřítomností dané osoby
+            </summary>
+            
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.GetStavNepritomnosti(Gordic.General.GString,System.Boolean)">
+            <summary>vrací stav záznamu o dovolené z tabulky dovsnpr s identifikátorem ixs_npr dle parametru</summary>
+            <param name="ixsNpr">ID záznamu</param>
+            <returns>GInt16 - priz_stav </returns>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.Gordic#Dov#Interface#IGDovNepritomnosti#ZmenStavNepritomnosti(Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>edituje stav záznamu v tabulce dovsnpr, který má ID odpovídající parametru ixsnpr na hodnotu novyStav</summary>
+            <param name="ixsNpr">ID záznamu</param>
+            <param name="cilovyStav">nový stav záznamu</param>
+            <returns>boolean</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.ZmenStavNepritomnosti(Gordic.General.GString,Gordic.General.GInt16,System.Boolean)">
+            <summary>edituje stav záznamu v tabulce dovsnpr, který má ID odpovídající parametru ixsnpr na hodnotu novyStav</summary>
+            <param name="ixsNpr">ID záznamu</param>
+            <param name="cilovyStav">nový stav záznamu</param>
+            <returns>boolean</returns>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.Gordic#Dov#Interface#IGDovNepritomnosti#NaplnSeznamNepritomnosti(Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GBoolean,System.Boolean,System.Boolean)">
+            <summary>Naplni zaznam o dane nepritomnosti</summary>
+            <param name="datumOd">datum - začátek vybraneho intervalu</param>
+            <param name="datumDo">datum - konec vybraneho intervalu</param>
+            <param name="jenAktivni">příznak aktivity</param>
+            <param name="keSchvaleni">příznak aktivity</param>
+            <param name="jenInterval">příznak jen z intervalu</param>
+            <returns>Datatable</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.NaplnSeznamNepritomnosti(Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GBoolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>Naplni zaznam o dane nepritomnosti</summary>
+            <param name="datumOd">datum - začátek vybraneho intervalu</param>
+            <param name="datumDo">datum - konec vybraneho intervalu</param>
+            <param name="jenAktivni">příznak aktivity</param>
+            <param name="keSchvaleni">příznak aktivity</param>
+            <param name="jenInterval">příznak jen z intervalu</param>
+            <returns>Datatable</returns>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.Gordic#Dov#Interface#IGDovNepritomnosti#NaplnSeznamNepritomnostiDleSchvalovatele(Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GBoolean,System.Boolean,System.Boolean,Gordic.General.GString)">
+            <summary>vrací seznam nepřítomností</summary>
+            <param name="datumOd"></param>
+            <param name="datumDo"></param>
+            <param name="jenAktivni"></param>
+            <param name="jenInterval"></param>
+            <param name="keSchvaleni"></param>
+            <param name="ixsEsu"></param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.NaplnSeznamNepritomnostiDleSchvalovatele(Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GBoolean,System.Boolean,System.Boolean,Gordic.General.GString,System.Boolean)">
+            <summary>vrací seznam nepřítomností</summary>
+            <param name="datumOd"></param>
+            <param name="datumDo"></param>
+            <param name="jenAktivni"></param>
+            <param name="jenInterval"></param>
+            <param name="keSchvaleni"></param>
+            <param name="ixsEsu"></param>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.NaplnSeznamNepritomnostiDleSym(Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GBoolean,System.Boolean,System.Boolean,Gordic.General.GString,System.Boolean)">
+            <summary>Naplni zaznam o dane nepritomnosti</summary>
+            <param name="datumOd">datum - začátek vybraneho intervalu</param>
+            <param name="datumDo">datum - konec vybraneho intervalu</param>
+            <param name="jenAktivni">příznak aktivity</param>
+            <param name="keSchvaleni">příznak aktivity</param>
+            <param name="jenInterval">příznak jen z intervalu</param>
+            <param name="ixsSym"></param>
+            <returns>Datatable</returns>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.Gordic#Dov#Interface#IGDovNepritomnosti#MojeNepritomnosti(Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GBoolean,System.Boolean,System.Boolean,Gordic.General.GString)">
+            <summary>Naplni zaznam o dane nepritomnosti</summary>
+            <param name="datumOd">datum - začátek vybraneho intervalu</param>
+            <param name="datumDo">datum - konec vybraneho intervalu</param>
+            <param name="jenAktivni">příznak aktivity</param>
+            <param name="keSchvaleni">příznak aktivity</param>
+            <param name="jenInterval">příznak jen z intervalu</param>
+            <param name="ixsEsu"></param>
+            <returns>Datatable</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.MojeNepritomnosti(Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GBoolean,System.Boolean,System.Boolean,Gordic.General.GString,System.Boolean)">
+            <summary>Naplni zaznam o dane nepritomnosti</summary>
+            <param name="datumOd">datum - začátek vybraneho intervalu</param>
+            <param name="datumDo">datum - konec vybraneho intervalu</param>
+            <param name="jenAktivni">příznak aktivity</param>
+            <param name="keSchvaleni">příznak aktivity</param>
+            <param name="jenInterval">příznak jen z intervalu</param>
+            <param name="ixsEsu"></param>
+            <returns>Datatable</returns>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.NaplnSeznamNepritomnostiDleStavu(Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GInt16,System.Boolean)">
+            <summary>Naplni zaznam o dane nepritomnosti</summary>
+            <param name="datumOd">datum - začátek vybraneho intervalu</param>
+            <param name="datumDo">datum - konec vybraneho intervalu</param>
+            <param name="prizStav">příznak stavu</param>
+            <returns>Datatable</returns>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.Gordic#Dov#Interface#IGDovNepritomnosti#GetKolizeSym(Gordic.Dov.Interface.NepritomnostiDataSet.NepritomnostiRow,Gordic.General.GDateTime,Gordic.General.GDateTime)">
+            <summary>vrací záznamy z tabulky DOVSNPR které kolidují termínem a pracovištěm se záznamem předamým v parametru - ixs_npr</summary>
+            <param name="detailNepritomnosti">ID nepřítomnosti</param>
+            <param name="zacatekIntervalu">začátek intervalu</param>
+            <param name="konecIntervalu">konec intervalu </param>
+            <returns>NepritomnostiDataTable - zaznam kolidujích nepřitomností</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.GetKolizeSym(Gordic.Dov.Interface.NepritomnostiDataSet.NepritomnostiRow,Gordic.General.GDateTime,Gordic.General.GDateTime,System.Boolean)">
+            <summary>vrací záznamy z tabulky DOVSNPR které kolidují termínem a pracovištěm se záznamem předamým v parametru - ixs_npr</summary>
+            <param name="detailNepritomnosti">ID nepřítomnosti</param>
+            <param name="zacatekIntervalu">začátek intervalu</param>
+            <param name="konecIntervalu">konec intervalu </param>
+            <returns>NepritomnostiDataTable - zaznam kolidujích nepřitomností</returns>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.Gordic#Dov#Interface#IGDovNepritomnosti#GetNazevStavu(Gordic.General.GInt16)">
+            <summary>Vrací název stavu dle paramatru</summary>
+            <param name="prizStav">příznak stavu</param>
+            <returns>string - s názvem stavu</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.GetNazevStavu(Gordic.General.GInt16,System.Boolean)">
+            <summary>Vrací název stavu dle paramatru</summary>
+            <param name="prizStav">příznak stavu</param>
+            <returns>string - s názvem stavu</returns>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.Gordic#Dov#Interface#IGDovNepritomnosti#GetKeSchvaleni(Gordic.General.GString)">
+            <summary>Vrátí seznam nepřítomností ve stavu ke schválení - které má schvalovat osoba zadaná parametrem</summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovNepritomnosti.GetKeSchvaleni(Gordic.General.GString,System.Boolean)">
+            <summary>Vrátí seznam nepřítomností ve stavu ke schválení - které má schvalovat osoba zadaná parametrem</summary>
+        </member>
+        <member name="T:Gordic.Dov.Server.GDovOrganizacniStruktura">
+            <summary>aplikační logika aplikace pro správu dovolených</summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovOrganizacniStruktura.KorenovyUzel">
+            <summary>
+            getter kořenového uzlu
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Trans_Kontrola">
+            <summary>
+            zkontroluje jestli je založená organizační struktura, případně založí kořenový uzel
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Trans_NactiUzel(Gordic.General.GString,Gordic.General.GString@)">
+            <summary>
+            načte uzel
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Trans_NactiSeznamPodrizenych(Gordic.General.GString)">
+            <summary>
+            Přidání skupiny do organizační struktury
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Trans_NactiSeznamOsobVeSkupine(Gordic.General.GString)">
+            <summary>
+            načte seznam osob v rámci danné skupiny
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Trans_NactiJmenoOsoby(Gordic.General.GString)">
+            <summary>
+            načte jmeno osoby
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Trans_NactiDetailZarazeni(Gordic.General.GString)">
+            <summary>
+            Načte detail zařazení osoby
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Trans_Commit_PridatSkupinu(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Přidání skupiny do organizační struktury
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Trans_Commit_ZrusitSkupinu(Gordic.General.GString)">
+            <summary>
+            metoda zruší skupinu
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Trans_OsobaJeZarazena(Gordic.General.GString)">
+            <summary>
+            vrací true je osoba zařazená
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Trans_SkupinaOsoby(Gordic.General.GString)">
+            <summary>
+            vrací true když je dov_rez_provoz = 2 
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Trans_NazevSkupiny(Gordic.General.GString)">
+            <summary>
+            vrací název skupiny 
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Trans_VedouciSkupiny(Gordic.General.GString)">
+            <summary>
+            vrací ID vedoucího danné skupiny
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Trans_Commit_PridatOsobuDoSkupiny(Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16)">
+            <summary>
+            Přidání skupiny do organizační struktury
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Trans_Commit_OdebratOsobu(Gordic.General.GString)">
+            <summary>
+            Odebrání osoby z organizační struktury
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Trans_Commit_UpravitZarazeniOsoby(Gordic.Dov.Interface.Zarazeni)">
+            <summary>
+            Přidání skupiny do organizační struktury
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Trans_Commit_VytvorZaznamSkupiny(Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            ulozi do DB zaznam skupiny 
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Gordic#Dov#Interface#IGDovOrganizacniStruktura#Kontrola">
+            <summary>
+            zkontroluje jestli je založená organizační struktura, případně založí kořenový uzel
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Kontrola(System.Boolean)">
+            <summary>
+            zkontroluje jestli je založená organizační struktura, případně založí kořenový uzel
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Gordic#Dov#Interface#IGDovOrganizacniStruktura#NactiUzel(Gordic.General.GString,Gordic.General.GString@)">
+            <summary>
+            načte uzel
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.NactiUzel(Gordic.General.GString,Gordic.General.GString@,System.Boolean)">
+            <summary>
+            načte uzel
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Gordic#Dov#Interface#IGDovOrganizacniStruktura#NactiSeznamPodrizenych(Gordic.General.GString)">
+            <summary>
+            Přidání skupiny do organizační struktury
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.NactiSeznamPodrizenych(Gordic.General.GString,System.Boolean)">
+            <summary>
+            Přidání skupiny do organizační struktury
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Gordic#Dov#Interface#IGDovOrganizacniStruktura#NactiSeznamOsobVeSkupine(Gordic.General.GString)">
+            <summary>
+            načte seznam osob v rámci danné skupiny
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.NactiSeznamOsobVeSkupine(Gordic.General.GString,System.Boolean)">
+            <summary>
+            načte seznam osob v rámci danné skupiny
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Gordic#Dov#Interface#IGDovOrganizacniStruktura#NactiJmenoOsoby(Gordic.General.GString)">
+            <summary>
+            načte jmeno osoby
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.NactiJmenoOsoby(Gordic.General.GString,System.Boolean)">
+            <summary>
+            načte jmeno osoby
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Gordic#Dov#Interface#IGDovOrganizacniStruktura#NactiDetailZarazeni(Gordic.General.GString)">
+            <summary>
+            Načte detail zařazení osoby
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.NactiDetailZarazeni(Gordic.General.GString,System.Boolean)">
+            <summary>
+            Načte detail zařazení osoby
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Gordic#Dov#Interface#IGDovOrganizacniStruktura#PridatSkupinu(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Přidání skupiny do organizační struktury
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.PridatSkupinu(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.Boolean)">
+            <summary>
+            Přidání skupiny do organizační struktury
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Gordic#Dov#Interface#IGDovOrganizacniStruktura#ZrusitSkupinu(Gordic.General.GString)">
+            <summary>
+            metoda zruší skupinu
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.ZrusitSkupinu(Gordic.General.GString,System.Boolean)">
+            <summary>
+            metoda zruší skupinu
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Gordic#Dov#Interface#IGDovOrganizacniStruktura#OsobaJeZarazena(Gordic.General.GString)">
+            <summary>
+            vrací true je osoba zařazená
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.OsobaJeZarazena(Gordic.General.GString,System.Boolean)">
+            <summary>
+            vrací true je osoba zařazená
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.SkupinaOsoby(Gordic.General.GString,System.Boolean)">
+            <summary>
+            vrací true když je dov_rez_provoz = 2
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.NazevSkupiny(Gordic.General.GString,System.Boolean)">
+            <summary>
+            vrací název skupiny
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.VedouciSkupiny(Gordic.General.GString,System.Boolean)">
+            <summary>
+            vrací ID vedoucího danné skupiny
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Gordic#Dov#Interface#IGDovOrganizacniStruktura#PridatOsobuDoSkupiny(Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16)">
+            <summary>
+            Přidání skupiny do organizační struktury
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.PridatOsobuDoSkupiny(Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,System.Boolean)">
+            <summary>
+            Přidání skupiny do organizační struktury
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Gordic#Dov#Interface#IGDovOrganizacniStruktura#OdebratOsobu(Gordic.General.GString)">
+            <summary>
+            Odebrání osoby z organizační struktury
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.OdebratOsobu(Gordic.General.GString,System.Boolean)">
+            <summary>
+            Odebrání osoby z organizační struktury
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.Gordic#Dov#Interface#IGDovOrganizacniStruktura#UpravitZarazeniOsoby(Gordic.Dov.Interface.Zarazeni)">
+            <summary>
+            Přidání skupiny do organizační struktury
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.UpravitZarazeniOsoby(Gordic.Dov.Interface.Zarazeni,System.Boolean)">
+            <summary>
+            Přidání skupiny do organizační struktury
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOrganizacniStruktura.VytvorZaznamSkupiny(Gordic.General.GString,Gordic.General.GString,System.Boolean)">
+            <summary>
+            ulozi do DB zaznam skupiny
+            </summary>
+        </member>
+        <member name="T:Gordic.Dov.Server.GDovOsoby">
+            <summary>
+            Třída obsahující aplikační logiku pro práci s osobami
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Gordic#Dov#Interface#IGDovOsoby#NaplnSeznamOsob(Gordic.General.GBoolean,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Vrátí seznam osob dle filtru
+            </summary>
+            <param name="jenAktivni">filtrovat jen aktivini osoby</param>
+            <param name="pracoviste">datum začátku období</param>
+            <param name="ixsOce">datum konce období</param>
+            <returns>PamsesuDataTeble</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.NaplnSeznamOsob(Gordic.General.GBoolean,Gordic.General.GString,Gordic.General.GString,System.Boolean)">
+            <summary>
+            Vrátí seznam osob dle filtru
+            </summary>
+            <param name="jenAktivni">filtrovat jen aktivini osoby</param>
+            <param name="pracoviste">datum začátku období</param>
+            <param name="ixsOce">datum konce období</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>PamsesuDataTeble</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.GetFullPpv(Gordic.Dov.Interface.NepritomnostiDataSet.NepritomnostiRow,System.Boolean)">
+            <summary>
+            Vrátí seznam všech aktivních PPV k dané osobě
+            </summary>
+            <param name="nepritomnost"></param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>DovdnprDataTeble</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Gordic#Dov#Interface#IGDovOsoby#GetFullPpv(Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GDateTime)">
+            <summary>
+            Vrátí seznam včech aktivních PPV k dané osobě
+            </summary>
+            <param name="ixsEsu">ID osoby</param>
+            <param name="zacatekIntervalu">datum začátku období</param>
+            <param name="konecIntervalu">datum konce období</param>
+            <returns>DovdnprDataTeble</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.GetFullPpv(Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GDateTime,System.Boolean)">
+            <summary>
+            Vrátí seznam včech aktivních PPV k dané osobě
+            </summary>
+            <param name="ixsEsu">ID osoby</param>
+            <param name="zacatekIntervalu">datum začátku období</param>
+            <param name="konecIntervalu">datum konce období</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>DovdnprDataTeble</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.DoplnitInformacePpv(Gordic.Dov.Interface.DovdnprDataSet.DovdnprDataTable,System.Boolean)">
+            <summary>
+            doplní informace do tabulky dovdnpr
+            </summary>
+            <param name="tmpTable">vstupní tabulka</param>
+            <param name="newTransaction">rizení transakci</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.DoplnitInformacePpv(Gordic.Dov.Interface.DovdnprDataSet.DovdnprDataTable,Gordic.General.GDecimal,System.Boolean)">
+            <summary>
+            doplní informace do tabulky dovdnpr
+            </summary>
+            <param name="tmpTable">vstupní tabulka</param>
+            <param name="rokObdMzdy"></param>
+            <param name="newTransaction">rizení transakci</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Gordic#Dov#Interface#IGDovOsoby#GetPpv(Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GDateTime)">
+            <summary>
+            Vrátí tabulku ppvcek dané osoby v daném intervalu
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.GetPpv(Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GDateTime,System.Boolean)">
+            <summary>
+            Vrátí tabulku ppvcek dané osoby v daném intervalu
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Gordic#Dov#Interface#IGDovOsoby#GetPpvOc(Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GDateTime)">
+            <summary>
+            Vrátí tabulku ppvcek dané osoby v daném intervalu dle OC
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.GetPpvOc(Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GDateTime,System.Boolean)">
+            <summary>
+            Vrátí tabulku ppvcek dané osoby v daném intervalu dle OC
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.DetailPpv(Gordic.General.GString,Gordic.General.GDecimal,System.Boolean)">
+            <summary>
+            Vrátí detail PPV
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Gordic#Dov#Interface#IGDovOsoby#GetNarokyOsoby(Gordic.General.GString)">
+            <summary>
+            Vrátí nárok na dovolenou k danému ppv
+            </summary>
+            <param name="ixsEsu">ID ESU</param>
+            <returns>počet dní</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.GetNarokyOsoby(Gordic.General.GString,System.Boolean)">
+            <summary>
+            Vrátí nárok na dovolenou k danému ppv
+            </summary>
+            <param name="ixsEsu">ID ESU</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>počet dní</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Gordic#Dov#Interface#IGDovOsoby#GetSchvaleneDnyOsoby(Gordic.General.GString)">
+            <summary>
+            Vrátí pocty schvalenzch dnu
+            </summary>
+            <param name="ixsEsu">ID ESU</param>
+            <returns>počet dní</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.GetSchvaleneDnyOsoby(Gordic.General.GString,System.Boolean)">
+            <summary>
+            Vrátí pocty schvalenzch dnu
+            </summary>
+            <param name="ixsEsu">ID ESU</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>počet dní</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Gordic#Dov#Interface#IGDovOsoby#GetNarok(Gordic.General.GString)">
+            <summary>
+            Vrátí nárok na dovolenou k danému ppv k aktuálnímu datu
+            </summary>
+            <param name="ixsPpv">ID PPV</param>
+            <returns>počet dní</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.GetNarok(Gordic.General.GString,System.Boolean)">
+            <summary>
+            Vrátí nárok na dovolenou k danému ppv k aktuálnímu datu
+            </summary>
+            <param name="ixsPpv">ID PPV</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>počet dní</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Gordic#Dov#Interface#IGDovOsoby#GetSchvaleneDny(Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Vrátí počet již zarezervovanych dnu k danému ppv
+            </summary>
+            <param name="ixsPpv">ID PPV</param>
+            <param name="ixsNpr">vlastní neppřítomnost která se do součtu nezapočítává</param>
+            <returns>počet dní</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.GetSchvaleneDny(Gordic.General.GString,Gordic.General.GString,System.Boolean)">
+            <summary>
+            Vrátí počet již zarezervovanych dnu k danému ppv
+            </summary>
+            <param name="ixsPpv">ID PPV</param>
+            <param name="ixsNpr">vlastní neppřítomnost která se do součtu nezapočítává</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>počet dní</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Gordic#Dov#Interface#IGDovOsoby#GetKalendar(Gordic.General.GString,Gordic.General.GDecimal)">
+            <summary>
+            Vrátí kalendářpro davé období a PPV
+            </summary>
+            <param name="ixsPpv">ID PPV</param>
+            <param name="rokObdMzdy">rok_obd_mzdy</param>
+            <returns>počet dní</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.GetKalendar(Gordic.General.GString,Gordic.General.GDecimal,System.Boolean)">
+            <summary>
+            Vrátí kalendářpro davé období a PPV
+            </summary>
+            <param name="ixsPpv">ID PPV</param>
+            <param name="rokObdMzdy">rok_obd_mzdy</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>počet dní</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Gordic#Dov#Interface#IGDovOsoby#GetKalendar(Gordic.General.GString,Gordic.General.GDate)">
+            <summary>
+            Vrátí kalendářpro davé období a PPV
+            </summary>
+            <param name="ixsPpv">ID PPV</param>
+            <param name="datum">datum</param>
+            <returns>počet dní</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.GetKalendar(Gordic.General.GString,Gordic.General.GDate,System.Boolean)">
+            <summary>
+            Vrátí kalendářpro davé období a PPV
+            </summary>
+            <param name="ixsPpv">ID PPV</param>
+            <param name="datum">datum</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>počet dní</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Gordic#Dov#Interface#IGDovOsoby#JePracovniDen(Gordic.General.GString,Gordic.General.GDate)">
+            <summary>
+            Vrátí bool jestli je zadané datum pracovní den
+            </summary>
+            <param name="ixsKal">ID KALENDÁŘE</param>
+            <param name="datum">datum</param>
+            <returns>true kdyz je pracovni den</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.JePracovniDen(Gordic.General.GString,Gordic.General.GDate,System.Boolean)">
+            <summary>
+            Vrátí bool jestli je zadané datum pracovní den
+            </summary>
+            <param name="ixsKal">ID KALENDÁŘE</param>
+            <param name="datum">datum</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>true kdyz je pracovni den</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Gordic#Dov#Interface#IGDovOsoby#DetailOsoby(Gordic.General.GString)">
+            <summary>
+            Vrátí detailní informace o osobě dle parametru l_oIxsEsu
+            </summary>
+            <param name="ixsEsu">ID osoby v pamsesu</param>
+            <returns>typový dataset pamsesu</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.DetailOsoby(Gordic.General.GString,System.Boolean)">
+            <summary>
+            Vrátí detailní informace o osobě dle parametru l_oIxsEsu
+            </summary>
+            <param name="ixsEsu">ID osoby v pamsesu</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>typový dataset pamsesu</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Gordic#Dov#Interface#IGDovOsoby#IxsEsuPrihlasenehoUzivatele(Gordic.General.GString,Gordic.General.GString@)">
+            <summary>
+            Vrátí ixsesu uživalele podle ixsref
+            </summary>
+            <param name="ixsEsu">id externího subjektu v pam </param>
+            <param name="ixsRef">id referenta</param>
+            <returns>bool jestli je podařilo IXSREF spárovat S IXXSESU   </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.IxsEsuPrihlasenehoUzivatele(Gordic.General.GString,Gordic.General.GString@,System.Boolean)">
+            <summary>
+            Vrátí ixsesu uživalele podle ixsref
+            </summary>
+            <param name="ixsEsu">id externího subjektu v pam </param>
+            <param name="ixsRef">id referenta</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>bool jestli je podařilo IXSREF spárovat S IXXSESU   </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Gordic#Dov#Interface#IGDovOsoby#GetOces(Gordic.General.GString,System.Collections.Generic.List{Gordic.General.GString}@)">
+            <summary>
+            Vrátí list OCE k příslušné osobě
+            </summary>
+            <param name="ixsEsu">id osoby</param>
+            <param name="oceList"> list OCE </param>
+            <returns>bool jestli je podařilo najít OCE</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.GetOces(Gordic.General.GString,System.Collections.Generic.List{Gordic.General.GString}@,System.Boolean)">
+            <summary>
+            Vrátí list OCE k příslušné osobě
+            </summary>
+            <param name="ixsEsu">id osoby</param>
+            <param name="oceList"> list OCE </param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>bool jestli je podařilo najít OCE</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Gordic#Dov#Interface#IGDovOsoby#JeSchvalovatel(Gordic.General.GString,System.Collections.Generic.List{Gordic.General.GString}@)">
+            <summary>
+            kontrola jestli je schvalovatel
+            </summary>
+            <param name="ixsEsu">id uzivatele</param>
+            <param name="symList">list SYM na které uživatel patří</param>
+            <returns>bool jestli je uyivatel schvalovatel</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.JeSchvalovatel(Gordic.General.GString,System.Collections.Generic.List{Gordic.General.GString}@,System.Boolean)">
+            <summary>
+            kontrola jestli je schvalovatel
+            </summary>
+            <param name="ixsEsu">id uzivatele</param>
+            <param name="symList">list SYM na které uživatel patří</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>bool jestli je uyivatel schvalovatel</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Gordic#Dov#Interface#IGDovOsoby#JeSchvalovatel(Gordic.General.GString)">
+            <summary>
+            kontrola jestli je schvalovatel
+            </summary>
+            <param name="ixsEsu">id uzivatele</param>
+            <returns>bool jestli je uzivatel schvalovatel</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.JeSchvalovatel(Gordic.General.GString,System.Boolean)">
+            <summary>
+            kontrola jestli je schvalovatel
+            </summary>
+            <param name="ixsEsu">id uzivatele</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>bool jestli je uzivatel schvalovatel</returns>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovOsoby.DovOrganizacniStruktura">
+            <summary>
+            Logika vlastni organizacni struktury
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovOsoby.DovSystemizace">
+            <summary>
+            Logika systemizace
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovOsoby.DovPersonalistika">
+            <summary>
+            Logika Personalistika
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovOsoby.LogikaOsobaSym">
+            <summary>
+            Logika systemizace
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.ZiskejRokObdobi(Gordic.General.GInt32,Gordic.General.GInt32)">
+            <summary>
+            Vypočítá složeninu rok+období ze zadaného roku a měsíce
+            </summary>
+            <param name="rok">Zadaný rok</param>
+            <param name="mesic">Zadaný měsíc</param>
+            <returns>Složenina rok+období</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Trans_NaplnSeznamOsob(Gordic.General.GBoolean,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Vrátí seznam osob dle filtru
+            </summary>
+            <param name="jenAktivni">filtrovat jen aktivini osoby</param>
+            <param name="pracoviste">datum začátku období</param>
+            <param name="ixsOce">datum konce období</param>
+            <returns>PamsesuDataTeble</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Trans_GetFullPpv(Gordic.Dov.Interface.NepritomnostiDataSet.NepritomnostiRow)">
+            <summary>
+            Vrátí seznam všech aktivních PPV k dané osobě
+            </summary>
+            <param name="nepritomnost"></param>
+            <returns>DovdnprDataTeble</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Trans_GetFullPpv(Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GDateTime)">
+            <summary>
+            Vrátí seznam včech aktivních PPV k dané osobě
+            </summary>
+            <param name="ixsEsu">ID osoby</param>
+            <param name="zacatekIntervalu">datum začátku období</param>
+            <param name="konecIntervalu">datum konce období</param>
+            <returns>DovdnprDataTeble</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Trans_DoplnitInformacePpv(Gordic.Dov.Interface.DovdnprDataSet.DovdnprDataTable)">
+            <summary>
+            doplní informace do tabulky dovdnpr
+            </summary>
+            <param name="tmpTable">vstupní tabulka</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Trans_DoplnitInformacePpv(Gordic.Dov.Interface.DovdnprDataSet.DovdnprDataTable,Gordic.General.GDecimal)">
+            <summary>
+            doplní informace do tabulky dovdnpr
+            </summary>
+            <param name="tmpTable">vstupní tabulka</param>
+            <param name="rokObdMzdy"></param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Trans_GetPpv(Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GDateTime)">
+            <summary>
+            Vrátí tabulku ppvcek dané osoby v daném intervalu
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Trans_GetPpvOc(Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GDateTime)">
+            <summary>
+            Vrátí tabulku ppvcek dané osoby v daném intervalu dle OC
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Trans_DetailPpv(Gordic.General.GString,Gordic.General.GDecimal)">
+            <summary>
+            Vrátí detail PPV 
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Trans_GetNarokyOsoby(Gordic.General.GString)">
+            <summary>
+            Vrátí nárok na dovolenou k danému ppv
+            </summary>
+            <param name="ixsEsu">ID ESU</param>
+            <returns>počet dní</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Trans_GetSchvaleneDnyOsoby(Gordic.General.GString)">
+            <summary>
+            Vrátí pocty schvalenzch dnu
+            </summary>
+            <param name="ixsEsu">ID ESU</param>
+            <returns>počet dní</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Trans_GetNarok(Gordic.General.GString)">
+            <summary>
+            Vrátí nárok na dovolenou k danému ppv k aktuálnímu datu
+            </summary>
+            <param name="ixsPpv">ID PPV</param>
+            <returns>počet dní</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Trans_GetSchvaleneDny(Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Vrátí počet již zarezervovanych dnu k danému ppv
+            </summary>
+            <param name="ixsPpv">ID PPV</param>
+            <param name="ixsNpr">vlastní neppřítomnost která se do součtu nezapočítává</param>
+            <returns>počet dní</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Trans_GetKalendar(Gordic.General.GString,Gordic.General.GDecimal)">
+            <summary>
+            Vrátí kalendářpro davé období a PPV
+            </summary>
+            <param name="ixsPpv">ID PPV</param>
+            <param name="rokObdMzdy">rok_obd_mzdy</param>
+            <returns>počet dní</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Trans_GetKalendar(Gordic.General.GString,Gordic.General.GDate)">
+            <summary>
+            Vrátí kalendářpro davé období a PPV
+            </summary>
+            <param name="ixsPpv">ID PPV</param>
+            <param name="datum">datum</param>
+            <returns>počet dní</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Trans_JePracovniDen(Gordic.General.GString,Gordic.General.GDate)">
+            <summary>
+            Vrátí bool jestli je zadané datum pracovní den
+            </summary>
+            <param name="ixsKal">ID KALENDÁŘE</param>
+            <param name="datum">datum</param>
+            <returns>true kdyz je pracovni den</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Trans_DetailOsoby(Gordic.General.GString)">
+            <summary>
+            Vrátí detailní informace o osobě dle parametru l_oIxsEsu 
+            </summary>
+            <param name="ixsEsu">ID osoby v pamsesu</param>
+            <returns>typový dataset pamsesu</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Trans_IxsEsuPrihlasenehoUzivatele(Gordic.General.GString,Gordic.General.GString@)">
+            <summary>
+            Vrátí ixsesu uživalele podle ixsref
+            </summary>
+            <param name="ixsEsu">id externího subjektu v pam </param>
+            <param name="ixsRef">id referenta</param>
+            <returns>bool jestli je podařilo IXSREF spárovat S IXXSESU   </returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Trans_GetOces(Gordic.General.GString,System.Collections.Generic.List{Gordic.General.GString}@)">
+            <summary>
+             Vrátí list OCE k příslušné osobě
+            </summary>
+            <param name="ixsEsu">id osoby</param>
+            <param name="oceList"> list OCE </param>
+            <returns>bool jestli je podařilo najít OCE</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Trans_JeSchvalovatel(Gordic.General.GString,System.Collections.Generic.List{Gordic.General.GString}@)">
+            <summary>
+            kontrola jestli je schvalovatel
+            </summary>
+            <param name="ixsEsu">id uzivatele</param>
+            <param name="symList">list SYM na které uživatel patří</param>
+            <returns>bool jestli je uyivatel schvalovatel</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.Trans_JeSchvalovatel(Gordic.General.GString)">
+            <summary>
+            kontrola jestli je schvalovatel
+            </summary>
+            <param name="ixsEsu">id uzivatele</param>
+            <returns>bool jestli je uzivatel schvalovatel</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.ParametrSchvalovatel">
+            <summary>
+            vrací true když je dov_rez_provoz = 2 
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovOsoby.ParametrAdministrator">
+            <summary>
+            vrací true když je dov_rez_provoz = 4 
+            </summary>
+        </member>
+        <member name="T:Gordic.Dov.Server.GDovPersonalistika">
+            <summary>aplikační logika aplikace pro správu dovolených</summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovPersonalistika.OsobyLogic">
+            <summary>
+            Logika SYM
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovPersonalistika.Trans_IxsEsu2OcPer(Gordic.General.GString)">
+            <summary>
+            vrátí OC k zadanému ixs_esu dle PER
+            </summary>
+            <param name="ixsEsu">identifikace osoby</param>
+            <returns>vrátí osobní číslo</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovPersonalistika.Gordic#Dov#Interface#IGDovPersonalistika#IxsEsu2OcPer(Gordic.General.GString)">
+            <summary>
+            vrátí OC k zadanému ixs_esu dle PER
+            </summary>
+            <param name="ixsEsu">identifikace osoby</param>
+            <returns>vrátí osobní číslo</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovPersonalistika.IxsEsu2OcPer(Gordic.General.GString,System.Boolean)">
+            <summary>
+            vrátí OC k zadanému ixs_esu dle PER
+            </summary>
+            <param name="ixsEsu">identifikace osoby</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>vrátí osobní číslo</returns>
+        </member>
+        <member name="T:Gordic.Dov.Server.GDovSystemizace">
+            <summary>aplikační logika aplikace pro správu dovolených</summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovSystemizace.VosLogic">
+            <summary>
+            Logika VOS
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovSystemizace.SymLogic">
+            <summary>
+            Logika SYM
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.Trans_AktualniVos">
+            <summary>
+            Vrátí aktuální VOS
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.Trans_GetSchvalovatelSym(Gordic.General.GString)">
+            <summary>
+            vrátí list ixs_sym schvalovatelů k příslušnému ppv
+            </summary>
+            <param name="ixsPpv">osobní číslo žadatele</param>
+            <returns>vrátí list ixs_esu</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.Trans_Oc2IxsEsu(Gordic.General.GString,Gordic.General.GString@)">
+            <summary>
+            vrátí ixs_esu k zadanému Oc
+            </summary>
+            <param name="osobniCislo">osobní číslo žadatele</param>
+            <param name="ixsEsu">osobní číslo žadatele</param>
+            <returns>vrátí uspěšnost operace</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.Trans_Sym2IxsEsu(Gordic.General.GString,System.Collections.Generic.List{Gordic.General.GString}@)">
+            <summary>
+            vrátí list ixsesu k příslušnému sym
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.Trans_Sym2Ppv(Gordic.General.GString,System.Collections.Generic.List{Gordic.General.GString}@)">
+            <summary>
+            list PPV na Sym
+            </summary>
+            <param name="ixsPpv"></param>
+            <param name="isxSym"></param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.Trans_Ppv2Sym(Gordic.General.GString,System.Collections.Generic.List{Gordic.General.GString}@)">
+            <summary>
+            vrátí list SYM k danému PPV
+            </summary>
+            <param name="ixsPpv"></param>
+            <param name="isxSym"></param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.Trans_GetNadSym(Gordic.General.GString,System.Collections.Generic.List{Gordic.General.GString}@)">
+            <summary>
+            vrátí nadřazené sym
+            </summary>
+            <param name="ixsPpv"></param>
+            <param name="nadSym"></param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.Trans_GetSym(Gordic.General.GString)">
+            <summary>
+            vrátí sym na kterém je zarazene dané ppv
+            </summary>
+            <param name="ixsPpv"></param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.Trans_Sym2Oces(Gordic.General.GString,System.Collections.Generic.List{Gordic.General.GString}@)">
+            <summary>
+            k SYM vrátí OCES
+            </summary>
+            <param name="ixsOceList"></param>
+            <param name="isxSym"></param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.Trans_Sym2OcesNazev(Gordic.General.GString,System.Collections.Generic.List{Gordic.General.GString}@)">
+            <summary>
+            vrátí nayev OCE k danému SYM
+            </summary>
+            <param name="ixsOceList"></param>
+            <param name="isxSym"></param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.Trans_Ppv2Name(Gordic.General.GString)">
+            <summary>
+            vrací jméno osoby k danému PPV
+            </summary>
+            <param name="ixsPpv">id ppv </param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.Trans_Sym2Names(Gordic.General.GString)">
+            <summary>
+            vrací jména lidí na sym
+            </summary>
+            <param name="isxSym">id ppv </param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.Trans_VedouciPostaveniSym(Gordic.General.GString)">
+            <summary>
+            jestli je SYM vedoucí
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.AktualniVos(System.Boolean)">
+            <summary>
+            Vrátí aktuální VOS
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.Gordic#Dov#Interface#IGDovSystemizace#GetSchvalovatelSym(Gordic.General.GString)">
+            <summary>
+            vrátí list ixs_sym schvalovatelů k příslušnému ppv
+            </summary>
+            <param name="ixsPpv">osobní číslo žadatele</param>
+            <returns>vrátí list ixs_esu</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.GetSchvalovatelSym(Gordic.General.GString,System.Boolean)">
+            <summary>
+            vrátí list ixs_sym schvalovatelů k příslušnému ppv
+            </summary>
+            <param name="ixsPpv">osobní číslo žadatele</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>vrátí list ixs_esu</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.Oc2IxsEsu(Gordic.General.GString,Gordic.General.GString@,System.Boolean)">
+            <summary>
+            vrátí ixs_esu k zadanému Oc
+            </summary>
+            <param name="osobniCislo">osobní číslo žadatele</param>
+            <param name="ixsEsu">osobní číslo žadatele</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>vrátí uspěšnost operace</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.Sym2IxsEsu(Gordic.General.GString,System.Collections.Generic.List{Gordic.General.GString}@,System.Boolean)">
+            <summary>
+            vrátí list ixsesu k příslušnému sym
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.Sym2Ppv(Gordic.General.GString,System.Collections.Generic.List{Gordic.General.GString}@,System.Boolean)">
+            <summary>
+            list PPV na Sym
+            </summary>
+            <param name="ixsPpv"></param>
+            <param name="isxSym"></param>
+            <param name="newTransaction">rizení transakci</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.Ppv2Sym(Gordic.General.GString,System.Collections.Generic.List{Gordic.General.GString}@,System.Boolean)">
+            <summary>
+            vrátí list SYM k danému PPV
+            </summary>
+            <param name="ixsPpv"></param>
+            <param name="isxSym"></param>
+            <param name="newTransaction">rizení transakci</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.GetNadSym(Gordic.General.GString,System.Collections.Generic.List{Gordic.General.GString}@,System.Boolean)">
+            <summary>
+            vrátí nadřazené sym
+            </summary>
+            <param name="ixsPpv"></param>
+            <param name="nadSym"></param>
+            <param name="newTransaction">rizení transakci</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.Gordic#Dov#Interface#IGDovSystemizace#GetSym(Gordic.General.GString)">
+            <summary>
+            vrátí sym na kterém je zarazene dané ppv
+            </summary>
+            <param name="ixsPpv"></param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.GetSym(Gordic.General.GString,System.Boolean)">
+            <summary>
+            vrátí sym na kterém je zarazene dané ppv
+            </summary>
+            <param name="ixsPpv"></param>
+            <param name="newTransaction">rizení transakci</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.Sym2Oces(Gordic.General.GString,System.Collections.Generic.List{Gordic.General.GString}@,System.Boolean)">
+            <summary>
+            k SYM vrátí OCES
+            </summary>
+            <param name="ixsOceList"></param>
+            <param name="isxSym"></param>
+            <param name="newTransaction">rizení transakci</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.Sym2OcesNazev(Gordic.General.GString,System.Collections.Generic.List{Gordic.General.GString}@,System.Boolean)">
+            <summary>
+            vrátí nayev OCE k danému SYM
+            </summary>
+            <param name="ixsOceList"></param>
+            <param name="isxSym"></param>
+            <param name="newTransaction">rizení transakci</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.Gordic#Dov#Interface#IGDovSystemizace#Ppv2Name(Gordic.General.GString)">
+            <summary>
+            vrací jméno osoby k danému PPV
+            </summary>
+            <param name="ixsPpv">id ppv </param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.Ppv2Name(Gordic.General.GString,System.Boolean)">
+            <summary>
+            vrací jméno osoby k danému PPV
+            </summary>
+            <param name="ixsPpv">id ppv </param>
+            <param name="newTransaction">rizení transakci</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.Sym2Names(Gordic.General.GString,System.Boolean)">
+            <summary>
+            vrací jména lidí na sym
+            </summary>
+            <param name="isxSym">id ppv </param>
+            <param name="newTransaction">rizení transakci</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovSystemizace.VedouciPostaveniSym(Gordic.General.GString,System.Boolean)">
+            <summary>
+            jestli je SYM vedoucí
+            </summary>
+        </member>
+        <member name="T:Gordic.Dov.Server.GDovMistaPobytu">
+            <summary>aplikační logika aplikace pro správu dovolených</summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovMistaPobytu.Gordic#Dov#Interface#IGDovMistaPobytu#NaplnSeznamMistPobytu(Gordic.General.GString)">
+            <summary>
+            vrátí seznam míst pobytu k dané nepřítomnosti
+            </summary>
+            <param name="ixsNpr">ID mepritomnosti</param>
+            <returns>MistaPobytuDataTable</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovMistaPobytu.NaplnSeznamMistPobytu(Gordic.General.GString,System.Boolean)">
+            <summary>
+            vrátí seznam míst pobytu k dané nepřítomnosti
+            </summary>
+            <param name="ixsNpr">ID mepritomnosti</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>MistaPobytuDataTable</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovMistaPobytu.GetPoradi(Gordic.General.GString,System.Boolean)">
+            <summary>
+            generuje pořadí pro nový záznam o místě pobytu během dovolené
+            </summary>
+            <param name="ixsNpr">ID mepritomnosti</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>pořadí</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovMistaPobytu.Gordic#Dov#Interface#IGDovMistaPobytu#PridatMisto(Gordic.Dov.Interface.MistaPobytuDataSet.MistaPobytuRow,Gordic.General.GString)">
+            <summary>
+            přidá místo pobytu k dané nepřítomnosti
+            </summary>
+            <param name="misto">zaznam o miste pobytu</param>
+            <param name="ixsNpr">ID mepritomnosti</param>
+            <returns>pořadí</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovMistaPobytu.PridatMisto(Gordic.Dov.Interface.MistaPobytuDataSet.MistaPobytuRow,Gordic.General.GString,System.Boolean)">
+            <summary>
+            přidá místo pobytu k dané nepřítomnosti
+            </summary>
+            <param name="misto">zaznam o miste pobytu</param>
+            <param name="ixsNpr">ID mepritomnosti</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>pořadí</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovMistaPobytu.Gordic#Dov#Interface#IGDovMistaPobytu#NaplnDetailMistaPobytu(Gordic.General.GString,Gordic.General.GInt32)">
+            <summary>
+            Vratí informace o miste pobytu
+            </summary>
+            <param name="ixsNpr">ID nepritomnosti</param>
+            <param name="poradi">pořadí místa</param>
+            <returns>pořadí</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovMistaPobytu.NaplnDetailMistaPobytu(Gordic.General.GString,Gordic.General.GInt32,System.Boolean)">
+            <summary>
+            Vratí informace o miste pobytu
+            </summary>
+            <param name="ixsNpr">ID nepritomnosti</param>
+            <param name="poradi">pořadí místa</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>pořadí</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovMistaPobytu.Gordic#Dov#Interface#IGDovMistaPobytu#SmazatMistoPobytu(Gordic.General.GString,Gordic.General.GInt32)">
+            <summary>
+            odstrani misto ze seznamu mist dane nepritomnosti - zmeni aktivitu
+            </summary>
+            <param name="ixsNpr">ID nepritomnosti</param>
+            <param name="poradi">pořadí místa</param>
+            <returns>výsledek</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovMistaPobytu.SmazatMistoPobytu(Gordic.General.GString,Gordic.General.GInt32,System.Boolean)">
+            <summary>
+            odstrani misto ze seznamu mist dane nepritomnosti - zmeni aktivitu
+            </summary>
+            <param name="ixsNpr">ID nepritomnosti</param>
+            <param name="poradi">pořadí místa</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>výsledek</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovMistaPobytu.Gordic#Dov#Interface#IGDovMistaPobytu#TrvalyPobyt(Gordic.General.GString)">
+            <summary>
+            vrátí adresu trvaleho pobytu dle zadaného ixs_esu
+            </summary>
+            <param name="ixsEsu">ID nepritomnosti</param>
+            <returns>typovaný dataset</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovMistaPobytu.TrvalyPobyt(Gordic.General.GString,System.Boolean)">
+            <summary>
+            vrátí adresu trvaleho pobytu dle zadaného ixs_esu
+            </summary>
+            <param name="ixsEsu">ID nepritomnosti</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>typovaný dataset</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovMistaPobytu.Trans_Commit_NaplnSeznamMistPobytu(Gordic.General.GString)">
+            <summary>
+            vrátí seznam míst pobytu k dané nepřítomnosti
+            </summary>
+            <param name="ixsNpr">ID mepritomnosti</param>
+            <returns>MistaPobytuDataTable</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovMistaPobytu.Trans_GetPoradi(Gordic.General.GString)">
+            <summary>
+            generuje pořadí pro nový záznam o místě pobytu během dovolené
+            </summary>
+            <param name="ixsNpr">ID mepritomnosti</param>
+            <returns>pořadí</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovMistaPobytu.Trans_PridatMisto(Gordic.Dov.Interface.MistaPobytuDataSet.MistaPobytuRow,Gordic.General.GString)">
+            <summary>
+            přidá místo pobytu k dané nepřítomnosti 
+            </summary>
+            <param name="misto">zaznam o miste pobytu</param>
+            <param name="ixsNpr">ID mepritomnosti</param>
+            <returns>pořadí</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovMistaPobytu.Trans_NaplnDetailMistaPobytu(Gordic.General.GString,Gordic.General.GInt32)">
+            <summary>
+            Vratí informace o miste pobytu
+            </summary>
+            <param name="ixsNpr">ID nepritomnosti</param>
+            <param name="poradi">pořadí místa</param>
+            <returns>pořadí</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovMistaPobytu.Trans_SmazatMistoPobytu(Gordic.General.GString,Gordic.General.GInt32)">
+            <summary>
+            odstrani misto ze seznamu mist dane nepritomnosti - zmeni aktivitu
+            </summary>
+            <param name="ixsNpr">ID nepritomnosti</param>
+            <param name="poradi">pořadí místa</param>
+            <returns>výsledek</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovMistaPobytu.Trans_TrvalyPobyt(Gordic.General.GString)">
+            <summary>
+            vrátí adresu trvaleho pobytu dle zadaného ixs_esu
+            </summary>
+            <param name="ixsEsu">ID nepritomnosti</param>
+            <returns>typovaný dataset</returns>
+        </member>
+        <member name="T:Gordic.Dov.Server.Gordic_Dov_Server">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server._31000081">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se najít schvalovatele..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server._31000083">
+            <summary>
+              Looks up a localized string similar to Neuložený záznam.
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server._31000084">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se změnit stav nepřítomnosti..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server._31000091">
+            <summary>
+              Looks up a localized string similar to Špatně nastavený interval nepřítomnosti.
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server._31000092">
+            <summary>
+              Looks up a localized string similar to Nepřítomnost nesplňuje nárok..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server._31000093">
+            <summary>
+              Looks up a localized string similar to Ve vybraném termínu má osoba již zadanou žádost..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server._31000094">
+            <summary>
+              Looks up a localized string similar to Nepřítomnost je v pořádku..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server._31000095">
+            <summary>
+              Looks up a localized string similar to Zrušeno.
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server._31000096">
+            <summary>
+              Looks up a localized string similar to Vaše žádost o dovolenou byla zamítnuta.
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server._31000097">
+            <summary>
+              Looks up a localized string similar to Vaše žádost o dovolenou byla schválena.
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server._31000098">
+            <summary>
+              Looks up a localized string similar to Avizace žádosti o dovolenou určené ke schválení.
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server._31000100">
+            <summary>
+              Looks up a localized string similar to Schvalovatel nenalezen.
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server._31000103">
+            <summary>
+              Looks up a localized string similar to Organizační struktura.
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server._31000104">
+            <summary>
+              Looks up a localized string similar to Kořenový uzel organizační struktury.
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server._31000105">
+            <summary>
+              Looks up a localized string similar to IS GINIS.
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server._31000115">
+            <summary>
+              Looks up a localized string similar to Nelze dohledat platný pracovněprávní vztah..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server._31000116">
+            <summary>
+              Looks up a localized string similar to Osoba není vedena v agendě PAM..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server._31000118">
+            <summary>
+              Looks up a localized string similar to Interval nepřítomnosti obsahuje den nižší než aktuální datum..
+            </summary>
+        </member>
+        <member name="T:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000003">
+            <summary>
+              Looks up a localized string similar to  Při pokusu o avizaci schvalovateli došlo k chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000005">
+            <summary>
+              Looks up a localized string similar to Při pokusu o avizaci vlastníkovi o schválení žádosti došlo k chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000007">
+            <summary>
+              Looks up a localized string similar to Při pokusu o avizaci vlastníkovi o zamítnutí žádosti došlo k chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000009">
+            <summary>
+              Looks up a localized string similar to Při pokusu o odeslání e-mailu došlo k chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000013">
+            <summary>
+              Looks up a localized string similar to Chyba při generování seznamu schválených nepřítomností za určitý měsíc..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000015">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se uložit data do tabulky DOVSNPS..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000017">
+            <summary>
+              Looks up a localized string similar to Chyba při generování dat pro tabulku DOVSNPS..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000019">
+            <summary>
+              Looks up a localized string similar to Chyba při vypočítávání pracovních hodin během zadaného intervalu..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000021">
+            <summary>
+              Looks up a localized string similar to Chyba během zjišťování počtu pracovních hodin za den dle daného kalendáře..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000024">
+            <summary>
+              Looks up a localized string similar to Chyba při načítání seznamu míst pobytu k dané nepřítomnosti..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000026">
+            <summary>
+              Looks up a localized string similar to Chyba při zjišťování pořadí záznamu místa pobytu..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000027">
+            <summary>
+              Looks up a localized string similar to Chyba při ukládání míst pobytu k nepřítomnosti ID: {0}..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000028">
+            <summary>
+              Looks up a localized string similar to Chyba při naplnění detailu místa pobytu z DB..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000029">
+            <summary>
+              Looks up a localized string similar to Chyba při pokusu o smazání místa pobytu u nepřítomnosti ID: {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000030">
+            <summary>
+              Looks up a localized string similar to Chyba při pokusu o naplnění místa pobytu adresou trvalého bydliště z DB..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000031">
+            <summary>
+              Looks up a localized string similar to Chyba při získávání seznamu osob z DB..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000032">
+            <summary>
+              Looks up a localized string similar to Chyba při načítání pracovněprávních vztahů osoby {0} v daném intervalu..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000033">
+            <summary>
+              Looks up a localized string similar to Chyba při doplňování informací o PPV..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000035">
+            <summary>
+              Looks up a localized string similar to Chyba při nahrávání detailu PPV..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000036">
+            <summary>
+              Looks up a localized string similar to Chyba při zjišťování nároku na dovolenou u osoby..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000037">
+            <summary>
+              Looks up a localized string similar to Chyba při zjišťování počtu schválených dnů dané osoby..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000038">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při zjišťování nároku u daného PPV..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000039">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při zjišťování schválených zarezervovaných dnů k danému PPV..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000040">
+            <summary>
+              Looks up a localized string similar to Chyba při zjišťování kalendáře náležícího danému PPV..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000041">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při zjišťování zda se jedná o pracovní den..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000042">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při nahrávání detailu osoby..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000043">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při zjišťování IxsEsu přihlášeného uživatele..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000044">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při zjišťování organizačních celků (OCE) do kterých je zařazena daná osoba..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000045">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při zjišťování zda má daný uživatel vedoucí postavení v rámci některých SYM..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000046">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při zjišťování nadřazeného systemizivaného místa (SYM)..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000047">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při prevádění osobního čísla (Oc) na identifikátor (ixs_esu)..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000048">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při zjišťování identifikátorů osob zařazených na určitém systemizovaném místě (Sym)..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000049">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při zjišťování PPV zařazených na SYM..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000050">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při zjišťování na která SYM je zařazené dané PPV..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000051">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při zjištování nadřazeného systemizovaného místa k danému PPV..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000052">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při zjišťování organizačních celků k danému systemizovanému místu..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000054">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při zjišťování jména k danému PPV..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000055">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při zjišťování názvů organizačních celku ve kterých je zařazeno dané systemizované místo..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000056">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při zjišťování jmen osob zařazených na daném systemizovaném místě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000057">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při zjišťování zda se je dané Sym ve vedoucím postavení..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000058">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při ukládání nepřítomnosti do databáze..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000059">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při nahrávání informací o osobě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000060">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se naplnit detail nepřítomnosti..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000061">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při zjišťování stavu dané nepřítomnosti..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000062">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při pokusu o změnu stavu nepřítomnosti..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000063">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při nahrávání seznamu nepřítomností..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000064">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při naplňování seznamu nepřítomností pro daného schvalovatele..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000065">
+            <summary>
+              Looks up a localized string similar to  Nastala chyba při naplňování seznamu nepřítomností pro dané Sym..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000066">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při naplňování seznamu nepřítomností patřících danému uživateli..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000067">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při hledání kolizí..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000068">
+            <summary>
+              Looks up a localized string similar to Při pokusu o změnu aktivity nepřítomnosti {0} došlo k chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000070">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při nastavování aktivity nepřítomnosti..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000071">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při zjišťování názvu stavu..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000072">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při nahrávání seznamu nepřítomností ke schválení..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000073">
+            <summary>
+              Looks up a localized string similar to Došlo k chybě během volání obslužné metody VytvorZadost..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000074">
+            <summary>
+              Looks up a localized string similar to Došlo k chybě během volání obslužné metody VratMojeZadosti..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000075">
+            <summary>
+              Looks up a localized string similar to Došlo k chybě během volání obslužné metody VratPrehledNepritomnosti..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000076">
+            <summary>
+              Looks up a localized string similar to Došlo k chybě během volání obslužné metody VratDetailZadosti..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000077">
+            <summary>
+              Looks up a localized string similar to Došlo k chybě během volání obslužné metody UpravZadost..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000078">
+            <summary>
+              Looks up a localized string similar to Při zakládání údajů o žádosti {0} došlo k chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000079">
+            <summary>
+              Looks up a localized string similar to Při pokusu o změnu aktivity místa pobytuběhem dovolené {0} došlo k chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000080">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se uložit informace o nepřítomnosti {0} ve stavu {1}. Chyba: {2}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000083">
+            <summary>
+              Looks up a localized string similar to Při generování textového řetězce s informacemi o nepřítomnosti, došlo k chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000085">
+            <summary>
+              Looks up a localized string similar to Pro datum {0} nejsou v kalendáři {1} vygenerovány záznamy..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000086">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při výpočtu délky intervalu od: {0} do: {1}   Chyba: {2}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000087">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se změnit stav nepřítomnosti. Chyba: {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000088">
+            <summary>
+              Looks up a localized string similar to Nastala chyba během vytváření nové nepřítomnosti. Chyba: {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000089">
+            <summary>
+              Looks up a localized string similar to Nastala chyba během vytváření nahrávání nepřítomnosti. Chyba: {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000090">
+            <summary>
+              Looks up a localized string similar to Nastala chyba během zakládání instance nepřítomnosti. Chyba: {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000102">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při zjišťování druhu ppv.
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000106">
+            <summary>
+              Looks up a localized string similar to Chyba při načítání popisu druhu mzdy.
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000110">
+            <summary>
+              Looks up a localized string similar to Chyba při načítání pracovních poměrů osoby s osobním číslem {0} v daném intervalu..
+            </summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.Gordic_Dov_Server_Exceptions._31000113">
+            <summary>
+              Looks up a localized string similar to Nastala chyba při prevádění identifikátoru osoby na osobní číslo..
+            </summary>
+        </member>
+        <member name="T:Gordic.Dov.Server.GDovWSMethods">
+            <summary>aplikační logika aplikace pro správu dovolených</summary>
+        </member>
+        <member name="P:Gordic.Dov.Server.GDovWSMethods.DovSystemizace">
+            <summary>
+            Logika systemizace
+            </summary>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovWSMethods.Trans_VytvorZadost(Gordic.General.GString,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GBoolean,Gordic.General.GBoolean)">
+            <summary>
+            vytvoří žádost a předá ji ke schválení
+            </summary>
+            <param name="osobniCislo">osobní číslo žadatele</param>
+            <param name="datumOd">Datum zacatku nepritomnosti</param>
+            <param name="datumDo">Datum konce nepritomnosti</param>
+            <param name="prizPdZac">Příznak půl dne na začátku intervalu</param>
+            <param name="prizPdKon">Příznak půl dne na konci intervalu</param>
+            <returns>vrátí list ixs_esu</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovWSMethods.VratMojeNepritomnosti(Gordic.General.GString)">
+            <summary>
+            vrátí list ixs_esu schvalovatelů k příslušnému oc
+            </summary>
+            <param name="osobniCislo">osobní číslo žadatele</param>
+            <returns>vrátí list ixs_esu</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovWSMethods.VratPrehledNepritomnosti(Gordic.General.GString)">
+            <summary>
+            vrátí list ixs_esu schvalovatelů k příslušnému oc
+            </summary>
+            <param name="osobniCislo">osobní číslo žadatele</param>
+            <returns>vrátí list ixs_esu</returns>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovWSMethods.VratDetailZadosti(Gordic.General.GString)">
+            <summary>
+            Vrátí detail nepřítomnosti dle paramateru ixsnpr
+            </summary>
+            <param name="idNepritomnosti"></param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovWSMethods.UpravZadost(Gordic.General.GString,System.Int32,Gordic.General.GString)">
+            <summary>
+            upraví stav nepřítomnosti 
+            </summary>
+            <param name="idNepritomnosti">id žádosti kterou chceme měnit</param>
+            <param name="stavNepritomnosti">nový stav na který se má změnit</param>
+            <param name="osobniCislo">osobní číslo</param>
+        </member>
+        <member name="M:Gordic.Dov.Server.GDovWSMethods.VytvorZadost(Gordic.General.GString,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GBoolean,Gordic.General.GBoolean,System.Boolean)">
+            <summary>
+            vytvoří žádost a předá ji ke schválení
+            </summary>
+            <param name="osobniCislo">osobní číslo žadatele</param>
+            <param name="datumOd">Datum zacatku nepritomnosti</param>
+            <param name="datumDo">Datum konce nepritomnosti</param>
+            <param name="prizPdZac">Příznak půl dne na začátku intervalu</param>
+            <param name="prizPdKon">Příznak půl dne na konci intervalu</param>
+            <param name="newTransaction">rizení transakci</param>
+            <returns>vrátí list ixs_esu</returns>
+        </member>
+    </members>
+</doc>

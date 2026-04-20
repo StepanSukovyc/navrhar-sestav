@@ -1,0 +1,429 @@
+﻿<AddIn name        = "Project Browser"
+       author      = "Mgr. Stepan Sukovyč"
+       description = "gres:29450950"
+       addInManagerHidden = "preinstalled"
+       version="5.25.0.1">
+
+  <Manifest>
+    <Identity name = "Gordic.GFE.WinClient.ProjectBrowser"/>
+  </Manifest>
+
+  <Runtime>
+    <Import assembly=":Gordic.GFE.WinClient">
+      <ConditionEvaluator name="WriteableProject" class="Gordic.GFE.WinClient.Core.WriteableProjectConditionEvaluator"/>
+      <ConditionEvaluator name="SolutionOpen" class="Gordic.GFE.WinClient.Project.SolutionOpenConditionEvaluator"/>
+      <ConditionEvaluator name="WriteableSolution" class="Gordic.GFE.WinClient.Project.WriteableSolutionConditionEvaluator"/>
+    </Import>
+  </Runtime>
+
+  <!-- Filtry souborů -->
+  <Path name = "/ReportDesigner/Desktop/Combine/FileFilter">
+    <FileFilter id         = "GfrmSolution"
+		            name       = "gres:29450815"
+		            class      = "Gordic.GFE.WinClient.Project.LoadSolution"
+		            extensions = "*.gfrm"/>
+    <FileFilter id         = "AllFiles"
+		            name       = "gres:29450812"
+		            extensions = "*.*"/>
+  </Path>
+  <!-- konec Filtry souborů -->
+  <!-- Hlavní nabídka aplikace -->
+  <Path name = "/ReportDesigner/MainMenu/Close">
+    <Condition name = "SolutionOpen" action="Disable">
+      <MenuItem id = "CloseCombine"
+                label = "gres:29450951"
+                shortcut = "Control|Shift|F4"
+                class = "Gordic.GFE.WinClient.ProjectBrowser.CloseSolution"/>
+    </Condition>
+  </Path>
+  <!-- KONEC Hlavní nabídka aplikace -->
+
+  <Path name = "/Solution/MenuItems">
+    <Condition name="WriteableSolution" action="Disable">
+      <MenuItem id          = "RunSolution"
+                label       = "gres:29450952"
+                loadclasslazy="false"
+                icon        = "Icons__Gin__uzivatel_ukon"
+                shortcut    = "F5"
+                class       = "Gordic.GFE.WinClient.ProjectBrowser.RunSolution"/>
+      <MenuItem id = "RunSeparator" type = "Separator"/>
+    </Condition>
+    <MenuItem id    = "CreateArchive"
+              label = "gres:29450953"
+              icon  = "Icons__Gin__archivni_format"
+              loadclasslazy = "false"
+              class = "Gordic.GFE.WinClient.ProjectBrowser.CreateArchive"/>
+    <MenuItem id    = "SolutionOptions"
+              label = "gres:29450758"
+              icon  = "Icons__Gin__aplikace_nastaveni"
+              loadclasslazy = "false"
+              class = "Gordic.GFE.WinClient.ProjectBrowser.SolutionOptions"/>
+  </Path>
+
+  <Path name = "/ReportDesigner/Desktop/Pads">
+    <Pad id       = "ProjectBrowser"
+		     category = "Tools"
+         title    = "gres:29450951"
+         icon     = "PadIcons.ProjectBrowser"
+         shortcut = "Control|Alt|L"
+         class    = "Gordic.GFE.WinClient.ProjectBrowser.ProjectBrowserPad"/>
+  </Path>
+  
+    <!-- kontextová nabídka ProjectBrowser-->
+  <Path name = "/ReportDesigner/Pads/ProjectBrowser/ContextMenu/ProjectNode">
+    <Condition name="WriteableProject" action="Disable">
+      <MenuItem id = "ProjectAddMenu" label = "gres:29450766" type = "Menu" >
+        <Include path="/ReportDesigner/Pads/ProjectBrowser/ContextMenu/FolderNode/Add"/>
+      </MenuItem>
+    </Condition>
+    <MenuItem id    = "OpenConfigFile"
+              label = "gres:29450954"
+              icon = "Icons__Gin__soubor_otevrit"
+              loadclasslazy = "false"
+              class = "Gordic.GFE.WinClient.Project.Commands.OpenConfigFile"/>
+    <MenuItem id = "Separator1" type = "Separator"/>
+    <Include id="inc" path="/ReportDesigner/Pads/ProjectBrowser/ContextMenu/CutPasteRemoveRename"/>
+    <MenuItem id = "Separator2" type = "Separator"/>
+    <Include id = "ProjectActions" path="/ReportDesigner/Pads/ProjectBrowser/ContextMenu/ProjectActions"/>
+    <MenuItem id = "NewItemSeparator" type = "Separator" />
+    <MenuItem id = "ShowProperty"
+                    label = "gres:29450765"
+                    type = "Item"
+                    icon ="Icons.16x16.PropertiesIcon"
+                    loadclasslazy = "false"
+                    class = "Gordic.GFE.WinClient.Project.Commands.ShowProperty"/>
+  </Path>
+
+  <Path name = "/ReportDesigner/Pads/ProjectBrowser/ContextMenu/FileNode">
+    <Condition name = "SelectedObject" implementinterface="Gordic.GFE.WinClient.Project.IFileProjectItemHandler">
+      <MenuItem id = "NewItemSeparator" type = "Separator" />
+      <MenuItem id = "ShowProperty"
+                      label = "gres:29450765"
+                      type = "Item"
+                      icon ="Icons.16x16.PropertiesIcon"
+                      loadclasslazy = "false"
+                      class = "Gordic.GFE.WinClient.Project.Commands.ShowProperty"/>
+    </Condition>
+  </Path>
+
+  <Path name="/ReportDesigner/Pads/ProjectBrowser/ContextMenu/ProjectActions">
+    <MenuItem id = "CloseSolution"
+		          label = "gres:29450955"
+              icon ="Icons__Gin__okno_zavrit"
+					    shortcut = "Control|Shift|F4"
+		          class = "Gordic.GFE.WinClient.ProjectBrowser.CloseSolution"/>
+    <MenuItem id = "OpenFolder"
+		          label = "gres:29450876"
+              icon ="Icons__Gin__prehled_ulozene"
+		          class = "Gordic.GFE.WinClient.Project.Commands.OpenProjectFolder"/>
+  </Path>
+
+  <Path name = "/ReportDesigner/Pads/ProjectBrowser/ContextMenu/CutPasteRemoveRename">
+    <MenuItem id = "Cut"
+		          label = "gres:29450759"
+		          type = "Item"
+		          icon = "Icons.16x16.CutIcon"
+		          loadclasslazy = "false"
+		          class = "Gordic.GFE.WinClient.Project.Commands.CutProjectBrowserNode"/>
+    <MenuItem id    = "Paste"
+		          label = "gres:29450761"
+		          type = "Item"
+		          icon  = "Icons.16x16.PasteIcon"
+		          loadclasslazy = "false"
+		          class = "Gordic.GFE.WinClient.Project.Commands.PasteProjectBrowserNode"/>
+    <MenuItem id = "Remove"
+		          label = "gres:29450762"
+		          type = "Item"
+		          icon  = "Icons.16x16.DeleteIcon"
+		          loadclasslazy = "false"
+		          class = "Gordic.GFE.WinClient.Project.Commands.DeleteProjectBrowserNode"/>
+    <MenuItem id = "Rename"
+		          label    = "gres:29450880"
+		          shortcut = "F2"
+		          class    = "Gordic.GFE.WinClient.Project.Commands.RenameEntryEvent"/>
+  </Path>
+
+  <Path name = "/ReportDesigner/Pads/ProjectBrowser/ContextMenu/FolderNode">
+    <!--
+    <Condition name = "Ownerstate" ownerstate = "Missing">
+      <MenuItem id = "CreateMissing"
+			          label = "nová složka"
+			          type  = "Item"
+			          icon  = "Icons.16x16.NewFolderIcon"
+			          class = "TODO.Project.Commands.CreateMissingCommand"/>
+      <MenuItem id = "RemoveMissing"
+			          label = "odstranit"
+			          type  = "Item"
+			          icon  = "Icons.16x16.DeleteIcon"
+			          class = "TODO.Project.Commands.ExcludeFileFromProject"/>
+    </Condition>
+    -->
+    <ComplexCondition>
+      <Not>
+        <Condition name = "Ownerstate" ownerstate = "Missing"/>
+      </Not>
+      <MenuItem id = "Add" label = "přidat" type="Menu">
+        <MenuItem id    = "NewItem"
+				          label = "gres:29450956"
+				          icon  = "Icons.16x16.NewDocumentIcon"
+				          class = "Gordic.GFE.WinClient.Project.Commands.AddNewItemsToProject"/>
+        <MenuItem id    = "ExistingItem"
+				          label = "gres:29450957"
+				          class = "Gordic.GFE.WinClient.Project.Commands.AddExistingItemsToProject"/>
+        <!--<MenuItem id    = "NewFolder"
+				          label = "nová složka"
+				          icon  = "Icons.16x16.NewFolderIcon"
+				          class = "Gordic.GFE.WinClient.Project.Commands.AddNewFolderToProject"/>
+        <MenuItem id    = "ExistingFolder"
+				          label = "existující složka"
+				          class = "Gordic.GFE.WinClient.Project.Commands.AddExistingFolderToProject"/>-->
+      </MenuItem>
+      <!--<MenuItem id = "AddSeparator" type = "Separator"  />
+      <MenuItem id = "OpenFolder"
+              icon ="Icons__Gin__prehled_ulozene"
+			          label = "gres:29450876"
+			          class = "TODO.Project.Commands.OpenFolder"/>-->
+      <!--
+      <ComplexCondition>
+        <Or>
+          <Condition name = "Ownerstate" ownerstate = "InProject"/>
+          <Condition name = "Ownerstate" ownerstate = "None"/>
+        </Or>
+        <Condition name = "Ownerstate" ownerstate = "InProject">
+          <MenuItem id    = "ExcludeFile"
+					          label = "vyloučit z projektu"
+					          class = "TODO.Project.Commands.ExcludeFileFromProject"/>
+        </Condition>
+
+        <Condition name = "Ownerstate" ownerstate = "None">
+          <MenuItem id    = "IncludeFile"
+					          label = "zahrnout do projektu"
+					          class = "TODO.Project.Commands.IncludeFileInProject"/>
+        </Condition>
+
+        <MenuItem id = "ExcludeSeparator" type = "Separator" />
+      </ComplexCondition>
+
+      <Include id="CutCopyPasteDeleteRename" path="/ReportDesigner/Pads/ProjectBrowser/ContextMenu/CutCopyPasteDeleteRename"/>-->
+    </ComplexCondition>
+  </Path>
+
+  <Path name = "/ReportDesigner/Pads/ProjectBrowser/ContextMenu/SolutionNode">
+    <Include id = "SolutionList" path = "/Solution/MenuItems" />
+    <MenuItem id = "NewItemSeparator" type = "Separator" />
+    <MenuItem id = "CloseSolution"
+		          label = "gres:29450955"
+              icon ="Icons__Gin__okno_zavrit"
+					    shortcut = "Control|Shift|F4"
+		          class = "Gordic.GFE.WinClient.ProjectBrowser.CloseSolution"/>
+    <!--<Condition name="WriteableSolution" action="Disable">
+      <MenuItem id = "CombineAddMenu" label = "přidat" type = "Menu">
+        <MenuItem id    = "AddNewProjectToSolution"
+				          label = "nový projekt..."
+				          icon  = "Icons.16x16.NewProjectIcon"
+				          class = "TODO.Project.Commands.AddNewProjectToSolution"/>
+        <MenuItem id    = "AddExitingProjectToSolution"
+				          label = "existující projekt..."
+				          class = "TODO.Project.Commands.AddExitingProjectToSolution"/>
+        <MenuItem id    = "Separator1" type = "Separator" />
+        <MenuItem id    = "AddItem"
+				          label = "přidat položku..."
+				          class = "TODO.Project.Commands.AddExistingItemToSolution"/>
+        <MenuItem id    = "AddNewSolutionFolderToSolution"
+				          icon  = "ProjectBrowser.SolutionFolder.CreateNew"
+				          label = "nová složka sestavení..."
+				          class = "TODO.Project.Commands.AddNewSolutionFolderToSolution"/>
+      </MenuItem>
+    </Condition>
+
+    <MenuItem id = "AddSeparator" type = "Separator"/>
+    <MenuItem id    = "Paste"
+		          label = "vložit"
+		          icon  = "Icons.16x16.PasteIcon"
+		          loadclasslazy = "false"
+		          class = "TODO.Project.Commands.PasteProjectBrowserNode"/>
+    <MenuItem id       = "Rename"
+		          label    = "přejmenovat"
+		          shortcut = "F2"
+		          class    = "TODO.Project.Commands.RenameEntryEvent"/>-->
+  </Path>
+
+  <Path name = "/ReportDesigner/Pads/ProjectBrowser/ContextMenu/FileNode">
+    <Condition name = "Ownerstate" ownerstate = "InProject">
+      <MenuItem id = "SetDefault"
+			          label = "gres:29450958"
+                loadclasslazy = "false"
+                icon  = "Icons__Gin__nastaveni_obnovit_vychozi"
+			          class = "Gordic.GFE.WinClient.Project.Commands.SetDefault"/>
+    </Condition>
+    <ComplexCondition>
+      <Not>
+        <Condition name = "Ownerstate" ownerstate = "Missing"/>
+      </Not>
+      <MenuItem id = "AddSeparator" type = "Separator"  />
+      <MenuItem id = "OpenFile"
+			          label = "gres:29450891"
+			          icon  = "Icons.16x16.OpenFileIcon"
+			          class = "Gordic.GFE.WinClient.ProjectBrowser.OpenFileFromProjectBrowser"/>
+      <MenuItem id = "OpenFolderContainingFile"
+			          label = "gres:29450892"
+                icon="Icons__Gin__prehled_ulozene"
+			          class = "Gordic.GFE.WinClient.OpenFolderContainingFile"/>
+    </ComplexCondition>
+    <Condition name = "Ownerstate" ownerstate = "Missing">
+      <MenuItem id = "Remove"
+			          label = "gres:29450762"
+			          type = "Item"
+			          icon  = "Icons.16x16.DeleteIcon"
+			          class = "Gordic.GFE.WinClient.Project.Commands.DeleteProjectBrowserNode"/>
+    </Condition>
+    <ComplexCondition>
+      <Not>
+        <Condition name = "Ownerstate" ownerstate = "Missing"/>
+      </Not>
+      <MenuItem id = "OpenSeparator" type = "Separator" />
+      <!--
+      <ComplexCondition>
+        <Or>
+          <Condition name = "Ownerstate" ownerstate = "InProject"/>
+          <Condition name = "Ownerstate" ownerstate = "None"/>
+        </Or>
+        <Condition name = "Ownerstate" ownerstate = "InProject">
+          <MenuItem id    = "ExcludeFile"
+					          label = "vyloučit z projektu"
+					          class = "TODO.Project.Commands.ExcludeFileFromProject"/>
+        </Condition>
+
+        <Condition name = "Ownerstate" ownerstate = "None">
+          <MenuItem id    = "IncludeFile"
+					          label = "zahrnout do projektu"
+					          class = "TODO.Project.Commands.IncludeFileInProject"/>
+        </Condition>
+
+        <MenuItem id = "ExcludeSeparator" type = "Separator" />
+      </ComplexCondition>-->
+      <Include id="CutCopyPasteDeleteRename" path="/ReportDesigner/Pads/ProjectBrowser/ContextMenu/CutCopyPasteDeleteRename"/>
+    </ComplexCondition>
+  </Path>
+
+  <Path name = "/ReportDesigner/Pads/ProjectBrowser/ContextMenu/CutCopyPasteDeleteRename">
+    <MenuItem id = "Cut"
+		          label = "gres:29450759"
+		          type = "Item"
+		          icon = "Icons.16x16.CutIcon"
+		          loadclasslazy = "false"
+		          class = "Gordic.GFE.WinClient.Project.Commands.CutProjectBrowserNode"/>
+    <MenuItem id = "Copy"
+		          label = "gres:29450760"
+		          type = "Item"
+		          icon = "Icons.16x16.CopyIcon"
+		          loadclasslazy = "false"
+		          class = "Gordic.GFE.WinClient.Project.Commands.CopyProjectBrowserNode"/>
+    <MenuItem id    = "Paste"
+		          label = "gres:29450761"
+		          type = "Item"
+		          icon  = "Icons.16x16.PasteIcon"
+		          loadclasslazy = "false"
+		          class = "Gordic.GFE.WinClient.Project.Commands.PasteProjectBrowserNode"/>
+    <MenuItem id = "Delete"
+		          label = "gres:29450762"
+		          type = "Item"
+		          icon  = "Icons.16x16.DeleteIcon"
+		          loadclasslazy = "false"
+		          class = "Gordic.GFE.WinClient.Project.Commands.DeleteProjectBrowserNode"/>
+    <MenuItem id = "Rename"
+		          label    = "gres:29450880"
+		          shortcut = "F2"
+		          class    = "Gordic.GFE.WinClient.Project.Commands.RenameEntryEvent"/>
+  </Path>
+  <!-- konec kontextové nabídky ProjectBrowser-->
+
+  <!-- panel nástojů ProjectBrowser-->
+  <Path name = "/ReportDesigner/Pads/ProjectBrowser/ToolBar/Standard">
+    <Condition name = "SolutionOpen" action="Disable">
+      <ToolbarItem id = "CloseSolution"
+                tooltip = "gres:29450955"
+                icon ="Icons__Gin__okno_zavrit"
+                shortcut = "Control|Shift|F4"
+                class = "Gordic.GFE.WinClient.ProjectBrowser.CloseSolution"/>
+      <ToolbarItem id      = "Properties"
+			             icon    = "Icons.16x16.PropertiesIcon"
+			             tooltip = "gres:29450765"
+                    loadclasslazy = "false"
+			             class   = "Gordic.GFE.WinClient.Project.Commands.ShowProperty"/>
+      <!--<ToolbarItem id = "PropertySeparator" type = "Separator"/>
+      <ToolbarItem id      = "ShowAll"
+			             type    = "CheckBox"
+			             icon    = "ProjectBrowser.Toolbar.ShowHiddenFiles"
+			             tooltip = "zobrazit všechny soubory"
+			             class   = "TODO.Project.Commands.ToggleShowAll"/>
+      <ToolbarItem id      = "Refresh"
+			             icon    = "ProjectBrowser.Toolbar.Refresh"
+			             tooltip = "obnovit"
+			             class   = "TODO.Project.Commands.RefreshProjectBrowser"/>-->
+    </Condition>
+  </Path>
+
+  <Path name = "/ReportDesigner/Pads/ProjectBrowser/ToolBar/File">
+    <ToolbarItem id      = "OpenFile"
+		             icon    = "Icons.16x16.OpenFileIcon"
+		             tooltip = "gres:29450891"
+		             class   = "Gordic.GFE.WinClient.ProjectBrowser.OpenFileFromProjectBrowser"/>
+    <ToolbarItem id = "OpenFolderContainingFile"
+              tooltip = "gres:29450892"
+              icon="Icons__Gin__prehled_ulozene"
+              class = "Gordic.GFE.WinClient.OpenFolderContainingFile"/>
+
+    <Condition name = "Ownerstate" ownerstate = "InProject">
+      <ToolbarItem id = "SetDefault"
+			          tooltip = "gres:29450959"
+                loadclasslazy = "false"
+                icon  = "Icons__Gin__nastaveni_obnovit_vychozi"
+			          class = "Gordic.GFE.WinClient.Project.Commands.SetDefault"/>
+    </Condition>
+  </Path>
+
+  <Path name = "/ReportDesigner/Pads/ProjectBrowser/ToolBar/ProjectNode">
+    <ToolbarItem id    = "OpenConfigFile"
+              tooltip = "gres:29450954"
+              icon = "Icons__Gin__soubor_otevrit"
+              loadclasslazy = "false"
+              class = "Gordic.GFE.WinClient.Project.Commands.OpenConfigFile"/>
+    <ToolbarItem id = "OpenFolderContainingFile"
+              tooltip = "gres:29450892"
+              icon="Icons__Gin__prehled_ulozene"
+              class = "Gordic.GFE.WinClient.OpenFolderContainingFile"/>
+  </Path>
+  
+  <Path name = "/ReportDesigner/Pads/ProjectBrowser/ToolBar/SolutionNode">
+    <Condition name="WriteableSolution" action="Disable">
+      <ToolbarItem id          = "RunSolution"
+                tooltip       = "gres:29450952"
+                loadclasslazy="false"
+                icon        = "Icons__Gin__uzivatel_ukon"
+                shortcut    = "F5"
+                class       = "Gordic.GFE.WinClient.ProjectBrowser.RunSolution"/>
+      <ToolbarItem id = "RunSeparator" type = "Separator"/>
+    </Condition>
+    <ToolbarItem id    = "CreateArchive"
+                tooltip = "gres:29450953"
+                icon  = "Icons__Gin__archivni_format"
+                loadclasslazy = "false"
+                class = "Gordic.GFE.WinClient.ProjectBrowser.CreateArchive"/>
+    <ToolbarItem id    = "SolutionOptions"
+                tooltip = "gres:29450758"
+                icon  = "Icons__Gin__aplikace_nastaveni"
+                loadclasslazy = "false"
+                class = "Gordic.GFE.WinClient.ProjectBrowser.SolutionOptions"/>
+  </Path>
+  <!-- konec panel nástojů ProjectBrowser-->
+
+  <!-- vlastnosti sestavení-->
+  <Path name = "/SolutionOptionsDialog" icon="Icons__Gin__aplikace_nastaveni">
+    <DialogPanel id = "SolutionSettings"
+             label = "gres:29450800"
+             class = "Gordic.GFE.WinClient.Project.SolutionSettingsPanel"/>
+  </Path>
+  <!-- konec vlastnosti sestavení-->
+
+</AddIn>

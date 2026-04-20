@@ -1,0 +1,878 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Ele.Client</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Ele.Client.GEleAdmEngClientNT">
+            <summary>
+            NT- Adm Engine
+            </summary>
+        </member>
+        <member name="T:Gordic.Ele.Client.GEleAdmEngClientNT.StatusEnum">
+            <summary>stav posilany delegatem CanContinueDelegate</summary>
+        </member>
+        <member name="F:Gordic.Ele.Client.GEleAdmEngClientNT.StatusEnum.InfoMessage">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Ele.Client.GEleAdmEngClientNT.StatusEnum.PreInitialise">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Ele.Client.GEleAdmEngClientNT.StatusEnum.StartCprocOneDoc">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Ele.Client.GEleAdmEngClientNT.StatusEnum.AfterCprocOneDoc">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Ele.Client.GEleAdmEngClientNT.StatusEnum.End">
+            <summary></summary>
+        </member>
+        <member name="T:Gordic.Ele.Client.GEleAdmEngClientNT.CanContinueDelegate">
+            <summary>delegat kterym se dotazuje cyklus kontroly DMS, jestli muze pokracovat</summary>
+        </member>
+        <member name="F:Gordic.Ele.Client.GEleAdmEngClientNT.moUserProcess">
+            <summary>
+            GUserProcess
+            </summary>
+        </member>
+        <member name="F:Gordic.Ele.Client.GEleAdmEngClientNT.moELEAdmEngServerNT">
+            <summary>
+            Interface
+            </summary>
+        </member>
+        <member name="M:Gordic.Ele.Client.GEleAdmEngClientNT.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userprocess">GUserProcess</param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GEleAdmEngClientNT.GetDiskSerTable(Gordic.General.GString)">
+            <summary>
+            Vraci tabulku s informacemi o serverech a discich, je li vyplneno IxsUlo vraci jeden radek pro toto id
+            </summary>
+            <param name="IxsUlo">id - nepovinne</param>
+            <returns>tabulka</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GEleAdmEngClientNT.GetDiskSerTableForOneServer(Gordic.General.GString)">
+            <summary>
+            Vraci tabulku s informacemi o serverech a discich a to pro jeden server
+            </summary>
+            <param name="Server">jmeno serveru</param>
+            <returns>tabulka</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GEleAdmEngClientNT.GetDocTableForProc(Gordic.General.GString,Gordic.General.GString,Gordic.Ele.Interface.GAdmEngSupport.OrderCfgEnum,Gordic.Ele.Interface.GAdmEngSupport.TestTypeEnum,System.Int32,System.Int32,System.Boolean,System.Boolean,Gordic.Ele.Interface.GELEConst.StatusTypeEnum,System.Int32@,Gordic.Ele.Interface.GRunAdmEngConfig)">
+            <summary>
+            Vrati tabulku s dokumenty pro zpracovani 
+            </summary>
+            <param name="Server">server</param>
+            <param name="Disk">disk</param>
+            <param name="OrderCfg">poradi</param>
+            <param name="TestType">typ testu</param>
+            <param name="batchLen">MAX pocet</param>
+            <param name="OlderThanMin">vybrat jen dokumenty starsi nez zadany pocet minut (0=vsechny)</param>
+            <param name="DoSelectDocCount">udelat select count na celkovy pocet dokumentu</param>
+            <param name="ProcToVerifOnly">zpracovat jen dokumenty ve stavu k verifikaci</param>
+            <param name="StatusType">provádět výběr dle all/primar/altern</param>
+            <param name="DocCount">Celkovy pocet dokumentu</param>
+            <param name="RunCfg">pom. konfigurace</param>
+            <returns>tabulka</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GEleAdmEngClientNT.ProcessDocument(System.DateTime,System.Data.DataRow,System.Data.DataRow,Gordic.Ele.Interface.GAdmEngSupport.TestTypeEnum,System.Boolean,Gordic.Ele.Interface.ProcessDocResult@)">
+            <summary>
+            Zpracuje dokument (informace o dokumentu jsou v parametrech > SerDisRow a DocumentRow)
+            </summary>
+            <param name="TestStartedAt">datum a cas startu davky</param>
+            <param name="SerDisRow">radek s informacemi o serveru a disku</param>
+            <param name="DocumentRow">radek s informacemi o dokumentu</param>
+            <param name="TestType">typ testu</param>
+            <param name="TryNoExtensionOnError">pokus o stazeni dokumentu bez extension</param>
+            <param name="ProcRes">vysledek testu</param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GEleAdmEngClientNT.ProcessDocument(Gordic.General.GString,Gordic.Ele.Interface.GAdmEngSupport.TestTypeEnum,System.DateTime,System.Boolean,System.Boolean,System.Boolean,Gordic.Ele.Interface.ProcessDocResult@)">
+            <summary>
+            Zpracuje dokument (informace o dokumentu jsou v parametru > IxsUlo)
+            </summary>
+            <param name="IxsUlo">id dokumentu</param>
+            <param name="TestType">typ testu</param>
+            <param name="TestStartedAt">datum testu</param>
+            <param name="UpdateDB">povoleni update informaci o validaci</param>
+            <param name="DisableDeleteDoc">true=po stazeni nemaze dokumenty</param>
+            <param name="TryNoExtensionOnError">pokus o stazeni dokumentu bez extension</param>
+            <param name="ProcRes">vysledek testu</param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GEleAdmEngClientNT.RunEngineAllSerDisks(System.DateTime,Gordic.Ele.Interface.GRunAdmEngConfig,Gordic.Ele.Client.GEleAdmEngClientNT.CanContinueDelegate)">
+            <summary>
+            RunEngineAllSerDisks
+            </summary>
+            <param name="TestStartedAt"></param>
+            <param name="RunCfg"></param>
+            <param name="CanContinue"></param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GEleAdmEngClientNT.RunEngineAllDiscOfOneserver(System.DateTime,Gordic.General.GString,Gordic.Ele.Interface.GRunAdmEngConfig,Gordic.Ele.Client.GEleAdmEngClientNT.CanContinueDelegate)">
+            <summary>
+            RunEngineAllDiscOfOneserver
+            </summary>
+            <param name="TestStartedAt"></param>
+            <param name="Server"></param>
+            <param name="RunCfg"></param>
+            <param name="CanContinue"></param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GEleAdmEngClientNT.MarkChyboveStavyFilesToVerify(Gordic.Ele.Interface.GRunAdmEngConfig,Gordic.Ele.Client.GEleAdmEngClientNT.CanContinueDelegate)">
+            <summary>
+            Označí soubory v chybových stavech k ověření
+            </summary>
+        </member>
+        <member name="M:Gordic.Ele.Client.GEleAdmEngClientNT.RunEngineOneSerDis(System.DateTime,System.Data.DataRow,Gordic.Ele.Interface.GRunAdmEngConfig,Gordic.Ele.Client.GEleAdmEngClientNT.CanContinueDelegate)">
+            <summary>
+            RunEngineOneSerDis
+            </summary>
+            <param name="TestStartedAt"></param>
+            <param name="SerDisRow"></param>
+            <param name="RunCfg"></param>
+            <param name="CanContinue"></param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GEleAdmEngClientNT.RunEngineOneSerDisPrivate(System.DateTime,System.Data.DataRow,System.Int32,Gordic.Ele.Interface.GRunAdmEngConfig,Gordic.Ele.Client.GEleAdmEngClientNT.CanContinueDelegate,System.Boolean@)">
+            <summary></summary>
+        </member>
+        <member name="M:Gordic.Ele.Client.GEleAdmEngClientNT.CallDelegate(Gordic.Ele.Client.GEleAdmEngClientNT.CanContinueDelegate,Gordic.Ele.Client.GEleAdmEngClientNT.StatusEnum,System.String,System.Int32,System.Int32)">
+            <summary></summary>
+        </member>
+        <member name="T:Gordic.Ele.Client.GELEAdmClient">
+            <summary>
+            adm
+            </summary>
+        </member>
+        <member name="F:Gordic.Ele.Client.GELEAdmClient.moUserProcess">
+            <summary>
+            GUserProcess
+            </summary>
+        </member>
+        <member name="F:Gordic.Ele.Client.GELEAdmClient.moELEAdmServer">
+            <summary>
+            Interface na server
+            </summary>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userprocess">GUserProcess</param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.GetAdmDataset">
+            <summary>
+            x
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.GetPthInfo(Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Informace o adresarich disku
+            </summary>
+            <param name="ServerName"></param>
+            <param name="DiskName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.GetDocContentTable(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.Ele.Interface.GELEConst.VerifStatusEnum)">
+            <summary>
+            el dokumenty dle serveru, disku, adresare
+            </summary>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.GetDeletedDocTable(Gordic.General.GString,Gordic.General.GString,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            el dokumenty dle serveru, disku, adresare
+            </summary>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.SearchDocById(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Hledani dokumentu dle ID 
+            pokud je vyplneno IXsUlo hleda podle nej 
+            (JINAK) pokud je vyplneno Ixp hleda podle nej 
+            (JINAK) pokud je vyplneno Ixs hleda podle nej
+            </summary>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.GetVerifStatus(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Int32@)">
+            <summary>
+            Informace o adresarich serveru a disku
+            </summary>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.GetDeleteStatus(Gordic.General.GString,Gordic.General.GString,System.Int32@,System.Int32@,System.Int32@)">
+            <summary>
+            Vraci pocet dokumentu (celkovy, smazany 500, fyzickysmazany 900)
+            pro server a disk. Pokud je disk IsNull tak pro cely server
+            </summary>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.GetVerifStatusNew(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.Boolean@,System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Int32@,System.Int32@)">
+            <summary>
+            
+            </summary>
+            <param name="ServerName"></param>
+            <param name="DiskName"></param>
+            <param name="PathName"></param>
+            <param name="DbNewVersion"></param>
+            <param name="total"></param>
+            <param name="notverif"></param>
+            <param name="toverif"></param>
+            <param name="neververif"></param>
+            <param name="verified"></param>
+            <param name="errors"></param>
+            <param name="notverifP"></param>
+            <param name="toverifP"></param>
+            <param name="neververifP"></param>
+            <param name="verifiedP"></param>
+            <param name="errorsP"></param>
+            <param name="notverifA"></param>
+            <param name="toverifA"></param>
+            <param name="neververifA"></param>
+            <param name="verifiedA"></param>
+            <param name="errorsA"></param>
+            <param name="primarlocation"></param>
+            <param name="alternativlocation"></param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.SetVerifStatus(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,System.Boolean,System.String@,System.String@)">
+            <summary>
+            Nastaveni stavu verifikace pro (disk/server/path) a nebo (disk/server pokud je VerifStatus.IsNull)
+            </summary>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.SetVerifStatusPrimAlt(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,System.Boolean,System.Boolean,System.String@,System.String@)">
+            <summary>
+            Nastaveni stavu verifikace prim/alt pro (disk/server/path) a nebo (disk/server pokud je VerifStatus.IsNull)
+            </summary>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.SetLocation(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.Boolean,System.String@,System.String@)">
+            <summary>
+            Nastaveni priznaku lokace pro (disk/server/path) a nebo (disk/server pokud je VerifStatus.IsNull)
+            (SetToPrimary=true) nastavi vse pouze na primarni (SetToPrimary=false) nastavi vse pouze na altern.
+            </summary>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.DocumentDetail(Gordic.General.GString,Gordic.General.GString@,Gordic.General.GInt64@,Gordic.General.GDateTime@,Gordic.General.GInt16@,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GInt16@,Gordic.General.GInt16@,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString[]@,Gordic.General.GString[]@,Gordic.General.GInt16@,Gordic.General.GDateTime@,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary>
+            Detailní informace o dokumentu
+            </summary>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.TestPodani(Gordic.Ele.Interface.GElePodInfo@)">
+            <summary>
+            Test podani
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.TestUpload(Gordic.Ele.Interface.GEleAdmGorDatasetDataSet.WFLSSERRow,Gordic.Ele.Interface.GEleAdmGorDatasetDataSet.WFLSDISRow,System.String@,System.String@,System.String@,System.String@,System.String@)">
+            <summary>
+            TestUpload
+            </summary>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.TestUploadData(Gordic.Ele.Interface.GEleAdmGorDatasetDataSet.WFLSSERRow,Gordic.Ele.Interface.GEleAdmGorDatasetDataSet.WFLSDISRow,System.Byte[],System.String@,System.String@,System.String@,System.String@,System.String@)">
+            <summary>
+            TestUpload
+            </summary>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.TestDownload(Gordic.Ele.Interface.GEleAdmGorDatasetDataSet.WFLSSERRow,Gordic.Ele.Interface.GEleAdmGorDatasetDataSet.WFLSDISRow,System.String,System.String,Gordic.Ele.Interface.AdmEngFileInfo@,System.String@,System.String@)">
+            <summary>
+            TestDownload
+            </summary>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.TestUploadAlt(Gordic.Ele.Interface.GEleAdmGorDatasetDataSet.WFLSSEZRow,Gordic.Ele.Interface.GEleAdmGorDatasetDataSet.WFLSDIZRow,System.String@,System.String@,System.String@,System.String@,System.String@)">
+            <summary>
+            TestUploadAlt
+            </summary>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.TestUploadAltData(Gordic.Ele.Interface.GEleAdmGorDatasetDataSet.WFLSSEZRow,Gordic.Ele.Interface.GEleAdmGorDatasetDataSet.WFLSDIZRow,System.Byte[],System.String@,System.String@,System.String@,System.String@,System.String@)">
+            <summary>
+            TestUploadAlt
+            </summary>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.TestDownloadAlt(Gordic.Ele.Interface.GEleAdmGorDatasetDataSet.WFLSSEZRow,Gordic.Ele.Interface.GEleAdmGorDatasetDataSet.WFLSDIZRow,System.String,System.String,Gordic.Ele.Interface.AdmEngFileInfo@,System.String@,System.String@)">
+            <summary>
+            TestDownloadAlt
+            </summary>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.DownloadDocument(Gordic.General.GString,System.Boolean,System.Boolean)">
+            <summary>
+            Stazeni dokumentu
+            </summary>
+            <param name="IxsUlo">id</param>
+            <param name="FromAlternativeStore">zdrojove uloziste : primarni / alternativni</param>
+            <param name="TryNoExtensionOnError">id</param>
+            <returns>data dokumentu</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.DownloadDocumetToFile(Gordic.General.GString,System.Boolean,System.Boolean)">
+            <summary>
+            Stazeni dokumentu do souboru - nelze pouzit pokud je oddelena serverova logika
+            Pouziva se pro velke dokumenty
+            </summary>
+            <param name="IxsUlo">id</param>
+            <param name="FromAlternativeStore">zdrojove uloziste : primarni / alternativni</param>
+            <param name="TryNoExtensionOnError"></param>
+            <returns>data dokumentu</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.DownloadDocumetToFile(Gordic.General.GString,System.Boolean,System.String,System.Boolean)">
+            <summary>
+            Stazeni dokumentu do souboru
+            </summary>
+            <param name="IxsUlo">id</param>
+            <param name="FromAlternativeStore">zdrojove uloziste : primarni / alternativni</param>
+            <param name="filename">cilovy soubor</param>
+            <param name="TryNoExtensionOnError"></param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.GetErrTableDates">
+            <summary>
+            Vraci sadu datumu chybove tabulky
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.GetErrTableContent(Gordic.General.GDateTime,System.Boolean)">
+            <summary>
+            Obsah chybove tabulky
+            </summary>
+            <param name="date"></param>
+            <param name="UndeletedOnly"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEAdmClient.DeleteErrosTableByDate(Gordic.General.GDateTime)">
+            <summary>
+            mazani chybove tabulky
+            </summary>
+            <param name="date"></param>
+        </member>
+        <member name="T:Gordic.Ele.Client.GELEClient">
+            <summary>
+            Klient ELE
+            </summary>
+        </member>
+        <member name="T:Gordic.Ele.Client.GELEClient.ProcessItemOfArchiveDelegate">
+            <summary>
+            Delegat volany pro zpracovani archivu
+            </summary>
+            <param name="current"></param>
+            <param name="total"></param>
+            <param name="info"></param>
+        </member>
+        <member name="F:Gordic.Ele.Client.GELEClient.moStrLastError">
+            <summary>
+            Text chyby
+            </summary>
+        </member>
+        <member name="F:Gordic.Ele.Client.GELEClient.moUserProcess">
+            <summary>
+            GUserProcess
+            </summary>
+        </member>
+        <member name="F:Gordic.Ele.Client.GELEClient.moELEServer">
+            <summary>
+            Interface na server
+            </summary>
+        </member>
+        <member name="F:Gordic.Ele.Client.GELEClient.mbDebugOutput">
+            <summary>
+            Zapnutí ladícího výstupu
+            </summary>
+        </member>
+        <member name="F:Gordic.Ele.Client.GELEClient.msDebugFile">
+            <summary>
+            Trasovací soubor
+            </summary>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userprocess">GUserProcess</param>
+        </member>
+        <member name="P:Gordic.Ele.Client.GELEClient.ELEServer">
+            <summary>
+            Zveřejnění interface na server
+            </summary>
+        </member>
+        <member name="P:Gordic.Ele.Client.GELEClient.DebugOutput">
+            <summary>
+            Zapnutí ladícího výstupu
+            </summary>
+        </member>
+        <member name="P:Gordic.Ele.Client.GELEClient.DebugFile">
+            <summary>
+            Trasovací soubor
+            </summary>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.GetFileInfo(Gordic.General.GString,Gordic.General.GInt32)">
+            <summary>
+            Volání FileInfo
+            </summary>
+            <param name="ixb">IXB</param>
+            <param name="ser_cislo">por cislo</param>
+            <returns>Dataset s informacemi</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.GetFileInfoNew(Gordic.General.GString,Gordic.General.GInt32)">
+            <summary>
+            Volání FileInfoNew
+            </summary>
+            <param name="ixb">IXB</param>
+            <param name="ser_cislo">por cislo</param>
+            <returns>Dataset s informacemi</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.GetFileEPX(Gordic.General.GString,Gordic.Ele.Interface.GELEConst.TypElpEnum)">
+            <summary>
+            Vrací dataset s informacemi o souboru v tabulce WFLSEPX
+            </summary>
+            <param name="ixp">ixp</param>
+            <param name="TypElp">typ dokumentu</param>
+            <returns>dataset nebo null při chybě</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.GetFileESX(Gordic.General.GString,Gordic.Ele.Interface.GELEConst.TypElpEnum)">
+            <summary>
+            Vrací dataset s informacemi o souboru v tabulce WFLSEPX
+            </summary>
+            <param name="ixs">ixs</param>
+            <param name="TypElp">typ dokumentu</param>
+            <returns>dataset nebo null při chybě</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.GetIXBActual(Gordic.General.GString,System.String@)">
+            <summary>
+            Vrací dataset s jediným záznamem o souboru v tabulce WFLSIXB
+            </summary>
+            <param name="a_ixb">ixb</param>
+            <param name="errorInfo">errorInfo</param>
+            <returns>dataset nebo null při chybě</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.GetIXBActual(Gordic.General.GString)">
+            <summary>
+            Vrací dataset s jediným záznamem o souboru v tabulce WFLSIXB
+            </summary>
+            <param name="a_ixb">ixb</param>
+            <returns>dataset nebo null při chybě</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.GetIXBHistory(Gordic.General.GString,Gordic.General.GInt32)">
+            <summary>
+            Vrací dataset s jediným záznamem o souboru v tabulce WFLHIXB
+            </summary>
+            <param name="a_ixb">ixb</param>
+            <param name="a_ser_cislo">ser_cislo</param>
+            <returns>dataset nebo null při chybě</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.GetIXB(Gordic.General.GString)">
+            <summary>
+            Vrací dataset se záznay o souboru v tabulce WFLSIXB a WFLHIXB (všechny verze)
+            </summary>
+            <param name="a_ixb">ixb</param>
+            <returns>dataset nebo null při chybě</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.GetFileGDataSet(Gordic.General.GString,Gordic.General.GInt32,Gordic.Ele.Interface.GELEConst.GetIXBSetEnum)">
+            <summary>
+            Vrací dataset se záznay o souboru v tabulce WFLSIXB a WFLHIXB (všechny verze)
+            </summary>
+            <param name="a_ixb">ixb</param>
+            <param name="a_ser_cislo">ser cislo nebo null pro aktualni verzi</param>
+            <param name="IXBSet">jake dokumentu se vraci</param>
+            <returns>Vysledny dataset</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.GetLastDocVersion(Gordic.Ele.Interface.GFileIXBDataset)">
+            <summary>
+            Vrátí řádek s poslední verzí dokumentu 
+            </summary>
+            <param name="IXBDataset">dataset</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.StrNotNull(System.String)">
+            <summary>
+            kontrola retezce
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.StreamToFile(System.IO.Stream,System.String)">
+            <summary>
+            Soubor / strem
+            </summary>
+            <param name="stream"></param>
+            <param name="sFileName"></param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.CopyStream(System.IO.Stream,System.IO.Stream)">
+            <summary>
+            kopirovani streamu
+            </summary>
+            <param name="input"></param>
+            <param name="output"></param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.DownloadIxsUlo(Gordic.General.GString)">
+            <summary>
+            Stažení souboru do streamu dle ixsulo
+            </summary>
+            <param name="IxsUlo">identifikátor</param>
+            <returns>data souboru</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.DownloadIxsUloToTemp(Gordic.General.GString)">
+            <summary>
+            Stažení dokumentu dle ixs_ulo do souboru.
+            Da se pouzit pouze tam, kde bezi Client/Interface/Server na jednom stroji
+            </summary>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.DownloadIxsUlo(Gordic.General.GString,System.Boolean)">
+            <summary>
+            Stažení souboru do streamu dle ixsulo a uzamčení
+            </summary>
+            <param name="IxsUlo">identifikátor</param>
+            <param name="doCheckOut">doCheckOut</param>
+            <returns>data souboru</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.DownloadIxsUlo(Gordic.General.GString,System.String)">
+            <summary>
+            Stažení dokumentu do lokálního souboru dle ixsulo
+            </summary>
+            <param name="IxsUlo">identifikátor</param>
+            <param name="fileName">jméno souboru</param>
+            <returns>true = lokánlí soubor byl vytvořen</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.DownloadIxsUlo(Gordic.General.GString,System.String,System.Boolean)">
+            <summary>
+            Stažení dokumentu do lokálního souboru dle ixsulo s možností uzamčení
+            </summary>
+            <param name="IxsUlo">identifikátor</param>
+            <param name="fileName">jméno souboru</param>
+            <param name="doCheckOut">doCheckOut</param>
+            <returns>true = lokánlí soubor byl vytvořen</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.UploadFile(System.IO.Stream,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary>
+            Nahrání souboru do úložiště
+            </summary>
+            <param name="sourcestream">zdrojová data</param>
+            <param name="OriginalFileName">jméno souboru</param>
+            <param name="Ixb">ixb</param>
+            <param name="Popis">popis</param>
+            <param name="PopisDms">popis pro DMS</param>
+            <param name="IxsTyp">typ</param>
+            <param name="Ix">obecný subjekt</param>
+            <param name="Ixp">úložné místo</param>
+            <param name="NewIxb">vygenerované ixb</param>
+            <param name="NewIxsUlo">vygenerované ixsulo</param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.UploadFile(System.IO.Stream,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.Boolean,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary>
+            Nahrání souboru do úložiště
+            </summary>
+            <param name="sourcestream"></param>
+            <param name="OriginalFileName"></param>
+            <param name="Ixb"></param>
+            <param name="Popis"></param>
+            <param name="PopisDms"></param>
+            <param name="IxsTyp"></param>
+            <param name="Ix"></param>
+            <param name="Ixp"></param>
+            <param name="DownloadTest"></param>
+            <param name="NewIxb"></param>
+            <param name="NewIxsUlo"></param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.UploadFile(System.IO.Stream,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.Boolean,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary>
+            Nahrání souboru do úložiště
+            </summary>
+            <param name="sourcestream">zdrojová data</param>
+            <param name="OriginalFileName">jméno souboru</param>
+            <param name="Ixb">ixb</param>
+            <param name="Popis">popis</param>
+            <param name="PopisDms">popis pro DMS</param>
+            <param name="IxsTyp">typ</param>
+            <param name="Ix">obecný subjekt</param>
+            <param name="Ixp">úložné místo</param>
+            <param name="KovTypSoub">Typ konverze souboru</param>
+            <param name="DownloadTest">test opetovnym stazenim</param>
+            <param name="NewIxb">vygenerované ixb</param>
+            <param name="NewIxsUlo">vygenerované ixsulo</param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.UploadFile(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary>
+            Nahrání souboru do úložiště
+            </summary>
+            <param name="SourceFile">jméno souboru</param>
+            <param name="Ixb">ixb</param>
+            <param name="Popis">popis</param>
+            <param name="PopisDms">popis pro DMS</param>
+            <param name="IxsTyp">typ</param>
+            <param name="Ix">obecný subjekt</param>
+            <param name="Ixp">úložné místo</param>
+            <param name="NewIxb">vygenerované ixb</param>
+            <param name="NewIxsUlo">vygenerované ixsulo</param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.UploadFile(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.Boolean,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary>
+            Nahrani na server
+            </summary>
+            <param name="SourceFile"></param>
+            <param name="Ixb"></param>
+            <param name="Popis"></param>
+            <param name="PopisDms"></param>
+            <param name="IxsTyp"></param>
+            <param name="Ix"></param>
+            <param name="Ixp"></param>
+            <param name="DownloadTest"></param>
+            <param name="NewIxb"></param>
+            <param name="NewIxsUlo"></param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.UploadFile(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.Boolean,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary>
+            Nahrání souboru do úložiště
+            </summary>
+            <param name="SourceFile">jméno souboru</param>
+            <param name="Ixb">ixb</param>
+            <param name="Popis">popis</param>
+            <param name="PopisDms">popis pro DMS</param>
+            <param name="IxsTyp">typ</param>
+            <param name="Ix">obecný subjekt</param>
+            <param name="Ixp">úložné místo</param>
+            <param name="KonvSoub">KonvSoub</param>
+            <param name="DownloadTestParam">Test opetovnym stazenim</param>
+            <param name="NewIxb">vygenerované ixb</param>
+            <param name="NewIxsUlo">vygenerované ixsulo</param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.UploadFile(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.Boolean,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary>
+            Nahrání souboru do úložiště
+            </summary>
+            <param name="SourceFile">jméno souboru</param>
+            <param name="SourceFilePath">cesta (rozšířený parametr)</param>
+            <param name="Ixb">ixb</param>
+            <param name="Popis">popis</param>
+            <param name="PopisDms">popis pro DMS</param>
+            <param name="IxsTyp">typ</param>
+            <param name="Ix">obecný subjekt</param>
+            <param name="Ixp">úložné místo</param>
+            <param name="KonvSoub">KonvSoub</param>
+            <param name="DownloadTest">Test opetovnym stazenim</param>
+            <param name="NewIxb">vygenerované ixb</param>
+            <param name="NewIxsUlo">vygenerované ixsulo</param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.UploadFile(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,System.Boolean,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary>
+            Nahrani na server
+            </summary>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.UploadFile(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,System.Boolean,System.Boolean,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary>
+            Nahrani na server
+            </summary>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.CopyToUD(Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString@)">
+            <summary>
+            Zverejneni dokumentu na uredni desku (CopyToUD)
+            </summary>
+            <param name="ixs_ulo">ID verze el. souboru</param>
+            <param name="por_cislo">por. cislo úložného místa</param>
+            <param name="DestFile">vrací název cílového souboru na UD</param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.UploadFileNT(System.IO.Stream,Gordic.Ele.Interface.GELEUploadFileParams,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary>
+            upload souboru na server - NT metoda
+            </summary>
+            <param name="SourceFileStream">zdrojový stream</param>
+            <param name="EleUplPrms">Parametry pro vkládání dokumentů (viz. GELEUploadFileParams)</param>
+            <param name="NewIxb">nově vytvořené IXB (pokud není na vstupu v parametrech)</param>
+            <param name="NewIxsUlo">nově vytvořené IXSULO</param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.UploadFileNT(System.String,Gordic.Ele.Interface.GELEUploadFileParams,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary>
+            upload souboru na server - NT metoda (nepouzivat pro velke soubory)
+            </summary>
+            <param name="SourceFilename">zdrojový soubor</param>
+            <param name="EleUplPrms">Parametry pro vkládání dokumentů (viz. GELEUploadFileParams)</param>
+            <param name="NewIxb">nově vytvořené IXB (pokud není na vstupu v parametrech)</param>
+            <param name="NewIxsUlo">nově vytvořené IXSULO</param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.GetSearchSerDis">
+            <summary>
+            vraci servery a disky vhodne pro vyhledavani
+            </summary>
+            <returns>servery a disky vhodne pro vyhledavani</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.GetSearchServersTableNew">
+            <summary>
+            vraci servery a disky vhodne pro vyhledavani
+            </summary>
+            <returns>servery a disky vhodne pro vyhledavani</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.Search(Gordic.General.GString,System.String[],System.String[])">
+            <summary>
+            Fulltextove hledani
+            </summary>
+            <param name="servername">jmeno serveru</param>
+            <param name="containwords">slova obsazena v dokumentu</param>
+            <param name="notcontainwords">slova ktera nesmi dokument obsahovat</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.SearchExpression(Gordic.General.GString,System.String)">
+            <summary>
+            Fulltextove hledani vyrazem a navrat tabulky s vysledkem
+            </summary>
+            <param name="servername">jmeno serveru (nepovinne)</param>
+            <param name="Expression">vyraz</param>
+            <returns>tabulka s informacemi o nalezenych dokumentech</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.SearchAndInsertToTemp(Gordic.General.GString,System.String[],System.String[],Gordic.General.GInt32)">
+            <summary>
+            Fulltextove hledani a zápis výsledku do WFLTDSR
+            </summary>
+            <param name="servername">jmeno serveru (nepovinné)</param>
+            <param name="containwords">slova obsazena v dokumentu</param>
+            <param name="notcontainwords">slova ktera nesmi dokument obsahovat</param>
+            <param name="LogPorCislo">por cislo</param>
+            <returns>počet nalezených dokumentů</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.SearchAndInsertToTemp(Gordic.General.GString,System.String[],Gordic.General.GInt32,Gordic.General.GInt16)">
+            <summary>
+            Hledani a zápis výsledku do WFLTDSR
+            </summary>
+            <param name="serverName">jmeno serveru (nepovinné)</param>
+            <param name="containWords">slova k hledání</param>
+            <param name="logPorCislo">por cislo</param>
+            <param name="searchType">typ hledání</param>
+            <returns>počet nalezených dokumentů</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.SearchAndInsertToTemp(Gordic.General.GString,System.String[],System.String[],Gordic.General.GInt32,Gordic.Ele.Interface.GELEConst.SearchType)">
+            <summary>
+            Hledani a zápis výsledku do WFLTDSR
+            </summary>
+            <param name="serverName">jmeno serveru (nepovinné)</param>
+            <param name="containWords">slova ktera musi dokument obsahovat</param>
+            <param name="notContainWords">slova ktera nesmi dokument obsahovat</param>
+            <param name="logPorCislo">por cislo</param>
+            <param name="sType">typ hledání</param>
+            <returns>počet nalezených dokumentů</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.SearchExpressionAndInsertToTemp(Gordic.General.GString,System.String,Gordic.General.GInt32)">
+            <summary>
+            Fulltextove hledani vyrazem a zápis výsledku do WFLTDSR
+            </summary>
+            <param name="serverName">jmeno serveru (nepovinné)</param>
+            <param name="Expression">vyraz</param>
+            <param name="logPorCislo">por cislo</param>
+            <returns>počet nalezených dokumentů</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.DeleteDocument(Gordic.General.GString,System.Boolean)">
+            <summary>
+            Mazání poslední verze dokumentu
+            </summary>
+            <param name="Ixb">Ixb dokumentu</param>
+            <param name="PhysicalDelete">opravdove mazaní=true, zneaktivneni=false</param>
+            <returns>true = byla to posledni verze</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.DeleteDoc(Gordic.General.GString,Gordic.General.GString,System.Boolean)">
+            <summary>
+            Mazání poslední verze dokumentu
+            </summary>
+            <param name="Ixp">ixp pro ktere se maže</param>
+            <param name="Ixb">Ixb dokumentu</param>
+            <param name="PhysicalDelete">opravdove mazaní=true, zneaktivneni=false</param>
+            <returns>true = byla to posledni verze</returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.PhysicallyDeleteDoc(Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString)">
+            <summary>
+            Fyzicka likvidace dokumentu v ulozisti a zapis priznaku do tabulky wflsulo
+            Nevola DB procedury (sp_ele_deleteX), neprovadi zmeny v tabulkach wflsixb - hixb 
+            </summary>
+            <param name="IxsUlo">id dokumentu ke smazani</param>
+            <param name="TypDuvDel">duvod smazani (ciselnik)</param>
+            <param name="TypAg">typ agendy</param>
+            <param name="IxsZmp">zmenu provedl</param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.DeleteDocInDb(Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString)">
+            <summary>
+            Nastavi zaznam o dokumentu ze je smazan (v ulozistich se nemaze)
+            </summary>
+            <param name="IxsUlo"></param>
+            <param name="TypDuvDel"></param>
+            <param name="TypAg"></param>
+            <param name="IxsZmp"></param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.SetAktivitaDoc(Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>
+            nastaveni aktivity
+            </summary>
+            <param name="IxsUlo"></param>
+            <param name="TypDuvDel"></param>
+            <param name="TypAg"></param>
+            <param name="IxsZmp"></param>
+            <param name="Aktivita"></param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.PublicateDocuments(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString[])">
+            <summary>
+            Publikovani dokumentu
+            </summary>
+            <param name="Ixp"></param>
+            <param name="Ixb"></param>
+            <param name="Owner"></param>
+            <param name="IxsUlz"></param>
+            <param name="KtgDms"></param>
+            <param name="DatFrom"></param>
+            <param name="DatTo"></param>
+            <param name="Title"></param>
+            <param name="IxbAttach"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.Publicate(System.IO.Stream,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Publikování dokumentu 
+            </summary>
+            <param name="stream">data dokumentu</param>
+            <param name="sourcefilename">jméno zdroj. souboru</param>
+            <param name="ixs_ulz">id úložiště</param>
+            <param name="ixb">id přílohy</param>
+            <param name="ktg_dms">publikační složka</param>
+            <param name="ixs_ulo">id přílohy/verze</param>
+            <param name="Popis">Titulek</param>
+            <param name="PopisDMS">Popis</param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.Publicate(System.IO.Stream,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Publikování dokumentu 
+            </summary>
+            <param name="stream">data dokumentu</param>
+            <param name="sourcefilename">jméno zdroj. souboru</param>
+            <param name="ixs_ulz">id úložiště</param>
+            <param name="ixb">id přílohy</param>
+            <param name="ktg_dms">publikační složka</param>
+            <param name="ixs_ulo">id přílohy/verze</param>
+            <param name="Popis">Titulek</param>
+            <param name="PopisDMS">Popis</param>
+            <param name="DestFilePrefix">Prefix jmena ciloveho dokumentu</param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.GetFileInfo01(Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GInt32)">
+            <summary>
+            file info01
+            </summary>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.UploadArchive(Gordic.Ele.Interface.GEleArchive)">
+            <summary>
+            Nahrani archivu na server
+            </summary>
+            <param name="EleArchive"></param>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.GetChildInfo(Gordic.General.GString,Gordic.General.GInt32)">
+            <summary>
+            GetChildInfo
+            </summary>
+            <param name="Ixb"></param>
+            <param name="SerCislo"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.DownloadArchive(Gordic.General.GString,Gordic.General.GInt32,System.String,System.Data.DataTable@,System.Int32@)">
+            <summary>
+            stazeni archivu
+            </summary>
+            <param name="Ixb"></param>
+            <param name="SerCislo"></param>
+            <param name="DestPath"></param>
+            <param name="ArchiveTable"></param>
+            <param name="MainFileInTablePos"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Ele.Client.GELEClient.DownloadArchive(Gordic.General.GString,Gordic.General.GInt32,System.String,Gordic.Ele.Client.GELEClient.ProcessItemOfArchiveDelegate,System.Data.DataTable@,System.Int32@)">
+            <summary>
+            stazeni archivu
+            </summary>
+            <param name="Ixb"></param>
+            <param name="SerCislo"></param>
+            <param name="DestPath"></param>
+            <param name="DownloadItem"></param>
+            <param name="ArchiveTable"></param>
+            <param name="MainFileInTablePos"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

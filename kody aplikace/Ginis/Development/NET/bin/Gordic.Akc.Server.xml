@@ -1,0 +1,805 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Akc.Server</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Akc.Server.GAuthor">
+            <summary>
+            Třída reprezentující autora.
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Server.GAuthor.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Server.GAuthor.#ctor(System.String,System.String,System.String[],System.Int32[])">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="login"> Login autora.</param>
+            <param name="email"> Email autora.</param>
+            <param name="subscripedFaze">Fáze, o které má autor na starost.</param>
+            <param name="ginlerrNumbers"></param>
+        </member>
+        <member name="P:Gordic.Akc.Server.GAuthor.Login">
+            <summary>
+            Login autora
+            </summary>
+        </member>
+        <member name="P:Gordic.Akc.Server.GAuthor.Email">
+            <summary>
+            Email autora
+            </summary>
+        </member>
+        <member name="P:Gordic.Akc.Server.GAuthor.SubscribedFaze">
+            <summary>
+            Fáze, které autor sleduje.
+            </summary>
+        </member>
+        <member name="P:Gordic.Akc.Server.GAuthor.GinlerrNumbers">
+            <summary>
+            Čísla chyb autora
+            </summary>
+        </member>
+        <member name="T:Gordic.Akc.Server.GAuthorLogic">
+            <summary>
+            Logika pro práci s autory. Není určeno pro použití v klientské logice.
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Server.GAuthorLogic.#ctor">
+            <summary>
+            Konstruktor serverové logiky pro autory. 
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Server.GAuthorLogic.GetAuthors">
+            <summary>
+            Vrátí autory filtrované podle filtrů
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GAuthorLogic.ParseAuthors(System.String)">
+            <summary>
+            Vyparsuje autory z txt zkopírovaného z číselníku chyb ginlerr
+            </summary>
+            <param name="path">cesta ke zdrojovému souboru</param>
+            <returns>List vyparsovaných autorů</returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GAuthorLogic.GetAuthorsGroupedByGinlerrNumbers">
+            <summary>
+            Vrátí autory seskupené podle čísla chyb v číselníku ginlerr
+            </summary>
+            <returns>Kolekce dvojic číslo chyby - autor</returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GAuthorLogic.MatchDigits(System.Int32,System.Text.RegularExpressions.Regex)">
+            <summary>
+            Matchne čísla podle regexu a vrátí výsledek (první skupinu z match)
+            </summary>
+            <param name="positiveNumber">vstupní číslo k matchování</param>
+            <param name="regex"> regex podle kterého se bude matchovat</param>
+            <returns>výsledek regexu, -1 pokud nenajde</returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GAuthorLogic.GetAuthorByGorErr(System.Int32,System.Collections.Generic.Dictionary{System.Int32,Gordic.Akc.Server.GAuthor})">
+            <summary>
+            Podle gorErr vybere správného autora. 
+            List autorů musí být seskupený podle jejich ginlerr čísel a musí mít na klíči 0 výchozího autora pro případ, že se nepovede najít jiného.
+            </summary>
+            <param name="gorErr"></param>
+            <param name="authorsByNumbers"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Akc.Server.GDbZamkyUzivatele">
+            <summary>
+            Apl. logika nových zámků pro uživatele
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDbZamkyUzivatele.Gordic#Akc#Interface#IGDbZamkyUzivatele#List(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.GDbZamkyUzivateleFilter})">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDbZamkyUzivatele.List(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.GDbZamkyUzivateleFilter},System.Boolean)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseLockIsl.Gordic#Akc#Interface#IGDatabaseLocksIsl#List(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.FilterLocks})">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseLockIsl.List(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.FilterLocks},System.Boolean)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseLockIsl.Gordic#Akc#Interface#IGDatabaseLocksIsl#StopProcess(Gordic.Akc.Interface.DTOs.GAkcDBLockDto)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseLockIsl.StopProcess(Gordic.Akc.Interface.DTOs.GAkcDBLockDto,System.Boolean)">
+            <summary/>
+        </member>
+        <member name="T:Gordic.Akc.Server.GDatabaseLocksLogicWithUsers">
+            <summary>
+            Logic for retrieving info about DB Locks.
+            </summary>
+            <seealso cref="T:Gordic.Akc.Interface.IGDatabaseLocksLogicWithUsers" />
+            <seealso cref="T:Gordic.General.ApplicationServer.GAppLogic" />
+            <seealso cref="T:Gordic.General.GeneratedBy.GALServerGenerator470" />
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseLocksLogicWithUsers.Trans_LoadDatabaseLocks(Gordic.General.GFilter{Gordic.Akc.Interface.FilterLocks}[])">
+            <summary>
+            Loads database locks with users info.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseLocksLogicWithUsers.TransformFilters(Gordic.General.GFilter{Gordic.Akc.Interface.FilterLocks}[])">
+            <summary>
+            Transforms the filters.
+            </summary>
+            <param name="filters">The filters.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseLocksLogicWithUsers.Gordic#Akc#Interface#IGDatabaseLocksLogicWithUsers#LoadDatabaseLocks(Gordic.General.GFilter{Gordic.Akc.Interface.FilterLocks}[])">
+            <summary>Loads database locks with users info.</summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseLocksLogicWithUsers.LoadDatabaseLocks(Gordic.General.GFilter{Gordic.Akc.Interface.FilterLocks}[],System.Boolean)">
+            <summary>Loads database locks with users info.</summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingIsl.Gordic#Akc#Interface#IGDatabaseSanitizingIsl#ListAllColumns(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.FilterColumns})">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingIsl.ListAllColumns(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.FilterColumns},System.Boolean)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingIsl.Gordic#Akc#Interface#IGDatabaseSanitizingIsl#ListSanitizingTexts(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.FilterColumns})">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingIsl.ListSanitizingTexts(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.FilterColumns},System.Boolean)">
+            <summary/>
+        </member>
+        <member name="T:Gordic.Akc.Server.GDatabaseSanitizingLogic">
+            <summary>
+            Logic for retrieving info about DB Locks.
+            </summary>
+            <seealso cref="T:Gordic.General.ApplicationServer.GAppLogic" />
+            <seealso cref="T:Gordic.General.GeneratedBy.GALServerGenerator470" />
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.Trans_LoadStringColumns(Gordic.General.GFilter{Gordic.Akc.Interface.FilterColumns}[])">
+            <summary>
+            Loads database locks with users info.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.Trans_LoadOracleStringColumns(Gordic.General.GFilter{Gordic.Akc.Interface.FilterColumns}[])">
+            <summary>
+            Loads the Oracle string columns.
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.Trans_LoadMicrosoftStringColumns(Gordic.General.GFilter{Gordic.Akc.Interface.FilterColumns}[])">
+            <summary>
+            Loads microsoft string columns.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.Trans_LoadInformixStringColumns(Gordic.General.GFilter{Gordic.Akc.Interface.FilterColumns}[])">
+            <summary>
+            Loads informix string columns.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.Trans_SanitizeColumns(Gordic.Akc.Interface.DTOs.GDBStringColumnDto[])">
+            <summary>
+            Trans - sanitize all columns.
+            </summary>
+            <param name="columns">The columns.</param>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.Trans_SanitizeColumnsInTable(System.String,Gordic.Akc.Interface.DTOs.GDBStringColumnDto[])">
+            <summary>
+            Trans - sanitize columns in table.
+            </summary>
+            <param name="tableName">Name of the table.</param>
+            <param name="columns">The columns.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.Trans_SanitizeDatabase">
+            <summary>
+            Transes the sanitize database.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.Trans_SanitizeTable(System.String)">
+            <summary>
+            Transes the sanitize table.
+            </summary>
+            <param name="tableName">Name of the table.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.SanitizeString(System.String)">
+            <summary>
+            Sanitizes the string asynchronous.
+            </summary>
+            <param name="value">The value.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.SanitizeColumns(Gordic.Akc.Interface.DTOs.GDBStringColumnDto[])">
+            <summary>
+            Sanitizes values in given columns.
+            </summary>
+            <param name="columns"></param>
+            <returns>
+            Count of sanitized values
+            </returns>
+            <example></example>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.SanitizeColumnsInTable(System.String,Gordic.Akc.Interface.DTOs.GDBStringColumnDto[])">
+            <summary>
+            Sanitizes the columns for given table.
+            </summary>
+            <param name="tableName">Name of the table.</param>
+            <param name="columns">The columns from given table.</param>
+            <returns>
+            Count of sanitized values
+            </returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.SanitizeDatabase">
+            <summary>
+            Sanitizes the database.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.LoadStringColumns(Gordic.General.GFilter{Gordic.Akc.Interface.FilterColumns}[])">
+            <summary>
+            Loads all potentially dangerous string columns.
+            </summary>
+            <param name="filters"></param>
+            <returns>
+            List of dto with table_name - column info
+            </returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.SanitizeTable(System.String)">
+            <summary>
+            Sanitizes the table.
+            </summary>
+            <param name="tableName">Name of the table.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.Gordic#Akc#Interface#IGDatabaseSanitizingLogic#LoadStringColumns(Gordic.General.GFilter{Gordic.Akc.Interface.FilterColumns}[])">
+            <summary>Loads database locks with users info.</summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.LoadStringColumns(Gordic.General.GFilter{Gordic.Akc.Interface.FilterColumns}[],System.Boolean)">
+            <summary>Loads database locks with users info.</summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.LoadOracleStringColumns(Gordic.General.GFilter{Gordic.Akc.Interface.FilterColumns}[],System.Boolean)">
+            <summary>Loads the Oracle string columns.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.LoadMicrosoftStringColumns(Gordic.General.GFilter{Gordic.Akc.Interface.FilterColumns}[],System.Boolean)">
+            <summary>Loads microsoft string columns.</summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.LoadInformixStringColumns(Gordic.General.GFilter{Gordic.Akc.Interface.FilterColumns}[],System.Boolean)">
+            <summary>Loads informix string columns.</summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.Gordic#Akc#Interface#IGDatabaseSanitizingLogic#SanitizeColumns(Gordic.Akc.Interface.DTOs.GDBStringColumnDto[])">
+            <summary>Trans - sanitize all columns.</summary>
+            <param name="columns">The columns.</param>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.SanitizeColumns(Gordic.Akc.Interface.DTOs.GDBStringColumnDto[],System.Boolean)">
+            <summary>Trans - sanitize all columns.</summary>
+            <param name="columns">The columns.</param>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.Gordic#Akc#Interface#IGDatabaseSanitizingLogic#SanitizeColumnsInTable(System.String,Gordic.Akc.Interface.DTOs.GDBStringColumnDto[])">
+            <summary>Trans - sanitize columns in table.</summary>
+            <param name="tableName">Name of the table.</param>
+            <param name="columns">The columns.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.SanitizeColumnsInTable(System.String,Gordic.Akc.Interface.DTOs.GDBStringColumnDto[],System.Boolean)">
+            <summary>Trans - sanitize columns in table.</summary>
+            <param name="tableName">Name of the table.</param>
+            <param name="columns">The columns.</param>
+            <returns></returns>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.Gordic#Akc#Interface#IGDatabaseSanitizingLogic#SanitizeDatabase">
+            <summary>Transes the sanitize database.</summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.SanitizeDatabase(System.Boolean)">
+            <summary>Transes the sanitize database.</summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.Gordic#Akc#Interface#IGDatabaseSanitizingLogic#SanitizeTable(System.String)">
+            <summary>Transes the sanitize table.</summary>
+            <param name="tableName">Name of the table.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GDatabaseSanitizingLogic.SanitizeTable(System.String,System.Boolean)">
+            <summary>Transes the sanitize table.</summary>
+            <param name="tableName">Name of the table.</param>
+            <returns></returns>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="T:Gordic.Akc.Server.GErrorLogIsl">
+            <summary>
+            Metody pro GErrorLogIsl
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogIsl.Gordic#Akc#Interface#IGErrorLogIsl#List(Gordic.Akc.Interface.Email.GErrorLogServiceRequest{Gordic.Akc.Interface.Email.FilterErrorLog})">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogIsl.List(Gordic.Akc.Interface.Email.GErrorLogServiceRequest{Gordic.Akc.Interface.Email.FilterErrorLog},System.Boolean)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogIsl.Gordic#Akc#Interface#IGErrorLogIsl#ListCompleted(Gordic.Akc.Interface.Email.GErrorLogServiceRequest{Gordic.Akc.Interface.Email.FilterErrorLog})">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogIsl.ListCompleted(Gordic.Akc.Interface.Email.GErrorLogServiceRequest{Gordic.Akc.Interface.Email.FilterErrorLog},System.Boolean)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogIsl.Gordic#Akc#Interface#IGErrorLogIsl#GetEmailDetail(Gordic.Akc.Interface.Email.GErrorLogServiceRequest{Gordic.Akc.Interface.Email.FilterErrorLog})">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogIsl.GetEmailDetail(Gordic.Akc.Interface.Email.GErrorLogServiceRequest{Gordic.Akc.Interface.Email.FilterErrorLog},System.Boolean)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogIsl.Gordic#Akc#Interface#IGErrorLogIsl#GetLastAutomaticDateTime">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogIsl.GetLastAutomaticDateTime(System.Boolean)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogIsl.Gordic#Akc#Interface#IGErrorLogIsl#ExportToZipFile(Gordic.Akc.Interface.Email.GErrorLogServiceRequest{Gordic.Akc.Interface.Email.FilterErrorLog})">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogIsl.ExportToZipFile(Gordic.Akc.Interface.Email.GErrorLogServiceRequest{Gordic.Akc.Interface.Email.FilterErrorLog},System.Boolean)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogIsl.Gordic#Akc#Interface#IGErrorLogIsl#SendEmailAutomatic(Gordic.Akc.Interface.Email.GErrorLogServiceRequest{Gordic.Akc.Interface.Email.FilterErrorLog})">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogIsl.SendEmailAutomatic(Gordic.Akc.Interface.Email.GErrorLogServiceRequest{Gordic.Akc.Interface.Email.FilterErrorLog},System.Boolean)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogIsl.Gordic#Akc#Interface#IGErrorLogIsl#SendEmailFromFile(Gordic.General.ApplicationInterface.GServiceActionRequest{Gordic.Akc.Interface.GErrorLogSendEmailFromFilesRequestDto})">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogIsl.SendEmailFromFile(Gordic.General.ApplicationInterface.GServiceActionRequest{Gordic.Akc.Interface.GErrorLogSendEmailFromFilesRequestDto},System.Boolean)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogIsl.Gordic#Akc#Interface#IGErrorLogIsl#SetNewAutomaticDateTime(System.DateTime)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogIsl.SetNewAutomaticDateTime(System.DateTime,System.Boolean)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogIsl.Gordic#Akc#Interface#IGErrorLogIsl#SendEmail(Gordic.Akc.Interface.GErrorLogEmailDto)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogIsl.SendEmail(Gordic.Akc.Interface.GErrorLogEmailDto,System.Boolean)">
+            <summary/>
+        </member>
+        <member name="T:Gordic.Akc.Server.GErrorLogLogic">
+            <summary>
+            Server část AL pro Akc
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.Gordic#Akc#Interface#Email#IGErrorLogLogic#ErrorLogListFromDB(Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}[])">
+            <summary>Načte seznam chyb z databáze pouze základní text (bez gilnexc</summary>
+            <param name="filters">Filtry k omezení výběru řádek</param>
+            <returns>Datatable s chybami z databáze</returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.ErrorLogListFromDB(Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}[],System.Boolean)">
+            <summary>Načte seznam chyb z databáze pouze základní text (bez gilnexc</summary>
+            <param name="filters">Filtry k omezení výběru řádek</param>
+            <returns>Datatable s chybami z databáze</returns>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.Gordic#Akc#Interface#Email#IGErrorLogLogic#ErrorLogListWithDetailFromDB(Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}[])">
+            <summary>Načte seznam chyb z databáze včetně všech textů ( i z ginlexc )</summary>
+            <param name="filters">Filtry k omezení výběru řádek</param>
+            <returns>Datatable s chybami z databáze</returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.ErrorLogListWithDetailFromDB(Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}[],System.Boolean)">
+            <summary>Načte seznam chyb z databáze včetně všech textů ( i z ginlexc )</summary>
+            <param name="filters">Filtry k omezení výběru řádek</param>
+            <returns>Datatable s chybami z databáze</returns>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.Trans_ErrorLogListFromDB(Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}[])">
+            <summary>
+            Načte seznam chyb z databáze pouze základní text (bez gilnexc
+            </summary>
+            <param name="filters">Filtry k omezení výběru řádek</param>
+            <returns>Datatable s chybami z databáze</returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.PreFilterValuesByText(System.String,Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}[])">
+            <summary>
+            Vyfiltruje errorLogy podle všech filtrů - zejména textového, ten pak odstraní a nahradí filtrem s IN (výčtem ser_cis_err čísel)
+            </summary>
+            <param name="tableName">název tabulky</param>
+            <param name="filters">filtry</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.Trans_ErrorLogListWithDetailFromDB(Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}[])">
+            <summary>
+            Načte seznam chyb z databáze včetně všech textů ( i z ginlexc )
+            </summary>
+            <param name="filters">Filtry k omezení výběru řádek</param>
+            <returns>Datatable s chybami z databáze</returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.ErrorLogListFromFile(System.String,Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}[])">
+            <summary>
+            Načte data z předaného souboru do dataTables
+            </summary>
+            <param name="fileName">Soubor k načtení</param>
+            <param name="filters">Filtry pro vybrání řádků</param>
+            <returns>Datatable naplněný chybami ze souboru.</returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.ErrorLogListToFileFromDB(System.String,System.Boolean,Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}[])">
+            <summary>
+            Uloží vybrané řádky z databázte do souboru.
+            </summary>
+            <param name="fileName">Soubor k uložení.</param>
+            <param name="automatic">
+            Vybrání chyb od data poslední automatické operace do dnes. 
+            Pokud je ve filtru specifikován datum Od - je použit ten.
+            </param>
+            <param name="filters">Filtry pro načtení chyb z databáze</param>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.ErrorLogListToFileFromFile(System.String,System.String,System.Boolean,Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}[])">
+            <summary>
+            Uloží vybrané řádky z databáze do souboru.
+            </summary>
+            <param name="fileName">Soubor k uložení.</param>
+            <param name="sourceFileName">Soubor k načtení.</param>
+            <param name="automatic">
+            Vybrání chyb od data poslední automatické operace do dnes. 
+            Pokud je ve filtru specifikován datum Od - je použit ten.
+            </param>
+            <param name="filters">Filtry pro načtení chyb z databáze</param>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.ErrorLogListToFile(System.String,Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable)">
+            <summary>
+            Uloží všechny řádky dataTable do souboru.
+            </summary>
+            <param name="fileName">Soubor k uložení.</param>
+            <param name="dataTable">Datatable s řádky k uložení.</param>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.SendEmailsFromFile(Gordic.Akc.Interface.Email.AuthorMatching,System.String,System.Boolean,Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}[])">
+            <summary>
+            Odešle chyby ze souboru příslušným autorům
+            </summary>       
+            <param name="authorMatching">Chyby přiřadí autorům podle fáze nebo podle číselníku ginlerr</param>
+            <param name="fileName">Soubor k načtení</param>
+            <param name="automatic">
+            Vybrání chyb od data poslední automatické operace do dnes. 
+            Pokud je ve filtru specifikován datum Od - je použit ten.
+            </param>
+            <param name="filters">Filtry pro vybrání chyb</param>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.SendEmailsFromDB(Gordic.Akc.Interface.Email.AuthorMatching,System.Boolean,Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}[])">
+            <summary>
+            Odešle chyby z databáze příslušným autorům
+            </summary>
+            <param name="authorMatching">Chyby přiřadí autorům podle fáze nebo podle číselníku ginlerr</param>
+            <param name="automatic">
+            Vybrání chyb od data poslední automatické operace do dnes. 
+            Pokud je ve filtru specifikován datum Od - je použit ten.
+            </param>
+            <param name="filters">Filtry pro vybrání chyb</param>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.BuildEmailFromDB(System.Boolean,Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}[])">
+            <summary>
+            Připraví email z chyb z databáze
+            </summary>
+            <param name="automatic">
+            Vybrání chyb od data poslední automatické operace do dnes. 
+            Pokud je ve filtru specifikován datum Od - je použit ten.
+            </param>
+            <param name="filters">filtry pro vybrání chyb</param>
+            <returns>email naplněný chybama</returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.BuildEmailFromFile(System.Boolean,System.String,Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}[])">
+            <summary>
+            Připraví email z chyb ze souboru
+            </summary>
+            <param name="automatic">
+            Vybrání chyb od data poslední automatické operace do dnes. 
+            Pokud je ve filtru specifikován datum Od - je použit ten.
+            </param>
+            <param name="fileName">Soubor k načtení</param>
+            <param name="filters">filtry pro vybrání chyb</param>
+            <returns>Email naplněný chybama</returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.SendEmail(Gordic.Akc.Interface.GErrorLogEmail)">
+            <summary>
+            Odešle jeden email
+            </summary>
+            <param name="email">Email k odeslání</param>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.GetLastAutomaticDateTime">
+            <summary>
+            Získání data poslední automatické operace
+            </summary>
+            <returns>Datum a čas poslední automatické operace</returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.SetLastAutomaticDateTime(System.DateTime)">
+            <summary>
+            Nastavení data poslední automatické operace
+            </summary>
+            <param name="lastAutomaticTime">Datum a čas poslední automatické operace</param>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.SendEmails(Gordic.Akc.Interface.Email.AuthorMatching,Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable)">
+            <summary>
+            Odešle chyby z datatable příslušným autorům
+            </summary>
+            <param name="authorMatching">Chyby přiřadí autorům podle fáze nebo podle číselníku ginlerr</param>
+            <param name="dataTable">filtry pro vybrání chyb k odeslání.</param>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.SendGroupedEmails(Gordic.Akc.Server.GErrorLogLogic.BuildEmailsMethod,Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow[])">
+            <summary>
+            Odešle emaily sestavené jednou z build metod.
+            </summary>
+            <param name="buildEmails">Metoda pro sestavení emailů</param>
+            <param name="rows">řádky pro vložení do emailů</param>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.BuildEmailsByAuthorsFaze(System.Collections.Generic.IEnumerable{Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow})">
+            <summary>
+            Postaví emaily pro autory podle fáze, ke které jsou autoři přiřazeni. Pokud k fázi neni přiřazen autor, je dána do emailu s fází 0.
+            </summary>
+            <param name="rows">řádky pro vložení do emailů</param>
+            <returns>Vytvořené emaily</returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.BuildEmailsByAuthorsGinlerrNumbers(System.Collections.Generic.IEnumerable{Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow})">
+            <summary>
+            Postaví emaily pro autory podle ginlerr číselníku rozparsováním gorErr chyby. Pokud k chybě neni nalezen autor, je předána autorovi, který má ve svém číselníku 0.
+            </summary>
+            <param name="rows">řádky pro vložení do emailů</param>
+            <returns>vytvořené emaily</returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.FillDataTableUsingChunkedSelect(Gordic.Akc.Server.GErrorLogLogic.FillErrorLogDataTableFromDBDelegate,System.String,System.Data.DataTable,Gordic.General.ApplicationServer.GWhereBuilder,Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog},System.Int32)">
+            <summary>
+            Naplní datatable několika select dotazy. 
+            Hodnoty chunkFilteru, který je typu IN nebo NOT IN jsou brány postupně po několika kusech (cca 100) a z nich jsou vytvořeny select dotazy.
+            Výsledná datatable je tak naplněna postupně několika select dotazy.
+            </summary>
+            <param name="fillMethod">Metoda kterou je dataTable plněno - je jí předáván upravený whereBuilder s IN filtrem v kterém je vždy max 100 kusů.</param>
+            <param name="tableName">Název tabulky - může být null</param>
+            <param name="dataTable">DataTable k naplnění.</param>
+            <param name="where">WhereBuilder - bez IN/NOT IN filtr.</param>
+            <param name="chunkFilter">IN/NOT IN filtr, z kterého je plněn whereBuilder a následně spuštěna FillMethod.</param>
+            <param name="limit">Limit na počet načtených záznamů.</param>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.ChooseBuilderMethodToAddFilter(Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog},Gordic.General.ApplicationServer.GWhereBuilder)">
+            <summary>
+            Vybrání metody builderu(AddIn/AddNotIn) podle filtru, pro přidávání hodnot z filteru
+            </summary>
+            <param name="filter">Filtr z kterého se bude plnit builder.</param>
+            <param name="builder">Builder do kterého se budou plnit hodnoty z filteru</param>
+            <returns>Vybraná metoda - builder.AddIn nebo builder.AddNotIn</returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.FillErrorLogDataTable(System.Data.DataTable,Gordic.General.ApplicationServer.GWhereBuilder,System.Int32)">
+            <summary>
+            Naplnění datatable řádky ginlerr z databáze. Pouze jednoduchý select z ginlerr.
+            </summary>
+            <param name="dataTable">DataTable k naplnění</param>
+            <param name="where">WhereBuilder s omezením</param>
+            <param name="limit">Limit na počet řádek</param>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.FillErrorLogDataTableWithDetail(System.Data.DataTable,Gordic.General.ApplicationServer.GWhereBuilder,System.Int32)">
+            <summary>
+            Naplnění datatable řádky ginlerr včetně všech txt_err, případně textem z ginlexc pokud existuje.
+            </summary>
+            <param name="dataTable">DataTable k naplnění</param>
+            <param name="where">WhereBuilder s omezením</param>
+            <param name="limit">Limit na počet řádek</param>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.FillErrorLogDataTableWithGinlexcDetail(System.Data.DataTable,Gordic.General.ApplicationServer.GWhereBuilder,System.Int32)">
+            <summary>
+            Výběr všeho důležitého z ginlexc.
+            </summary>
+            <param name="target">Cílová DataTable</param>
+            <param name="where">Where část selectu</param>
+            <param name="limit">není použit - pouze kvůli delegátu, pro ginlexc nemá význam</param>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.FillDataTableWithSerCisErrNumbers(System.Data.DataTable,Gordic.General.ApplicationServer.GWhereBuilder,System.Int32)">
+            <summary>
+            Vrátí seznam serCisErr odpovídajících zadaným podmínkám. Hledáno v ginlerr a ginlexc.
+            </summary>
+            <param name="dataTable">DataTable k naplnění</param>
+            <param name="where">WhereBuilder s omezením</param>
+            <param name="limit">Limit na počet řádek</param>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.FillDataTableWithGinlexcSerCisErr(System.Data.DataTable,Gordic.General.ApplicationServer.GWhereBuilder,System.Int32)">
+            <summary>
+            Jednoduchý výběr pouze ser_cis_err z ginlexc.
+            </summary>
+            <param name="target">Cílová DataTable</param>
+            <param name="where">Where část selectu</param>
+            <param name="limit">není použit - pouze kvůli delegátu, pro ginlexc nemá význam</param>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.FillDataTableFromDataTable(System.Data.DataTable,Gordic.General.ApplicationServer.GWhereBuilder,System.Int32,System.Data.DataTable)">
+            <summary>
+            Naplnění datatable řádky z jiné datatable - včetně filtrování podle whereBuilderu.
+            </summary>
+            <param name="target">DataTable k naplnění</param>
+            <param name="where">WhereBuilder s omezením - nutno upravit pro filtrování dataTable a ne databáze</param>
+            <param name="limit">Limit na počet řádek</param>
+            <param name="source">DataTable k načtení a filtrování</param>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.BuildDBWhereBuilder(System.String,Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}[],System.Int32@,Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}@)">
+            <summary>
+            Převede filtry do whereBuilderu pro databázi. 
+            </summary>
+            <param name="tableName">název tabulky ze které se bude dotazovat.</param>
+            <param name="filters">filtry pro sestavení wherebuilderu.</param>
+            <param name="limit">Pokud je omezen počet řádků, bude zde číslo větší jak 0, jinak -1.</param>
+            <param name="chunkFilter">Pokud není null, budou hodnoty tohoto filtru použity pro rozkouskování dotazu na části (pro ser_cis_err IN nebo NOT IN s hodně hodnotami).</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.BuildFileWhereBuilder(Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}[],System.Int32@)">
+            <summary>
+            Převede filtry do whereBuilderu pro soubor
+            </summary>
+            <param name="filters"></param>
+            <param name="limit">vrací limit na počet řádek</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.GetSelectErrors">
+            <summary>
+            Select string pro vybrání záznamů z ginlerr - pouze jeden sloupec txt_err
+            </summary>
+            <returns>Select string s WHERE </returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.GetSelectErrorsWithDetails">
+            <summary>
+            Select string pro vybrání záznamů z ginler
+            </summary>
+            <returns>Select string s WHERE </returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.GetSelectExceptions">
+            <summary>
+            Select string pro vybrání záznamů z ginlexc
+            </summary>
+            <returns>Select string s WHERE </returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.MergeErrorsWithExceptions(Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable,Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable,System.Int32)">
+            <summary>
+            Spojí záznamy z tabulky ginlerr se záznamy z ginlexc do tabulky ginlerr.
+            </summary>
+            <param name="ginlerrTable">záznamy tabulky ginlerr</param>
+            <param name="ginlexcTable">záznamy tabulky ginlexc</param>
+            <param name="ginlerrOffset">index od kterého se začne zpracovávat ginlerrTable</param>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.ParseDetailsFromTxtErr(Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow)">
+            <summary>
+            Parses the details from text error.
+            </summary>
+            <param name="row">The row.</param>
+        </member>
+        <member name="M:Gordic.Akc.Server.GErrorLogLogic.AppendExceptionText(System.Text.StringBuilder,Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow)">
+            <summary>
+            Přidá do builderu exception text z row
+            </summary>
+            <param name="builder">Builder pro přidání exception text z row.</param>
+            <param name="row">Řádek se sloupcem exc_txt.</param>
+        </member>
+        <member name="T:Gordic.Akc.Server.GErrorLogLogic.BuildEmailsMethod">
+            <summary>
+            Delegát pro metodu podle které se sestaví emaily
+            </summary>
+            <param name="rows">řádky pro vložení do emailů</param>
+            <returns>Pole vytvořených emailů.</returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GActiveUsersIsl.Gordic#Akc#Interface#Users#IGActiveUsersIsl#ListActiveDatabaseConnects(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.FilterUser})">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GActiveUsersIsl.ListActiveDatabaseConnects(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.FilterUser},System.Boolean)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GActiveUsersIsl.Gordic#Akc#Interface#Users#IGActiveUsersIsl#ListActiveUsers(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.FilterUser})">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GActiveUsersIsl.ListActiveUsers(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.FilterUser},System.Boolean)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GActiveUsersIsl.Gordic#Akc#Interface#Users#IGActiveUsersIsl#ZadostUkonceniPrace(Gordic.General.GString[])">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GActiveUsersIsl.ZadostUkonceniPrace(Gordic.General.GString[],System.Boolean)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GActiveUsersIsl.Gordic#Akc#Interface#Users#IGActiveUsersIsl#ZadostUkonceniPraceAll">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GActiveUsersIsl.ZadostUkonceniPraceAll(System.Boolean)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GConcurrentUsersIsl.Gordic#Akc#Interface#IGConcurrentUsersIsl#List(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.FilterUser})">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GConcurrentUsersIsl.List(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.FilterUser},System.Boolean)">
+            <summary/>
+        </member>
+        <member name="T:Gordic.Akc.Server.GSoucasnePracujiciUzivatele">
+            <summary>
+            Serverová logika pro Současně pracující uživatele
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Server.GSoucasnePracujiciUzivatele.Gordic#Akc#Interface#IGSoucasnePracujiciUzivatele#ListFaze(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.GSoucasnePracujiciUzivateleFilter})">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GSoucasnePracujiciUzivatele.ListFaze(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.GSoucasnePracujiciUzivateleFilter},System.Boolean)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GSoucasnePracujiciUzivatele.ListFazeExtended(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.GSoucasnePracujiciUzivateleFilter},System.Boolean)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GSoucasnePracujiciUzivatele.ListCelkem(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.GSoucasnePracujiciUzivateleFilter},System.Boolean)">
+            <summary/>
+        </member>
+        <member name="T:Gordic.Akc.Server.GUnauthorizedAttempts">
+            <summary>
+            Logika pro zobrazení neoprávněných pokusů o přihlášení
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Server.GUnauthorizedAttempts.Gordic#Akc#Interface#Users#IGUnauthorizedAttempts#List(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.Users.FilterUnauthorizedAttempts})">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GUnauthorizedAttempts.List(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.Users.FilterUnauthorizedAttempts},System.Boolean)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GUsersLoginHistory.Gordic#Akc#Interface#Users#IGUsersLoginHistory#List(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.FilterUser})">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Akc.Server.GUsersLoginHistory.List(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.FilterUser},System.Boolean)">
+            <summary/>
+        </member>
+        <member name="T:Gordic.Akc.Server.GUsersLoginsLogic">
+            <summary>
+            Logic for getting info about users.
+            </summary>
+            <seealso cref="T:Gordic.General.ApplicationServer.GAppLogic" />
+            <seealso cref="T:Gordic.General.GeneratedBy.GALServerGenerator470" />
+            <seealso cref="T:Gordic.Akc.Interface.IGUsersLoginsLogic" />
+        </member>
+        <member name="M:Gordic.Akc.Server.GUsersLoginsLogic.Trans_LoadConcurrentUsers(Gordic.General.GFilter{Gordic.Akc.Interface.FilterUser}[])">
+            <summary>
+            Načte vícekrát přihlášené uživatele.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GUsersLoginsLogic.Trans_LoadActiveUsers(Gordic.General.GFilter{Gordic.Akc.Interface.FilterUser}[])">
+            <summary>
+            Načte aktivní uživatele
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GUsersLoginsLogic.Gordic#Akc#Interface#IGUsersLoginsLogic#LoadConcurrentUsers(Gordic.General.GFilter{Gordic.Akc.Interface.FilterUser}[])">
+            <summary>Načte vícekrát přihlášené uživatele.</summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GUsersLoginsLogic.LoadConcurrentUsers(Gordic.General.GFilter{Gordic.Akc.Interface.FilterUser}[],System.Boolean)">
+            <summary>Načte vícekrát přihlášené uživatele.</summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GUsersLoginsLogic.Gordic#Akc#Interface#IGUsersLoginsLogic#LoadActiveUsers(Gordic.General.GFilter{Gordic.Akc.Interface.FilterUser}[])">
+            <summary>Načte aktivní uživatele</summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Server.GUsersLoginsLogic.LoadActiveUsers(Gordic.General.GFilter{Gordic.Akc.Interface.FilterUser}[],System.Boolean)">
+            <summary>Načte aktivní uživatele</summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Akc.Server.SoucasnePracujiciUzivateleCelkemAsync">
+            <summary>
+            Asynchronní úloha pro současně pracující uživatele
+            </summary>
+        </member>
+        <member name="T:Gordic.Akc.Server.SoucasnePracujiciUzivateleAsync">
+            <summary>
+            Asynchronní úloha pro současně pracující uživatele
+            </summary>
+        </member>
+    </members>
+</doc>

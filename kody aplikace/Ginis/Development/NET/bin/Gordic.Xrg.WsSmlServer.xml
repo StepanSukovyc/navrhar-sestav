@@ -1,0 +1,3122 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Xrg.WsSmlServer</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWsSmlDataException">
+            <summary>Výjimka aplikační logiky pro WS-SML</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlDataException.#ctor(System.Int32,System.Int32,System.String[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlDataException.#ctor(System.Int32,System.Int32,System.Exception,System.String[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="innerException">vnitřní vyjímka</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWsSmlServerException">
+            <summary>Výjimka aplikační logiky pro WS-SML</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlServerException.#ctor(System.Int32,System.Int32,System.String[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlServerException.#ctor(System.Int32,System.Int32,System.Exception,System.String[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="innerException">vnitřní vyjímka</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWsSmlCommon">
+            <summary>
+            Base třída pro WS-SML
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWsSmlCommon.m_csSegmentSdh">
+            <summary>
+            Konstanta s hodnotou pro segment SDH.
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWsSmlCommon.m_csSegmentOrj">
+            <summary>
+            Konstanta s hodnotou pro segment ORJ.
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWsSmlCommon.m_csSegmentFun">
+            <summary>
+            Konstanta s hodnotou pro segment FUN.
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWsSmlCommon.m_bEvidenceKompletnihoDokladu">
+            <summary>
+            Info o tom, jestli se ws volá v rámci evidence kompletního dokladu (pak se jinak chovám k chybám a commitu)
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWsSmlCommon.m_bOraLogovani">
+            <summary>
+            Zda už jede Ora logovani, při false nejede, při true ale jet nemusí, je to optimalizace, aby se nepouštělo při vnořování wm vícekrát (u evid. komp. dokl.)
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWsSmlCommon.m_ikc">
+            <summary>
+            Ikc instance
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.GWsSmlCommon.Ikc">
+            <summary>
+            Gets the instance of <see cref="T:Gordic.General.GIkc"/> associated with the current object.
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.GWsSmlCommon.Is_ac_dok_25chars">
+            <summary>
+            2025-10-17: Zda je délka ac_dok_1 a ac_dok_2 v SP a tabulkách 25 znaků 
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.LogWrite(System.String,System.Object[])">
+            <summary>
+            Zapíše zprávu do logu
+            </summary>
+            <param name="message">zpráva</param>
+            <param name="parameters">param.</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.LogWriteSql(System.String,System.Collections.Generic.List{Gordic.General.GDbType})">
+            <summary>
+            Vypíše SQL dotaz a 
+            </summary>
+            <param name="sql"></param>
+            <param name="l_InParams"></param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.CisKategorieKnihy(Gordic.General.GString)">
+            <summary>
+            Vrátí číselníkovou hodnotu kategorie knihy
+            </summary>
+            <param name="kXml">hodnota sloupce k_xml</param>
+            <returns>číselníková hodnota kategorie knihy</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.CisTypSazbyDaneLocal(Gordic.General.GString)">
+            <summary>
+            Vrátí číselníkovou hodnotu typu sazby daně
+            </summary>
+            <param name="kXml">hodnota sloupce k_xml</param>
+            <returns>číselníková hodnota kategorie knihy</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.CisStavPodpisu(Gordic.General.GString)">
+            <summary>
+            Vrátí číselníkovou hodnotu stavu podpisu
+            </summary>
+            <param name="kXml">hodnota sloupce k_xml</param>
+            <returns>číselníková hodnota stavu podpisu</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.CisTypKurzu(Gordic.General.GString)">
+            <summary>
+            Vrátí číselníkovou hodnotu typu kurzu
+            </summary>
+            <param name="kXml">hodnota sloupce k_xml</param>
+            <returns>číselníková hodnota</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.CisTypCeny(Gordic.General.GString)">
+            <summary>
+            Vrátí číselníkovou hodnotu typu ceny
+            </summary>
+            <param name="kXml">hodnota sloupce k_xml</param>
+            <returns>číselníková hodnota</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.CisTypPlatnosti(Gordic.General.GString)">
+            <summary>
+            Vrátí číselníkovou hodnotu typu platnosti.
+            </summary>
+            <param name="kXml">hodnota sloupce k_xml</param>
+            <returns>číselníková hodnota</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.PromennaIn(Gordic.General.GInt32,System.Int32[])">
+            <summary>
+            Zjistí, zda je hodnota promenne mezi zadaným výčtem hodnot.
+            Je-li proměnná NULL, vrátí vždy false.
+            Obdoba databázového příkazu "prom IN (1, 2)"
+            </summary>
+            <param name="gnPromenna">promenná, které se to týká</param>
+            <param name="anIn">výčet hodnot</param>
+            <returns>zda je proměnná ve výčtu</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.Nvl(Gordic.General.GString,System.String)">
+            <summary>
+            Implementace Informixí NVL funkce pro GString.
+            </summary>
+            <param name="gsProm">GString nad kterým provést operaci.</param>
+            <param name="s">Dosazená hodnota, pokud je GString roven NULL.</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.Nvl(Gordic.General.GInt16,System.Int16)">
+            <summary>
+            Implementace Informixí NVL funkce pro GInt16.
+            </summary>
+            <param name="gnProm">GInt16 nad kterým provést operaci.</param>
+            <param name="n">Dosazená hodnota, pokud je GInt16 roven NULL.</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.Nvl(Gordic.General.GInt32,System.Int32)">
+            <summary>
+            Implementace Informixí NVL funkce pro GInt32.
+            </summary>
+            <param name="gnProm">GInt32 nad kterým provést operaci.</param>
+            <param name="n">Dosazená hodnota, pokud je GInt32 roven NULL.</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.Nvl(Gordic.General.GDecimal,System.Decimal)">
+            <summary>
+            Implementace Informixí NVL funkce pro GDecimal.
+            </summary>
+            <param name="gnProm">GDecimal nad kterým provést operaci.</param>
+            <param name="n">Dosazená hodnota, pokud je GDecimal roven NULL.</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.MujCisTypAgendy(Gordic.General.GString,System.Boolean)">
+            <summary>
+            Vrátí číselníkovou hodnotu typu blokační agendy.
+            Hodnoty 'evz', 'vfp', 'epo' převede na odpovídající číslo. Ostatní ponechává.
+            </summary>
+            <param name="typAgendy">převáděná hodnota</param>
+            <param name="povolitNull">zda může být hodnota NULL, jinak bude vyhozena výjimka</param>
+            <returns>hodnota podle číselníku vas.ginctag</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon._MujCisTypAgendy(Gordic.General.GString)">
+            <summary>
+            Připraveno pro více typů blokační agendy, ale zatím bez toho, zatím striktní kontrola na výčet hodnot.
+            </summary>
+            <param name="typAgendy"></param>
+            <returns></returns>
+            <exception cref="T:Gordic.General.GException"></exception>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.GStr(Gordic.General.GDbType)">
+            <summary>
+            Převede DbType na hodnotu string
+            </summary>
+            <param name="oDbType">GDbType hodnota</param>
+            <returns>hodnota převedená na string, a pokud je hodnota NULL, tak string 'NULL'</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.GStrApo(Gordic.General.GDbType)">
+            <summary>
+            Převede DbType na hodnotu string obalenou apostrofy "'"
+            </summary>
+            <param name="oDbType">GDbType hodnota</param>
+            <returns>hodnota převedená na string, a pokud je hodnota NULL, tak string 'NULL'</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.RemoveTabs(System.String)">
+            <summary>
+            Pro SQL, odstraní všechny tabulátory
+            </summary>
+            <param name="sql">SQL</param>
+            <returns>upravené SQL</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.RemoveLeftWhiteSpace(System.String)">
+            <summary>
+            Pro SQL, odstraní tabulátory a mezery na začátku každého řádku
+            </summary>
+            <param name="sql">SQL</param>
+            <returns>upravené SQL</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.ExterniZahradka(System.String,Gordic.General.GString,System.Boolean)">
+            <summary>
+            U externích položek přidá na začátek zahrádku (#), pokud nejsou vyplněny, tak vyhodí výjimku.
+            </summary>
+            <param name="nazev">název položky - do výjimky</param>
+            <param name="hodnota">hodnota položky</param>
+            <param name="externi">hodnota atributu externí položky</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.VyjimkaIfNullOrEmpty(Gordic.General.GDbType,System.String)">
+            <summary>
+            Pokud je hodnota položky Null (u String položek NullOrEmpty), tak vrátí výjimku
+            </summary>
+            <param name="hodnota"></param>
+            <param name="xmlNazev"></param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.RokToGInt16(Gordic.General.GString)">
+            <summary>
+            Znějakýho důvodu mám rok na vstupu jako GString, zde převádím na GInt16 pro použití jako vstup storovek
+            </summary>
+            <param name="rok"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.IntChybaCisloText(Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Pokus o dohledání textu k číslu INT chyby.
+            </summary>
+            <param name="cisloIntChyby">číslo INT chyby</param>
+            <param name="ginErrCode">gin err code</param>
+            <param name="ginTxtErr">gin txt err</param>
+            <param name="idSegmentu">id segmentu</param>
+            <returns>číslo INT chyby + text</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.StavRozpisuToText(System.Int32)">
+            <summary>
+            Zjištění textové podoby stavu rozpisu
+            </summary>
+            <param name="stavRozpisuId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.Exec_spg_smlwsrok(Gordic.General.GString,System.Boolean,Gordic.General.GString,Gordic.General.GDecimal,Gordic.General.GIkc)">
+            <summary>
+            Rozpis částky na rok SP
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.Exec_spg_smlwsschstpol(Gordic.General.GString,System.Boolean,Gordic.General.GString,Gordic.General.GString,System.Boolean,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GIkc)">
+            <summary>
+            Vlastní volání SP pro Schváleni/Storno položky.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.StavSchvaleniStornaToText(System.Int32)">
+            <summary>
+            Vráti text chyby pro schválení / storno.
+            </summary>
+            <param name="l_chyba">číslo ch.</param>
+            <returns>text</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.ZapniOraLogovani">
+            <summary>
+            Zahájí logování na db ORA.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.KontrolaExistenceExtIdDokladu(System.Boolean,Gordic.General.GString)">
+            <summary>
+            Pokud ext. id už použito, tak výjimka
+            </summary>
+            <param name="extIdDokladu"></param>
+            <param name="idDokladu"></param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.Exec_spg_smlwspid(Gordic.General.GString,Gordic.General.GBoolean,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GIkc)">
+            <summary>
+            Zavolání metody pro schválení / ukončení dokladu
+            </summary>
+            <param name="id_sml">externí/interní ID dokladu SML</param>
+            <param name="atribut_id_sml_externi">zda je ID dokladu SML externí/interní</param>
+            <param name="rok">aktuální účetní období</param>
+            <param name="stav">požadovaný stav dokladu: 30=schváleno, 50=ukončeno</param>
+            <param name="ikc">ikc instance</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.Exec_spg_smlwsesu(System.Boolean,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GBoolean,Gordic.General.GString,Gordic.General.GBoolean,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Zavolání spg_smlwsesu
+            </summary>
+            <param name="commit">zda provádět commit</param>
+            <param name="rezim">typ požadované operace: 0=Zalozeni-protistrany, 1=editace-protistrany, 2=zruseni-protistrany</param>
+            <param name="IdDokladuSml"></param>
+            <param name="Atribut_IdDokladuSml_Externi"></param>
+            <param name="IdEsu"></param>
+            <param name="Atribut_IdEsu_Externi"></param>
+            <param name="EsuCisloDokladu"></param>
+            <param name="EsuCisloUctu"></param>
+            <param name="EsuSmerovyKod"></param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.EkoInitSml(Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>
+            Provede ekoinicializaci a sml inicializaci
+            </summary>
+            <param name="ixp"></param>
+            <param name="rok"></param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.EkoInitSml(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>
+            Provede ekoinicializaci a sml inicializaci
+            </summary>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="nks"></param>
+            <param name="ixpDen"></param>
+            <param name="rok"></param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.CallMajInit">
+            <summary>
+            Inicializace SML pro WS, nedělá commit!
+            Převzato z WS-MAJ.
+            Pro evidenci-kompletního-dokladu, protože segment Vecny-profil vyžaduje inicializaci majtgpr.
+            V rámci WS nesmím dělat commit, jinak by tato logika byla narušena!
+            Od verze 384:
+                pevná vas.matgpr od v. 384 převedena na #majtgpr
+                už možný commit, použit FFiala ex. zámek
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.CallMajUninit">
+            <summary>
+            Smaže řádek v majtgpr pro WS, nedělá commit!
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.IfNullGetItemFromEkoscfu(System.String,Gordic.General.GString)">
+            <summary>
+            Pokud není příslušná položka zadána, tak vrátí její prázdnou hodnotu
+            </summary>
+            <param name="dbName"></param>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWsSmlCommon.NaformatujVystupniDataSet(System.Data.DataSet)">
+            <summary>
+            Naformátuje výstupní DataSet
+            </summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GKompletniDokladElPrilohy">
+            <summary>
+            Zpracuje el. přílohu v rámci evidence kompletního dokladu
+            v podstatě rewrite Gordic.Ssl.WsSslServer.GSslPridatSoubor.cs
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GKompletniDokladElPrilohy.#ctor(Gordic.General.GString,Gordic.Xrg.WsSmlInterface.EvidenceKompletnihoDokladuRequestDataSet.ElektronickePrilohyRow)">
+            <summary>
+            Kontruktor a zároveň výkonná metoda
+            </summary>
+            <param name="ixp">id dokladu sml</param>
+            <param name="ep">řádek s el. přílohou</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GKompletniDokladElPrilohy.Exec">
+            <summary>
+            Výkonná metoda
+            </summary>
+            <returns>id souboru</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GKompletniDokladElPrilohy.PridejElektronickyObraz">
+            <summary>
+            Přidání elektronického obrazu
+            </summary>
+            <returns>interní identifikaci souboru ixb</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GKompletniDokladElPrilohy.PridejElektronickouPrilohu">
+            <summary>
+            Přidání elektronické přílohy
+            </summary>
+            <returns>interní identifikaci souboru ixb</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GKompletniDokladElPrilohy.KontrolaTypuSouboru(System.String)">
+            <summary>
+            Kontrola přípony souboru vůči GIN_ELE_TYPSOUB
+            z Gordic.Ssl.WsSslServer.GSslPridatSoubor.cs
+            </summary>
+            <param name="pripona"> přípona </param>                
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GSpgSmlwspidCommon">
+            <summary>
+            Parametry předávané z gspg_smlwspid... storovek
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GSpgSmlwspidCommon.o_chyba">
+            <summary>o_chyba - výstupní parameter</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GSpgSmlwspidCommon.o_txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GSpgIntsegsdxexCommon">
+            <summary>
+            Parametry předávané z gspg_intsegsdxex... storovek
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GSpgIntsegsdxexCommon.o_chyba">
+            <summary>o_chyba - výstupní parameter</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GSpgIntsegsdxexCommon.o_ixp">
+            <summary>o_ixp - výstupní parameter</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GSpgIntsegsdxexCommon.o_ac_sml">
+            <summary>o_ac_sml - výstupní parameter</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GSpgIntsegsdxexCommon.o_ac">
+            <summary>o_ac - výstupní parameter</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GSpgIntsegsdxexCommon.GinErrCode">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GSpgIntsegsdxexCommon.GinTxtErr">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet">
+             <summary>
+            Represents a strongly typed in-memory cache of data.
+            </summary>
+             <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.tableekodsql">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsql">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet._schemaSerializationMode">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.SchemaSerializationMode">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.#ctor">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.InitializeDerivedDataSet">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.Clone">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ShouldSerializeTables">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ShouldSerializeRelations">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ReadXmlSerializable(System.Xml.XmlReader)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.GetSchemaSerializable">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.InitVars">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.InitVars(System.Boolean)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.InitClass">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ShouldSerializeekodsql">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.SchemaChanged(System.Object,System.ComponentModel.CollectionChangeEventArgs)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.GetTypedDataSetSchema(System.Xml.Schema.XmlSchemaSet)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.Tables">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.Relations">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlRowChangeEventHandler">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable">
+             <summary>
+            Represents the strongly named DataTable class.
+            </summary>
+             <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.columnixs_uka">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.columnpor_cislo">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.columnobsah">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.ixs_ukaColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.por_cisloColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.obsahColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.Count">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.Item(System.Int32)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="E:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.ekodsqlRowChanging">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="E:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.ekodsqlRowChanged">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="E:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.ekodsqlRowDeleting">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="E:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.ekodsqlRowDeleted">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.#ctor">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.#ctor(System.Data.DataTable)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.AddekodsqlRow(Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlRow)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.System#Collections#IEnumerable#GetEnumerator">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.Clone">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.CreateInstance">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.InitVars">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.InitClass">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.NewekodsqlRow">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.NewRowFromBuilder(System.Data.DataRowBuilder)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.OnRowChanged(System.Data.DataRowChangeEventArgs)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.OnRowChanging(System.Data.DataRowChangeEventArgs)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.OnRowDeleted(System.Data.DataRowChangeEventArgs)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.OnRowDeleting(System.Data.DataRowChangeEventArgs)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.RemoveekodsqlRow(Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlRow)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.GetTypedTableSchema(System.Xml.Schema.XmlSchemaSet)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.Rows">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.AddekodsqlRow(Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.AddekodsqlRow">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlDataTable.GetEnumerator">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlRow">
+             <summary>
+            Represents strongly named DataRow class.
+            </summary>
+             <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlRow.tableekodsql">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlRow.#ctor(System.Data.DataRowBuilder)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlRow.ixs_uka">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlRow.por_cislo">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlRow.obsah">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlRowChangeEvent">
+             <summary>
+            Row event argument class
+            </summary>
+             <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlRowChangeEvent.eventRow">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlRowChangeEvent.eventAction">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlRowChangeEvent.#ctor(Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlRow,System.Data.DataRowAction)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlRowChangeEvent.Row">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.ekodsqlRowChangeEvent.Action">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.Colekodsql">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.Colekodsql.ixs_uka">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.Colekodsql.por_cislo">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GEkodsqlDataSet.Colekodsql.obsah">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GXrgSmlServiceLogic">
+            <summary>XRG - aplikační logika služby SML</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GXrgSmlServiceLogic.m_oOriginalServiceLogic">
+            <summary>aplikační logika původní služby</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.GXrgSmlServiceLogic.OriginalServiceLogic">
+            <summary>aplikační logika původní služby</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.GXrgSmlServiceLogic.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GXrgSmlServiceLogic.GetRequestDataset(System.String,System.String)">
+            <summary>získání prázdného datasetu pro vstupní data</summary>
+            <param name="methodName">název metody</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat</param>
+            <returns>prázdná instance datasetu pro vstupní data, v případě vrácení hodnoty null nebudou načítána žádná vstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GXrgSmlServiceLogic.ProcessRequest(System.String,System.String,Gordic.General.GDataSet)">
+            <summary>zpracování vstupních dat</summary>
+            <param name="methodName">název metody</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat</param>
+            <param name="requestDataSet">dataset se vstupními daty</param>
+            <returns>dataset s výstupními daty nebo null v případě, že nesmlí být vrácena žádná výstupní data</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GSmlWebService">
+            <summary>
+            Server webových služeb SML
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GSmlWebService.TestNamespace(System.String,System.String)">
+            <summary>
+            test namespace
+            </summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GSmlWebService.GetRequestSchemaFileName(System.String,System.String)">
+            <summary>získání názvu souboru obsahujícího XML schéma pro validaci vstupních dat webové služby</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <returns>název souboru s XML schématem ( tj. *.xsd ), v případě vrácení hodnoty null nebo prázdného řetězce nebsml kontrola vstupních dat webové služby provedena</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GSmlWebService.GetRequestDataset(System.String,System.String)">
+            <summary>získání prázdného typového datasetu pro načtení vstupních dat</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <returns>prázdná instance typového datasetu určená pro načtení vstupních dat nebo hodnota null v případě, že aplikační logika webové služby vstupní data neočekává</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GSmlWebService.ProcessRequest(System.String,System.String,System.Data.DataSet)">
+            <summary>zpracování vstupních dat webové služby</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <param name="requestDataSet">instance typového datasetu naplněná vstupními daty webové služby</param>
+            <returns>dataset s výstupními daty webové služby, nebo null v případě, že webová služba nevrací žádná data</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242">
+            <summary>
+            Package   : 
+            Procedure : spg_intsegsdxex242
+            Version   : 524.2
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_log_por_cislo">
+            <summary>log_por_cislo</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_com_mode">
+            <summary>rezim commitu po generaci IXP  0 ne, 1 commit</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_int_ixs_ext">
+            <summary>identifikátor externího systému</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_int_ixs_dav">
+            <summary>identifikátor dávky - v případě WS asi null</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_rok">
+            <summary>aktuální období</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_id_seg">
+            <summary>identifikátor segmentu, který je zpracováván ( evidence-dokladu = 'SDH/@', evidence-dokladu-r = 'SDR/@' )</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_ixs_zmp">
+            <summary>a_ixs_zmp - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_lic">
+            <summary>a_lic - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_ico">
+            <summary>a_ico - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_ucs">
+            <summary>a_ucs - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_nks">
+            <summary>a_nks - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_id_sml">
+            <summary>identifikátor dokladu</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_ac_sml">
+            <summary>ag_cis</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_ac">
+            <summary>evi_cis</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_ixp_den">
+            <summary>id_knihy</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_ktg_sml">
+            <summary>kategorie dokladu</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_ktg_typ">
+            <summary>kategorie typu</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_ixs_typ">
+            <summary>id_typ_doklad</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_ac_esu">
+            <summary>esu_cis_doklad</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_bu_ci">
+            <summary>esu_bu</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_sk_ci">
+            <summary>esu_sk</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_dat_prij_pod">
+            <summary>datum_evidence</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_typ_platnost">
+            <summary>a_typ_platnost - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_dat_uzavreni">
+            <summary>a_dat_uzavreni - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_dat_ucinnost">
+            <summary>a_dat_ucinnost - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_dat_platnost">
+            <summary>a_dat_platnost - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_id_fun_vyriz">
+            <summary>kompetent GINIS</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_id_fun_ref">
+            <summary>referent GINIS</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_id_fun_akt">
+            <summary>vlastník GINIS</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_soutez">
+            <summary>druh_soutez</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_ac_ver_zak">
+            <summary>cis_vz_dt</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_mena_sis">
+            <summary>mena - hodnota pro rozhraní - odpovídá standardu ISVS</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_typ_kurz">
+            <summary>typ_kurzu</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_kurz">
+            <summary>kurz</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_m">
+            <summary>m_kurz</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_typ_ceny">
+            <summary>a_typ_ceny - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_c_mena_doc">
+            <summary>celková cena za doklad nebo celková částka dle konfigurace</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_sgn_stav">
+            <summary>stav_podpis</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_popis">
+            <summary>a_popis - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_nazev">
+            <summary>a_nazev - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_poznamka">
+            <summary>a_poznamka - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_ac_dok_1">
+            <summary>souvis_dok_1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_ac_dok_2">
+            <summary>souvis_dok_2</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_id_orj">
+            <summary>org_jednotka</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_fin_od">
+            <summary>a_fin_od - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_fin_do">
+            <summary>a_fin_do - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_id_sml_pri">
+            <summary>identifikátor odkazu na nadřazenou smlouvu ixp_sml_nad</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_id_pri">
+            <summary>identifikátor případu blokační agendy</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_cis_real">
+            <summary>realizátor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_typ_ag_blok">
+            <summary>typ blokační agendy</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_id_esu">
+            <summary>identifikátor ESU</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_ixs_sbl">
+            <summary>identifikátor šablony</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_txt_1">
+            <summary>pomocný údaj - pro SDSEPO údaj o typu výběrového řízení</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_txt_2">
+            <summary>pomocný údaj - pro SDSEPO údaj o vlastníkovi výběrového řízení</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_c_rok">
+            <summary>366.1 rozpis částky pro aktuální rok v CZK</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_ixs_lpc">
+            <summary>382.1 id původce změny</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_ikc">
+            <summary>386.1 id kolekce</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.a_por_cislo_nab">
+            <summary>524.2 pořadové číslo nabídky BLK</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.o_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.o_sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.o_isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.o_txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.o_chyba">
+            <summary>o_chyba - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.o_ixp">
+            <summary>o_ixp - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.o_ac_sml">
+            <summary>o_ac_sml - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.o_ac">
+            <summary>o_ac - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.SetInParams(Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GInt16,Gordic.General.GDecimal,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDecimal,Gordic.General.GString,Gordic.General.GInt64,Gordic.General.GInt32)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GInt16,Gordic.General.GDecimal,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDecimal,Gordic.General.GString,Gordic.General.GInt64,Gordic.General.GInt32)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.DbExecute(System.Int32)">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_intsegsdxex242.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243">
+            <summary>
+            Package   : 
+            Procedure : spg_intsegsprxex243
+            Version   : 524.3
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_log_por_cislo">
+            <summary>log_por_cislo</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_com_mode">
+            <summary>rezim commitu po generaci IXP  0 ne, 1 commit</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_ixs_ext">
+            <summary>identifik�tor extern�ho syst�mu</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_ixs_dav">
+            <summary>identifik�tor d�vky</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_id_seg">
+            <summary>identifik�tor segmentu, kter� je zpracov�v�n</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_lic">
+            <summary>licence DB</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_zmenu_prov">
+            <summary>ixs_zmp u�ivatele</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_id_sml">
+            <summary>smlspid.ixp     id_doklad_sml</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_rok">
+            <summary>obdob�</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_id_cislo">
+            <summary>��slo polo�ky finan�n�ho profilu = id-polozky-sml extern�</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_cis_pol_pla">
+            <summary>��slo akce = polo�ky pl�nu</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_nazev">
+            <summary>popis polo�ky</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_c">
+            <summary>��stka polo�ky</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_bu_vl">
+            <summary>vlasn� bankovn� ��et</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_sk_vl">
+            <summary>sm�rov� k�d banky vlastn�ho bankovn�ho ��tu</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_ico">
+            <summary>i�o</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_ucs">
+            <summary>ucs</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_nks">
+            <summary>nks</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_uea_rr">
+            <summary>toto je uea_rr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_ueb_rr">
+            <summary>toto je ueb_rr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_uec">
+            <summary>polo�ky rs -- &gt;</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_ued">
+            <summary>a_ued - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_uee">
+            <summary>a_uee - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_uef">
+            <summary>a_uef - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_ueg">
+            <summary>a_ueg - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_ueh">
+            <summary>a_ueh - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_uei">
+            <summary>a_uei - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_uej">
+            <summary>a_uej - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_te0">
+            <summary>a_te0 - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_te1">
+            <summary>a_te1 - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_te2">
+            <summary>a_te2 - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_te3">
+            <summary>a_te3 - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_te4">
+            <summary>polo�ky rs &lt;--</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_uek">
+            <summary>a_uek - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_uel">
+            <summary>a_uel - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_uem">
+            <summary>a_uem - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_uen">
+            <summary>a_uen - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_te5">
+            <summary>a_te5 - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_te6">
+            <summary>a_te6 - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_te7">
+            <summary>a_te7 - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_te8">
+            <summary>a_te8 - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_te9">
+            <summary>a_te9 - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_id_sml_2">
+            <summary>id nad�azen� slouvy, na kterou v�e objedn�vka - extern� - smlspol.ixp_sml</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_rok_sml">
+            <summary>obdob� polo�ky nad�azen� slouvy, na kterou v�e polo�ka objedn�vky</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_id_cislo_sml">
+            <summary>��slo polo�ky nad�azen� slouvy, na kterou v�e polo�ka objedn�vky - extern�</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_up_stav">
+            <summary>po�adovan� stav polo�ky, null,0 nebo 20 = evidov�no = default, 30=schv�leno</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_ixs_lpc">
+            <summary>383.1 id p�vodce zm�ny</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.a_ikc">
+            <summary>383.1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.o_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.o_err_sql">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.o_err_isam">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.o_txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.l_chyba">
+            <summary>l_chyba - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.l_cislo">
+            <summary>l_cislo - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.SetInParams(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDecimal,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt64)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDecimal,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt64)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.DbExecute(System.Int32)">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_intsegsprxex243.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84">
+            <summary>
+            Package   : 
+            Procedure : spg_intsegspvxex84
+            Version   : 383.2
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_log_por_cislo">
+            <summary>log_por_cislo</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_com_mode">
+            <summary>rezim commitu po generaci IXP  0 ne, 1 commit</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_ixs_ext">
+            <summary>383.1 identifik�tor extern�ho syst�mu</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_id_seg">
+            <summary>identifik�tor segmentu, kter� je zpracov�v�n -  'SPV/@'</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_zmenu_prov">
+            <summary>ixs_zmp u�ivatele</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_id_sml">
+            <summary>smlspid.ixp     id_doklad_sml</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_id_cislo">
+            <summary>��slo polo�ky VP</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_skp">
+            <summary>P klasifikace majetku a slu�eb - CZ-CC, CZ-CPA</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_mat_cis">
+            <summary>p�edpokl�dan� materi�lov� ��slo/K�M</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_nazev">
+            <summary>P n�zev polo�ky VP</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_drh_id">
+            <summary>p�edpokl�d�n� druh majetku</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_mj">
+            <summary>P p�edpokl�d�n� MJ</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_vyr_cis">
+            <summary>v�robn� ��slo</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_inv_cis">
+            <summary>invent�rn� ��slo v p��pad� n�kupu, pron�jmu existuj�c�ho majetku</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_kod_pol">
+            <summary>objedn�vkov� ��slo dodavatele</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_ico">
+            <summary>P I�O ��etn� jednotky</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_ucs">
+            <summary>P ��etn� st�edisko</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_nks">
+            <summary>P n�kladov� st�edisko, pro n�j� je polo�ka VP ur�ena</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_nks_zad">
+            <summary>n�kladov� st�edikso zadavatele, pokud nen� zd�no, plat� nks_zad = nks</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_vp_stav">
+            <summary>P po�adovan� stav polo�ky - 10=n�vrh, 20=evidence, 30=schv�leno, 90=stornov�no; bude-li null, nastav� se 20</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_ixs_dup">
+            <summary>P typ polo�ky VP</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_popis">
+            <summary>popis polo�ky VP</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_m_sml">
+            <summary>P p�edpokl�d�n� po�et MJ</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_c_sml">
+            <summary>P p�edpokl�d�n� ��stka</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_evi_cis">
+            <summary>Eviden�n� ��slo majetku  380.1 -- &gt;</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_ser_cis">
+            <summary>S�riov� ��slo majetku</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_sarze">
+            <summary>Definice v�robn� �ar�e</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_mena">
+            <summary>M�na</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_kurz">
+            <summary>Kurz</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_m_kurz">
+            <summary>Po�et jednotek m�ny</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_dan_typ">
+            <summary>typ dane DPH - ekocdat</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_c_sml_dph">
+            <summary>��stka DPH v CZK</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_c_c_sml_dph">
+            <summary>Celkov� ��stka DPH v CZK</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_c_sml_mna_z">
+            <summary>��stka v m�n� bez DPH</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_c_sml_mna_dph">
+            <summary>��stka DPH v m�n� v z�kladn� sazb�</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_c_c_sml_mna_dph">
+            <summary>Celkov� ��stka v m�n� 380.1 &lt;--</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_lic">
+            <summary>383.1 -- &gt;</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.a_ixs_lpc">
+            <summary>383.1 &lt;--</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.o_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.o_err_sql">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.o_err_isam">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.o_txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.o_chyba">
+            <summary>o_chyba - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.o_cislo">
+            <summary>o_cislo - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.SetInParams(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GInt16,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GInt16,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.DbExecute(System.Int32)">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_intsegspvxex84.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84">
+            <summary>
+            Package   : 
+            Procedure : spg_smlwsesu84
+            Version   : 384.1
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84.a_log_por_cislo">
+            <summary>log_por_cislo</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84.a_com_mode">
+            <summary>rezim commitu po generaci IXP  0 ne, 1 commit</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84.a_ixs_ext">
+            <summary>383.1 identifik�tor extern�ho syst�mu - Povinn�</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84.a_rezim">
+            <summary>typ po�adovan� operace: 0=zalozeni-protistrany, 1=editace-protistrany, 2=zruseni-protistrany</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84.a_lic">
+            <summary>aktu�ln� lic - Povinn�</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84.a_id_sml">
+            <summary>extern� ID dokladu SML - Povinn�</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84.a_id_esu">
+            <summary>extern� identifik�tor ESU - Povinn�</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84.a_ac_esu">
+            <summary>esu_cis_doklad - Nepovinn�</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84.a_bu_ci">
+            <summary>esu_bu    - Nepovinn�</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84.a_sk_ci">
+            <summary>esu_sk    - Nepovinn�</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84.a_zmenu_prov">
+            <summary>a_zmenu_prov - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84.a_ixs_lpc">
+            <summary>382.1 id p�vodce zm�ny</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84.o_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84.o_sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84.o_isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84.o_txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84.o_chyba">
+            <summary>o_chyba - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84.SetInParams(Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84.DbExecute(System.Int32)">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsesu84.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.gspg_smlwsfreepol243">
+            <summary>
+            Package   : 
+            Procedure : spg_smlwsfreepol243
+            Version   : 524.3
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsfreepol243.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsfreepol243.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsfreepol243.a_log_por_cislo">
+            <summary>log_por_cislo</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsfreepol243.a_com_mode">
+            <summary>rezim commitu po generaci IXP  0 ne, 1 commit</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsfreepol243.a_ixs_ext">
+            <summary>identifik�tor extern�ho syst�mu</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsfreepol243.a_id_sml">
+            <summary>extern� ID dokladu SML</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsfreepol243.a_rok">
+            <summary>obdob�</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsfreepol243.a_id_cislo">
+            <summary>extern� ��slo polo�ky FP</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsfreepol243.a_typ_ag">
+            <summary>typ agendy, kter� vol� uvoln�n�</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsfreepol243.a_zmenu_prov">
+            <summary>a_zmenu_prov - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsfreepol243.a_ixs_lpc">
+            <summary>382.1 id p�vodce zm�ny</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsfreepol243.a_ikc">
+            <summary>383.3 id kolekce</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsfreepol243.o_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsfreepol243.o_err_sql">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsfreepol243.o_err_isam">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsfreepol243.o_txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsfreepol243.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsfreepol243.o_chyba">
+            <summary>o_chyba - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsfreepol243.SetInParams(Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt64)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsfreepol243.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt64)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsfreepol243.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsfreepol243.DbExecute(System.Int32)">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsfreepol243.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.gspg_smlwspid243">
+            <summary>
+            Package   : 
+            Procedure : spg_smlwspid243
+            Version   : 524.3
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwspid243.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwspid243.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwspid243.a_log_por_cislo">
+            <summary>log_por_cislo</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwspid243.a_com_mode">
+            <summary>rezim commitu po generaci IXP  0 ne, 1 commit</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwspid243.a_ixs_ext">
+            <summary>383.1 identifik�tor extern�ho syst�mu</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwspid243.a_id_sml">
+            <summary>extern� ID dokladu SML</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwspid243.a_rok_obd">
+            <summary>aktu�ln� ��etn� obdob�</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwspid243.a_sml_stav">
+            <summary>po�adovan� stav dokladu: 30=schv�leno, 50=ukon�eno, 90=storno</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwspid243.a_zmenu_prov">
+            <summary>a_zmenu_prov - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwspid243.a_ixs_lpc">
+            <summary>382.1 id p�vodce zm�ny</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwspid243.a_ikc">
+            <summary>383.4 id kolekce</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwspid243.o_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwspid243.o_err_sql">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwspid243.o_err_isam">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwspid243.o_txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwspid243.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwspid243.o_chyba">
+            <summary>o_chyba - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwspid243.SetInParams(Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt64)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwspid243.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt64)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwspid243.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwspid243.DbExecute(System.Int32)">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwspid243.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GEvidDokEkoParams">
+            <summary>
+            Třída GEvidDokEkoParams - ekonomické parametry, které jsou potřebné pro evidenci dokladu SML.
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.GEvidDokEkoParams.Ico">
+            <summary>Ico - zjistí se selektem na základě identifikátoru knihy</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.GEvidDokEkoParams.Ucs">
+            <summary>Ucs - zjistí se selektem na základě identifikátoru knihy</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.GEvidDokEkoParams.Nks">
+            <summary>Nks - je na vstupu web. metody</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.GEvidDokEkoParams.Rok_den">
+            <summary>Rok_den - zjistí se selektem na základě identifikátoru knihy</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.gspg_smlwsrok85">
+            <summary>
+            Package   : 
+            Procedure : spg_smlwsrok85
+            Version   : 386.1
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsrok85.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsrok85.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsrok85.a_log_por_cislo">
+            <summary>log_por_cislo</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsrok85.a_com_mode">
+            <summary>rezim commitu po generaci IXP  0 ne, 1 commit</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsrok85.a_ixs_ext">
+            <summary>383.1 identifik�tor extern�ho syst�mu</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsrok85.a_id_sml">
+            <summary>extern� ID dokladu SML</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsrok85.a_rok">
+            <summary>obdob�</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsrok85.a_c_mena">
+            <summary>��stka v m�n� za dan� rok</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsrok85.a_rok_obd">
+            <summary>aktu�ln� ��etn� obdob�, je-li null, pak bude nastaveno a_rok_obd = a_rok</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsrok85.a_zmenu_prov">
+            <summary>a_zmenu_prov - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsrok85.a_ixs_lpc">
+            <summary>386.1 id p�vodce zm�ny, pokud je null, zkus� se dohledat</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsrok85.a_ikc">
+            <summary>386.1 id kolekce, pokud je null, zkus� se dohledat</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsrok85.o_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsrok85.o_err_sql">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsrok85.o_err_isam">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsrok85.o_txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsrok85.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsrok85.o_chyba">
+            <summary>o_chyba - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsrok85.SetInParams(Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GDecimal,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt64)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsrok85.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GDecimal,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt64)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsrok85.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsrok85.DbExecute(System.Int32)">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsrok85.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.gspg_smlwsschstpol243">
+            <summary>
+            Package   : 
+            Procedure : spg_smlwsschstpol243
+            Version   : 524.3
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsschstpol243.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsschstpol243.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsschstpol243.a_log_por_cislo">
+            <summary>log_por_cislo</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsschstpol243.a_com_mode">
+            <summary>rezim commitu po generaci IXP  0 ne, 1 commit</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsschstpol243.a_ixs_ext">
+            <summary>383.1 identifik�tor extern�ho syst�mu ;  'SML' = vol�no z norm�ln� SPG, jinak z WS</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsschstpol243.a_id_sml">
+            <summary>extern� ID dokladu SML</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsschstpol243.a_rok">
+            <summary>obdob�</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsschstpol243.a_id_cislo">
+            <summary>extern� ��slo polo�ky FP</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsschstpol243.a_up_stav">
+            <summary>po�adovan� stav polo�ky 30 = schv�leno, 90=stornov�no</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsschstpol243.a_duvod_storno">
+            <summary>texov� popis d�vodu storna</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsschstpol243.a_zmenu_prov">
+            <summary>a_zmenu_prov - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsschstpol243.a_ixs_lpc">
+            <summary>povinn� 383.1 id p�vodce zm�ny</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsschstpol243.a_ikc">
+            <summary>383.4 id kolekce</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsschstpol243.o_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsschstpol243.o_err_sql">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsschstpol243.o_err_isam">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsschstpol243.o_txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsschstpol243.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.gspg_smlwsschstpol243.o_chyba">
+            <summary>o_chyba - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsschstpol243.SetInParams(Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt64)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsschstpol243.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt64)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsschstpol243.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsschstpol243.DbExecute(System.Int32)">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.gspg_smlwsschstpol243.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWmSmlDetailSmlouvy">
+            <summary>
+            Třída GSmlDetailSmlouvy.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlDetailSmlouvy.Execute(Gordic.Xrg.WsSmlInterface.DetailSmlouvyRequestDataSet)">
+            <summary>zaobalující public metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlDetailSmlouvy.ExecuteWebMethod(Gordic.Xrg.WsSmlInterface.DetailSmlouvyRequestDataSet)">
+            <summary>Nalezení knih.</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlDetailSmlouvy.ZpracujVstupniDataSet(Gordic.Xrg.WsSmlInterface.DetailSmlouvyRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset - otestuje jej a převede číselníky
+            Je celé v try...catch
+            </summary>
+            <param name="oRequest">vstupní dataset pro prehled knih</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlDetailSmlouvy.NaplnVystupniDataset">
+            <summary>
+            Naplní výstupní dataset.
+            Je celé v try...catch
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWmSmlPrehledTypuPolozkyVecnehoProfilu">
+            <summary>
+            Třída GSmlPrehledTypuPolozkyVecnehoProfilu.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledTypuPolozkyVecnehoProfilu.Execute(Gordic.Xrg.WsSmlInterface.PrehledTypuPolozkyVecnehoProfiluRequestDataSet)">
+            <summary>zaobalující public metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledTypuPolozkyVecnehoProfilu.ExecuteWebMethod(Gordic.Xrg.WsSmlInterface.PrehledTypuPolozkyVecnehoProfiluRequestDataSet)">
+            <summary>Nalezení knih.</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledTypuPolozkyVecnehoProfilu.ZpracujVstupniDataSet(Gordic.Xrg.WsSmlInterface.PrehledTypuPolozkyVecnehoProfiluRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset - otestuje jej a převede číselníky
+            Je celé v try...catch
+            </summary>
+            <param name="oRequest">vstupní dataset pro prehled knih</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledTypuPolozkyVecnehoProfilu.NaplnVystupniDataset">
+            <summary>
+            Naplní výstupní dataset.
+            Je celé v try...catch
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWmSmlPrehledNavazanychRezervacnichDokladu">
+            <summary>
+            Třída GSmlPrehledNavazanychRezervacnichDokladu.
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlPrehledNavazanychRezervacnichDokladu.m_gsIdDokladuSml">
+            <summary>
+            Aktuální období - ekonomický parametr
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledNavazanychRezervacnichDokladu.Execute(Gordic.Xrg.WsSmlInterface.PrehledNavazanychRezervacnichDokladuRequestDataSet)">
+            <summary>zaobalující public metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledNavazanychRezervacnichDokladu.ExecuteWebMethod(Gordic.Xrg.WsSmlInterface.PrehledNavazanychRezervacnichDokladuRequestDataSet)">
+            <summary>Nalezení NavazanychRezervacnichDokladu.</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledNavazanychRezervacnichDokladu.ZpracujVstupniDataSet(Gordic.Xrg.WsSmlInterface.PrehledNavazanychRezervacnichDokladuRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset - otestuje jej a převede číselníky
+            Je celé v try...catch
+            </summary>
+            <param name="oRequest">vstupní dataset pro prehled NavazanychRezervacnichDokladu</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledNavazanychRezervacnichDokladu.NaplnVystupniDataset">
+            <summary>
+            Naplní výstupní dataset.
+            Je celé v try...catch
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWmSmlStornoDokladu">
+            <summary>
+            Obsluha SML webové metody Storno-dokladu.
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlStornoDokladu.m_oVstupRow">
+            <summary>
+            Vstupní řádek
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlStornoDokladu.m_gsIdDoklSmlNas">
+            <summary>
+            Náš id dokladu sml
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlStornoDokladu.Execute(Gordic.Xrg.WsSmlInterface.StornoDokladuRequestDataSet)">
+            <summary>zaobalující public metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlStornoDokladu.ExecuteWebMethod(Gordic.Xrg.WsSmlInterface.StornoDokladuRequestDataSet)">
+            <summary>výkonná metoda web. služby</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlStornoDokladu.ZpracujVstupniDataSet(Gordic.Xrg.WsSmlInterface.StornoDokladuRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset - otestuje jej a převede číselníky
+            Je celé v try...catch
+            </summary>
+            <param name="oRequest">vstupní dataset pro prehled typu dokumentů</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlStornoDokladu.PridejRadekVystupniDataTableStornoDokladu(Gordic.Xrg.WsSmlInterface.StornoDokladuResponseDataSet,Gordic.Xrg.WsSmlServer.GSpgSmlwspidCommon)">
+            <summary>
+            Naplní výstupní datatable StornoDokladu
+            </summary>
+            <param name="outputDataSet"></param>
+            <param name="sp"></param>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWmSmlSeznamSmluv">
+            <summary>
+            Třída GSmlSeznamSmluv.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlSeznamSmluv.Execute(Gordic.Xrg.WsSmlInterface.SeznamSmluvRequestDataSet)">
+            <summary>zaobalující public metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlSeznamSmluv.ExecuteWebMethod(Gordic.Xrg.WsSmlInterface.SeznamSmluvRequestDataSet)">
+            <summary>Nalezení knih.</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlSeznamSmluv.ZpracujVstupniDataSet(Gordic.Xrg.WsSmlInterface.SeznamSmluvRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset - otestuje jej a převede číselníky
+            Je celé v try...catch
+            </summary>
+            <param name="oRequest">vstupní dataset pro prehled knih</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlSeznamSmluv.NaplnVystupniDataset">
+            <summary>
+            Naplní výstupní dataset.
+            Je celé v try...catch
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWmSmlZruseniProtistrany">
+            <summary>
+            Obsluha SML webové metody Zruseni-protistrany.
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlZruseniProtistrany.m_gsIdDoklSmlNas">
+            <summary>
+            Náš id dokladu sml
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlZruseniProtistrany.m_gsIdEsuNas">
+            <summary>
+            Náš id esu
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlZruseniProtistrany.m_oInputRow">
+            <summary>
+            Vstupní řádek
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlZruseniProtistrany.Execute(Gordic.Xrg.WsSmlInterface.ZruseniProtistranyRequestDataSet)">
+            <summary>zaobalující public metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlZruseniProtistrany.ExecuteWebMethod(Gordic.Xrg.WsSmlInterface.ZruseniProtistranyRequestDataSet)">
+            <summary>výkonná metoda web. služby</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlZruseniProtistrany.ZpracujVstupniDataSet(Gordic.Xrg.WsSmlInterface.ZruseniProtistranyRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset - otestuje jej a převede číselníky
+            Je celé v try...catch
+            </summary>
+            <param name="oRequest">vstupní dataset pro prehled typu dokumentů</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlZruseniProtistrany.NaplnVystupniDataset(Gordic.Xrg.WsSmlInterface.ZruseniProtistranyResponseDataSet)">
+            <summary>
+            Naplní výstupní dataset.
+            </summary>
+            <param name="outputDataSet">output</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWmSmlEditaceProtistrany">
+            <summary>
+            Obsluha SML webové metody Editace-protistrany.
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlEditaceProtistrany.m_gsIdDoklSmlNas">
+            <summary>
+            Náš id dokladu sml
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlEditaceProtistrany.m_gsIdEsuNas">
+            <summary>
+            Náš id esu
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlEditaceProtistrany.m_oInputRow">
+            <summary>
+            Vstupní řádek
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEditaceProtistrany.Execute(Gordic.Xrg.WsSmlInterface.EditaceProtistranyRequestDataSet)">
+            <summary>zaobalující public metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEditaceProtistrany.ExecuteWebMethod(Gordic.Xrg.WsSmlInterface.EditaceProtistranyRequestDataSet)">
+            <summary>výkonná metoda web. služby</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEditaceProtistrany.ZpracujVstupniDataSet(Gordic.Xrg.WsSmlInterface.EditaceProtistranyRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset - otestuje jej a převede číselníky
+            Je celé v try...catch
+            </summary>
+            <param name="oRequest">vstupní dataset pro prehled typu dokumentů</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEditaceProtistrany.NaplnVystupniDataset(Gordic.Xrg.WsSmlInterface.EditaceProtistranyResponseDataSet)">
+            <summary>
+            Naplní výstupní dataset.
+            </summary>
+            <param name="outputDataSet">output</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWmSmlZalozeniProtistrany">
+            <summary>
+            Obsluha SML webové metody Zalozeni-protistrany.
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlZalozeniProtistrany.m_gsIdDoklSmlNas">
+            <summary>
+            Náš id dokladu sml
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlZalozeniProtistrany.m_gsIdEsuNas">
+            <summary>
+            Náš id esu
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlZalozeniProtistrany.m_oInputRow">
+            <summary>
+            Vstupní řádek
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlZalozeniProtistrany.Execute(Gordic.Xrg.WsSmlInterface.ZalozeniProtistranyRequestDataSet)">
+            <summary>zaobalující public metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlZalozeniProtistrany.ExecuteWebMethod(Gordic.Xrg.WsSmlInterface.ZalozeniProtistranyRequestDataSet)">
+            <summary>výkonná metoda web. služby</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlZalozeniProtistrany.ZpracujVstupniDataSet(Gordic.Xrg.WsSmlInterface.ZalozeniProtistranyRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset - otestuje jej a převede číselníky
+            Je celé v try...catch
+            </summary>
+            <param name="oRequest">vstupní dataset pro prehled typu dokumentů</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlZalozeniProtistrany.NaplnVystupniDataset(Gordic.Xrg.WsSmlInterface.ZalozeniProtistranyResponseDataSet)">
+            <summary>
+            Naplní výstupní dataset.
+            </summary>
+            <param name="outputDataSet">output</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWmSmlUkonceniDokladu">
+            <summary>
+            Obsluha SML webové metody Ukonceni-dokladu.
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlUkonceniDokladu.m_oVstupRow">
+            <summary>
+            Vstupní řádek
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlUkonceniDokladu.m_gsIdDoklSmlNas">
+            <summary>
+            Náš id dokladu sml
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlUkonceniDokladu.Execute(Gordic.Xrg.WsSmlInterface.UkonceniDokladuRequestDataSet)">
+            <summary>zaobalující public metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlUkonceniDokladu.ExecuteWebMethod(Gordic.Xrg.WsSmlInterface.UkonceniDokladuRequestDataSet)">
+            <summary>výkonná metoda web. služby</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlUkonceniDokladu.ZpracujVstupniDataSet(Gordic.Xrg.WsSmlInterface.UkonceniDokladuRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset - otestuje jej a převede číselníky
+            Je celé v try...catch
+            </summary>
+            <param name="oRequest">vstupní dataset pro prehled typu dokumentů</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlUkonceniDokladu.PridejRadekVystupniDataTableUkonceniDokladu(Gordic.Xrg.WsSmlInterface.UkonceniDokladuResponseDataSet,Gordic.Xrg.WsSmlServer.GSpgSmlwspidCommon)">
+            <summary>
+            Naplní výstupní datatable UkonceniDokladu
+            </summary>
+            <param name="outputDataSet"></param>
+            <param name="sp"></param>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWmSmlSchvaleniDokladu">
+            <summary>
+            Obsluha SML webové metody Schvaleni-dokladu.
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlSchvaleniDokladu.m_oVstupRow">
+            <summary>
+            Vstupní řádek
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlSchvaleniDokladu.m_gsIdDoklSmlNas">
+            <summary>
+            Náš id dokladu sml
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlSchvaleniDokladu.Execute(Gordic.Xrg.WsSmlInterface.SchvaleniDokladuRequestDataSet)">
+            <summary>zaobalující public metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlSchvaleniDokladu.ExecuteWebMethod(Gordic.Xrg.WsSmlInterface.SchvaleniDokladuRequestDataSet)">
+            <summary>výkonná metoda web. služby</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlSchvaleniDokladu.ZpracujVstupniDataSet(Gordic.Xrg.WsSmlInterface.SchvaleniDokladuRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset - otestuje jej a převede číselníky
+            Je celé v try...catch
+            </summary>
+            <param name="oRequest">vstupní dataset pro prehled typu dokumentů</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlSchvaleniDokladu.PridejRadekVystupniDataTableSchvaleniDokladu(Gordic.Xrg.WsSmlInterface.SchvaleniDokladuResponseDataSet,Gordic.Xrg.WsSmlServer.GSpgSmlwspidCommon)">
+            <summary>
+            Naplní výstupní datatable SchvaleniDokladu
+            </summary>
+            <param name="outputDataSet"></param>
+            <param name="sp"></param>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWmSmlSchvaleniPolozky">
+            <summary>
+            Obsluha SML webové metody Schvaleni-polozky.
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlSchvaleniPolozky.m_oInputRow">
+            <summary>
+            Vstupní řádek
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlSchvaleniPolozky.Execute(Gordic.Xrg.WsSmlInterface.SchvaleniPolozkyRequestDataSet)">
+            <summary>zaobalující public metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlSchvaleniPolozky.ExecuteWebMethod(Gordic.Xrg.WsSmlInterface.SchvaleniPolozkyRequestDataSet)">
+            <summary>výkonná metoda web. služby</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlSchvaleniPolozky.ZpracujVstupniDataSet(Gordic.Xrg.WsSmlInterface.SchvaleniPolozkyRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset - otestuje jej a převede číselníky
+            Je celé v try...catch
+            </summary>
+            <param name="oRequest">vstupní dataset pro prehled typu dokumentů</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlSchvaleniPolozky.NaplnVystupniDataset(Gordic.Xrg.WsSmlInterface.SchvaleniPolozkyResponseDataSet,System.String)">
+            <summary>
+            Naplní výstupní dataset.
+            </summary>
+            <param name="outputDataSet">output</param>
+            <param name="stavSchvaleni">stav</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWmSmlRozpisCRok">
+            <summary>
+            Obsluha SML webové metody Rozpis-c-rok.
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlRozpisCRok.m_oRozpisTable">
+            <summary>
+            Rozpis částek na roky
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlRozpisCRok.m_stav_rozpisu">
+            <summary>
+            Stav rozpisu -> pro evid. kompl. dokl.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlRozpisCRok.Execute(Gordic.Xrg.WsSmlInterface.RozpisCRokRequestDataSet)">
+            <summary>zaobalující public metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlRozpisCRok.ExecuteForKompletniDoklad(Gordic.Xrg.WsSmlInterface.RozpisCRokRequestDataSet,System.Int32[]@)">
+            <summary>zaobalující internal metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>        
+            <param name="stav_rozpisu">info o stavu rozpisu</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlRozpisCRok.ExecuteWebMethod(Gordic.Xrg.WsSmlInterface.RozpisCRokRequestDataSet)">
+            <summary>výkonná metoda web. služby</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlRozpisCRok.ZpracujVstupniDataSet(Gordic.Xrg.WsSmlInterface.RozpisCRokRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset - otestuje jej a převede číselníky
+            Je celé v try...catch
+            </summary>
+            <param name="oRequest">vstupní dataset pro prehled typu dokumentů</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlRozpisCRok.PridejRadekVystupniDataTableRozpisCRok(Gordic.Xrg.WsSmlInterface.RozpisCRokResponseDataSet,Gordic.General.GString,System.Boolean,Gordic.General.GString,Gordic.General.GDecimal,System.String)">
+            <summary>
+            Naplní výstupní datatable RozpisCRok.
+            </summary>
+            <param name="outputDataSet"></param>
+            <param name="idDokladuSml"></param>
+            <param name="atributIdDokladuSml_externi"></param>
+            <param name="rok"></param>
+            <param name="castkaRok"></param>
+            <param name="stavRozpisu"></param>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWmSmlEvidencePolozky">
+            <summary>
+            Obsluha SML webové metody Evidence-polozky.
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlEvidencePolozky.m_oEvidPolRow">
+            <summary>
+            Vstupní řádek, jehož data obsahují info potřebná k zaevidování položky do SML
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlEvidencePolozky.m_evKomplDoklCisloPolozky">
+            <summary>
+            číslo položky, kt. vracím pro evidenci komplentího dokladu
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidencePolozky.Execute(Gordic.Xrg.WsSmlInterface.EvidencePolozkyRequestDataSet)">
+            <summary>zaobalující public metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidencePolozky.ExecuteForKompletniDoklad(Gordic.Xrg.WsSmlInterface.EvidencePolozkyRequestDataSet)">
+            <summary>zaobalující internal metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidencePolozky.ExecuteWebMethod(Gordic.Xrg.WsSmlInterface.EvidencePolozkyRequestDataSet)">
+            <summary>výkonná metoda web. služby</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidencePolozky.ZpracujVstupniDataSet(Gordic.Xrg.WsSmlInterface.EvidencePolozkyRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset - otestuje jej a převede číselníky
+            Je celé v try...catch
+            </summary>
+            <param name="oRequest">vstupní dataset pro prehled typu dokumentů</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidencePolozky.Exec_spg_intsegsprxex">
+            <summary>
+            Vlastní volání SP.
+            </summary>
+            <returns>výsledek evidence</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidencePolozky.NaplnVystupniDataTableEvidencePolozky(Gordic.Xrg.WsSmlInterface.EvidencePolozkyResponseDataSet,System.String,System.String)">
+            <summary>
+            Naplní výstupní datatable EvidencePolozky
+            </summary>
+            <param name="outputDataSet"></param>
+            <param name="stavEvidence"></param>
+            <param name="stavRezervace"></param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidencePolozky.EvidPolStavToText(System.Int32,System.String@,System.String@)">
+            <summary>
+            Převod čísla chyby evidence na text
+            </summary>
+            <param name="evidPolStavId"></param>
+            <param name="stavEvidence"></param>
+            <param name="stavRezervace"></param>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWmSmlStavRozpoctu">
+            <summary>
+            Obsluha SML webové metody Stav-rozpoctu.
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlStavRozpoctu.m_oInputRow">
+            <summary>
+            vstupní řádek
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlStavRozpoctu.m_oOutputDataSet">
+            <summary>
+            výstupní dataset
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlStavRozpoctu.m_gsRealizator">
+            <summary>
+            realizátor (v tabulkách cis_real)
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlStavRozpoctu.Execute(Gordic.Xrg.WsSmlInterface.StavRozpoctuRequestDataSet)">
+            <summary>zaobalující public metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlStavRozpoctu.ExecuteWebMethod(Gordic.Xrg.WsSmlInterface.StavRozpoctuRequestDataSet)">
+            <summary>výkonná metoda web. služby</summary>
+            <param name="inputDataSet">vstupní data</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlStavRozpoctu.ZpracujVstupniDataSet(Gordic.Xrg.WsSmlInterface.StavRozpoctuRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset - otestuje jej a převede číselníky
+            Je celé v try...catch
+            </summary>
+            <param name="oRequest">vstupní dataset pro prehled typu dokumentů</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlStavRozpoctu.SekceAC">
+            <summary>
+            určení podmínek výběru dle ukazatelů v závislosti na hodnotě DB parametru SML_RAD_ACKPPLA, který je navázán na agendu GWSSML01
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlStavRozpoctu.SekceAB">
+            <summary>
+            určení podmínek mapování čísla akce do TE1. Výslekem je získání první a poslední pozice výskytu akce v TE1
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlStavRozpoctu.SekceAA">
+            <summary>
+            výběr konta přímo z rozpočtu
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlStavRozpoctu.m_sStavRozpoctuOperator">
+            <summary>
+            Lokální uchování web config parametru Stav-rozpoctu-oper
+            možná to díky tomu bude rychlejší
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlStavRozpoctu.PridejWhereUeaPodleParametru(System.String,Gordic.General.GString)">
+            <summary>
+            Pokud bude hodnota různá od null, tak se přidá do podmínky m_where_uea
+            a použitý operátor závisí na web config parametru Stav-rozpoctu-oper
+            </summary>
+            <param name="sloupec">s</param>
+            <param name="hodnota">h</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlStavRozpoctu.PridejWhereUeaPovinny(System.String,Gordic.General.GString)">
+            <summary>
+            Přidá do podmínky m_where_uea
+            </summary>
+            <param name="sloupec">s</param>
+            <param name="hodnota">h</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlStavRozpoctu.PridejWhereUea(System.String,Gordic.General.GString)">
+            <summary>
+            Pokud bude hodnota různá od null, tak se přidá do podmínky m_where_uea
+            </summary>
+            <param name="sloupec">s</param>
+            <param name="hodnota">h</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlStavRozpoctu.NaplnVystupniDataset">
+            <summary>
+            Naplní výstupní dataset.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlStavRozpoctu.AddStavRozpoctuRow">
+            <summary>
+            Vlastní naplnění výstupního řádku stavu rozpočtu
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlStavRozpoctu.SetRealizator">
+            <summary>
+            Ověření kompetenta a zjištění realizátora
+            </summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladuR">
+            <summary>
+            Obsluha SML webové metody Evidence-dokladu-r.
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladuR.m_oEkoRow">
+            <summary>
+            Vstupní řádek potřebných EKO parametrů
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladuR.m_oInputRow">
+            <summary>
+            Vstupní řádek, jehož data obsahují info potřebná k zaevidování dokladu do SML
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladuR.m_oRozpisTable">
+            <summary>
+            Rozpis částek na roky
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladuR.m_oEvidDokEkoParams">
+            <summary>
+            Všechny potřebné EKO parametry, které metoda používá
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladuR.Execute(Gordic.Xrg.WsSmlInterface.EvidenceDokladuRRequestDataSet)">
+            <summary>zaobalující public metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladuR.ExecuteWebMethod(Gordic.Xrg.WsSmlInterface.EvidenceDokladuRRequestDataSet)">
+            <summary>výkonná metoda web. služby</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladuR.PridejRadekVystupniDataTableRozpisCRok(Gordic.Xrg.WsSmlInterface.EvidenceDokladuRResponseDataSet,Gordic.General.GString,Gordic.General.GDecimal,System.String)">
+            <summary>
+            Naplní výstupní datatable RozpisCRok.
+            </summary>
+            <param name="outputDataSet"></param>
+            <param name="rok"></param>
+            <param name="castkaRok"></param>
+            <param name="stavRozpisu"></param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladuR.ZpracujVstupniDataSet(Gordic.Xrg.WsSmlInterface.EvidenceDokladuRRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset - otestuje jej a převede číselníky
+            Je celé v try...catch
+            </summary>
+            <param name="oRequest">vstupní dataset pro prehled typu dokumentů</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladuR.DoEkoInit">
+            <summary>
+            Provede ekoinicializaci, tak jak se ve WS delava.
+            Na vstupu mam jen Nks, protoze Ico, Ucs a Rok_deniku si nactu z tabulky knih (vas.smlsden).
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladuR.KonEkoParam(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Kontrola eko parametrů
+            </summary>
+            <param name="kniha">kniha smluv</param>
+            <param name="ico">IČO</param>
+            <param name="ucs">UCS</param>
+            <param name="nks">NKS</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladuR.Exec_spg_intsegsdxex">
+            <summary>
+            volá SP provádějící evidenci dokladu
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladuR.NaplnVystupniDataset(Gordic.Xrg.WsSmlInterface.EvidenceDokladuRResponseDataSet,Gordic.Xrg.WsSmlServer.GSpgIntsegsdxexCommon)">
+            <summary>
+            Naplní výstupní dataset.
+            </summary>
+            <param name="outputDataSet"></param>
+            <param name="sp">parametry předávané z gspg_intsegsdxex...</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladu">
+            <summary>
+            Obsluha SML webové metody Evidence-dokladu.
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladu.m_oEkoRow">
+            <summary>
+            Vstupní řádek potřebných EKO parametrů
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladu.m_oInputRow">
+            <summary>
+            Vstupní řádek, jehož data obsahují info potřebná k zaevidování dokladu do SML
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladu.m_oProtistranyTable">
+            <summary>protistrany</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladu.m_oEvidDokEkoParams">
+            <summary>
+            Všechny potřebné EKO parametry, které metoda používá
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladu.m_sRealizator">
+            <summary>při evidenci kompl. dokladu může být nastaven, jinak null</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladu.Execute(Gordic.Xrg.WsSmlInterface.EvidenceDokladuRequestDataSet)">
+            <summary>zaobalující public metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladu.ExecuteForKompletniDoklad(Gordic.Xrg.WsSmlInterface.EvidenceDokladuRequestDataSet,Gordic.General.GString)">
+            <summary>
+            Evidence dokladu v rámci evidence kompletního dokladu
+            počítá s tím, že předtím proběhl EKOINIT!
+            </summary>
+            <param name="inputDataSet"></param>
+            <param name="realizator">Evidence-dokladu nemá realizatora na vstupu, tak si ho předám parametrem a pak do SP dodám</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladu.ExecuteWebMethod(Gordic.Xrg.WsSmlInterface.EvidenceDokladuRequestDataSet)">
+            <summary>výkonná metoda web. služby</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladu.ZpracujVstupniDataSet(Gordic.Xrg.WsSmlInterface.EvidenceDokladuRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset - otestuje jej a převede číselníky
+            Je celé v try...catch
+            </summary>
+            <param name="oRequest">vstupní dataset pro prehled typu dokumentů</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladu.DoEkoInit">
+            <summary>
+            Provede ekoinicializaci, tak jak se ve WS delava.
+            Na vstupu mam jen Nks, protoze Ico, Ucs a Rok_deniku si nactu z tabulky knih (vas.smlsden).
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladu.KonEkoParam(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Kontrola eko parametrů
+            </summary>
+            <param name="kniha">kniha smluv</param>
+            <param name="ico">IČO</param>
+            <param name="ucs">UCS</param>
+            <param name="nks">NKS</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladu.Exec_spg_intsegsdxex(System.Boolean)">
+            <summary>
+            volá SP provádějící evidenci dokladu
+            </summary>
+            <param name="commit">jestli se má přímo v SP provést commit</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceDokladu.NaplnVystupniDataset(Gordic.Xrg.WsSmlInterface.EvidenceDokladuResponseDataSet,Gordic.Xrg.WsSmlServer.GSpgIntsegsdxexCommon)">
+            <summary>
+            Naplní výstupní dataset.
+            </summary>
+            <param name="outputDataSet"></param>
+            <param name="sp">parametry předávané z gspg_intsegsdxex...</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWmSmlFakturyNavazaneNaSmlouvu">
+            <summary>
+            Třída GSmlFakturyNavazaneNaSmlouvu.
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlFakturyNavazaneNaSmlouvu.m_gsIdDokladuSml">
+            <summary>
+            Číslo smlouvy
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlFakturyNavazaneNaSmlouvu.Execute(Gordic.Xrg.WsSmlInterface.FakturyNavazaneNaSmlouvuRequestDataSet)">
+            <summary>zaobalující public metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlFakturyNavazaneNaSmlouvu.ExecuteWebMethod(Gordic.Xrg.WsSmlInterface.FakturyNavazaneNaSmlouvuRequestDataSet)">
+            <summary>Nalezení knih.</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlFakturyNavazaneNaSmlouvu.m_sParam_SML_WS_RPP">
+            <summary>
+            Na základě hodnoty glob. db parametru sml_ws_rpp rozhodne, jesli se použít rozšířený profil písemností
+            -- sml_ws_rpp
+            INSERT INTO vas.gincpar ( param, param_txt, priz_num, priz_zobr, popis, aktivita, priz_cen, priz_tem, submodel, login_uziv, priz_rp, typ_par, priz_glob, form_pop, priz_hrom ) 
+            VALUES ( 'sml_ws_rpp', 'SML - WS Použití vyhledávání v rozšířeném profilu', 0, 1, '', 100, 0, 0, 'SML', 'jvacha', 0, 10, 0, 0, 0 );;
+            INSERT INTO vas.gincpaf ( faze, param, aktivita ) VALUES ( 'GWSSML01', 'sml_ws_rpp', 100 );;
+            INSERT INTO vas.ginchop ( param, config_txt, config, aktivita ) VALUES ( 'sml_ws_rpp', 'Ano', 'ano', 100 );;
+            INSERT INTO vas.ginchop ( param, config_txt, config, aktivita ) VALUES ( 'sml_ws_rpp', 'Ne', 'ne', 100 );;
+            DELETE FROM vas.gincpau WHERE param = 'sml_ws_rpp';;
+            INSERT INTO vas.gincpau ( param, uroven_cfg ) VALUES ( 'sml_ws_rpp', 10 );;
+            -- DEFAULT parametru 
+            INSERT INTO vas.ginspar ( uroven_cfg, subj_cfg, param, config, config_txt, aktivita, zmenu_prov ) 
+            VALUES ( 10, 'glob', 'sml_ws_rpp', 'ne', 'Ne', 100, '0000SZ000007' );;
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlFakturyNavazaneNaSmlouvu.ZpracujVstupniDataSet(Gordic.Xrg.WsSmlInterface.FakturyNavazaneNaSmlouvuRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset - otestuje jej a převede číselníky
+            Je celé v try...catch
+            </summary>
+            <param name="oRequest">vstupní dataset pro prehled knih</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlFakturyNavazaneNaSmlouvu.NaplnVystupniDataset">
+            <summary>
+            Naplní výstupní dataset.
+            Je celé v try...catch
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlFakturyNavazaneNaSmlouvu.NaplnVystupniDatasetRozsirenyProfil">
+            <summary>
+            Naplní výstupní dataset.
+            Je celé v try...catch
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWmSmlPrehledDruhuSouteze">
+            <summary>
+            Obsluha SML webové metody Prehled-druhu-souteze
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlPrehledDruhuSouteze.m_gnTypAgendy">
+            <summary>
+            Typ blokační agendy - hodnota převedená z číselníku přes sloupec k_xml
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledDruhuSouteze.Execute(Gordic.Xrg.WsSmlInterface.PrehledDruhuSoutezeRequestDataSet)">
+            <summary>zaobalující public metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledDruhuSouteze.ExecuteWebMethod(Gordic.Xrg.WsSmlInterface.PrehledDruhuSoutezeRequestDataSet)">
+            <summary>výkonná metoda web. služby</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledDruhuSouteze.ZpracujVstupniDataSet(Gordic.Xrg.WsSmlInterface.PrehledDruhuSoutezeRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset - otestuje jej a převede číselníky
+            Je celé v try...catch
+            </summary>
+            <param name="oRequest">vstupní dataset pro prehled typu dokumentů</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledDruhuSouteze.NaplnVystupniDataset(Gordic.Xrg.WsSmlInterface.PrehledDruhuSoutezeResponseDataSet)">
+            <summary>
+            Naplní výstupní dataset.
+            Je celé v try...catch
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWmSmlPrehledKnih">
+            <summary>
+            Třída GSmlPrehledKnih.
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlPrehledKnih.m_rok">
+            <summary>
+            Aktuální období - ekonomický parametr
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlPrehledKnih.m_kategorieKnihy">
+            <summary>
+            Kategorie knihy - hodnota převedená z číselníku přes sloupec k_xml
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlPrehledKnih.m_ico">
+            <summary>
+            ICO, je volitelné
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlPrehledKnih.m_aktivita">
+            <summary>
+            Aktuální období - ekonomický parametr
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledKnih.Execute(Gordic.Xrg.WsSmlInterface.PrehledKnihRequestDataSet)">
+            <summary>zaobalující public metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledKnih.ExecuteWebMethod(Gordic.Xrg.WsSmlInterface.PrehledKnihRequestDataSet)">
+            <summary>Nalezení knih.</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledKnih.ZpracujVstupniDataSet(Gordic.Xrg.WsSmlInterface.PrehledKnihRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset - otestuje jej a převede číselníky
+            Je celé v try...catch
+            </summary>
+            <param name="oRequest">vstupní dataset pro prehled knih</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledKnih.NaplnVystupniDataset">
+            <summary>
+            Naplní výstupní dataset.
+            Je celé v try...catch
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWmSmlPrehledTypuDokumentu">
+            <summary>
+            Obsluha SML webové metody Prehled-typu-dokumentu
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlPrehledTypuDokumentu.m_csSelectFrom">
+            <summary>
+            SELECT a FROM část použitého selektu
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlPrehledTypuDokumentu.requestRow">
+            <summary>
+            Request
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlPrehledTypuDokumentu.ktg_den">
+            <summary>
+            Kategorie knihy - hodnota převedená z číselníku přes sloupec k_xml
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlPrehledTypuDokumentu.ktg_typ">
+            <summary>
+            Kategorie typu dokumentu - hodnota převedená z číselníku přes sloupec k_xml
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlPrehledTypuDokumentu.ixp_den">
+            <summary>
+            Kniha
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledTypuDokumentu.Execute(Gordic.Xrg.WsSmlInterface.PrehledTypuDokumentuRequestDataSet)">
+            <summary>zaobalující public metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledTypuDokumentu.ExecuteWebMethod(Gordic.Xrg.WsSmlInterface.PrehledTypuDokumentuRequestDataSet)">
+            <summary>Nalezení typu dokumentu</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledTypuDokumentu.ZpracujVstupniDataSet(Gordic.Xrg.WsSmlInterface.PrehledTypuDokumentuRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset - otestuje jej a převede číselníky
+            Je celé v try...catch
+            </summary>
+            <param name="oRequest">vstupní dataset pro prehled typu dokumentů</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledTypuDokumentu.GetKtgTypWhereByKtgDen">
+            <summary>
+            Bacha, používá se pro vas.ginckat i vas.sslstyp
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledTypuDokumentu.NaplnVystupniDataset(Gordic.Xrg.WsSmlInterface.PrehledTypuDokumentuResponseDataSet)">
+            <summary>
+            Naplní výstupní dataset.
+            </summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWmSmlPrehledVlastniku">
+            <summary>
+            Obsluha SML webové metody Prehled-vlastniku
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlPrehledVlastniku.m_gsIdKnihy">
+            <summary>
+            Identifikátor knihy
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlPrehledVlastniku.m_ico">
+            <summary>
+            Ičo
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledVlastniku.Execute(Gordic.Xrg.WsSmlInterface.PrehledVlastnikuRequestDataSet)">
+            <summary>zaobalující public metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>				
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledVlastniku.ExecuteWebMethod(Gordic.Xrg.WsSmlInterface.PrehledVlastnikuRequestDataSet)">
+            <summary>zjištění přehledu vlastníků</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledVlastniku.ZpracujVstupniDataSet(Gordic.Xrg.WsSmlInterface.PrehledVlastnikuRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset - otestuje jej a převede číselníky
+            Je celé v try...catch
+            </summary>
+            <param name="oRequest">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledVlastniku.NaplnVystupniDataset(Gordic.Xrg.WsSmlInterface.PrehledVlastnikuResponseDataSet)">
+            <summary>
+            Naplní výstupní dataset.
+            Je celé v try...catch
+            </summary>
+            <param name="oOutputDataSet">Výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWmSmlPrehledVyrizReferentu">
+            <summary>
+            Obsluha SML webové metody Prehled-vyriz-referentu
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlPrehledVyrizReferentu.m_gsIdFunkceKompetenta">
+            <summary>
+            Identifikátor funkce kompetenta - náš GINIS identifikátor
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlPrehledVyrizReferentu.m_ico">
+            <summary>
+            ICO
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledVyrizReferentu.Execute(Gordic.Xrg.WsSmlInterface.PrehledVyrizReferentuRequestDataSet)">
+            <summary>zaobalující public metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>		
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledVyrizReferentu.ExecuteWebMethod(Gordic.Xrg.WsSmlInterface.PrehledVyrizReferentuRequestDataSet)">
+            <summary>Zjištění přehledu vyřizujících referentů</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledVyrizReferentu.ZpracujVstupniDataSet(Gordic.Xrg.WsSmlInterface.PrehledVyrizReferentuRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset - otestuje jej a převede číselníky
+            Je celé v try...catch
+            </summary>
+            <param name="oRequest">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlPrehledVyrizReferentu.NaplnVystupniDataset(Gordic.Xrg.WsSmlInterface.PrehledVyrizReferentuResponseDataSet)">
+            <summary>
+            Naplní výstupní dataset.
+            Je celé v try...catch
+            </summary>
+            <param name="oOutputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWmSmlStornoPolozky">
+            <summary>
+            Obsluha SML webové metody Storno-polozky.
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlStornoPolozky.m_oInputRow">
+            <summary>
+            Vstupní řádek
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlStornoPolozky.Execute(Gordic.Xrg.WsSmlInterface.StornoPolozkyRequestDataSet)">
+            <summary>zaobalující public metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlStornoPolozky.ExecuteWebMethod(Gordic.Xrg.WsSmlInterface.StornoPolozkyRequestDataSet)">
+            <summary>výkonná metoda web. služby</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlStornoPolozky.ZpracujVstupniDataSet(Gordic.Xrg.WsSmlInterface.StornoPolozkyRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset - otestuje jej a převede číselníky
+            Je celé v try...catch
+            </summary>
+            <param name="oRequest">vstupní dataset pro prehled typu dokumentů</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlStornoPolozky.NaplnVystupniDataset(Gordic.Xrg.WsSmlInterface.StornoPolozkyResponseDataSet,System.String)">
+            <summary>
+            Naplní výstupní dataset.
+            </summary>
+            <param name="outputDataSet">output</param>
+            <param name="stavStorna">stav</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWmSmlUvolneniPolozky">
+            <summary>
+            Obsluha SML webové metody Uvolneni-polozky.
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlUvolneniPolozky.m_oInputRow">
+            <summary>
+            Vstupní řádek
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlUvolneniPolozky.Execute(Gordic.Xrg.WsSmlInterface.UvolneniPolozkyRequestDataSet)">
+            <summary>zaobalující public metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlUvolneniPolozky.ExecuteWebMethod(Gordic.Xrg.WsSmlInterface.UvolneniPolozkyRequestDataSet)">
+            <summary>výkonná metoda web. služby</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlUvolneniPolozky.ZpracujVstupniDataSet(Gordic.Xrg.WsSmlInterface.UvolneniPolozkyRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset - otestuje jej a převede číselníky
+            Je celé v try...catch
+            </summary>
+            <param name="oRequest">vstupní dataset pro prehled typu dokumentů</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlUvolneniPolozky.Exec_spg_smlwsfreepol">
+            <summary>
+            Vlastní volání SP.
+            </summary>
+            <returns>stav id</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlUvolneniPolozky.StavUvolneniToText(System.Int32)">
+            <summary>
+            Vráti text chyby.
+            </summary>
+            <param name="l_chyba">číslo ch.</param>
+            <returns>text</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlUvolneniPolozky.NaplnVystupniDataset(Gordic.Xrg.WsSmlInterface.UvolneniPolozkyResponseDataSet,System.String)">
+            <summary>
+            Naplní výstupní dataset.
+            </summary>
+            <param name="outputDataSet"></param>
+            <param name="stavUvolneni"></param>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer._138">
+            <summary>
+              Looks up a localized string similar to Položka neexistuje..
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer._139">
+            <summary>
+              Looks up a localized string similar to Doklad neexistuje..
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer._140">
+            <summary>
+              Looks up a localized string similar to Případ neexistuje..
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer._141">
+            <summary>
+              Looks up a localized string similar to Hodnota položek je vyšší než hodnota rozpisu..
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer._142">
+            <summary>
+              Looks up a localized string similar to Nelze snížit pod úroveň rezervovaných nebo vázaných prostředků..
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer._143">
+            <summary>
+              Looks up a localized string similar to Položka není krytá prostředky vyhrazenými položkou smlouvy..
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer._144">
+            <summary>
+              Looks up a localized string similar to Položka není krytá rozpočtem..
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer._145">
+            <summary>
+              Looks up a localized string similar to Položka není krytá prostředky případu blokační agendy..
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer._146">
+            <summary>
+              Looks up a localized string similar to Položka je již stornovaná..
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer._150">
+            <summary>
+              Looks up a localized string similar to Chyba č. {0} (odpovídá identifikaci položky v segmentu SPR)..
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer._156">
+            <summary>
+              Looks up a localized string similar to Položka není ve stavu umožňujícím uvolnění..
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer._157">
+            <summary>
+              Looks up a localized string similar to Položka nemá volné prostředky..
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer._168">
+            <summary>
+              Looks up a localized string similar to OK.
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer._169">
+            <summary>
+              Looks up a localized string similar to Doklad ještě neexistuje..
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer._170">
+            <summary>
+              Looks up a localized string similar to Doklad nemá finanční profil..
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer._171">
+            <summary>
+              Looks up a localized string similar to Rok je mimo povolený interval..
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer._172">
+            <summary>
+              Looks up a localized string similar to Hodnota rozpisu je vyšší než celková částka za doklad..
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer._174">
+            <summary>
+              Looks up a localized string similar to Hodnota položek je vyšší než rozpis..
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer._175">
+            <summary>
+              Looks up a localized string similar to Neplatná kombinace rozpočtové skladby..
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer._176">
+            <summary>
+              Looks up a localized string similar to Přeskočeno, chyba u jiného roku a částky..
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer._177">
+            <summary>
+              Looks up a localized string similar to Chyba při rozepisování částky {0} na rok {0}..
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer._178">
+            <summary>
+              Looks up a localized string similar to Přeskočeno, chyba při evidenci dokladu..
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer._181">
+            <summary>
+              Looks up a localized string similar to Chyba č. {0}..
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer._187">
+            <summary>
+              Looks up a localized string similar to (Id-dokladu-sml={0}; externi={1}; Rok={2}; Castka-rok={3}).
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsSmlServer.Gordic_Xrg_WsSmlServer._188">
+            <summary>
+              Looks up a localized string similar to (Id-dokladu-sml={0}; externi={1}; Rok={2}; Id-polozky-sml={3}; exteni={4}).
+            </summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu">
+            <summary>
+            Obsluha SML webové metody Evidence-kompletniho-dokladu.
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.m_oDokladSmlOrig">
+            <summary>orig. doklad ze vstupu</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.m_oDokladSml">
+            <summary>dokl. už mnou změněný</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.m_oRozpisFinancovaniTbl">
+            <summary>datatable s rozpisem financování</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.m_oFinancniProfilTbl">
+            <summary>datatable s fin. profilem</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.m_oVecnyProfilTbl">
+            <summary>datatable s vecnym profilem</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.m_oElektronickePrilohyTbl">
+            <summary>datatable s el. přílohama</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.m_evid_obd">
+            <summary>RokToGInt16(m_oDokladSml.EvidencniObdobi)</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.m_kateg_knihy">
+            <summary>CisKategorieKnihy(m_oDokladSml.KategorieKnihy)</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.m_ucs">
+            <summary>úč. stř.</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.m_id_funkce_kompetenta">
+            <summary>id_funkce_kompetenta (ixs_fun) pro m_oDokladSml.Kompetent (což je ixs_ref)</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.Execute(Gordic.Xrg.WsSmlInterface.EvidenceKompletnihoDokladuRequestDataSet)">
+            <summary>zaobalující public metoda web. služby</summary>
+            <param name="oRequest">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.ExecuteWebMethod(Gordic.Xrg.WsSmlInterface.EvidenceKompletnihoDokladuRequestDataSet)">
+            <summary>výkonná metoda web. služby</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.GetVpStav(Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString)">
+            <summary>
+            Dohledá stav položky věcného profilu
+            </summary>
+            <param name="ixp"></param>
+            <param name="cis_smo"></param>
+            <param name="ixp_sml_pri"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.ZpracujVstupniDataSet(Gordic.Xrg.WsSmlInterface.EvidenceKompletnihoDokladuRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset - otestuje jej a převede číselníky
+            Je celé v try...catch
+            </summary>
+            <param name="oRequest">vstupní dataset pro prehled typu dokumentů</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.GetRealizator">
+            <summary>
+            Specifické pro MO (decentrální realizátor má číslo realizátora shodné s číslem  NS)
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.RealizatorSelectCentralni">
+            <summary>
+            Centrální realizátor
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.RealizatorSelectDecentralni">
+            <summary>
+            Decentrální realizátor
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.TestRealizator">
+            <summary>
+            Kontrola, že zadaný realizátor existuje
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.GetIntKompRefByExterniKompRef">
+            <summary>
+            externí komp. -> dohledáme int. referenta a pak z něj int. funkci
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.GetKompetentByIxsRef(Gordic.General.GString)">
+            <summary>
+            Pro ixs_ref kompetenta dohledá ixs_fun
+            </summary>
+            <param name="kompetent_ixs_ref"></param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.TestKompetent">
+            <summary>
+            Kontrola, že zadaný interní kompetent ixs_fun existuje
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.GetZpracovatelByIxsRef(Gordic.General.GString)">
+            <summary>
+            Pro ixs_ref zpracovatele (zjištěného z externího id zpracovatele) dohledá ixs_fun
+            </summary>
+            <param name="zpracovatel_ixs_ref"></param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.TestZpracovatel">
+            <summary>
+            Kontrola, že zadaný interní zpracovatel ixs_fun existuje
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.TestVyrizujiciReferent">
+            <summary>
+            Kontrola, že zadaný interní VyrizujiciReferent ixs_fun existuje
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.GetVyrizujiciReferentByIxsRef(Gordic.General.GString)">
+            <summary>
+            Pro ixs_ref VyrizujiciReferent (zjištěného z externího id VyrizujiciReferent) dohledá ixs_fun
+            </summary>
+            <param name="vyrizujici_ixs_ref"></param>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.GetCisloVzDt">
+            <summary>
+            Dohledání CisloVzdt (podle JZednicek)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsSmlServer.GWmSmlEvidenceKompletnihoDokladu.GetDokladItemsForResponse(Gordic.General.GString,Gordic.General.GString@,Gordic.General.GInt16@,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary>
+            Dohledám ve vas.smlspid položky, kt. si z evidence-dokladu nevracím
+            </summary>
+            <param name="ixp"></param>
+            <param name="id_esu"></param>
+            <param name="stav_pripadu"></param>
+            <param name="realizator"></param>
+            <param name="kompetent"></param>
+            <param name="vyrizujici_referent"></param>
+            <param name="zpracovatel"></param>
+            <param name="id_dokladu_nadrazene_sml"></param>
+            <param name="id_doklad_blok"></param>
+        </member>
+        <member name="T:Gordic.Xrg.WsSmlServer.GLogParams">
+            <summary>
+            Třída pro zápis proměnných SP a jejich výpis vrámci Exception
+            </summary>
+        </member>
+    </members>
+</doc>

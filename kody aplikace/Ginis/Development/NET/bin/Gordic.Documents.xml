@@ -1,0 +1,1065 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Documents</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Documents.GDocxControl">
+            <summary>
+            Metody pro obsluhu Docx dokumentu
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.GDocxControl.CopyStream(System.IO.Stream,System.IO.Stream)">
+            <summary>
+            Kopíruje z jednoho streamu do druhého
+            </summary>
+            <param name="source"></param>
+            <param name="target"></param>
+        </member>
+        <member name="M:Gordic.Documents.GDocxControl.GetNamespaceXml(System.Xml.XmlDocument)">
+            <summary>
+            Nastavení předpony w:
+            </summary>
+            <param name="xmlDocument"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Documents.GDocxControl.GetDefaultStyle(System.IO.Packaging.PackagePart)">
+            <summary>
+            Získání defaultního stylu, aby ho bylo možné odstranit při vložení hodnoty (šedé písmeno)
+            </summary>
+            <param name="styles"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Documents.GDocxControl.Analyze(System.Xml.XmlDocument)">
+            <summary>
+            Počáteční analýza dokumentu (získání všech prvků do kterých je možnost ukládat)
+            </summary>
+            <param name="document"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Documents.GDocxControl.AnalyzeNode(System.String,System.String,System.Xml.XmlNode,System.Xml.XmlNamespaceManager)">
+            <summary>
+            Získání identifikátoru uzlu
+            </summary>
+            <param name="nazev"></param>
+            <param name="node"></param>
+            <param name="xmlNamespace"></param>
+            <param name="attr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Documents.GDocxControl.GetValueFromNode(Gordic.Documents.GDocxItem,System.Xml.XmlDocument,System.Xml.XmlNamespaceManager)">
+            <summary>
+            Získání hodnoty z uzlu
+            </summary>
+            <param name="item"></param>
+            <param name="xmlNamespace"></param>
+            <param name="document"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Documents.GDocxControl.SetValueToNode(Gordic.Documents.GDocxItem,System.String,System.Xml.XmlDocument,System.Xml.XmlNamespaceManager,System.String)">
+            <summary>
+            Funkce pro vložení hodnoty do souboru
+            </summary>
+            <param name="item"></param>
+            <param name="value"></param>
+            <param name="xmlNamespace"></param>
+            <param name="defaultStyleName"></param>
+            <param name="document"></param>
+        </member>
+        <member name="T:Gordic.Documents.GDocxDocument">
+            <summary>
+            Třída pro práci s docs dokumentem
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.GDocxDocument.originalStream">
+            <summary> Uloyeni pole pro memory stream</summary>
+        </member>
+        <member name="F:Gordic.Documents.GDocxDocument.defaultStyleName">
+            <summary> Defaultní styl </summary>
+        </member>
+        <member name="F:Gordic.Documents.GDocxDocument.oldname">
+            <summary> Puvodni jmeno slouzi prdevsim k preulozeni do noveho formatu </summary>
+        </member>
+        <member name="F:Gordic.Documents.GDocxDocument.items">
+            <summary> Prvky do kterých je možno vkládat hodnoty</summary>
+        </member>
+        <member name="F:Gordic.Documents.GDocxDocument.nmgr">
+            <summary> Zabezpečení předpony w:</summary>
+        </member>
+        <member name="F:Gordic.Documents.GDocxDocument.document">
+            <summary> Dokument který upravuji (/word/document.xml)</summary>
+        </member>
+        <member name="M:Gordic.Documents.GDocxDocument.#ctor(System.String,System.IO.Stream)">
+            <summary>
+            GDocxDocument
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.GDocxDocument.Check(Gordic.Documents.GDocumentCheckContext)">
+            <summary>
+            Check
+            </summary>
+            <param name="context"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Documents.GDocxDocument.Extract">
+            <summary>
+            Získání dat z datasetu
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Documents.GDocxDocument.Feed(System.Data.DataRow)">
+            <summary>
+            Funkce pro naplnění dat
+            </summary>
+            <param name="data"></param>
+        </member>
+        <member name="M:Gordic.Documents.GDocxDocument.ReplaceHeader(System.String,System.String,System.Single,Gordic.Documents.Zarovnani)">
+            <summary>
+            Neni implementovano
+            </summary>
+            <param name="text"></param>
+            <param name="fontName"></param>
+            <param name="fontSize"></param>
+            <param name="zarovnani"></param>
+        </member>
+        <member name="M:Gordic.Documents.GDocxDocument.SaveTo(System.String,System.IO.Stream)">
+            <summary>
+            Uložení do výstupního proudu a uklizení
+            </summary>
+            <param name="name"></param>
+            <param name="s"></param>
+        </member>
+        <member name="M:Gordic.Documents.GDocxDocument.FeedData(System.Data.DataRow,Gordic.Documents.GDocxItem)">
+            <summary>
+            Vložení hodnoty do pole (podle id nebo tagu)
+            </summary>
+            <param name="data"></param>
+            <param name="item"></param>
+        </member>
+        <member name="M:Gordic.Documents.GDocxDocument.SaveToDefaultWordFormat(System.String,System.IO.Stream)">
+            <summary>
+            Metoda pro ulo6en9 do defaultního WORD Formátu
+            </summary>
+            <param name="name">Pouze pomocný parametr</param>
+            <param name="s">Stream do kterého se ukládá</param>
+        </member>
+        <member name="M:Gordic.Documents.GDocxDocument.Close">
+            <summary>
+             Metoda pro close
+            </summary>
+        </member>
+        <member name="T:Gordic.Documents.GDocumentCheckContext">
+            <summary>
+            Context pro check
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.GDocumentCheckContext.name">
+            <summary>
+            Nazev souboru
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.GDocumentCheckContext.s">
+            <summary>
+            Stream k ulozeni
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.GDocumentCheckContext.futureDocxDocument">
+            <summary>
+            Povoleni pouzití docxDocumentu
+            </summary>
+        </member>
+        <member name="T:Gordic.Documents.IGDocumentIncludeText">
+            <summary>
+            Rozšíření dokumentu o práci s IncludeText
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.IGDocumentIncludeText.ReplaceIncludeText(System.String,System.String)">
+            <summary>
+            Nahrazení textu pole typu IncludeText
+            </summary>
+        </member>
+        <member name="T:Gordic.Documents.GDocument">
+            <summary>
+            Základní třída sytému dokumentů. Pro vytvoření třídy použijte statickou metodu Create.
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.GDocument.#ctor">
+            <summary>
+            Protected konstruktor. Prázdný.
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.GDocument.Create(System.String,System.IO.Stream,System.Boolean)">
+            <summary>
+            Vytvoření dokumentu podle názvu a obsahu
+            </summary>
+            <param name="name">Název souboru. Podle koncovky se většinou rozezná typ dokumentu.</param>
+            <param name="s">Stream (obsah)</param>
+            <param name="futureDocxDocument">true - Pokud je pokud je používán přímo ve webových projektech</param>
+            <returns>Vrací dokument, nebo null, pokud dokument nemůže být načten</returns>
+            <remarks>Dokument podporuje <see cref="T:System.IDisposable"/>, je nutné jej před ukončením práce uzavřít (<see cref="M:System.IDisposable.Dispose"/> nebo <see cref="M:Gordic.Documents.GDocument.Close"/>).</remarks>
+        </member>
+        <member name="M:Gordic.Documents.GDocument.Extract">
+            <summary>
+            Vrací dataset z polí uvnitř dokumentu.
+            </summary>
+            <returns>Výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Documents.GDocument.Feed(System.Data.DataRow)">
+            <summary>
+            Nakrmí dokument jedním řádkem dat.
+            </summary>
+            <param name="data">Vstupní data</param>
+        </member>
+        <member name="M:Gordic.Documents.GDocument.ReplaceHeader(System.String,System.String,System.Single,Gordic.Documents.Zarovnani)">
+            <summary>
+            Nastavení hlavičky dokumentu
+            </summary>
+            <param name="text">Text hlavičky</param>
+            <param name="fontName">Název fontu</param>
+            <param name="fontSize">Velikost fontu</param>
+            <param name="zarovnani">Zarovnání</param>
+        </member>
+        <member name="M:Gordic.Documents.GDocument.SaveTo(System.String,System.IO.Stream)">
+            <summary>
+            Uloží (změněný) dokument do streamu. Jméno je pouze k rozlišení typu dokumentu (je-li to možné).
+            </summary>
+            <param name="name">Jméno k určení typu dokumentu (většinou podle přípony)</param>
+            <param name="s">Stream, kam se ukládá.</param>
+            <remarks>Stream bude posunut na konec zápisu. Viz přetížení s parametrem SeekBack</remarks>
+        </member>
+        <member name="M:Gordic.Documents.GDocument.SaveToRtf(System.String,System.IO.Stream)">
+            <summary>
+            Uloží (změněný) dokument do streamu.
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.GDocument.Close">
+            <summary>
+            Uzavření dokumentu. Doporučuji spíše použít IDisposable (c# using)
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.GDocument.SaveTo(System.String,System.IO.Stream,System.Boolean)">
+            <summary>
+            Uloží (změněný) dokument do streamu. Jméno je pouze k rozlišení typu dokumentu (je-li to možné).
+            </summary>
+            <param name="name">Jméno k určení typu dokumentu (většinou podle přípony)</param>
+            <param name="s">Stream, kam se ukládá.</param>
+            <param name="SeekBack">Při true, nastaví pozici ve streamu zpět na výchozí hodnotu</param>
+            <exception cref="T:Gordic.General.GArgumentException">Předaný stream nepodporuje Seek</exception>
+        </member>
+        <member name="M:Gordic.Documents.GDocument.Feed(System.Data.DataSet)">
+            <summary>
+            Nakrmí dokument datasetem.
+            </summary>
+            <param name="data">Vstupní data</param>
+        </member>
+        <member name="P:Gordic.Documents.GDocument.Types">
+            <summary>
+            Seznam typů dokumentů, které systém zná.
+            </summary>
+        </member>
+        <member name="T:Gordic.Documents.Zarovnani">
+            <summary>
+            Typ zarovnání
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Zarovnani.Left">
+            <summary>Zarovnání vlevo</summary>
+        </member>
+        <member name="F:Gordic.Documents.Zarovnani.Right">
+            <summary>Zarovnání vpravo</summary>
+        </member>
+        <member name="F:Gordic.Documents.Zarovnani.Center">
+            <summary>Zarovnání na střed</summary>
+        </member>
+        <member name="T:Gordic.Documents.GDocumentDataSet">
+            <summary>
+            Pomocný typ datasetu pro snadné přidání hodnot pro systém dokumentů
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.GDocumentDataSet.#ctor">
+            <summary>
+            Nový datový zdroj
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.GDocumentDataSet.AddValue(System.String,System.String,System.String)">
+            <summary>
+            Přidá hodnotu do dat
+            </summary>
+            <param name="prefix">Případný prefix (přidá se před jméno hodnoty)</param>
+            <param name="name">Jméno hodnoty (bez prefixu)</param>
+            <param name="value">Hodnota</param>
+        </member>
+        <member name="M:Gordic.Documents.GDocumentDataSet.AddValue(System.String,System.String)">
+            <summary>
+            Přidá hodnotu do dat
+            </summary>
+            <param name="name">Jméno hodnoty</param>
+            <param name="value">Hodnota</param>
+        </member>
+        <member name="M:Gordic.Documents.GDocumentDataSet.GetDataText">
+            <summary>
+            vrátí řetězec se všemi daty (položky oddělené koncem řádku)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Documents.GDocumentException">
+            <summary> Výjimka používaná vrstvou Gordic.Documents </summary>
+            <remarks>
+            <para>
+            Výjimku nelze použít samostatně a neobsahuje žádné dodatečné informace oproti GException. 
+            Třídu však lze použít k rozlišení výjimky vdáleného volání od ostatních systémových a 
+            aplikačních výjimek
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Gordic.Documents.GDocumentException.#ctor(System.Int32,System.Int32,System.String[])">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Documents.GDocumentException.#ctor(System.Int32,System.Int32,System.Exception,System.String[])">
+            <exclude/>
+        </member>
+        <member name="T:Gordic.Documents.GHelpers">
+            <summary>
+            Třída pro pomocné funkce při práci s dokumentama
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.GHelpers.FormatBytes(System.Int64)">
+            <summary>
+            Formátuje velikost souboru v bajtech do formátu v "GB", "MB", "KB", "B"
+            </summary>
+            <remarks>Made by J.Vácha</remarks>
+        </member>
+        <member name="T:Gordic.Documents.Doc.GDocDocument">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Documents.Doc.GDocDocument.#ctor(System.String,System.IO.Stream)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Documents.Doc.GDocDocument.Close">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Documents.Doc.GDocDocument.Check(Gordic.Documents.GDocumentCheckContext)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Documents.Doc.GDocDocument.Extract">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Documents.Doc.GDocDocument.Feed(System.Data.DataRow)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Documents.Doc.GDocDocument.ReplaceHeader(System.String,System.String,System.Single,Gordic.Documents.Zarovnani)">
+            <summary>
+            Nastavení hlavičky dokumentu
+            </summary>
+            <param name="text">Text hlavičky</param>
+            <param name="fontName">Název fontu</param>
+            <param name="fontSize">Velikost fontu</param>
+            <param name="zarovnani">Zarovnání</param>
+        </member>
+        <member name="M:Gordic.Documents.Doc.GDocDocument.Podtrzeni">
+            <summary>
+            Podtržení dle tagů (podtrzeni/ /podtrzeni a podteckovani/ /podteckovani)
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.Doc.GDocDocument.RTrimMax(System.String)">
+            <summary>
+            oříznutí na max délku kterou přežije Word
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Documents.Doc.GDocDocument.RTrimMaxPb(System.String)">
+            <summary>
+            oříznutí na max délku kterou přežije Word
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Documents.Doc.GDocDocument.ReplaceIncludeText(System.String,System.String)">
+            <summary>
+            Nahrazení textu pole typu IncludeText
+            </summary>
+            <param name="oldValue">Starý text</param>
+            <param name="newValue">Nový text</param>
+        </member>
+        <member name="M:Gordic.Documents.Doc.GDocDocument.SaveTo(System.String,System.IO.Stream)">
+            <summary>
+            Uloží ve formátu RTF
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.Doc.GDocDocument.Protect(System.Int32,System.Int32,System.String)">
+            <summary>
+            zamkne dokument - např. 2 je zamčení pouze formulářových polí
+            </summary>
+            <param name="type">2=form pole</param>
+            <param name="noreset">1=true</param>
+            <param name="password"></param>
+        </member>
+        <member name="M:Gordic.Documents.Doc.GDocDocument.ProtectedForForms(System.Int32,System.Int32)">
+            <summary>
+            zamkne sekci dokumentu
+            </summary>
+            <param name="section">číslo oddílu</param>
+            <param name="protect">0/1</param>
+        </member>
+        <member name="M:Gordic.Documents.Doc.GDocDocument.ActionFromText(System.String)">
+            <summary>
+            provede akce z textového soupisu - který obvykle vrací GRC - např. ProtectedForForms#3#1#|
+            </summary>
+            <param name="akce"></param>
+        </member>
+        <member name="M:Gordic.Documents.Doc.GDocDocument.SaveToRtf(System.String,System.IO.Stream)">
+            <summary>
+            Uloží ve formátu Rtf
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.Doc.GDocDocument.SaveTo(System.String,System.IO.Stream,Microsoft.Office.Interop.Word.WdSaveFormat)">
+            <summary>
+            Uložení dle zadaného formátu
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.Doc.GDocDocument.SaveToDefaultWordFormat(System.String,System.IO.Stream)">
+            <summary>
+            Uloží ve výchozím formátu Wordu (lze nastavit v možnostech v novém Wordu - "Možnosti aplikace Word" )
+            </summary>
+        </member>
+        <member name="T:Gordic.Documents.Rtf.GRTFControl">
+            <summary>
+            základní abstraktní třída objektu analyzovaného RTF obsahu
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFControl.OffsetStart">
+            <summary>
+            pozice začátku skupiny v dokumentu
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFControl.OffsetEnd">
+            <summary>
+            pozice konce skupiny v dokumentu
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFControl.Text">
+            <summary>
+            textová prezentace objektu RTF obsahu
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFControl.Document">
+            <summary>
+            výsldený dokument RTF obsahu
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFControl.#ctor(Gordic.Documents.Rtf.GRTFParsedDocument)">
+            <summary>
+            vytvoření nové instance třídy
+            </summary>
+            <param name="doc">výsldený dokument RTF obsahu</param>
+        </member>
+        <member name="T:Gordic.Documents.Rtf.GRTFText">
+            <summary>
+            textová položka
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFText.ValueText">
+            <summary>
+            textová hodnota dané položky
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFText.Text">
+            <summary>
+            textová prezentace položky
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFText.#ctor(Gordic.Documents.Rtf.GRTFParsedDocument,System.String)">
+            <summary>
+            vytvoření nové instance třídy
+            </summary>
+            <param name="doc"></param>
+            <param name="text"></param>
+        </member>
+        <member name="T:Gordic.Documents.Rtf.GRTFCommand">
+            <summary>
+            objekt příkazu RTF
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFCommand.Command">
+            <summary>
+            příkaz
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFCommand.Argument">
+            <summary>
+            argument příkazu
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFCommand.Text">
+            <summary>
+            textová prezentace příkazu
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFCommand.#ctor(Gordic.Documents.Rtf.GRTFParsedDocument,System.String)">
+            <summary>
+            vytvoření nové instance třídy
+            </summary>
+            <param name="doc">analyzovaný dokument</param>
+            <param name="cmd">příkaz</param>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFCommand.#ctor(Gordic.Documents.Rtf.GRTFParsedDocument,System.String,Gordic.Documents.Rtf.GRTFGroup)">
+            <summary>
+            konstruktor třídy
+            </summary>
+            <param name="doc"></param>
+            <param name="cmd">příkaz</param>
+            <param name="group">skupina, které patří objekt</param>
+        </member>
+        <member name="T:Gordic.Documents.Rtf.GRTFDestination">
+            <summary>
+            příkaz skupiny
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFDestination.Text">
+            <summary>
+            textová prezentace objektu
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFDestination.#ctor(Gordic.Documents.Rtf.GRTFParsedDocument,System.String)">
+            <summary>
+            konstruktor třídy
+            </summary>
+            <param name="doc"></param>
+            <param name="cmd">příkaz</param>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFDestination.#ctor(Gordic.Documents.Rtf.GRTFParsedDocument,System.String,Gordic.Documents.Rtf.GRTFGroup)">
+            <summary>
+            konstruktor třídy
+            </summary>
+            <param name="doc"></param>
+            <param name="cmd">příkaz</param>
+            <param name="group">skupina, které patří objekt</param>
+        </member>
+        <member name="T:Gordic.Documents.Rtf.GRTFGroup">
+            <summary>
+            skupina RTF obsahu
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRTFGroup.m_tags">
+            <summary>
+            známe klíče skupiny
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFGroup.Tags">
+            <summary>
+            známe klíče skupiny
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFGroup.Text">
+            <summary>
+            textová prezentace skupiny
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFGroup.IsOptional">
+            <summary>
+            indikuje skupinu, která není zapotřebí
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFGroup.#ctor(Gordic.Documents.Rtf.GRTFParsedDocument)">
+            <summary>
+            vytvoření nové instance třídy
+            </summary>
+            <param name="doc">analyzovaný dokument</param>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFGroup.Clear">
+            <summary>
+            vyprázdnění seznamu dostupných klíčů skupiny
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFGroup.Add(Gordic.Documents.Rtf.GRTFControl)">
+            <summary>
+            přidání klíče do seznamu všech klíču
+            </summary>
+            <param name="c">přidávaný objekt</param>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFGroup.AddRtf(System.String)">
+            <summary>
+            vložení RTF příkazu do skupiny
+            </summary>
+            <param name="rtf">textivá prezentace RTF obsahu skupiny</param>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFGroup.RecursiveFind``1(System.Collections.Generic.List{``0})">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFGroup.RecursiveFindFieldAndOptional``1(System.Collections.Generic.List{Gordic.Documents.Rtf.GRTFControl})">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFGroup.Contains(System.String)">
+            <summary>
+            zjištění existence přítomnosti větve (GRTFControl) [v plošném seznamu vnitřních objektů] s názvem příkazu <paramref name="keyword"/>
+            </summary>
+            <param name="keyword">Klíčové slovo hledaného příkazu</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Documents.Rtf.GRTFDocument">
+            <summary>
+            hlavní dokument RTF obsahu
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFDocument.Fields">
+            <summary>
+            datové položky RTF obsahu dokumentu
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFDocument.FieldsWithOptional">
+            <summary>
+            datové položky RTF obsahu dokumentu
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFDocument.Tags">
+            <summary>
+            datové položky RTF obsahu dokumentu
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFDocument.FontTable">
+            <summary>
+            Tabulka fontů. Může být null, pokud dokument nemá tabulku fontů.
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFDocument.#ctor(System.String)">
+            <summary>
+            vytvoření nové instance třídy
+            </summary>
+            <param name="path">cesta k analyzovanému souboru</param>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFDocument.#ctor(System.String,System.IO.Stream)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFDocument.Check(Gordic.Documents.GDocumentCheckContext)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFDocument.Extract">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFDocument.Feed(System.Data.DataRow)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFDocument.ReplaceHeader(System.String,System.String,System.Single,Gordic.Documents.Zarovnani)">
+            <summary>
+            Nastavení hlavičky dokumentu
+            </summary>
+            <param name="text">Text hlavičky</param>
+            <param name="fontName">Název fontu</param>
+            <param name="fontSize">Velikost fontu</param>
+            <param name="zarovnani">Zarovnání</param>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFDocument.SaveTo(System.String,System.IO.Stream)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFDocument.load(System.IO.Stream)">
+            <summary>
+            načtení obsahu a analýza z proudu dat
+            </summary>
+            <param name="stream">otevřený ke čtení proud dat</param>
+        </member>
+        <member name="T:Gordic.Documents.Rtf.GRTFFonttable">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFFonttable.#ctor(Gordic.Documents.Rtf.GRTFParsedDocument,Gordic.Documents.Rtf.GRTFGroup)">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFFonttable.Fonts">
+            <summary>
+            Fonty v tabulce fontů
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFFonttable.Item(System.Int32)">
+            <summary>
+            Font dle indexu fontu
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFFonttable.FindFontByIndex(System.Int32)">
+            <summary>
+            Font dle indexu fontu
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFFonttable.UseThemes">
+            <summary>
+            Příznak existence fontů z motivu (theme)
+            </summary>
+        </member>
+        <member name="T:Gordic.Documents.Rtf.GRTFField">
+            <exclude/>
+        </member>
+        <member name="T:Gordic.Documents.Rtf.GRTFField.GFieldType">
+            <summary>
+            dostupné typy polí
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRTFField.GFieldType.unknown">
+            <summary>neznámý</summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRTFField.GFieldType.macrobutton">
+            <summary>pole je MACROBUTTON</summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRTFField.GFieldType.formfield">
+            <summary>pole je FORMFIELD</summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRTFField.GFieldType.section">
+            <summary>pole je SectionBegin/SectionEnd atp.</summary>
+        </member>
+        <member name="T:Gordic.Documents.Rtf.GRTFField.GMBType">
+            <summary>
+            dostupné typy MACROBUTTON objektu
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRTFField.GMBType.unknown">
+            <summary>
+            výchozí typ
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRTFField.GMBType.field">
+            <summary>
+            Obyčejné pole
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRTFField.GMBType.header">
+            <summary>
+            MACROBUTTON identifikující hlavičku sekce
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRTFField.GMBType.body">
+            <summary>
+            MACROBUTTON identifikující tělo sekce
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRTFField.GMBType.footer">
+            <summary>
+            MACROBUTTON identifikující patičku sekce
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRTFField.GMBType.end">
+            <summary>
+            MACROBUTTON identifikující konec sekce
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFField.MSWMBType">
+            <summary>
+            typ MACROBUTTON objektu
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFField.FieldType">
+            <summary>
+            typ pole
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFField.InstanceRtf">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFField.InstanceType">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFField.MSWNameRaw">
+            <summary>Jméno položky</summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFField.MSWName">
+            <summary>Jméno položky</summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFField.MSWNote">
+            <summary>Text v hranatých závorkách</summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFField.MSWGuid">
+            <summary>Guid uvedený v hranatých závorkách</summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFField.Type">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFField.FieldName">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFField.Value">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFField.ValueText">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFField.#ctor(System.String)">
+            <summary>
+            prázdný konstruktor třídy
+            </summary>
+            <param name="value">vstupní řetězec s informaci o objektu</param>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFField.#ctor(Gordic.Documents.Rtf.GRTFParsedDocument,Gordic.Documents.Rtf.GRTFGroup)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFField.SetValue(System.String)">
+            <exclude/>
+        </member>
+        <member name="T:Gordic.Documents.Rtf.GRTFLexerTag">
+            <summary>
+            výčet dostupných klíčů
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRTFLexerTag.EOF">
+            <summary>
+            klíč konce dokumentu
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRTFLexerTag.COMMAND">
+            <summary>
+            klíč příkazu
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRTFLexerTag.SYMBOL">
+            <summary>
+            klíč symbolu
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRTFLexerTag.BGROUP">
+            <summary>
+            klíč začátku skupiny, obvykle {
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRTFLexerTag.EGROUP">
+            <summary>
+            klíč konce skupiny, obvykle }
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRTFLexerTag.TEXT">
+            <summary>
+            klíč textové hodnoty
+            </summary>
+        </member>
+        <member name="T:Gordic.Documents.Rtf.GRTFLexer">
+            <summary>
+            lexer RTF analyzátoru
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFLexer.Encoding">
+            <summary>
+            kódování obsahu
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFLexer.Current">
+            <summary>
+            aktuální klíč
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRTFLexer.OffsetStart">
+            <summary>
+            Pozice posuvníku datového proudu
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFLexer.Offset">
+            <summary>
+            Pozice posuvníku datového proudu
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFLexer.Text">
+            <summary>
+            textový obsah klíče
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFLexer.#ctor(System.IO.Stream)">
+            <summary>
+            vytvoření nové instance třídy
+            </summary>
+            <param name="s">proud s RTF obsahem</param>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFLexer.#ctor(System.IO.Stream,System.Text.Encoding)">
+            <summary>
+            vytvoření nové instance třídy
+            </summary>
+            <param name="inp">vstupní proud s RTF obsahem</param>
+            <param name="e">kódování obsahu</param>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFLexer.Next">
+            <summary>
+            čtení následujícího klíče
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFLexer.PeekChar">
+            <summary>
+            zjištění následujícího symbolu
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFLexer.PeekNextChar">
+            <summary>
+            zjištění následujícího symbolu
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFLexer.ReadChar">
+            <summary>
+            čtení následujícího symbolu
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Documents.Rtf.GRTFParsedDocument">
+            <summary>
+            třída analyzovaného dokumentu
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRTFParsedDocument.m_enc">
+            <summary>
+            kódování
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFParsedDocument.Encoding">
+            <summary>
+            kódování obsahu
+            </summary>
+        </member>
+        <member name="P:Gordic.Documents.Rtf.GRTFParsedDocument.Lexer">
+            <summary>
+            lexer dokumentu
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFParsedDocument.GetFields">
+            <summary>
+            datové položky RTF obsahu dokumentu
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFParsedDocument.GetFieldsWithOptional">
+            <summary>
+            datové položky RTF obsahu dokumentu
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFParsedDocument.#ctor">
+            <summary>
+            vytvoření nové instance třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFParsedDocument.#ctor(Gordic.Documents.Rtf.GRTFLexer)">
+            <summary>
+            vytvoření nové instance třídy
+            </summary>
+            <param name="m_lex">lexer dokumentu</param>
+        </member>
+        <member name="T:Gordic.Documents.Rtf.GRTFParser">
+            <summary>
+            Analyzátor RTF obsahu
+            </summary>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFParser.#ctor(System.IO.Stream)">
+            <summary>
+            vytvoření instance nové třídy analyzátoru
+            </summary>
+            <param name="s">proud s RTF obsahem k analýze</param>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFParser.#ctor(System.IO.Stream,System.Text.Encoding)">
+            <summary>
+            vytvoření nové instance třídy
+            </summary>
+            <param name="inp">vstupní proud</param>
+            <param name="e">kódování</param>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFParser.ParseGroup(Gordic.Documents.Rtf.GRTFParsedDocument,Gordic.Documents.Rtf.GRTFGroup)">
+            <summary>
+            analýza skupiny
+            </summary>
+            <param name="doc">analyzovaný dokument</param>
+            <param name="g">skupina</param>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRTFParser.Parse">
+            <summary>
+            analýza RTF obsahu dokumentu
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Documents.Rtf.GRtfUtils">
+            <summary>
+            pomocná třída analyzátoru
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRtfUtils._themedata">
+            <summary>
+            A document’s Theme Data contains a hex-encoded representation of a set of styling 
+            that can be applied to objects within a document and which affects 
+            the look of the document and the information and objects it contains
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRtfUtils._datastore">
+            <summary>
+            This control word specifies the properties for the custom XML parts inside an RTF file
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRtfUtils._colorschememapping">
+            <summary>
+            Color Scheme Mapping enables multiple Theme colors to be chained together
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRtfUtils._latentstyles">
+            <summary>
+            The style restrictions group
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRtfUtils._shprslt">
+            <summary>
+            This is where the Word 6.0 and Word 95 drawn object RTF can be placed
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRtfUtils._nonshppict">
+            <summary>
+            Specifies that Word 97 through Word 2002 has written a 
+            {\pict destination that it will not read on input. 
+            This keyword is for compatibility with other readers.
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRtfUtils._pict">
+            <summary>
+            An RTF file can include pictures created with other applications.
+            These pictures can be in hexadecimal (the default) or binary format.
+            Pictures are destinations and begin with the \pict control word.
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRtfUtils._field">
+            <summary>
+            The \field control word introduces a field destination, which contains the text of fields.
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRtfUtils._fonttable">
+            <summary>
+            The \fonttbl control word introduces the font table group. Unique \fN control words define each font available in the document. These control words refer to that font throughout the document.
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRtfUtils._themefont_commands">
+            <summary>
+            The following control words may be emitted along with a particular font entry in the RTF font table and specify the entry’s relation to the document’s theme.
+            </summary>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRtfUtils._header">
+            <exclude/>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRtfUtils._footer">
+            <exclude/>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRtfUtils._headerl">
+            <exclude/>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRtfUtils._headerr">
+            <exclude/>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRtfUtils._headerf">
+            <exclude/>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRtfUtils._footerl">
+            <exclude/>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRtfUtils._footerr">
+            <exclude/>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRtfUtils._footerf">
+            <exclude/>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRtfUtils._pnseclvl">
+            <exclude/>
+        </member>
+        <member name="F:Gordic.Documents.Rtf.GRtfUtils._par">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Documents.Rtf.GRtfUtils.NeedsSpace(Gordic.Documents.Rtf.GRTFControl,Gordic.Documents.Rtf.GRTFControl)">
+            <exclude/>
+        </member>
+    </members>
+</doc>

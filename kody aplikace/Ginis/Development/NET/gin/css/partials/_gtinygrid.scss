@@ -1,0 +1,264 @@
+﻿@import "base";
+
+///////////////////////////////////////////////////////////////
+// Styly pro přetížení vzhledu
+///////////////////////////////////////////////////////////////
+
+%zero-height {
+    transform: scaleY(0);
+    height: 0 !important;
+    line-height: 0;
+    border: none !important;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.g-tiny-grid__thead {
+    color: #808080;
+    text-transform: uppercase;
+    font-size: .6rem;
+    border-bottom: 1px solid #C3CAD8;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: #fff;
+}
+
+.g-tiny-grid__tbody {
+    .g-tiny-grid__td {
+        height: 1.5rem;
+        padding: 0 .25rem;
+        vertical-align: middle;
+        color: #2650B9;
+        border-top: 1px solid #C3CAD8;
+    }
+
+   .g-tiny-grid__td.nazev {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        max-width: 1px;
+    }
+
+    .g-tiny-grid__tr:first-child .g-tiny-grid__td {
+        border-top-style: none;
+    }
+}
+
+.g-tiny-grid__tfoot {
+    background-color: #ccc;
+    border-top: 1px solid #C3CAD8;
+}
+
+.g-login__content-main .g-tiny-grid__tfoot {
+    /* V loginu vynucuje border-top scrollbar, tak jej zmenim na bottom. */
+    border-top: unset;
+    border-bottom: 1px solid #C3CAD8;
+}
+
+.g-tiny-grid__th {
+    font-weight: 800;
+    vertical-align: bottom;
+    padding: .25rem .25rem;
+}
+
+.g-tiny-grid__tr--selected .g-tiny-grid__td {
+    background-color: hsl(223, 66%, 44%);
+    color: #fff;
+}
+
+.g-tiny-grid__tr--focused .g-tiny-grid__td {
+    background-color: hsl(223, 66%, 28%);
+    color: #fff;
+}
+
+.g-tiny-grid__td--row-number {
+    background-color: #ccc;
+    color: #000;
+}
+
+.g-tiny-grid__filters {
+    .g-tiny-grid__th {
+        padding: .25rem;
+        text-align: center;
+        font-size: .75rem;
+        position: relative;
+    }
+
+    input[type="text"] {
+        border: none;
+        //font-style: italic;
+        text-decoration: underline;
+        font-weight: 800;
+        letter-spacing: .01rem;
+
+        @include placeholder {
+            font-weight: 400;
+            text-decoration: underline;
+            font-style: italic;
+            color: #808080;
+        }
+
+        &:focus {
+            outline: none;
+        }
+    }
+}
+
+.g-tiny-grid__td--tooltip {
+    text-align: right;
+}
+
+////////////////////////////////////////////////////////////////////
+// Základní styly
+////////////////////////////////////////////////////////////////////
+
+.g-tiny-grid {
+    min-width: 100%;
+    //overflow: hidden;
+    &:not(.g-tiny-grid--scroll-body) {
+        display: table;
+    }
+
+    &.g-tiny-grid--scroll-body {
+        height: calc(100% - 1px);
+        max-height: 100%;
+        position: relative;
+
+        & > .g-tiny-grid__thead,
+        & > .g-tiny-grid__tfoot {
+            display: table;
+            width: 100%;
+        }
+    }
+}
+
+.g-tiny-grid__thead {
+    display: table-header-group;
+}
+
+.g-tiny-grid__tbody {
+    display: table-row-group;
+}
+
+.g-tiny-grid__tfoot {
+    display: table-footer-group;
+}
+
+.g-tiny-grid__tr {
+    display: table-row;
+    /* 03.06.2019 - TFeik */
+    /* Změna kurzoru z textu "I" na "ruku". */
+    cursor: pointer;
+}
+
+.g-tiny-grid__th,
+.g-tiny-grid__td {
+    display: table-cell;
+
+    input {
+        width: 100%; // input jinak není responzivní, rezervuje si svojí min-width
+    }
+}
+
+.g-tiny-grid__td.g-tiny-grid__td--dummy {
+    &:after {
+        content: "";
+    }
+}
+
+.gtinygrid-filter-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.gtinygrid-filter {
+    padding-left: 2em;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.gtinygrid-filter-icon {
+    position: absolute;
+    left: 0.5em;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #808080;
+    pointer-events: none;
+    font-size: 1em;
+}
+
+///////////////////////////////////////////////////////////////////////////
+// Styly pro options
+///////////////////////////////////////////////////////////////////////////
+
+.g-tiny-grid__scroll-wrapper {
+    position: relative;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    .g-tiny-grid__thead,
+    .g-tiny-grid__tfoot {        
+        height: 0;
+        .g-tiny-grid__td,
+        .g-tiny-grid__th {
+            @extend %zero-height;
+        }
+    }       
+}
+
+.g-tiny-grid__tr--filtered {
+    line-height: 0;
+
+    .g-tiny-grid__td {
+        @extend %zero-height;
+    }
+
+    input {
+        display: none;
+    }
+}
+
+.g-tiny-grid__th--sortable {
+    cursor: pointer;
+
+    &:after {
+        //float: right;
+        height: 100%;
+        vertical-align: bottom;
+        font: normal normal normal 14px/1 FontAwesome;
+        color: transparent;
+    }
+
+    &.g-tiny-grid__th--sorted-asc:after {
+        color: inherit;
+        content: ' \f15d';
+    }
+
+    &.g-tiny-grid__th--sorted-desc:after {
+        color: inherit;
+        content: ' \f15e';
+    }
+}
+
+input[name="gtinygrid-selected-row"] {
+    position: absolute;
+    transform: scaleY(0);
+    width: 0;
+}
+
+.g-tiny-grid--row-numbering {
+
+    counter-reset: row-counter;
+
+    .g-tiny-grid__td--row-number {
+        width: 1em;
+        text-align: right;
+
+        &:after {
+            content: counter(row-counter);
+            counter-increment: row-counter;
+        }
+    }
+}

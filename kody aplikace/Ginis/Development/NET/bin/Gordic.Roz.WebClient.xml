@@ -1,0 +1,608 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Roz.WebClient</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Roz.WebClient.GDashboard">
+            <summary>
+            Úvodní stránka (dashboard)
+            </summary>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GDashboard.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            RenderContent
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GDashboard.Init">
+            <summary>
+            Inicializace
+            </summary>
+        </member>
+        <member name="T:Gordic.Roz.WebClient.GDetailDokladuTab">
+            <summary>
+            Prace nad detailem dokladu
+            </summary>
+            <remarks>
+            Při správném otevření detailu, by se měla použít aktuálně vybraná kniha (ze seznamu by se měl použít jeho gpc s nastavenou knihou).
+            Může se ale stát (např.v režimu všech knih nebo při otevření detailu do nové záložky), že v EkoParams nebude nastavena žádná kniha a vy přesto budete knihu potřebovat, aby se s detailem dalo správně pracovat.
+            V takovém případě je nutné zajistit si otevření detailu tak, aby v momentě otvírání detailu v gpc už byla nastavena správná kniha.
+            To lze udělat nejlépe pomocí stepu pro detail, který ze zadaného vstupního identifikátoru zkusí zjistit knihu a tu nastaví (pokud ještě v gpc nebo v kontextových parametrech není)
+            Tento detailový step bude předcházet standardnímu stepu na knihu a bude pro něj chystat vstup tak, aby step s knihou vyrobil správný gpc s požadovanou knihou.
+            GSeznamDokladuTab.ts.709 - Gordic.Eko.Utils.createBookGpc(that.gpc, currentRow.ixp_den!)
+            
+            bookStepID - identifikátor - bude použit jako klíč do uživatelského nastavení, do kterého se bude ukládat poslední výběr.Pokud bude ponechán default, bude se poslední výběr sdílet mezi více contenty.
+            stepType [Type] - C# typ stepu, který se má použít. Pokud není vyplněn, použije se defaultní GEkoBookInitStep.
+            EnableYearBooks [boolean] - default je true - zda je povoleno vybrat knihy za aktuální rok.
+            EnableAllBooks [boolean] - default je true - zda je povoleno vybrat všechny knihy (všech let).
+            UpdateEkoParams [boolean] - default je true - zda se mají aktualizovat EkoParams (po startu aplikace bude ixp_den v EkoParams = null).
+            TypAgFilter [short] - typAg, ve které se má kniha hledat(určení xxxsden tabulky)
+            KtgDenFilter [short[]] - ktgDen, omezení pouze na výčet ktgDen, které se mají vybrat
+            ForceChoice [boolean] - neukládat výběr knihy a tím vynutit výběr při každém spuštění.
+            </remarks>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GDetailDokladuTab.Ixp">
+            <summary>e
+            Pid dokladu
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GDetailDokladuTab.Action">
+            <summary>
+            Probihajici akce
+            </summary>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GDetailDokladuTab.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            RenderContent override 
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="T:Gordic.Roz.WebClient.GRozHledaniDokladu">
+            <summary>
+            Seznam ucetnich knih
+            </summary>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GRozHledaniDokladu.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="T:Gordic.Roz.WebClient.GRozGenerujPrislib">
+            <summary>
+            Content pro generovani prislibu
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GRozGenerujPrislib.dokladHead">
+            <summary>
+            Detail dokladu
+            </summary>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GRozGenerujPrislib.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GRozGenerujPrislib.setTitle">
+            <summary>
+            Nastaveni titulku okna
+            </summary>
+        </member>
+        <member name="T:Gordic.Roz.WebClient.GRozOperaceImport">
+            <summary>
+            Import
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GRozOperaceImport.Ixp">
+            <summary>e
+            Pid dokladu
+            </summary>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GRozOperaceImport.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            RenderContent
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="T:Gordic.Roz.WebClient.GSeznamDokladuTab">
+            <summary>
+            Prace nad seznamem rozpoctovych dokladu
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GSeznamDokladuTab.filtr">
+            <summary>
+            Pripadny filtr s Dashboardu
+            </summary>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GSeznamDokladuTab.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Zakladni metoda pro vykresleni seznamu
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="T:Gordic.Roz.WebClient.GRozServiceContent">
+            <summary>Servisni kontent pro preevidenci</summary>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GRozServiceContent.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>OnPreRender</summary>
+        </member>
+        <member name="T:Gordic.Roz.WebClient.GRozAjaxContentBase">
+            <summary>
+            Pradek ajax kontextu pro uct
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GRozAjaxContentBase.NeedEkoParams">
+            <summary>
+            Nacteni ekoparams a globalnich nastaveni do LK
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GRozAjaxContentBase.GlobalParams">
+            <summary>
+            Globalni promenne - parametry
+            </summary>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GRozAjaxContentBase.getTypPorizovace(Gordic.Uct.Interface.GRozDokladOutDto)">
+            <summary>
+            Typ porizovace
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GRozAjaxContentBase.isDokladRezervujeVIISSP(Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt32)">
+            <summary>
+            Vraci true, pokud doklad rezervuje v IISSP
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GRozAjaxContentBase.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            RenderContent
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="T:Gordic.Roz.WebClient.GRozDetailAHlavicka">
+            <summary>
+            Prace nad detailem A-hlavicky
+            </summary>
+        </member>
+        <member name="F:Gordic.Roz.WebClient.GRozDetailAHlavicka.ixs_ahl">
+            <summary>
+            Pid a-hlavicky
+            </summary>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GRozDetailAHlavicka.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GRozDetailAHlavicka.GetDetailHlavicky">
+            <summary>
+            Ziskani dat 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Roz.WebClient.GPrintParameters">
+            <summary>
+            Parametry předávane do sestav
+            </summary>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GPrintParameters.ServerParameterMethodPodteceniRozpoctu(Gordic.General.ApplicationClient.GUserProcess,Gordic.Report.Interface.IGReport)">
+            <summary>
+            Metoda volana pri tisku chyboveho souboru pri podteceni rozpoctu
+            </summary>
+            <param name="up"></param>
+            <param name="rep"></param>
+        </member>
+        <member name="T:Gordic.Roz.WebClient.GRozManagerCile">
+            <summary>
+            Prace nad seznamem managerem cilu
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GRozManagerCile.OptionInput">
+            <summary>
+            Vstupni parametr
+            </summary>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GRozManagerCile.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GRozManagerCile.setTitle">
+            <summary>
+            Nastaveni titulku okna
+            </summary>
+        </member>
+        <member name="T:Gordic.Roz.WebClient.GRozOptionManagerCilu">
+            <summary>
+            Vstupni DTO
+            </summary>
+        </member>
+        <member name="F:Gordic.Roz.WebClient.GRozOptionManagerCilu.ListCiluEO">
+            <summary>
+            Seznamu cilu ekonomickeho organu
+            </summary>
+        </member>
+        <member name="F:Gordic.Roz.WebClient.GRozOptionManagerCilu.ListStromCilu">
+            <summary>
+            Seznam strumu cilu
+            </summary>
+        </member>
+        <member name="F:Gordic.Roz.WebClient.GRozOptionManagerCilu.SelectedCilEO">
+            <summary>
+            Vybrany cil ekonomickeho organu
+            </summary>
+        </member>
+        <member name="F:Gordic.Roz.WebClient.GRozOptionManagerCilu.SelectedStromCilu">
+            <summary>
+            Vybrany cil stromu
+            </summary>
+        </member>
+        <member name="F:Gordic.Roz.WebClient.GRozOptionManagerCilu.ixs_evp">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.Roz.WebClient.GRozOptionManagerCilu.ixs_evp_eo">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.Roz.WebClient.GRozOptionManagerCilu.manager_cile_txt">
+            <summary>
+            vybrany manager cile
+            </summary>
+        </member>
+        <member name="F:Gordic.Roz.WebClient.GRozOptionManagerCilu.ixs_fun_mng">
+            <summary>
+            manager cile
+            </summary>
+        </member>
+        <member name="T:Gordic.Roz.WebClient.GPristupnostPolozekDto">
+            <summary>
+            DTO predavane evidenci pristupnosti polozek menu
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GPristupnostPolozekDto.ToolTip">
+            <summary>
+            Tooltip
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GPristupnostPolozekDto.Title">
+            <summary>
+            Nezav menu
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GPristupnostPolozekDto.Icon">
+            <summary>
+            Nezav menu
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GPristupnostPolozekDto.Visible">
+            <summary>
+            Viditelnost akce
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GPristupnostPolozekDto.Enabled">
+            <summary>
+            Povoleni akce
+            </summary>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GPristupnostPolozekDto.#ctor(System.Boolean,System.Boolean,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Konstuktor
+            </summary>
+            <param name="enabled"></param>
+            <param name="title"></param>
+            <param name="visible"></param>
+            <param name="toolTip"></param>
+        </member>
+        <member name="T:Gordic.Roz.WebClient.GSeznamDokladuPermissionsDto">
+            <summary>
+            DTO pri pristupnost akci na seznamu
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GSeznamDokladuPermissionsDto.PovoleniHromadneZauctovani">
+            <summary>
+            Povoleni hromadneho zauctovani
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GSeznamDokladuPermissionsDto.PovoleniHromadneKontrolyMetadat">
+            <summary>
+            Povoleni hromadne kontroly metadat
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GSeznamDokladuPermissionsDto.PovoleniHromadnehoUzavreniVsech">
+            <summary>
+            Povoleni uzavreni dokladu
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GSeznamDokladuPermissionsDto.PovoleniHromadnehoUzavreniVybranych">
+            <summary>
+            Povoleni uzavreni vybranych dokladu
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GSeznamDokladuPermissionsDto.PovoleniPodani">
+            <summary>
+            Povoleni podani
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GSeznamDokladuPermissionsDto.PovoleniVazebDokladu">
+            <summary>
+            Povoleni vazeb dokladu
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GSeznamDokladuPermissionsDto.PovoleniPredani">
+            <summary>
+            Povoleni predani
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GSeznamDokladuPermissionsDto.PovoleniPrideleni">
+            <summary>
+            Povoleni prideleni
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GSeznamDokladuPermissionsDto.PovoleniPrevzeti">
+            <summary>
+            Povoleni prevzeti
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GSeznamDokladuPermissionsDto.PovoleniPreevidence">
+            <summary>
+            Povoleni preevidence
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GSeznamDokladuPermissionsDto.PovoleniKlicovaSlova">
+            <summary>
+            Povoleni klicova slova
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GSeznamDokladuPermissionsDto.PovolenOznacitPrectene">
+            <summary>
+            Povoleni oznacit doklad precteny
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GSeznamDokladuPermissionsDto.PovolenOznacitNeprectene">
+            <summary>
+            Povoleni oznacit doklad neprecteny
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GSeznamDokladuPermissionsDto.PovolenUzaverkyKnih">
+            <summary>
+            Povoleni uzaverky knih
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GSeznamDokladuPermissionsDto.PovolenUzaverkyKniha">
+            <summary>
+            Povoleni uzaverky aktualni knihy
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GSeznamDokladuPermissionsDto.PovolenUzaverkyAgenda">
+            <summary>
+            Povoleni uzaverky agenda
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GSeznamDokladuPermissionsDto.PovolenUzaverkyOtevreniKnihy">
+            <summary>
+            Povoleni uzaverky znovuotevreni vybrane knihy
+            </summary>
+        </member>
+        <member name="T:Gordic.Roz.WebClient.GSeznamDokladuContentDto">
+            <summary>
+            DTO predavane do seznamu dokladu v js
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GSeznamDokladuContentDto.Seznam">
+            <summary>
+            Seznam dokladu
+            </summary>
+        </member>
+        <member name="T:Gordic.Roz.WebClient.GRozTypPorizovace">
+            <summary>
+            Typ porizovace
+            </summary>
+        </member>
+        <member name="F:Gordic.Roz.WebClient.GRozTypPorizovace.Standard">
+            <summary>
+            Standardni
+            </summary>
+        </member>
+        <member name="F:Gordic.Roz.WebClient.GRozTypPorizovace.VLZR">
+            <summary>
+            Vicelete zmenove rizeni
+            </summary>
+        </member>
+        <member name="F:Gordic.Roz.WebClient.GRozTypPorizovace.Rezervace">
+            <summary>
+            Rezervacni (DRD 6)
+            </summary>
+        </member>
+        <member name="T:Gordic.Roz.WebClient.Global">
+            <summary>
+            Nastaveni webove aplikace
+            </summary>
+            <remarks>
+            Startovaci bod aplikace, urcuji se zde hlavni pozadavky konfigurace.
+            Tyto pozadavky se definuji pomoci vlastnich atributu
+            </remarks>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.Global.Application_Start(System.Object,System.EventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="eventArgs"></param>
+        </member>
+        <member name="T:Gordic.Roz.WebClient.Gordic_Roz_WebClient_Exceptions">
+            <summary>
+              Třída prostředků se silnými typy pro vyhledávání lokalizovaných řetězců atp.
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.Gordic_Roz_WebClient_Exceptions.ResourceManager">
+            <summary>
+              Vrací instanci ResourceManager uloženou v mezipaměti použitou touto třídou.
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.Gordic_Roz_WebClient_Exceptions.Culture">
+            <summary>
+              Potlačí vlastnost CurrentUICulture aktuálního vlákna pro všechna
+              vyhledání prostředků pomocí třídy prostředků se silnými typy.
+            </summary>
+        </member>
+        <member name="T:Gordic.Roz.WebClient.GMainApp">
+            <summary>
+            Startovni content modulu ROZ (hlavni okno s tasklistem vlevo a infobarem nahore)
+            </summary>
+            <remarks>
+            Dedicnost: GEkoMainAppBase : GMainApp : GWebAppGinis : GWebAppBase : GAjaxContent
+            </remarks>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GMainApp.useEvidenceDelegate">
+            <summary>
+            nutné pro redistribuci, aby se evidence brala z delegáte z mainApp.ts
+            </summary>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GMainApp.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Metoda ktera zajistuje vykresleni uvodniho okna
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GMainApp.OpenDetail(System.String,System.String,System.String)">
+            <summary>otevření detailu objektu na základě připravené relace</summary>
+            <param name="ixx1">id objektu</param>
+            <param name="ixx2">druhé id objektu v případě složeného klíče</param>
+            <param name="ixx3">třetí id objektu v případě složeného klíče</param>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GMainApp.OnGInitBegin(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Metoda IGInitContext, spousti se pred zahajenim IGInit
+            </summary>
+            <param name="context">Prepravni obalka, posila se mezi klientem a serverem</param>
+            <remarks>
+            Metoda ziska vstup Context. Toto je "prepravni obalka" mezi klientem a serverem a do ktere se doplnuji informace pro inicializaci.
+            Sem se behem prihlaseni vpisuji pristupove udaje, DB profil atd. Je to reference, tudiz ho muzeme rucne upravovat, cehoz
+            lze vyuzit napr pro autologin - viz.nize
+            </remarks>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GMainApp.OnGInitEnd(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Metoda IGInitContext, spousti se po ukonceni incializacniho procesu (nutno zde ponechat, je soucasti interface)
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GMainApp.GlobalParams">
+            <summary>
+            Globalni promenne - parametry
+            </summary>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GMainApp.CheckDocs(System.Collections.Generic.List{System.String})">
+            <summary>
+            
+            </summary>
+            <param name="pids"></param>
+            <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GMainApp.Evidence(System.Collections.Generic.List{System.String})">
+            <summary>
+            Evidence dokladu
+            </summary>
+            <param name="pids"></param>
+        </member>
+        <member name="T:Gordic.Roz.WebClient.GRozSeznamAHlavicekTab">
+            <summary>
+            Prace nad seznamem A-hlavicek
+            </summary>
+        </member>
+        <member name="P:Gordic.Roz.WebClient.GRozSeznamAHlavicekTab.IxsFun">
+            <summary>
+            Pid prihlasene funkce
+            </summary>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GRozSeznamAHlavicekTab.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GRozSeznamAHlavicekTab.GetSeznamHlavicek">
+            <summary>
+            Ziskani dat 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Roz.WebClient.GRozUtils">
+            <summary>
+            Spolecne registrace Javascriptu pro celou aplikaci
+            </summary>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GRozUtils.GlobalParams(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Objekt pro převod databazovych parametrů do vlastností třídy
+            </summary>
+        </member>
+        <member name="F:Gordic.Roz.WebClient.GRozUtils.ROOT_PATH">
+            <summary>
+            Cesta k souborum JS a CSS
+            </summary>
+        </member>
+        <member name="F:Gordic.Roz.WebClient.GRozUtils.SCRIPT_PATH">
+            <summary>
+            Cesta ke skriptum
+            </summary>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GRozUtils.RegisterPreviews">
+            <summary>
+            Registrace preview
+            </summary>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GRozUtils.RegisterUserSettings(Gordic.Gui.WebControls.GWebControlAdvancedValues,Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Registrace formularu uzivatelskeho nastaveni
+            </summary>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GRozUtils.RegisterCommonScripts(Gordic.Gui.WebControls.GWebControlAdvancedValues,Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Registrace spolecnych skriptu
+            </summary>
+            <param name="contentValues"></param>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GRozUtils.RegisterDetailScripts(Gordic.Gui.WebControls.GWebControlAdvancedValues,Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Registrace skriptu pro detail dokladu
+            </summary>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GRozUtils.RegisterSeznamScripts(Gordic.Gui.WebControls.GWebControlAdvancedValues,Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Registrace skriptu pro seznam dokladu
+            </summary>
+            <param name="contentValues"></param>
+            <param name="userProcess"></param>
+            <remarks>HOTOVO - nutno overit zda budu potrebovat EKO metody</remarks>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GRozUtils.RegisterPorizovacScripts(Gordic.Gui.WebControls.GWebControlAdvancedValues)">
+            <summary>
+            Registrace skriptu pro porizovac (detail okno)
+            </summary>
+            <param name="contentValues"></param>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GRozUtils.RegisterPrefabsScripts(Gordic.Gui.WebControls.GWebControlAdvancedValues)">
+            <summary>
+            Registrace skriptu pro prefaby
+            </summary>
+            <param name="contentValues"></param>
+        </member>
+        <member name="M:Gordic.Roz.WebClient.GRozUtils.RegisterHledaniScripts(Gordic.Gui.WebControls.GWebControlAdvancedValues,Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Registrace skriptu pro hledani dokladu
+            </summary>
+            <param name="contentValues"></param>
+            <param name="userProcess"></param>
+        </member>
+    </members>
+</doc>

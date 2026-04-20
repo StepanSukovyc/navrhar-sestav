@@ -1,0 +1,218 @@
+﻿// Vychozi barevna sekce tematu (background text-color border )
+// parent pro sekce bez parenta (pouzije se pokud root sekce neni v parentu pritomna)
+$theme-default-colors: white black (1px solid black) !default;
+
+// sekce tematu, ktere se zpracovavaji jako barvy (automaticke doplneni barvy textu, atd...)
+$theme-color-sections: (theme-header theme-header-active theme-caption theme-content theme-clickable theme-clickable-hover theme-clickable-active) !default;
+
+// vychozi sekce budou pouzity u temat, kde dane sekce chybi
+$theme-default: ( 
+    theme-header: $theme-default-colors, 
+    theme-header-active: $theme-default-colors, 
+    theme-caption: $theme-default-colors, 
+    theme-content: $theme-default-colors, 
+    theme-clickable: $theme-default-colors, 
+    theme-clickable-hover: $theme-default-colors, 
+    theme-clickable-active: $theme-default-colors, 
+ ) !default;
+
+// default, aby vzdy nejake tema bylo
+$themes: ( 
+    theme-default: $theme-default 
+)!default;
+
+// pokud je $section.background == theme-section-name, doplni ji z jine sekce kopii nebo pouzitim color funkce
+@function theme-section-auto-bgcolor($theme, $section) {
+    $bg: nth($section, 1);
+
+    @if $bg and index($theme-color-sections, nth($bg, 1)) {
+        $src: map-get($theme, nth($bg, 1));
+        //        $src: if($src and length($src) >= 1, $src, $theme-default-colors);  // default by nemel byt potreba, vsechny predchozi sekce by mely byt pritomne
+
+        $value: theme-background-color($src); // ziskani barvy z odkazu
+        @if (length($bg) >= 2) { // volani funkce
+            $fce: nth($bg, 2);
+            $param: if(length($bg)>=3, nth($bg, 3), null); // i s parametrem
+            $value: call($fce, $value, $param)
+        }
+
+        $section: set-nth($section, 1, $value);
+    }
+
+    @return $section;
+}
+
+// pokud neni zadana barva textu, doplni jednu z defaultnich barev $dark-text-default, $light-text-default
+// podle kontrastu pozadi
+@function theme-section-auto-color($theme, $section) {
+    @if length($section) == 1 { // color v sekci vubec neni
+        $section: append($section, color-contrast(theme-background-color($section)));
+    }
+    @else if length($section) >= 2 and not nth($section, 2) { // color v sekci je, ale je null
+        $section: set-nth($section, 2, color-contrast(theme-background-color($section)));
+    }
+
+    @return $section;
+}
+
+// pokud neni zadana barva textu, doplni jednu z defaultnich barev $dark-text-default, $light-text-default
+// podle kontrastu pozadi
+@function theme-section-auto-border($theme, $section) {
+    @if length($section) == 2 and theme-background-color($section) { // border v sekci vubec neni
+        $section: append($section, (1px solid (theme-background-color($section))));
+    }
+
+    @return $section;
+}
+
+// doplni v tematech nutne hodnoty (auto u background-color, auto konstrastni color, ...)
+@function themes-compute($themes, $theme-default, $theme-color-sections) {
+    $newthemes: ();
+
+    @each $themename, $theme in $themes {
+        @each $name in $theme-color-sections {
+            $section: map-get($theme, $name); // ziskani barevne sekce z tematu ke zpracovani
+            $section: if($section, $section, map-get($theme-default, $name)); // pouziti defaultu, pokud v tematu neni
+
+            $section: theme-section-auto-bgcolor($theme, $section); // zpracovani pozadi
+            $section: theme-section-auto-color($theme, $section); // zpracovani textu
+            $section: theme-section-auto-border($theme, $section); // zpracovani ramecku
+
+            $theme: map-merge($theme, ($name: $section) );
+        }
+
+        $newthemes: map-merge($newthemes, ($themename: $theme));
+    }
+
+    @return $newthemes;
+}
+
+// vlozi sekce background-color, color, border do CSS
+// pouziti s tematy:
+//
+// @include colors($theme-header...);
+@mixin colors($background: null, $text: null, $border: null) {
+    background: $background;
+    color: $text;
+
+    @if $border {
+        @if list_separator($border) == space or length($border) == 1 {
+            border: $border;
+        }
+        @else if length($border) == 4 {
+            border-top: nth($border, 1);
+            border-right: nth($border, 2);
+            border-bottom: nth($border, 3);
+            border-left: nth($border, 4);
+        }
+        @else if length($border) == 5 {
+            border: nth($border, 1);
+            border-top: nth($border, 2);
+            border-right: nth($border, 3);
+            border-bottom: nth($border, 4);
+            border-left: nth($border, 5);
+        }
+    }
+}
+
+// funkce pro ziskani parcialni hodnoty barevne sekce tematu (napr.: div { color: theme-color($theme-header); } )
+@mixin theme-colors($section) { @include colors($section...); }
+@function theme-background($section) { @return nth($section, 1); }
+@function theme-background-color($section) { $bg: theme-background($section); @return if($bg, nth($bg, 1), null); }
+@function theme-color($section) { @return nth($section, 2); }
+@function theme-border($section) { @return if(length($section)>=3, nth($section, 3), null); }
+@function theme-border-width($section, $default: null) { $border: theme-border($section); @return if($border and length($border)==3 and list_separator($border) == space and type-of(nth($border, 1)) == 'number', nth($border, 1), $default); }
+@function theme-border-color($section, $default: null) { $border: theme-border($section); @return if($border and length($border)==3 and list_separator($border) == space and type-of(nth($border, 3)) == 'number', nth($border, 3), $default); }
+@mixin shadow($shadow) {
+    @if ($shadow) {
+        -moz-box-shadow:    $shadow;
+        -webkit-box-shadow: $shadow;
+        box-shadow:         $shadow;
+    }
+}
+// zakladni obalovaci mixin, ktery zajistuje naplneni globalnich promennych pro jejich aplikaci na vnorene tagy
+// Pouziti:
+//
+// div {
+//   margin: 0;
+//   padding: 10px;
+//   @include themify {
+//     @include theme-colors($theme-content);
+//     text-decoration-color: theme-color($theme-header);
+//   }
+// }
+@mixin themify($themes: $themes, $applyTo: null) {
+    @each $theme-name, $theme in $themes {
+        // deklarace globalni promennych, ktere lze pouzit uvnitr @content (SASS neumi volat @content s parametry)
+        // proto naplnime ruznymi hodnotami, jak prochazime seznam temat
+        $current-theme-name: $theme-name !global;
+        $current-theme: $theme !global;
+
+        $theme-header: map-get($theme, theme-header)!global;
+        $theme-header: $theme-default-colors !global !default;
+
+        $theme-header-active: map-get($theme, theme-header-active) !global;
+        $theme-header-active: $theme-header !global !default;
+
+        $theme-caption: map-get($theme, theme-caption) !global;
+        $theme-caption: $theme-header !global !default;
+
+        $theme-content: map-get($theme, theme-content) !global;
+        $theme-content: $theme-default-colors !global !default;
+
+        $theme-clickable: map-get($theme, theme-clickable) !global;
+        $theme-clickable: $theme-default-colors !global !default;
+
+        $theme-clickable-hover: map-get($theme, theme-clickable-hover) !global;
+        $theme-clickable-hover: $theme-clickable !global !default;
+
+        $theme-clickable-active: map-get($theme, theme-clickable-active) !global;
+        $theme-clickable-active: $theme-clickable !global !default;
+
+        $theme-primary-clickable: map-get($theme, theme-primary-clickable) !global;
+        $theme-primary-clickable: $theme-clickable !global !default;
+
+        $theme-primary-clickable-hover: map-get($theme, theme-primary-clickable-hover) !global;
+        $theme-primary-clickable-hover: $theme-clickable-hover !global !default;
+
+        $theme-primary-clickable-active: map-get($theme, theme-primary-clickable-active) !global;
+        $theme-primary-clickable-active: $theme-clickable-active !global !default;
+
+        $theme-close-clickable-hover: map-get($theme, theme-close-clickable-hover) !global;
+        $theme-close-clickable-hover: $theme-clickable-hover !global !default;
+
+        $theme-toolbar: map-get($theme, theme-toolbar) !global;
+        $theme-toolbar: $theme-default-colors !global !default;
+
+        $theme-commandbar: map-get($theme, theme-commandbar) !global;
+        $theme-commandbar: $theme-default-colors !global !default;
+
+        // vlastni themify
+        @if $applyTo and $applyTo == "." {
+            &.#{$theme-name} {
+                @content;
+            }
+        } @else if $applyTo {
+            & {
+                #{$applyTo}.#{$theme-name} {
+                    @content;
+                }
+            }
+        } @else {
+            .#{$theme-name} & {
+                @content;
+            }
+        }
+    }
+    // reset globalnich promennych, aby je nekdo necetl (bylo by v nich "nahodne" (posledni) tema)
+    $current-theme-name: null !global;
+    $current-theme: null !global;
+
+    $theme-header: null !global;
+    $theme-header-active: null !global;
+    $theme-content: null !global;
+    $theme-content-header: null !global;
+    $theme-clickable: null !global;
+    $theme-clickable-hover: null !global;
+    $theme-clickable-active: null !global;
+}

@@ -1,0 +1,1033 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Xrg.WsFucServer</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Xrg.WsFucServer.GRozpoctovaSkladba">
+            <summary>
+            Rozpočtová skladba.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GRozpoctovaSkladba.#ctor">
+            <summary>
+            Konstruktor implicitní
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GRozpoctovaSkladba.#ctor(Gordic.Xrg.WsFucInterface.UcetniPripadRequestDataSet.UcetniPripadRow)">
+            <summary>
+            Konstruktor z vstupních dat účetního případu
+            </summary>
+            <param name="inputRow"></param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GRozpoctovaSkladba.#ctor(Gordic.Xrg.WsFucInterface.UcetniPohybRequestDataSet.UcetniPohybRow)">
+            <summary>
+            Konstruktor z vstupních dat účetního pohybu
+            </summary>
+            <param name="inputRow"></param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFucServer.GWsFucCommon">
+            <summary>
+            Společné funkce kontrol a čtení číselníků pro FUC
+            </summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.GWsFucCommon.RozsirenaUcetniVeta">
+            <summary>
+            příznak, jestli aktuální verze databáze už podporuje rozšířenou účetní větu
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWsFucCommon.m_oGinsesu">
+            <summary>
+            Server pro práci s externími subjekty
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWsFucCommon.CisZpusobUhrady(Gordic.General.GString)">
+            <summary>
+            Získá způsob úhrady z číselníku podle xml výčtového typu
+            </summary>
+            <param name="zpusobUhradyXml">zpusobUhrady</param>
+            <returns>kód způsobu úhrady</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWsFucCommon.CisZpusobZahranicniUhrady(Gordic.General.GString)">
+            <summary>
+            Získej způsob zahraniční platby
+            </summary>
+            <param name="zpXml">zpusobPlatby</param>
+            <returns>kód způsobu zahraniční platby</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWsFucCommon.CisUrceniPlatby(Gordic.General.GString)">
+            <summary>
+            Přečte z číselníku určení platby
+            </summary>
+            <param name="urceniPlatbyXml">určení platby</param>
+            <returns>kód určení platby</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWsFucCommon.CisHrazeniPoplatku(Gordic.General.GString)">
+            <summary>
+            Získej způsob hrazení poplatku
+            </summary>
+            <param name="hrazeniPoplatkuXml">hrazení poplatku</param>
+            <returns>kód hrazení poplatků</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWsFucCommon.CisPrioritaPlatby(Gordic.General.GString)">
+            <summary>
+            Převod hodnoty priority platby z xml na číselníkovou
+            </summary>
+            <param name="prioritaXml">priorita</param>
+            <returns>číseníková hodnota priority platby</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWsFucCommon.GetStavUhrady(System.Decimal,System.Int32,System.Int32)">
+            <summary>
+            Získá stav úhrady
+            </summary>
+            <param name="cena">cena (může být kladná i záporná</param>
+            <param name="zpusobPlatby">způsob platby v číselném kódu</param>
+            <param name="prijemVydej">příjem/výdej = -1/1</param>
+            <returns>identifikátor stavu úhrady</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWsFucCommon.ExistUcetVlastni(Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Existuje danný účet?
+            </summary>
+            <param name="ucetVlastni">vlasní účet</param>
+            <param name="skVlastni">vlasní směrový kód</param>
+            <param name="rok">rok</param>
+            <param name="ico">ičo</param>
+            <param name="ucs">účetní středisko</param>
+            <returns>zda existuje účet</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWsFucCommon.ExistUcetCizi(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Existuje danný cizí účet?
+            </summary>
+            <param name="idEsuInt">id esu interní</param>
+            <param name="ucetCizi">cizí účet</param>
+            <param name="skCizi">cizí směrový kód</param>
+            <returns>zda existuje cizí účet</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWsFucCommon.PobockaBankyUKtereJeVedenUcet(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Zda má cizí účet vyplněnou identifikaci adresy bankovní pobočky
+            </summary>
+            <param name="idEsuInt">id esu interní</param>
+            <param name="ucetCizi">cizí účet</param>
+            <param name="skCizi">cizí směrový kód</param>
+            <returns>Identifikace pobočky u které je veden účet. Nebyl-</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWsFucCommon.ExistCiziUcet(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Zda má cizí účet vyplněnou identifikaci adresy bankovní pobočky
+            </summary>
+            <param name="idEsuInt">id esu interní</param>
+            <param name="ucetCizi">cizí účet</param>
+            <param name="skCizi">cizí směrový kód</param>
+            <returns>Identifikace pobočky u které je veden účet. Nebyl-</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWsFucCommon.ExistUpr(Gordic.General.GString)">
+            <summary>
+            Zjišťuje zda existuje externí subjekt s zadaným ixs_upr v tabulce vas.ginsupr
+            </summary>
+            <param name="ixsUpr">identifikátor účetního případu</param>
+            <returns>zda existuje externí subjekt s zadaným ixs_upr</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWsFucCommon.ExistPlatba(Gordic.General.GString)">
+            <summary>
+            Zjišťuje zda existuje platba
+            </summary>
+            <param name="idPlatby">id platby</param>
+            <returns>zda existuje platba</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWsFucCommon.ExistUpo(Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Test existence účetního pohybu v tabulce fucdupo
+            </summary>
+            <param name="idUpr">idUpr</param>
+            <param name="idUpo">idUpo</param>
+            <returns>existence účetního pohybu</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWsFucCommon.ExistLinkExtSys(Gordic.General.GString)">
+            <summary>
+            Test na existenci vazby dokumentu na externí systém
+            </summary>
+            <param name="ixp">identifikátor dokumentu</param>
+            <returns>příznak existence v tabulce wflspex</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWsFucCommon.GetUprInfo(Gordic.General.GString,Gordic.General.GInt16@,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GInt16@,Gordic.General.GInt16@,Gordic.General.GString@)">
+            <summary>
+            Informace o ičo, roku, ucs, ktgTyp a typAg z účetního případu
+            </summary>
+            <param name="idUpr">identifikátor účetního případu</param>
+            <param name="rok">out rok</param>
+            <param name="ico">out ičo</param>
+            <param name="ucs">out ucs</param>
+            <param name="ktgTyp">out ktgTyp</param>
+            <param name="typAg">out typAg</param>  
+            <param name="uus"> OUT účtárna UCS </param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWsFucCommon.GetUpoInfo(Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16@,Gordic.General.GInt32@,Gordic.General.GDateTime@)">
+            <summary>
+            Získá pro danný účetní pohyb ktgUpo, radekUpo a datUpo
+            </summary>
+            <param name="idUpr">účetní případ</param>
+            <param name="idUpo">účetní pohyb</param>
+            <param name="ktgUpo">ktgUpo</param>
+            <param name="radekUpo">radekUpo</param>
+            <param name="datUpo">datUpo</param>        
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWsFucCommon.GetUprInfo(Gordic.General.GString,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GInt16@)">
+            <summary>
+            Vrátí základní EKO informace o případu
+            </summary>
+            <param name="ixpUpr">identifikátor případu</param>
+            <param name="ico">IČO případu</param>
+            <param name="ucs">UCS případu</param>
+            <param name="nks">NKS případu</param>
+            <param name="uus">účtárna UCS</param>
+            <param name="rok">rok případu</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWsFucCommon.GetUpoInfo(Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32@,Gordic.General.GInt16@)">
+            <summary>
+            Vrátí základní EKO informace o pohybu
+            </summary>
+            <param name="ixpUpr">PID případu</param>
+            <param name="idUpo">id pohybu</param>
+            <param name="radekUpo">řádek pohybu</param>
+            <param name="rok">rok pohybu</param>        
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWsFucCommon.CreateLinkExtSys(Gordic.General.GString)">
+            <summary>
+            Vytvoření vazby písemnosti na externí systém, který ho vytvořil
+            </summary>
+            <param name="ixp"> identifikátor písemnosti </param>
+            <returns>true - vytvoření, false - ixp již existuje</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWsFucCommon.XrgFucKoOtMes">
+            <summary>
+            Načtení parametru XRG_FUC_KOOTMES
+            </summary>
+            <returns>Vrací hodnotu parametru (false (0) - NEkontrolovat, true (1) - ANO kontrolovat)</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsFucServer.GWsFucDataException">
+            <summary> Výjimka aplikační logiky pro ws Fuc </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWsFucDataException.#ctor(System.Int32,System.Int32,System.String[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWsFucDataException.#ctor(System.Int32,System.Int32,System.Exception,System.String[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="innerException">vnitřní vyjímka</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFucServer.GWsFucServerException">
+            <summary> Výjimka aplikační logiky pro ws Fuc </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWsFucServerException.#ctor(System.Int32,System.Int32,System.String[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWsFucServerException.#ctor(System.Int32,System.Int32,System.Exception,System.String[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="innerException">vnitřní vyjímka</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFucServer.GXrgFucServiceLogic">
+            <summary>XRG - aplikační logika služby FUC</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GXrgFucServiceLogic.m_oOriginalServiceLogic">
+            <summary>aplikační logika původní služby</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.GXrgFucServiceLogic.OriginalServiceLogic">
+            <summary>aplikační logika původní služby</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GXrgFucServiceLogic.GetRequestDataset(System.String,System.String)">
+            <summary>získání prázdného datasetu pro vstupní data</summary>
+            <param name="methodName">název metody</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat</param>
+            <returns>prázdná instance datasetu pro vstupní data, v případě vrácení hodnoty null nebudou načítána žádná vstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GXrgFucServiceLogic.ProcessRequest(System.String,System.String,Gordic.General.GDataSet)">
+            <summary>zpracování vstupních dat</summary>
+            <param name="methodName">název metody</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat</param>
+            <param name="requestDataSet">dataset se vstupními daty</param>
+            <returns>dataset s výstupními daty nebo null v případě, že nemají být vrácena žádná výstupní data</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsFucServer.GFucWebService">
+            <summary>Server webových služeb FUC</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GFucWebService.m_csFucPripadRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GFucWebService.m_csFucDetailPripadRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GFucWebService.m_csFucPohybRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GFucWebService.m_csFucDetailPohybRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>        
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GFucWebService.m_csFucPlatbaRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GFucWebService.m_csFucZahrPlatbaRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GFucWebService.m_csFucDetailPlatbaRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GFucWebService.m_csFucWsInfoRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GFucWebService.m_csFucStornoUpoRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GFucWebService.m_csFucUlozeniZapisuRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GFucWebService.m_csFucPodkladyKhDphRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GFucWebService.GetRequestSchemaFileName(System.String,System.String)">
+            <summary>získání názvu souboru obsahujícího XML schéma pro validaci vstupních dat webové služby</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <returns>název souboru s XML schématem ( tj. *.xsd ), v případě vrácení hodnoty null nebo prázdného řetězce nebude kontrola vstupních dat webové služby provedena</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GFucWebService.GetRequestDataset(System.String,System.String)">
+            <summary>získání prázdného typového datasetu pro načtení vstupních dat</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <returns>prázdná instance typového datasetu určená pro načtení vstupních dat nebo hodnota null v případě, že aplikační logika webové služby vstupní data neočekává</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GFucWebService.ProcessRequest(System.String,System.String,System.Data.DataSet)">
+            <summary>zpracování vstupních dat webové služby</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <param name="requestDataSet">instance typového datasetu naplněná vstupními daty webové služby</param>
+            <returns>dataset s výstupními daty webové služby, nebo null v případě, že webová služba nevrací žádná data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GFucWebService.ProcessRequestInternal(System.String,System.String,System.Data.DataSet)">
+            <summary>zpracování vstupních dat webové služby</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <param name="requestDataSet">instance typového datasetu naplněná vstupními daty webové služby</param>
+            <returns>dataset s výstupními daty webové služby, nebo null v případě, že webová služba nevrací žádná data</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12">
+            <summary>
+            Package   : 
+            Procedure : spg_bucinspeppub12
+            Version   : 383.01
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.ixp_p">
+            <summary>ixp_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.radek_uhr_p">
+            <summary>radek_uhr_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.subradek_p">
+            <summary>subradek_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.lic_p">
+            <summary>lic_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.eko_akt_p">
+            <summary>eko_akt_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.arw_p">
+            <summary>arw_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.ixs_esu_p">
+            <summary>ixs_esu_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.vs_p">
+            <summary>vs_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.ks_p">
+            <summary>ks_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.ss_p">
+            <summary>ss_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.sk_vl_p">
+            <summary>sk_vl_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.bu_vl_p">
+            <summary>bu_vl_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.bu_txt_vl_p">
+            <summary>bu_txt_vl_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.sk_ci_p">
+            <summary>sk_ci_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.bu_ci_p">
+            <summary>bu_ci_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.bu_txt_ci_p">
+            <summary>bu_txt_ci_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.zp_p">
+            <summary>zp_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.ac_p">
+            <summary>ac_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.ixp_den_p">
+            <summary>ixp_den_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.s_uhrp_p">
+            <summary>s_uhrp_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.c_p">
+            <summary>c_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.c_par_p">
+            <summary>c_par_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.dat_spl_p">
+            <summary>dat_spl_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.dat_zap_p">
+            <summary>dat_zap_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.dat_par_p">
+            <summary>dat_par_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.dat_kuhr_p">
+            <summary>dat_kuhr_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.typ_ag_p">
+            <summary>typ_ag_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.ktg_typ_p">
+            <summary>ktg_typ_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.cis_bdo_p">
+            <summary>cis_bdo_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.dat_zmena_p">
+            <summary>dat_zmena_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.zmenu_prov_p">
+            <summary>zmenu_prov_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.mena_p">
+            <summary>mena_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.c_mena_p">
+            <summary>c_mena_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.zp_z_p">
+            <summary>zp_z_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.hra_pop_p">
+            <summary>hra_pop_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.pla_tit_p">
+            <summary>pla_tit_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.ucel_uhr_p">
+            <summary>ucel_uhr_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.dev_pov_p">
+            <summary>dev_pov_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.id_platby_p">
+            <summary>id_platby_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.ixs_ext_p">
+            <summary>348.01 byl ixp_exs</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.ktg_upo_p">
+            <summary>ktg_upo_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.dat_vzniku_p">
+            <summary>dat_vzniku_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.radek_upo_p">
+            <summary>radek_upo_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.por_cislo_int_p">
+            <summary>por_cislo_int_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.rok_p">
+            <summary>rok_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.ico_p">
+            <summary>ico_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.ucs_p">
+            <summary>ucs_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.upl_p">
+            <summary>upl_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.exp_pla_p">
+            <summary>exp_pla_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.bu_pop_p">
+            <summary>bu_pop_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.mena_pop_p">
+            <summary>mena_pop_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.mena_poz_p">
+            <summary>mena_poz_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.inf1_p">
+            <summary>inf1_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.inf2_p">
+            <summary>inf2_p - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.c_par_mena_p">
+            <summary>346.04</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.ixp_real_p">
+            <summary>346.04</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.popis_p">
+            <summary>348.02</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.priz_nepar_p">
+            <summary>354.01</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.sds_p">
+            <summary>354.01</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.priz_pred_rcdn_p">
+            <summary>354.01</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.pri_uhr_p">
+            <summary>354.01</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.dat_sch_p">
+            <summary>360.01</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.radek_upo_rez_p">
+            <summary>360.01</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.priz_rez_pri_p">
+            <summary>360.01</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.ixp_sml_p">
+            <summary>360.01</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.rok_sml_p">
+            <summary>360.01</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.cislo_sml_p">
+            <summary>360.01</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.dsp_p">
+            <summary>364.03  default NULL</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.kurz_p">
+            <summary>366.01  default 1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.alg_par_p">
+            <summary>370.01  default 0</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.ixp_vaz_p">
+            <summary>370.01  default NULL</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.uus_p">
+            <summary>374.01</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.u_zp_p">
+            <summary>382.01 - pokud není, tak 0</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.sk_ci_mf_p">
+            <summary>382.01 - pokud není, tak NULL</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.bu_ci_mf_p">
+            <summary>382.01 - pokud není, tak NULL</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.c_mf_p">
+            <summary>382.01 - pokud není, tak 0</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.ixs_esu_mf_p">
+            <summary>382.01 - pokud není, tak NULL</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.vs_mf_p">
+            <summary>382.01 - pokud není, tak NULL</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.ks_mf_p">
+            <summary>382.01 - pokud není, tak NULL</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.ss_mf_p">
+            <summary>382.01 - pokud není, tak NULL</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.id_hdr_ris_pik_p">
+            <summary>382.01 - pokud není, tak NULL</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.radek_hdr_pik_p">
+            <summary>382.01 - pokud není, tak NULL</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.a_ixs_lpc">
+            <summary>383.01</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.a_ikc">
+            <summary>383.01 id kolekce</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.pradek_uhr">
+            <summary>pradek_uhr - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.SetInParams(Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GDecimal,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GDate,Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDecimal,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDate,Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GDecimal,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDecimal,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GInt64)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GDecimal,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GDate,Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDecimal,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDate,Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GDecimal,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDecimal,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GInt64)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.gspg_bucinspeppub12.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsFucServer.GWmFucPodkladyKhDph">
+            <summary>Uložení doplňujících údajů pro kontrolní hlášení DPH k pohybu</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucPodkladyKhDph.m_oRow">
+            <summary>
+            Vstupní data
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucPodkladyKhDph.m_gsIxpUpr">
+            <summary>
+            Interní identifikátor (PID) účetního případu
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucPodkladyKhDph.m_gnRadekUpo">
+            <summary>
+            Řádek účetního pohybu
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucPodkladyKhDph.m_gnRadekUpoOpr">
+            <summary>
+            Řádek opravovaného účetního pohybu
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucPodkladyKhDph.Execute(Gordic.Xrg.WsFucInterface.PodkladyKhDphRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucPodkladyKhDph.ExecuteWebMethod(Gordic.Xrg.WsFucInterface.PodkladyKhDphRequestDataSet)">
+            <summary>uložení podkladů kontrolního hlášení DPH</summary>
+            <param name="inputDataSet">vstupní data</param>               
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucPodkladyKhDph.ZpracujVstupniDataSet(Gordic.Xrg.WsFucInterface.PodkladyKhDphRequestDataSet)">
+            <summary>
+            Kontrola a úprava vstupních dat
+            </summary>
+            <param name="inputDataSet">vstupní hodnoty</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucPodkladyKhDph.UlozPodkladyKhDph">
+            <summary>
+            Uložení podkladů kontrolního hlášení DPH do databáze
+            </summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsFucServer.GWmFucUlozeniZapisu">
+            <summary> uložení zápisů účetního pohybu </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucUlozeniZapisu.m_oRow">
+            <summary>
+            Vstupní data
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucUlozeniZapisu.m_gsIxpUpr">
+            <summary>
+            Interní identifikátor účetního případu
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucUlozeniZapisu.Execute(Gordic.Xrg.WsFucInterface.UlozeniZapisuRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucUlozeniZapisu.ExecuteWebMethod(Gordic.Xrg.WsFucInterface.UlozeniZapisuRequestDataSet)">
+            <summary>založení účetního případu</summary>
+            <param name="inputDataSet">vstupní data</param>               
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucUlozeniZapisu.ZpracujVstupniDataSet(Gordic.Xrg.WsFucInterface.UlozeniZapisuRequestDataSet)">
+            <summary>
+            Provede otestování validity zadaných vstupních hodnot
+            </summary>
+            <param name="inputDataSet">vstupní hodnoty</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucUlozeniZapisu.UlozZapisy(Gordic.Xrg.WsFucInterface.UlozeniZapisuRequestDataSet.RadkyZapisuDataTable)">
+            <summary>
+            Provede založení účetního pohybu
+            </summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsFucServer.GWmFucStornoUcetnihoPohybu">
+            <summary>stornování účetního pohybu</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucStornoUcetnihoPohybu.m_oRow">
+            <summary>
+            Vstupní data
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucStornoUcetnihoPohybu.m_gsIxpUpr">
+            <summary>
+            Interní identifikátor účetního případu
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucStornoUcetnihoPohybu.m_gsIdUpo">
+            <summary>
+            Identifikátor účetního pohybu
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucStornoUcetnihoPohybu.m_gnMesic">
+            <summary>
+            Měsíc
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucStornoUcetnihoPohybu.m_gnDen">
+            <summary>
+            Den
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucStornoUcetnihoPohybu.m_gnObdobiDph">
+            <summary>
+            Rok zdanění
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucStornoUcetnihoPohybu.m_gnMesicDph">
+            <summary>
+            Měsíc zdanění
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucStornoUcetnihoPohybu.Execute(Gordic.Xrg.WsFucInterface.StornoUcetnihoPohybuRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucStornoUcetnihoPohybu.ExecuteWebMethod(Gordic.Xrg.WsFucInterface.StornoUcetnihoPohybuRequestDataSet)">
+            <summary>založení účetního případu</summary>
+            <param name="inputDataSet">vstupní data</param>               
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucStornoUcetnihoPohybu.ZpracujVstupniDataSet(Gordic.Xrg.WsFucInterface.StornoUcetnihoPohybuRequestDataSet)">
+            <summary>
+            Provede otestování validity zadaných vstupních hodnot
+            </summary>
+            <param name="inputDataSet">vstupní hodnoty</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucStornoUcetnihoPohybu.StornujUcetniPohyb">
+            <summary>
+            Provede založení účetního pohybu
+            </summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsFucServer.GWmFucDetailPlatby">
+            <summary>získání informací o platbě</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucDetailPlatby.Execute(Gordic.Xrg.WsFucInterface.DetailPlatbyRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucDetailPlatby.ExecuteWebMethod(Gordic.Xrg.WsFucInterface.DetailPlatbyRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucDetailPlatby.ZpracujVstupniDataSet(Gordic.Xrg.WsFucInterface.DetailPlatbyRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucDetailPlatby.NactiDetailPlatby">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucDetailPlatby.NaformatujVystupniDataset(Gordic.Xrg.WsFucInterface.DetailPlatbyResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucDetailPlatby.NactiInformaceOZahranicniBance(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary>
+            Načte informace o zahraniční bance která vede danný účet
+            </summary>
+            <param name="idEsu">identifikace subjektu</param>
+            <param name="cisloUctuCizi">číslo účtu</param>
+            <param name="smerovyKodCizi">směrovký kód</param>
+            <param name="idEsuBanky">identifikace pobočky banky u které je účet veden</param>
+            <param name="kodZahrBanky">kód zahraniční banky</param>
+            <param name="typZahrBanky">typ zahraniční banky</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFucServer.GWmFucDetailUcetnihoPohybu">
+            <summary>detail účetního pohybu</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucDetailUcetnihoPohybu.Execute(Gordic.Xrg.WsFucInterface.DetailUcetnihoPohybuRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucDetailUcetnihoPohybu.ExecuteWebMethod(Gordic.Xrg.WsFucInterface.DetailUcetnihoPohybuRequestDataSet)">
+            <summary>detail účetního pohybu</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucDetailUcetnihoPohybu.ZpracujVstupniDataSet(Gordic.Xrg.WsFucInterface.DetailUcetnihoPohybuRequestDataSet)">
+            <summary>
+            Zpracuje vstupní dataset
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucDetailUcetnihoPohybu.FillOutputDataSet(Gordic.Xrg.WsFucInterface.DetailUcetnihoPohybuRequestDataSet,Gordic.Xrg.WsFucInterface.DetailUcetnihoPohybuResponseDataSet)">
+            <summary>
+            detail ucetniho pohybu
+            </summary>
+            <param name="inDataSet">vstupni dataset</param>
+            <param name="outDataSet">vystupni dataset</param>               
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucDetailUcetnihoPohybu.NaformatujVystupniDataset(Gordic.Xrg.WsFucInterface.DetailUcetnihoPohybuResponseDataSet)">
+            <summary>
+            Provede dodatečné naformátování dat v výstupním datasetu
+            </summary>
+            <param name="outDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFucServer.GWmFucDetailUcetnihoPripadu">
+            <summary>získání detailních informací o účetním případu</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucDetailUcetnihoPripadu.Execute(Gordic.Xrg.WsFucInterface.DetailUcetnihoPripaduRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucDetailUcetnihoPripadu.ExecuteWebMethod(Gordic.Xrg.WsFucInterface.DetailUcetnihoPripaduRequestDataSet)">
+            <summary>získání detailních informací o účetním případu</summary>
+            <param name="inputdataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucDetailUcetnihoPripadu.ZpracujVstupniDataset(Gordic.Xrg.WsFucInterface.DetailUcetnihoPripaduRequestDataSet)">
+            <summary>
+            Zpracuje data v vstpním datasetu
+            </summary>
+            <param name="inputDataSet">vstupní data</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucDetailUcetnihoPripadu.FillOutputDataSet(Gordic.Xrg.WsFucInterface.DetailUcetnihoPripaduRequestDataSet,Gordic.Xrg.WsFucInterface.DetailUcetnihoPripaduResponseDataSet)">
+            <summary>
+            Naplnění výstupního datasetu
+            </summary>
+            <param name="inDataSet">vstupní dataset</param>
+            <param name="outDataSet">výstupní dataset</param>               
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucDetailUcetnihoPripadu.NaformatujVystupniDataset(Gordic.Xrg.WsFucInterface.DetailUcetnihoPripaduResponseDataSet)">
+            <summary>
+            Provede dodatečné naformátování dat v výstupním datasetu
+            </summary>
+            <param name="outDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFucServer.GWmFucPlatba">
+            <summary>Provedení platby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucPlatba.m_gsIco">
+            <summary>
+            Eko-parametr IČO
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucPlatba.m_gsUcs">
+            <summary>
+            Eko-parametr UCS
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucPlatba.m_gsUus">
+            <summary>
+            Účtárna UCS
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucPlatba.m_gnPrijemVydej">
+            <summary>
+            Příznak přijmu/výdeje
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucPlatba.Execute(Gordic.Xrg.WsFucInterface.PlatbaRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucPlatba.ExecuteWebMethod(Gordic.Xrg.WsFucInterface.PlatbaRequestDataSet)">
+            <summary>založení účetního pohybu - </summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucPlatba.ZpracujVstupniDataset(Gordic.Xrg.WsFucInterface.PlatbaRequestDataSet)">
+            <summary>
+            Provede otestování validity zadaných vstupních hodnot
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFucServer.GWmFucUcetniPohyb">
+            <summary>založení účetního pohybu</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucUcetniPohyb.m_oRow">
+            <summary>
+            ucetni pohyb
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucUcetniPohyb.m_gsPrijemVydej">
+            <summary>
+            Příznak příjem - výdej
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucUcetniPohyb.m_gnPriznakDanovehoUpo">
+            <summary>
+            Příznak daňového UPO
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucUcetniPohyb.m_gnTypUpo">
+            <summary>
+            Typ UPO (10 default, 40 ručně)
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucUcetniPohyb.Execute(Gordic.Xrg.WsFucInterface.UcetniPohybRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucUcetniPohyb.ExecuteWebMethod(Gordic.Xrg.WsFucInterface.UcetniPohybRequestDataSet)">
+            <summary>založení účetního případu</summary>
+            <param name="inputDataSet">vstupní data</param>               
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucUcetniPohyb.ZpracujVstupniDataSet(Gordic.Xrg.WsFucInterface.UcetniPohybRequestDataSet)">
+            <summary>
+            Provede otestování validity zadaných vstupních hodnot a následné uložení do tabulky FUCDUPO
+            </summary>
+            <param name="inputDataSet">vstupní hodnoty</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucUcetniPohyb.ZalozUcetniPohyb">
+            <summary>
+            Provede založení účetního pohybu
+            </summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsFucServer.GWmFucUcetniPripad">
+            <summary>založení účetního případu</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucUcetniPripad.m_gnZpusobUhrady">
+            <summary>
+            Způsob úhrady dle EKOCIZP
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucUcetniPripad.m_gnMena">
+            <summary>
+            Způsob úhrady dle EKOCMEN
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucUcetniPripad.m_gsPrijemVydej">
+            <summary>
+            Příznak příjem - výdej
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucUcetniPripad.m_bVytvorIntVazbuUpr">
+            <summary>
+            Příznak, že byl převzat externí identifikátor účetního případu a má se po vytvoření UPR založit vazba do GINIS-INT
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFucServer.GWmFucUcetniPripad.m_gsIxsUpr">
+            <summary>
+            Identifikátor účetního případu
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucUcetniPripad.Execute(Gordic.Xrg.WsFucInterface.UcetniPripadRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucUcetniPripad.ExecuteWebMethod(Gordic.Xrg.WsFucInterface.UcetniPripadRequestDataSet)">
+            <summary>založení účetního případu - volba zda budou data commitnuta nebo ne</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucUcetniPripad.ZpracujVstupniDataset(Gordic.Xrg.WsFucInterface.UcetniPripadRequestDataSet)">
+            <summary>
+            Zpracovává vstupní dataset
+            </summary>
+            <param name="inputDataSet"></param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFucServer.GWmFucUcetniPripad.ExistujeUcsVObdobi(Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>
+            Zjišťuje zda existuje danné UCS aktivní pro danný rok
+            </summary>
+            <param name="rok">rok</param>
+            <param name="ico">IČO</param>
+            <param name="ucs">účetní středisko</param>
+            <returns>zda existuje danné UCS aktivní pro danný rok </returns>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,120 @@
+﻿//  <FileHeader xmlns="http://www.gordic.cz/shared/file-header/v_1.0.0.0">
+//    <Name>        Gordic.General.ApplicationInterface.GTypeExtensions.cs      </Name>
+//    <Description> Rozšíření o funkce pro G typy                               </Description>
+//    <Author>      FFIALA                                                      </Author>
+//    <Copyright>   © GORDIC spol. s r. o. 1993 - 2019                            </Copyright>
+//    <Created>     2017-04-11                                                  </Created>
+//  </FileHeader>
+
+using System;
+using System.Runtime.CompilerServices;
+using System.Reflection;
+using System.Data;
+using System.Text;
+using System.Linq;
+using System.Collections.Generic;
+
+namespace Gordic.General
+{
+    /// <summary>
+    /// Rozšíření o funkce pro G typy
+    /// </summary>
+    public static class GTypeDictionaryExtensions
+    {
+        /// <summary>
+        /// Konverze všech hodnot sloupců z datarow do GDbTypeDisctionaty
+        /// </summary>
+        /// <param name="a_datarow"></param>
+        /// <returns></returns>
+        public static GDbTypeDictionary GDataRowToGDbTypeDictionary(GDataRow a_datarow)
+        {
+            GDbTypeDictionary v_vysledek = new GDbTypeDictionary();
+            foreach (DataColumn v_sloupec in a_datarow.Table.Columns)
+            {
+                string v_col_name = v_sloupec.ColumnName;
+                IGDbType v_value = a_datarow.GetDbValue(v_col_name);
+                v_vysledek.Add(v_col_name, v_value);
+            }
+            return (v_vysledek);
+        }
+
+        /// <summary>
+        /// Převod GDataRow na GDbTypeDictionary
+        /// </summary>
+        /// <param name="a_datarow">GDataRow jehož data se mají převést do GDbTypeDictionary</param>
+        /// <returns>Nově vytvořené GDbTypeDictionary</returns>
+        public static GDbTypeDictionary ToGDbTypeDictionary(this GDataRow a_datarow)
+        {
+            return (GDataRowToGDbTypeDictionary(a_datarow));
+        }
+
+        /// <summary>
+        /// Převod DataTable na List of GDbTypeDictionary
+        /// </summary>
+        /// <param name="a_datatable"></param>
+        /// <returns></returns>
+        public static List<GDbTypeDictionary> ToListGDbTypeDictionary(this GDataTable a_datatable)
+        {
+            List<GDbTypeDictionary> v_vysledek = new List<GDbTypeDictionary>();
+            foreach ( GDataRow v_row in a_datatable.Rows )
+            {
+                v_vysledek.Add(v_row.ToGDbTypeDictionary());
+            }
+            return v_vysledek;
+        }
+
+        /// <summary>
+        /// Konverze všech hodnot sloupců z datarow do Dictionary
+        /// </summary>
+        /// <param name="a_datarow">Obecná DataRow</param>
+        /// <returns></returns>
+        public static Dictionary<string,object> DataRowToDictionary(DataRow a_datarow)
+        {
+            Dictionary<string, object> v_vysledek = new Dictionary<string, object>();
+            foreach (DataColumn v_sloupec in a_datarow.Table.Columns)
+            {
+                object v_value = null;
+                string v_col_name = v_sloupec.ColumnName;
+                if(!a_datarow.IsNull(v_col_name) )
+                    v_value = a_datarow[v_col_name];
+                v_vysledek.Add(v_col_name, v_value);
+            }
+            return (v_vysledek);
+        }
+        /// <summary>
+        /// Převod DataRow na Dictionary
+        /// </summary>
+        /// <param name="a_datarow">GDataRow jehož data se mají převést do Dictionary</param>
+        /// <returns>Nově vytvořené Dictionary string, object </returns>
+        public static Dictionary<string, object> ToDictionary(this DataRow a_datarow)
+        {
+            return (DataRowToDictionary(a_datarow));
+        }
+
+        /// <summary>
+        /// Převod DataRow na GDbTypeDictionary
+        /// </summary>
+        /// <param name="a_datarow">GDataRow jehož data se mají převést do Dictionary</param>
+        /// <returns>Nově vytvořené GDbTypeDictionary</returns>
+        public static GDbTypeDictionary ToGDbTypeDictionary(this DataRow a_datarow)
+        {
+            return (new GDbTypeDictionary(DataRowToDictionary(a_datarow)));
+        }
+        
+        /// <summary>
+        /// Převod DataTable na List of GDbTypeDictionary
+        /// </summary>
+        /// <param name="a_datatable"></param>
+        /// <returns></returns>
+        public static List<Dictionary<string, object>> ToListDictionary(this DataTable a_datatable)
+        {
+            List<Dictionary<string, object>> v_vysledek = new List<Dictionary<string, object>>();
+            foreach (DataRow v_row in a_datatable.Rows)
+            {
+                v_vysledek.Add(v_row.ToDictionary());
+            }
+            return v_vysledek;
+        }
+
+    }
+}

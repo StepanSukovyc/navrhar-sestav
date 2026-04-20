@@ -1,0 +1,825 @@
+﻿<AddIn name        = "ALF Binding"
+       author      = "Mgr. Stepan Sukovyč"
+       addInManagerHidden = "preinstalled"
+       description = "gres:29450769"
+       version="5.25.0.2">
+
+	<Manifest>
+		<Identity name = "Gordic.GFE.WinClient.ALF"/>
+	</Manifest>
+
+	<Runtime>
+		<Import assembly=":Gordic.GFE.WinClient"/>
+		<Import assembly=":Gordic.GFE.Parsers"/>
+	</Runtime>
+
+	<Path name = "/ReportDesigner/RDTextEditor/Formatter/ALF">
+		<Class id ="ALFFormatter" class = "Gordic.GFE.WinClient.ALF.AlfFormattingStrategy"/>
+	</Path>
+
+	<!-- editor -->
+	<Path name = "/Desktop/DisplayBindings">
+		<DisplayBinding id = "AlfBinding"
+							insertbefore = "AlfxBinding"
+							fileNamePattern="\.alf"
+							title = "gres:21090001"
+							class = "Gordic.GFE.WinClient.Editor.AlfDisplayBinding"/>
+		<DisplayBinding id    = "AlfxBinding"
+							insertbefore = "GfrmBinding"
+							fileNamePattern="\.alfx"
+							title = "gres:29450700"
+							class = "Gordic.GFE.WinClient.Editor.AlfxDisplayBinding" />
+		<DisplayBinding id    = "GfrmBinding"
+							insertbefore = "Text"
+							fileNamePattern="\.gfrm"
+							title = "gres:29450701"
+							class = "Gordic.GFE.WinClient.Editor.GfrmDisplayBinding" />
+	</Path>
+	<!-- konec editor -->
+
+	<!-- Main menu -->
+	<Path name = "/ReportDesigner/MainMenu">
+		<ComplexCondition action="Exclude">
+			<Or>
+				<Condition name="WindowActive" activewindow="Gordic.GFE.WinClient.GrrEditor.GrrViewContent"/>
+				<Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.GrfEditor.GrfViewContent"/>
+			</Or>
+			<MenuItem id = "MmGraphics" insertafter="View" insertbefore="Tools" label="gres:29450962" type = "Menu">
+				<MenuItem id="FormatBlock" label="gres:21090002" type="Menu" icon="Icons__Ost__text_zarovnat_doleva">
+					<MenuItem id="ContentAlignTop"
+							  shortcut = "Shift|Alt|Up"
+							  label="gres:29450702"
+							  type="Item"
+							  loadclasslazy="false"
+							  icon="Icons__Ost__text_zarovnat_nahoru"
+							  class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignTop"/>
+					<MenuItem id="ContentAlignMiddle"
+							  label="gres:29450703"
+							  type="Item"
+							  loadclasslazy="false"
+							  icon="Icons__Ost__text_zarovnat_na_stred_vertikal"
+							  class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignMiddle"/>
+					<MenuItem id="ContentAlignBottom"
+							  shortcut = "Shift|Alt|Down"
+							  label="gres:29450704"
+							  type="Item"
+							  loadclasslazy="false"
+							  icon="Icons__Ost__text_zarovnat_dolu"
+							  class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignBottom"/>
+					<MenuItem id = "AlignSeparator" type = "Separator"  />
+					<MenuItem id="ContentAlignLeft"
+							  shortcut = "Control|Shift|L"
+							  label="gres:29450705"
+							  type="Item"
+							  loadclasslazy="false"
+							  icon="Icons__Ost__text_zarovnat_doleva"
+							  class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignLeft"/>
+					<MenuItem id="ContentAlignCenter"
+							  label="gres:29450703"
+							  type="Item"
+							  shortcut = "Control|Shift|E"
+							  loadclasslazy="false"
+							  icon="Icons__Ost__text_zarovnat_na_stred_horizont"
+							  class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignCenter"/>
+					<MenuItem id="ContentAlignRight"
+							  shortcut = "Control|Shift|R"
+							  label="gres:29450706"
+							  type="Item"
+							  loadclasslazy="false"
+							  icon="Icons__Ost__text_zarovnat_doprava"
+							  class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignRight"/>
+					<MenuItem id="ContentAlignJustify"
+							  label="gres:29450707"
+							  type="Item"
+							  shortcut = "Control|Shift|J"
+							  loadclasslazy="false"
+							  class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignJustify"/>
+				</MenuItem>
+				<MenuItem id="FontStyle"
+						label="gres:29450708"
+						icon="Icons__Ost__registr_uprava_pismen"
+						type="Menu">
+					<MenuItem id="FontRegular"
+							  label="gres:29450709"
+							  type="Item"
+							  loadclasslazy="false"
+							  class="Gordic.GFE.WinClient.TextContentCommands.ContentRegular"/>
+					<MenuItem id="FontBold"
+							  shortcut = "Control|Shift|B"
+							  label="gres:29450710"
+							  type="Item"
+							  loadclasslazy="false"
+							  class="Gordic.GFE.WinClient.TextContentCommands.ContentBold"/>
+					<MenuItem id="FontItalic"
+							  shortcut = "Control|Shift|I"
+							  label="gres:29450711"
+							  type="Item"
+							  loadclasslazy="false"
+							  class="Gordic.GFE.WinClient.TextContentCommands.ContentItalic"/>
+					<MenuItem id="FontUnderline"
+							  shortcut = "Control|Shift|U"
+							  label="gres:29450712"
+							  type="Item"
+							  loadclasslazy="false"
+							  class="Gordic.GFE.WinClient.TextContentCommands.ContentUnderline"/>
+					<MenuItem id="FontStrikeout"
+							  shortcut = "Control|Shift|W"
+							  label="gres:29450713"
+							  type="Item"
+							  loadclasslazy="false"
+							  class="Gordic.GFE.WinClient.TextContentCommands.ContentStrikeout"/>
+				</MenuItem>
+				<MenuItem id="Surround" label="gres:29450714" type="Menu" icon="Icons__Ost__oramovani_dokola_vnitrek">
+					<MenuItem id="SurroundNothing"
+										label="gres:29450715"
+										type="Item"
+										loadclasslazy="false"
+										icon="Icons__Ost__oramovani_zadne"
+										class="Gordic.GFE.WinClient.SurroundCommands.SurroundNothing"/>
+					<MenuItem id="SurroundAround"
+										label="gres:29450716"
+										type="Item"
+										loadclasslazy="false"
+										icon="Icons__Ost__oramovani_dokola"
+										class="Gordic.GFE.WinClient.SurroundCommands.SurroundAround"/>
+					<MenuItem id = "SurroundCommonSeparator" type = "Separator"  />
+					<MenuItem id="SurroundLeft"
+										label="gres:29450717"
+										type="Item"
+										loadclasslazy="false"
+										icon="Icons__Ost__oramovani_left"
+										class="Gordic.GFE.WinClient.SurroundCommands.SurroundLeft"/>
+					<MenuItem id="SurroundRight"
+										label="gres:29450718"
+										type="Item"
+										loadclasslazy="false"
+										icon="Icons__Ost__oramovani_right"
+										class="Gordic.GFE.WinClient.SurroundCommands.SurroundRight"/>
+					<MenuItem id="SurroundTop"
+										label="gres:29450719"
+										type="Item"
+										loadclasslazy="false"
+										icon="Icons__Ost__oramovani_top"
+										class="Gordic.GFE.WinClient.SurroundCommands.SurroundTop"/>
+					<MenuItem id="SurroundBottom"
+										label="gres:29450720"
+										type="Item"
+										loadclasslazy="false"
+										icon="Icons__Ost__oramovani_bottom"
+										class="Gordic.GFE.WinClient.SurroundCommands.SurroundBottom"/>
+					<MenuItem id = "SurroundSimpleSeparator" type = "Separator"  />
+					<MenuItem id="SurroundInside"
+										label="gres:29450721"
+										type="Item"
+										loadclasslazy="false"
+										icon="Icons__Ost__oramovani_vnitrek"
+										class="Gordic.GFE.WinClient.SurroundCommands.SurroundInside"/>
+					<MenuItem id="SurroundAroundInside"
+										label="gres:29450722"
+										type="Item"
+										loadclasslazy="false"
+										icon="Icons__Ost__oramovani_dokola_vnitrek"
+										class="Gordic.GFE.WinClient.SurroundCommands.SurroundAroundInside"/>
+					<MenuItem id="SurroundMiddleHorizontal"
+										label="gres:29450723"
+										type="Item"
+										loadclasslazy="false"
+										icon="Icons__Ost__oramovani_horizontalne"
+										class="Gordic.GFE.WinClient.SurroundCommands.SurroundMiddleHorizontal"/>
+					<MenuItem id="SurroundMiddleVertical"
+										label="gres:29450724"
+										type="Item"
+										loadclasslazy="false"
+										icon="Icons__Ost__oramovani_vertikalne"
+										class="Gordic.GFE.WinClient.SurroundCommands.SurroundMiddleVertical"/>
+				</MenuItem>
+				<MenuItem id="GraphicsLine" label="gres:29450725" type="Menu" icon="Icons__Ost__radek">
+					<Include id = "ShiftUp" item = "/ReportDesigner/MainMenu/MmGraphics/Lines/ShiftUp"/>
+					<Include id = "ShiftDown" item = "/ReportDesigner/MainMenu/MmGraphics/Lines/ShiftDown"/>
+				</MenuItem>
+				<MenuItem id="GraphicsCell" label="gres:29450726" type="Menu">
+					<Include id = "InsertCellBefore" item = "/ReportDesigner/MainMenu/MmGraphics/Cells/InsertCellBefore"/>
+					<Include id = "InsertCellAfter" item = "/ReportDesigner/MainMenu/MmGraphics/Cells/InsertCellAfter"/>
+					<Include id = "ShiftLeft" item = "/ReportDesigner/MainMenu/MmGraphics/Cells/ShiftLeft"/>
+					<Include id = "ShiftRight" item = "/ReportDesigner/MainMenu/MmGraphics/Cells/ShiftRight"/>
+				</MenuItem>
+				<MenuItem id = "ArgumentSeparator" type = "Separator"  />
+				<MenuItem id = "ShowToolTip"
+						  label = "gres:29450727"
+						  type = "CheckBox"
+						  loadclasslazy = "false"
+						  class = "Gordic.GFE.WinClient.SpecificFormatCommands.ShowToolTip"/>
+				<MenuItem id = "ShowObjects"
+						  label = "gres:29450728"
+						  type = "CheckBox"
+						  icon ="Icons__Gin__oblast"
+						  loadclasslazy = "false"
+						  class = "Gordic.GFE.WinClient.SpecificFormatCommands.ShowObjects"/>
+				<MenuItem id = "ShowGrid"
+						  label = "gres:29450729"
+						  type = "CheckBox"
+						  shortcut = "Control|G"
+						  icon ="Icons__Gin__format_sloupce"
+						  loadclasslazy = "false"
+						  class = "Gordic.GFE.Parsers.Core.ShowGrid"/>
+				<MenuItem id = "ShowOrder"
+						  label = "gres:2945175"
+						  type = "CheckBox"
+						  icon ="Icons__Gin__predplnit_podaci_cislo"
+						  loadclasslazy = "false"
+						  class = "Gordic.GFE.Parsers.Core.ShowOrder"/>
+				<MenuItem id = "CustomColor"
+						  label = "gres:29450730"
+						  type = "Item"
+						  icon ="Icons__Gin__stav_hotovo_barva"
+						  loadclasslazy = "false"
+						  class = "Gordic.GFE.WinClient.SpecificFormatCommands.CustomColorEditor"/>
+				<MenuItem id = "ReindexObjects"
+						  label = "gres:29450731"
+						  type = "Item"
+						  icon ="Icons__Gin__prepocitat"
+						  loadclasslazy = "false"
+						  class = "Gordic.GFE.WinClient.SpecificFormatCommands.ReindexObjects"/>
+				<MenuItem id = "FormatSeparator" type = "Separator"  />
+				<MenuItem id = "MmGValidation"
+						  icon = "Icons__Gin__kontrola"
+						  loadclasslazy = "false"
+						  label = "gres:29450805"
+						  class = "Gordic.GFE.WinClient.Gui.GAlfValidateCommand"/>
+				<MenuItem id = "FormatSeparator" type = "Separator"  />
+				<MenuItem id = "CopyFormat"
+						  label = "gres:29450732"
+						  type = "Item"
+						  icon ="Icons__Wfl__dokument_kopie"
+						  loadclasslazy = "false"
+						  class = "Gordic.GFE.WinClient.SpecificFormatCommands.CopyFormat"/>
+				<MenuItem id = "PasteFormat"
+						  label = "gres:29450733"
+						  type = "Item"
+						  icon ="Icons__Gin__zaznam_novy_vlozit_pred"
+						  loadclasslazy = "false"
+						  class = "Gordic.GFE.WinClient.SpecificFormatCommands.ApplyFormat"/>
+				<MenuItem id = "PropertySeparator" type = "Separator"  />
+				<MenuItem id = "ShowProperty"
+						  label = "gres:29450734"
+						  type = "Item"
+						  shortcut = "Control|D"
+						  icon ="Icons__Gin__vlastnosti"
+						  loadclasslazy = "false"
+						  class = "Gordic.GFE.WinClient.Gui.ShowProperty"/>
+			</MenuItem>
+		</ComplexCondition>
+	</Path>
+	<!-- konec Main menu -->
+
+	<!-- nástrojové líšty -->
+	<Path name = "/ReportDesigner/ToolBarMenu/Standard">
+		<ComplexCondition action="Exclude">
+			<Not>
+				<Condition name="WindowActive" activewindow="Gordic.GFE.WinClient.FormatOffice.AOfficeViewContent"/>
+			</Not>
+
+			<ToolbarItem id = "GRFSeparator" type = "Separator" insertafter="Redo" />
+			<ComplexCondition action="Exclude">
+				<Or>
+					<Condition name="WindowActive" activewindow="Gordic.GFE.WinClient.GrrEditor.GrrViewContent"/>
+					<Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.GrfEditor.GrfViewContent"/>
+				</Or>
+
+				<ToolbarItem id = "ShowToolTip"
+					tooltip = "gres:29450727"
+					type = "CheckBox"
+					icon ="Icons__Gin__komentar"
+					loadclasslazy = "false"
+					class = "Gordic.GFE.WinClient.SpecificFormatCommands.ShowToolTip"/>
+				<ToolbarItem id = "ShowObjects"
+					tooltip = "gres:29450728"
+					type = "CheckBox"
+					icon ="Icons__Gin__oblast"
+					loadclasslazy = "false"
+					class = "Gordic.GFE.WinClient.SpecificFormatCommands.ShowObjects"/>
+				<ToolbarItem id = "ShowGrid"
+					tooltip = "gres:29450729"
+					type = "CheckBox"
+					icon ="Icons__Gin__format_sloupce"
+					loadclasslazy = "false"
+					class = "Gordic.GFE.Parsers.Core.ShowGrid"/>
+				<ToolbarItem id = "ShowOrder"
+					tooltip = "gres:2945175"
+					type = "CheckBox"
+					icon ="Icons__Gin__predplnit_podaci_cislo"
+					loadclasslazy = "false"
+					class = "Gordic.GFE.Parsers.Core.ShowOrder"/>
+			</ComplexCondition>
+			<ToolbarItem id = "CustomColor"
+				tooltip = "gres:29450730"
+				type = "Item"
+				icon ="Icons__Gin__stav_hotovo_barva"
+				loadclasslazy = "false"
+				class = "Gordic.GFE.WinClient.SpecificFormatCommands.CustomColorEditor"/>
+			<ToolbarItem id = "ReindexObjects"
+				tooltip = "gres:29450731"
+				type = "Item"
+				icon ="Icons__Gin__prepocitat"
+				loadclasslazy = "false"
+				class = "Gordic.GFE.WinClient.SpecificFormatCommands.ReindexObjects"/>
+			<ComplexCondition action="Exclude">
+				<Or>
+					<Condition name="WindowActive" activewindow="Gordic.GFE.WinClient.GrrEditor.GrrViewContent"/>
+					<Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.GrfEditor.GrfViewContent"/>
+				</Or>
+				<ToolbarItem id="ZoomValue"
+						  tooltip="gres:29450735"
+						  type="ComboBox"
+						  loadclasslazy="false"
+						  width="25"
+						  class="Gordic.GFE.Parsers.Core.Zoom">
+					<IncludeList id = "ListOfZoom" item="/GlobalList/Zoom"/>
+				</ToolbarItem>
+			</ComplexCondition>
+			<ToolbarItem id = "ShowGridSeparator" type = "Separator"  />
+			<ComplexCondition action="Exclude">
+				<Or>
+					<Condition name="WindowActive" activewindow="Gordic.GFE.WinClient.GrrEditor.GrrViewContent"/>
+					<Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.GrfEditor.GrfViewContent"/>
+				</Or>
+				<ToolbarItem id = "Cut"
+						tooltip = "gres:29450736"
+						icon = "Icons__Gin__vyjmout"
+						type = "Item"
+						shortcut = "Control|X"
+						loadclasslazy = "false"
+						class = "Gordic.GFE.WinClient.EditCommands.Cut"/>
+				<ToolbarItem id = "Copy"
+						  tooltip = "gres:29450737"
+						  icon = "Icons__Gin__kopirovat"
+						  type = "Item"
+						  shortcut = "Control|C"
+						  loadclasslazy = "false"
+						  class = "Gordic.GFE.WinClient.EditCommands.Copy"/>
+				<ToolbarItem id = "Paste"
+						  tooltip = "gres:29450738"
+						  icon = "Icons__Gin__vlozit"
+						  type = "Item"
+						  shortcut = "Control|V"
+						  loadclasslazy = "false"
+						  class = "Gordic.GFE.WinClient.EditCommands.Paste"/>
+				<ToolbarItem id = "DeleteSelected"
+						   tooltip = "gres:29450739"
+						   icon ="Icons__Gin__vymazat"
+						   loadclasslazy = "false"
+						   type = "Item"
+						   shortcut = "Delete"
+						   class = "Gordic.GFE.WinClient.EditCommands.Delete"/>
+				<Condition name = "WindowActive" activewindow="GrrViewContent">
+					<ToolbarItem id = "DeleteSelectedContent"
+							   tooltip = "gres:29450740"
+							   icon ="Icons__Wfl__dokument_vymazat"
+							   loadclasslazy = "false"
+							   type = "Item"
+							   shortcut = "Control|Delete"
+							   class = "Gordic.GFE.WinClient.EditCommands.DeleteContent"/>
+				</Condition>
+				<Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.GrfEditor.GrfViewContent">
+					<ToolbarItem id = "CopyPasteCutDeleteSeparator" type = "Separator"  />
+					<ToolbarItem id = "Anchor"
+							  tooltip = "gres:29450741"
+							  icon ="Icons__Gin__stav_uzamceno"
+							  loadclasslazy = "false"
+							  type = "CheckBox"
+							  class = "Gordic.GFE.WinClient.GrfEditor.Anchor"/>
+					<ToolbarItem id="ArgumentEdit"
+							  tooltip = "gres:29450742"
+							  icon = "Icons__Gin__editace"
+							  loadclasslazy = "false"
+							  class = "Gordic.GFE.WinClient.GrfEditor.ArgumentEdit"/>
+				</Condition>
+				<ToolbarItem id = "ArgumentSeparator" type = "Separator"  />
+				<ToolbarItem id="CopyFormat"
+						  tooltip ="gres:29450732"
+						  loadclasslazy = "false"
+						  icon="Icons__Wfl__dokument_kopie"
+						  class = "Gordic.GFE.WinClient.SpecificFormatCommands.CopyFormat"/>
+				<ToolbarItem id="PasteFormat"
+						  tooltip ="gres:29450733"
+						  loadclasslazy = "false"
+						  icon="Icons__Gin__zaznam_novy_vlozit_pred"
+						  class = "Gordic.GFE.WinClient.SpecificFormatCommands.ApplyFormat"/>
+				<ToolbarItem id = "PropertySeparator" type = "Separator"  />
+				<ToolbarItem id = "ShowProperty"
+						  tooltip = "gres:29450734"
+						  type = "Item"
+						  icon ="Icons__Gin__vlastnosti"
+						  loadclasslazy = "false"
+						  class = "Gordic.GFE.WinClient.Gui.ShowProperty"/>
+			</ComplexCondition>
+		</ComplexCondition>
+	</Path>
+
+	<!-- pozor od Názvu se vyvijí ve kterém řádku se nachází lišta objektů -->
+	<Path name = "/ReportDesigner/ToolBarMenu/Format">
+		<ComplexCondition action="Exclude">
+			<Or>
+				<Condition name="WindowActive" activewindow="Gordic.GFE.WinClient.GrrEditor.GrrViewContent"/>
+				<Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.GrfEditor.GrfViewContent"/>
+			</Or>
+			<!-- Formátování bloku-->
+			<ToolbarItem id="ContentAlignTop"
+					  tooltip="gres:29450702"
+					  type="Item"
+					  loadclasslazy="false"
+					  icon="Icons__Ost__text_zarovnat_nahoru"
+					  class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignTop"/>
+			<ToolbarItem id="ContentAlignMiddle"
+					  tooltip="gres:29450703"
+					  type="Item"
+					  loadclasslazy="false"
+					  icon="Icons__Ost__text_zarovnat_na_stred_vertikal"
+					  class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignMiddle"/>
+			<ToolbarItem id="ContentAlignBottom"
+					  tooltip="gres:29450704"
+					  type="Item"
+					  loadclasslazy="false"
+					  icon="Icons__Ost__text_zarovnat_dolu"
+					  class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignBottom"/>
+			<ToolbarItem id = "AlignSeparator" type = "Separator"  />
+			<ToolbarItem id="ContentAlignLeft"
+					  tooltip="gres:29450705"
+					  type="Item"
+					  loadclasslazy="false"
+					  icon="Icons__Ost__text_zarovnat_doleva"
+					  class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignLeft"/>
+			<ToolbarItem id="ContentAlignCenter"
+					  tooltip="gres:29450703"
+					  type="Item"
+					  loadclasslazy="false"
+					  icon="Icons__Ost__text_zarovnat_na_stred_horizont"
+					  class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignCenter"/>
+			<ToolbarItem id="ContentAlignRight"
+					  tooltip="gres:29450706"
+					  type="Item"
+					  loadclasslazy="false"
+					  icon="Icons__Ost__text_zarovnat_doprava"
+					  class="Gordic.GFE.WinClient.TextContentCommands.ContentAlignRight"/>
+			<!-- konec Formátování bloku-->
+			<ToolbarItem id = "FontSeparator" type = "Separator"  />
+			<!-- řez písma -->
+			<ToolbarItem id="FontRegular"
+					  tooltip="gres:29450709"
+					  label="R"
+					  fontstyle="Regular"
+					  type="Item"
+					  loadclasslazy="false"
+					  class="Gordic.GFE.WinClient.TextContentCommands.ContentRegular"/>
+			<ToolbarItem id="FontBold"
+					  shortcut = "Control|Shift|B"
+					  tooltip="gres:29450710"
+					  label="B"
+					  fontstyle="Bold"
+					  type="Item"
+					  loadclasslazy="false"
+					  class="Gordic.GFE.WinClient.TextContentCommands.ContentBold"/>
+			<ToolbarItem id="FontItalic"
+					  shortcut = "Control|Shift|I"
+					  tooltip="gres:29450711"
+					  type="Item"
+					  label="I"
+					  fontstyle="Italic"
+					  loadclasslazy="false"
+					  class="Gordic.GFE.WinClient.TextContentCommands.ContentItalic"/>
+			<ToolbarItem id="FontUnderline"
+					  shortcut = "Control|Shift|U"
+					  tooltip="gres:29450712"
+					  label="U"
+					  fontstyle="Underline"
+					  type="Item"
+					  loadclasslazy="false"
+					  class="Gordic.GFE.WinClient.TextContentCommands.ContentUnderline"/>
+			<ToolbarItem id="FontStrikeout"
+					  shortcut = "Control|Shift|W"
+					  tooltip="gres:29450713"
+					  fontstyle="Strikeout"
+					  label="W"
+					  type="Item"
+					  loadclasslazy="false"
+					  class="Gordic.GFE.WinClient.TextContentCommands.ContentStrikeout"/>
+			<!-- konec řez písma -->
+			<ToolbarItem id = "ArgumentSeparator" type = "Separator"  />
+			<!-- orámování výběru -->
+			<ToolbarItem id="SurroundWidth"
+				  tooltip="gres:29450743"
+				  type="ComboBox"
+				  loadclasslazy="false"
+				  width="10"
+				  class="Gordic.GFE.WinClient.SurroundCommands.SurroundWidth">
+				<IncludeList id = "ListOfSurroundWidth" item="/GlobalList/SurroundWidth"/>
+			</ToolbarItem>
+			<ToolbarItem id="DashStyle"
+				tooltip="gres:29450744"
+				type="ComboBox"
+				loadclasslazy="false"
+				class="Gordic.GFE.WinClient.SurroundCommands.SurroundDashStyle">
+				<IncludeList id = "ListOfDashStyle" item="/GlobalList/DashStyle"/>
+			</ToolbarItem>
+			<ToolbarItem id="Color"
+				tooltip="gres:29450745"
+				type="ComboBox"
+				loadclasslazy="false"
+				class="Gordic.GFE.WinClient.SurroundCommands.SurroundColor">
+				<IncludeList id = "ListOfColors" item="/GlobalList/ColorNameCZEN"/>
+			</ToolbarItem>
+
+			<ToolbarItem id="SurroundNothing"
+					  tooltip="gres:29450746"
+					  type="Item"
+					  loadclasslazy="false"
+					  icon="Icons__Ost__oramovani_zadne"
+					  class="Gordic.GFE.WinClient.SurroundCommands.SurroundNothing"/>
+			<ToolbarItem id="SurroundAround"
+					  tooltip="dokola (použijte v kombinaci s CTRL pro opačný efekt)"
+					  type="Item"
+					  loadclasslazy="false"
+					  icon="Icons__Ost__oramovani_dokola"
+					  class="Gordic.GFE.WinClient.SurroundCommands.SurroundAround"/>
+			<ToolbarItem id = "SurroundCommonSeparator" type = "Separator"  />
+			<ToolbarItem id="SurroundLeft"
+					  tooltip="gres:29450747"
+					  type="Item"
+					  loadclasslazy="false"
+					  icon="Icons__Ost__oramovani_left"
+					  class="Gordic.GFE.WinClient.SurroundCommands.SurroundLeft"/>
+			<ToolbarItem id="SurroundRight"
+					  tooltip="gres:29450748"
+					  type="Item"
+					  loadclasslazy="false"
+					  icon="Icons__Ost__oramovani_right"
+					  class="Gordic.GFE.WinClient.SurroundCommands.SurroundRight"/>
+			<ToolbarItem id="SurroundTop"
+					  tooltip="gres:29450749"
+					  type="Item"
+					  loadclasslazy="false"
+					  icon="Icons__Ost__oramovani_top"
+					  class="Gordic.GFE.WinClient.SurroundCommands.SurroundTop"/>
+			<ToolbarItem id="SurroundBottom"
+					  tooltip="gres:29450750"
+					  type="Item"
+					  loadclasslazy="false"
+					  icon="Icons__Ost__oramovani_bottom"
+					  class="Gordic.GFE.WinClient.SurroundCommands.SurroundBottom"/>
+			<ComplexCondition action="Exclude">
+				<Not>
+					<Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.GrfEditor.GrfViewContent"/>
+				</Not>
+				<ToolbarItem id = "SurroundSimpleSeparator" type = "Separator"  />
+				<ToolbarItem id="SurroundInside"
+					tooltip="gres:29450721"
+					type="Item"
+					loadclasslazy="false"
+					icon="Icons__Ost__oramovani_vnitrek"
+					class="Gordic.GFE.WinClient.SurroundCommands.SurroundInside"/>
+				<ToolbarItem id="SurroundAroundInside"
+					tooltip="gres:29450751"
+					type="Item"
+					loadclasslazy="false"
+					icon="Icons__Ost__oramovani_dokola_vnitrek"
+					class="Gordic.GFE.WinClient.SurroundCommands.SurroundAroundInside"/>
+				<ToolbarItem id="SurroundMiddleHorizontal"
+					tooltip="gres:29450723"
+					type="Item"
+					loadclasslazy="false"
+					icon="Icons__Ost__oramovani_horizontalne"
+					class="Gordic.GFE.WinClient.SurroundCommands.SurroundMiddleHorizontal"/>
+				<ToolbarItem id="SurroundMiddleVertical"
+					tooltip="gres:29450724"
+					type="Item"
+					loadclasslazy="false"
+					icon="Icons__Ost__oramovani_vertikalne"
+					class="Gordic.GFE.WinClient.SurroundCommands.SurroundMiddleVertical"/>
+			</ComplexCondition>
+			<!-- orámování výběru ^^^-->
+
+			<!-- písmo výběru -->
+			<ToolbarItem id = "FontSeparator" type = "Separator"  />
+			<ToolbarItem id="ForeColor"
+						 tooltip="gres:29450752"
+						 type="ComboBox"
+						 loadclasslazy="false"
+						 class="Gordic.GFE.WinClient.FontCommands.FontColor">
+				<IncludeList id = "ListOfColors" item="/GlobalList/ColorNameCZEN"/>
+			</ToolbarItem>
+			<ToolbarItem id="ForeName"
+						 tooltip="gres:29450753"
+						 type="ComboBox"
+						 loadclasslazy="false"
+						 class="Gordic.GFE.WinClient.FontCommands.FontName">
+			</ToolbarItem>
+			<ToolbarItem id="ForeSize"
+				tooltip="gres:29450754"
+				type="ComboBox"
+				loadclasslazy="false"
+				class="Gordic.GFE.WinClient.FontCommands.FontSize">
+				<IncludeList id = "SurroundWidth" item="/GlobalList/SurroundWidth"/>
+			</ToolbarItem>
+			<!-- písmo výběru ^^-->
+		</ComplexCondition>
+	</Path>
+	<!-- konec nástrojové líšty -->
+
+	<!-- Kontextové menu textového editoru -->
+	<Path name = "/ReportDesigner/RDTextEditor/ContextMenu">
+		<Include id = "Cut" item = "/ReportDesigner/MainMenu/Edit/Cut"/>
+		<Include id = "Copy" item = "/ReportDesigner/MainMenu/Edit/Copy"/>
+		<Include id = "Paste" item = "/ReportDesigner/MainMenu/Edit/Paste"/>
+		<Include id = "Delete" item = "/ReportDesigner/MainMenu/Edit/Delete"/>
+		<MenuItem id = "Separator1" type = "Separator"/>
+		<Include id = "Save" item = "/ReportDesigner/MainMenu/File/Save"/>
+		<Include id = "SaveAs" item = "/ReportDesigner/MainMenu/File/SaveAs"/>
+		<Include id = "SaveDb" item = "/ReportDesigner/MainMenu/File/SaveDb"/>
+		<Include id = "CloseFile" item = "/ReportDesigner/MainMenu/File/Close/CloseFile"/>
+		<MenuItem id = "Separator2" type = "Separator"/>
+		<MenuItem id = "Comment"
+				  icon  = "Icons.16x16.CommentRegion"
+				  label = "gres:29450755"
+				  shortcut = "Control|/"
+				  class= "Gordic.GFE.WinClient.DefaultTextEditorCommands.CommentRegion"/>
+		<MenuItem id = "Indent"
+					  label = "gres:29450756"
+				  icon  = "Icons__Gin__posun_doprava"
+					  shortcut = "Control|I"
+					  class = "Gordic.GFE.WinClient.DefaultTextEditorCommands.IndentSelection" />
+		<MenuItem id = "FileMode" label = "gres:29450757" type="Menu">
+			<MenuItem id = "HighlightBuilder" type="Builder" class = "Gordic.GFE.WinClient.DefaultTextEditorCommands.HighlightingTypeBuilder" />
+		</MenuItem>
+		<MenuItem id = "Separator3" type = "Separator"/>
+		<MenuItem id = "Options"
+					  label = "gres:29450758"
+					  icon = "Icons.16x16.PropertiesIcon"
+					  class ="Gordic.GFE.WinClient.ToolsCommands.ShowTextEditorOptions"/>
+	</Path>
+	<!-- konec Kontextové menu textového editoru -->
+
+	<!-- kontextové menu vybraných objektů -->
+	<Path name="/Formation/ContextMenu/SelectedObject">
+		<!-- ICloneable -->
+		<Condition name = "SelectedObject" implementinterface="System.ICloneable" >
+			<MenuItem id = "SelectedObjectSeparator" type = "Separator"  />
+			<MenuItem id = "Cut"
+					  label = "gres:29450759"
+					  icon = "Icons__Gin__vyjmout"
+					  type = "Item"
+					  shortcut = "Control|X"
+					  loadclasslazy = "false"
+					  class = "Gordic.GFE.WinClient.EditCommands.Cut"/>
+			<MenuItem id = "Copy"
+					  label = "gres:29450760"
+					  icon = "Icons__Gin__kopirovat"
+					  type = "Item"
+					  shortcut = "Control|C"
+					  loadclasslazy = "false"
+					  class = "Gordic.GFE.WinClient.EditCommands.Copy"/>
+		</Condition>
+		<!-- konec IFormationObject -->
+		<MenuItem id = "Paste"
+				  label = "gres:29450761"
+				  icon = "Icons__Gin__vlozit"
+				  type = "Item"
+				  shortcut = "Control|V"
+				  loadclasslazy = "false"
+				  class = "Gordic.GFE.WinClient.EditCommands.Paste"/>
+		<MenuItem id = "Delete"
+				  label = "gres:29450762"
+				  icon = "Icons__Gin__vymazat"
+				  type = "Item"
+				  shortcut = "Delete"
+				  loadclasslazy = "false"
+				  class = "Gordic.GFE.WinClient.EditCommands.Delete"/>
+
+		<ComplexCondition action = "Exclude">
+			<Or>
+				<And>
+					<Condition name = "SelectedObject" implementinterface="Gordic.GFE.Parsers.Gui.IBackground"/>
+					<Not>
+						<Condition name="SelectedObject" implementinterface="Gordic.GFE.Parsers.Editor.ILabel"/>
+					</Not>
+				</And>
+				<And>
+					<Or>
+						<Condition name="SelectedObject" implementinterface="Gordic.GFE.Parsers.Gui.IParentable"/>
+						<Condition name = "WindowActive" activewindow="GrrViewContent"/>
+					</Or>
+					<Not>
+						<Condition name="SelectedObject" implementinterface="Gordic.GFE.Parsers.Editor.ILabel"/>
+					</Not>
+				</And>
+			</Or>
+			<MenuItem id = "PropertySeparator" type = "Separator"  />
+		</ComplexCondition>
+
+		<ComplexCondition action = "Exclude" >
+			<And>
+				<Condition name = "SelectedObject" implementinterface="Gordic.GFE.Parsers.Gui.IBackground"/>
+				<Not>
+					<Condition name="SelectedObject" implementinterface="Gordic.GFE.Parsers.Editor.ILabel"/>
+				</Not>
+			</And>
+			<MenuItem id = "DeleteBackImage"
+					label = "gres:29450763"
+					icon = "Icons__Gin__oblibene_vymazat"
+					type = "Item"
+					loadclasslazy="false"
+					class = "Gordic.GFE.WinClient.EditCommands.DeleteBackImage"/>
+		</ComplexCondition>
+		<ComplexCondition action = "Exclude" >
+			<And>
+				<Or>
+					<Condition name="SelectedObject" implementinterface="Gordic.GFE.Parsers.Gui.IParentable"/>
+					<Condition name = "WindowActive" activewindow="GrrViewContent"/>
+				</Or>
+				<Not>
+					<Condition name="SelectedObject" implementinterface="Gordic.GFE.Parsers.Editor.ILabel"/>
+				</Not>
+			</And>
+			<MenuItem id = "DeleteSelectedContent"
+						tooltip = "gres:29450764"
+						icon ="Icons__Wfl__dokument_vymazat"
+						loadclasslazy = "false"
+						type = "Item"
+						label="gres:29450768"
+						shortcut = "Control|Delete"
+						class = "Gordic.GFE.WinClient.EditCommands.DeleteContent"/>
+		</ComplexCondition>
+		<ComplexCondition action = "Exclude" >
+			<Or>
+				<Condition name = "SelectedObject" implementinterface="Gordic.GFE.Parsers.Dom.ITagComponent"/>
+				<Condition name = "SelectedObject" implementinterface="Gordic.GFE.Parsers.IPage"/>
+			</Or>
+			<!-- ICloneable -->
+			<MenuItem id = "PropertySeparator" type = "Separator"  />
+			<MenuItem id="Property"
+						type="Item"
+						label="gres:29450765"
+						shortcut="Control|D"
+						loadclasslazy="false"
+						icon="Icons__Gin__vlastnosti"
+						class="Gordic.GFE.WinClient.Gui.ShowProperty"/>
+		</ComplexCondition>
+		<!-- konec IFormationObject -->
+	</Path>
+	<!-- konec kontextové menu vybraných objektů -->
+
+	<!-- Kontextové menu -->
+	<Path name = "/Formation/CustomListBox/ContextMenu">
+		<MenuItem id = "Add"
+				  icon  = "Icons__Gin__pridat"
+				  label = "gres:29450766"
+				  loadclasslazy="false"
+				  class= "Gordic.GFE.WinClient.Gui.CLAdd"/>
+		<MenuItem id = "Delete"
+					  label = "gres:29450767"
+					  icon  = "Icons__Gin__odebrat"
+					  loadclasslazy="false"
+					  class = "Gordic.GFE.WinClient.Gui.CLDelete" />
+		<MenuItem id = "Separator1" type = "Separator"/>
+		<MenuItem id = "Up"
+					  label = "gres:29450609"
+					  icon = "Icons__Gin__posun_maly_nahoru"
+					  loadclasslazy="false"
+					  class ="Gordic.GFE.WinClient.Gui.CLShiftUp"/>
+		<MenuItem id = "Down"
+					  label = "gres:29450608"
+					  icon = "Icons__Gin__posun_maly_dolu"
+					  loadclasslazy="false"
+					  class ="Gordic.GFE.WinClient.Gui.CLShiftDown"/>
+	</Path>
+	<Path name="/Formation/Chart">
+		<List id="LayerTags">
+			<ListItem value="type" />
+			<ListItem value="shape"/>
+			<ListItem value="label-layout"/>
+			<ListItem value="label"/>
+			<ListItem value="legend"/>
+			<ListItem value="draw3d"/>
+			<ListItem value="color"/>
+			<ListItem value="name" />
+		</List>
+		<List id="AddButtonArea">
+			<ListItem value="guid" />
+		</List>
+		<List id="LayerDataSetTags">
+			<ListItem value="name" />
+			<ListItem value="series"/>
+			<ListItem value="color"/>
+		</List>
+	</Path>
+	<Path name="/Formation/Components">
+		<List id="AddButtonArea">
+			<ListItem value="guid" />
+		</List>
+	</Path>
+	<!-- Edit akce XML editoru 
+  <Path path = "/AddIns/AlfEditor/EditActions">
+    <EditAction id = "XmlCompletionPopup" class = "Gordic.GFE.WinClient.ALF.Commands.CodeCompletionPopupCommand"  keys = "Control|Space"/>
+    <EditAction id = "GoToDefinition" class = "Gordic.GFE.WinClient.ALF.Commands.GoToSchemaDefinitionEditAction" keys = "Control|Enter"/>
+  </Path>
+  konec -->
+</AddIn>

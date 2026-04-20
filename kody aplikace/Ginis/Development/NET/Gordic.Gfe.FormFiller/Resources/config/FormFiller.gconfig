@@ -1,0 +1,373 @@
+﻿<AddIn name        = "FormFiller"
+       author      = "Mgr. Stepan Sukovyč"
+       description = "Prohlížeč formulářů"
+       addInManagerHidden = "true"
+       version="4.72.1.6">
+
+  <Manifest>
+    <Identity name = "Gordic.Gfe.FormFiller" version = "@FormFillerCoreVersion"/>
+  </Manifest>
+
+  <!-- Prostředí aplikace -->
+  <Runtime>
+    <Import assembly=":Gordic.Gfe.FormFiller">
+      <ConditionEvaluator name="WindowActive" class="Gordic.Gfe.FormFiller.Core.WindowActiveConditionEvaluator"/>
+      <ConditionEvaluator name="ActiveWindowState" class="Gordic.Gfe.FormFiller.Core.ActiveWindowStateConditionEvaluator"/>
+      <ConditionEvaluator name="OpenWindowState" class="Gordic.Gfe.FormFiller.Core.OpenWindowStateConditionEvaluator"/>
+      <ConditionEvaluator name="SelectedObject" class="Gordic.Gfe.FormFiller.Core.SelectedObjectConditionEvaluator"/>
+      <ConditionEvaluator name="FormationType" class="Gordic.Gfe.FormFiller.Core.FormationTypeConditionEvaluator"/>
+      <ConditionEvaluator name="WriteableProject" class="Gordic.Gfe.FormFiller.Core.WriteableProjectConditionEvaluator"/>
+      <ConditionEvaluator name="SolutionOpen" class="Gordic.Gfe.FormFiller.Project.SolutionOpenConditionEvaluator"/>
+      <ConditionEvaluator name="WriteableSolution" class="Gordic.Gfe.FormFiller.Project.WriteableSolutionConditionEvaluator"/>
+    </Import>
+    <Import assembly=":Gordic.GFE.Parsers">
+      <Maker name="Pad" class="Gordic.GFE.Parsers.PadMaker"/>
+    </Import>
+    <Import assembly=":Gordic.TextEditor"/>
+  </Runtime>
+  <!-- konec prostředí -->
+
+  <!-- musí být, aby nenastali vyjímky -->
+  <Path name = "/FormFiller/FFTextEditor/EditActions"/>
+  <Path name = "/FormFiller/FFTextEditor/Formatter"/>
+  <Path name = "/FormFiller/FFTextEditor/AdvancedHighlighter"/>
+  <Path name = "/FormFiller/FFTextEditor/CodeCompletion"/>
+  <!-- konec musí být, aby nenastali vyjímky -->
+
+  <!-- IKONKY -->
+  <Path name = "/Workspace/Icons">
+    <!-- XML -->
+    <Icon id         = "XmlFileIcon"
+		      extensions = ".xme"
+		      resource   = "Icons__Ost__struktura" />
+
+    <Icon id         = "DataFileIcon"
+		      extensions = ".tmp;.xml"
+		      resource   = "Icons__Gin__soubor_textovy" />
+
+    <Icon id         = "AddInFileIcon"
+		      extensions = ".gfrm"
+		      resource   = "Icons__Gin__sestava" />
+
+    <!-- TextFiles -->
+    <Icon id         = "TextFileIcon"
+		      extensions = ".txt;.doc"
+		      resource   = "Icons.16x16.TextFileIcon"/>
+  </Path>
+  <!-- konec IKONKY -->
+
+  <!-- Vazby -->
+  <Path name = "/Desktop/DisplayBindings">
+    <!--<DisplayBinding id    = "Text"
+                title = "Textový editor"
+                class = "Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBinding" />-->
+    <DisplayBinding id    = "AlfText"
+		                fileNamePattern="\.gfrm$"
+		                insertbefore = "Text"
+		                title = "GFRM prohlížeč"
+		                class = "Gordic.Gfe.FormFiller.Gui.DocfrmDisplayBinding"/>
+  </Path>
+  <!-- konec Vazba -->
+
+  <!-- Filtry souborů -->
+  <Path name = "/FormFiller/Desktop/OpenFileFilter">
+    <FileFilter id         = "FillerFile"
+		            name       = "formuláře (*.gfrm)"
+		            extensions = "*.gfrm"/>
+  </Path>
+  <Path name = "/FormFiller/Desktop/OpenDataFilter">
+    <FileFilter id         = "DataFile"
+		            name       = "soubory dat"
+		            extensions = "*.dat;*.tmp;*.xml"/>
+  </Path>
+  <Path name = "/FormFiller/Desktop/FormatFilter">
+    <FileFilter id         = "FormatFile"
+		            name       = "soubory formátu"
+		            extensions = "*.alf"/>
+  </Path>
+  <Path name = "/FormFiller/Desktop/ApplicationFileFilter">
+    <FileFilter id         = "Application"
+		            name       = "Aplikace"
+		            extensions = "*.exe"/>
+  </Path>
+  <Path name = "/FormFiller/Desktop/OpenStructureFilter">
+    <FileFilter id         = "XME"
+		            name       = "Soubory XME"
+		            extensions = "*.xme"/>
+  </Path>
+  <Path name = "/FormFiller/Desktop/PreviewDataFilter">
+    <FileFilter id         = "DATA"
+		            name       = "Soubor dat"
+		            extensions = "*.tmp;*.dat;*.txt;"/>
+  </Path>
+  <!-- konec -->
+
+  <!-- Podložky -->
+  <Path name = "/FormFiller/Desktop/Pads"/>
+
+  <!-- hlavní nabídka aplikace -->
+  <Path name = "/FormFiller/MainMenu">
+    <!-- FILE -->
+    <MenuItem id="File" label="&amp;Soubor" type="Menu">
+      <MenuItem id          = "File"
+				        label       = "&amp;otevřít..."
+				        icon        = "Icons__Gin__soubor_otevrit"
+				        shortcut    = "Control|O"
+				        class       = "Gordic.Gfe.FormFiller.FileCommands.OpenFile"/>
+      <MenuItem id = "OpenSeparator" type = "Separator"  />
+      <Condition name = "WindowActive" activewindow="*" action="Disable">
+        <MenuItem id = "CloseFile"
+					        label = "&amp;zavřít"
+					        icon  = "Icons__Gin__okno_zavrit"
+					        shortcut = "Control|F4"
+					        class ="Gordic.Gfe.FormFiller.FileCommands.CloseFile"/>
+      </Condition>
+      <MenuItem id = "CloseSeparator" type = "Separator"  />
+
+      <Condition name = "ActiveWindowState" windowstate="Dirty, Untitled" nowindowstate="ViewOnly" action="Disable">
+        <MenuItem id = "Save"
+                  label = "uložit"
+                  icon = "Icons__Gin__ulozit"
+                  shortcut = "Control|S"
+                  class = "Gordic.Gfe.FormFiller.FileCommands.SaveFile"/>
+      </Condition>
+      <Condition name = "ActiveWindowState" windowstate="None" nowindowstate="ViewOnly" action="Disable">
+        <MenuItem id = "SaveAs"
+                  icon = "Icons__Gin__ulozit_jako"
+                  label = "uložit jako ..."
+                  shortcut = "Control|Shift|S"
+                  class = "Gordic.Gfe.FormFiller.FileCommands.SaveFileAs"/>
+      </Condition>
+
+      <MenuItem id = "ExitSC:eparator" type = "Separator"  />
+      <MenuItem id = "Exit"
+			          label = "&amp;konec"
+                shortcut = "Alt|F4"
+			          icon = "Icons__Gin__aplikace_ukonceni"
+			          class = "Gordic.Gfe.FormFiller.ApplicationCommands.ExitDesktopCommand" />
+    </MenuItem>
+    <!-- konec FILE -->
+    <!-- ZOBRAZIT -->
+    <MenuItem id = "View" label = "&amp;Zobrazit" insertafter="File" type="Menu">
+      <MenuItem id = "FullScreen"
+          label = "Úplná obrazovka"
+          icon = "Icons.16x16.FullScreen"
+          shortcut = "F11"
+          class = "Gordic.Gfe.FormFiller.ApplicationCommands.ToggleFullscreenCommand" />
+    </MenuItem>
+    <!-- konec ZOBRAZIT -->
+    <!-- TOOLS-->
+    <MenuItem id="Tools" insertafter="File" label="&amp;Nástroje" type="Menu">
+      <MenuItem id = "Preview"
+                icon = "Icons__Gin__tisk_nahled"
+                shortcut = "Control|R"
+                label = "náhled"
+                loadclasslazy="false"
+                class = "Gordic.Gfe.FormFiller.ToolCommands.ContentPreview"/>
+      <MenuItem id = "PDF"
+                icon = "Icons__Wfl__dokument_konverze_do_pdf"
+                shortcut = "Control|Shift|P"
+                label = "konverze do pdf"
+                loadclasslazy="false"
+                class = "Gordic.Gfe.FormFiller.ToolCommands.PdfExport"/>
+      <MenuItem id = "SendAll"
+                icon = "Icons__Gin__webove_sluzby"
+                shortcut = "Control|E"
+                label = "odeslat vše"
+                loadclasslazy="false"
+                class = "Gordic.Gfe.FormFiller.ToolCommands.SendFile"/>
+      <MenuItem id = "ToolsSeparator" type = "Separator"  />
+      <MenuItem id = "ShowColorOf"
+                icon = "Icons__Gin__oblast"
+                shortcut = "Control|Q"
+                label = "&amp;podbarvit datové položky"
+                type="CheckBox"
+                class = "Gordic.GFE.Parsers.Core.ShowColorOf"/>
+      <MenuItem id = "ShowGrid"
+                icon = "Icons__Gin__format_sloupce"
+                shortcut = "Control|G"
+                label = "&amp;zobrazit mřížku"
+                type="CheckBox"
+                class = "Gordic.GFE.Parsers.Core.ShowGrid"/>
+    </MenuItem>
+    <!--konec TOOLS-->
+  </Path>
+  <!-- konec hlavní nabídky aplikace -->
+
+  <!-- ToolBar nabídka aplikace-->
+  <Path name = "/FormFiller/ToolBarMenu/Standard">
+    <ToolbarItem id="OpenItem"
+                 tooltip="otevřít soubor..."
+                 type="Item"
+                 icon="Icons__Gin__soubor_otevrit"
+                 loadclasslazy="false"
+                 shortcut    = "Control|O"
+                 class       = "Gordic.Gfe.FormFiller.FileCommands.OpenFile"/>
+    <Condition name = "ActiveWindowState" windowstate="Dirty,Untitled" nowindowstate="ViewOnly" action="Disable">
+      <ToolbarItem id="SaveItem"
+              tooltip="uložení aktuálního souboru"
+              type="Item"
+              icon="Icons__Gin__ulozit"
+              loadclasslazy="false"
+              shortcut = "Control|S"
+              class   = "Gordic.Gfe.FormFiller.FileCommands.SaveFile"/>
+    </Condition>
+    <Condition name = "ActiveWindowState" windowstate="None" nowindowstate="ViewOnly" action="Disable">
+      <ToolbarItem id = "SaveAsItem"
+                icon = "Icons__Gin__ulozit_jako"
+                shortcut = "Control|Shift|S"
+                tooltip = "uložení aktuálního souboru jako..."
+                loadclasslazy="false"
+                class = "Gordic.Gfe.FormFiller.FileCommands.SaveFileAs"/>
+    </Condition>
+    <Condition name = "WindowActive" activewindow="*" action="Disable">
+      <ToolbarItem id = "CloseFileItem"
+                tooltip = "zavřít aktuální soubor"
+                icon  = "Icons__Gin__okno_zavrit"
+                shortcut = "Control|F4"
+                class ="Gordic.Gfe.FormFiller.FileCommands.CloseFile"/>
+    </Condition>
+    <ToolbarItem id = "ExitSCSeparator" type = "Separator"  />
+    <ToolbarItem id = "ExitItem"
+                 tooltip = "&amp;Konec"
+                 shortcut = "Alt|F4"
+                 icon = "Icons__Gin__aplikace_ukonceni"
+                 class = "Gordic.Gfe.FormFiller.ApplicationCommands.ExitDesktopCommand" />
+  </Path>
+  <Path name = "/FormFiller/ToolBarMenu/Tools">
+    <ToolbarItem id = "Preview"
+              icon = "Icons__Gin__tisk_nahled"
+              shortcut = "Control|R"
+              tooltip = "náhled"
+              loadclasslazy="false"
+              class = "Gordic.Gfe.FormFiller.ToolCommands.ContentPreview"/>
+    <ToolbarItem id = "PDF"
+              icon = "Icons__Wfl__dokument_konverze_do_pdf"
+              shortcut = "Control|Shift|P"
+              tooltip = "konverze do pdf"
+              loadclasslazy="false"
+              class = "Gordic.Gfe.FormFiller.ToolCommands.PdfExport"/>
+    <ToolbarItem id = "SendAll"
+              icon = "Icons__Gin__webove_sluzby"
+              shortcut = "Control|E"
+              tooltip = "odeslat vše"
+              loadclasslazy="false"
+              class = "Gordic.Gfe.FormFiller.ToolCommands.SendFile"/>
+    <ToolbarItem id = "ToolsSeparator" type = "Separator"  />
+    <Condition action="Exclude" name="WindowActive" activewindow="Gordic.GFE.Parsers.Gui.IDesignerPropertyHandler">
+      <ToolbarItem id = "ShowColorOf"
+                icon = "Icons__Gin__oblast"
+                shortcut = "Control|Q"
+                type="CheckBox"
+                tooltip = "podbarvit datové položky"
+                class = "Gordic.GFE.Parsers.Core.ShowColorOf"/>
+      <ToolbarItem id = "ShowGrid"
+              icon = "Icons__Gin__format_sloupce"
+              shortcut = "Control|G"
+              type="CheckBox"
+              tooltip = "zobrazit mřížku"
+              class = "Gordic.GFE.Parsers.Core.ShowGrid"/>
+      <ToolbarItem id="ZoomValue"
+                        tooltip="lupa"
+                        type="ComboBox"
+                        loadclasslazy="false"
+                        width="25"
+                        class="Gordic.GFE.Parsers.Core.Zoom">
+        <IncludeList id = "ListOfZoom" item="/GlobalList/Zoom"/>
+      </ToolbarItem>
+    </Condition>
+  </Path>
+  <!-- konec ToolBar nabídka aplikace-->
+
+  <!-- Kontextové menu Naposledy otevřených položek startovacího okna -->
+  <Path name = "/FormFiller/StartTab/RecentOpen/ContextMenu">
+    <MenuItem id = "OpenFile"
+		          label = "otevřít"
+		          icon = "Icons.16x16.OpenFileIcon"
+		          class = "Gordic.Gfe.FormFiller.FileCommands.OpenFile"/>
+    <!-- dodělat případ souboru z DB, tam by se tato položka neměla nabízet -->
+    <MenuItem id = "OpenFolderContainingFile"
+              label = "otevřít umístění souboru"
+              icon ="Icons__Gin__prehled_ulozene"
+              class = "Gordic.Gfe.FormFiller.FileCommands.OpenFolderContainingFile"/>
+    <MenuItem id = "RemoveSeparator" type = "Separator"/>
+    <MenuItem id = "RemoveRecentOpen"
+              label = "odstranit položku"
+              icon="Icons__Gin__vymazat"
+              class = "Gordic.Gfe.FormFiller.FileCommands.RemoveRecentOpen"/>
+  </Path>
+  <!-- konec -->
+  <!-- Kontextové menu vybraných objektů -->
+  <Path name = "/FormFiller/Desktop/SelectedObject">
+    <MenuItem id = "InsertLineBefore"
+              label = "vložit řádek před"
+              icon  = "Icons__Ost__vlozit_radek_pred"
+              loadclasslazy = "false"
+              class ="Gordic.Gfe.FormFiller.Commands.InsertLineBefore"/>
+    <MenuItem id = "InsertLineAfter"
+              label = "vložit řádek za"
+              icon  = "Icons__Ost__vlozit_radek_za"
+              loadclasslazy = "false"
+              insertafter = "InsertLineBefore"
+              class ="Gordic.Gfe.FormFiller.Commands.InsertLineAfter"/>
+  </Path>
+  <!-- konec -->
+
+  <!-- Kontextové menu záložek -->
+  <Path name = "/FormFiller/Desktop/OpenFileTab/ContextMenu">
+    <Condition name = "WindowActive" activewindow="*" action="Disable">
+      <MenuItem id = "CloseFile"
+                label = "&amp;zavřít"
+                icon  = "Icons__Gin__okno_zavrit"
+                shortcut = "Control|F4"
+                class ="Gordic.Gfe.FormFiller.FileCommands.CloseFile"/>
+    </Condition>
+    <MenuItem id    = "CloseAll"
+                  icon  = "Icons.16x16.CloseAllDocuments"
+                  label = "z&amp;avřít vše"
+                  class = "Gordic.Gfe.FormFiller.FileCommands.CloseAllWindows" />
+    <MenuItem id    = "CloseAllButThis"
+		          label = "za&amp;vřít vše kromě aktuálního"
+		          class = "Gordic.Gfe.FormFiller.FileTabStripCommands.CloseAllButThisFileTab" />
+
+    <MenuItem id = "CloseSeparator" type = "Separator" />
+    <Condition name = "ActiveWindowState" windowstate="Dirty, Untitled" nowindowstate="ViewOnly" action="Disable">
+      <MenuItem id = "Save"
+			          label = "&amp;uložit"
+				        icon = "Icons__Gin__ulozit"
+				        shortcut = "Control|S"
+				        class = "Gordic.Gfe.FormFiller.FileCommands.SaveFile"/>
+    </Condition>
+    <MenuItem id = "SaveAs"
+				          icon = "Icons__Gin__ulozit_jako"
+				          label = "uložit jako ..."
+				          shortcut = "Control|Shift|S"
+				          class = "Gordic.Gfe.FormFiller.FileCommands.SaveFileAs"/>
+    <Condition name = "ActiveWindowState" windowstate="None" nowindowstate="ViewOnly" action="Disable">
+      <MenuItem id = "SaveDb"
+                icon = "Icons__Gin__ulozit_do_databaze"
+                label = "uložit do databáze"
+                class = "Gordic.Gfe.FormFiller.FileCommands.SaveFileToDatabase"/>
+    </Condition>
+    <Condition name = "OpenWindowState" openwindowstate="Dirty" action="Disable">
+      <MenuItem id = "SaveAll"
+			          icon = "Icons.16x16.SaveAllIcon"
+			          label = "uložit vše&amp;chny aktuálně otevřené"
+			          class = "Gordic.Gfe.FormFiller.FileCommands.SaveAllFiles"/>
+    </Condition>
+    <MenuItem id = "SaveSeparator" type = "Separator" />
+    <ComplexCondition action="Disable">
+      <Not>
+        <Condition name = "Ownerstate" ownerstate="FileUntitled" />
+      </Not>
+      <MenuItem id = "CopyPathName"
+			          label = "kopírovat cestu k souboru/název"
+                class = "Gordic.Gfe.FormFiller.FileTabStripCommands.CopyPathName"/>
+      <MenuItem id = "OpenFolderContainingFileFromTab"
+			          label = "otevřít umístění složky"
+                icon ="Icons__Gin__prehled_ulozene"
+			          class = "Gordic.Gfe.FormFiller.FileTabStripCommands.OpenFolderContainingFile"/>
+    </ComplexCondition>
+  </Path>
+  <!-- konec -->
+</AddIn>

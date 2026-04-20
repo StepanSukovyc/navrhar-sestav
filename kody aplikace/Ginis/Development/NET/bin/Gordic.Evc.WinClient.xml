@@ -1,0 +1,3528 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Evc.WinClient</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Evc.WinClient.GEvcApplication">
+            <summary>Aplikace EVC</summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GEvcApplication.Main(System.String[])">
+            <summary>hlavní smyčka aplikace</summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GEvcApplication.OnCreateEkoInit(System.Windows.Forms.Form)">
+            <summary>
+            Definice chování aplikace při ekoinicializaci
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GPriznaneMzCommon">
+            <summary>
+            Společné věci pro práci s měsíčními změnami na klientu
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneMzCommon.GetMzFrmType(Gordic.General.GInt16,Gordic.General.GInt16)">
+            <summary>
+            Vrátí druh formuláře, který má být vytvořen pro určitý typ formuláře a složku mzdy 
+            (složka mzdy by fakticky být potřeba neměla, ale nakonec kvůli výjimce u form. 180 byla přidána)
+            </summary>
+            <param name="typFormulare">Typ formuláře</param>
+            <param name="slozkaMzdy">Složka mzdy</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneMzCommon.AdditionalReadOnlyCondition(Gordic.Pam.Interface.MesicniZmenyDataSet.MesicniZmenyRow)">
+            <summary>
+            Vrátí true v případě, že má být detail mz pouze pro čtení
+            </summary>
+            <param name="row">Řádek detailu</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneMzCommon.CheckZadaneSlozky">
+            <summary>
+            Určuje, zda se má testovat zadání složek typu 10 - Zadané složky
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneMzCommon.GetFilterTypSlozky">
+            <summary>
+            Získá filtr na typ složky
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneMzCommon.UpdateObdobiValid(Gordic.Pam.Interface.MesicniZmenyDataSet.MesicniZmenyRow,Gordic.Pam.Interface.MesicniZmenyAddDataSet.SeznamRow)">
+            <summary>
+            Aktualizuje informaci o správnosti výběru období, do kterého je složka zadávána (do addRow)
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GKontroly">
+            <summary>
+            Třída pro práci se společnými kontrolami modulu
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GKontroly.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GKontroly.UserProcess">
+            <summary>Uživatelský proces aplikace</summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GKontroly.EkoParams">
+            <summary>
+            Ekonomické parametry
+            </summary>
+            <remarks>Neproběhla-li pro tuto aplikaci ekoinicializace, nastane při pokusu
+            o přečtení této vlastnosti výjimka</remarks>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GKontroly.EkoUserProcess">
+            <summary>
+            Ekonomický uživatelský proces aplikace
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GKontroly.EvcClient">
+            <summary>
+            Klientská část aplikační logiky Evc
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GKontroly.PamClient">
+            <summary>
+            Klientská část aplikační logiky Pam
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GKontroly.PosledniDen">
+            <summary>
+            Poslední den aktuálního období
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GKontroly.KontrolaDatumu">
+            <summary>
+            Provede kontrolu datumu bez zobrazení dialogu
+            </summary>
+            <returns>Zda proběhla kontrola v pořádku</returns>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GKontroly.KontrolaDatumu(System.String,Gordic.Evc.WinClient.GKontroly.DialogKontrolaDatumu)">
+            <summary>
+            Provede kontrolu datumu a zobrazení dialogu
+            </summary>
+            <param name="action">Text popisující akci</param>
+            <param name="dialogKontrolaDatumu">Delegát na zobrazení dialogu (null - dialog nebude zobrazen)</param>
+            <returns>Zda proběhla kontrola v pořádku</returns>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GKontroly.KontrolaJineObdobi(System.Int32)">
+            <summary>
+            Provede kontrolu na jine období bez zobrazení dialogu
+            </summary>
+            <param name="obdobi">Kontrolované období</param>
+            <returns>Zda proběhla kontrola v pořádku</returns>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GKontroly.KontrolaJineObdobi(System.Int32,System.String,Gordic.Evc.WinClient.GKontroly.DialogKontrolaJineObdobi)">
+            <summary>
+            Provede kontrolu na jine období a zobrazení dialogu
+            </summary>
+            <param name="obdobi">Kontrolované období</param>
+            <param name="action">Text popisující akci</param>
+            <param name="dialogKontrolaJineObdobi">Delegát na zobrazení dialogu (null - dialog nebude zobrazen)</param>
+            <returns>Zda proběhla kontrola v pořádku</returns>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GKontroly.DialogNematePravoProvestAkci(System.String,Gordic.WinForms.Gui.GTab)">
+            <summary>
+            Vyvolá dialog informující o nedostatečných právech k akci
+            </summary>
+            <param name="actionText">Název akce</param>
+            <param name="parentTab">Rodičovská karta</param>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GKontroly.DialogKontrolaDatumu">
+            <summary>
+            Delegát pro vyvolání dialogu, který informuje o nesprávném aktuálním datumu
+            </summary>
+            <param name="action">Název akce</param>
+            <param name="posledniDen">Poslední den</param>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GKontroly.DialogKontrolaJineObdobi">
+            <summary>
+            Delegát pro vyvolání dialogu, který informuje o provedení akci nad obdobím, které není aktuálním obdobím
+            </summary>
+            <param name="action">Název akce</param>
+            <param name="obdobi">Kontrolované období</param>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GMzCommon">
+            <summary>
+            Společné věci pro práci s měsíčními změnami na klientu
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GMzCommon.GetMzFrmType(Gordic.General.GInt16,Gordic.General.GInt16)">
+            <summary>
+            Vrátí druh formuláře, který má být vytvořen pro určitý typ formuláře a složku mzdy 
+            (složka mzdy by fakticky být potřeba neměla, ale nakonec kvůli výjimce u form. 180 byla přidána)
+            </summary>
+            <param name="typFormulare">Typ formuláře</param>
+            <param name="slozkaMzdy">Složka mzdy</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GMzCommon.AdditionalReadOnlyCondition(Gordic.Pam.Interface.MesicniZmenyDataSet.MesicniZmenyRow)">
+            <summary>
+            Vrátí true v případě, že má být detail mz pouze pro čtení
+            </summary>
+            <param name="row">Řádek detailu</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GMzCommon.CheckZadaneSlozky">
+            <summary>
+            Určuje, zda se má testovat zadání složek typu 10 - Zadané složky
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GMzCommon.GetFilterTypSlozky">
+            <summary>
+            Získá filtr na typ složky
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GFiltrZdravotniPojistovny">
+            <summary>
+            Filtační prvek předběžné kontroly
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GFiltrZdravotniPojistovny.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrZdravotniPojistovny.PodleObdobi">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrZdravotniPojistovny.PouzeVlastniDoklady">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrZdravotniPojistovny.ObdobiOd">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrZdravotniPojistovny.MaxObdobiOd">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrZdravotniPojistovny.MinObdobiOd">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrZdravotniPojistovny.ObdobiDo">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrZdravotniPojistovny.MaxObdobiDo">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrZdravotniPojistovny.MinObdobiDo">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrZdravotniPojistovny.FiltrPouzeVlastniDokladyVisible">
+            <summary>Určuje viditelnost filtru na vlastní doklady</summary>
+        </member>
+        <member name="E:Gordic.Evc.WinClient.GFiltrZdravotniPojistovny.PodleObdobiChanged">
+            <summary>Událost vyvolána při změně vlastnosti <see cref="P:Gordic.Evc.WinClient.GFiltrZdravotniPojistovny.PodleObdobi"/></summary>
+        </member>
+        <member name="E:Gordic.Evc.WinClient.GFiltrZdravotniPojistovny.PouzeVlastniDokladyChanged">
+            <summary>Událost vyvolána při změně vlastnosti <see cref="P:Gordic.Evc.WinClient.GFiltrZdravotniPojistovny.PouzeVlastniDoklady"/></summary>
+        </member>
+        <member name="E:Gordic.Evc.WinClient.GFiltrZdravotniPojistovny.ObdobiOdChanged">
+            <summary>Událost vyvolána při změně období od</summary>
+        </member>
+        <member name="E:Gordic.Evc.WinClient.GFiltrZdravotniPojistovny.ObdobiDoChanged">
+            <summary>Událost vyvolána při změně období do</summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GFiltrZdravotniPojistovny.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GFiltrZdravotniPojistovny.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GFiltrZdravotniPojistovny.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GMzDetail">
+            <summary>
+            Prvek formuláře detailu měsíční změny
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GMzDetail.NastaveniAgDesignCtl">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GMzDetail.jeUPpanelVisible">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GMzDetail.GetMzCommon">
+            <summary>
+            Vrátí virtuálně instanci pro <see cref="T:Gordic.Pam.WinClient.GMzCommon"/>
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GMzDetail.GetTypZpetnehoZadani">
+            <summary>
+            Určuje způsob zpětného zadání
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GMzDetail.AdditionalReadOnlyCondition(Gordic.Pam.Interface.MesicniZmenyDataSet.MesicniZmenyRow)">
+            <summary>
+            Vrátí true v případě, že má být detail mz pouze pro čtení
+            </summary>
+            <param name="Row">Řádek detailu</param>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GMzPracPomer">
+            <summary>
+            Prvek pro výběr pracovního poměru a období - vázaný na měsíční změny
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GMzPracPomer.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GPriznaneMzDetail">
+            <summary>
+            Prvek formuláře detailu měsíční změny - přiznané měsíční změny
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneMzDetail.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneMzDetail.GetMzCommon">
+            <summary>
+            Vrátí virtuálně instanci pro <see cref="T:Gordic.Pam.WinClient.GMzCommon"/>
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneMzDetail.PovoleneSlozkyMzdy(System.Data.DataTable,Gordic.General.GInt16)">
+            <summary>
+            Provede případné filtrování složek mzdy
+            </summary>
+            <param name="table"></param>
+            <param name="typSlozky"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneMzDetail.AdditionalReadOnlyCondition(Gordic.Pam.Interface.MesicniZmenyDataSet.MesicniZmenyRow)">
+            <summary>
+            Vrátí true v případě, že má být detail mz pouze pro čtení
+            </summary>
+            <param name="Row">Řádek detailu</param>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GPriznaneMzFrm180">
+            <summary>
+            Formulář měsíční změny 180 - Srážky - pro přiznané složky
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneMzFrm180.#ctor(Gordic.Pam.WinClient.GMzCommon)">
+            <summary>Konstruktor třídy</summary>
+            <param name="mzCommon">Objekt pro práci se seznamy měsíčních změn</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneMzFrm180.GetTbSrazkaVisible">
+            <summary>
+            Určuje, zda bude zobrazováno pole srážka
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GPriznaneMzPracPomer">
+            <summary>
+            Prvek pro výběr pracovního poměru a období - vázaný na měsíční změny
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GPriznaneMzPracPomer.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneMzPracPomer.#ctor">
+            <summary>Vytvoří objekt tohoto typu</summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneMzPracPomer.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneMzPracPomer.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GSoupiskaMZFrm100">
+            <summary>
+            Formulář měsíční změny 100 - Korunový
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZFrm100.#ctor(Gordic.Pam.WinClient.GMzCommon)">
+            <summary>Konstruktor třídy</summary>
+            <param name="mzCommon">Objekt pro práci se seznamy měsíčních změn</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZFrm100.ValidniCastka(Gordic.General.GDecimal,System.Boolean)">
+            <summary>Vrací informaci, zda je zadaná částka validní</summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GSoupiskaMZFrm140">
+            <summary>
+            Formulář měsíční změny 140 - Korunový
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZFrm140.#ctor(Gordic.Pam.WinClient.GMzCommon)">
+            <summary>Konstruktor třídy</summary>
+            <param name="mzCommon">Objekt pro práci se seznamy měsíčních změn</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZFrm140.PrepocetPro140(Gordic.Pam.Interface.GSlozkaMzdyKomplet)">
+            <summary>
+            Zda se bude provádět výpočet na formuláři 140
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZFrm140.ProvadejVypocet(Gordic.Pam.Interface.GSlozkaMzdyKomplet)">
+            <summary>
+            Určuje, zda má být pro zadanou složku proveden výpočet
+            </summary>
+            <param name="slozkaMzdy">Kompletní složka mzdy</param>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GSoupiskaMZFrm180">
+            <summary>
+            Formulář měsíční změny 180 - Srážky
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZFrm180.#ctor(Gordic.Pam.WinClient.GMzCommon)">
+            <summary>Konstruktor třídy</summary>
+            <param name="mzCommon">Objekt pro práci se seznamy měsíčních změn</param>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSoupiskaMZFrm180.UseMena">
+            <summary>Určuje, zda se bude na formuláři používat políčko měna</summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZFrm180.SetZpPlatbyFilter">
+            <summary>Umožní nastavit doplňkové filtry pro políčko Způsob platby</summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZFrm180.OnObdobiChanged(System.Int32,System.Int32)">
+            <summary>Reakce na změnu období</summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZFrm180.OnDatumOdBeforeSet(Gordic.General.GDate)">
+            <summary>Reakce na změnu datum od</summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZFrm180.GetTbSrazkaVisible">
+            <summary>
+            Určuje, zda bude zobrazováno pole srážka
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GPriznaneMzHromadneTab">
+            <summary>Karta pro hromadné zadávání přiznaných složek</summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneMzHromadneTab.#ctor">
+            <summary>Konstruktor třídy</summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GPriznaneMzHromadneTab.SelectedRows">
+            <summary>Vybrané řádky</summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GPriznaneMzHromadneTab.Row">
+            <summary>Právě zpracovávaný řádek</summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GPriznaneMzHromadneTab.AddRow">
+            <summary>Pomocný řádek s doplňujícími údaji</summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GPriznaneMzHromadneTab.Tab">
+            <summary>Vrací instanci karty</summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneMzHromadneTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneMzHromadneTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneMzHromadneTab.LoadData(Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString,Gordic.Pam.WinClient.IGMzProvider,Gordic.Pam.Interface.MesicniZmenyDataSet.MesicniZmenyRow,Gordic.Pam.Interface.MesicniZmenyAddDataSet.SeznamRow,Gordic.Pam.WinClient.TypZpetnehoZadani)">
+            <summary>
+            Formulář naplní daty
+            </summary>
+            <param name="ixsPra">Identifikátor pracoviště, které určuje seznam zobrazených pracovních poměrů</param>
+            <param name="obdobi">Výchozí období pro hromadné pořizování</param>
+            <param name="filterIxsVyp">Volitelný filtr na výplatní místo (IsNull - bez filtru)</param>
+            <param name="mzProvider">Rodič pro zobrazení měsíčních změn</param>
+            <param name="newRow">Řádek, ve kterém bude probíhat editace</param>
+            <param name="newAddRow">Řádek, ve kterém bude probíhat editace (přídavný)</param>
+            <param name="typZpetnehoZadani">Typ zpětného zadání</param>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GTbDataPamstpr">
+            <summary>
+            Databázové políčko se seznamem šablon (omezených pro EVC)
+            </summary>
+            <remarks>
+            <para>
+            Pro vytvoření nového políčka je zapotřebí v třídě zajistit:
+            1)  Vytvořit členskou proměnnou která reprezentuje klientskou část přístupu k app serveru (poděděnou od GTbData)<br/>
+            2)  Implementovat property DataAccess, v ní vrátit tuto členskou pronměnnou - to potřebuje podhoubí psané v této třídě...<br/>
+            3)  Implementovat přetíženou metodu ShowDataSelection, která umožní výběr z více hodnot, měla by končit SetValidData<br/>
+            4)  V konstruktoru změnit LabelText<br/>
+            5)  Implementovat metody SetValidData s parametry odpovídajícími políčku. SetValidData by měla volat base.SetValidData(text), <br/>
+                která nastavuje zobrazovaný text políčka a měla by nastavit vnitřní proměnné na data získaná z DB. SetValidData by měly být dvě
+                První by měla nastavit všechny hodnoty svázané s políčkem (psč, stát, pošta, státTxt) 
+                Druhá pouze klíčové (psč, stát) a na zbytek se zeptat databáze (s použitím filtrů)
+            6)  Napsat property pro čtení a zápis hodnot svázaných s políčkem (stát, psč, pošta, státTxt)<br/>
+            7)  Napsat property pro nastavení a zjištění filtrů na jednotlivé hodnoty (stát, psč, pošta, státTxt).<br/>
+            </para>
+            </remarks>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GTbDataPamstpr.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Properties.Resources.Icons__Eko__financovani">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Properties.Resources.Icons__Esu__subjekt_externi_bankovni_ucet">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Properties.Resources.Icons__Esu__subjekt_externi_skupina">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Properties.Resources.Icons__Gin__aplikace_debug">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Properties.Resources.Icons__Gin__dorucovaci_adresa">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Properties.Resources.Icons__Gin__export">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Properties.Resources.Icons__Gin__slozky_priznane">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Properties.Resources.Icons__Gin__zaznam_novy">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Properties.Resources.Icons__Ost__osoba_detail">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Properties.Resources.Icons__Ost__zdravotni_pojistovna">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Properties.Resources.Icons__Pam__mzdovy_doklad_osoba_mimo">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Properties.Resources.Icons__Pam__mzdovy_doklad_soupiska_mesicnich_zmen">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Properties.Resources.Icons__Pam__stav_predano_ke_schvaleni">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Properties.Resources.Icons__Pam__stav_prijato_do_mezd">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Properties.Resources.Icons__Pam__stav_vraceno_z_mezd">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Properties.Resources.Icons__Pam__vypoctena_slozka">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Properties.Resources.Icons__Pam__vypoctena_slozka_vyplaceno">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Properties.Resources.Icons__Pam__vypoctene_slozky">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Properties.Resources.Icons__Wfl__dokument_priznak_schvaleno">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Properties.Resources.Icons__Wfl__dokument_stornovano">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GDebugTab">
+            <summary>Karta pro zobrazení logování</summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDebugTab.Zaznamy">
+            <summary>
+            AL pro prohlizeni zaznamu
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDebugTab.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDebugTab.ZmenaLogovani(Gordic.WinForms.Controls.GRadioButton)">
+            <summary>Obsloužení změny výběru logování</summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDebugTab.NastaveniTlacitek(System.Int16)">
+            <summary>Nastavení vybraného tlačítka</summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDebugTab.UlozeniLogu">
+            <summary>Ulozeni logu do souboru</summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDebugTab.LoadData">
+            <summary>
+            Nahrají se data
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GDebugTab.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDebugTab.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDebugTab.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GDetailDoklBase">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailDoklBase.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailDoklBase._checkESUsjinymPPV(Gordic.General.GString,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="ixsESU"></param>
+            <param name="showmsg"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GDetailOsobiUdajPASTab">
+            <summary>
+            Karta s detailem dokladu zdravotní pojišťovny
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GDetailOsobiUdajPASTab.m_oDT">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsobiUdajPASTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailOsobiUdajPASTab._TabMode">
+            <summary> </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailOsobiUdajPASTab.ReadOnly">
+            <summary>
+            Určuje, zda je formulář pouze pro čtení
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailOsobiUdajPASTab.Modified">
+            <summary>
+            Určuje, zda byla data na formuláři modifikována uživatelem
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailOsobiUdajPASTab.DataValid">
+            <summary>
+            Určuje, zda jsou zadaná data validní
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsobiUdajPASTab.ClearData">
+            <summary>
+            Naplní formulář výchozími daty
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsobiUdajPASTab.LoadData(Gordic.Evc.Interface.DokladyZdravotniPojistovnyDataSet.SeznamRow)">
+            <summary>
+            Naplní formulář daty
+            </summary>
+            <param name="zdravotniPojistovnyRow">Řádek s informacemi o zdravotní pojišťovně</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsobiUdajPASTab._GetRowsData">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GDetailOsobiUdajPASTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsobiUdajPASTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsobiUdajPASTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GDetailOsobiUdajCIZPOJTab">
+            <summary>
+            Karta s detailem dokladu zdravotní pojišťovny
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GDetailOsobiUdajCIZPOJTab.m_oDT">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsobiUdajCIZPOJTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailOsobiUdajCIZPOJTab._TabMode">
+            <summary> </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailOsobiUdajCIZPOJTab.ReadOnly">
+            <summary>
+            Určuje, zda je formulář pouze pro čtení
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailOsobiUdajCIZPOJTab.Modified">
+            <summary>
+            Určuje, zda byla data na formuláři modifikována uživatelem
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailOsobiUdajCIZPOJTab.DataValid">
+            <summary>
+            Určuje, zda jsou zadaná data validní
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsobiUdajCIZPOJTab.ClearData">
+            <summary>
+            Naplní formulář výchozími daty
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsobiUdajCIZPOJTab._GetRowsData">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GDetailOsobiUdajCIZPOJTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsobiUdajCIZPOJTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsobiUdajCIZPOJTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GDetailOsobiUdajDCHTab">
+            <summary>
+            Karta s detailem dokladu zdravotní pojišťovny
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsobiUdajDCHTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailOsobiUdajDCHTab._TabMode">
+            <summary> </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailOsobiUdajDCHTab.ReadOnly">
+            <summary>
+            Určuje, zda je formulář pouze pro čtení
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailOsobiUdajDCHTab.Modified">
+            <summary>
+            Určuje, zda byla data na formuláři modifikována uživatelem
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailOsobiUdajDCHTab.DataValid">
+            <summary>
+            Určuje, zda jsou zadaná data validní
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsobiUdajDCHTab.ClearData">
+            <summary>
+            Naplní formulář výchozími daty
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsobiUdajDCHTab.LoadData(Gordic.Pam.Interface.GPamdduvDto)">
+            <summary>
+            
+            </summary>
+            <param name="row"></param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsobiUdajDCHTab._GetDtoRowDDuv">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GDetailOsobiUdajDCHTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsobiUdajDCHTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsobiUdajDCHTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GDokladDetailPamdduvTab">
+            <summary>
+            Karta s detailem dokladu zdravotní pojišťovny
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDokladDetailPamdduvTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDokladDetailPamdduvTab.ReadOnly">
+            <summary>
+            Určuje, zda je formulář pouze pro čtení
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDokladDetailPamdduvTab.Modified">
+            <summary>
+            Určuje, zda byla data na formuláři modifikována uživatelem
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDokladDetailPamdduvTab.DataValid">
+            <summary>
+            Určuje, zda jsou zadaná data validní
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDokladDetailPamdduvTab.ClearData">
+            <summary>
+            Naplní formulář výchozími daty
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDokladDetailPamdduvTab.LoadData(Gordic.General.GString,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="ixp"></param>
+            <param name="rok_obd_load"></param>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GDokladDetailPamdduvTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDokladDetailPamdduvTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDokladDetailPamdduvTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GDetailNoveVysluhEppTab">
+            <summary>
+            Karta s detailem Záznam o provedení předběžné kontroly
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GDetailNoveVysluhEppTab.m_sRozhodnuti">
+            <summary>Je využito i pro uchovávání předchozího stavu, pro detekci změny</summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailNoveVysluhEppTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailNoveVysluhEppTab.ReadOnly">
+            <summary>
+            Určuje, zda je formulář pouze pro čtení
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailNoveVysluhEppTab.Modified">
+            <summary>
+            Určuje, zda byla data na formuláři modifikována uživatelem
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailNoveVysluhEppTab.DataValid">
+            <summary>
+            Určuje, zda jsou zadaná data validní
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailNoveVysluhEppTab.Clear">
+            <summary>
+            Vymaže formulář
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailNoveVysluhEppTab.LoadData(Gordic.Evc.Interface.PredbezneKontrolyDataSet.SeznamRow)">
+            <summary>
+            Načte detail formuláře
+            </summary>
+            <param name="predbezneKontrolyRow">Řádek s informacemi o předběžné kontrole</param>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GDetailNoveVysluhEppTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailNoveVysluhEppTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailNoveVysluhEppTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GSeznamDchCrsTab">
+            <summary>
+            Karta se seznamem předběžných kontrol
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamDchCrsTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamDchCrsTab.currDR">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamDchCrsTab.LoadData">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GSeznamDVPAMTab">
+            <summary>
+            Karta se seznamem předběžných kontrol
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamDVPAMTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamDVPAMTab._PamsduvRow">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamDVPAMTab.LoadData(Gordic.General.GString)">
+            <summary>
+            
+            </summary>
+            <param name="ixs_esu"></param>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GSeznamDVPAMTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamDVPAMTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamDVPAMTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GSeznamAdresPAMTab">
+            <summary>
+            Karta se seznamem předběžných kontrol
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamAdresPAMTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamAdresPAMTab.IxsEsu">
+            <summary> </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamAdresPAMTab._PamdadoRow">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamAdresPAMTab.EkoParams">
+            <summary>
+            Ekonomické parametry
+            </summary>
+            <remarks>Neproběhla-li pro tuto aplikaci ekoinicializace, nastane při pokusu
+            o přečtení této vlastnosti výjimka</remarks>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamAdresPAMTab.EkoUserProcess">
+            <summary>
+            Ekonomický uživatelský proces aplikace
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamAdresPAMTab.EvcClient">
+            <summary>
+            Klientská část aplikační logiky Evc
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamAdresPAMTab.PamClient">
+            <summary>
+            Klientská část aplikační logiky Pam
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GSeznamAdresPAMTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamAdresPAMTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamAdresPAMTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.PerUdajTabMode">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.PerUdajTabMode.New">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.PerUdajTabMode.EditExisting">
+            <summary>editace per udaje ktery jiz byl ulozen v pam (ma vyplnen por_cislo)</summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.PerUdajTabMode.Edit">
+            <summary>Editace udaje z dokladu</summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.PerUdajTabMode.DeleteExisting">
+            <summary></summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GDetailAdresyTab">
+            <summary>
+            Karta s detailem dokladu zdravotní pojišťovny
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GDetailAdresyTab.m_oRow">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailAdresyTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailAdresyTab._TabMode">
+            <summary> </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailAdresyTab.ReadOnly">
+            <summary>
+            Určuje, zda je formulář pouze pro čtení
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailAdresyTab.Modified">
+            <summary>
+            Určuje, zda byla data na formuláři modifikována uživatelem
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailAdresyTab.DataValid">
+            <summary>
+            Určuje, zda jsou zadaná data validní
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailAdresyTab.ClearData">
+            <summary>
+            Naplní formulář výchozími daty
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailAdresyTab.LoadData(Gordic.Pam.Interface.AdresyDataSet.SeznamRow)">
+            <summary>
+            Naplní formulář daty
+            </summary>
+            <param name="rr">Řádek s informacemi o zdravotní pojišťovně</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailAdresyTab._GetRowData(System.Boolean)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GDetailAdresyTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailAdresyTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailAdresyTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GDetailAdresDokladTab">
+            <summary>
+            Karta s detailem dokladu zdravotní pojišťovny
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailAdresDokladTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailAdresDokladTab.ReadOnly">
+            <summary>
+            Určuje, zda je formulář pouze pro čtení
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailAdresDokladTab.Modified">
+            <summary>
+            Určuje, zda byla data na formuláři modifikována uživatelem
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailAdresDokladTab.DataValid">
+            <summary>
+            Určuje, zda jsou zadaná data validní
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailAdresDokladTab.ClearData">
+            <summary>
+            Naplní formulář výchozími daty
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailAdresDokladTab.LoadData(Gordic.General.GString,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="ixp"></param>
+            <param name="rok_obd_load"></param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailAdresDokladTab.NastavDokladInfo(Gordic.Pam.Interface.AdresyDataSet.SeznamRow)">
+            <summary>
+            
+            </summary>
+            <param name="dokl"></param>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GDetailAdresDokladTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailAdresDokladTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailAdresDokladTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GSeznamAdresTab">
+            <summary>
+            Karta se seznamem předběžných kontrol
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamAdresTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamAdresTab.EkoParams">
+            <summary>
+            Ekonomické parametry
+            </summary>
+            <remarks>Neproběhla-li pro tuto aplikaci ekoinicializace, nastane při pokusu
+            o přečtení této vlastnosti výjimka</remarks>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamAdresTab.EkoUserProcess">
+            <summary>
+            Ekonomický uživatelský proces aplikace
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamAdresTab.EvcClient">
+            <summary>
+            Klientská část aplikační logiky Evc
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamAdresTab.PamClient">
+            <summary>
+            Klientská část aplikační logiky Pam
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GSeznamAdresTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamAdresTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamAdresTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GSeznamDuchoduTab">
+            <summary>
+            Karta se seznamem předběžných kontrol
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamDuchoduTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamDuchoduTab.EkoParams">
+            <summary>
+            Ekonomické parametry
+            </summary>
+            <remarks>Neproběhla-li pro tuto aplikaci ekoinicializace, nastane při pokusu
+            o přečtení této vlastnosti výjimka</remarks>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamDuchoduTab.EkoUserProcess">
+            <summary>
+            Ekonomický uživatelský proces aplikace
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamDuchoduTab.EvcClient">
+            <summary>
+            Klientská část aplikační logiky Evc
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamDuchoduTab.PamClient">
+            <summary>
+            Klientská část aplikační logiky Pam
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GSeznamDuchoduTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamDuchoduTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamDuchoduTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GSeznamPerdesuTab">
+            <summary>
+            Karta se seznamem předběžných kontrol
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamPerdesuTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamPerdesuTab._PerdesuRow">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamPerdesuTab.IxsEsu">
+            <summary> </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamPerdesuTab.EkoParams">
+            <summary>
+            Ekonomické parametry
+            </summary>
+            <remarks>Neproběhla-li pro tuto aplikaci ekoinicializace, nastane při pokusu
+            o přečtení této vlastnosti výjimka</remarks>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamPerdesuTab.EkoUserProcess">
+            <summary>
+            Ekonomický uživatelský proces aplikace
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamPerdesuTab.EvcClient">
+            <summary>
+            Klientská část aplikační logiky Evc
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamPerdesuTab.PamClient">
+            <summary>
+            Klientská část aplikační logiky Pam
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GSeznamPerdesuTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamPerdesuTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamPerdesuTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GDetailOsobiUdajTab">
+            <summary>
+            Karta s detailem dokladu zdravotní pojišťovny
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GDetailOsobiUdajTab.m_oRow">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsobiUdajTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailOsobiUdajTab._TabMode">
+            <summary> </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailOsobiUdajTab.ReadOnly">
+            <summary>
+            Určuje, zda je formulář pouze pro čtení
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailOsobiUdajTab.Modified">
+            <summary>
+            Určuje, zda byla data na formuláři modifikována uživatelem
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailOsobiUdajTab.DataValid">
+            <summary>
+            Určuje, zda jsou zadaná data validní
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsobiUdajTab.ClearData">
+            <summary>
+            Naplní formulář výchozími daty
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsobiUdajTab.LoadData(Gordic.Pam.Interface.OsobniUdajeDataSet.SeznamRow)">
+            <summary>
+            Naplní formulář daty
+            </summary>
+            <param name="rr">Řádek s informacemi o per udaji</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsobiUdajTab._setHodnotaValue">
+            <summary>
+            nastavi policka hodnot dle toho, jakeho typu je personalni udaj (string/date)
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsobiUdajTab._GetRowData(System.Boolean)">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GDetailOsobiUdajTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsobiUdajTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsobiUdajTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GDetailOsUdajeDokladTab">
+            <summary>
+            Karta s detailem dokladu zdravotní pojišťovny
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsUdajeDokladTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailOsUdajeDokladTab.ReadOnly">
+            <summary>
+            Určuje, zda je formulář pouze pro čtení
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailOsUdajeDokladTab.Modified">
+            <summary>
+            Určuje, zda byla data na formuláři modifikována uživatelem
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailOsUdajeDokladTab.DataValid">
+            <summary>
+            Určuje, zda jsou zadaná data validní
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsUdajeDokladTab.ClearData">
+            <summary>
+            Naplní formulář výchozími daty
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsUdajeDokladTab.LoadData(Gordic.General.GString,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="ixp"></param>
+            <param name="rok_obd_load"></param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsUdajeDokladTab.NastavDokladInfo(Gordic.Pam.Interface.OsobniUdajeDataSet.SeznamRow)">
+            <summary>
+            
+            </summary>
+            <param name="dokl"></param>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GDetailOsUdajeDokladTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsUdajeDokladTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailOsUdajeDokladTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GSeznamOsobniUdajeTab">
+            <summary>
+            Karta se seznamem předběžných kontrol
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamOsobniUdajeTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamOsobniUdajeTab.EkoParams">
+            <summary>
+            Ekonomické parametry
+            </summary>
+            <remarks>Neproběhla-li pro tuto aplikaci ekoinicializace, nastane při pokusu
+            o přečtení této vlastnosti výjimka</remarks>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamOsobniUdajeTab.EkoUserProcess">
+            <summary>
+            Ekonomický uživatelský proces aplikace
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamOsobniUdajeTab.EvcClient">
+            <summary>
+            Klientská část aplikační logiky Evc
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamOsobniUdajeTab.PamClient">
+            <summary>
+            Klientská část aplikační logiky Pam
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GSeznamOsobniUdajeTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamOsobniUdajeTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamOsobniUdajeTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GDetailZdravotniPojistovnyTab">
+            <summary>
+            Karta s detailem dokladu zdravotní pojišťovny
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailZdravotniPojistovnyTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailZdravotniPojistovnyTab.ReadOnly">
+            <summary>
+            Určuje, zda je formulář pouze pro čtení
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailZdravotniPojistovnyTab.Modified">
+            <summary>
+            Určuje, zda byla data na formuláři modifikována uživatelem
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailZdravotniPojistovnyTab.DataValid">
+            <summary>
+            Určuje, zda jsou zadaná data validní
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailZdravotniPojistovnyTab.ClearData">
+            <summary>
+            Naplní formulář výchozími daty
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailZdravotniPojistovnyTab.LoadData(Gordic.Evc.Interface.DokladyZdravotniPojistovnyDataSet.SeznamRow)">
+            <summary>
+            Naplní formulář daty
+            </summary>
+            <param name="zdravotniPojistovnyRow">Řádek s informacemi o zdravotní pojišťovně</param>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GDetailZdravotniPojistovnyTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailZdravotniPojistovnyTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailZdravotniPojistovnyTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GSeznamZdravotnichPojistovenTab">
+            <summary>
+            Karta se seznamem dokladů zdravotních pojišťoven
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamZdravotnichPojistovenTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamZdravotnichPojistovenTab.EkoParams">
+            <summary>
+            Ekonomické parametry
+            </summary>
+            <remarks>Neproběhla-li pro tuto aplikaci ekoinicializace, nastane při pokusu
+            o přečtení této vlastnosti výjimka</remarks>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamZdravotnichPojistovenTab.EkoUserProcess">
+            <summary>
+            Ekonomický uživatelský proces aplikace
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamZdravotnichPojistovenTab.EvcClient">
+            <summary>
+            Klientská část aplikační logiky Evc
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamZdravotnichPojistovenTab.PamClient">
+            <summary>
+            Klientská část aplikační logiky Pam
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GSeznamZdravotnichPojistovenTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamZdravotnichPojistovenTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamZdravotnichPojistovenTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GSeznamyOsobTab">
+            <summary>
+            Karta se seznamy osob na pracovištích
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamyOsobTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamyOsobTab.GetTema">
+            <summary>
+            Vrátí název tiskového tématu
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamyOsobTab.OnActionUkoncit(Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GDate,Gordic.General.GDate)">
+            <summary>
+            Reakce na vyvolání akce Ukončit pro pracovní poměr
+            </summary>
+            <param name="ixsPpv">Identifikátor pracovního poměru</param>
+            <param name="druhPpv">Druh pracovního poměru</param>
+            <param name="datumOd">Datum začátku platnosti pracovního poměru</param>
+            <param name="datumDo">Datum konce platnosti pracovního poměru</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamyOsobTab.OnGetPrerazeniPracPomeruTab">
+            <summary>
+            Získá kartu pro zobrazení přeřazení pracovního poměru
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamyOsobTab.EvcClient">
+            <summary>
+            Klientská část aplikační logiky Evc
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GSeznamyOsobTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamyOsobTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamyOsobTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GSeznamSoupisekTab">
+            <summary>
+            Karta se seznamem soupisek vycházející z předka v Pam
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamSoupisekTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamSoupisekTab.TestujIdentifikatorTisku">
+            <summary>
+            Určuje, zda se má testovat identifikátor tisku
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamSoupisekTab.ZobrazSloupecVypocet">
+            <summary>
+            Určuje, zda se má zobrazovat ikona informující o úspěšném výpočtu všech osob na soupisce
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamSoupisekTab.GetSoupiskaMZTab">
+            <summary>
+            Vrací instanci karty soupisky měsíčních změn z Evc
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamSoupisekTab.OnGetSeznamSoupisek">
+            <summary>
+            Provede načtení seznamu soupisek
+            </summary>
+            <returns>Načtený seznam</returns>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamSoupisekTab.UpdateActionPredatEnabled">
+            <summary>
+            Obnoví povolení u akce předat
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamSoupisekTab.UpdateActionTiskEnabled">
+            <summary>
+            Aktualizuje povolení u akce Tisk
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamSoupisekTab.UpdateActionTiskVisible">
+            <summary>
+            Aktualizuje viditelnost u akce Tisk
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamSoupisekTab.OnCurrentRowChanged">
+            <summary>Nastane při změně řádku v tabulce</summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamSoupisekTab.GetSoupiskaReadOnly(Gordic.General.GInt16)">
+            <summary>
+            Určuje, zda je soupiska v daném stavu pouze pro čtení
+            </summary>
+            <param name="stavDokladu">Stav dokladu</param>
+            <returns>Režim pouze pro čtení</returns>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamSoupisekTab.OnDetailLoaded(Gordic.Pam.WinClient.GSoupiskaMZTab)">
+            <summary>Vyvolá se po zobrazení detailu</summary>
+            <param name="mzTab">Detail</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamSoupisekTab._predatAutomaticky">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamSoupisekTab.GetDialogOpravduPredatText(System.Int32)">
+            <summary>
+            Vrací text k dialogu "Opravdu předat"
+            </summary>
+            <param name="rowcnt"></param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamSoupisekTab.OnActionNova">
+            <summary>
+            Vyvolá se při akci "Nová"
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamSoupisekTab.KontrolaStavuDokladuPriPredani(Gordic.Pam.Interface.MesicniZmenyDataSet.SoupiskyRow,Gordic.General.GInt16)">
+            <summary>
+            Kontrola stavu dokladu při předání
+            </summary>
+            <param name="row">Řádek se soupiskou</param>
+            <param name="stavDokladu">Stav dokladu</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamSoupisekTab.KontrolaSoupiskyPriPredani(Gordic.Pam.Interface.MesicniZmenyDataSet.SoupiskyRow,System.String@)">
+            <summary>
+            Kontrola soupisky při předání
+            </summary>
+            <param name="row">Řádek se soupiskou</param>
+            <param name="report">Text kontroly (null - pokud kontrola proběhne bez problémů)</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamSoupisekTab.DoPredatHromadne(System.Collections.Generic.List{Gordic.Pam.Interface.MesicniZmenyDataSet.SoupiskyRow})">
+            <summary>
+            Provede hromadné předání soupisky do mezd
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamSoupisekTab.KontrolaSoupiskyPriStornu(Gordic.Pam.Interface.MesicniZmenyDataSet.SoupiskyRow,System.String@)">
+            <summary>
+            Kontrola soupisky při stornu
+            </summary>
+            <param name="row">Řádek se soupiskou</param>
+            <param name="report">Text kontroly (null - pokud kontrola proběhne bez problémů)</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamSoupisekTab.KontrolaSoupiskyPriObnoveni(Gordic.Pam.Interface.MesicniZmenyDataSet.SoupiskyRow,System.String@)">
+            <summary>
+            Kontrola soupisky při obnovení
+            </summary>
+            <param name="row">Řádek se soupiskou</param>
+            <param name="report">Text kontroly (null - pokud kontrola proběhne bez problémů)</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamSoupisekTab.TextNeniMozneEditovatSoupiskuPoDatu(System.DateTime)">
+            <summary>
+            Vrací řetězec pro nemožnost editovat soupisku po datu
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GSeznamSoupisekTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamSoupisekTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamSoupisekTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GSoupiskaMZTab">
+            <summary>
+            Karta se soupiskou měsíčních změn vycházející z předka v Pam
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZTab.GetTema">
+            <summary>
+            Vrátí název tiskového tématu
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZTab.ShowZPriznanychSlozekColumn">
+            <summary>Určuje, zda se bude zobrazovat sloupec s ikonou odkazující na přiznané složky</summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZTab.GetMzCommon">
+            <summary>
+            Vrátí virtuálně instanci pro <see cref="T:Gordic.Pam.WinClient.GMzCommon"/>
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZTab.GetMzPracPomer">
+            <summary>
+            Vrátí prvek s informacemi o osobě
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZTab.GetMzDetail">
+            <summary>
+            Vrátí prvek s detailem měsíční změny
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZTab.UpdateActionIndKalendar">
+            <summary>
+            Aktualizuje povolení a viditelnost akce IndKalendar
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZTab.UpdateActionDuplikovatVisible">
+            <summary>
+            Aktualizuje viditelnost u akce Duplikovat
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZTab.UpdateActionZMezdEnabled">
+            <summary>
+            Aktualizuje povolení u akce Z mezd
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZTab.UpdateActionZMezdVisible">
+            <summary>
+            Aktualizuje viditelnost u akce Z mezd
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZTab.UpdateActionKopieSoupiskyEnabled">
+            <summary>
+            Aktualizuje povolení u akce Kopie soupisky
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZTab.UpdateActionKopieSoupiskyVisible">
+            <summary>
+            Aktualizuje viditelnost u akce Kopie soupisky
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZTab.UpdateActionKopirovatProfilEnabled">
+            <summary>
+            Aktualizuje povolení u akce Kopírovat účetní profil
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZTab.UpdateActionKopirovatProfilVisible">
+            <summary>
+            Aktualizuje viditelnost u akce Kopírovat účetní profil
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZTab.UpdateActionVlozitProfilEnabled">
+            <summary>
+            Aktualizuje povolení u akce Vložit účetní profil
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZTab.UpdateActionVlozitProfilVisible">
+            <summary>
+            Aktualizuje viditelnost u akce Vložit účetní profil
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GSoupiskaMZTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSoupiskaMZTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GPriznaneSlozkyTab">
+            <summary>
+            Seznam přiznaných složek
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneSlozkyTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneSlozkyTab.OnLoad(System.EventArgs)">
+            <summary>
+            Po nahrátí formuláře
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneSlozkyTab.GetMzCommon">
+            <summary>
+            Vrátí virtuálně instanci pro <see cref="T:Gordic.Pam.WinClient.GMzCommon"/>
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneSlozkyTab.GetMzDetail">
+            <summary>
+            Vrátí prvek s detailem měsíční změny
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneSlozkyTab.GetSeznamSoupisekTab">
+            <summary>Vrátí odpovídající seznam soupisek</summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneSlozkyTab.GetPriznaneSlozky">
+            <summary>Vrátí instanci aplikační logiky</summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneSlozkyTab.GetMzHromadneTab">
+            <summary>
+            Vrátí formulář pro hromadné zadání mz
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GPrerazeniPracPomeruTab">
+            <summary>
+            Karta pro přeřazení pracovního poměru na jiné pracoviště
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPrerazeniPracPomeruTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPrerazeniPracPomeruTab.OnPreraditPracovniPomer(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Provede přeřazení pracovního poměru
+            </summary>
+            <param name="ixsPpv">Identifikátor pracovního poměru</param>
+            <param name="ixsPra">Identifikátor pracoviště</param>
+            <param name="ixsVyp">Identifikátor výplatního místa</param>
+            <param name="datum">Datum, ke kterému bude proved převod</param>
+            <param name="ixsEsu">Identifikátor externího subjektu</param>
+            <param name="nazevEsu">Název externího subjektu</param>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GDuchodyCrsTask.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDuchodyCrsTask.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDuchodyCrsTask.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GDebugTask">
+            <summary>Úloha logování procedur</summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDebugTask.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDebugTask.#ctor(System.ComponentModel.IContainer)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="container"></param>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GDebugTask.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDebugTask.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDebugTask.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GDuchodyTask">
+            <summary>
+            Úloha pro práci se záznamy o provedení předběžných kontrol
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDuchodyTask.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDuchodyTask.#ctor(System.ComponentModel.IContainer)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="container"></param>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GDuchodyTask.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDuchodyTask.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDuchodyTask.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GAdresyTask">
+            <summary>
+            Úloha pro práci se záznamy o provedení předběžných kontrol
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GAdresyTask.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GAdresyTask.#ctor(System.ComponentModel.IContainer)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="container"></param>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GAdresyTask.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GAdresyTask.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GAdresyTask.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GOsobniUdajeTask">
+            <summary>
+            Úloha pro práci se záznamy o provedení předběžných kontrol
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GOsobniUdajeTask.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GOsobniUdajeTask.#ctor(System.ComponentModel.IContainer)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="container"></param>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GOsobniUdajeTask.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GOsobniUdajeTask.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GOsobniUdajeTask.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GPriznaneSlozkyTask">
+            <summary>
+            Úloha pro práci se seznamem přiznaných složek
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneSlozkyTask.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneSlozkyTask.#ctor(System.ComponentModel.IContainer)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="container"></param>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GPriznaneSlozkyTask.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneSlozkyTask.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPriznaneSlozkyTask.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GZdravotniPojistovnyTask">
+            <summary>
+            Úloha pro práci s doklady zdravotních pojišťoven
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GZdravotniPojistovnyTask.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GZdravotniPojistovnyTask.#ctor(System.ComponentModel.IContainer)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="container"></param>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GZdravotniPojistovnyTask.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GZdravotniPojistovnyTask.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GZdravotniPojistovnyTask.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GSeznamSoupisekTask">
+            <summary>
+            Úloha pro práci se seznamem soupisek
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamSoupisekTask.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamSoupisekTask.#ctor(System.ComponentModel.IContainer)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="container"></param>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GSeznamSoupisekTask.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamSoupisekTask.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamSoupisekTask.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GFiltrVypocteneSlozky">
+            <summary>
+            Filtační prvek na vypočtené složky
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GFiltrVypocteneSlozky.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrVypocteneSlozky.PodleObdobi">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrVypocteneSlozky.Oc">
+            <summary>Filtr na osobní číslo (null - bez filtru)</summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrVypocteneSlozky.Jmeno">
+            <summary>Filtr na jméno osoby (null - bez filtru)</summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrVypocteneSlozky.Rc">
+            <summary>Filtr na rodné číslo (null - bez filtru)</summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrVypocteneSlozky.FiltrVyplaceneSlozky">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrVypocteneSlozky.ObdobiOd">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrVypocteneSlozky.MaxObdobiOd">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrVypocteneSlozky.MinObdobiOd">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrVypocteneSlozky.ObdobiDo">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrVypocteneSlozky.MaxObdobiDo">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrVypocteneSlozky.MinObdobiDo">
+            <summary></summary>
+        </member>
+        <member name="E:Gordic.Evc.WinClient.GFiltrVypocteneSlozky.PodleObdobiChanged">
+            <summary>Událost vyvolána při změně vlastnosti <see cref="P:Gordic.Evc.WinClient.GFiltrVypocteneSlozky.PodleObdobi"/></summary>
+        </member>
+        <member name="E:Gordic.Evc.WinClient.GFiltrVypocteneSlozky.FiltrVyplaceneSlozkyChanged">
+            <summary>Událost vyvolána při změně vlastnosti <see cref="P:Gordic.Evc.WinClient.GFiltrVypocteneSlozky.FiltrVyplaceneSlozky"/></summary>
+        </member>
+        <member name="E:Gordic.Evc.WinClient.GFiltrVypocteneSlozky.FiltrOsobaChanged">
+            <summary>Událost vyvolána při změně vlastnosti <see cref="P:Gordic.Evc.WinClient.GFiltrVypocteneSlozky.Oc"/>, <see cref="P:Gordic.Evc.WinClient.GFiltrVypocteneSlozky.Jmeno"/> nebo <see cref="P:Gordic.Evc.WinClient.GFiltrVypocteneSlozky.Rc"/></summary>
+        </member>
+        <member name="E:Gordic.Evc.WinClient.GFiltrVypocteneSlozky.ObdobiOdChanged">
+            <summary>Událost vyvolána při změně období od</summary>
+        </member>
+        <member name="E:Gordic.Evc.WinClient.GFiltrVypocteneSlozky.ObdobiDoChanged">
+            <summary>Událost vyvolána při změně období do</summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GFiltrVypocteneSlozky.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GFiltrVypocteneSlozky.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GFiltrVypocteneSlozky.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.FiltrVyplaceneSlozky">
+            <summary>
+            Filtr podle vyplacenosti/nevyplacenosti složky
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.FiltrVyplaceneSlozky.Vsechny">
+            <summary>Všechny složky</summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.FiltrVyplaceneSlozky.Vyplacene">
+            <summary>Pouze vyplacené (bezhotovostně)</summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.FiltrVyplaceneSlozky.Nevyplacene">
+            <summary>Pouze nevyplacené (bezhotovostně)</summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.FiltrVyplaceneSlozky.VyplaceneHotove">
+            <summary>Proplacené (hotovostně)</summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.FiltrVyplaceneSlozky.NevyplaceneHotove">
+            <summary>K proplacení (hotovostně)</summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GFiltrPredbezneKontroly">
+            <summary>
+            Filtační prvek předběžné kontroly
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GFiltrPredbezneKontroly.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrPredbezneKontroly.PodleObdobi">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrPredbezneKontroly.PouzeVlastniDoklady">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrPredbezneKontroly.ObdobiOd">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrPredbezneKontroly.MaxObdobiOd">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrPredbezneKontroly.MinObdobiOd">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrPredbezneKontroly.ObdobiDo">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrPredbezneKontroly.MaxObdobiDo">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrPredbezneKontroly.MinObdobiDo">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GFiltrPredbezneKontroly.FiltrPouzeVlastniDokladyVisible">
+            <summary>Určuje viditelnost filtru na vlastní doklady</summary>
+        </member>
+        <member name="E:Gordic.Evc.WinClient.GFiltrPredbezneKontroly.PodleObdobiChanged">
+            <summary>Událost vyvolána při změně vlastnosti <see cref="P:Gordic.Evc.WinClient.GFiltrPredbezneKontroly.PodleObdobi"/></summary>
+        </member>
+        <member name="E:Gordic.Evc.WinClient.GFiltrPredbezneKontroly.PouzeVlastniDokladyChanged">
+            <summary>Událost vyvolána při změně vlastnosti <see cref="P:Gordic.Evc.WinClient.GFiltrPredbezneKontroly.PouzeVlastniDoklady"/></summary>
+        </member>
+        <member name="E:Gordic.Evc.WinClient.GFiltrPredbezneKontroly.ObdobiOdChanged">
+            <summary>Událost vyvolána při změně období od</summary>
+        </member>
+        <member name="E:Gordic.Evc.WinClient.GFiltrPredbezneKontroly.ObdobiDoChanged">
+            <summary>Událost vyvolána při změně období do</summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GFiltrPredbezneKontroly.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GFiltrPredbezneKontroly.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GFiltrPredbezneKontroly.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.Gordic_Evc_WinClient">
+            <summary>
+              Třída prostředků se silnými typy pro vyhledávání lokalizovaných řetězců atp.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient.ResourceManager">
+            <summary>
+              Vrací instanci ResourceManager uloženou v mezipaměti použitou touto třídou.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient.Culture">
+            <summary>
+              Potlačí vlastnost CurrentUICulture aktuálního vlákna pro všechna
+              vyhledání prostředků pomocí třídy prostředků se silnými typy.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320001">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Záznamy předběžných kontrol.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320002">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Jste přihlášeni do období, které je uzavřené!.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320004">
+             <summary>
+               Vyhledá lokalizovaný řetězec podobný Jste přihlášeni do období, které není první otevřené!
+            
+            První otevřené období je {0}..
+             </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320012">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný otevřené.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320013">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný uzavřené.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320014">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Probíhá načítání seznamu předběžných kontrol.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320015">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Výběr osoby.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320016">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Záznam o provedení předběžné kontroly.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320017">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Referent: {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320018">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Číslo jednací: {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320019">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Záznam vyhotovil: {0} Dne: {1}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320020">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Příkazce operace: {0} Dne: {1}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320021">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Příkazce operace v zastoupení: {0} Dne: {1}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320022">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Správce rozpočtu: {0} Dne: {1}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320023">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Správce rozpočtu v zastoupení: {0} Dne: {1}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320024">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Hlavní účetní: {0} Dne: {1}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320025">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Nepodařilo se získat účtárnu účetního střediska..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320026">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Chyba při inicializaci aplikace.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320027">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Uložení změn.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320028">
+             <summary>
+               Vyhledá lokalizovaný řetězec podobný Byly provedeny změny.
+            Chcete tyto změny uložit?.
+             </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320029">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Neúplné vyplnění údajů.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320030">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Nejsou zadány správně všechny údaje..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320031">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Předat lze pouze aktivní doklad ve stavu &apos;Příprava&apos;..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320032">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Předání dokladů.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320033">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Přejete si předat doklad(y) do mezd?.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320034">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Přehled vypočtených složek.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320035">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Probíhá načítání seznamu zadaných složek.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320036">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Vyplacená složka.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320037">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Stav dokladu.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320038">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Poznámka.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320039">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Název.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320040">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný ČJ.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320041">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Období.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320042">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Datum změny.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320043">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Stornovat lze pouze aktivní doklad ve stavu &apos;Příprava&apos;..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320044">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Stornování dokladu.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320045">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Přejete si doklad stornovat?.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320046">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Druh dokladu.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320047">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Nelze obnovit doklad, který není vystornovaný..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320048">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Obnovování dokladu.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320049">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Přejete si obnovit stornovaný doklad?.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320050">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Nebyly správně zadány všechny údaje. Není možné provést jejich uložení..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320051">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Jméno.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320052">
+             <summary>
+               Vyhledá lokalizovaný řetězec podobný Osoba: {0}, složka: {1} {2}
+            
+            Není možné provést odvod a zaúčtování složky.
+            {3}
+            
+            Proveďte nový výběr..
+             </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320053">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Odvod a zaúčtování složky.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320054">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Přejete si provést odvod a zaúčtování této složky?.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320055">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Složka platu.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320056">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Částka.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320057">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Účet.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320058">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný VS.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320059">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný SS.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320060">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný KS.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320061">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Vyplňte minimálně pole příjmení,státní občanství, stát a psč..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320062">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Vyberte prosím osobu..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320063">
+             <summary>
+               Vyhledá lokalizovaný řetězec podobný Doklad (ČJ {1}) se nepodařilo přijmout do mezd:
+            {0}.
+             </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320064">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Přejete si předat doklad(y) přímo do mezd?.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320065">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Automatický příjem dokladu.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320066">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Přejete si provést odvod a zaúčtování těchto složek?.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320067">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Id.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320068">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Seznam soupisek.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320069">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Přejete si předat soupisku přímo do mezd?.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320070">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Přejete si předat soupisku přímo do mezd a provést výpočet mzdy zaměstnanců?.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320071">
+             <summary>
+               Vyhledá lokalizovaný řetězec podobný Soupisku se nepodařilo přijmout do mezd:
+            {0}.
+             </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320072">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Příjem soupisky do mezd.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320073">
+             <summary>
+               Vyhledá lokalizovaný řetězec podobný Nepodařilo se provést výpočet mzdy zaměstnanců na soupisce:
+            {0}.
+             </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320074">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Provede výpočet mzdy zaměstnanců na soupisce.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320075">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Přepočítat.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320076">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Výpočet mzdy zaměstnanců na soupisce.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320077">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Přejete si provést výpočet mzdy zaměstnanců na soupisce?.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320078">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Soupisky není povoleno vytvářet nebo modifikovat po datu {0:d}..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320079">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Předání soupisky.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320080">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Detail soupisky.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320081">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Vytvoření soupisky.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320082">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Záznamy předběžných kontrol není povoleno vytvářet nebo modifikovat po datu {0:d}..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320083">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Vytvoření záznamu.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320084">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Předání záznamu.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320085">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Storno záznamu.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320086">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Obnovení záznamu.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320087">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Není povoleno vytvářet nebo modifikovat záznamy předběžných kontrol z období {0}..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320088">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Vypočtené složky není povoleno modifikovat po datu {0:d}..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320089">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Není povoleno modifikovat vypočtené složky z období {0}..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320090">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Vyplatit.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320091">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Ukládání záznamu předběžné kontroly.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320093">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Ukončení pracovního poměru.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320094">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Máte právo ukončovat pouze evidenční pracovní poměry..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320095">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Probíhá předání soupisky.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320096">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Předání soupisky.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320097">
+             <summary>
+               Vyhledá lokalizovaný řetězec podobný Nepodařilo se předat soupisku(y):
+            
+            {0}.
+             </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320098">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Nezdařený příjem.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320099">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Nezdařený výpočet mzdy.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320100">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Nemáte oprávnění provádět tuto akci..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320101">
+             <summary>
+               Vyhledá lokalizovaný řetězec podobný Mzdovou složku 3079 nelze proplatit dříve, než-li bude proplacena mzdová složka 5050. Proveďte u osoby nejdříve vyplacení mzdové složky 5050, která je ve shodném období připravena k proplacení.
+            .
+             </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320102">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Zdravotní pojišťovny.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320103">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Probíhá načítání seznamu dokladů zdravotních pojišťoven.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320104">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Kód ZP.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320105">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Datum od.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320106">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Datum do.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320107">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Doklad zdravotní pojišťovny osoby.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320108">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Doklady zdravotních pojišťoven osob není povoleno vytvářet nebo modifikovat po datu {0:d}..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320109">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Není povoleno vytvářet nebo modifikovat doklady zdravotních pojišťoven osob z období {0}..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320110">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Doklad ({1}) se nepodařilo přijmout do mezd:;{0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320111">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný ixp {0}, osoba {1}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320113">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný V PAM byla patrně provedena modifikace údajů osoby a je nutný nový přepočet..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320114">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Složka již byla vyplacena..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320115">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Pracoviště.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320116">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Výplatní místo.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320117">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Výplatní místo (název).
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320118">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Přiznané složky není povoleno vytvářet nebo modifikovat po datu {0:d}. Seznam je zobrazen v režimu prohlížení..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320119">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Seznam přiznaných složek.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320125">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Účetní profil měsíční změny.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320126">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Nejprve dokončete hromadné pořizování..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320127">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Ukončení hromadného pořizování.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320128">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Datum do v rozsahu platnosti musí být větší než datum od..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320129">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Není povoleno zpětné zadání přiznaných složek..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320130">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Není povoleno zadávat zpětně do otevřeného období ({0})..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320131">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Změna pracoviště z modulu EVC.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320132">
+             <summary>
+               Vyhledá lokalizovaný řetězec podobný Rodné číslo {0} patří osobě &apos;{1}&apos;, která je již zavedena v systému.
+            
+            Musíte změnit výběr osoby na osobu již evidovanou..
+             </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320133">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný KNIHA.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320134">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný OBDOBÍ.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320135">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Měna.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320136">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Osobní údaje.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320137">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Adresy.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320138">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Probíhá načítání seznamu adres.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320139">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Adresy osob.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320140">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Editace dokladu.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320141">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Doklady není povoleno vytvářet nebo modifikovat po datu {0:d}..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient._23320142">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Není povoleno vytvářet nebo modifikovat doklady z období {0}..
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.Gordic_Evc_WinClient_Exceptions">
+            <summary>
+              Třída prostředků se silnými typy pro vyhledávání lokalizovaných řetězců atp.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient_Exceptions.ResourceManager">
+            <summary>
+              Vrací instanci ResourceManager uloženou v mezipaměti použitou touto třídou.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient_Exceptions.Culture">
+            <summary>
+              Potlačí vlastnost CurrentUICulture aktuálního vlákna pro všechna
+              vyhledání prostředků pomocí třídy prostředků se silnými typy.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient_Exceptions._23320005">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný Neplatný pokus o přístup k informaci o otevřenosti období..
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.Gordic_Evc_WinClient_Exceptions._23320112">
+            <summary>
+              Vyhledá lokalizovaný řetězec podobný K osobě ({0}) v období ({1}) neexistuje právě jeden pracovní poměr (počet nalezených je {2})..
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GEvcModuleForm">
+            <summary>Hlavní okno modulu EVC</summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GEvcModuleForm.DebugTask">
+            <summary>Úloha debug okna</summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GEvcModuleForm.PredbezneKontrolyTask">
+            <summary>Úloha Záznamy předběžných kontrol</summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GEvcModuleForm.PriznaneSlozkyTask">
+            <summary>Úloha Seznam přiznaných složek</summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GEvcModuleForm.SeznamSoupisekTask">
+            <summary>Úloha Seznam soupisek</summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GEvcModuleForm.ZdravotniPojistovnyTask">
+            <summary>Úloha Zdravotní pojišťovny</summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GEvcModuleForm.ZadaneSlozkyTask">
+            <summary>Úloha Přehled zadaných složek</summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GEvcModuleForm.SeznamyTask">
+            <summary>Úloha Seznamy osob</summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GEvcModuleForm.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GEvcModuleForm.OnGetSettings">
+            <summary>
+            Metoda sloužící k předání uživatelských nastavení aplikace
+            </summary>
+            <returns>Pole s komponentami definující uživatelská nastavení aplikace</returns>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GEvcModuleForm.OnDebugModeEnd">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GEvcModuleForm.OnDebugModeBegin">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GEvcModuleForm.InitEkoParameters">
+            <summary>Kompletně zinicializuje všechny eko proměnné.</summary>
+            <remarks>Je voláno i při změně ekonomických parametrů.</remarks>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GEvcModuleForm.ZjistiOtevrenostObdobi">
+            <summary>Lze spustit až po nastavených eko parametrech.</summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GEvcModuleForm.NastavInformacniTexty">
+            <summary>Nastaví informační texty v záhlaví aplikace.</summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GEvcModuleForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GEvcModuleForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GEvcModuleForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GEvcWinClientException">
+            <summary>Výjimka klientské části Pdm pro WinForms</summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GEvcWinClientException.#ctor(System.Int32,System.Int32,System.Object[])">
+            <summary>
+            Konstruktor výjimky
+            </summary>
+            <param name="code">Kód výjimky</param>
+            <param name="resourceCode">Kód textu výjimky v souboru se zdroji</param>
+            <param name="parameters">Parametry pro formátovaný text výjimky</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GEvcWinClientException.#ctor(System.Int32,System.Int32,System.Exception,System.Object[])">
+            <summary>
+            Konstruktor výjimky
+            </summary>
+            <param name="code">Kód výjimky</param>
+            <param name="resourceCode">Kód textu výjimky v souboru se zdroji</param>
+            <param name="innerException">Vnitřní výjimka</param>
+            <param name="parameters">Parametry pro formátovaný text výjimky</param>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GCommon">
+            <summary>
+            Společné chování tlustého klienta Evc
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GSeznamVypoctenychSlozekTab">
+            <summary>
+            Karta se seznamem vypočtených složek
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamVypoctenychSlozekTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamVypoctenychSlozekTab.EkoParams">
+            <summary>
+            Ekonomické parametry
+            </summary>
+            <remarks>Neproběhla-li pro tuto aplikaci ekoinicializace, nastane při pokusu
+            o přečtení této vlastnosti výjimka</remarks>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamVypoctenychSlozekTab.EkoUserProcess">
+            <summary>
+            Ekonomický uživatelský proces aplikace
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamVypoctenychSlozekTab.EvcClient">
+            <summary>
+            Klientská část aplikační logiky Evc
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamVypoctenychSlozekTab.PamClient">
+            <summary>
+            Klientská část aplikační logiky Pam
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamVypoctenychSlozekTab.CreateGridFormat">
+            <summary>
+            sestaví sloupce gridu
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamVypoctenychSlozekTab.GetStavImage(System.Data.DataRow,System.String)">
+            <summary>
+            delegát pro dohledání obrázku pro sloupec s obrázky
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamVypoctenychSlozekTab.KontrolaProplaceni3079(Gordic.Evc.Interface.ZadaneSlozkyDataSet.SeznamRow,Gordic.Evc.Interface.ZadaneSlozkyDataSet.SeznamDataTable)">
+            <summary>
+            Pokud by existovala neproplacená mzdová složka 5050, neumožnit vyplatit mzdovou složku 3079. Tuto složku by bylo možné proplatit po proplacení existující mzdové složky 5050. 
+            </summary>
+            <param name="row">Kontrolovaný řádek</param>
+            <param name="dataTable">Seznam všech načtených složek (nevyfiltrovaný)</param>
+            <returns>Zda proběhla kontrola v pořádku</returns>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GSeznamVypoctenychSlozekTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamVypoctenychSlozekTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamVypoctenychSlozekTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GDetailPredbezneKontrolyTab">
+            <summary>
+            Karta s detailem Záznam o provedení předběžné kontroly
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GDetailPredbezneKontrolyTab.m_sRozhodnuti">
+            <summary>Je využito i pro uchovávání předchozího stavu, pro detekci změny</summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailPredbezneKontrolyTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailPredbezneKontrolyTab.ReadOnly">
+            <summary>
+            Určuje, zda je formulář pouze pro čtení
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailPredbezneKontrolyTab.Modified">
+            <summary>
+            Určuje, zda byla data na formuláři modifikována uživatelem
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GDetailPredbezneKontrolyTab.DataValid">
+            <summary>
+            Určuje, zda jsou zadaná data validní
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailPredbezneKontrolyTab.Clear">
+            <summary>
+            Vymaže formulář
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailPredbezneKontrolyTab.LoadData(Gordic.Evc.Interface.PredbezneKontrolyDataSet.SeznamRow)">
+            <summary>
+            Načte detail formuláře
+            </summary>
+            <param name="predbezneKontrolyRow">Řádek s informacemi o předběžné kontrole</param>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GDetailPredbezneKontrolyTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailPredbezneKontrolyTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GDetailPredbezneKontrolyTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GSeznamPredbeznychKontrolTab">
+            <summary>
+            Karta se seznamem předběžných kontrol
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamPredbeznychKontrolTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamPredbeznychKontrolTab.EkoParams">
+            <summary>
+            Ekonomické parametry
+            </summary>
+            <remarks>Neproběhla-li pro tuto aplikaci ekoinicializace, nastane při pokusu
+            o přečtení této vlastnosti výjimka</remarks>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamPredbeznychKontrolTab.EkoUserProcess">
+            <summary>
+            Ekonomický uživatelský proces aplikace
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamPredbeznychKontrolTab.EvcClient">
+            <summary>
+            Klientská část aplikační logiky Evc
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GSeznamPredbeznychKontrolTab.PamClient">
+            <summary>
+            Klientská část aplikační logiky Pam
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GSeznamPredbeznychKontrolTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamPredbeznychKontrolTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamPredbeznychKontrolTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GVyberOsobyTab">
+            <summary>
+            Karta pro výběr osoby
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GVyberOsobyTab.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GVyberOsobyTab.ReadOnly">
+            <summary>
+            Určuje, zda je formulář pouze pro čtení
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GVyberOsobyTab.Modified">
+            <summary>
+            Určuje, zda byla data na formuláři modifikována uživatelem
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GVyberOsobyTab.DataValid">
+            <summary>
+            Určuje, zda jsou zadaná data validní
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GVyberOsobyTab.RezimVyberuOsoby">
+            <summary>
+            Určuje režim výběru osoby
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.WinClient.GVyberOsobyTab.UdajeOsobRow">
+            <summary>
+            Řádek s pořízenými daty
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GVyberOsobyTab.LoadData(Gordic.Evc.Interface.UdajeOsobDataSet.SeznamRow,System.Boolean,Gordic.Evc.WinClient.RezimVyberuOsoby)">
+            <summary>
+            Načte data nově zadávané osoby
+            </summary>
+            <param name="udajeOsobRow">Řádek s údaji o osobě</param>
+            <param name="dataLoadedMode">Veškeré údaje o osobě jsou načteny v řádku s osobou</param>
+            <param name="rezimVyberuOsoby">Zda se jedná o novou či existující osobu</param>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GVyberOsobyTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GVyberOsobyTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GVyberOsobyTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.RezimVyberuOsoby">
+            <summary>
+            Režim výběru osoby
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.RezimVyberuOsoby.NovaOsoba">
+            <summary>Byla zadána nová osoba</summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.RezimVyberuOsoby.EvidovanaOsoba">
+            <summary>Byla vybrána existující zaměstnanec</summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GPredbezneKontrolyTask">
+            <summary>
+            Úloha pro práci se záznamy o provedení předběžných kontrol
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPredbezneKontrolyTask.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPredbezneKontrolyTask.#ctor(System.ComponentModel.IContainer)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="container"></param>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GPredbezneKontrolyTask.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPredbezneKontrolyTask.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GPredbezneKontrolyTask.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GZadaneSlozkyTask">
+            <summary>
+            Úloha pro práci s přehledem zadaných složek
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GZadaneSlozkyTask.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GZadaneSlozkyTask.#ctor(System.ComponentModel.IContainer)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="container"></param>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GZadaneSlozkyTask.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GZadaneSlozkyTask.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GZadaneSlozkyTask.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.WinClient.GSeznamyTask">
+            <summary>
+            Úloha umožňující prohlížet seznamy pracovníků systému PAM
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.WinClient.GSeznamyTask.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamyTask.#ctor(System.ComponentModel.IContainer)">
+            <summary>
+            Vytvoří instanci
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamyTask.#ctor">
+            <summary>
+            Vytvoří instanci
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamyTask.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.WinClient.GSeznamyTask.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+    </members>
+</doc>

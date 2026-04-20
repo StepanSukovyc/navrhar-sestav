@@ -1,0 +1,1442 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Rnp.WinClient</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Rnp.WinClient.GRnpApplication">
+            <summary>RNP - Registr nemovitostí - prohlížení</summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.GRnpApplication.Main">
+            <summary>hlavní smyčka aplikace</summary>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.Base.GRnpCommandLine">
+            <summary>
+            Třída pro zpracování spuštění z příkazového řádku
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.RNP_VOLANO_Z_APL">
+            <summary>
+            Parametr označující, že prohlížečka byla volána z jiné aplikace přes příkazovou řádku
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.RNP_LOG_POR_CISLO">
+            <summary>
+            Parametr log_por_cislo předané v příkazové řádce 
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.RNP_ZAPSAT_TMP">
+            <summary>
+            Parametr označující, že prohlížečka nemá po ukončení mazat tabulku nemtobj
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.RNP_ZAPSAT_TMP_PAR">
+            <summary>
+            Parametr příkazové řádky označující, že prohlížečka nemá po ukončení mazat tabulku nemtobj
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.I_TYPE_SERVICE">
+            <summary>
+            Typ služby RNP(přípustné hodnoty: 0, 1, 2, 3)
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.I_PAR_LV">
+            <summary>
+            List vlastnictví
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.I_PAR_ICO">
+            <summary>
+            IČO vlastníka
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.I_PAR_TYP_OBJEKTU">
+            <summary>
+            Typ objektu (10-parcela, 20-budova, 30-část budovy, 40-jednotka)
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.I_PAR_ID_PARCELY">
+            <summary>
+            Identifikační číslo parcely
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.I_PAR_ID_BUDOVY">
+            <summary>
+            Identifikační číslo budovy
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.I_PAR_TYP_BUDOVY">
+            <summary>
+            Typ budovy
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.I_PAR_CISLO_DOMOVNI">
+            <summary>
+            Číslo domovní
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.I_PAR_ID_JEDNOTKY">
+            <summary>
+            Identifikační číslo jednotky
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.O_PAR_TYP_OBJEKTU">
+            <summary>
+            Typ objektu
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.O_PAR_ID_PARCELY">
+            <summary>
+            Identifikační číslo parcely
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.O_PAR_ID_BUDOVY">
+            <summary>
+            Identifikační číslo budovy
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.O_PAR_TYP_BUDOVY">
+            <summary>
+            Typ budovy
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.O_PAR_CISLO_DOMOVNI">
+            <summary>
+            Číslo domovní
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.O_PAR_ID_JEDNOTKY">
+            <summary>
+            Identifikační číslo jednotky
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.O_PAR_CENA">
+            <summary>
+            Cena nemovitosti stanovená podle zákona o oceňování majetku
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.O_PAR_VYMERA">
+            <summary>
+            Výměra parcely – pouze pro typ objektu 10 = parcela, pro ostatní typy objektů platí měrná jednotka právě jeden kus
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.O_PAR_DRUH_POZ">
+            <summary>
+            Druh pozemku – pouze pro typ objektu 10 = parcela
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.O_PAR_MAJ_PODIL_CIT">
+            <summary>
+            Majetkový podíl vyjádřený částí zlomku – čitatel – údaj se vrací pouze v případě zvolené služby č.3 se zadaným IČO vlastníka(spoluvlastníka)
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.O_PAR_MAJ_PODIL_JM">
+            <summary>
+            Majetkový podíl vyjádřený částí zlomku - jmenovatel – údaj se vrací pouze v případě zvolené služby č.3 se zadaným IČO vlastníka(spoluvlastníka)
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.O_PAR_VECNE_BR">
+            <summary>
+            Příznak, zda je nemovitost zatížena věcným břemenem – 0 - NE, 1 - ANO
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.O_PAR_ZAST_PR">
+            <summary>
+            Příznak, zda je nemovitost zatížena zástavním právem – 0 - NE, 1 - ANO
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Base.GRnpCommandLine.O_PAR_RESULT">
+            <summary>
+            Příznak zda modul RNP vrátil do tabulky nemtobj vybrané objekty(nabývá textových hodnot “TRUE“, “FALSE“)
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Base.GRnpCommandLine.SpusteniRNP">
+            <summary>
+            Spuštění RNP z příkazové řádky (načtení parametrů z registrů)
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Base.GRnpCommandLine.VymazRegistry">
+            <summary>
+            Vymaže proměnné v registrech
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Base.GRnpCommandLine.SetRegParamValue(System.String,System.Object)">
+            <summary>
+            Nastaví hodnotu v registrech
+            </summary>
+            <param name="paramName"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Base.GRnpCommandLine.GetRegParamInt16(System.String)">
+            <summary>
+            Int parametr z registrů
+            </summary>
+            <param name="paramName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Base.GRnpCommandLine.GetRegParamInt32(System.String)">
+            <summary>
+            Int parametr z registrů
+            </summary>
+            <param name="paramName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Base.GRnpCommandLine.GetRegParamString(System.String)">
+            <summary>
+            String parametr z registrů
+            </summary>
+            <param name="paramName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.Controls.Details.BudovaDetailControl">
+            <summary>
+            Kontrolka pro zobrazení detailu budovy
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.BudovaDetailControl.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.BudovaDetailControl.SetData(Gordic.Ren.Interface.GDetailBudovyNahlizeni)">
+            <summary>
+            Nastaví hodnoty kontrolek
+            </summary>
+            <param name="detail"></param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.BudovaDetailControl.ClearData">
+            <summary>
+            Vyprázdní zobrazené údaje v kontrolkách
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Controls.Details.BudovaDetailControl.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.BudovaDetailControl.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.BudovaDetailControl.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.Controls.Details.NemovitostDetailControl">
+            <summary>
+            Kontrolka pro zobrazení detailu nemovitosti
+            </summary>
+        </member>
+        <member name="P:Gordic.Rnp.WinClient.Controls.Details.NemovitostDetailControl.Detail">
+            <summary>
+            Detail nemovitosti
+            </summary>
+        </member>
+        <member name="P:Gordic.Rnp.WinClient.Controls.Details.NemovitostDetailControl.ShowHeader">
+            <summary>
+            Zda se má zobrazit hlavička
+            </summary>
+        </member>
+        <member name="P:Gordic.Rnp.WinClient.Controls.Details.NemovitostDetailControl.Task">
+            <summary>
+            Tab na kterém je umístěn tento prvek - musí být nastaven (pro otevírání modálních oken)
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.NemovitostDetailControl.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.NemovitostDetailControl.ShowDetail(Gordic.Ren.Interface.TypNemovitostiEnum,Gordic.General.GString)">
+            <summary>
+            Naplní detail nemovitosti
+            </summary>
+            <param name="typNemovitosti"></param>
+            <param name="idNemovitosti"></param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.NemovitostDetailControl.ClearDetail">
+            <summary>
+            Vymaže zobrazené údaje detailu nemovitosti
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Controls.Details.NemovitostDetailControl.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.NemovitostDetailControl.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.NemovitostDetailControl.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.Controls.Details.ParcelaSeznamControl">
+            <summary>Kontrolka pro zobrazení seznamu parcel pod budovou</summary> 
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.ParcelaSeznamControl.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.ParcelaSeznamControl.NactiData(Gordic.General.GString)">
+            <summary>
+            Načte data
+            </summary>
+            <param name="idBudovy"></param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.ParcelaSeznamControl.ClearData">
+            <summary>
+            Vyprázdní zobrazený seznam
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Controls.Details.ParcelaSeznamControl.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.ParcelaSeznamControl.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.ParcelaSeznamControl.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.Controls.Details.JednotkaDetailControl">
+            <summary>
+            Kontrolka pro zobrazení detailu jednotky
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.JednotkaDetailControl.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.JednotkaDetailControl.SetData(Gordic.Ren.Interface.GDetailJednotkyNahlizeni)">
+            <summary>
+            Nastaví hodnoty kontrolek
+            </summary>
+            <param name="detail"></param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.JednotkaDetailControl.ClearData">
+            <summary>
+            Vyprázdní zobrazené údaje v kontrolkách
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Controls.Details.JednotkaDetailControl.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.JednotkaDetailControl.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.JednotkaDetailControl.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.Controls.Details.CenaControl">
+            <summary>
+            Kontrolka pro zobrazení ceny
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.CenaControl.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.CenaControl.showControls(Gordic.Ren.Interface.TypNemovitostiEnum)">
+            <summary>
+            Podle typu nemovitosti zobrazí/skryje kontrolky
+            </summary>
+            <param name="typNemovitosti"></param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.CenaControl.SetData(Gordic.Ren.Interface.GDetailParcely)">
+            <summary>
+            Nastaví hodnoty kontrolek
+            </summary>
+            <param name="detail"></param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.CenaControl.SetData(Gordic.Ren.Interface.GDetailBudovyNahlizeni)">
+            <summary>
+            Nastaví hodnoty kontrolek
+            </summary>
+            <param name="detail"></param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.CenaControl.SetData(Gordic.Ren.Interface.GDetailJednotkyNahlizeni)">
+            <summary>
+            Nastaví hodnoty kontrolek
+            </summary>
+            <param name="detail"></param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.CenaControl.ClearData">
+            <summary>
+            Vyprázdní zobrazené údaje v kontrolkách
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Controls.Details.CenaControl.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.CenaControl.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.CenaControl.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.Controls.Details.UmisteniControl">
+            <summary>
+            Kontrolka pro zobrazení umístění
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.UmisteniControl.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.UmisteniControl.SetData(Gordic.Ren.Interface.GDetailParcely)">
+            <summary>
+            Nastaví hodnoty kontrolek
+            </summary>
+            <param name="detail"></param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.UmisteniControl.SetData(Gordic.Ren.Interface.GDetailBudovyNahlizeni)">
+            <summary>
+            Nastaví hodnoty kontrolek
+            </summary>
+            <param name="detail"></param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.UmisteniControl.SetData(Gordic.Ren.Interface.GDetailJednotkyNahlizeni)">
+            <summary>
+            Nastaví hodnoty kontrolek
+            </summary>
+            <param name="detail"></param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.UmisteniControl.ClearData">
+            <summary>
+            Vyprázdní zobrazené údaje v kontrolkách
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Controls.Details.UmisteniControl.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.UmisteniControl.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.UmisteniControl.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.Controls.Details.ParcelaDetailControl">
+            <summary>
+            Kontrolka pro zobrazení detailu parcely
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.ParcelaDetailControl.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.ParcelaDetailControl.SetData(Gordic.Ren.Interface.GDetailParcely)">
+            <summary>
+            Nastaví hodnoty kontrolek
+            </summary>
+            <param name="detail"></param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.ParcelaDetailControl.ClearData">
+            <summary>
+            Vyprázdní zobrazené údaje v kontrolkách
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Controls.Details.ParcelaDetailControl.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.ParcelaDetailControl.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Details.ParcelaDetailControl.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.Controls.Filters.IFilterControl">
+            <summary>
+            Interface pro kontrolky s filtrem
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.IFilterControl.GetFilter``1">
+            <summary>
+            Vrací filter
+            </summary>
+            <typeparam name="T">Typ výsledku</typeparam>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.Controls.Filters.MainFilterControl">
+            <summary>
+            Hlavní filtr seznamů nemovitostí
+            </summary>
+        </member>
+        <member name="P:Gordic.Rnp.WinClient.Controls.Filters.MainFilterControl.MainFilterState">
+            <summary>
+            Zobrazený stav filtru
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.MainFilterControl.#ctor">
+            <summary>
+            Kontrolka pro filtr hledání
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.MainFilterControl.GetFilterAsArray``1(System.Boolean@)">
+            <summary>
+            Nastavený filtr
+            </summary>
+            <typeparam name="TFilterId"></typeparam>
+            <param name="isValid">zda je filtr platný - dostatečný pro filtrování</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.MainFilterControl.SetValue(Gordic.Rnp.WinClient.Controls.Filters.FilterValue,System.Object)">
+            <summary>
+            Nastaví hodnotu do pole filtru
+            </summary>
+            <param name="filterValue"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.MainFilterControl.GetValue(Gordic.Rnp.WinClient.Controls.Filters.FilterValue)">
+            <summary>
+            Vrátí hodnotu do pole filtru
+            </summary>
+            <param name="filterValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.MainFilterControl.GetFilter``1">
+            <summary>
+            Nastavený filtr
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.MainFilterControl.GetFilter``1(System.Boolean@)">
+            <summary>
+            Nastavený filtr
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="isValid">zda je filtr platný - dostatečný pro filtrování</param>
+            <returns></returns>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Controls.Filters.MainFilterControl.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.MainFilterControl.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.MainFilterControl.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.Controls.Filters.MainFilterStateEnum">
+            <summary>
+            Nastavení zobrazeného filtru
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Controls.Filters.MainFilterStateEnum.ParcelaVlastnik">
+            <summary>Parcela - Vlastník</summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Controls.Filters.MainFilterStateEnum.ParcelaList">
+            <summary>Parcela - List vlastnictví</summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Controls.Filters.MainFilterStateEnum.ParcelaCislo">
+            <summary>Parcela - Číslo parcely</summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Controls.Filters.MainFilterStateEnum.BudovaVlastnik">
+            <summary>Budova - Vlastník</summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Controls.Filters.MainFilterStateEnum.BudovaList">
+            <summary>Budova - List vlastnictví</summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Controls.Filters.MainFilterStateEnum.BudovaCislo">
+            <summary>Budova - Číslo domovní</summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Controls.Filters.MainFilterStateEnum.JednotkaVlastnik">
+            <summary>Jednotka - Vlastník</summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Controls.Filters.MainFilterStateEnum.JednotkaList">
+            <summary>Jednotka - List vlastnictví</summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Controls.Filters.MainFilterStateEnum.JednotkaCislo">
+            <summary>Jednotka - Číslo jednotky</summary>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.Controls.Filters.FilterValue">
+            <summary>
+            Vstupní pole filtru
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Controls.Filters.FilterValue.ListVlastnictvi">
+            <summary>List vlastnictví</summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Controls.Filters.FilterValue.Ico">
+            <summary>ICO</summary>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.Controls.Filters.CisloDomovniFilterControl">
+            <summary>
+            Filtr pro zadání čísla domovního
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.CisloDomovniFilterControl.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.CisloDomovniFilterControl.GetFilter``1">
+            <summary>
+            Vrací filtr
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Controls.Filters.CisloDomovniFilterControl.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.CisloDomovniFilterControl.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.CisloDomovniFilterControl.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.Controls.Filters.CisloJednotkyFilterControl">
+            <summary>
+            Filtr na číslo jednotky
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.CisloJednotkyFilterControl.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.CisloJednotkyFilterControl.GetFilter``1">
+            <summary>
+            Vrací filtr pro číslo jednotky
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Controls.Filters.CisloJednotkyFilterControl.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.CisloJednotkyFilterControl.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.CisloJednotkyFilterControl.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.Controls.Filters.ListVlastnictviFilterControl">
+            <summary>
+            Filtr podle listu vlastnictví
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.ListVlastnictviFilterControl.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.ListVlastnictviFilterControl.GetFilter``1">
+            <summary>
+            Vrací filtr podle listu vlastnictví
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.ListVlastnictviFilterControl.SetListVlastnictvi(Gordic.General.GInt16)">
+            <summary>
+            Nastaví hodnotu listu vlastnictví
+            </summary>
+            <param name="value"></param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.ListVlastnictviFilterControl.GetListVlastnictvi">
+            <summary>
+            Vrátí hodnotu listu vlastnictví
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Controls.Filters.ListVlastnictviFilterControl.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.ListVlastnictviFilterControl.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.ListVlastnictviFilterControl.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.Controls.Filters.CisloParcelyFilterControl">
+            <summary>
+            Filtr čísla parcely
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.CisloParcelyFilterControl.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.CisloParcelyFilterControl.GetFilter``1">
+            <summary>
+            Vrací filtr pro číslo parcely
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Controls.Filters.CisloParcelyFilterControl.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.CisloParcelyFilterControl.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.CisloParcelyFilterControl.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.Controls.Filters.BaseFilterControl">
+            <summary>
+            Filtr podle vlastníka
+            </summary>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.Controls.Filters.BaseFilterControl.EnterKeyDownEventHandler">
+            <summary>
+            Vyvoláno při stisknutí klávesy Enter
+            </summary>
+        </member>
+        <member name="E:Gordic.Rnp.WinClient.Controls.Filters.BaseFilterControl.EnterKeyDownEvent">
+            <summary>
+            Vyvoláno při stisknutí klávesy Enter
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.BaseFilterControl.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.BaseFilterControl.GetFilter``1">
+            <summary>
+            Vrací filtr podle vlastníka
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.BaseFilterControl.OnEnterKeyDown(System.Windows.Forms.KeyEventArgs)">
+            <summary>
+            Vyvolá událost při stisknutí klávesy Enter
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Controls.Filters.BaseFilterControl.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.BaseFilterControl.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.BaseFilterControl.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.Controls.Filters.VlastnikFilterControl">
+            <summary>
+            Filtr podle vlastníka
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.VlastnikFilterControl.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.VlastnikFilterControl.GetFilter``1">
+            <summary>
+            Vrací filtr podle vlastníka
+            </summary>
+            <typeparam name="T"></typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.VlastnikFilterControl.SetIco(System.String)">
+            <summary>
+            Nastaví hodnotu ICO
+            </summary>
+            <param name="ico"></param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.VlastnikFilterControl.GetIco">
+            <summary>
+            Vrátí hodnotu ico
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Controls.Filters.VlastnikFilterControl.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.VlastnikFilterControl.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Controls.Filters.VlastnikFilterControl.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.GRnpModuleForm">
+            <summary>Hlavní formulář modulu RNP</summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.GRnpModuleForm.#ctor">
+            <summary>Vytvoří formulář modulu 'Rnp'</summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.GRnpModuleForm.OnGetSettings">
+            <summary>
+            Metoda sloužící k předání uživatelských nastavení aplikace
+            </summary>
+            <returns>Pole s komponentami definující uživatelská nastavení aplikace</returns>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.GRnpModuleForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.GRnpModuleForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.GRnpModuleForm.OnGetDefaultDockingPanelWidth">
+            <summary>
+            Nastavuje výchozí šířku dokovatelného panelu
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.GAppSetting">
+            <summary>
+            Nastavení aplikace REN
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.GAppSetting.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.GAppSetting.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.GAppSetting.OnLoadParam(System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="paramName"></param>
+            <param name="paramValue"></param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.GAppSetting.OnSaveParam(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="paramName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.GAppSetting.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.Tab.Detaily.GSezNahlizeniTab">
+            <summary>
+            Základní okno nahlížení do registru nemovitostí s filtrem, seznamy a detailem nemovitosti
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GSezNahlizeniTab.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GSezNahlizeniTab.#ctor(System.Boolean)">
+            <summary>
+            Konstruktor 
+            </summary>
+            <param name="useRegFilter">zda se má filtr nastavit podle parametrů v registrech</param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GSezNahlizeniTab.CreateParcelyHledaniGridFormat(System.Boolean)">
+            <summary>
+            Vytvoří GridFormat pro seznam nalezených parcel
+            </summary>
+            <returns>formátovací předpis pro data grid</returns>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GSezNahlizeniTab.CreateParcelyPripravaGridFormat">
+            <summary>
+            Vytvoří GridFormat pro seznam parcel připravených k vložení
+            </summary>
+            <returns>formátovací předpis pro data grid</returns>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GSezNahlizeniTab.CreateBudovyHledaniGridFormat(System.Boolean)">
+            <summary>
+            Vytvoří GridFormat pro seznam nalezených budov
+            </summary>
+            <returns>formátovací předpis pro data grid</returns>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GSezNahlizeniTab.CreateBudovyPripravaGridFormat">
+            <summary>
+            Vytvoří GridFormat pro seznam budov připravených k vložení
+            </summary>
+            <returns>formátovací předpis pro data grid</returns>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GSezNahlizeniTab.CreateJednotkyHledaniGridFormat(System.Boolean)">
+            <summary>
+            Vytvoří GridFormat pro seznam nalezených jednotek
+            </summary>
+            <returns>formátovací předpis pro data grid</returns>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GSezNahlizeniTab.CreateJednotkyPripravaGridFormat">
+            <summary>
+            Vytvoří GridFormat pro seznam nalezených jednotek
+            </summary>
+            <returns>formátovací předpis pro data grid</returns>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GSezNahlizeniTab.CreateVyberGridFormat">
+            <summary>
+            Vytvoří GridFormat pro vybrané nemovitosti
+            </summary>
+            <returns>formátovací předpis pro data grid</returns>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GSezNahlizeniTab.ChangeGrid(Gordic.Ren.Interface.TypNemovitostiEnum,Gordic.Rnp.WinClient.Controls.Filters.MainFilterStateEnum)">
+            <summary>
+            Změní seznam sloupců v gridech podle zvoleného typu nemovitosti
+            </summary>
+            <param name="typNemovitosti"></param>
+            <param name="mainFilter"></param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GSezNahlizeniTab.LoadGridDataHledani">
+            <summary>
+            Nacteni seznamu pozadavku
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GSezNahlizeniTab.SetFiltersByRegParams">
+            <summary>
+            Nastaví filtry podle parametrů v registrech
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GSezNahlizeniTab.GSezNahlizeniTab_Load(System.Object,System.EventArgs)">
+            <summary>
+            Zavoláno po načtení okna
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GSezNahlizeniTab.GetFilter(Gordic.Ren.Interface.TypNemovitostiEnum@)">
+            <summary>
+            Podle nastavené kombinace typu nemovitosti a typu filtru vrací enum pro zobrazení odpovídajících kontrolek filtru
+            </summary>
+            <param name="typNemovitosti">
+            Vybraný typ nemovitosti
+            </param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GSezNahlizeniTab.EnableTiskAction(System.Boolean)">
+            <summary>
+            Povolení akcí pro tisk detailu 
+            </summary>
+            <param name="enable"></param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GSezNahlizeniTab.OnOkClick">
+            <summary>
+            Metoda volaná po stisku tlačítka OK
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GSezNahlizeniTab.ConvertBool(System.Boolean)">
+            <summary>
+            Převede boolean na hodnoty 0,1
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GSezNahlizeniTab.FillPodilParams(Gordic.General.GString)">
+            <summary>
+            Při vyhledávání dle IČO vlastníka - naplní parametry podílu vlastnictví
+            </summary>
+            <param name="idTelesa"></param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GSezNahlizeniTab.OnCancelClick">
+            <summary>
+            Metoda volaná po stisku tlačítka Cancel
+            </summary>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Tab.Detaily.GSezNahlizeniTab.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GSezNahlizeniTab.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GSezNahlizeniTab.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.Tab.Detaily.GDetNahlizeniTab">
+            <summary>
+            Základní okno nahlížení do registru nemovitostí s detailem nemovitosti
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GDetNahlizeniTab.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GDetNahlizeniTab.GDetNahlizeniTab_Load(System.Object,System.EventArgs)">
+            <summary>
+            Zavoláno po načtení okna
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GDetNahlizeniTab.EnableTiskAction(System.Boolean)">
+            <summary>
+            Povolení akcí pro tisk detailu 
+            </summary>
+            <param name="enable"></param>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Tab.Detaily.GDetNahlizeniTab.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GDetNahlizeniTab.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Tab.Detaily.GDetNahlizeniTab.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.Task.Aktivni.GTaskNahlizeniDetRegTest">
+            <summary>
+            Task nahlížení do registru nemovitostí - TEST parametrů pro detail
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Task.Aktivni.GTaskNahlizeniDetRegTest.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Task.Aktivni.GTaskNahlizeniDetRegTest.#ctor(System.ComponentModel.IContainer)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="container"></param>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Task.Aktivni.GTaskNahlizeniDetRegTest.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Task.Aktivni.GTaskNahlizeniDetRegTest.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Task.Aktivni.GTaskNahlizeniDetRegTest.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.Task.Aktivni.GTaskNahlizeniSezRegTest">
+            <summary>
+            Task nahlížení do registru nemovitostí - TEST parametrů pro seznamy
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Task.Aktivni.GTaskNahlizeniSezRegTest.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Task.Aktivni.GTaskNahlizeniSezRegTest.#ctor(System.ComponentModel.IContainer)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="container"></param>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Task.Aktivni.GTaskNahlizeniSezRegTest.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Task.Aktivni.GTaskNahlizeniSezRegTest.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Task.Aktivni.GTaskNahlizeniSezRegTest.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.Task.Aktivni.GTaskNahlizeni">
+            <summary>
+            Task nahlížení do registru nemovitostí
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Task.Aktivni.GTaskNahlizeni.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Task.Aktivni.GTaskNahlizeni.#ctor(System.ComponentModel.IContainer)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="container"></param>
+        </member>
+        <member name="F:Gordic.Rnp.WinClient.Task.Aktivni.GTaskNahlizeni.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Task.Aktivni.GTaskNahlizeni.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Rnp.WinClient.Task.Aktivni.GTaskNahlizeni.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Rnp.WinClient.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rnp.WinClient.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rnp.WinClient.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rnp.WinClient.Properties.Resources.GSARNP01">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+            </summary>
+        </member>
+        <member name="P:Gordic.Rnp.WinClient.Properties.Resources.Icons__Gin__evidence">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rnp.WinClient.Properties.Resources.Images__Zkratky__rnp">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rnp.WinClient.Properties.Resources.NazevRetezc">
+            <summary>
+              Looks up a localized string similar to Text.
+            </summary>
+        </member>
+        <member name="T:Gordic.Rob.WinClient.Gordic_Rnp_WinClient">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610002">
+            <summary>
+              Looks up a localized string similar to Kód KÚ.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610005">
+            <summary>
+              Looks up a localized string similar to Podd..
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610006">
+            <summary>
+              Looks up a localized string similar to Díl.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610007">
+            <summary>
+              Looks up a localized string similar to Výměra.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610008">
+            <summary>
+              Looks up a localized string similar to Druh pozemku.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610009">
+            <summary>
+              Looks up a localized string similar to Způsob využití pozemku.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610010">
+            <summary>
+              Looks up a localized string similar to Název KÚ.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610011">
+            <summary>
+              Looks up a localized string similar to Druh čísl..
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610012">
+            <summary>
+              Looks up a localized string similar to Typ.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610013">
+            <summary>
+              Looks up a localized string similar to Číslo par..
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610014">
+            <summary>
+              Looks up a localized string similar to List vla..
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610015">
+            <summary>
+              Looks up a localized string similar to RČ.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610016">
+            <summary>
+              Looks up a localized string similar to IČO.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610017">
+            <summary>
+              Looks up a localized string similar to Název oprávněného subjektu.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610018">
+            <summary>
+              Looks up a localized string similar to Číslo domovní.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610019">
+            <summary>
+              Looks up a localized string similar to Číslo parcely.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610020">
+            <summary>
+              Looks up a localized string similar to Číslo jednotky.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610021">
+            <summary>
+              Looks up a localized string similar to Typ budovy.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610022">
+            <summary>
+              Looks up a localized string similar to Způsob využití budovy.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610023">
+            <summary>
+              Looks up a localized string similar to Typ jednotky.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610024">
+            <summary>
+              Looks up a localized string similar to Způsob využití jednotky.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610027">
+            <summary>
+              Looks up a localized string similar to Popis.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610028">
+            <summary>
+              Looks up a localized string similar to Cena.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610029">
+            <summary>
+              Looks up a localized string similar to Výměra.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610030">
+            <summary>
+              Looks up a localized string similar to Druh nemovitosti.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610031">
+            <summary>
+              Looks up a localized string similar to Název parcely.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610032">
+            <summary>
+              Looks up a localized string similar to Název budovy.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610033">
+            <summary>
+              Looks up a localized string similar to Název jednotky.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610035">
+            <summary>
+              Looks up a localized string similar to Nebyla zadána dostačující kritéria pro výběr..
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient._31610036">
+            <summary>
+              Looks up a localized string similar to Nebyl správně nastaven parametr TypService. Aplikace bude ukončena..
+            </summary>
+        </member>
+        <member name="T:Gordic.Rob.WinClient.Gordic_Rnp_WinClient_Exceptions">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient_Exceptions.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient_Exceptions.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient_Exceptions._31610026">
+            <summary>
+              Looks up a localized string similar to Při načítání seznamu vyhledaných nemovitostí došlo k chybě.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient_Exceptions._31610034">
+            <summary>
+              Looks up a localized string similar to Při načítání seznamu připravených nemovitostí došlo k chybě.
+            </summary>
+        </member>
+        <member name="P:Gordic.Rob.WinClient.Gordic_Rnp_WinClient_Exceptions._31610037">
+            <summary>
+              Looks up a localized string similar to Při načítání seznamu vybraných nemovitostí došlo k chybě.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,86 @@
+﻿@mixin prefix($name, $argument, $prefixes: (webkit ms moz o)) {    
+    @if $name == display and $argument == flex {
+        @if index($prefixes, ms) { display: -ms-flexbox; } // TWEENER - IE 10
+        @if index($prefixes, webkit) { display: -webkit-flex; } // NEW - Safari 6.1+. iOS 7.1+, BB10
+    } 
+    @else {
+        @each $prefix in $prefixes {     
+            -#{$prefix}-#{$name}: #{$argument};
+        }
+    }
+    #{$name}: #{$argument};
+}
+
+@mixin shadow($shadow) {
+    @if ($shadow) {
+        -moz-box-shadow:    $shadow;
+        -webkit-box-shadow: $shadow;
+        box-shadow:         $shadow;
+    }
+}
+
+@mixin background-image-cover($url) {
+    background: url($url) center / cover;
+}
+
+@mixin append-fa($charcode) {
+    position: relative;
+
+    @at-root #{& + '::after'} {
+        content: $charcode;
+        font-family: FontAwesome;
+        position: absolute;
+        right: .6em;
+    }
+}
+
+@mixin clickable($hoverColor) {
+    cursor: pointer;
+
+    &:hover {
+        color: $hoverColor;
+        @content;
+    }
+}
+
+@mixin focus() {
+    background-image: $btn-focus-image;
+    outline-color: transparent;
+    outline-width: 2px;
+    outline-style: dotted;
+}
+
+// obtáhne písmenka barvou, využívá několikanásobný font-shadow
+@mixin text-outline($color, $size: 1px, $blur: 1px) {
+    text-shadow:
+        $size (-$size) $blur $color,
+        $size $size $blur $color,
+        (-$size) $size $blur $color,
+        (-$size) (-$size) $blur $color;
+}
+
+@mixin angular($heightToWidthRatio: 1) {
+    @at-root #{& + ':after'} {
+        content: "";
+        float: left;
+        margin-top: $heightToWidthRatio * 100%;
+    }
+}
+
+@mixin placeholder {
+    &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+        @content;
+    }
+    &::-moz-placeholder { // Firefox 19+
+        @content;
+    }
+    &:-ms-input-placeholder { // IE 10+
+        @content;
+    }
+    &:-moz-placeholder { // Firefox 18-
+        @content;
+    }
+    /*&::placeholder { // css4 (Firefox 51+)
+        @content;
+    }*/
+}

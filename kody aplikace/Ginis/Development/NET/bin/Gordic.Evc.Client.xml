@@ -1,0 +1,546 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Evc.Client</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Evc.Client.GEvcClient">
+            <summary>
+            Předek všech klientských tříd aplikační logiky pro Evc
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.Client.GEvcClient.m_oAppLogic">
+            <summary>Objekt aplikační logiky</summary>
+        </member>
+        <member name="M:Gordic.Evc.Client.GEvcClient.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Evc.Client.GEvcClient.#ctor(Gordic.General.ApplicationClient.GUserProcess,System.Boolean)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="userProcess">UserProcess</param>
+            <param name="createAppLogic">Zda se má vytvořit objekt pro přístup k aplikační logice</param>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.Ico">
+            <summary>
+            IČO
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.Ucs">
+            <summary>
+            UCS
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.Nks">
+            <summary>
+            NKS
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.Uus">
+            <summary>
+            UUS
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.Rok">
+            <summary>
+            Rok
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.Mesic">
+            <summary>
+            Měsíc
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.RokObdobi">
+            <summary>
+            Složenina Rok+Měsíc
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.IxpDen">
+            <summary>
+            Kniha
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.OtevreneObdobi">
+            <summary>
+            Určuje, zda je aktuální období otevřené
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.PrvniOtevreneObdobi">
+            <summary>
+            První otevřené období (null v situaci, že nedošlo k uzávěrce)
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.DatabazovyDatum">
+            <summary>
+            Vrací aktuální datum braný z databázového serveru
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.ParametrEvcNksZdroj">
+            <summary>
+            Hodnota parametru: EVC - ŘP Nákladové středisko pro pořizování dat
+            Hodnota parametru udává číslo nákladového střediska, kde dochází k pořizování dat(typicky NKS VUZP: 631700).
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.ParametrEvcRadTprEvid">
+            <summary>
+            Hodnota parametru: EVC - Šablona evidenčního pracovního poměru
+            Evidenční pracovní poměr se zakládá ve mzdách při převzetí dokladu z EVC podle této šablony. Volba této šablony určuje např. pracoviště, na které bude evid. pracovní poměr zařazen.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.ParametrEvcRadAutPrij">
+            <summary>
+            Hodnota parametru: EVC - Automatický příjem dokladu po jeho předání
+            Určuje, zda se při uložení dokladu (záznam o provedení předběžné kontroly) provede jeho automatický příjem do mezd.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.ParametrEvcRadZpSoPre">
+            <summary>
+            Hodnota parametru: EVC - Zpracování soupisky po předání do mezd
+            Určuje, jakým způsobem bude soupiska měsíčních změn po předání do mezd dále zpracována.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.ParametrEvcRadOmSoDat">
+            <summary>
+            Hodnota parametru: EVC - Omezit modifikaci dat podle aktuálního datumu
+            Zapíná kontrolu na modifikaci obsahu soupisky nebo její předání podle aktuálního datumu. Se soupiskou lze nakládat pouze do posledního dne měsíce, ve kterém byla pořízena.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.ParametrEvcRadEdOsEpp">
+            <summary>
+            Hodnota parametru: EVC - ŘP Právo editovat osobu s evidenčním pracovním poměrem 
+            Parametr určuje, zda má uživatel právo editovat osobu s evidenčním pracovním poměrem 
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.ParametrEvcRadObOsEpp">
+            <summary>
+            Hodnota parametru: EVC - ŘP Právo obnovit osobu s evidenčním pracovním poměrem 
+            Parametr určuje, zda má uživatel právo obnovit stornovanou osobu s evidenčním pracovním poměrem 
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.ParametrEvcRadPrOsEpp">
+            <summary>
+            Hodnota parametru: EVC - ŘP Právo předat osobu s evidenčním pracovním poměrem 
+            Parametr určuje, zda má uživatel právo předat doklad s osobou s evidenčním pracovním poměrem pro jeho založení ve mzdách 
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.ParametrEvcRadStOsEpp">
+            <summary>
+            Hodnota parametru: EVC - ŘP Právo stornovat osobu s evidenčním pracovním poměrem 
+            Parametr určuje, zda má uživatel právo stornovat osobu s evidenčním pracovním poměrem 
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.ParametrEvcRadVyOsEpp">
+            <summary>
+            Hodnota parametru: EVC - ŘP Právo vytvořit osobu s evidenčním pracovním poměrem 
+            Parametr určuje, zda má uživatel právo vytvořit osobu s evidenčním pracovním poměrem 
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.ParametrEvcRadAPDZdPo">
+            <summary>
+            Hodnota parametru: EVC - Automatický příjem dokladu zdravotní pojišťovna osoby
+            Určuje, zda se při předání dokladu (zdravotní pojišťovna osoby) provede jeho automatický příjem do mezd.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.ParametrEvcRadEdDZdPo">
+            <summary>
+            Hodnota parametru: EVC - ŘP Právo editovat doklad se zdravotní pojišťovnou osoby
+            Parametr určuje, zda má uživatel právo editovat doklad se zdravotní pojišťovnou osoby
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.ParametrEvcRadObDZdPo">
+            <summary>
+            Hodnota parametru: EVC - ŘP Právo obnovit doklad se zdravotní pojišťovnou osoby
+            Parametr určuje, zda má uživatel právo obnovit stornovaný doklad se zdravotní pojišťovnou osoby
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.ParametrEvcRadPrDZdPo">
+            <summary>
+            Hodnota parametru: EVC - ŘP Právo předat doklad se zdravotní pojišťovnou osoby
+            Parametr určuje, zda má uživatel právo předat doklad se zdravotní pojišťovnou osoby pro jeho založení ve mzdách
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.ParametrEvcRadStDZdPo">
+            <summary>
+            Hodnota parametru: EVC - ŘP Právo stornovat doklad se zdravotní pojišťovnou osoby
+            Parametr určuje, zda má uživatel právo stornovat doklad se zdravotní pojišťovnou osoby
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.ParametrEvcRadVyDZdPo">
+            <summary>
+            Hodnota parametru: EVC - ŘP Právo vytvořit doklad se zdravotní pojišťovnou osoby
+            Parametr určuje, zda má uživatel právo vytvořit doklad se zdravotní pojišťovnou osoby
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.ParametrEvcRadVyVypSl">
+            <summary>
+            Hodnota parametru: EVC - ŘP Právo vyplatit vypočtenou složku
+            Parametr určuje, zda má uživatel právo vyplatit vypočtenou složku 
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.ParametrEvcRadUlPriSl">
+            <summary>
+            Hodnota parametru: EVC - ŘP Právo pracovat s přiznanými složkami
+            Parametr určuje, zda má uživatel právo pracovat s přiznanými složkami (určuje, zda bude mezi úlohami úloha Přiznané složky)
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Client.GEvcClient.AppLogic">
+            <summary>
+            Přístup k objektu aplikační logiky
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Client.GEvcClient.SetEkoGlobalDbParameters(System.String,System.String,System.String,System.Int32,System.String,System.String)">
+            <summary>Nastavení globálních parametrů - ekonomických</summary>    
+        </member>
+        <member name="M:Gordic.Evc.Client.GEvcClient.NastavSdileneParametry(System.Boolean,Gordic.General.GInt32)">
+            <summary>
+            Nastaví společné základní parametry modulu
+            </summary>
+            <param name="otevreneObdobi">Zda je období otevřené</param>
+            <param name="prvniOtevreneObdobi">První otevřené období</param>
+        </member>
+        <member name="M:Gordic.Evc.Client.GEvcClient.NactiTabulku(System.String,System.String[])">
+            <summary>
+            Načte tabulku zadaného jména.
+            </summary>
+            <param name="jmenoTabulky">Jméno tabulky GINISu.</param>
+            <param name="sloupceTabulky">Sloupce tabulky, které se mají načíst. Nebude-li uveden
+            žádný sloupec, načte se celá tabulka.</param>
+            <returns>Vrací požadovanou tabulku.</returns>
+        </member>
+        <member name="M:Gordic.Evc.Client.GEvcClient.NactiTabulku(System.String,System.Int32,System.String[])">
+            <summary>
+            Načte tabulku zadaného jména.
+            </summary>
+            <param name="jmenoTabulky">Jméno tabulky GINISu.</param>
+            <param name="orderIndex">Index sloupce(od 1), podle kterého se má řadit tabulka.</param>
+            <param name="sloupceTabulky">Sloupce tabulky, které se mají načíst. Nebude-li uveden
+            žádný sloupec, načte se celá tabulka.</param>
+            <returns>Vrací požadovanou tabulku.</returns>
+        </member>
+        <member name="M:Gordic.Evc.Client.GEvcClient.ZiskejUcetniJednotku">
+            <summary>Získá učetní jednotku. Je závislé na aktuálním
+            období, Ičo, Ucs, Uus, Nks.</summary>
+            <returns>Hodnota ixs_vaj.</returns>
+        </member>
+        <member name="M:Gordic.Evc.Client.GEvcClient.ZiskejNazevKnihy(System.String)">
+            <summary>
+            Získá název knihy na základě jejího identifikátoru
+            </summary>
+            <param name="ixpDen">Identifikátor knihy</param>
+            <returns>Název knihy</returns>
+        </member>
+        <member name="M:Gordic.Evc.Client.GEvcClient.ZiskejCiselnik(System.String)">
+            <summary>
+            Načte libovolný číselník
+            </summary>
+            <param name="tableName">název tabulky</param>
+        </member>
+        <member name="M:Gordic.Evc.Client.GEvcClient.ClearCache">
+            <summary>
+            Vymaže všechny cache
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.Client.GReaderPamstpr">
+            <summary>
+            Klientská část AL - Šablony pracovních poměrů
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Client.GReaderPamstpr.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="T:Gordic.Evc.Client.GReaderPamspra">
+            <summary>
+            Klientská část AL - Pracoviště
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Client.GReaderPamspra.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="T:Gordic.Evc.Client.GEvcClientException">
+            <summary>Výjimka klienta aplikační logiky Pdm</summary>
+        </member>
+        <member name="M:Gordic.Evc.Client.GEvcClientException.#ctor(System.Int32,System.Int32,System.Object[])">
+            <summary>
+            Konstruktor výjimky
+            </summary>
+            <param name="code">Kód výjimky</param>
+            <param name="resourceCode">Kód textu výjimky v souboru se zdroji</param>
+            <param name="parameters">Parametry pro formátovaný text výjimky</param>
+        </member>
+        <member name="M:Gordic.Evc.Client.GEvcClientException.#ctor(System.Int32,System.Int32,System.Exception,System.Object[])">
+            <summary>
+            Konstruktor výjimky
+            </summary>
+            <param name="code">Kód výjimky</param>
+            <param name="resourceCode">Kód textu výjimky v souboru se zdroji</param>
+            <param name="innerException">Vnitřní výjimka</param>
+            <param name="parameters">Parametry pro formátovaný text výjimky</param>
+        </member>
+        <member name="T:Gordic.Evc.Client.GPriznaneSlozky">
+            <summary>
+            Klientská část AL pro práci s přiznanými složkami
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Client.GPriznaneSlozky.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="P:Gordic.Evc.Client.GPriznaneSlozky.AppLogic">
+            <summary>
+            Přístup k objektu aplikační logiky
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.Client.GOsoby">
+            <summary>
+            Klientská část AL pro práci s osobami
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Client.GOsoby.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Evc.Client.GOsoby.ZkontrolujExistenciOsobyVPam(Gordic.Evc.Interface.UdajeOsobDataSet.SeznamRow)">
+            <summary>
+            podle vstupních parametrů ověří, zda již existuje ESU 
+            </summary>
+            <param name="esurow"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Gordic.Evc.Client.GOsoby.AppLogic">
+            <summary>
+            Přístup k objektu aplikační logiky
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.Client.GSoupisky">
+            <summary>
+            Klientská část AL pro práci se soupiskami
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Client.GSoupisky.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="P:Gordic.Evc.Client.GSoupisky.AppLogic">
+            <summary>
+            Přístup k objektu aplikační logiky
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.Client.GEvcCrsConnector">
+            <summary>Třída zapouzdřující volání ověření v CRS (na GŘC - pouze u jednoho zákazníka)</summary>
+        </member>
+        <member name="M:Gordic.Evc.Client.GEvcCrsConnector.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor třídy</summary>
+        </member>
+        <member name="M:Gordic.Evc.Client.GEvcCrsConnector.NactiSeznamDuchodu(Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            
+            </summary>
+            <param name="rc"></param>
+            <param name="duvodOvereni"></param>
+        </member>
+        <member name="T:Gordic.Evc.Client.GPoznamkyDokladu">
+            <summary>
+            Klient AL pro poznámky k dokladům
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.Client.GPoznamkyDokladu.m_oAppLogicPoznamkyDokladu">
+            <summary>Objekt aplikační logiky</summary>
+        </member>
+        <member name="M:Gordic.Evc.Client.GPoznamkyDokladu.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="P:Gordic.Evc.Client.GPoznamkyDokladu.AppLogic">
+            <summary>
+            Přístup k objektu aplikační logiky
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Client.GPoznamkyDokladu.Seznam(Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GFilter{Gordic.Evc.Interface.FilPoznamkyDokladu}[])">
+            <summary>Seznam poznámek rozšířeného objektu</summary>
+            <param name="sxs">Identifikátor rozšířeného objektu</param>
+            <param name="typObj">Identifikátor rozšířeného typu objektu</param>
+            <param name="filters">Filtrační kritéria</param>
+        </member>
+        <member name="T:Gordic.Evc.Client.GUdajeOsob">
+            <summary>
+            Klient AL pro práci s údaji osob
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.Client.GUdajeOsob.m_oAppLogicUdajeOsob">
+            <summary>Objekt aplikační logiky</summary>
+        </member>
+        <member name="M:Gordic.Evc.Client.GUdajeOsob.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="P:Gordic.Evc.Client.GUdajeOsob.AppLogic">
+            <summary>
+            Přístup k objektu aplikační logiky
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Client.GUdajeOsob.GetEsuTypAg(Gordic.General.GString)">
+            <summary>
+            vrati ginsesu.typ_ag dle ixs_esu
+            </summary>
+            <param name="ixs_esu"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Evc.Client.GUdajeOsob.Detail(Gordic.General.GString)">
+            <summary>Získá podrobné údaje o zaměstnanci</summary>
+            <param name="ixsEsu">Identifikátor zaměstnance (pamsesu)</param>
+        </member>
+        <member name="M:Gordic.Evc.Client.GUdajeOsob.DetailZDokladu(Gordic.General.GString,Gordic.General.GString)">
+            <summary>Získá podrobné údaje o osobě z přidružených informacích dokladu (pamddes)</summary>
+            <param name="ixp">Identifikátor dokladu</param>
+            <param name="ixsEsu">Identifikátor osoby</param>
+        </member>
+        <member name="T:Gordic.Evc.Client.GPredbezneKontroly">
+            <summary>
+            Klient AL pro práci s předběžnými kontrolami
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.Client.GPredbezneKontroly.m_oAppLogicPredbezneKontroly">
+            <summary>Objekt aplikační logiky</summary>
+        </member>
+        <member name="M:Gordic.Evc.Client.GPredbezneKontroly.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="P:Gordic.Evc.Client.GPredbezneKontroly.AppLogic">
+            <summary>
+            Přístup k objektu aplikační logiky
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Client.GPredbezneKontroly.Seznam(Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GFilter{Gordic.Evc.Interface.FilPredbezneKontroly}[])">
+            <summary>Seznam předběžných kontrol</summary>
+            <param name="obdobiOd">Omezení na záznamy platné pouze v období od</param>
+            <param name="obdobiDo">Omezení na záznamy platné pouze v období do</param>
+            <param name="filters">Filtrační kritéria</param>
+        </member>
+        <member name="M:Gordic.Evc.Client.GPredbezneKontroly.VytvorNeboUprav(Gordic.Evc.Interface.PredbezneKontrolyDataSet.SeznamRow,Gordic.Evc.Interface.UdajeOsobDataSet.SeznamRow,Gordic.Evc.Interface.PoznamkyDokladuDataSet.SeznamDataTable)">
+            <summary>Vytvoří nový nebo upraví stávající doklad předběžné kontroly</summary>
+            <param name="predbezneKontrolySeznamRow">Informace z dokladu předběžné kontroly</param>
+            <param name="udajeOsobSeznamRow">Údaje o osobě</param>
+            <param name="poznamkyDokladuSeznamTable">Seznam poznámek k dokladu</param>
+        </member>
+        <member name="M:Gordic.Evc.Client.GPredbezneKontroly.VytvorNeboUpravEppVysluh(Gordic.Evc.Interface.PredbezneKontrolyDataSet.SeznamRow,Gordic.Evc.Interface.UdajeOsobDataSet.SeznamRow,Gordic.Evc.Interface.PoznamkyDokladuDataSet.SeznamDataTable)">
+            <summary>
+            
+            </summary>
+            <param name="predbezneKontrolySeznamRow"></param>
+            <param name="udajeOsobSeznamRow"></param>
+            <param name="poznamkyDokladuSeznamTable"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Evc.Client.GPredbezneKontroly.ZiskejUcetniJednotkyPracovisteZeSablony(Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary>Získá účetní jednotku pro pracoviště na základě šablony a období</summary>
+            <param name="ixsTpr">Identifikátor šablony</param>
+            <param name="rokObdobiMzdy">Období, pro něž se bude účetní jednotka zjišťovat</param>
+            <param name="ico">IČO</param>
+            <param name="ucs">UCS</param>
+            <param name="nks">NKS</param>
+            <param name="uus">UUS</param>
+        </member>
+        <member name="T:Gordic.Evc.Client.GZadaneSlozky">
+            <summary>
+            Klient AL pro práci se zadanými složkami
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.Client.GZadaneSlozky.m_oAppLogicZadaneSlozky">
+            <summary>Objekt aplikační logiky</summary>
+        </member>
+        <member name="M:Gordic.Evc.Client.GZadaneSlozky.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="P:Gordic.Evc.Client.GZadaneSlozky.AppLogic">
+            <summary>
+            Přístup k objektu aplikační logiky
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Client.GZadaneSlozky.Seznam(Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GFilter{Gordic.Evc.Interface.FilZadaneSlozky}[])">
+            <summary>Seznam vypočtených složek</summary>
+            <param name="obdobiOd">Omezení na složky platné pouze v období od</param>
+            <param name="obdobiDo">Omezení na složky platné pouze v období do</param>
+            <param name="filters">Filtrační kritéria</param>
+        </member>
+        <member name="M:Gordic.Evc.Client.GZadaneSlozky.OdvedAZauctujSlozku(Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GInt32)">
+            <summary>Provede odvod a vyúčtování vypočtené složky mzdy</summary>
+            <param name="ixsPpv">Identifikátor pracovního poměru</param>
+            <param name="rokObdobiMzdy">Období mzdy</param>
+            <param name="poradi">Pořadové číslo vypočtené složky mzdy</param>
+            <param name="flags">Pomocné příznaky</param>
+        </member>
+        <member name="T:Gordic.Evc.Client.GDokladyZmenaZarazeni">
+            <summary>
+            Klient AL AL pro práci s doklady měnící zařazení PPV
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.Client.GDokladyZmenaZarazeni.m_oAppLogicDokladyZmenaZarazeni">
+            <summary>Objekt aplikační logiky</summary>
+        </member>
+        <member name="M:Gordic.Evc.Client.GDokladyZmenaZarazeni.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="P:Gordic.Evc.Client.GDokladyZmenaZarazeni.AppLogic">
+            <summary>
+            Přístup k objektu aplikační logiky
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Client.GDokladyZmenaZarazeni.VytvorNeboUprav(Gordic.Evc.Interface.DokladyZmenaZarazeniDataSet.SeznamRow)">
+            <summary>Vytvoří nový nebo upraví stávající doklad změny zařazení PPV</summary>
+            <param name="zmenaZarazeniSeznamRow">Informace z dokladu změny zařazení PPV</param>
+        </member>
+        <member name="T:Gordic.Evc.Client.GDokladyZdravotniPojistovny">
+            <summary>
+            Klient AL pro práci s doklady zdravotních pojišťoven
+            </summary>
+        </member>
+        <member name="F:Gordic.Evc.Client.GDokladyZdravotniPojistovny.m_oAppLogicDokladyZdravotniPojistovny">
+            <summary>Objekt aplikační logiky</summary>
+        </member>
+        <member name="M:Gordic.Evc.Client.GDokladyZdravotniPojistovny.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="P:Gordic.Evc.Client.GDokladyZdravotniPojistovny.AppLogic">
+            <summary>
+            Přístup k objektu aplikační logiky
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Client.GDokladyZdravotniPojistovny.Seznam(Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GFilter{Gordic.Evc.Interface.FilterDokladyZdravotniPojistovny}[])">
+            <summary>Seznam dokladů zdravotncíh pojišťoven</summary>
+            <param name="obdobiOd">Omezení na záznamy platné pouze v období od</param>
+            <param name="obdobiDo">Omezení na záznamy platné pouze v období do</param>
+            <param name="filters">Filtrační kritéria</param>
+        </member>
+        <member name="M:Gordic.Evc.Client.GDokladyZdravotniPojistovny.VytvorNeboUprav(Gordic.Evc.Interface.DokladyZdravotniPojistovnyDataSet.SeznamRow)">
+            <summary>Vytvoří nový nebo upraví stávající doklad zdravotní pojišťovny</summary>
+            <param name="zdravotniPojistovnySeznamRow">Informace z dokladu zdravotní pojišťovny</param>
+        </member>
+    </members>
+</doc>

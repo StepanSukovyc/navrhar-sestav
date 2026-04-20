@@ -1,0 +1,1986 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Report.WinClient</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Report.WinClient.GReportViewerWin">
+            <summary>
+            GXL formátování
+            </summary>
+            <summary>
+            Třída pro klientskou stranu reporteru obsahující funkce pro těžkého klienta
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportViewerWin.ShowReportGXL(Gordic.Report.Interface.IGReport,System.Boolean)">
+            <summary>
+            Zobrazení GXL sestavy
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportViewerWin.Instance">
+            <summary>
+            Jediný způsob, jak dostat instanci tohto objektu
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportViewerWin.SetUpReport(Gordic.Report.Interface.IGReport)">
+            <summary>Nastavení reportu nutné před generováním</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportViewerWin.FinalizeReport(Gordic.Report.Interface.IGReport)">
+            <summary>(Od)Nastavení reportu po generováním</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportViewerWin.SetViewerParams(Gordic.Report.Interface.IGReport)">
+            <summary>
+            Nastaví parametry pro zobrazení. Není třeba používat, pokud je report získaný pomocí metod 
+            <see cref="M:Gordic.Report.WinClient.GReportViewerWin.ShowReportTreeTab(Gordic.Report.WinClient.ReportChosenHandler,System.String,System.String,Gordic.General.GEkoDate,Gordic.Report.Interface.GReportSource,System.String,System.String,Gordic.Report.Client.GOperatingPrintKind,System.Boolean,System.Boolean,System.Boolean,Gordic.Report.Interface.GPreselectedParams,System.Boolean,Gordic.Report.Interface.IGReport,System.EventHandler,System.String,System.Boolean,System.Boolean,System.Boolean,Gordic.Report.WinClient.ReportTreeShowHandler,Gordic.General.GString)"/> nebo <see cref="M:Gordic.Report.Client.GReportViewer.GetReport(Gordic.Report.Interface.GReportIdentity,Gordic.Report.Interface.GReportSource,Gordic.General.GEkoDate,System.String)"/>./>
+            </summary>
+            <param name="report">Report pro nastevení parametrů</param>
+            <returns>shodné s parametrem</returns>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportViewerWin._GenerateAsync(Gordic.Report.Interface.IGReport)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportViewerWin._Generate(Gordic.Report.Interface.IGReport)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportViewerWin.FormatSaveReport(Gordic.Report.Interface.IGReport)">
+            <summary>
+            Spuštění celého formátování sestavy včetně ukládání do ELE apod. ale _bez_ skutečného zobrazení sestavy na obrazovce
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportViewerWin.ShowReport(Gordic.Report.Interface.IGReport)">
+            <summary>
+            Zobrazí report v gordic prohlížeči.
+            </summary>
+            <remarks>
+            Report předaný této metodě se, pokud již není, nejdříve vygeneruje a po té se
+            zobrazí. Pokud již vygenerovaný je, bude zobrazení probíhat podstatně rychleji.
+            Pokud není vygeneruje se voláním metody <see cref="M:Gordic.Report.Client.GReportViewer.GenerateReport(Gordic.Report.Interface.IGReport)"/>.
+            </remarks>
+            <exception cref="T:Gordic.Report.Client.GReportClientException">
+            Pokud se nepovede report vygenerovat.
+            </exception>
+            <exception cref="T:Gordic.Report.Interface.GReportUserException">
+            Pokud je v souboru .alv použita konstrukce 'runerror "nějaká chyba"'
+            </exception>
+            <exception cref="T:Gordic.Report.Interface.GReportAbortException">
+            Pokud uživatel přeruší generování sestavy.
+            </exception>
+            <param name="report">
+            Report vrácený z <see cref="M:Gordic.Report.WinClient.GReportViewerWin.ShowReportTreeTab(Gordic.Report.WinClient.ReportChosenHandler,System.String,System.String,Gordic.General.GEkoDate,Gordic.Report.Interface.GReportSource,System.String,System.String,Gordic.Report.Client.GOperatingPrintKind,System.Boolean,System.Boolean,System.Boolean,Gordic.Report.Interface.GPreselectedParams,System.Boolean,Gordic.Report.Interface.IGReport,System.EventHandler,System.String,System.Boolean,System.Boolean,System.Boolean,Gordic.Report.WinClient.ReportTreeShowHandler,Gordic.General.GString)"/> a případně doplněný o parametry.
+            </param>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportViewerWin.FormatReportDms(Gordic.Report.Interface.IGReport,System.Boolean)">
+            <summary>ulozeni do uloziste (DMS)</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportViewerWin.ScheduleReport(Gordic.Report.Interface.IGReport,System.Boolean)">
+            <summary>Plánování odložené sestavy</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportViewerWin.ShowReportTreeTab(Gordic.Report.WinClient.ReportChosenHandler,System.String,System.String,Gordic.General.GEkoDate,Gordic.Report.Interface.GReportSource,System.String,System.String,Gordic.Report.Client.GOperatingPrintKind,System.Boolean,System.Boolean,System.Boolean,Gordic.Report.Interface.GPreselectedParams,System.Boolean,Gordic.Report.Interface.IGReport,System.EventHandler,System.String,System.Boolean,System.Boolean,System.Boolean,Gordic.Report.WinClient.ReportTreeShowHandler,Gordic.General.GString)">
+            <summary>Zobrazí strom sestav</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportViewerWin.SchedulingEnabled">
+            <summary>
+            Příznak povolení plánování z parametru v DB
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportViewerWin.ShowFileInVidrun(System.String)">
+            <summary>
+            Zobrazení souboru ve Vindrun (bez parametrů atp.)
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportViewerWin.DetectFormat(Gordic.Report.Interface.IGReport,System.String,System.Int32@,System.Int32@,System.String@)">
+            <summary>
+            Zjistí nastavení stránky (tiskovou předvolbu) z prohlížeče
+            </summary>
+            <param name="report">Report</param>
+            <param name="key">Klíč</param>
+            <param name="pageLen">Požadovaná délka stránky (v počtu řádek)</param>
+            <param name="pageWidth">Požadovaná šířka stránky (ve znacích)</param>
+            <param name="formatName">Název předvolby</param>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportViewerWin.Gordic#Report#WinClient#IGReportExtWindowForms#ShowExtWindow(System.Windows.Forms.Form)">
+            <summary>Dialog pri generovani</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportViewerWin.Gordic#Report#WinClient#IGReportExtWindowForms#ShowExtWindow(System.Windows.Forms.CommonDialog)">
+            <summary>Dialog pri generovani</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportViewerWin.MessageBox(System.String,System.String)">
+            <summary>Zobrazí klasický MessageBox, s jedním tlačítkem OK</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportViewerWin.InputBox(System.String,System.String,System.String@)">
+            <summary>
+            Zobrazí dialogový box s políčkem pro zadání textové hodnoty od uživatele
+            </summary>
+            <param name="caption">Nadpis dialogového okna</param>
+            <param name="text">Popisek nad vstupním polem pro text</param>
+            <param name="input">Vstupně výstupní parametr, bude zde uveden text zadaný
+            uživatelem, pokud se zadá již při volání funkce, bude to sloužit jako
+            předvyplněný text</param>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportViewerWin.ChoiceBox(System.String,System.Collections.IList,System.String@,System.Boolean)">
+            <summary>
+            Zobrazí dialogový box se seznamem možností, kde lze jednu vybrat
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportViewerWin.ProgressBox(System.String,System.String,System.String)">
+            <summary>
+            Zobrazí dialogový box s ukazatelem procentuálního dokončení úlohy
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportViewerWin.CustomDialog(System.String,System.Drawing.Point,System.Drawing.Size,System.Collections.IDictionary)">
+            <summary>
+            Vytvoří custom dialog
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportViewerWin.RunAlgorithm(Gordic.Report.Interface.IGReport,System.Collections.Generic.Dictionary{System.String,System.String},System.Boolean)">
+            <summary>Spustí algoritmus</summary>
+            <returns>null pokud se algoritmus nespustí, jinak výsledek jeho spuštění</returns>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportViewerWin.RunAlgorithm(System.String,System.Collections.Generic.Dictionary{System.String,System.String},System.Boolean,System.String)">
+            <summary>Vyhledá a spustí algoritmus</summary>
+            <returns>null pokud se algoritmus nespustí, jinak výsledek jeho spuštění</returns>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportViewerWin.RunAlgorithm(Gordic.Report.Interface.GReportIdentity,System.Collections.Generic.Dictionary{System.String,System.String},System.Boolean)">
+            <summary>Vyhledá a spustí algoritmus</summary>
+            <returns>null pokud se algoritmus nespustí, jinak výsledek jeho spuštění</returns>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GVid01Wrapper">
+            <summary>Statický objekt pro volání Prohlížeče</summary>
+            <remarks>
+            Tento objekt zprostředkovává volání prohlížeče souborů MANAGED prostředky
+            </remarks>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GVid01Wrapper.VidSession">
+            <summary>Objekt spojení (session) s Prohlížečem</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GVid01Wrapper.VidSession.#ctor">
+            <summary>Objekt spojení (session) s Prohlížečem</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GVid01Wrapper.VidSession.Finalize">
+            <summary>uvolnění</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GVid01Wrapper.VidSession.Dispose">
+            <summary>uvolnění</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GVid01Wrapper.VidSession.GetParametr(System.String)">
+            <summary>Čtení hodnoty parametru</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GVid01Wrapper.VidSession.SetParametr(System.String,System.String)">
+            <summary>Nastavení hodnoty parametru</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GVid01Wrapper.VidSession.Open(System.String)">
+            <summary>Otevření souboru</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GVid01Wrapper.VidSession.Show">
+            <summary>Zobrazení</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GVid01Wrapper.VidSession.ShowNoClose">
+            <summary>Zobrazení (bez ukončení)</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GVid01Wrapper.VidSession.WaitForClose">
+            <summary>Čekání na ukončení (pro modální zobrazení)</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GVid01Wrapper.VidSession.RegisterAction(System.String,System.Action)">
+            <summary>Registrace akce pod jménem</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GVid01Wrapper.VidSession.SendMessage">
+            <summary>Odeslání zprávy</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GVid01Wrapper.vid_SessionCreate">
+            <summary>Vytvoření spojení (session) s Prohlížečem</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GVid01Wrapper.vid_SessionClose(Gordic.Report.WinClient.GVid01Wrapper.VidSession)">
+            <summary>Ukončení spojení (session) s Prohlížečem</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GVid01Wrapper.vid_SessionShow(Gordic.Report.WinClient.GVid01Wrapper.VidSession)">
+            <summary>Zobrazení (s ukončením)</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GVid01Wrapper.vid_SessionShowNoClose(Gordic.Report.WinClient.GVid01Wrapper.VidSession)">
+            <summary>Zobrazení (bez ukončení)</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GVid01Wrapper.vid_SessionWaitForClose(Gordic.Report.WinClient.GVid01Wrapper.VidSession)">
+            <summary>Čekání na ukončení (pro modální zobrazení)</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GVid01Wrapper.vid_RegisterAction(Gordic.Report.WinClient.GVid01Wrapper.VidSession,System.String,System.Action)">
+            <summary>Registrace akce pod jménem</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GVid01Wrapper.vid_SessionOpenFile(Gordic.Report.WinClient.GVid01Wrapper.VidSession,System.String)">
+            <summary>Otevření souboru</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GVid01Wrapper.vid_SessionGetParameter(Gordic.Report.WinClient.GVid01Wrapper.VidSession,System.String,System.Text.StringBuilder,System.Int32)">
+            <summary>Čtení hodnoty parametru</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GVid01Wrapper.vid_SessionSetParameter(Gordic.Report.WinClient.GVid01Wrapper.VidSession,System.String,System.String)">
+            <summary>Nastavení hodnoty parametru</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GVid01Wrapper.vid_SessionSendMessage(Gordic.Report.WinClient.GVid01Wrapper.VidSession,Gordic.Report.WinClient.GVid01Wrapper.MessageDispatcher@)">
+            <summary>Odeslání zprávy</summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GVid01Wrapper.MessageParameter">
+            <summary>Parametr zprávy</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GVid01Wrapper.MessageParameter.Name">
+            <summary>Jméno parametru</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GVid01Wrapper.MessageParameter.Value">
+            <summary>Hodnota parametru</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GVid01Wrapper.MessageParameter.SetValue(System.String)">
+            <summary>Hodnota parametru</summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GVid01Wrapper.MessageDispatcher">
+            <summary>Odesílání zpráv</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GVid01Wrapper.MessageDispatcher.ID">
+            <summary>ID zprávy</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GVid01Wrapper.MessageDispatcher.SetID(System.String)">
+            <summary>ID zprávy</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GVid01Wrapper.MessageDispatcher.Parameters">
+            <summary>Parametry zprávy</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GVid01Wrapper.MessageDispatcher.AddParameter(System.String)">
+            <summary>Parametry zprávy</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GVid01Wrapper.MessageDispatcher.Broadcast">
+            <summary>Rozeslání zprávy všem modulům</summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GfrmBackControl">
+            <summary>
+            Panel na pozadí
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GfrmBackControl.#ctor">
+            <summary>
+            konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GfrmBackControl.#ctor(Gordic.Report.Interface.IGReport)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GfrmBackControl.Dispose(System.Boolean)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GfrmBackControl.OnPaintBackground(System.Windows.Forms.PaintEventArgs)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GfrmBackControl.OnPaint(System.Windows.Forms.PaintEventArgs)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GfrmBackControl.OnMouseDown(System.Windows.Forms.MouseEventArgs)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GfrmBackControl.OnMouseUp(System.Windows.Forms.MouseEventArgs)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GfrmBackControl.OnMouseMove(System.Windows.Forms.MouseEventArgs)">
+            <summary/>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GReportSettingProvider">
+            <summary>Poskytovatel uživatelského nastavení pro infopanel</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportSettingProvider.GetSettings">
+            <summary>
+            Vrátí uživatelské nastavení pro infopanel
+            </summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GReportFormShow">
+            <summary>
+            Zobrazení sestav Interaktivních formulářů
+            </summary>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GReportFormShow.m_gfe">
+            <summary/>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportFormShow.Report">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFormShow.#ctor">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFormShow.#ctor(Gordic.Report.Interface.IGReport)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFormShow.#ctor(System.String)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFormShow.Dispose(System.Boolean)">
+            <summary>Clean up any resources being used.</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportFormShow.MainControl">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFormShow.BeginInvoke(System.Delegate)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFormShow.ShowReport(Gordic.Report.Interface.IGReport,System.Byte[],System.String)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFormShow.SetPageMargins(System.Int32,System.Int32,System.Int32,System.Int32)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFormShow.PaintPageContent(System.Int32,System.Drawing.Graphics,System.Drawing.RectangleF)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFormShow.InvokeMouseDown(System.Windows.Forms.MouseEventArgs)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFormShow.InvokeMouseUp(System.Windows.Forms.MouseEventArgs)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFormShow.InvokeMouseMove(System.Windows.Forms.MouseEventArgs)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFormShow.ShowFile(System.String,System.String)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFormShow.Navigate(System.String,Gordic.Report.Interface.IGReport,Gordic.GFE.Parsers.Dom.Filler)">
+            <summary/>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportFormShow.ScriptEngine">
+            <summary>
+            Engine
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFormShow.RegisterCustomClass(System.String,Gordic.Report.Implementation.IScriptable)">
+            <summary>Registrace dalších tříd pro skripty</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFormShow.UpdateState">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFormShow.AddControl(System.Windows.Forms.Control)">
+            <summary/>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GReportFormShow.useGui">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFormShow.ShowToGui(Gordic.WinForms.Gui.GTab)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFormShow.Save">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFormShow.InternalSave">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFormShow.GetEleName(System.String,System.String)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFormShow.PrepareReport">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFormShow.SaveGfrm(System.String)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFormShow.SaveGfrma(System.String)">
+            <summary/>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportFormShow.Opener">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFormShow.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GReportFormShow.aSaveClose">
+            <summary/>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GReportFormShow.aHighlight">
+            <summary/>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GReportFormShow.aSave">
+            <summary/>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GReportFormShow.aPrint">
+            <summary/>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GReportFormShow.aSaveAs">
+            <summary/>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GReportFormShow.m_oToolBar">
+            <summary/>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GReportFormShow.miHighlight">
+            <summary/>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GReportFormShow.aBack">
+            <summary/>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GReportFormShow.aForw">
+            <summary/>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GReportFormShow.aRefresh">
+            <summary/>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GReportFormShow.aPrint2">
+            <summary/>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GReportFormShow.aPrint3">
+            <summary/>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GSettingBackForm">
+            <summary>
+            Objekt pro uzivatelske nastaveni - GSettingBackForm
+            </summary>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GSettingBackForm.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GSettingBackForm.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GSettingBackForm.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GSeznamOdlozBaliku">
+            <summary>
+            Seznam balíků odložených úloh
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GSeznamOdlozBaliku.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GSeznamOdlozBaliku.NewVisible">
+            <summary>Viditelnost tlačítka Nový</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GSeznamOdlozBaliku.OnLoad(System.EventArgs)">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GSeznamOdlozBaliku.Balik">
+            <summary>Balík</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GSeznamOdlozBaliku.IdUdaFilter">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GSeznamOdlozBaliku.aNew_Start(System.Object,System.EventArgs)">
+            <exclude/>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GWpOdlozTabPkg">
+            <summary>
+            Krok č.2 (Obsah) v průvodci pro odložené balíky
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTabPkg.#ctor(Gordic.Report.Client.GScheduledReport)">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTabPkg.OnEnter">
+            <summary>
+            Vstup na stránku
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTabPkg.OnLeavePage(Gordic.WinForms.Controls.GWizardTabReason)">
+            <summary>
+            Validace dat
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTabPkg.GetInfoControl(System.Boolean)">
+            <summary>
+            info control
+            </summary>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GWpOdlozTabPkg.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTabPkg.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTabPkg.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GWpOdlozTab2">
+            <summary>
+            Krok č.2 v průvodci pro odložené úlohy
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab2.#ctor(Gordic.Report.Client.GScheduledReport)">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab2.OnEnter">
+            <summary>
+            Vstup na stránku
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab2.GetInfoControl(System.Boolean)">
+            <summary>
+            info control
+            </summary>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GWpOdlozTab2.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab2.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab2.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GSeznamOdlozUloh">
+            <summary>
+            Seznam odložených úloh
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GSeznamOdlozUloh.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GSeznamOdlozUloh.Adu">
+            <summary>
+            aplikacni logika
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GSeznamOdlozUloh.CreateGridFormat(System.Boolean)">
+            <summary>
+            Vytvoří GridFormat
+            </summary>
+            <returns>formátovací předpis pro data grid</returns>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GSeznamOdlozUloh.SelectImage(System.Data.DataRow,System.String)">
+            <summary>
+            delegát pro dohledání obrázku pro sloupec s obrázky
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GSeznamOdlozUloh.GetFilters">
+            <summary>
+            vrati pole filtru
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GSeznamOdlozUloh.UpdateControlsState">
+            <summary>
+            aktualizace stavu promennych
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GSeznamOdlozUloh.CurrentRow">
+            <summary>vybraný řádek</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GSeznamOdlozUloh.LoadGridData">
+            <summary>
+            Nacteni seznamu pozadavku
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GSeznamOdlozUloh.rbFilters_CheckedChanged(System.Object,System.EventArgs)">
+            <summary>
+            akce, ktera se provede pri preskrtnuti kterehokoliv radiobuttonu
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GSeznamOdlozUloh.OnLoad(System.EventArgs)">
+            <summary>
+            inicializace dialogu
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GSeznamOdlozUloh.m_oActionDetailUlohy_Click(System.Object,System.EventArgs)">
+            <summary>
+            Detail odložené úlohy
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GSeznamOdlozUloh.CreateScheduledReportTab(Gordic.Adu.Interface.GEventsDataset.ScheduledEventsRow)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GSeznamOdlozUloh.CreateScheduledReport(Gordic.Adu.Interface.GEventsDataset.ScheduledEventsRow)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GSeznamOdlozUloh.rbFiltry_CheckedChanged(System.Object,System.EventArgs)">
+            <summary>
+            Změna filtrů - pouze 1x pro zaškrtnutý
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GSeznamOdlozUloh.m_oActionNacist_Click(System.Object,System.EventArgs)">
+            <summary>
+            Načíst
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GSeznamOdlozUloh.RunLocalTest(Gordic.Adu.Interface.GEventsDataset.ScheduledEventsRow)">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GSeznamOdlozUloh.Rad_EditCiziODL">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GSeznamOdlozUloh.Rad_ZrusCiziODL">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GSeznamOdlozUloh.IdUdaFilter">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GSeznamOdlozUloh.AddBasicIdUdaFilter">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GSeznamOdlozUloh.aNew_Start(System.Object,System.EventArgs)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GSeznamOdlozUloh.gvUlohy_CurrentRowChanged(System.Object,System.EventArgs)">
+            <exclude/>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GSeznamOdlozUloh.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GSeznamOdlozUloh.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GSeznamOdlozUloh.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GSeznamOdlozUloh.aNew">
+            <exclude/>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GPrintFormatsCombo">
+            <summary>
+            Kombobox pro výběr tiskové předvolby
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GPrintFormatsCombo.OnDropDown(System.EventArgs)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GPrintFormatsCombo.Fill">
+            <exclude/>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GPrintOuputCombo">
+            <summary>
+            Kombobox pro výběr typu výstupu sestavy
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GPrintOuputCombo.SelectedOutputType">
+            <summary>
+            Zvolený typ výstupu
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GPrintOuputCombo.SelectedOutputTypeOrDefault">
+            <summary>
+            Zvolený nebo výchozí typ výstupu 
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GPrintOuputCombo.SelectedOutputTypeOrDefaultFor(Gordic.Report.Interface.IGReport)">
+            <summary>
+            optimalizovane SelectedOutputTypeOrDefault
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GPrintOuputCombo.Report">
+            <summary>
+            Sestava pro kterou se nabízí výstupy
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GPrintOuputCombo.ReportInfo">
+            <summary>
+            Sestava pro kterou se nabízí výstupy
+            </summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GReportTreeTab">
+            <summary>
+            Okno Výběru sestavy
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportTreeTab.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportTreeTab.#ctor(System.String,System.String,Gordic.General.GEkoDate,Gordic.Report.Interface.IGReportProvider,Gordic.Report.Interface.GReportSource,System.String,System.String,Gordic.Report.Client.GOperatingPrintKind)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportTreeTab.OnLoad(System.EventArgs)">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportTreeTab.Report">
+            <summary>Vybraný report</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportTreeTab.Tema">
+            <summary>Téma nebo "" pokud jich je více</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportTreeTab.Temas">
+            <summary>Témata (všechna)</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportTreeTab.OperatingPrint">
+            <summary>možnost výběru operativního tisku</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportTreeTab.JustOneReport">
+            <summary>Pouze jedna sestava ve výběru</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportTreeTab.Count">
+            <summary>Počet zobrazených sestav</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportTreeTab.RunAgain">
+            <summary>Volba spustit znovu</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportTreeTab.Preselect">
+            <summary>Volba přednastavit</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportTreeTab.RunAgainVisible">
+            <summary>Možnost volby spustit znovu</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportTreeTab.PreselectVisible">
+            <summary>Možnost volby přednastavit</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportTreeTab.SchedulingVisible">
+            <summary>Možnost plánování</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportTreeTab.ScheduleEnabled">
+            <summary>Povolení plánování</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportTreeTab.Platnost">
+            <summary>Platnost</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportTreeTab.ReportProvider">
+            <summary>Provider</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportTreeTab.TreeProvider">
+            <summary>Provider</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportTreeTab.ReportSource">
+            <summary>Zdroj dat sestav</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportTreeTab.RestrictionALV">
+            <summary>Omezení ALV</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportTreeTab.RestrictionALF">
+            <summary>Omezení ALF</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportTreeTab.AcceptTypes">
+            <summary>Seznam typu (typ_alv), které lze vybrat</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportTreeTab.ClosableTab">
+            <summary>Příznak zda se tab zavře vybráním sestavy (pro speciální použití)</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportTreeTab.MoreVisible">
+            <summary>Zda je právě rozbaleno More tlačítko</summary>
+        </member>
+        <member name="E:Gordic.Report.WinClient.GReportTreeTab.ReportChosen">
+            <summary>Událost vybrání reportu</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportTreeTab.OnReportChosen(Gordic.Report.Interface.GReportEventArgs)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportTreeTab.SelectReport(Gordic.Report.Interface.IGReport)">
+            <summary>
+            zavření okna
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportTreeTab.OnOkClick">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportTreeTab.FindReport(Gordic.Report.Interface.GReportIdentity)">
+            <summary>Vyhledání sestavy</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportTreeTab.SelectReport(Gordic.Report.Interface.GReportIdentity)">
+            <summary>Vyhledání a označení sestavy</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportTreeTab.EvidFunFilter">
+            <summary>Filtr na funkci pro seznam evidovanych</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportTreeTab.AddToFavorites(Gordic.Report.Interface.GReportIdentity)">
+            <summary>
+            přidání do oblíbených
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportTreeTab.LoadData">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportTreeTab.GplusActive">
+            <summary>G+ Asistent je aktivní</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportTreeTab.ShowInGfe(Gordic.General.ApplicationClient.GUserProcess,Gordic.Report.Interface.IGReport)">
+            <summary>
+            Spuštění GFE
+            </summary>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GReportTreeTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportTreeTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportTreeTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GReportFavorite">
+            <summary>
+            Panel s oblibenyma
+            </summary>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GReportFavorite.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFavorite.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportFavorite.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GReportSeznamEvidovanychTab">
+            <summary>Tab seznamu zobrazení uložených sestav (evidovaných výstupů)</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportSeznamEvidovanychTab.ActFazeFilter">
+            <summary>Filtr na aktualni fazi</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportSeznamEvidovanychTab.IcoFilter">
+            <summary>Filtr na ICO</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportSeznamEvidovanychTab.RokFilter">
+            <summary>Filtr na ROK</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportSeznamEvidovanychTab.IxsFunFilter">
+            <summary>Filtr na funkci</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportSeznamEvidovanychTab.#ctor">
+            <summary>
+            Konstruktor pro zobrazení uložených sestav aplikace
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportSeznamEvidovanychTab.#ctor(Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>
+            Konstruktor pro zobrazení uložených sestav aplikace, filtr dle ICO, ROK
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportSeznamEvidovanychTab.#ctor(System.String,Gordic.General.GString)">
+            <summary>
+            Konstruktor pro zobrazení  uložených sestav dle tématu a IXP (pro specialni pouziti)
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportSeznamEvidovanychTab.#ctor(Gordic.General.GString)">
+            <summary>
+            Konstruktor pro zobrazení uložených sestav dle IXP
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportSeznamEvidovanychTab.#ctor(Gordic.Report.Interface.IGReport)">
+            <summary>
+            Konstruktor pro zobrazení uložených sestav konkrétní sestavy (v ico,rok)
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportSeznamEvidovanychTab.OnLoad(System.EventArgs)">
+            <remarks/>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GReportSeznamEvidovanychTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportSeznamEvidovanychTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportSeznamEvidovanychTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GExtReportUserProcess">
+            <summary>vstupní bod generátoru a reporteru pro Win32 applikace</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GExtReportUserProcess.ReportInit(System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String)">
+            <summary>hromadné načtení dat z XML formulářů do databáze</summary>
+            <param name="faze">fáze aplikace</param>
+            <param name="user">login uživatele</param>
+            <param name="licence">licence databáze</param>
+            <param name="logPorCislo">identifikátor autorizované relace</param>
+            <param name="datumPrihlaseni">datum přihlášení</param>
+            <param name="profile">název databázového profilu</param>
+            <param name="loginDb">login DBA uživatele</param>
+            <param name="passwordDb">heslo DBA uživatele</param>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GExtReportUserProcess.ReportRelease">
+            <summary>
+            Uvolnění prostředků (logout)
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GExtReportUserProcess.ReportSetParameter(System.String,System.String)">
+            <summary>
+            Nastavení parametrů pro reporter
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GExtReportUserProcess.ReportGetParameter(System.String)">
+            <summary>
+            Zjištění parametrů z reporteru
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GExtReportUserProcess.PreselectedParams">
+            <summary>Přednastavení</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GExtReportUserProcess.ReportChooseTree(System.String,System.String)">
+            <summary>
+            Výběr sestavy ke generování
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GExtReportUserProcess.ReportSet(System.String,System.String)">
+            <summary>
+            Nastavení sestavy ke generování
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GExtReportUserProcess._ReportSet(Gordic.Report.Interface.IGReport)">
+            <summary>
+            Nastavení sestavy ke generování
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GExtReportUserProcess.ReportGenRun(System.String)">
+            <summary>
+            Spuštění generátoru
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GExtReportUserProcess.ReportShow">
+            <summary>
+            Spuštění celého zobrazení sestavy včetně ukládání do ELE apod.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GExtReportUserProcess.ReportFormatSave">
+            <summary>
+            Spuštění celého formátování sestavy včetně ukládání do ELE apod. ale _bez_ skutečného zobrazení sestavy na obrazovce
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GExtReportUserProcess.ReportPreselectDialog">
+            <summary>
+            Zobrazení nastavení tisku
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GExtReportUserProcess.ReportSeznamEvidovanychDialog">
+            <summary>
+            Zobrazení seznamu evidovaných výstupů
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GExtReportUserProcess.ReportSeznamOdlozDialog">
+            <summary>
+            Zobrazení seznamu odložených úloh
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GExtReportUserProcess.ReportSchedule">
+            <summary>
+            Spuštění plánování sestavy
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GExtReportUserProcess.ses_GetInfo(System.String,System.String)">
+            <summary>Zjisteni info sekci ze sestavy</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GExtReportUserProcess.ses_GetAllInfo(System.String)">
+            <summary>Zjisteni info sekci ze sestavy</summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GExtReportAlvUserProcess">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GExtReportAlvUserProcess.#ctor(System.String)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GExtReportAlvUserProcess.OnCreateApplicationInfo">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GExtReportAlvUserProcess.ParseCommandLine">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GExtReportAlvUserProcess.OnLoadDatabaseConfiguration">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GExtReportAlvUserProcess.GetAutoLoginInfo">
+            <exclude/>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GPrintAction">
+            <summary>
+            Akce GUI k přístupu k tiskovým funkcím
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GPrintAction.#ctor(System.ComponentModel.IContainer)">
+            <summary>
+            Veřejný konstruktor
+            </summary>
+            <param name="container">Kontainer</param>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GPrintAction.#ctor">
+            <summary>
+            Veřejný konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GPrintAction.OnStart(System.EventArgs)">
+            <summary>
+            Vyvolává event Start
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GPrintAction.OnReportChosen(Gordic.Report.Interface.GReportEventArgs)">
+            <summary>
+            Vyvolává se po volbě sestavy
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GPrintAction.OnReportCompleted(Gordic.Report.Interface.GReportEventArgs)">
+            <summary>Vyvolává event ReportCompleted</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GPrintAction.OnReportFinished(Gordic.Report.Interface.GReportEventArgs)">
+            <summary>Vyvolává event ReportFinished</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GPrintAction.OnReportStarting(Gordic.Report.Interface.GReportEventArgs)">
+            <summary>Vyvolává event ReportStarting/ReportRetrieveEvent</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GPrintAction.OnOperatingPrintStarting(Gordic.Report.Interface.GReportOperatingPrintEventArgs)">
+            <summary>Vyvolává event OperationPrintRetrieve</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GPrintAction.EvalEnabledState">
+            <summary>
+            Řídí enablovaní butonku podle nastavených vlastností
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GPrintAction.ReportViewer">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GPrintAction.Text">
+            <summary>
+            Text Butonu, nelze nastavovat v designeru
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GPrintAction.Enabled">
+            <summary>
+            Zneviditelnuje property Enabled v toolboxu
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GPrintAction.Tema">
+            <summary>
+            Tema distribucniho stromu sestav
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GPrintAction.PID">
+            <summary>
+            PID distribucniho stromu sestav
+            </summary>
+            <remarks>Po zobrazení stromu sestav se uložená hodnota automaticky vymaže</remarks>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GPrintAction.Platnost">
+            <summary>Platnost reportu, pro distribucni strom sestav</summary>
+            <remarks>Po zobrazení stromu sestav se uložená hodnota automaticky vymaže</remarks>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GPrintAction.RestrictionALV">
+            <summary>
+            Dodatečné omezení pro distribuční strom sestav (alv), forma SQL příkazu, musí začínat AND
+            </summary>
+            <remarks>Po zobrazení stromu sestav se uložená hodnota automaticky vymaže</remarks>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GPrintAction.RestrictionALF">
+            <summary>
+            Dodatečné omezení pro distribuční strom sestav (alf), forma SQL příkazu, musí začínat AND
+            </summary>
+            <remarks>Po zobrazení stromu sestav se uložená hodnota automaticky vymaže</remarks>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GPrintAction.ReportSource">
+            <summary>
+            Informace o tom kde se ma report vzit <see cref="T:Gordic.Report.Interface.GReportSource"/>
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GPrintAction.OperatingPrint">
+            <summary>
+            Povoluje použití operativního tisku
+            </summary>
+            <remarks>
+            Nastavení této proměnné na true má za následek přidání položky "Operativní Tisk" do stromu
+            sestav. Dále bude po stisku tlačítka a výběru této položky (v případě že není ve stromu sama)
+            vyvolán event OperationPrintRetrieve pro zadání dat ve formě DataTable. V budoucnu může být použito
+            i pro speciální sestavy, které nebudou data natahovat z databáze, ale budou očekávat dodání
+            DataTable. K formátování sloupců se použije GGridFormat v případě že je zadán.
+            </remarks>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GPrintAction.OperatingPrintAllowOnlySelected">
+            <summary>
+            Povoluje operativní tisk varianta pro označené řádky
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GPrintAction.PreselectVisible">
+            <summary>Povoluje viditelnost možnosti přednastavení sestavy</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GPrintAction.RunAgainVisible">
+            <summary>Povoluje viditelnost možnosti znovuspuštění sestavy</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GPrintAction.AllowScheduling">
+            <summary>Povolení zveřejnění sestavy</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GPrintAction.ShowJustOneReport">
+            <summary>Zda zobrazit nabídku i když je jediná sestava k výběru</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GPrintAction.AcceptTypes">
+            <summary>Seznam akceptovaných typů sestav (default: ALV,GRC)</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GPrintAction.UseGui">
+            <summary>Zda se má použít GUI pro zobrazení nabídky sestav</summary>
+            <remarks>Pokud je false, používá se OutForm</remarks>
+        </member>
+        <member name="E:Gordic.Report.WinClient.GPrintAction.ReportStarting">
+            <summary>
+            Event vyvolávaný po získání reportu z databáze
+            </summary>
+        </member>
+        <member name="E:Gordic.Report.WinClient.GPrintAction.ReportOperatingPrintStarting">
+            <summary>
+            Event vzniká po vybrání reportu z distribučního stromu v případě že je nastaven příznak OperatingPrint
+            </summary>
+        </member>
+        <member name="E:Gordic.Report.WinClient.GPrintAction.ReportCompleted">
+            <summary>
+            Event vyvolávaný po kompletním zpracování sestavy
+            </summary>
+        </member>
+        <member name="E:Gordic.Report.WinClient.GPrintAction.ReportCancelled">
+            <summary>
+            Event vyvolávaný po kompletním zpracování sestavy
+            </summary>
+        </member>
+        <member name="E:Gordic.Report.WinClient.GPrintAction.ReportFinished">
+            <summary>
+            Event vzniká po generování a zobrazení sestavy.
+            </summary>
+        </member>
+        <member name="E:Gordic.Report.WinClient.GPrintAction.ReportTreeShow">
+            <summary>
+            Event vzniká před zobrazením nabídky sestav
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GPrintAction.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GReportBatchDialog">
+            <summary>
+            Dialog ulozeni davky
+            </summary>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GReportBatchDialog.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportBatchDialog.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportBatchDialog.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GCustomDialog.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GInputBoxForm">
+            <summary>
+            Summary description for Gordic.
+            </summary>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GInputBoxForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GInputBoxForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GInputBoxForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GReportChoiceBox">
+            <summary>
+            Summary description for Gordic.
+            </summary>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GReportChoiceBox.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportChoiceBox.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportChoiceBox.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GReportProgressBoxForm">
+            <summary>Teploměr - formulář (běží na hlavním threadu)</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportProgressBoxForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportProgressBoxForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportProgressBoxForm.OnCancelled(System.EventArgs)">
+            <exclude/>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GReportProgressBox">
+            <summary>Teploměr - pomocná třída, která se volá z Interpretu (běží na druhém threadu). Hlavně o synchronizaci.</summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GReportSaveDMSDialog">
+            <summary>
+            Dialog volby ulozeni do DMS
+            </summary>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GReportSaveDMSDialog.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportSaveDMSDialog.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportSaveDMSDialog.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GReportPreselected">
+            <summary>
+            Dialog přednastavených algoritmů a formátů pro témata sestav
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportPreselected.#ctor">
+            <summary>
+            Dialog přednastavených algoritmů a formátů pro témata sestav
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportPreselected.#ctor(Gordic.Report.Interface.GPreselectedParams)">
+            <summary>
+            Dialog přednastavených algoritmů a formátů pro témata sestav
+            </summary>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GReportPreselected.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportPreselected.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GReportPreselected.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GADSDetail">
+            <summary>
+            Zobrazení detailu sestavy pro ADS
+            </summary>
+            <summary>
+            generated
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GADSDetail.#ctor(Gordic.Report.Interface.IGReport)">
+            <summary>
+            Zobrazení detailu sestavy pro ADS
+            </summary>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GADSDetail.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GADSDetail.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GADSDetail.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GGuiMenuProvider">
+            <summary>
+            Poskytovatel položek menu pro GUI
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GGuiMenuProvider.#ctor">
+            <summary>
+            konstruktor
+            </summary>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GGuiMenuProvider.Preselected">
+            <summary>Přidání okna Nastavení tiskových formátů</summary>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GGuiMenuProvider.Evidovane">
+            <summary>Přidání okna Uložené sestavy</summary>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GGuiMenuProvider.Odlozene">
+            <summary>Přidání okna Přehled úloh odloženého zpracování sestav</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GGuiMenuProvider.OnShowSettingPrint">
+            <summary>
+            Vyvoláno při pokusu o zobrazení nastavení tisku
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GGuiMenuProvider.OnShowSettingSavedReport">
+            <summary>
+            Vyvoláno při pokusu o zobrazení uložených sestav
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GGuiMenuProvider.OnShowSettingOdlozReport">
+            <summary>
+            Vyvoláno při pokusu o zobrazení odložených sestav
+            </summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.IGReportExtWindowForms">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.IGReportExtWindowForms.ShowExtWindow(System.Windows.Forms.Form)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.IGReportExtWindowForms.ShowExtWindow(System.Windows.Forms.CommonDialog)">
+            <exclude/>
+        </member>
+        <member name="T:Gordic.Report.WinClient.ReportChosenHandler">
+            <summary>Událost volby sestavy</summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GReportTreeShowArgs">
+            <summary>Třída pro událost před zobrazením stromu</summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GReportTreeShowArgs.Tree">
+            <summary>Strom sestav</summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.ReportTreeShowHandler">
+            <summary>Delegát použitý před zobrazením stromu</summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__e_mail">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__hledat">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__oblibene">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__oblibene_novy">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__sestava">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__sestava_ulozena">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__sipka_doleva">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__sipka_doprava">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__slozka">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__slozka_obsahujici">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__slozka_otevrena">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__slozka_otevrena_obsahujici">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__soubor_doc">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__soubor_doc_tisk">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__soubor_gor">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__soubor_gor_tisk">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__soubor_mdf">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__soubor_special">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__soubor_special_tisk">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__soubor_standard">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__soubor_standard_tisk">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__soubor_xls">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__soubor_xls_tisk">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__soubor_xls1">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__tisk">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__tisk_format">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__tisk_nahled">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__tisk_nastaveni">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__uloha_odlozena">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__ulozit">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__vlastnictvi_skupinove">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Gin__vlastnictvi_soukrome">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Ssl__balik">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Icons__Wfl__dokument">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.Properties.Resources.Images__preloader">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GOdlozZastZnak">
+            <summary>
+            Dialog s nabidkou zastupnych znak v odl.zpracovani
+            </summary>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GOdlozZastZnak.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GOdlozZastZnak.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GOdlozZastZnak.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GWpScheduleTab">
+            <summary>
+            Průvodce odloženou úlohou
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpScheduleTab.#ctor">
+            <summary>
+            Konstruktor - nepouzivat!
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpScheduleTab.#ctor(Gordic.Report.Client.GScheduledReport)">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpScheduleTab.Init(Gordic.Report.Client.GScheduledReport)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpScheduleTab.wizard_WizardResize(System.Object,System.Drawing.Size)">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GWpScheduleTab.WizardClosed">
+            <summary>
+            Akce vyvolaná při stisku tlačítka zrušit
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpScheduleTab.GDetailPlanOdloz_Load(System.Object,System.EventArgs)">
+            <summary>
+            Načtení tabu
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpScheduleTab.OnWizardLoad(Gordic.Report.WinClient.GScheduleReportWizardControl)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpScheduleTab.GDetailPlanOdloz_Closing(System.Object,System.ComponentModel.CancelEventArgs)">
+            <summary>
+            Pokoušíme se uzavřít GTab - pokud to povolí wizard, skončíme GTab
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpScheduleTab.CloseWizard">
+            <summary>
+            Uzavření wizardu a tohoto tabu
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GWpScheduleTab.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpScheduleTab.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpScheduleTab.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GScheduleReportWizardControl">
+            <summary>
+            Control pro wizard plánování sestav
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GScheduleReportWizardControl.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GScheduleReportWizardControl.AutoMaxSize">
+            <summary>
+            Velikost wizardu podle největší karty
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GScheduleReportWizardControl.WizardTitle">
+            <summary>
+            Nadpis wizardu
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GScheduleReportWizardControl.ScheduledReport">
+            <summary>
+            Nutno nastavit - report, který se plánuje
+            </summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GWpOdlozBaseTab">
+            <summary>
+            Předek pro odložené zpracování
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozBaseTab.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozBaseTab.#ctor(Gordic.Report.Client.GScheduledReport)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="odlozenyPozadavek"></param>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GWpOdlozBaseTab.OdlozenyPozadavek">
+            <summary>
+            Odložený požadavek
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GWpOdlozBaseTab.UserProcess">
+            <summary>UserProcess</summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GWpOdlozTab1">
+            <summary>
+            Krok č.1 v průvodci pro odložené úlohy
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab1.#ctor(Gordic.Report.Client.GScheduledReport)">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab1.OnEnter">
+            <summary>
+            Vstup na stránku
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab1.OnLeavePage(Gordic.WinForms.Controls.GWizardTabReason)">
+            <summary>
+            Validace dat
+            </summary>
+            <param name="reason"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab1.GetInfoControl(System.Boolean)">
+            <summary>
+            info control
+            </summary>
+            <param name="isSelected"></param>
+            <returns></returns>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GWpOdlozTab1.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab1.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab1.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GWpOdlozTab3">
+            <summary>
+            Krok č.3 v průvodci pro odložené úlohy
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab3.#ctor(Gordic.Report.Client.GScheduledReport)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab3.OnEnter">
+            <summary>Vstup do karty</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab3.OnLeavePage(Gordic.WinForms.Controls.GWizardTabReason)">
+            <summary>Akce při opuštění stránky</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab3.GetInfoControl(System.Boolean)">
+            <summary>info control</summary>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GWpOdlozTab3.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab3.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab3.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GWpOdlozTab4">
+            <summary>
+            Krok č.4 v průvodci pro odložené úlohy
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab4.#ctor(Gordic.Report.Client.GScheduledReport)">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab4.OnEnter">
+            <summary>
+            Vstup do karty
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab4.OnLeavePage(Gordic.WinForms.Controls.GWizardTabReason)">
+            <summary>
+            Opuštění stránky
+            </summary>
+            <param name="reason"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab4.GetInfoControl(System.Boolean)">
+            <summary>
+            info control
+            </summary>
+            <param name="isSelected"></param>
+            <returns></returns>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GWpOdlozTab4.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab4.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab4.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GWpOdlozTab5">
+            <summary>
+            Krok č.5 v průvodci pro odložené úlohy
+            </summary>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GWpOdlozTab5.Rad_OdlFile">
+            <summary>povolení uložení ODL do souboru</summary>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GWpOdlozTab5.Rad_OdlDms">
+            <summary>povolení uložení ODL do DMS</summary>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GWpOdlozTab5.Rad_OdlMail">
+            <summary>povolení odeslání ODL emailem</summary>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GWpOdlozTab5.Rad_OdlUda">
+            <summary>povolení odeslání ODL událostí</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab5.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab5.#ctor(Gordic.Report.Client.GScheduledReport)">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab5.OnEnter">
+            <summary>
+            Vstup do karty
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab5.OnLeavePage(Gordic.WinForms.Controls.GWizardTabReason)">
+            <summary>
+            TODO
+            </summary>
+            <param name="reason"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab5.SignState(System.Boolean,System.Boolean)">
+            <summary>Kombinace hodnot sign a timestamp</summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab5.GetInfoControl(System.Boolean)">
+            <summary>
+            info control
+            </summary>
+            <param name="isSelected"></param>
+            <returns></returns>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GWpOdlozTab5.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab5.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab5.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Report.WinClient.GWpOdlozTab6">
+            <summary>
+            Krok č.6 v průvodci pro odložené úlohy
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab6.#ctor(Gordic.Report.Client.GScheduledReport)">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="P:Gordic.Report.WinClient.GWpOdlozTab6.IsFinal">
+            <summary>
+            Příznak koncové stránky (nemá Next, dokončit je před ní)
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab6.OnEnter">
+            <summary>
+            Vstup do karty
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab6.OnLeavePage(Gordic.WinForms.Controls.GWizardTabReason)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab6.GetInfoControl(System.Boolean)">
+            <summary>
+            info control
+            </summary>
+            <param name="isSelected"></param>
+            <returns></returns>
+        </member>
+        <member name="F:Gordic.Report.WinClient.GWpOdlozTab6.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab6.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Report.WinClient.GWpOdlozTab6.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+    </members>
+</doc>

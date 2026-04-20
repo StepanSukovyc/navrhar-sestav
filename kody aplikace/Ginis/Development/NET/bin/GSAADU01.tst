@@ -1,0 +1,8 @@
+[program]
+revize=40ADU0152610X01
+dat_akt=2025-10-10
+
+[required]
+MODULES=GSAADUD1,GSAADUH1
+GSAADUD1_mandatory=FALSE
+GSAADUH1_mandatory=FALSE

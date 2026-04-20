@@ -1,0 +1,1851 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Buc.WebClient</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Buc.WebClient.GVyberBanky">
+            <summary>
+            Dialog pro výběr banky pro načtení dávky
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GVyberBanky.mod">
+            <summary>
+             Mód (0-3)
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GVyberBanky.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GBankovniVypisDetail">
+            <summary>
+            Detail bankovního výpisu
+            </summary>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GBankovniVypisDetail.GBankovniVypisKnihaProvider">
+            <summary>
+            Pomocná třída pro dohledání knihy, není-li v gpc známa
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GBankovniVypisDetail.Ixp">
+            <summary>
+            PID aktuálního bankovniho výpisu
+            </summary>
+        </member>
+        <member name="F:Gordic.Buc.WebClient.GBankovniVypisDetail.radek_pol">
+            <summary>
+             Řádek položky bankovního výpisu - pro okamžité zobrazení v gridu položek
+            </summary>
+        </member>
+        <member name="F:Gordic.Buc.WebClient.GBankovniVypisDetail.subradek">
+            <summary>
+             Subřádek položky bankovního výpisu - pro okamžité zobrazení v gridu položek
+            </summary>
+        </member>
+        <member name="F:Gordic.Buc.WebClient.GBankovniVypisDetail.radek_av">
+            <summary>
+             Řádek AV - řádek rozpisu položky bankovního výpisu - pro okamžité zobrazení v gridu položek
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GBankovniVypisDetail.ZaznamZadan">
+            <summary>
+            Příznak zadaného záznamu
+            </summary>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GBankovniVypisDetail.GBankovniVypisDetailParams">
+            <summary>
+            Struktura pro databázové parametry použivané v TS
+            </summary>
+        </member>
+        <member name="F:Gordic.Buc.WebClient.GBankovniVypisDetail.GBankovniVypisDetailParams.buc_valzus">
+            <summary>BUC - Valutový zůstatek</summary>
+        </member>
+        <member name="F:Gordic.Buc.WebClient.GBankovniVypisDetail.GBankovniVypisDetailParams.buc_rad_test">
+            <summary>BUC - Testovací režim</summary>
+        </member>
+        <member name="F:Gordic.Buc.WebClient.GBankovniVypisDetail.GBankovniVypisDetailParams.gin_gen_ixp">
+            <summary>GIN - Automatické generování identifikátoru</summary>
+        </member>
+        <member name="F:Gordic.Buc.WebClient.GBankovniVypisDetail.GBankovniVypisDetailParams.buc_ptm_bvyalv">
+            <summary>BUC - TT Bankovní výpis TXT</summary>
+        </member>
+        <member name="F:Gordic.Buc.WebClient.GBankovniVypisDetail.GBankovniVypisDetailParams.buc_ptm_probvg">
+            <summary>BUC - TT Protokol o párování ban.výp. (GR)</summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBankovniVypisDetail.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            RenderContent
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBankovniVypisDetail.DefineDetailBuilder(Gordic.Gin.WebClient.GDetailBuilder)">
+            <summary>
+            Vrátí prázdný DTO detailu s vyplněnými hodnotami primárního klíče
+            </summary>
+            <returns>DTO detailu s vyplněnými hodnotami primárního klíče</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBankovniVypisDetail.ReadData(Gordic.Buc.Interface.GBankovniVypisDto)">
+            <summary>
+            Vrátí DTO detailu s načtenými daty
+            </summary>
+            <param name="data">data (s vyplněným PK)</param>
+            <returns>DTO detailu s načtenými daty (nebo data ze vstupu, pokud se načtení nepovedle/nedělalo)</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBankovniVypisDetail.GetEmptyDtoWithFilledPK">
+            <summary>
+            Vrátí prázdný DTO detailu s vyplněnými hodnotami primárního klíče
+            </summary>
+            <returns>DTO detailu s vyplněnými hodnotami primárního klíče</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBankovniVypisDetail.GetTitle">
+            <summary>
+            Vrátí titulek detailu
+            </summary>
+            <returns>titulek detailu</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBankovniVypisDetail.AddFragments(System.Collections.Generic.List{System.String})">
+            <summary>
+            Doplní další potřebné fragmenty pro detaily
+            </summary>
+            <param name="fragments">přednastavené fragmenty</param>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBankovniVypisDetail.PrintParameters(Gordic.General.ApplicationClient.GUserProcess,Gordic.Report.Interface.IGReport,Gordic.Buc.WebClient.GBankovniVypisDetail.GBankovniVypisPrintDto)">
+            <summary>
+            Tisk bankovního výpisu
+            </summary>
+            <param name="up">UserProcess</param>
+            <param name="rep">parametry tisku</param>
+            <param name="customDto">DTO s aktuálním výpisem</param>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBankovniVypisDetail.PrintParametersProtokol(Gordic.General.ApplicationClient.GUserProcess,Gordic.Report.Interface.IGReport,Gordic.Buc.WebClient.GBankovniVypisDetail.GBankovniVypisPrintDto)">
+            <summary>
+            Tisk protokolu bankovního výpisu
+            </summary>
+            <param name="up">UserProcess</param>
+            <param name="rep">parametry tisku</param>
+            <param name="customDto">DTO s aktuálním výpisem</param>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GBankovniVypisDetail.GBankovniVypisPrintDto">
+            <summary>
+            Dto pro tisk bankovního výpisu
+            </summary>
+        </member>
+        <member name="F:Gordic.Buc.WebClient.GBankovniVypisDetail.GBankovniVypisPrintDto.ixp">
+            <summary>
+            Identifikátor bankovního výpisu
+            </summary>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GBankovniVypisPolozkaVyhledavani">
+            <summary>
+            Content pro vyhledávání položek bankovních výpisů
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GBankovniVypisPolozkaVyhledavani.BucGlobals">
+            <summary>
+            Globální proměnné BUC
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBankovniVypisPolozkaVyhledavani.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBankovniVypisPolozkaVyhledavani.PrintParameters(Gordic.General.ApplicationClient.GUserProcess,Gordic.Report.Interface.IGReport,Gordic.Buc.Interface.GBankovniVypisPolozkaVyhledavaniFilterDto)">
+            <summary>
+            Tisk seznamu generování dávek složenek B
+            </summary>
+            <param name="up">UserProcess</param>
+            <param name="rep">parametry tisku</param>
+            <param name="customDto"></param>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GBankovniVypisSeznam">
+            <summary>
+            Seznam bankovních výpisů
+            </summary>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GBankovniVypisSeznam.GBankovniVypisSeznamParams">
+            <summary>
+            Struktura pro databázové parametry použivané v TS
+            </summary>
+        </member>
+        <member name="F:Gordic.Buc.WebClient.GBankovniVypisSeznam.GBankovniVypisSeznamParams.buc_ptm_sezvyp">
+            <summary>BUC - TT Seznam bankovních výpisů</summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBankovniVypisSeznam.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            RenderContent
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBankovniVypisSeznam.GetServicePermissions">
+            <summary>
+            Vrácení seznamových oprávnění
+            </summary>
+            <returns>sada seznamových oprávnění</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBankovniVypisSeznam.PrintParameters(Gordic.General.ApplicationClient.GUserProcess,Gordic.Report.Interface.IGReport,Gordic.Buc.Interface.GBankovniVypisFilterDto)">
+            <summary>
+            Tisk seznamu bankovních výpisů
+            </summary>
+            <param name="up">UserProcess</param>
+            <param name="rep">parametry tisku</param>
+            <param name="customDto">DTO aktuálního filtru</param>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GDefiniceVS">
+            <summary>
+            Content pro definici VS pro hledání v poli AV při načítání bankovního výpisu
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDefiniceVS.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GNacteniElVypisu">
+            <summary>
+            Třída pro načtení elektronického bankovního výpisu
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GNacteniElVypisu.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GNacteniElVypisu.PrintParameters(Gordic.General.ApplicationClient.GUserProcess,Gordic.Report.Interface.IGReport,Gordic.Buc.WebClient.GNacteniElVypisu.GNacteniElVypisuTiskDto)">
+            <summary>
+            Tisk protokolu o načtení
+            </summary>
+            <param name="up">UserProcess</param>
+            <param name="rep">parametry tisku</param>
+            <param name="customDto"></param>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GNacteniElVypisu.GNacteniElVypisuTiskDto">
+            <summary>
+            Dto pro přenost dat při tisku nacházení elektronického výpisu
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GNacteniElVypisu.GNacteniElVypisuTiskDto.ikc">
+            <summary>
+            ikc
+            </summary>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GOcekavanoZBanky">
+            <summary>
+            Content pro očekáváno z banky
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GOcekavanoZBanky.BucGlobals">
+            <summary>
+            Globální proměnné BUC
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GOcekavanoZBanky.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GOcekavanoZBanky.PrintParameters(Gordic.General.ApplicationClient.GUserProcess,Gordic.Report.Interface.IGReport,Gordic.Buc.Interface.GOcekavanoZBankyTiskParamsDto)">
+            <summary>
+            Tisk seznamu bankovních výpisů
+            </summary>
+            <param name="up">UserProcess</param>
+            <param name="rep">parametry tisku</param>
+            <param name="customDto">DTO aktuálního filtru</param>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GParovanoHistorie">
+            <summary>
+            Dialog s historií párování položky výpisu
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GParovanoHistorie.ixp_par">
+            <summary>
+            Identifikátor napárovaného dokladu
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GParovanoHistorie.radek_pol">
+            <summary>
+             Řádek položky bankovního výpisu
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GParovanoHistorie.subradek">
+            <summary>
+             Subřádek položky bankovního výpisu
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GParovanoHistorie.radek_av">
+            <summary>
+             Řádek AV - řádek rozpisu položky bankovního výpisu
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GParovanoHistorie.BucGlobals">
+            <summary>
+            Globální proměnné BUC
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GParovanoHistorie.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GParovanoDetail">
+            <summary>
+            Dialog s detailem platby na kterou byla párována položka výpisu
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GParovanoDetail.ixp_par">
+            <summary>
+            Identifikátor napárovaného dokladu
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GParovanoDetail.cislo_par">
+            <summary>
+            Číslo řádku napárovaného dokladu
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GParovanoDetail.s_pol">
+            <summary>
+            Stav položky
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GParovanoDetail.c">
+            <summary>
+            Částka
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GParovanoDetail.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GDetailDavka">
+            <summary>
+            Detail dávky s příkazy do banky
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDetailDavka.ixp_dav">
+            <summary>
+            PID dávky
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDetailDavka.ZaznamZadan">
+            <summary>
+            Příznak zadaného příkazu k úhradě
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDetailDavka.IxpDen">
+            <summary>
+            identifikátor knihy, ve které je doklad aktuálně evidován (kdfspid.ixp_den).
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDetailDavka.Editace">
+            <summary>
+            Příznak editování detailu
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDetailDavka.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            RenderContent
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDetailDavka.DefineDetailBuilder(Gordic.Gin.WebClient.GDetailBuilder)">
+            <summary>
+            Vrátí prázdný DTO detailu s vyplněnými hodnotami primárního klíče
+            </summary>
+            <returns>DTO detailu s vyplněnými hodnotami primárního klíče</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDetailDavka.ReadData(Gordic.Buc.Interface.GDavkaPDBDto)">
+            <summary>
+            Vrátí DTO detailu s načtenými daty
+            </summary>
+            <param name="data">data (s vyplněným PK)</param>
+            <returns>DTO detailu s načtenými daty (nebo data ze vstupu, pokud se načtení nepovedle/nedělalo)</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDetailDavka.GetEmptyDtoWithFilledPK">
+            <summary>
+            Vrátí prázdný DTO detailu s vyplněnými hodnotami primárního klíče
+            </summary>
+            <returns>DTO detailu s vyplněnými hodnotami primárního klíče</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDetailDavka.GetTitle">
+            <summary>
+            Vrátí titulek detailu
+            </summary>
+            <returns>titulek detailu</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDetailDavka.GetProtocol">
+            <summary>
+            GFileInfoDto - vrátí protokol se stavem odeslání dávky do banky
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GDetailDavkaPDB">
+            <summary>
+            Detail dávky s příkazy do banky
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDetailDavkaPDB.ixp_dav">
+            <summary>
+            PID dávky
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDetailDavkaPDB.ZaznamZadan">
+            <summary>
+            Příznak zadaného příkazu k úhradě
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDetailDavkaPDB.IxpDen">
+            <summary>
+            identifikátor knihy, ve které je doklad aktuálně evidován (kdfspid.ixp_den).
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDetailDavkaPDB.Editace">
+            <summary>
+            Příznak editování detailu
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDetailDavkaPDB.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            RenderContent
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDetailDavkaPDB.DefineDetailBuilder(Gordic.Gin.WebClient.GDetailBuilder)">
+            <summary>
+            Vrátí prázdný DTO detailu s vyplněnými hodnotami primárního klíče
+            </summary>
+            <returns>DTO detailu s vyplněnými hodnotami primárního klíče</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDetailDavkaPDB.ReadData(Gordic.Buc.Interface.GDavkaPDBDto)">
+            <summary>
+            Vrátí DTO detailu s načtenými daty
+            </summary>
+            <param name="data">data (s vyplněným PK)</param>
+            <returns>DTO detailu s načtenými daty (nebo data ze vstupu, pokud se načtení nepovedle/nedělalo)</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDetailDavkaPDB.GetEmptyDtoWithFilledPK">
+            <summary>
+            Vrátí prázdný DTO detailu s vyplněnými hodnotami primárního klíče
+            </summary>
+            <returns>DTO detailu s vyplněnými hodnotami primárního klíče</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDetailDavkaPDB.GetTitle">
+            <summary>
+            Vrátí titulek detailu
+            </summary>
+            <returns>titulek detailu</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDetailDavkaPDB.GetProtocol">
+            <summary>
+            GFileInfoDto - vrátí protokol se stavem odeslání dávky do banky
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GOdeslaniDavka">
+            <summary>
+            Odeslání jedné nebo více Dávek s příkazy přes průvodce do banky
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GOdeslaniDavka.vybraneRadky">
+            <summary>
+            Vybrane radky pro provodce odeslanim dávek
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GOdeslaniDavka.ikc">
+            <summary>
+            Ikc
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GOdeslaniDavka.davkaDto">
+            <summary>
+            Vybrana davka - DTO s udaji o vybrane dávce
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GOdeslaniDavka.bankaDto">
+            <summary>
+            Vybrana banka - DTO s udaji o vybrane bance
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GOdeslaniDavka.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            RenderContent
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GOdeslaniDavka.GetTitle">
+            <summary>
+            Vrátí titulek okna
+            </summary>
+            <returns>titulek okna</returns>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GPodepsaniDavka">
+            <summary>
+            Podepsání jedné nebo více Dávek s příkazy přes průvodce
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GPodepsaniDavka.vybraneRadky">
+            <summary>
+            Vybrane radky pro provodce podepsanim dávek
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GPodepsaniDavka.davkaDto">
+            <summary>
+            Vybrana davka - DTO s udaji o vybrane dávce
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GPodepsaniDavka.bankaPodpisDto">
+            <summary>
+            Dto s 
+            informacemi o bance po podpisu
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GPodepsaniDavka.buc_rad_poddav">
+            <summary>
+            DB parametr s opravnenim podepisovat davku (1 = ano)
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GPodepsaniDavka.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            RenderContent
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GPodepsaniDavka.GetTitle">
+            <summary>
+            Vrátí titulek okna
+            </summary>
+            <returns>titulek okna</returns>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GPodpisyDlg">
+            <summary>
+            Dialog s nabídkou podpisů dávky s příkazy
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GPodpisyDlg.Ikc">
+            <summary>
+            Aktuální IKC
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GPodpisyDlg.poc_pod">
+            <summary>
+            Počet podpisů
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GPodpisyDlg.ixp">
+            <summary>
+            Identifikátor
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GPodpisyDlg.ixb">
+            <summary>
+            Identifikátor
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GPodpisyDlg.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            RenderContent
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GPodpisyDlg.GetIkc(System.Boolean)">
+            <summary>
+            Vrácení IKC
+            </summary>
+            <param name="nove">vrátit nové IKC</param>
+            <returns>IKC</returns>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GSeznamDavka">
+            <summary>
+            Seznam generovanych davek prikazu k uhrade
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GSeznamDavka.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            RenderContent
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GSeznamDavka.GetTitle">
+            <summary>
+            Vrátí titulek okna
+            </summary>
+            <returns>titulek okna</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GSeznamDavka.GetServicePermissions">
+            <summary>
+            Vrácení seznamových oprávnění
+            </summary>
+            <returns>sada seznamových oprávnění</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GSeznamDavka.VlozitVsechnyDavkyDoPracSeznamu(Gordic.Buc.Interface.GDavkaPDBDto[])">
+            <summary>
+            Uložení všech davek s prikazy do pracovní tabulky
+            </summary>
+            <param name="filters">filtry</param>
+            <returns>aktuální IKC</returns>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.Global">
+            <summary>
+            Aplikace BUC
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.Global.Application_Start(System.Object,System.EventArgs)">
+            <summary>
+            Obsluha události start aplikace
+            </summary>
+            <param name="sender">původce události</param>
+            <param name="e">parametry události</param>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.Global.OnGInitBegin(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Zacatek inicializace modulu
+            </summary>
+            <param name="context">parametry inicializace</param>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.Global.OnGInitEnd(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Konec inicializace
+            </summary>
+            <param name="context">parametry inicializace</param>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.Gordic_Buc_WebClient_Exceptions">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.Gordic_Buc_WebClient_Exceptions.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.Gordic_Buc_WebClient_Exceptions.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GMainApp">
+            <summary>
+            Startovní bod modulu BUC
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GMainApp.BucGlobals">
+            <summary>
+            Globální proměnné BUC
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GMainApp.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            Kroky nutné pro render hlavní aplikace
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GMainApp.PrepareResult">
+            <summary>PrepareResult</summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GMainApp.OpenDetail(System.String,System.String,System.String)">
+            <summary>
+            Otevře detail BUC (bankovni výpis, ...)
+            </summary>
+            <param name="ixx1">id objektu (PID otevíraného detailu)</param>
+            <param name="ixx2">druhé id objektu v případě složeného klíče</param>
+            <param name="ixx3">třetí id objektu v případě složeného klíče</param>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GBucDetail`1">
+            <summary>
+            Předek pro standardní detail (před DetailBuilder)
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GBucDetail`1.DetailDto">
+            <summary>
+            DTO detailu
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GBucDetail`1.ZaznamZadan">
+            <summary>
+            Příznak zadaného záznamu
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GBucDetail`1.NasledujiciDetail">
+            <summary>
+            Je otevřen následující detai? např. při pohybu šipkami po seznamu
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GBucDetail`1.AktivniOperace">
+            <summary>
+            Byla aktivní operace na detailu?
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBucDetail`1.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            RenderContent
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBucDetail`1.DefineDetailBuilder(Gordic.Gin.WebClient.GDetailBuilder)">
+            <summary>
+            Zadefinuje komponenty DetailBuilderu
+            </summary>
+            <param name="builder">DetailBuilder</param>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBucDetail`1.ReadData(`0)">
+            <summary>
+            Vrátí DTO detailu s načtenými daty
+            </summary>
+            <param name="data">data (s vyplněným PK)</param>
+            <returns>DTO detailu s načtenými daty (nebo data ze vstupu, pokud se načtení nepovedle/nedělalo)</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBucDetail`1.GetEmptyDtoWithFilledPK">
+            <summary>
+            Vrátí prázdný DTO detailu s vyplněnými hodnotami primárního klíče
+            </summary>
+            <returns>DTO detailu s vyplněnými hodnotami primárního klíče</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBucDetail`1.WithFragmentPermissions(`0)">
+            <summary>
+            Vrátí request pro metodu Read, kde kromě dat bude vyplněn i fragment pro oprávnění
+            </summary>
+            <param name="data">DTO</param>
+            <returns>reguest s daty a fragmenty</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBucDetail`1.AddFragments(System.Collections.Generic.List{System.String})">
+            <summary>
+            Doplní další potřebné fragmenty pro detaily
+            </summary>
+            <param name="fragments">přednastavené fragmenty</param>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBucDetail`1.GetTitle">
+            <summary>
+            Vrátí titulek detailu
+            </summary>
+            <returns>titulek detailu</returns>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GBucSeznam`1">
+            <summary>
+            Předek pro BUC seznam
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GBucSeznam`1.Ikc">
+            <summary>
+            Aktuální IKC
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBucSeznam`1.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            RenderContent
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBucSeznam`1.VlozitDoPracSeznamuBase(Gordic.General.GString[],System.Boolean)">
+            <summary>
+            Uložení předaných záznamů do pracovní tabulky
+            </summary>
+            <param name="zaznamy">seznam záznamů</param>
+            <param name="noveIkc">generovat nové IKC (true) nebo použít stávající (false)?</param>
+            <returns>aktuální IKC</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBucSeznam`1.VlozitDoPracSeznamu(System.String[])">
+            <summary>
+            Uložení předaných záznamů do pracovní tabulky
+            </summary>
+            <param name="zaznamy">seznam záznamů</param>
+            <returns>aktuální IKC</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBucSeznam`1.SmazatPracSeznam">
+            <summary>
+            Smazání pracovní tabulky
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBucSeznam`1.GetIkc(System.Boolean)">
+            <summary>
+            Vrácení IKC
+            </summary>
+            <param name="nove">vrátit nové IKC</param>
+            <returns>IKC</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBucSeznam`1.GetServicePermissions">
+            <summary>
+            Vrácení seznamových oprávnění
+            </summary>
+            <returns>sada seznamových oprávnění</returns>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GBucUtils">
+            <summary>Pomocné utility pro BUC (především inicializace a registrace potřebných hodnot)</summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBucUtils.RegisterRequiredContentValues(Gordic.Gui.WebControls.GWebControlAdvancedValues,Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Registrace globalnich hodnot</summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBucUtils.RegisterRequiredScripts(Gordic.Gui.WebControls.GWebControlAdvancedValues,Gordic.General.ApplicationClient.GUserProcess,System.Boolean)">
+            <summary>Registrace společných skriptů</summary>
+            <param name="contentValues">rozšířené vlastnosti objektu v TS</param>
+            <param name="up">uživatelský process</param>
+            <param name="extends">dělat Extends?</param>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBucUtils.RegisterPreviews">
+            <summary>
+            Registrace všech náhledů, které budou potřeba
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GBucUtils.RegisterUserSettings(Gordic.Gui.WebControls.GWebControlAdvancedValues,Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Registrace formularu uzivatelskeho nastaveni
+            </summary>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GParametrySlozenek">
+            <summary>
+            Content pro parametry složenek
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GParametrySlozenek.BucGlobals">
+            <summary>
+            Globální proměnné BUC
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GParametrySlozenek.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GSablonaLikvidaceFucSeznam">
+            <summary>
+            Content pro Definiční tabulka-šablona pro automatickou likvidaci nespárovaných plateb do FUC
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GSablonaLikvidaceFucSeznam.rezim">
+            <summary>
+            Příznak režimu otevření (0 - editace, 1 - pouze výběr)
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GSablonaLikvidaceFucSeznam.vs">
+            <summary>
+            Variabilní symbol
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GSablonaLikvidaceFucSeznam.sk_vl">
+            <summary>
+            Kod banky
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GSablonaLikvidaceFucSeznam.bu_vl">
+            <summary>
+            Číslo bankovního účtu
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GSablonaLikvidaceFucSeznam.typ_pla">
+            <summary>
+            typ_pla
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GSablonaLikvidaceFucSeznam.priz_char">
+            <summary>
+            priz_char
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GSablonaLikvidaceFucSeznam.ktg_typ">
+            <summary>
+            ktg_typ
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GSablonaLikvidaceFucSeznam.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GDashboard">
+            <summary>
+            Úvodní stránka (dashboard) To do: zapojit nový Dashboard
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDashboard.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            RenderContent
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GParovaciZapisyKompenzace">
+            <summary>
+            Content s párovací zápisy zápočtových listů
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GParovaciZapisyKompenzace.BucGlobals">
+            <summary>
+            Globální proměnné BUC
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GParovaciZapisyKompenzace.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GParovaciZapisyKompenzace.PrintParameters(Gordic.General.ApplicationClient.GUserProcess,Gordic.Report.Interface.IGReport,Gordic.Buc.Interface.GParovaciZapisyTiskParamsDto)">
+            <summary>
+            Tisk seznamu párovacích zápisů
+            </summary>
+            <param name="up">UserProcess</param>
+            <param name="rep">parametry tisku</param>
+            <param name="customDto">DTO aktuálního filtru</param>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GParovaciZapisyPok">
+            <summary>
+            Content s párovací zápisy hotovostních operací a platební brány
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GParovaciZapisyPok.BucGlobals">
+            <summary>
+            Globální proměnné BUC
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GParovaciZapisyPok.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GParovaciZapisyPok.PrintParameters(Gordic.General.ApplicationClient.GUserProcess,Gordic.Report.Interface.IGReport,Gordic.Buc.Interface.GParovaciZapisyTiskParamsDto)">
+            <summary>
+            Tisk seznamu párovacích zápisů
+            </summary>
+            <param name="up">UserProcess</param>
+            <param name="rep">parametry tisku</param>
+            <param name="customDto">DTO aktuálního filtru</param>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GParovaciZapisyPrepUzavObd">
+            <summary>
+            Content s položky vzniklé přepárováním z uzavřených období
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GParovaciZapisyPrepUzavObd.BucGlobals">
+            <summary>
+            Globální proměnné BUC
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GParovaciZapisyPrepUzavObd.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GAutomatickeParovani">
+            <summary>
+            Content pro automatické párování
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GAutomatickeParovani.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GAutomatickeParovani.PrintParameters(Gordic.General.ApplicationClient.GUserProcess,Gordic.Report.Interface.IGReport,Gordic.Buc.Interface.GAutomatickeParovaniTiskParamsDto)">
+            <summary>
+            Tisk seznamu bankovních výpisů
+            </summary>
+            <param name="up">UserProcess</param>
+            <param name="rep">parametry tisku</param>
+            <param name="customDto">DTO aktuálního filtru</param>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GManualniParovani">
+            <summary>
+            Content pro manuální párování
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GManualniParovani.BucGlobals">
+            <summary>
+            Globální proměnné BUC
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GManualniParovani.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GManualniParovani.PrintParameters(Gordic.General.ApplicationClient.GUserProcess,Gordic.Report.Interface.IGReport,Gordic.Buc.Interface.GManualniParovaniTiskParamsDto)">
+            <summary>
+            Tisk seznamu manuálního párování
+            </summary>
+            <param name="up">UserProcess</param>
+            <param name="rep">parametry tisku</param>
+            <param name="customDto">DTO aktuálního filtru</param>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GNedokonceneParovani">
+            <summary>
+            Content pro seznam výpisů s nedokončeným párováním
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GNedokonceneParovani.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GParovaniProtokoly">
+            <summary>
+            Content pro protokoly párování
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GParovaniProtokoly.BucGlobals">
+            <summary>
+            Globální proměnné BUC
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GParovaniProtokoly.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GParovaniProtokoly.PrintParameters(Gordic.General.ApplicationClient.GUserProcess,Gordic.Report.Interface.IGReport,Gordic.Buc.Interface.GParovaniProtokolTiskParamsDto)">
+            <summary>
+            Tisk seznamu manuálního párování
+            </summary>
+            <param name="up">UserProcess</param>
+            <param name="rep">parametry tisku</param>
+            <param name="customDto">DTO aktuálního filtru</param>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GPosledniParovani">
+            <summary>
+            Content pro poslední párování
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GPosledniParovani.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GRozpisPredpisu">
+            <summary>
+            Content pro rozpis předpisů pro párování
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GRozpisPredpisu.readOnly">
+            <summary>
+            Příznak, zda je grid pouze pro čtení
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GRozpisPredpisu.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GDavkaAvizoPolozka">
+            <summary>
+            Dialog s položkami dávky avíza platební karty
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaAvizoPolozka.davka">
+            <summary>
+             Číslo dávka
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaAvizoPolozka.s_rozp">
+            <summary>
+             Stav dávky
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaAvizoPolozka.mod">
+            <summary>
+             mód (0-1)
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDavkaAvizoPolozka.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GDavkaAvizoPolozkaRozpis">
+            <summary>
+            Dialog s rozpisem položky dávky avíza platební karty
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaAvizoPolozkaRozpis.davka">
+            <summary>
+             Číslo dávka
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaAvizoPolozkaRozpis.radek">
+            <summary>
+             Řádek dávky
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaAvizoPolozkaRozpis.mod">
+            <summary>
+             mód (0-1)
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDavkaAvizoPolozkaRozpis.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GDavkaAvizoPolozkaUhradaPOK">
+            <summary>
+            Dialog s výběrem úhrady POK pro identifikaci položky avíza
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaAvizoPolozkaUhradaPOK.typ_doh">
+            <summary>
+             Typ dohledané dávky
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaAvizoPolozkaUhradaPOK.pos_id">
+            <summary>
+             Identifikátor terminálu
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaAvizoPolozkaUhradaPOK.karta_id">
+            <summary>
+             ID karty
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaAvizoPolozkaUhradaPOK.c_tra">
+            <summary>
+             Částka transakce
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDavkaAvizoPolozkaUhradaPOK.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GDavkaAvizoSeznam">
+            <summary>
+            Dialog se seznamem dávek avíz platebních karet
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaAvizoSeznam.sk_vl">
+            <summary>
+             směrový kód banky vlastní
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaAvizoSeznam.bu_vl">
+            <summary>
+             běžný účet vlastní
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaAvizoSeznam.c_pre">
+            <summary>
+             částka převodu
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaAvizoSeznam.vs">
+            <summary>
+             variabilní symbol
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaAvizoSeznam.ss">
+            <summary>
+             specifický symbol
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaAvizoSeznam.mod">
+            <summary>
+             mód (0-1)
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDavkaAvizoSeznam.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDavkaAvizoSeznam.PrintParameters(Gordic.General.ApplicationClient.GUserProcess,Gordic.Report.Interface.IGReport,Gordic.Buc.WebClient.GDavkaAvizoSeznam.GDavkaAvizoSeznamPrintDto)">
+            <summary>
+            Tisk seznamu
+            </summary>
+            <param name="up">UserProcess</param>
+            <param name="rep">parametry tisku</param>
+            <param name="customDto">DTO aktuálního filtru</param>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GDavkaAvizoSeznam.GDavkaAvizoSeznamPrintDto">
+            <summary>
+            DTO pro tisk v seznamu dávek avíz
+            </summary>
+        </member>
+        <member name="F:Gordic.Buc.WebClient.GDavkaAvizoSeznam.GDavkaAvizoSeznamPrintDto.datTraStart">
+            <summary>
+            Datum transakce od
+            </summary>
+        </member>
+        <member name="F:Gordic.Buc.WebClient.GDavkaAvizoSeznam.GDavkaAvizoSeznamPrintDto.datTraEnd">
+            <summary>
+            Datum transakce od
+            </summary>
+        </member>
+        <member name="F:Gordic.Buc.WebClient.GDavkaAvizoSeznam.GDavkaAvizoSeznamPrintDto.sPol">
+            <summary>
+            Stavy
+            </summary>
+        </member>
+        <member name="F:Gordic.Buc.WebClient.GDavkaAvizoSeznam.GDavkaAvizoSeznamPrintDto.sPolZkr">
+            <summary>
+            Stavy zkratky
+            </summary>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GDavkaAvizoTiskMaska">
+            <summary>
+            Dialog se s maskou pro tisk seznamu dávek avíz platebních karet
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDavkaAvizoTiskMaska.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GDetailPrikaz">
+            <summary>
+            Detail příkazu k úhradě do banky
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDetailPrikaz.ixp">
+            <summary>
+            PID dokumentu (příkazu k úhradě)
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDetailPrikaz.ikc">
+            <summary>
+            Ikc
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDetailPrikaz.radek_uhr">
+            <summary>
+            radek_uhr (příkazu k úhradě)
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDetailPrikaz.ZaznamZadan">
+            <summary>
+            Příznak zadaného příkazu k úhradě
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDetailPrikaz.IxpDen">
+            <summary>
+            identifikátor knihy, ve které je doklad aktuálně evidován (kdfspid.ixp_den).
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDetailPrikaz.Editace">
+            <summary>
+            Příznak editování detailu
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDetailPrikaz.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            RenderContent
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDetailPrikaz.DefineDetailBuilder(Gordic.Gin.WebClient.GDetailBuilder)">
+            <summary>
+            Vrátí prázdný DTO detailu s vyplněnými hodnotami primárního klíče
+            </summary>
+            <returns>DTO detailu s vyplněnými hodnotami primárního klíče</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDetailPrikaz.ReadData(Gordic.Buc.Interface.GPrikazDto)">
+            <summary>
+            Vrátí DTO detailu s načtenými daty
+            </summary>
+            <param name="data">data (s vyplněným PK)</param>
+            <returns>DTO detailu s načtenými daty (nebo data ze vstupu, pokud se načtení nepovedle/nedělalo)</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDetailPrikaz.GetEmptyDtoWithFilledPK">
+            <summary>
+            Vrátí prázdný DTO detailu s vyplněnými hodnotami primárního klíče
+            </summary>
+            <returns>DTO detailu s vyplněnými hodnotami primárního klíče</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDetailPrikaz.GetTitle">
+            <summary>
+            Vrátí titulek detailu
+            </summary>
+            <returns>titulek detailu</returns>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GDetailPrikazZP">
+            <summary>
+            Detail příkazu k úhradě pro Zahranicni platbu
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDetailPrikazZP.Ixp">
+            <summary>
+            PID dokumentu (příkazu k úhradě)
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDetailPrikazZP.DetailDto">
+            <summary>
+            DTO s udaji o ZP
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDetailPrikazZP.Editace">
+            <summary>
+            Příznak editování detailu
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDetailPrikazZP.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            RenderContent
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GDisponibilitaDlg">
+            <summary>
+            Dialog s výsledkem kontroly disponibility
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDisponibilitaDlg.data">
+            <summary>
+            Data k zobrazeni
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDisponibilitaDlg.kind">
+            <summary>
+            Typ dialogu (Error = 200 / Warning = 206)
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDisponibilitaDlg.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            RenderContent
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GSeznamPrikaz">
+            <summary>
+            Seznam příkazů
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GSeznamPrikaz.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            RenderContent
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GSeznamPrikaz.KontrolaPlatcuDph">
+            <summary>
+            Kontrola na registr platcu DPH
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GSeznamPrikaz.GetServicePermissions">
+            <summary>
+            Vrácení seznamových oprávnění
+            </summary>
+            <returns>sada seznamových oprávnění</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GSeznamPrikaz.VlozitVsechnyPrikazyDoPracSeznamu(Gordic.Buc.Interface.GPrikazDto[])">
+            <summary>
+            Uložení všech příkazů do pracovní tabulky
+            </summary>
+            <param name="filters">filtry</param>
+            <returns>aktuální IKC</returns>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GPlatbaDavkou">
+            <summary>
+            Zaplaceni jednoho nebo více příkazů do banky přes průvodce
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GPlatbaDavkou.vybraneRadky">
+            <summary>
+            Vybrane radky pro provodce zaplacenim prikazu
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GPlatbaDavkou.bankaDto">
+            <summary>
+            Vybrana banka - DTO s udaji o vybrane bance
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GPlatbaDavkou.bankaPodpisDto">
+            <summary>
+            Dto s 
+            informacemi o bance po podpisu
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GPlatbaDavkou.buc_rad_poddav">
+            <summary>
+            DB parametr s opravnenim podepisovat davku (1 = ano)
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GPlatbaDavkou.ikc">
+            <summary>
+            Ikc
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GPlatbaDavkou.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            RenderContent
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GPlatbaDavkou.KontrolaPlatcuDph">
+            <summary>
+            Kontrola na registr platcu DPH
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GPlatbaDavkou.PrepareGeneratedFile(Gordic.Buc.Interface.GDavkaPDBDto,Gordic.Buc.Interface.GBankaDto)">
+            <summary>
+            Metoda k ziskani obsahu souboru davky pro filefield policko
+            </summary>
+            <param name="davkaDto"></param>
+            <param name="bankaDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GPlatbaDavkou.PrepareSignedFile">
+            <summary>
+            Metoda k ziskani podepsaneho obsahu souboru davky pro filefield policko
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GPlatbaDavkou.GetTitle">
+            <summary>
+            Vrátí titulek okna
+            </summary>
+            <returns>titulek okna</returns>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GZastaveniPrikazu">
+            <summary>
+            Pozastavení jednoho nebo více příkazů do banky přes průvodce
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GZastaveniPrikazu.vybraneRadky">
+            <summary>
+            Vybrane radky pro provodce zastaveni prikazu
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GZastaveniPrikazu.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            RenderContent
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GDetailTEST">
+            <summary>
+            Detail banky
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDetailTEST.Ico">
+            <summary>
+            IČO
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDetailTEST.Ucs">
+            <summary>
+            UCS
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDetailTEST.IxsEsu">
+            <summary>
+            PID subjektu banky
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDetailTEST.Sbu">
+            <summary>
+            Skupina bankovních účtů
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDetailTEST.ZaznamZadan">
+            <summary>
+            Příznak zadané banky
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDetailTEST.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            RenderContent
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDetailTEST.DefineDetailBuilder(Gordic.Gin.WebClient.GDetailBuilder)">
+            <summary>
+            Vrátí prázdný DTO detailu s vyplněnými hodnotami primárního klíče
+            </summary>
+            <returns>DTO detailu s vyplněnými hodnotami primárního klíče</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDetailTEST.ReadData(Gordic.Buc.Interface.GBankaDto)">
+            <summary>
+            Vrátí DTO detailu s načtenými daty
+            </summary>
+            <param name="data">data (s vyplněným PK)</param>
+            <returns>DTO detailu s načtenými daty (nebo data ze vstupu, pokud se načtení nepovedle/nedělalo)</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDetailTEST.GetEmptyDtoWithFilledPK">
+            <summary>
+            Vrátí prázdný DTO detailu s vyplněnými hodnotami primárního klíče
+            </summary>
+            <returns>DTO detailu s vyplněnými hodnotami primárního klíče</returns>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDetailTEST.GetTitle">
+            <summary>
+            Vrátí titulek detailu
+            </summary>
+            <returns>titulek detailu</returns>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GSeznamBanka">
+            <summary>
+            Seznam TEST
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GSeznamBanka.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <summary>
+            RenderContent
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GSeznamBanka.GetTitle">
+            <summary>
+            Vrátí titulek okna
+            </summary>
+            <returns>titulek okna</returns>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GNapojeniPoplatniciDDP">
+            <summary>
+            Dialog s výběrem předpisů napojených poplatníků DDP
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GNapojeniPoplatniciDDP.ixp_pl">
+            <summary>
+            Identifikátor plátce
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GNapojeniPoplatniciDDP.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GRozpisPolozky">
+            <summary>
+            Dialog s rozpisem položky
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GRozpisPolozky.ixp">
+            <summary>
+            Identifikátor položky
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GRozpisPolozky.radek_pol">
+            <summary>
+             Řádek položky
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GRozpisPolozky.dat_vyp">
+            <summary>
+             Datum stažení výpisů
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GRozpisPolozky.uroceni">
+            <summary>
+             uroceni
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GRozpisPolozky.c_jistina">
+            <summary>
+             c_jistina
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GRozpisPolozky.c_urok">
+            <summary>
+             c_urok
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GRozpisPolozky.c_preplatek">
+            <summary>
+             c_preplatek
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GRozpisPolozky.ixp_uro">
+            <summary>
+             ixp_uro
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GRozpisPolozky.radek_uhr_uro">
+            <summary>
+             radek_uhr_uro
+            </summary>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GRozpisPolozky.GRozpisPolozkyParams">
+            <summary>
+            Struktura pro databázové parametry použivané v TS
+            </summary>
+        </member>
+        <member name="F:Gordic.Buc.WebClient.GRozpisPolozky.GRozpisPolozkyParams.buc_rpnp">
+            <summary>BUC - Předplnění pole Název-popis v rozpisu</summary>
+        </member>
+        <member name="F:Gordic.Buc.WebClient.GRozpisPolozky.GRozpisPolozkyParams.buc_ptm_rozpol">
+            <summary>BUC - TT Rozpis položky výpisu ( GR )</summary>
+        </member>
+        <member name="F:Gordic.Buc.WebClient.GRozpisPolozky.GRozpisPolozkyParams.buc_duav">
+            <summary>BUC - Datum úhrady pro dávku složenek A-V</summary>
+        </member>
+        <member name="F:Gordic.Buc.WebClient.GRozpisPolozky.GRozpisPolozkyParams.buc_dusi">
+            <summary>BUC - Datum úhrady pro dávku SIPO</summary>
+        </member>
+        <member name="F:Gordic.Buc.WebClient.GRozpisPolozky.GRozpisPolozkyParams.buc_dupk">
+            <summary>BUC - Datum úhrady pro dávku avíz PK</summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GRozpisPolozky.BucGlobals">
+            <summary>
+            Globální proměnné BUC
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GRozpisPolozky.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GRozpisPolozky.PrintParameters(Gordic.General.ApplicationClient.GUserProcess,Gordic.Report.Interface.IGReport,Gordic.Buc.WebClient.GRozpisPolozky.GRozpisPolozkyPrintDto)">
+            <summary>
+            Tisk rozpis položky bankovního výpisu
+            </summary>
+            <param name="up">UserProcess</param>
+            <param name="rep">parametry tisku</param>
+            <param name="customDto">DTO s aktuálním výpisem</param>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GRozpisPolozky.GRozpisPolozkyPrintDto">
+            <summary>
+            Dto pro tisk rozpisu položky bankovního výpisu
+            </summary>
+        </member>
+        <member name="F:Gordic.Buc.WebClient.GRozpisPolozky.GRozpisPolozkyPrintDto.ixp">
+            <summary>
+            Identifikátor položky bankovního výpisu
+            </summary>
+        </member>
+        <member name="F:Gordic.Buc.WebClient.GRozpisPolozky.GRozpisPolozkyPrintDto.radek_pol">
+            <summary>
+            Řádek položky bankovního výpisu
+            </summary>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GVyberUhrady">
+            <summary>
+            Dialog s výběrem úhrady při párování
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GVyberUhrady.vs">
+            <summary>
+            VS
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GVyberUhrady.ss">
+            <summary>
+             SS
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GVyberUhrady.sk_vl">
+            <summary>
+             sk_vl
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GVyberUhrady.bu_vl">
+            <summary>
+             bu_vl
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GVyberUhrady.sk_ci">
+            <summary>
+             sk_ci
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GVyberUhrady.bu_ci">
+            <summary>
+             bu_ci
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GVyberUhrady.c">
+            <summary>
+             c
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GVyberUhrady.typ_doh">
+            <summary>
+             TypDoh
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GVyberUhrady.poc_doh">
+            <summary>
+             PocDoh
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GVyberUhrady.c_mena">
+            <summary>
+             c_mena
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GVyberUhrady.mena">
+            <summary>
+             Měna
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GVyberUhrady.radek_in">
+            <summary>
+             RadekIn
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GVyberUhrady.ixp">
+            <summary>
+             ixp
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GVyberUhrady.ixp_rs">
+            <summary>
+             ixp_rs
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GVyberUhrady.dat_vyp_vra">
+            <summary>
+             dat_vyp_vra
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GVyberUhrady.lic">
+            <summary>
+             lic
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GVyberUhrady.multiSelect">
+            <summary>
+             Příznak, zda je povolen výběr více řádků
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GVyberUhrady.BucGlobals">
+            <summary>
+            Globální proměnné BUC
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GVyberUhrady.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GDavkaAVObsah">
+            <summary>
+            Dialog s obsahem složenky dávek/y A-V
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaAVObsah.davka">
+            <summary>
+             Číslo dávky
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaAVObsah.mod">
+            <summary>
+             mód (1 - podané)
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDavkaAVObsah.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDavkaAVObsah.PrintParameters(Gordic.General.ApplicationClient.GUserProcess,Gordic.Report.Interface.IGReport,Gordic.Buc.WebClient.GDavkaAVObsah.GDavkaAVObsahPrintDto)">
+            <summary>
+            Tisk seznamu
+            </summary>
+            <param name="up">UserProcess</param>
+            <param name="rep">parametry tisku</param>
+            <param name="customDto">DTO aktuálního filtru</param>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GDavkaAVObsah.GDavkaAVObsahPrintDto">
+            <summary>
+            DTO pro tisk v seznamu dávek A-V
+            </summary>
+        </member>
+        <member name="F:Gordic.Buc.WebClient.GDavkaAVObsah.GDavkaAVObsahPrintDto.where">
+            <summary>
+            Select podmínka
+            </summary>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GDavkaAVSeznam">
+            <summary>
+            Dialog se seznamem složenek dávek A-V
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaAVSeznam.sk_vl">
+            <summary>
+             směrový kód banky vlastní
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaAVSeznam.bu_vl">
+            <summary>
+             běžný účet vlastní
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaAVSeznam.c_pre">
+            <summary>
+             částka převodu
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaAVSeznam.mod">
+            <summary>
+             mód (1 - podané)
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaAVSeznam.vs">
+            <summary>
+             variabilní symbol
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDavkaAVSeznam.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDavkaAVSeznam.PrintParameters(Gordic.General.ApplicationClient.GUserProcess,Gordic.Report.Interface.IGReport,Gordic.Buc.WebClient.GDavkaAVSeznam.GDavkaAVSeznamPrintDto)">
+            <summary>
+            Tisk seznamu
+            </summary>
+            <param name="up">UserProcess</param>
+            <param name="rep">parametry tisku</param>
+            <param name="customDto">DTO aktuálního filtru</param>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GDavkaAVSeznam.GDavkaAVSeznamPrintDto">
+            <summary>
+            DTO pro tisk v seznamu dávek A-V
+            </summary>
+        </member>
+        <member name="F:Gordic.Buc.WebClient.GDavkaAVSeznam.GDavkaAVSeznamPrintDto.where">
+            <summary>
+            Select podmínka
+            </summary>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GDavkaBGenerovani">
+            <summary>
+            Content pro generování dávek složenek B
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaBGenerovani.BucGlobals">
+            <summary>
+            Globální proměnné BUC
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDavkaBGenerovani.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDavkaBGenerovani.PrintParameters(Gordic.General.ApplicationClient.GUserProcess,Gordic.Report.Interface.IGReport,Gordic.Buc.Interface.GDavkaBGenerovaniTiskParamsDto)">
+            <summary>
+            Tisk seznamu generování dávek složenek B
+            </summary>
+            <param name="up">UserProcess</param>
+            <param name="rep">parametry tisku</param>
+            <param name="customDto"></param>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GDavkaBGenerovaniSoubory">
+            <summary>
+            Content pro generování dávek složenek B - zobrazení souborů, tisknutí a uhrazení
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaBGenerovaniSoubory.BucGlobals">
+            <summary>
+            Globální proměnné BUC
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDavkaBGenerovaniSoubory.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDavkaBGenerovaniSoubory.PrintParameters(Gordic.General.ApplicationClient.GUserProcess,Gordic.Report.Interface.IGReport,Gordic.Buc.Interface.GDavkaBGenerovaniSouboryTiskParamsDto)">
+            <summary>
+            Tisk seznamu generování dávek složenek B
+            </summary>
+            <param name="up">UserProcess</param>
+            <param name="rep">parametry tisku</param>
+            <param name="customDto"></param>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GDavkaBSeznam">
+            <summary>
+            Dialog se seznamem/vyúčtováním dávek/složenek B
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDavkaBSeznam.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GDavkaSIPOObsah">
+            <summary>
+            Dialog s obsahem složenky dávek/y SIPO
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaSIPOObsah.davka">
+            <summary>
+             Číslo dávky
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaSIPOObsah.mod">
+            <summary>
+             mód (1 - podané)
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDavkaSIPOObsah.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Gordic.Buc.WebClient.GDavkaSIPOSeznam">
+            <summary>
+            Dialog se seznamem složenek dávek SIPO
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaSIPOSeznam.sk_vl">
+            <summary>
+             směrový kód banky vlastní
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaSIPOSeznam.bu_vl">
+            <summary>
+             běžný účet vlastní
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaSIPOSeznam.c_pre">
+            <summary>
+             částka převodu
+            </summary>
+        </member>
+        <member name="P:Gordic.Buc.WebClient.GDavkaSIPOSeznam.mod">
+            <summary>
+             mód (0-1)
+            </summary>
+        </member>
+        <member name="M:Gordic.Buc.WebClient.GDavkaSIPOSeznam.RenderContent(System.Web.UI.HtmlTextWriter)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Gordic.Buc.Interface.GlobalsDto">
+            <summary> DTO parametrů a proměnných přes celou aplikaci </summary>
+        </member>
+        <member name="M:Gordic.Buc.Interface.GlobalsDto.#ctor">
+            <summary> konstruktor </summary>
+        </member>
+        <member name="F:Gordic.Buc.Interface.GlobalsDto.UusGen">
+            <summary>
+            UUS pro generování příkazů a kontrolu odpárování v režimu jeden BÚ pro více účtáren ( MO )
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,444 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Services.AuthServiceClient</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Services.AuthServiceClient.GAuthService">
+            <summary>autorizační služba - klientská logika systémové služby</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAuthService.m_coAuthServiceLock">
+            <summary>synchronizační objekt</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAuthService.m_oUserProcess">
+            <summary>uživatelský proces autorizační služby</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAuthService.m_oGAuthService">
+            <summary>rozhraní na instanci aplikační logiky autorizační služby</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAuthService.m_oTimer">
+            <summary>časovač pro provádění periodického zpracování</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAuthService.m_bTimerWorks">
+            <summary>příznak probíhajícího periodického zpracování</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAuthService.m_bServiceFailed">
+            <summary>příznak fatálního selhání služby</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAuthService.m_bStartedAsService">
+            <summary>příznak startu v režimu služby</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAuthService.m_oServiceHost">
+            <summary>instance hostitele WCF služby</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAuthService.NLog">
+            <summary>podpora logování</summary>
+        </member>
+        <member name="P:Gordic.Services.AuthServiceClient.GAuthService.UserProcess">
+            <summary>uživatelský proces autorizační služby</summary>
+        </member>
+        <member name="P:Gordic.Services.AuthServiceClient.GAuthService.AuthorizationService">
+            <summary>rozhraní na instanci aplikační logiky autorizační služby</summary>
+        </member>
+        <member name="P:Gordic.Services.AuthServiceClient.GAuthService.ServiceFailed">
+            <summary>příznak fatálního selhání služby</summary>
+        </member>
+        <member name="P:Gordic.Services.AuthServiceClient.GAuthService.StartedAsService">
+            <summary>příznak startu v režimu služby</summary>
+        </member>
+        <member name="P:Gordic.Services.AuthServiceClient.GAuthService.ApplicationInfo">
+            <summary>rozhraní na obecné informace o aplikaci</summary>
+        </member>
+        <member name="P:Gordic.Services.AuthServiceClient.GAuthService.ConfigurationHashtable">
+            <summary>kolekce lokálních konfiguračních parametrů</summary>
+        </member>
+        <member name="P:Gordic.Services.AuthServiceClient.GAuthService.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthService.#ctor(Gordic.Services.AuthServiceClient.GAuthServiceUserProcess)">
+            <summary>veřejný konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthService.OnStart(System.String[])">
+            <summary>obsluha požadavku na start služby</summary>
+            <param name="args">vstupní parametry</param>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthService.OnStop">
+            <summary>obsluha požadavku na ukončení služby</summary>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthService.OnPause">
+            <summary>obsluha požadavku na pozastavení činnosti služby</summary>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthService.OnContinue">
+            <summary>obsluha požadavku na obnovení činnosti služby</summary>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthService.OnTimer(System.Object)">
+            <summary>obsluha události generované časovačem</summary>
+            <param name="input">vstupní parametr (není využit)</param>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthService.Fail(Gordic.General.GException)">
+            <summary>okamžité zastavení služby z důvodu jejího selhání s pokusem o restart</summary>
+            <param name="exception">výjimka, která způsobila selhání služby</param>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthService.StartService">
+            <summary>start služby</summary>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthService.StopService">
+            <summary>ukončení služby</summary>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthService.PauseService">
+            <summary>pozastavení služby</summary>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthService.ContinueService">
+            <summary>obnovení činnosti služby</summary>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthService.GetAuthService">
+            <summary>získání rozhraní na instanci aplikační logiky autorizační služby pro Ginis</summary>
+            <returns>rozhraní na instanci aplikační logiky autorizační služby pro Ginis</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthService.StartTimer">
+            <summary>start časovače</summary>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthService.StopTimer">
+            <summary>ukončení časovače</summary>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthService.InitializeService">
+            <summary>inicializace autorizační služby</summary>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthService.StartAuthService">
+            <summary>spuštění autorizační služby</summary>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthService.OpenChannel">
+            <summary>otevření komunikačního kanálu</summary>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthService.OpenWcfChannel(System.String)">
+            <summary>otevření komunikačního kanálu pomocí WCF</summary>
+            <param name="url">url adresa služby</param>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthService.RestartService">
+            <summary>požadavek na restart autorizační služby</summary>
+        </member>
+        <member name="T:Gordic.Services.AuthServiceClient.GAut01ServiceUserProcess">
+            <summary>uživatelský proces autorizační WCF služby</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAut01ServiceUserProcess.m_oHost">
+            <summary>hostitel služby</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAut01ServiceUserProcess.m_sRequestProfile">
+            <summary>požadovaný databázový profil</summary>
+        </member>
+        <member name="P:Gordic.Services.AuthServiceClient.GAut01ServiceUserProcess.Host">
+            <summary>hostitel služby</summary>
+        </member>
+        <member name="P:Gordic.Services.AuthServiceClient.GAut01ServiceUserProcess.LocalService">
+            <summary>klientská logika systémové služby</summary>
+        </member>
+        <member name="P:Gordic.Services.AuthServiceClient.GAut01ServiceUserProcess.ApplicationLogic">
+            <summary>aplikační logika autorizační služby</summary>
+        </member>
+        <member name="P:Gordic.Services.AuthServiceClient.GAut01ServiceUserProcess.RequestProfile">
+            <summary>požadovaný databázový profil</summary>
+        </member>
+        <member name="P:Gordic.Services.AuthServiceClient.GAut01ServiceUserProcess.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01ServiceUserProcess.OnCreateApplicationInfo">
+            <summary>metoda volaná při vytváření rozraní na obecné informace o aplikaci</summary>
+            <returns>rozraní na obecné informace o aplikaci</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01ServiceUserProcess.OnLoadConfiguration(Gordic.General.IGApplicationInfo)">
+            <summary>metoda volaná při načítání konfigurace aplikace</summary>
+            <param name="applicationInfo">obecné informace o aplikaci</param>
+            <returns>tabulka lokálních konfiguračních parametrů</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01ServiceUserProcess.OnAuthorize">
+            <summary>metoda volaná při požadavku na autorizaci do systému</summary>
+        </member>
+        <member name="T:Gordic.Services.AuthServiceClient.GAut01ServiceHost">
+            <summary>hostitel autorizační služby</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAut01ServiceHost.m_oLocalService">
+            <summary>klientská logika systémové služby</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAut01ServiceHost.m_oApplicationLogic">
+            <summary>aplikační logika autorizační služby</summary>
+        </member>
+        <member name="P:Gordic.Services.AuthServiceClient.GAut01ServiceHost.LocalService">
+            <summary>klientská logika systémové služby</summary>
+        </member>
+        <member name="P:Gordic.Services.AuthServiceClient.GAut01ServiceHost.ApplicationLogic">
+            <summary>aplikační logika autorizační služby</summary>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01ServiceHost.#ctor(Gordic.Services.AuthServiceClient.GAuthService,Gordic.Services.AuthServiceInterface.IGAuthService,System.Type,System.Uri[])">
+            <summary>veřejný konstruktor</summary>
+            <param name="localService">klientská logika systémové služby</param>
+            <param name="applicationLogic">aplikační logika autorizační služby</param>
+            <param name="serviceType">typ služby</param>
+            <param name="baseAddresses">url adresy služby</param>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01ServiceHost.CreateUserProcess">
+            <summary>vytvoření nového uživatelského procesu WCF služby</summary>
+            <returns>uživatelský proces WCF služby</returns>
+        </member>
+        <member name="T:Gordic.Services.AuthServiceClient.GAut01ServiceFactory">
+            <summary>podpora vytvoření hostitele autorizační služby</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAut01ServiceFactory.m_oLocalService">
+            <summary>klientská logika systémové služby</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAut01ServiceFactory.m_oApplicationLogic">
+            <summary>aplikační logika autorizační služby</summary>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01ServiceFactory.#ctor(Gordic.Services.AuthServiceClient.GAuthService,Gordic.Services.AuthServiceInterface.IGAuthService)">
+            <summary>veřejný konstruktor</summary>
+            <param name="localService">klientská logika systémové služby</param>
+            <param name="applicationLogic">aplikační logika autorizační služby</param>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01ServiceFactory.OnCreateServiceHost(System.Type,System.Uri[])">
+            <summary>metoda volaná při vytváření nové instance hostitele služby</summary>
+            <param name="serviceType">typ služby</param>
+            <param name="baseAddresses">url adresy služby</param>
+            <returns>nová instance hostitele služby</returns>
+        </member>
+        <member name="T:Gordic.Services.AuthServiceClient.GAut01Service">
+            <summary>autorizační WCF služba</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAut01Service.m_csProfiles">
+            <summary>skupina pro uložení seznamu databázových profilů do vyrovnávací paměti</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAut01Service.m_csProfile">
+            <summary>skupina pro uložení informací o databázovém profilu do vyrovnávací paměti</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAut01Service.m_csBeaPdb">
+            <summary>skupina pro uložení autentizačních údajů servisního účtu cpgclient do vyrovnávací paměti</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAut01Service.m_csCodeList">
+            <summary>skupina pro uložení obsahu číselníků do vyrovnávací paměti</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAut01Service.m_csMailTemplate">
+            <summary>skupina pro uložení šablony e-mailové zprávy do vyrovnávací paměti</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAut01Service.m_csGlobalDatabaseParameter">
+            <summary>skupina pro uložení globálních databázových parametů</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAut01Service.m_csAll">
+            <summary>klíč pro uložení seznamu databázových profilů do vyrovnávací paměti</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAut01Service.m_coCacheLock">
+            <summary>řídící objekt pro zámek vyrovnávací paměti</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAut01Service.m_coCacheItemPolicy">
+            <summary>politika pro ukládání položek do vyrovnávací paměti</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAut01Service.m_oUserProcess">
+            <summary>uživatelský proces</summary>
+        </member>
+        <member name="P:Gordic.Services.AuthServiceClient.GAut01Service.UserProcess">
+            <summary>uživatelský proces</summary>
+        </member>
+        <member name="P:Gordic.Services.AuthServiceClient.GAut01Service.LocalService">
+            <summary>klientská logika systémové služby</summary>
+        </member>
+        <member name="P:Gordic.Services.AuthServiceClient.GAut01Service.ApplicationLogic">
+            <summary>aplikační logika autorizační služby</summary>
+        </member>
+        <member name="P:Gordic.Services.AuthServiceClient.GAut01Service.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.IsServiceReady(System.Xml.XmlElement)">
+            <summary>získání příznaku dostupnosti autorizační služby</summary>
+            <param name="requestXml">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.GetAvailableProfiles(System.Xml.XmlElement)">
+            <summary>získání seznamu názvů dostupných profilů pro přihlášení k databázi</summary>
+            <param name="requestXml">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.GetProfile(System.Xml.XmlElement)">
+            <summary>získání popisných informací o databázovém profilu</summary>
+            <param name="requestXml">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.Authorize(System.Xml.XmlElement)">
+            <summary>autorizace do systému</summary>
+            <param name="requestXml">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.AuthenticateWebService(System.Xml.XmlElement)">
+            <summary>získání informací pro autentizaci webové služby</summary>
+            <param name="requestXml">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.VerifyTicket(System.Xml.XmlElement)">
+            <summary>ověření platnosti vstupenky do systému</summary>
+            <param name="requestXml">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.WakeUp(System.Xml.XmlElement)">
+            <summary>probuzení autorizační služby</summary>
+            <param name="requestXml">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.GetOneShotTicket(System.Xml.XmlElement)">
+            <summary>získání jednorázové vstupenky do systému</summary>
+            <param name="requestXml">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.CreatePublicUser(System.Xml.XmlElement)">
+            <summary>založení nového uživatele typu veřejnost</summary>
+            <param name="requestXml">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.GetCodeList(System.Xml.XmlElement)">
+            <summary>získání hodnot z číselníku</summary>
+            <param name="requestXml">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.GetPublicUserQuestion(System.Xml.XmlElement)">
+            <summary>získání kontrolní otázky pro uživatele typu veřejnost</summary>
+            <param name="requestXml">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.GetPublicUserPassword(System.Xml.XmlElement)">
+            <summary>získání zapomenutého hesla uživatele typu veřejnost</summary>
+            <param name="requestXml">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.GetPublicUserLogin(System.Xml.XmlElement)">
+            <summary>získání zapomenutých přihlašovacích údajů uživatele typu veřejnost</summary>
+            <param name="requestXml">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.ObtainBeaAuthenticationPdb(System.Xml.XmlElement)">
+            <summary>získání kódovaného hesla pro autentizaci webové služby prostřednictvím účtu uživatele portálu Bea AquaLogic Interaction</summary>
+            <param name="requestXml">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.ChangePublicUserPassword(System.Xml.XmlElement)">
+            <summary>změna hesla externího uživatele typu veřejnost</summary>
+            <param name="requestXml">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.GetMailTemplate(System.Xml.XmlElement)">
+            <summary>získání šablony pro e-mailovou zprávu</summary>
+            <param name="requestXml">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.ForgottenPublicPassword(System.Xml.XmlElement)">
+            <summary>požadavek na změnu zapomenutého hesla uživatele typu veřejnost</summary>
+            <param name="requestXml">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.LogError(System.Xml.XmlElement)">
+            <summary>zápis informací o výjimce do databázového žurnálu</summary>
+            <param name="requestXml">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.ReactivatePublicUser(System.Xml.XmlElement)">
+            <summary>nová aktivace uživatele typu veřejnost</summary>
+            <param name="requestXml">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.GetGlobalDatabaseParameter(System.Xml.XmlElement)">
+            <summary>získání hodnoty databázového parametru nastavené na globální úrovni</summary>
+            <param name="requestXml">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.ObtainPreparedSession(System.Xml.XmlElement)">
+            <summary>získání informací o připravené relaci</summary>
+            <param name="requestXml">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.AuthenticateLdapUser(System.Xml.XmlElement)">
+            <summary>ověření přístupových údajů uživatele prostřednictvím LDAP</summary>
+            <param name="requestXml">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.GinisInfo(System.Xml.XmlElement)">
+            <summary>získání obecných informací o systému</summary>
+            <param name="requestXml">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.WriteAduResult(System.Xml.XmlElement)">
+            <summary>uložení výsledku autorizace digitálního úkonu</summary>
+            <param name="requestXml">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.ProcessException(System.Exception)">
+            <summary>standardní ošetření výjimky</summary>
+            <param name="exception">zdrojová výjimka</param>
+            <returns>výjimka k dalším zpracování</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.OpenSession(System.String)">
+            <summary>otevření autorizované relace</summary>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.GetCacheItem``1(System.String,System.String)">
+            <summary>získání položky z vyrovnávací paměti</summary>
+            <typeparam name="T">očekávaný typ položky</typeparam>
+            <param name="group">skupina položek</param>
+            <param name="key">identifikátor položky</param>
+            <returns>položka z vyrovnávací paměti existuje-li, jinak null</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.SetCacheItem(System.String,System.String,System.Object)">
+            <summary>uložení položky do vyrovnávací paměti</summary>
+            <param name="group">skupina položek</param>
+            <param name="key">identifikátor položky</param>
+            <param name="item">položka k uložení do vyrovnávací paměti</param>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAut01Service.GetCacheKey(System.String,System.String)">
+            <summary>získání klíče pro položku ve vyrovnávací paměti</summary>
+            <param name="group">skupina položek</param>
+            <param name="key">identifikátor položky</param>
+            <returns>klíč pro položku ve vyrovnávací paměti</returns>
+        </member>
+        <member name="T:Gordic.Services.AuthServiceClient.GAuthServiceUserProcess">
+            <summary>uživatelský proces autorizační služby</summary>
+        </member>
+        <member name="F:Gordic.Services.AuthServiceClient.GAuthServiceUserProcess.m_oConfigurationHashtable">
+            <summary>kolekce lokálních konfiguračních parametrů</summary>
+        </member>
+        <member name="P:Gordic.Services.AuthServiceClient.GAuthServiceUserProcess.Current">
+            <summary>aktuální uživatelský proces</summary>
+            <remarks>v případě, že aktuální instance uživatelského procesu nebyla nalezena, je vytvořena nová a načte se do ní uložený kontext</remarks>
+        </member>
+        <member name="P:Gordic.Services.AuthServiceClient.GAuthServiceUserProcess.AuthorizationProvider">
+            <summary>rozhraní objektu pro autorizaci do Ginisu</summary>
+        </member>
+        <member name="P:Gordic.Services.AuthServiceClient.GAuthServiceUserProcess.ConfigurationHashtable">
+            <summary>kolekce lokálních konfiguračních parametrů</summary>
+        </member>
+        <member name="P:Gordic.Services.AuthServiceClient.GAuthServiceUserProcess.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthServiceUserProcess.Main">
+            <summary>hlavní smyčka procesu</summary>
+            <remarks>určené pro ladění při vývoji</remarks>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthServiceUserProcess.OnLoadConfiguration(Gordic.General.IGApplicationInfo)">
+            <summary>metoda volaná při načítání konfigurace aplikace</summary>
+            <param name="applicationInfo">obecné informace o aplikaci</param>
+            <returns>kolekce lokálních konfiguračních parametrů</returns>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthServiceUserProcess.OnSetAutenticationProperties(Gordic.General.GCommon.AuthenticationType@,System.String@)">
+            <summary>metoda volaná při nastavování vlastností autentizace</summary>
+            <param name="authenticationType">typ autentizace</param>
+            <param name="authListenerUrl">url adresa autorizační služby</param>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthServiceUserProcess.Run">
+            <summary>spuštění autorizační služby</summary>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthServiceUserProcess.EndRequest">
+            <summary>test uživatelského požadavku na ukončení služby</summary>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthServiceUserProcess.Register">
+            <summary>registrace služby</summary>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthServiceUserProcess.Unregister">
+            <summary>odregistrace služby</summary>
+        </member>
+        <member name="M:Gordic.Services.AuthServiceClient.GAuthServiceUserProcess.RegisterService(System.Boolean)">
+            <summary>registrace nebo odregistrace služby</summary>
+            <param name="unregister">příznak požadavku na odregistraci služby</param>
+        </member>
+    </members>
+</doc>

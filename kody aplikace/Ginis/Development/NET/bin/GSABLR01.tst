@@ -1,0 +1,12 @@
+[program]
+revize=40BLR0152410X01
+dat_akt=2010-10-06
+datetime_akt=2018-09-25 11:45:00
+
+[REQUIRED]
+MODULES=GINGRR01,GINDEP01,GINGIN01
+GINGRR01_mandatory=TRUE
+GINDEP01_mandatory=TRUE
+GINGIN01_mandatory=TRUE
+
+

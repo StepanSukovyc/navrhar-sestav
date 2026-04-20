@@ -1,0 +1,1570 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Develop.SetupGenerator</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Develop.SetupGenerator.GSetupGeneratorNonFatalException">
+            <summary> Výjimka používaná vrstvou Gordic.Develop.SetupGenerator </summary>
+            <remarks>
+            <para>
+            Výjimku nelze použít samostatně a neobsahuje žádné dodatečné informace oproti GException. 
+            Třídu však lze použít k rozlišení výjimky controls od ostatních systémových a 
+            aplikačních výjimek
+            </para>
+            </remarks>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GInterop">
+            <summary>
+            Třída s pomocnými metodami
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInterop.GetShortPathName(System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Vrátí krátkou cestu (8.3) a jméno
+            </summary>
+            <param name="longName">kompletní jméno a cesta k souboru</param>
+            <param name="l_oShortNameList">seznam krátkých jmen</param>
+            <returns>krátké jméno</returns>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInterop.GetDecimalPlaces(System.Int32)">
+            <summary>
+            Vrátí kolik číslic má danné celé číslo
+            </summary>
+            <param name="l_iNumber">číslo</param>
+            <returns>počet číslic v čísle</returns>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GPrjConfig">
+            <summary>
+            Struktura pro načtení informací o assembly (prj.config)
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GPrjConfig.AssemblyDir">
+            <summary> adresar zdrojovych kodu projektu 
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GPrjConfig.OriginalName">
+            <summary>OriginalName</summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GPrjConfig.#ctor(Gordic.Develop.SetupGenerator.GSetupGenerator,System.IO.DirectoryInfo)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="setupGenerator">Setup generator</param>
+            <param name="assemblyDir">složka v které se má .prj.config hledat</param>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GPrjConfig.Name">
+            <summary> Jméno projektu
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GPrjConfig.HasInstallSection">
+            <summary>HasInstallSection</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GPrjConfig.Localizable">
+            <summary></summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GPrjConfig.ReadCsProj(System.IO.FileInfo)">
+            <summary> Načtení informací konfiguračního souboru projektu - .csproj - čte název assembly </summary>
+            <param name="l_oCsProj">csproj</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GPrjConfig.ReadFiltered(System.String,System.String)">
+            <summary></summary>
+            <param name="customer"></param>
+            <param name="target"></param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GPrjConfig.AnalyzeInstallElement(System.Xml.XmlTextReader,System.String,System.String,System.String)">
+            <summary> Zpracuje install element .prj.configu </summary>
+            <param name="prjConfigXmlReader">xml reader do souboru s install elementem</param>
+            <param name="target"></param>
+            <param name="customer"></param>
+            <param name="prjConfigFileName">jméno .prj.config souboru</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GPrjConfig.AnalyzeCustomerElement(System.Xml.XmlTextReader,Gordic.Develop.SetupGenerator.GInstallCustomer,System.String,System.String)">
+            <summary>Zpracování vnitřku elementu Customer</summary>
+            <param name="prjConfigXmlReader">xml reader</param>
+            <param name="installCustomer">struktura pro načtená data custommera</param>
+            <param name="target"></param>
+            <param name="prjConfigFileName">jméno souboru prj.config</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GPrjConfig.AnalyzeModuleElement(System.Xml.XmlTextReader,Gordic.Develop.SetupGenerator.GInstallModule,System.String,System.String)">
+            <summary> Zpracuje vnitřek elementu "Module" z .prj.config </summary>
+            <param name="prjConfigXmlReader">xml reader</param>
+            <param name="installModule"></param>
+            <param name="filterTarget"></param>
+            <param name="prjConfigFileName"></param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GPrjConfig.AnalyzeTargetElement(System.Xml.XmlTextReader,System.String,Gordic.Develop.SetupGenerator.GInstallTarget[])">
+            <summary> Analyzuje target element prj.configu </summary>
+            <param name="prjConfigXmlReader">xml reader s otevřeným .prj.config</param>
+            <param name="installTargets">instalační cíle, které se mají nakonfigurovat podle konfigurace v prj.configu</param>
+            <param name="prjConfigFileName">jméno souboru prj.config</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GPrjConfig.AnalyzeAssemblyElement(System.Xml.XmlTextReader,Gordic.Develop.SetupGenerator.GInstallTarget[])">
+            <summary>
+            Zpracuje element s assembly
+            </summary>
+            <param name="prjConfigXmlReader"></param>
+            <param name="installTargets">instalační cíle, které se mají nakonfigurovat podle konfigurace v prj.configu</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GPrjConfig.AnalyzeRegistryElement(System.Xml.XmlTextReader,Gordic.Develop.SetupGenerator.GInstallTarget[])">
+            <summary>
+            Zpracuje element s požadavky na zápis do registru
+            </summary>
+            <param name="prjConfigXmlReader"></param>
+            <param name="installTargets">instalační cíle, které se mají nakonfigurovat podle konfigurace v prj.configu</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GPrjConfig.AnalyzeShortcutElement(System.Xml.XmlTextReader,Gordic.Develop.SetupGenerator.GInstallTarget[])">
+            <summary>
+            Zpracuje požadavek na vytvoření zástupce
+            </summary>
+            <param name="prjConfigXmlReader"></param>
+            <param name="installTargets">instalační cíle, které se mají nakonfigurovat podle konfigurace v prj.configu</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GPrjConfig.AnalyzeFilesElement(System.Xml.XmlTextReader,Gordic.Develop.SetupGenerator.GInstallTarget[])">
+            <summary>
+            Zpracuje požadavek na zařazení souboru do instalace
+            </summary>
+            <param name="prjConfigXmlReader"></param>
+            <param name="installTargets">instalační cíle, které se mají nakonfigurovat podle konfigurace v prj.configu</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GPrjConfig.AnalyzeIncludeElement(Gordic.Develop.SetupGenerator.IncludeExcludeCollectionType,System.Xml.XmlTextReader,Gordic.Develop.SetupGenerator.GInstallTarget[])">
+            <summary> Zpracuje include element požadavku na zařazení souboru </summary>
+            <param name="collectionType">Typ kolekce s kterou se má pracovat</param>
+            <param name="prjConfigXmlReader"></param>
+            <param name="installTargets">instalační cíle, které se mají nakonfigurovat podle konfigurace v prj.configu</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GPrjConfig.AnalyzeExcludeElement(Gordic.Develop.SetupGenerator.IncludeExcludeCollectionType,System.Xml.XmlTextReader,Gordic.Develop.SetupGenerator.GInstallTarget[])">
+            <summary> Zpracuje požadavek na vyřazení souboru z instalace </summary>
+            <param name="collectionType">Typ kolekce s kterou se má pracovat</param>
+            <param name="prjConfigXmlReader"></param>
+            <param name="installTargets"></param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GPrjConfig.GetIncludeExcludeProperties(System.Xml.XmlTextReader,System.String@,System.String@,System.String@,System.Boolean@,System.String@)">
+            <summary>
+            Přečte z .prj.configu atributy include/exclude tagu
+            </summary>
+            <param name="prjConfigXmlReader">prj.config</param>
+            <param name="srcDir">zdrojová složka</param>
+            <param name="dstDir">cílová sloźka</param>
+            <param name="regExp">regulární výraz</param>
+            <param name="recursive">zda se mají prohledávat podadresáře</param>
+            <param name="rename">jak se má nalezený soubor (je-li jeden) pojmenovat</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GPrjConfig.AnalyzeModuleIncludeElement(System.Xml.XmlTextReader,Gordic.Develop.SetupGenerator.GInstallModule)">
+            <summary>
+            Zpracuje include element požadavku na zařazení souboru
+            </summary>
+            <param name="prjConfigXmlReader"></param>
+            <param name="installModule"></param>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GSetupGeneratorException">
+            <summary> Výjimka používaná vrstvou Gordic.Develop.SetupGenerator </summary>
+            <remarks>
+            <para>
+            Výjimku nelze použít samostatně a neobsahuje žádné dodatečné informace oproti GException. 
+            Třídu však lze použít k rozlišení výjimky controls od ostatních systémových a 
+            aplikačních výjimek
+            </para>
+            </remarks>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GSetupGenerator">
+            <summary> Hlavní třída generátoru setup projektů
+            </summary>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GSetupGenerator.SetupGeneratorEvent">
+            <summary></summary>
+            <param name="sender"></param>
+            <returns></returns>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.GSetupGenerator.LocalizedResourcesCreator">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GSetupGenerator.#ctor(System.String,System.String,System.String,Gordic.Develop.InstallerCommon.GLog,Gordic.Develop.InstallerCommon.GRevision)">
+            <summary> Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GSetupGenerator.ValidatePath(System.String)">
+            <summary> Validace cesty</summary>
+            <param name="path">cesta</param>
+            <returns>validovaná cesta</returns>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GSetupGenerator.ReadSourceProjects(System.String,System.String)">
+            <summary> Načtení jednotlivých projektů v source path (.prj.configů)</summary>
+            <param name="customer"></param>
+            <param name="target"></param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GSetupGenerator.FindIncludeExcludeMatchingFiles">
+            <summary> Načte include soubory
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GSetupGenerator.ResolveInheritance(System.String)">
+            <summary> Pořeší dědičnost konfigurace zákazníků</summary>
+            <param name="customer"></param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GSetupGenerator.ResolveInheritanceRecur(System.Collections.Hashtable,System.Collections.Hashtable)">
+            <summary> Rekurzivní metoda řešicí dědičnost konfigurace zákazníků </summary>
+            <param name="l_oResolvedCustomers">pořešení zákazníci</param>
+            <param name="l_oUnResolvedCustomers">nepořešení zákazníci</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GSetupGenerator.Reset">
+            <summary> Vyresetuje všechna statická počítadla
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GSetupGenerator.VirtualDirectoryToDisk(Gordic.Develop.SetupGenerator.GInstallDirectory,System.String)">
+            <summary>Vytvoří na disku obraz virtuální struktury souborů v MSI</summary>
+            <param name="virtDir">kořen virtuálních složek popisujících MSI </param>
+            <param name="realPath">reálná složka do které se má tato sktrukura umístit</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GSetupGenerator.GetExistingCustomer(System.String)">
+            <summary>
+            Pokusí se najít zákazníka a pokud existuje, tak ho vrátí, jinak vrátí výjimku
+            </summary>
+            <param name="customer">název zákazníka</param>
+            <returns>Pokusí se najít zákazníka a pokud existuje, tak ho vrátí, jinak vrátí výjimku</returns>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GSetupGenerator.GetExistingModule(Gordic.Develop.SetupGenerator.GInstallCustomer,System.String)">
+            <summary>
+            Pokusí se najít modul, pokud se mu to podaří vrátí ho, jinak vyhodí výjimku
+            </summary>
+            <param name="l_oCustomer">zákazník, v němž se hledá</param>
+            <param name="module">modul v kterém se hledá</param>
+            <returns>nalezený modul, pokud nenašel tak vyhodí výjimku</returns>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GSetupGenerator.GetExistingTarget(Gordic.Develop.SetupGenerator.GInstallModule,System.String)">
+            <summary>Zjistí zda existuje instalační cíl a pokud ano, tak ho vrátí, pokud neexistuje, vyhodí výjimku</summary>
+            <param name="module">instalační modul, jehož instalční cíle se mají prohledávat</param>
+            <param name="target">instalační cíl</param>
+            <returns>nalezený instalační cíl, nebo výjimka </returns>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GSetupGenerator.FindTarget(System.String,System.String)">
+            <summary>Na základě zákazníka a názvu targetu/modulu najde konkrétní instalační cíl</summary>
+            <param name="customer">zákazník</param>
+            <param name="targetModule">modul (i s instalačním cílem, např 41USU01)</param>
+            <returns>Nalezený instalační cíl, v případě neúspěchu vyhodí výjimku</returns>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GSetupGenerator.ResolveModuleIncludes">
+            <summary>Provede napojení modulů podle include příkazů
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GSetupGenerator.ResolveResxIncludes(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.String}})">
+            <summary> Provede připojení lokalizovaných resources
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GSetupGenerator.WriteModuleExports(System.Xml.XmlWriter,System.Boolean)">
+            <summary> Zapíše do souboru informace co který modul exportuje </summary>
+            <param name="wr">Writer</param>
+            <param name="full"></param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GSetupGenerator.GetOrCreateCustomer(System.String,System.String)">
+            <summary> Vrátí existujícího, nebo vytvoří nového zákazeníka a zařadí do kolekce zákazníků </summary>
+            <param name="name">název zákazníka</param>
+            <param name="l_sExtends">z jakého zákazníka dědí</param>
+            <returns></returns>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GSetupGenerator.SourcePath">
+            <summary> Cesta k zdrojákům
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GSetupGenerator.BinaryPath">
+            <summary> Cesta k binárkám
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GSetupGenerator.GinPath">
+            <summary> Cesta ke GIN z BS
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GSetupGenerator.GinPathUnchecked">
+            <summary> GinPath bez kontroly na existenci slozky 
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GSetupGenerator.Revision">
+            <summary> Revize vyrabeneho modulu 
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GSetupGenerator.Generate(System.String,System.String)">
+            <summary> Analyza souboru, zavislosti, vytvoreni uplne struktury baliku
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GSetupGenerator.TestModuleInstallable(System.String,System.String)">
+            <summary> Projde načtenou konfiguraci z prj.configů a ověří, zda je možno isntalovat požadovaný modul... </summary>
+            <param name="customer">zákazník</param>
+            <param name="targetModule">target/modul </param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GSetupGenerator.ForceZip(System.String,System.String)">
+            <summary>Projde načtenou konfiguraci z prj.configů a ověří, zda je možno isntalovat požadovaný modul...</summary>
+            <param name="customer">zákazník</param>
+            <param name="targetModule">target/modul </param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GSetupGenerator.GetPackageInfo(System.String,System.String)">
+            <summary> Vraci informace k vytvoreni jednoho konkretniho baliku </summary>
+            <param name="customer"></param>
+            <param name="targetModule"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GSetupGenerator.CreateSrcZip(System.String,System.String,System.String)">
+            <summary> Vytvoří Src.zip </summary>
+            <param name="dstFileName">cesta a jméno vytvářeného souboru</param>
+            <param name="customer">zákazník (X)</param>
+            <param name="targetModule">modul (i s instalačním cílem, např 41USU01)</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GSetupGenerator.CreateInstallationImage(System.String,System.String,System.String)">
+            <summary> Vytvoří Src.zip </summary>
+            <param name="customer">zákazník (X)</param>
+            <param name="targetModule">modul (i s instalačním cílem, např 41GIN01)</param>
+            <param name="imageDir">složka, do které se má image instalace udělat</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GSetupGenerator.GetAssemblyListForLocalization(System.String,System.String)">
+            <summary>vrati seznam assembly predaneho targetu. jmena jsou bez pripony (napr."Gordic.Adu.Client")</summary>
+            <param name="customer">zákazník (X)</param>
+            <param name="targetModule">modul (i s instalačním cílem, např 41GIN01)</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GSetupGenerator.WarnMissingLocalizeTexts(System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.Dictionary{System.String,System.Int32}})">
+            <summary> vygeneruje warningy pro neexistujici lokalizace </summary>
+            <param name="customer">zákazník (X)</param>
+            <param name="targetModule">modul (i s instalačním cílem, např 41GIN01)</param>
+            <param name="missingTexts">struktura s chybejicimi resourci</param>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GPackageCreatorInfo">
+            <summary> Trida pro predavani informaci o vytvarenem modulu/targetu 
+            (mustek mezi SetupGenerator, ktery zpracovava vzdy vsechny baliky, a mechanismem pro tvorbu jednoho konkretniho baliku (MSI2)) 
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.GPackageCreatorInfo.DefaultPoolName">
+            <summary> pro WEBCLIENT/WEBSERVICE vraci nazev vychoziho Aplikacniho poolu </summary>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.GPackageCreatorInfo.VirtualPath">
+            <summary>pro WEBCLIENT/WEBSERVICE vraci vychozi virtualni cestu na IIS ("/GORDIC/USU01"), pro TK vraci vychozi relativni cestu do Program Files ("Gordic\Tool01")</summary>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.GPackageCreatorInfo.UpgradeCode">
+            <summary>UpgradeCode pro MSI (pouzije se bud z DB, nebo se generuje nove)</summary>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.GPackageCreatorInfo.Localizations">
+            <summary> Udaje podlehajici lokalizaci</summary>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GPackageCreatorLocalizationInfo">
+            <summary> Informace, ktere podlehaji lokalizacim
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.GPackageCreatorLocalizationInfo.CultureName">
+            <summary> Nazev kultury ("cs-CZ") </summary>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.GPackageCreatorLocalizationInfo.Title">
+            <summary> Strohy nazev modulu </summary>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.GPackageCreatorLocalizationInfo.TitleFull">
+            <summary> Uplny nazev modulu</summary>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.GPackageCreatorLocalizationInfo.ShortCuts">
+            <summary> Seznam zastupcu </summary>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GPackageCreatorShortCut">
+            <summary> Informace o zastupcich pro WINCLIENTY 
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.GPackageCreatorShortCut.TargetFileName">
+            <summary> Jméno exe souboru, který má shortcut pouštět </summary>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.GPackageCreatorShortCut.Arguments">
+            <summary> Argumenty zástupce </summary>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.GPackageCreatorShortCut.Name">
+            <summary> Název zástupce </summary>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.GPackageCreatorShortCut.Description">
+            <summary> Popis zastupce </summary>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.GPackageCreatorShortCut.IconIndex">
+            <summary> Index ikony </summary>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GModuleInclude">
+            <summary>
+            Struktura pro uložení pokynu pro include modulu
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GModuleInclude.Name">
+            <summary>název modulu, který se má inkludovat</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GModuleInclude.PrjConfig">
+            <summary>prj konfig, v kterém je pokyn pro include modulu</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GModuleInclude.Included">
+            <summary>Zda byl danný include pokyn již realizován</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GModuleInclude.Working">
+            <summary>Zda se zrovna zpracovává pokyn pro include (pro detekci smyček v include)</summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GModuleInclude.#ctor(System.String,Gordic.Develop.SetupGenerator.GPrjConfig)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="name">název modulu, který se má inkludovat</param>
+            <param name="prjConfig">prj konfig, v kterém je pokyn pro include modulu</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GResolverFile.#ctor(System.String,System.String,System.String,System.String,Gordic.Develop.SetupGenerator.GPrjConfig)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="fullSrcName">celé jméno i s cestou zdrojového souboru</param>
+            <param name="dstPath">cílová cesta</param>
+            <param name="rename">pokyn pro přejmenování souboru</param>
+            <param name="author">autor požadavku??</param>
+            <param name="prjConfig">prj.config který soubor includoval</param>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GResolverFile.SrcFileName">
+            <summary>celé jméno i s cestou zdrojového souboru</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GResolverFile.DstPath">
+            <summary>DstPath</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GResolverFile.Rename">
+            <summary>Rename</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GResolverFile.Author">
+            <summary>Author</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GResolverFile.PrjConfig">
+            <summary>prj.config který soubor includoval</summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GResolverFile.Equals(System.Object)">
+            <summary> Porovnání
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GResolverFile.DstUniqueId">
+            <summary> Unikátní id cílového umístění souboru
+            </summary>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GFileIncludeExcludeResolver">
+            <summary>
+            Třída pro vyhodnocování regulárních include/exclude výrazů
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GFileIncludeExcludeResolver.Log">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GFileIncludeExcludeResolver.#ctor(Gordic.Develop.SetupGenerator.GInstallTarget)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="l_oInstallTarget">instalační cíl, do kterého resolver patří...</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GFileIncludeExcludeResolver.AddInclude(System.String,System.String,System.String,System.Boolean,System.String,System.String,Gordic.Develop.SetupGenerator.GPrjConfig)">
+            <summary> Přidá jeden include výraz </summary>
+            <param name="srcPath">zdrojová cesta</param>
+            <param name="dstPath">cílová cesta</param>
+            <param name="regExp">regulární výraz</param>
+            <param name="recursive">zda se mají prohledávat podadresáře</param>
+            <param name="author">autor</param>
+            <param name="rename">přejmenování</param>
+            <param name="netAssembly">assembly v jejíž .prj.configu include je</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GFileIncludeExcludeResolver.AddExclude(System.String,System.String,System.String,System.Boolean,System.String,Gordic.Develop.SetupGenerator.GPrjConfig)">
+            <summary> Přidá exclude </summary>
+            <param name="srcPath">zdrojová cesta</param>
+            <param name="dstPath">cílová cesta</param>
+            <param name="regExp">regulární výraz</param>
+            <param name="recursive">zda se mají prohledávat podadresáře</param>
+            <param name="author">autor</param>
+            <param name="netAssembly">assembly v jejíž .prj.configu include je</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GFileIncludeExcludeResolver.FindIncludeExcludeMatchingFiles">
+            <summary> Projde všechny regulární include a exclude a vyhovující soubory nastrká do kolekce "Files"
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GFileIncludeExcludeResolver.Files">
+            <summary>
+            Hashtable s soubory
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GFileIncludeExcludeResolver.FindAllPosibleExcludes(System.IO.DirectoryInfo)">
+            <summary>
+            Najde všechny exclude pro dannou složku (tedy i rekurzivní exclude pro otcovské složky)
+            </summary>
+            <param name="dir">jméno složky pro kerou mám hledat exclude</param>
+            <returns>list všech exclude které nad složkou existují</returns>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GFileIncludeExcludeResolver.RecurRead(System.IO.DirectoryInfo,System.Collections.Generic.List{Gordic.Develop.SetupGenerator.GInExItem},System.String)">
+            <summary> Tahle metoda se rekuzrivně volá a plní struktury souborů, assemblies GAC a autorů podle Inlcude, Exclude patternů nad dannou zdrojovou složkou </summary>
+            <param name="dir">zdrojový adresář jehož include a exclude patterny se zpracovávají</param>
+            <param name="incArray">Seznam GInExItem pro includy pro dany zdrojovy adresar</param>
+            <param name="dstPath">aktualni cesta, konstrukce dst cesty se provadi jako Path.Combine(incRegExDst[i],dstPath)</param>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GPathComparer">
+            <summary> Porovnavač dvou cest
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GPathComparer.System#Collections#IComparer#Compare(System.Object,System.Object)">
+            <summary>
+            Porovnání dvou cest k souborům
+            </summary>
+            <param name="x">cesta X</param>
+            <param name="y">cesta Y</param>
+            <returns>výsledek porovnání</returns>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GInExItem">
+            <summary> Jedna položka v sadě regulárních výrazů (include i exclude) v .prj.configu
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInExItem.#ctor(Gordic.Develop.SetupGenerator.GRegex,System.String,System.Boolean,System.String)">
+            <summary> Konstruktor </summary>
+            <param name="regExp">Regulární výraz</param>
+            <param name="dstPath">Cíl, kam se mají vyhovující soubory nakopírovat</param>
+            <param name="recursive">Zda se mají procházet i podsložky</param>
+            <param name="rename">přejmenování includovaného souboru</param>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInExItem.RegExp">
+            <summary> Regulární výraz</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInExItem.DstPath">
+            <summary>Cíl, kam se mají vyhovující soubory nakopírovat</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInExItem.Recursive">
+            <summary>Zda se mají procházet i podsložky</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInExItem.Rename">
+            <summary>Rename</summary>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GRegex">
+            <summary> Regularni výraz s autorem a assembly
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GRegex.#ctor(System.String,System.String,Gordic.Develop.SetupGenerator.GPrjConfig)">
+            <summary> Konstruktor </summary>
+            <param name="l_sRegexp">reg. výraz</param>
+            <param name="author">autor</param>
+            <param name="netAssembly">assembly</param>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GRegex.Author">
+            <summary> Autor
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GRegex.PrjConfig">
+            <summary> Assembly
+            </summary>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GInstallAssembly">
+            <summary>
+            Jedna assembly (soubor s příponou .dll)
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallAssembly.PrjConfig">
+            <summary> Assembly (.prj.config) </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallAssembly.#ctor(Gordic.Develop.SetupGenerator.GInstallTarget,System.String,System.String,System.String,System.String,System.String,System.String,Gordic.Develop.SetupGenerator.InstallAction,System.String,Gordic.Develop.SetupGenerator.GPrjConfig,System.Collections.IDictionary)">
+            <summary> Konstruktor </summary>
+            <param name="installTarget">instalační cíl (WEBSERVER, APPSERVER...)</param>
+            <param name="sourcePath">zdrojová cesta</param>
+            <param name="name">jméno assembly</param>
+            <param name="originalName">původní (nepřejmenovaný) název assembly</param>
+            <param name="description">popis</param>
+            <param name="author">autor</param>
+            <param name="action">akce</param>
+            <param name="dstDir">cílová složka</param>
+            <param name="modulePath">cesta modulu behem includu</param>
+            <param name="netAssembly">assembly (prj.config)</param>
+            <param name="serviceParams">parametry service</param>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallAssembly.FullName">
+            <summary>
+            Název assembly i s verzí a public key token
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallAssembly.AssemblyVersion">
+            <summary>
+            Verze assembly
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallAssembly.ParentDirectoryId">
+            <summary>
+            Id otcovské složky
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallAssembly.Service">
+            <summary>
+            Zda má nějaké servisní parametry
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallAssembly.ServiceParams">
+            <summary>
+            Servisní parametry
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallAssembly.DstDir">
+            <summary> Cílová složka instalace, zatím jsou podporovány pouze složky začínající \ModuleName (např. \BAR01)
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallAssembly.Name">
+            <summary> Název assembly
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallAssembly.OriginalName">
+            <summary> Původní (nepřejmenovaný) název assembly
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallAssembly.UniqueId">
+            <summary>
+            Unikátní ID assembly
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallAssembly.SourcePath">
+            <summary>
+            Cesta k zdrojovému souboru
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallAssembly.Description">
+            <summary>Popis</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallAssembly.Author">
+            <summary>Autor</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallAssembly.ModulePath">
+            <summary> Cesta modulu jak prochazeli includy
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallAssembly.Action">
+            <summary>akce</summary>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GServiceID">
+            <summary>
+            Třída pro generování ServiceId
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GServiceID.Id">
+            <summary>
+            Vrátí unikátní ServiceID
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GServiceID.Reset">
+            <summary>
+            Nastaví ID na 0
+            </summary>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GServiceControlID">
+            <summary>
+            Třída pro generování ID ServiceControl
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GServiceControlID.Id">
+            <summary>
+            Vrátí unikátní ServiceControlId
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GServiceControlID.Reset">
+            <summary>
+            Nastaví ID na 0
+            </summary>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GInstallCustomer">
+            <summary>
+            Struktura odpovídající jednomu zákazníku .prj.configu
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallCustomer.#ctor(Gordic.Develop.SetupGenerator.GSetupGenerator,System.String,System.String)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="l_oSetupGenerator">Setup generator</param>
+            <param name="name">jméno zákazníka</param>
+            <param name="extends"></param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallCustomer.UpdateShortcutDirectoryStructure(System.String,Gordic.Develop.SetupGenerator.GInstallShortCut,Gordic.Develop.SetupGenerator.GInstallTarget,System.Collections.Hashtable)">
+            <summary>
+            Vrátí (vytvoří pokud neexistuje) novou složku pro shortcut v start menu či desktopu
+            </summary>
+            <param name="directory">jméno </param>
+            <param name="shortCut"></param>
+            <param name="target"></param>
+            <param name="l_oRemoveFolder"></param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallCustomer.GetModule(System.String)">
+            <summary>
+            Buď vrátí již existující, nebo založí nový modul s danným jménem
+            </summary>
+            <param name="name">Název modulu (GIN01, BAR01 - obsah tagu Module .prj.config)</param>
+            <returns>Strukturu obsahující informace o danném modulu</returns>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallCustomer.FindModule(System.String)">
+            <summary>
+            Buď vrátí již existující, nebo null
+            </summary>
+            <param name="name">Název modulu (GIN01, BAR01 - obsah tagu Module .prj.config)</param>
+            <returns>Strukturu obsahující informace o danném modulu, nebo null v přápadě, že modul neexistuje</returns>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallCustomer.InstallModules">
+            <summary>
+            Moduly, které patří do zákazníka
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallCustomer.FindIncludeExcludeMatchingFiles">
+            <summary>
+            Načte include soubory
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallCustomer.ResolveInheritance(Gordic.Develop.SetupGenerator.GInstallCustomer)">
+            <summary> Vyřeší dědičnost zákazníků </summary>
+            <param name="parent">otcovský zákazník</param>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallCustomer.SetupGenerator">
+            <summary>
+            reference na SetupGenerator
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallCustomer.Name">
+            <summary>
+            Název zákazníka
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallCustomer.Extends">
+            <summary>
+            Extends
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallCustomer.ProductName">
+            <summary>
+            Jméno produktu
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallCustomer.IsEmpty">
+            <summary>
+            False pokud customer obsahuje nějaký neprázdný modul
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallCustomer.ResolveModuleIncludes">
+            <summary> Nakopíruje k modulu zákazníka všechny moduly, které se mají includovat.
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallCustomer.ResolveResxIncludes(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.String}})">
+            <summary> Prode všechny soubory v modulu a doplní resources.
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallCustomer.WriteModuleExports(System.Xml.XmlWriter,System.Boolean)">
+            <summary> Vypíše exporty modulů v zákazníkovi </summary>
+            <param name="wr">soubor</param>
+            <param name="full"></param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallCustomer.WarnUnusedShortcuts">
+            <summary> Vypíše do logu varování o nepoužitých shortcutech
+            </summary>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GInstallDirectory">
+            <summary>
+            Složka instalace
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallDirectory.#ctor(Gordic.Develop.SetupGenerator.GInstallDirectory,System.String,Gordic.Develop.SetupGenerator.GInstallTarget)">
+            <summary> Konstruktor </summary>
+            <param name="parentDir">otcovská složka této složky</param>
+            <param name="name">jméno složky</param>
+            <param name="installTarget">instalační cíl...</param>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallDirectory.SubDirectories">
+            <summary>SubDirectories</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallDirectory.Name">
+            <summary>Name</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallDirectory.FullName">
+            <summary>Plný název složky</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallDirectory.GacFiles">
+            <summary>Soubory v složce, které se ale instalují do GACu</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallDirectory.Files">
+            <summary>Soubory v složce</summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallDirectory.AddFile(Gordic.Develop.SetupGenerator.IGInstallFile,System.String)">
+            <summary> Přidá do struktury reprezentující složku instalace odkaz na strukturu reprezentující soubor </summary>
+            <param name="file">soubor, který má být přidán</param>
+            <param name="dstDir">cesta, do které soubor patří. První část cesty musí odpovídat této složce...</param>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GUniqueGacID">
+            <summary>
+            Třída pro generování unikátních ID GACu
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GUniqueGacID.Id">
+            <summary>
+            Unikátní ID
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GUniqueGacID.Reset">
+            <summary>
+            Nastaví ID na 0
+            </summary>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GUniqueServiceID">
+            <summary>
+            Třída pro generování unikátních ID service
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GUniqueServiceID.Id">
+            <summary>
+            Unikátní ID service
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GUniqueServiceID.Reset">
+            <summary>
+            Nastaví ID na 0
+            </summary>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GUniqueDirectoryId">
+            <summary>
+            Třída pro generování unikátních ID directory
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GUniqueDirectoryId.Id">
+            <summary>
+            Unikátní ID directory
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GUniqueDirectoryId.Reset">
+            <summary>
+            Nastaví ID na 0
+            </summary>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GUniqueFileId">
+            <summary>
+            Třída pro generování unikátních file ID
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GUniqueFileId.Id">
+            <summary>
+            Unikátní file ID
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GUniqueFileId.Reset">
+            <summary>
+            Nastaví ID na 0
+            </summary>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GRemoveFolderId">
+            <summary>
+            Generátor identifikátorů pro RemoveFolder
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GRemoveFolderId.Id">
+            <summary>
+            Vygeneruje nové unikátní ID
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GRemoveFolderId.Reset">
+            <summary>
+            Nastaví ID na 0
+            </summary>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GInstallFile">
+            <summary>
+            Soubor instalace
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallFile.#ctor(Gordic.Develop.SetupGenerator.GInstallTarget,System.String,System.String,System.String,System.String,System.String,Gordic.Develop.SetupGenerator.InstallAction,System.String,Gordic.Develop.SetupGenerator.GPrjConfig)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="l_oInstallTarget">Instalační cíl</param>
+            <param name="sourcePath">plný název souboru</param>
+            <param name="name">jméno souboru</param>
+            <param name="originalName">původní (nepřejmenované) jméno souboru</param>
+            <param name="author">autor</param>
+            <param name="action">akce</param>
+            <param name="modulePath">cesta modulu behem includu</param>
+            <param name="dstDir">složka instalace</param>
+            <param name="netAssembly">assembly z jejíhož .prj.configu jsme vyšli</param>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallFile.PrjConfig">
+            <summary>
+            assembly z jejíhož .prj.configu jsme vyšli
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallFile.Service">
+            <summary>
+            Zda se jedná o službu??
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallFile.UniqueId">
+            <summary>
+            Unikátní ID souboru
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallFile.DstDir">
+            <summary>
+            Cílová složka
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallFile.Name">
+            <summary>
+            Název souboru
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallFile.OriginalName">
+            <summary>
+            Původní (nepřejmenované) jméno reportu
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallFile.ModulePath">
+            <summary> Cesta modulu jak prochazeli includy
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallFile.SourcePath">
+            <summary>
+            Plná cesta a název souboru (stejné jako Src)
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallFile.ParentDirectoryId">
+            <summary>
+            Id otcovské složky
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallFile.FullName">
+            <summary>
+            Název souboru (plný)
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallFile.Author">
+            <summary>autor</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallFile.Action">
+            <summary>akce</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallFile.AssemblyVersion">
+            <summary>
+            Verze assembly - pro obyčejný file není verze assembly...
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallFile.InstallTarget">
+            <summary>Instalační cíl (Webserver, Appserver,...)</summary>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GInstallModule">
+            <summary>
+            Informace o modulu (GIN01, BAR01 z prj.config)
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.GInstallModule.m_oInstallTargets">
+            <summary> Všechny instalační cíle modulu </summary>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.GInstallModule.m_oInstallCustomer">
+            <summary> Odkaz na otce - zákazníka </summary>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.GInstallModule.m_sName">
+            <summary> Název modulu </summary>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.GInstallModule.m_oIncludedModules">
+            <summary> Moduly </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallModule.Log">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallModule.#ctor(Gordic.Develop.SetupGenerator.GInstallCustomer,System.String)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="l_oInstallCustomer">zákazník</param>
+            <param name="name">název modulu</param>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallModule.IncludedModules">
+            <summary> Kolekce modulů, které se mají k tomuto modulu připojit
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallModule.IsInstallable">
+            <summary>Zda je možno vyrobit intalační balíček modulu</summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallModule.GetTarget(System.String)">
+            <summary> Vrátí instalační cíl, pokud zatím neexistuje, tak založí nový a vloží ho do kolekce instalačních cílů modulu </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallModule.FindTarget(System.String)">
+            <summary> Vrátí instalační cíl, pokud zatím neexistuje, tak založí nový a vloží ho do kolekce instalačních cílů modulu </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallModule.FindIncludeExcludeMatchingFiles">
+            <summary> Načte všechny include soubory modulu
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallModule.ResolveInheritance(Gordic.Develop.SetupGenerator.GInstallModule)">
+            <summary> Pořeší dědičnost - přidá do balíku vlastnosti předka </summary>
+            <param name="l_oParent"></param>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallModule.InstallTargets">
+            <summary> Instalační cíle modulu
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallModule.Name">
+            <summary> Název modulu (GIN01)
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallModule.UnresolvedErrorText">
+            <summary> Text chyby pri resolve zavislosti. Pokud neni prazdny neni mozne instalovat balicek!
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallModule.InstallCustomer">
+            <summary> Otcovský zákazník modulu
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallModule.IsEmpty">
+            <summary> Zda je instalace modulu prázdná (všechny instalační cíle jsou prázdné)
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallModule.AllIncludedModules">
+            <summary>Metoda projde strom include modulů a vrátí všechny moduly, které jsou z danného modulu inkludovány</summary>
+            <returns>vrátí všechny moduly, které jsou z danného modulu inkludovány</returns>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallModule.ResolveModuleIncludes">
+            <summary> Nakopíruje k modulu zákazníka všechny moduly, které se mají includovat.
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallModule.ResolveResxIncludes(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.String}})">
+            <summary> Připojí k souborům modulu lokalizované resources.
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallModule.WriteModuleExports(System.Xml.XmlWriter,System.Boolean)">
+            <summary> Vypíše exporty modulu </summary>
+            <param name="wr">soubor</param>
+            <param name="full"></param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallModule.WarnUnusedShortcuts">
+            <summary> Vypíše do logu varování o nepoužitých shortcutech
+            </summary>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GInlcudedModulesCollection">
+            <summary> Kolekce include modulů s upravenou metodu Add, která nepřidává stejné include vícekrát
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInlcudedModulesCollection.Add(Gordic.Develop.SetupGenerator.GModuleInclude)">
+            <summary>Provede přidání nového include do kolekce, pokud v kolekci takový include již existuje, přidání se neprovede.</summary>
+            <param name="newIncludedModule"></param>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GInstallRegistry">
+            <summary>
+            Struktura udržující požadavek na přidání položky do registru
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallRegistry.#ctor(Gordic.Develop.SetupGenerator.GInstallTarget,System.String,System.String,System.String,System.String,System.String,System.String,System.String,Gordic.Develop.SetupGenerator.GPrjConfig)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="l_oInstallTarget">instalační cíl</param>
+            <param name="l_sHKEY">klíč registrů</param>
+            <param name="l_sSubKey">subklíč</param>
+            <param name="name">název</param>
+            <param name="l_sValue">hodnota</param>
+            <param name="l_sType">typ</param>
+            <param name="l_sAction">akce</param>
+            <param name="l_sAuthor">autor</param>
+            <param name="l_oPrjConfig">assembly</param>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallRegistry.NeedResolveFiles">
+            <summary>
+            Zda se bude nahrazovat v registrech reference na soubory jejich požadovanými atributy
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallRegistry.PrjConfig">
+            <summary>
+            Assembly v jejímž .prj.configu je připojení hodnoty do registru
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallRegistry.ResolveFiles(System.String,Gordic.Develop.SetupGenerator.IGInstallFile)">
+            <summary>
+            Naváže odkaz na soubor v registru na instalační soubor
+            </summary>
+            <param name="l_sFileName">jméno souboru</param>
+            <param name="l_oFile">struktura s info o souboru</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallRegistry.WriteXMLInstall(System.Xml.XmlTextWriter)">
+            <summary>
+            Zapíše XML soubor pro Wix...
+            </summary>
+            <param name="wxsXmlWriter">xml writer</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallRegistry.AnalyzeString(System.String)">
+            <summary>
+            Zkontroluje řetězec, zda neobsahuje odkaz na soubor, pokud ano, přidá ho do kolekce odkazovaných souborů
+            </summary>
+            <param name="analyzed">analyzovaný text</param>
+            <returns>případně upravený text</returns>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallRegistry.ExpandString(System.String)">
+            <summary>
+            Doplní do odkazu na soubor jeho požadovaným atributem
+            </summary>
+            <param name="l_sStringToExpand"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GUniqeRegistryId">
+            <summary>
+            Slouží k  vytváření unikátního ID regstrů
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GUniqeRegistryId.Id">
+            <summary>
+            Získá nové unikátní ID
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GUniqeRegistryId.Reset">
+            <summary>
+            Nastaví ID na 0
+            </summary>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GHkeys">
+            <summary>
+            Větve registru
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GHkeys.ValidHKEY(System.String)">
+            <summary>
+            Zjistí, zda je key validní
+            </summary>
+            <param name="hkey">key</param>
+            <returns>zda je key validní</returns>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GHkeys.ValidValues">
+            <summary>
+            Seznam validních hodnot
+            </summary>
+            <returns>Seznam validních hodnot oddělených čárkou</returns>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GHkeys.Transalte(System.String)">
+            <summary>
+            Překlad z dlouhých na krátké názvy
+            </summary>
+            <param name="l_sHkey">název</param>
+            <returns>krátký název</returns>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GRegistryActions">
+            <summary>
+            Akce v registru
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GRegistryActions.Translate(System.String)">
+            <summary>
+            Sjednocení akce add a write
+            </summary>
+            <param name="l_sAction">akce</param>
+            <returns>sjednocená akce</returns>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GRegistryType">
+            <summary>
+            Typ hodnoty v registru
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GRegistryType.Translate(System.String)">
+            <summary>
+            Překlad
+            </summary>
+            <param name="l_sType">typ</param>
+            <returns>kanonyzovaný typ</returns>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GInstallShortCut">
+            <summary>
+            Shortcut
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallShortCut.#ctor(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="targetFileName">jméno cílového exe, které má shortcut pouštět</param>
+            <param name="arguments">argumenty zástupce</param>
+            <param name="name">název zástupce</param>
+            <param name="description">popis</param>
+            <param name="directory">složka</param>
+            <param name="hotkey">hotkey</param>
+            <param name="iconIndex">index ikony</param>
+            <param name="show">show?</param>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallShortCut.Name">
+            <summary> Jméno shortcutu
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallShortCut.LongName">
+            <summary> Dlouhé jméno shortcutu
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallShortCut.File">
+            <summary> Cílový soubor shortcutu
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallShortCut.TargetFileName">
+            <summary> Jméno exe souboru, který má shortcut pouštět
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallShortCut.Directory">
+            <summary> Složka do které se má shortcut instlovat (cesta)
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallShortCut.DirectoryId">
+            <summary> ID složky do které se má instalovat (z GShortCutDir)
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallShortCut.Used">
+            <summary>Zda byl shortcut použit</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallShortCut.Arguments">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallShortCut.Description">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallShortCut.IconIndex">
+            <summary></summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallShortCut.WriteWxsFile(System.Xml.XmlTextWriter)">
+            <summary> Zapíše WXS
+            </summary>
+            <param name="wxsXmlWriter">WXS</param>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GUniqueShortCutId">
+            <summary>
+            Třída pro generování unikátních id shortcutů
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GUniqueShortCutId.Id">
+            <summary>
+            Generuje unikátní ID zástupce
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GUniqueShortCutId.Reset">
+            <summary>
+            Nastaví ID na 0
+            </summary>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GInstallTarget">
+            <summary>
+            Instalační cíl (WEBSERVER, WINCLIENT,...)
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallTarget.#ctor(Gordic.Develop.SetupGenerator.GInstallModule,System.String)">
+            <summary> Konstruktor </summary>
+            <param name="installModule">modul</param>
+            <param name="target">cíl instalace</param>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallTarget.Title">
+            <summary> Title - záhlaví balíčku
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallTarget.Description">
+            <summary> Description - popis balíčku
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallTarget.InstallDirRoot">
+            <summary>Kořen struktury složek a souborů tak jak bude v instalaci</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallTarget.Upgradable">
+            <summary> Vlastnost, která říká, zda lze danný target upgradovat (true), nebo se má každá verze
+            instalovat jako izolovaný modul (a verze lze tudíž instalovat vedle sebe) (false)
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallTarget.Log">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallTarget.AddShortcut(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary> Přidá do instalačního cíle shortcut </summary>
+            <param name="targetFileName">jméno cílového souboru, který má shortcut pouštět</param>
+            <param name="arguments">argumenty shortcutu</param>
+            <param name="name">Název shortcutu</param>
+            <param name="description">popis</param>
+            <param name="directory">pracovní složka</param>
+            <param name="hotkey">hotkey</param>
+            <param name="iconIndex">index ikony</param>
+            <param name="show">?</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallTarget.ResolveRegistry(System.String,Gordic.Develop.SetupGenerator.IGInstallFile)">
+            <summary> Nahradí odkazy na soubory jejich skutečnými atributy </summary>
+            <param name="l_sResTarget">cílový soubor</param>
+            <param name="l_oFile">popis souboru</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallTarget.ResolveShortCut(System.String,Gordic.Develop.SetupGenerator.IGInstallFile,System.Xml.XmlTextWriter,System.Collections.Hashtable)">
+            <summary> Podívá se, zda je k dannému resTarget (.exe nebbo .dll) napojen nějaký shortcut, pokud ano, tak ho přidá do wxs </summary>
+            <param name="assemblyName">jméno assembly, pro kterou budeme hledat shortcuty </param>
+            <param name="assembly">assembly</param>
+            <param name="wxsXmlWriter">výstupní WSX soubor</param>
+            <param name="removeFolder">?</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallTarget.ResolveResxIncludes(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.String}})">
+            <summary> Připojí k souborům modulu lokalizované resources. </summary>
+            <param name="resxHash">klíč je jméno souboru, hodnota je pole resource files s lokalizací danného souboru</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallTarget.WarnUnusedShortcuts">
+            <summary> Projde všechny shortcuty a varuje, pokud je nějaký, který nebyl při generování WXS použit (navázán na .exe)
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallTarget.setTitle(System.String,System.String)">
+            <summary></summary>
+            <param name="l_sTitle"></param>
+            <param name="l_sTitleSetter"></param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallTarget.AddInstallAssembly(System.String,System.String,System.String,System.String,System.String,Gordic.Develop.SetupGenerator.GPrjConfig,System.Collections.IDictionary)">
+            <summary>
+            Přidá do kolekce assembly které se mají instalovat novou 
+            </summary>
+            <param name="assemblyPathName">plná cesta k assembly</param>
+            <param name="l_sAssemblyName">název assembly</param>
+            <param name="originalName">původní název assembly</param>
+            <param name="l_sDescription">popis assemlby</param>
+            <param name="l_sAuthor">autor assembly</param>
+            <param name="l_oPrjConfig">struktura s popisem assembly</param>
+            <param name="l_oServiceParams">parametry pro systémovou službu ?</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallTarget.AddInstallFile(System.String,System.String,System.String,System.String,System.String,Gordic.Develop.SetupGenerator.GPrjConfig,System.String)">
+            <summary> Přidá do kolekce souborů, které se mají instalovat nový soubor </summary>
+            <param name="sourcePath">plná cesta k souboru</param>
+            <param name="name">název souboru</param>
+            <param name="originalName">původní název souboru</param>
+            <param name="author">autor souboru</param>
+            <param name="dstDir">cílová složka instalace</param>
+            <param name="prjConfig">struktura s popisem assembly</param>
+            <param name="modulePath"></param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallTarget.AddInstallRegistry(System.String,System.String,System.String,System.String,System.String,System.String,System.String,Gordic.Develop.SetupGenerator.GPrjConfig)">
+            <summary> Přidá do instalace hodnotu patřící do registrů/ </summary>
+            <param name="l_sHKEY">větev registrů</param>
+            <param name="l_sSubKey">subvětev</param>
+            <param name="name">název</param>
+            <param name="l_sValue">hodnota</param>
+            <param name="l_sType">datový typ</param>
+            <param name="l_sAction">akce</param>
+            <param name="l_sAuthor">autor</param>
+            <param name="l_oPrjConfig">prj.config v kterém je příkaz</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallTarget.AddInclude(Gordic.Develop.SetupGenerator.IncludeExcludeCollectionType,System.String,System.String,System.String,System.Boolean,System.String,System.String,Gordic.Develop.SetupGenerator.GPrjConfig)">
+            <summary> Přidá do FileResolveru Include podmínku pro reporty </summary>
+            <param name="colType">typ kolekce, v které se má provádět include</param>
+            <param name="l_sSourcePath">zdrojová cesta include příkazu</param>
+            <param name="l_sDestPath">cílová cesta, kam se má provést include</param>
+            <param name="l_sRegExp">regulární výraz co se má všechno includovat</param>
+            <param name="l_bRecursive">zda se má vkládat rekurzivně</param>
+            <param name="l_sAuthor">autor</param>
+            <param name="rename">přejmenování includovaného souboru</param>
+            <param name="l_oPrjConfig">prj.config v kterém je příkaz pro include</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallTarget.AddExclude(Gordic.Develop.SetupGenerator.IncludeExcludeCollectionType,System.String,System.String,System.String,System.Boolean,System.String,Gordic.Develop.SetupGenerator.GPrjConfig)">
+            <summary> Přidá do FileResolveru exclude podmínku pro reporty </summary>
+            <param name="colType">typ kolekce, v které se má provádět exclude</param>
+            <param name="l_sSourcePath">zdrojová cesta include příkazu</param>
+            <param name="l_sDestPath">cílová cesta, kam se má provést include</param>
+            <param name="l_sRegExp">regulární výraz co se má všechno includovat</param>
+            <param name="l_bRecursive">zda se má vkládat rekurzivně</param>
+            <param name="l_sAuthor">autor</param>
+            <param name="l_oPrjConfig">prj.config v kterém je příkaz pro exclude</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallTarget.FindIncludeExcludeMatchingFiles">
+            <summary> Najde soubory odpovídající Include a Exclude požadavkům a zaznamená je do struktur pro instalaci balíčku
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallTarget.ResolveInheritance(Gordic.Develop.SetupGenerator.GInstallTarget)">
+            <summary> Zpracovává dědičnost zákazníků
+            </summary>
+            <param name="l_oParent"></param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallTarget.FillDirectoryStructure">
+            <summary> Naplní virtuální strukturu adresářů soubory </summary>
+            <returns>Kořenový adresář struktury</returns>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallTarget.AddComponent(System.String)">
+            <summary> Zaregistruje, že součástí instalace tohoto targetu má být danná komponenta </summary>
+            <param name="Id"></param>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallTarget.InstallModule">
+            <summary> Modul, ve kterém tento instalační cíl leží
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallTarget.InstallAssemblies">
+            <summary>Hashtable jméno/struktura s popisem assembly</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallTarget.InstallRegistry">
+            <summary>Hashtable jméno/struktura s popisem větve v registru</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallTarget.InstallFiles">
+            <summary>Hashtable jméno zdrojového souboru / pole struktur s popisem umístění souboru v cíli instaci</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallTarget.Components">
+            <summary>Hashtable obsahující v klíči jméno komponenty, která se má umístit do instalace tohoto targetu. Hodnota je prázdná</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallTarget.ShortCuts">
+            <summary>Hashtable jméno souboru/pole shortcutů navázaných na soubor</summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallTarget.Target">
+            <summary> Název instanačního cíle (WEBCLIENT, WINCLIENT, APPSERVER,....)
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallTarget.ForceZip">
+            <summary>Název instanačního cíle (WEBCLIENT, WINCLIENT, APPSERVER,....)
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallTarget.HashString">
+            <summary> HashString (jednoznačná identifikace) instalačního cíle
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallTarget.IsEmpty">
+            <summary> Zda je instalační cíl prázný = zda neobsahuje žádné pokyny pro instlaci
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GInstallTarget.UniqueRegistryId">
+            <summary> Vytvoří unikátní id pro registr
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallTarget.AddFoundFilesToTarget">
+            <summary> Přidá do kolekce include souborů, které se mají instalovat soubory z FileResolveru (ktery vyhodnocuje regulární výrazy include a exclude souborů).
+            Ještě jednou (protože jsem blbej) INCLUDE soubory - ne standardní .dll
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallTarget.WriteTargetExports(System.Xml.XmlWriter,System.Boolean)">
+            <summary> Vypíše exporty targetu </summary>
+            <param name="wr">soubor</param>
+            <param name="full"></param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GInstallTarget.Merge(Gordic.Develop.SetupGenerator.GInstallTarget,System.Boolean,System.String)">
+            <summary>
+            Provede kopii souborů určeného instalačního cíle do tohoto instalačního cíle
+            </summary>
+            <param name="merged">Připojovaný</param>
+            <param name="includeFiles">zda se mají napojovat i jiné soubory než .dll</param>
+            <param name="moduleStack"></param>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.IncludeExcludeCollectionType">
+            <summary>
+            Výčet určující typ kolekce do které se má provést include či exclude
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.IncludeExcludeCollectionType.Files">
+            <summary>
+            Files
+            </summary>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.InstallableEnum">
+            <summary> Výčet možností instalovatelnosti instalačního cíle
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.InstallableEnum.Installable">
+            <summary> Instalovatelný </summary>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.InstallableEnum.NotInstallable">
+            <summary> Neinstalovatelný </summary>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.GShortCutDir">
+            <summary>
+            Třída představuje složku (a její podsložky), do kterých se instalují shortcuty (podsložky start menu)
+            </summary>
+            <remarks>
+            Tato třída představuje jednu složku a její podsložky pro instalací shortcutů.
+            První instance (z GINstallCustomer) je abstratkní kořen který smí obsahovat
+            jednu ze dvou hodnot ProgramMenuFolder a DesktopFolder. Další instance už mohou 
+            obsahovat libovolné podsložky. Vytváří tak strukturu složek pro shortcuty.
+            Každá složka má informaci pro které všechny targety se má instalovat.
+            </remarks>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GShortCutDir.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GShortCutDir.#ctor(System.String,System.String,System.String,Gordic.Develop.SetupGenerator.GShortCutDir)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="id">id složky shortcutů</param>
+            <param name="name">jméno složky shortcutů</param>
+            <param name="longName">dlouhé jméno složky shortcutů</param>
+            <param name="parent">otcovská složka shortcutů</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GShortCutDir.AddInstallTarget(Gordic.Develop.SetupGenerator.GInstallTarget)">
+            <summary> Přidá do kolekce targetů, které mají shortcuty další target </summary>
+            <param name="target">target</param>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GShortCutDir.UniqueId">
+            <summary> Unikátní ID složky shortcutu
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.GShortCutDir.Parent">
+            <summary> Otcovský shortcut dir </summary>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GShortCutDir.WriteXMLDirs(System.Xml.XmlTextWriter)">
+            <summary> Zapíše do WXS pokyn pro instalaci složek v program files do kterých patří shortcuty </summary>
+            <param name="wxsXmlWriter">wxs</param>
+        </member>
+        <member name="M:Gordic.Develop.SetupGenerator.GShortCutDir.UpdateDirectoryStructure(System.String,Gordic.Develop.SetupGenerator.GInstallShortCut,Gordic.Develop.SetupGenerator.GInstallTarget,System.Collections.Hashtable)">
+            <summary>
+            Vytvoří si v v struktuře složek kam se instalují shortcuty záznam, že instalační cíl chce umístit shortcut do této složky...
+            Shortcutu přidělí získané ID vzniklé nebo nalezené složky
+            </summary>
+            <param name="directory">cesta, pro kterou se má vytvořit strutkura</param>
+            <param name="shortCut">shortcut (zástupce)</param>
+            <param name="target">instalační cíl, který zástupce do složky potřebuje umístit</param>
+            <param name="l_oRemoveFolder">??</param>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.IGInstallFile">
+            <summary>
+            Interface pro soubor (GInstallAssembly, ostatní soubory GInstallFile)
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.IGInstallFile.Service">
+            <summary>
+            ???
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.IGInstallFile.DstDir">
+            <summary> Cílová složka
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.IGInstallFile.Name">
+            <summary> Jméno
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.IGInstallFile.OriginalName">
+            <summary> Původní, nepřejmenované jméno
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.IGInstallFile.UniqueId">
+            <summary> Unikátní ID
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.IGInstallFile.SourcePath">
+            <summary> Zdrojová cesta
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.IGInstallFile.FullName">
+            <summary> Plné jméno
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.IGInstallFile.AssemblyVersion">
+            <summary> Verze assembly
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.SetupGenerator.IGInstallFile.ParentDirectoryId">
+            <summary> Identifikace otcovské složky
+            </summary>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.InstallAction">
+            <summary>
+            Instalační akce
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.InstallAction.Add">
+            <summary>
+            Přidání
+            </summary>
+        </member>
+        <member name="T:Gordic.Develop.SetupGenerator.InstallSrcRoot">
+            <summary>
+            Kořen instalace
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.InstallSrcRoot.SRCROOT">
+            <summary>Skutecny SRC root pro vsechny projekty</summary>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.InstallSrcRoot.SRC">
+            <summary>Slozka zdrojovych kodu pro assembly v níž se prj.config nachází</summary>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.InstallSrcRoot.BIN">
+            <summary>Binárky</summary>
+        </member>
+        <member name="F:Gordic.Develop.SetupGenerator.InstallSrcRoot.GIN">
+            <summary>GIN tvoreny na BS</summary>
+        </member>
+    </members>
+</doc>

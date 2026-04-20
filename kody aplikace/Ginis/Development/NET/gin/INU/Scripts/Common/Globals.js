@@ -1,0 +1,7 @@
+"use strict";
+//declare namespace Gordic.Inu {
+//    const GInuBaseClass: {
+//        new <TExtension = {}>(): GContentType<TExtension>;        
+//    };
+//}
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiR2xvYmFscy5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIkdsb2JhbHMudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IjtBQVdBLGdDQUFnQztBQUNoQyw0QkFBNEI7QUFDNUIsb0VBQW9FO0FBQ3BFLFFBQVE7QUFDUixHQUFHIiwic291cmNlc0NvbnRlbnQiOlsiZGVjbGFyZSBuYW1lc3BhY2UgR29yZGljLkludSB7XHJcbiAgICBcclxuICAgIGludGVyZmFjZSBHSW51QmFzZUNsYXNzIGV4dGVuZHMgSUdDb250ZW50QmFzZVxyXG4gICAge1xyXG5cclxuICAgICAgICByZWFkb25seSBHbG9iYWxQYXJhbXM6IEdvcmRpYy5JbnUuV2ViQ2xpZW50LkdJbnVHbG9iYWxEdG87XHJcblxyXG4gICAgfVxyXG5cclxuXHJcbn1cclxuLy9kZWNsYXJlIG5hbWVzcGFjZSBHb3JkaWMuSW51IHtcclxuLy8gICAgY29uc3QgR0ludUJhc2VDbGFzczoge1xyXG4vLyAgICAgICAgbmV3IDxURXh0ZW5zaW9uID0ge30+KCk6IEdDb250ZW50VHlwZTxURXh0ZW5zaW9uPjsgICAgICAgIFxyXG4vLyAgICB9O1xyXG4vL31cclxuXHJcbiJdfQ==

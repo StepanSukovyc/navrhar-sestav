@@ -1,0 +1,1 @@
+<%@ WebService Language="C#" CodeBehind="Gordic.WsDms.Server.GWsDms.asmx.cs" Class="Gordic.WsDms.Server.GWsDms" %>

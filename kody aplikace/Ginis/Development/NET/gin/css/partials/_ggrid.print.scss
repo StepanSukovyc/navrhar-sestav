@@ -1,0 +1,546 @@
+﻿@import "base";
+
+$grid-structure-levels: 20; 
+$grid-structure-indent: 0.75rem;
+
+.ggridprint {
+    
+
+    .header {
+        position: relative;
+        overflow: hidden;
+        border-top: 1px solid $base-color-tool;
+        border-bottom: 3px solid $base-color-tool;
+
+        .row {
+            position: relative;
+            min-height: 1.5rem;
+            background-color: rgba($base-color-tool, 0.0);
+        }
+
+        .cell {
+            display: flex;
+        }
+
+        .highlight {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+    }
+
+    .caption {
+        font-weight: $font-weight-bold;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding-right: 0.25rem;
+        flex-grow: 1;
+    }
+
+    .caption--light {
+        text-overflow: clip;
+        font-size: 1rem;
+    }
+
+    .cell {
+        //    mix-blend-mode: color-burn; // vypada mnohem lepe na chrome, nefunguje na IE, ale FF to z neznameho duvodu zprasi
+        //border-right: 1px solid $base-color-tool;
+        outline: none; // odstraneni systemovych hidden focusu
+        //padding: 0 0.25rem;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    div.row-delimeter {
+        border-bottom-color: darken($base-color-shadow, 10%);
+    }
+
+    .no-ellipsis {
+        text-overflow: clip;
+    }
+
+    .no-border, .no-render {
+        border-right: none;
+    }
+
+    .no-render {
+        z-index: -1;
+    }
+
+    .editing {
+        overflow: visible;
+    }
+
+    .status-errors {
+        display: inline-block;
+        white-space: nowrap;
+    }
+
+    .status-errors:not(:empty) {
+        border-right: 1px solid $base-color-tool;
+    }
+
+    .structure-lead > i:first-of-type {
+        text-align: right;
+        padding-right: 0.25rem;
+        width: 0.75rem;
+        display: inline-block;
+        font-size: 1rem;
+        vertical-align: bottom;
+
+        &:hover {
+            color: $base-color-primary;
+        }
+    }
+
+    @for $i from 1 to $grid-structure-levels {
+        .l#{$i} .structure-lead {
+            > i:first-of-type {
+                width: 0.75rem + $i * $grid-structure-indent;
+            }
+
+            &.ui-selected::before, &.ui-hover::before {
+                left: $i * $grid-structure-indent;
+            }
+        }
+    }
+
+    .structure-lead-inactive {
+        opacity: 0.35
+    }
+
+    .row.group {
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+    //.group.l0 { background-color: rgba(0, 0, 0, 0.20); }
+    //.group.l1 { background-color: rgba(0, 0, 0, 0.17); }
+  
+    .warning {
+        background-color: rgba($base-color-warning, 0.3);
+    }
+
+    .error {
+        background-color: rgba($base-color-error, 0.3);
+    }
+
+    .marked {
+        background-color: #ffffb3;
+        z-index: 2;
+    }
+
+    .group-header-count {
+        font-size: 0.8em;
+        padding: 0 0.25rem;
+    }
+}
+
+.grid-cell-icon { 
+  font-size: 1rem;
+  &.gi-stack {
+    line-height: 1.25rem;
+    width: 1.3rem;
+  }
+  &.fa-stack {
+    font-size: 0.75rem;
+  }
+}
+
+.ggridfiltervariant{
+    margin-top: 0.5rem;
+}
+
+.col-ref {
+    font-weight: $font-weight-bold;
+}
+
+.col-ref:before {
+    content:'[';
+}
+
+.col-ref:after {
+    content: ']';
+}
+
+.formula-text{
+    font-family: monospace;
+}
+
+.formula__input {
+    .tag-parent{
+        padding: 0.45rem 0;
+    }
+    .gcontrolbox-state:first-child{
+        padding-right:0;
+    }
+}
+
+.formula__result-preview{
+    padding: 0.25rem 0;
+}
+
+.formula-analysis__tree {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    overflow: auto;
+    white-space: nowrap;
+
+    & .formula-analysis__buttons {
+        display: inline-block;
+    }
+
+    & [data-type-of] {
+        font-weight: $font-weight-normal;
+        border-bottom: 1px dashed;
+        cursor: help;
+    }
+
+    &--result {
+        padding-left: 1rem;
+    }
+
+    &--result + &--formula {
+        padding-top: 0.75rem;
+    }
+
+    &--result span:last-child {
+        font-weight: $font-weight-bold;
+    }
+
+    &--formula:last-child, &--formula:last-child .gi, &--formula:last-child .fa {
+        font-weight: $font-weight-bold;
+    }
+
+    &--result:before {
+        content: '  ';
+        padding-left: 1.125em;
+    }
+
+    &--formula + &--result:before {
+        content: '⮡ ';
+        font-weight: $font-weight-bold;
+        padding-left: 0;
+    }
+
+    & .formula-analysis__tree--formula + .formula-analysis__tree--formula {
+        padding-top: 0.75rem;
+    }
+
+    & .formula-analysis__tree--formula .g-state-error {
+        display: inline-block;
+        border-bottom: 3px double $base-color-error;
+    }
+}
+
+.formula-help__ {
+    &fnc-name, &fnc-usage, &fnc-desc, &fnc-name:after, &fnc-usage:after,
+    &icon, &icon-name, &icon:after, &icon-name:after {
+        vertical-align: top;
+        display: inline-block
+    }
+
+    &fnc-name:after, &fnc-usage:after,
+    &icon:after, &icon-name:after {
+        content: "|";
+        padding: 0 0.5em;
+    }
+
+    &fnc-desc, &icon-desc {
+        white-space: normal;
+    }
+
+    &col-desc, &icon-name {
+        font-weight: $font-weight-bold;
+    }
+}
+
+
+/*************************************************/
+.ggrid-condf, .ggridprint .ggrid-condf {
+    &__list .doubleLineInfo .iconInfo {
+        max-width: 3.5rem;
+    }
+
+    &__list .doubleLineInfo .iconInfo:not(:empty) + .mainInfo {
+        max-width: calc(100% - 3.5rem);
+    }
+
+    &__list .doubleLineInfo &__item-template {
+        display: inline-block;
+        margin: 0 0.5rem 0 0;
+    }
+
+    &__list .singleLineInfo &__item-template {
+        vertical-align: middle;
+        display: inline-block;
+        margin: 0 0.25rem 0 0.25rem;
+    }
+
+    &__list .singleLineInfo &__main-info {
+        width: calc(100% - 3rem);
+    }
+
+    &__list &__main-info {
+        display: inline-flex;
+        flex: 0 1 auto;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    &__list .formula-text {
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    &__list &__column-list {
+        display: inline-block;
+        white-space: pre-wrap;
+    }
+
+    &__list &__column-list .g-badge {
+        position: static;
+        display: inline-block;
+        margin: 0 0.15rem 0.15rem 0;
+    }
+
+    &__list .formula-text {
+        margin: 0 0.5rem 0.15rem 0;
+    }
+
+    &__item-template {
+        padding: 0 0.25rem;
+        border: 1px solid $base-color-shadow;
+    }
+
+    &-bg {
+        &-black {
+            background-color: rgba(0,0,0,0.65);
+        }
+
+        &-white {
+            background-color: rgba(255,255,255,0.65);
+        }
+        /*        &-lighgray {
+            background-color: rgb(237,237,237);
+        }
+
+        &-gray {
+            background-color: rgb(219,219,219);
+        }
+
+        &-darkgray {
+            background-color: rgb(201,201,201);
+        }
+
+        &-lightred {
+            background-color: rgb(255, 204, 204);
+        }
+
+        &-red {
+            background-color: rgb(255, 153, 153);
+        }
+
+        &-darkred {
+            background-color: rgb(255, 101, 101);
+        }
+
+        &-lightyellow {
+            background-color: rgb(255,242,204);
+        }
+
+        &-yellow {
+            background-color: rgb(254,229,153);
+        }
+
+        &-darkyellow {
+            background-color: rgb(255,217,101);
+        }
+
+        &-lightgreen {
+            background-color: rgb(226,239,217);
+        }
+
+        &-green {
+            background-color: rgb(197,224,179);
+        }
+
+        &-darkgreen {
+            background-color: rgb(168,208,141)
+        }
+
+        &-lightblue {
+            background-color: rgb(222,235,246);
+        }
+
+        &-blue {
+            background-color: rgb(189,215,238);
+        }
+
+        &-darkblue {
+            background-color: rgb(156,195,229);
+        }
+
+        &-lightorange {
+            background-color: rgb(251,229,213);
+        }
+
+        &-orange {
+            background-color: rgb(247,203,172);
+        }
+
+        &-darkorange {
+            background-color: rgb(244,177,131);
+        }
+
+        &-lightpurple {
+            background-color: rgb(235,221,246)
+        }
+
+        &-purple {
+            background-color: rgb(215,187,237);
+        }
+
+        &-darkpurple {
+            background-color: rgb(195,154,228);
+        }*/
+        &-lightgray {
+            background-color: rgba(229,229,229,0.5);
+        }
+
+        &-gray {
+            background-color: rgba(177,177,177,0.5);
+        }
+
+        &-darkgray {
+            background-color: rgba(127,127,127,0.5);
+        }
+
+        &-lightred {
+            background-color: rgba(255,153,153,0.5);
+        }
+
+        &-red {
+            background-color: rgba(255,51,51,0.5);
+        }
+
+        &-darkred {
+            background-color: rgba(255,0,0,0.5);
+        }
+
+        &-lightyellow {
+            background-color: rgba(255,229,153,0.5);
+        }
+
+        &-yellow {
+            background-color: rgba(253,203,51,0.5);
+        }
+
+        &-darkyellow {
+            background-color: rgba(255,179,0,0.5);
+        }
+
+        &-lightgreen {
+            background-color: rgba(197,223,179,0.5);
+        }
+
+        &-green {
+            background-color: rgba(139,193,103,0.5);
+        }
+
+        &-darkgreen {
+            background-color: rgba(81,161,27,0.5);
+        }
+
+        &-lightblue {
+            background-color: rgba(189,215,237,0.5);
+        }
+
+        &-blue {
+            background-color: rgba(123,175,221,0.5);
+        }
+
+        &-darkblue {
+            background-color: rgba(57,135,203,0.5);
+        }
+
+        &-lightorange {
+            background-color: rgba(247,203,171,0.5);
+        }
+
+        &-orange {
+            background-color: rgba(239,151,89,0.5);
+        }
+
+        &-darkorange {
+            background-color: rgba(233,99,7,0.5);
+        }
+
+        &-lightpurple {
+            background-color: rgba(215,187,237,0.5);
+        }
+
+        &-purple {
+            background-color: rgba(175,119,219,0.5);
+        }
+
+        &-darkpurple {
+            background-color: rgba(135,53,201,0.5);
+        }
+    }
+
+    &-text {
+        &-black {
+            color: black;
+        }
+
+        &-white {
+            color: white;
+        }
+
+        &-gray {
+            color: $shadow-text-default;
+        }
+
+        &-red {
+            color: rgb(225, 0, 0);
+        }
+
+        &-yellow {
+            color: rgb(255,191,0);
+        }
+
+        &-green {
+            color: rgb(112,173,71);
+        }
+
+        &-blue {
+            color: rgb(91,155,213);
+        }
+
+        &-orange {
+            color: rgb(237,125,49);
+        }
+
+        &-purple {
+            color: rgb(155,87,211);
+        }
+    }
+
+    &-style {
+        &-bold, &-bold .gi, &-bold .fa {
+            font-weight: $font-weight-bold;
+        }
+
+        &-italic {
+            font-style: italic;
+        }
+
+        &-underline {
+            text-decoration: underline;
+        }
+
+        &-linethrough {
+            text-decoration: line-through;
+        }
+    }
+}

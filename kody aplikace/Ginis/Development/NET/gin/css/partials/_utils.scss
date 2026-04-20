@@ -1,0 +1,95 @@
+﻿@import 'base';
+
+.abs { position: absolute; }
+.abs-full { position: absolute; top: 0; left: 0; right: 0; bottom: 0; }
+
+// block element centering
+.center-x { margin: 0 auto; }
+.center-y { // must have parent with position other than static
+    position: absolute;
+    max-width: 100%; // IE fix
+    bottom: 50%; // IE fix -- http://stackoverflow.com/questions/27000492/css3-transform-property-working-differently-in-internet-explorer
+    @include prefix(transform, translateY(50%), (ms, webkit));
+}
+.center-y.center { width: 100%; }
+
+// laytou floating
+.clearfix { &:after { content: ""; display: table; clear: both; } }
+.pull-right { @extend .clearfix; float: right; }
+.pull-left { @extend .clearfix; float: left; }
+
+// layout common
+.inline { display: inline-block; vertical-align: top; }
+.noverflow { overflow: hidden }
+
+// table layout
+.table { display: table; }
+.table-fixed { display: table; table-layout: fixed; }
+.tr { display: table-row; }
+.td { display: table-cell; vertical-align: top; }
+
+// text
+.ellipsis { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.noselect { @include prefix(user-select, none, (ms webkit moz)); cursor: default; }
+.nowrap { white-space: nowrap; }
+.uppercase { text-transform: uppercase; }
+.lowercase { text-transform: lowercase; }
+.capitalize { text-transform: capitalize; }
+// https://kenneth.io/blog/2012/03/04/word-wrapping-hypernation-using-css/
+// needs lang attribute on html <html lang="cs">; is inherited
+.word-wrap { @include prefix(word-break, break-all, (ms)); word-break: break-word; @include prefix(hyphens, auto); }
+.bold { font-weight: 800; }
+.italic { font-style: italic; }
+.fade-out { opacity: .3; }
+.text-center { text-align: center; }
+
+.concealed{
+    display: none !important;
+}
+
+%width-reservoir {
+    display: block;
+    margin-top: -1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+/*  Užitečné, když mám element široký dle obsahu a na nějakou akci (např.
+    hover) se mění řez písma na tučné a nechci, aby tato změna ovlivnila
+    šířku elementu. Pokud text v atributu odpovídá obsahu elementu, zajistí
+    tento styl, že šířka elementu je taková, jako by byl text uvnitř vždy
+    tučný a proto změna řezu písma šířku elementu neovlivní.
+*/
+[data-wr-bold]:after {
+    @extend %width-reservoir;
+    content: attr(data-wr-bold);
+    font-weight: bold;
+}
+
+.stripes {
+  background-size: 30px 30px;
+  background-image: linear-gradient(
+    45deg, 
+    rgba(black, 0.1)  25%, 
+    transparent       25%, 
+    transparent       50%, 
+    rgba(black, 0.1)  50%, 
+    rgba(black, 0.1)  75%, 
+    transparent       75%, 
+    transparent
+  );  
+}
+
+.visually-hidden,
+.visually-hidden-focusable:not(:focus):not(:focus-within) {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+

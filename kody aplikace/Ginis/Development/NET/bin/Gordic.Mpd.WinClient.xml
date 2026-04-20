@@ -1,0 +1,912 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Mpd.WinClient</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Mpd.WinClient.GDataTransferTab">
+            <summary>karta přenosy dat</summary>
+        </member>
+        <member name="F:Gordic.Mpd.WinClient.GDataTransferTab.m_ctsTimerPeriod">
+            <summary>interval provádění periodického zpracování</summary>
+        </member>
+        <member name="F:Gordic.Mpd.WinClient.GDataTransferTab.m_ctsResultVisibilityDuration">
+            <summary>doba zobrazení výsledku zpracování</summary>
+        </member>
+        <member name="F:Gordic.Mpd.WinClient.GDataTransferTab.m_oTimer">
+            <summary>časovač pro provádění periodického zpracování</summary>
+        </member>
+        <member name="F:Gordic.Mpd.WinClient.GDataTransferTab.m_oProcessingInfo">
+            <summary>informace o zpracování</summary>
+        </member>
+        <member name="F:Gordic.Mpd.WinClient.GDataTransferTab.m_bIsProcessing">
+            <summary>příznak probíhajícího zpracování</summary>
+        </member>
+        <member name="F:Gordic.Mpd.WinClient.GDataTransferTab.m_bUploadDownloadEnabled">
+            <summary>příznak přístupnosti stahování a odesílání dávek</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GDataTransferTab.ClientLogic">
+            <summary>klientská logika administrace událostí</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GDataTransferTab.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GDataTransferTab.#ctor">
+            <summary>veřejný konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GDataTransferTab.OnLoad(System.Object,System.EventArgs)">
+            <summary>načtení karty</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">argumenty události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GDataTransferTab.OnInvokeProcessing(System.Object,System.EventArgs)">
+            <summary>spuštění zpracování</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">argumenty události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GDataTransferTab.OnCancelProcessing(System.Object,System.EventArgs)">
+            <summary>přerušení zpracování</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">argumenty události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GDataTransferTab.OnParametersChanged(System.Object,System.EventArgs)">
+            <summary>změna parametrů zpracování</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">parametry události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GDataTransferTab.OnTimer(System.Object,System.EventArgs)">
+            <summary>periodicky prováděné zpracování</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">parametry události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GDataTransferTab.LoadData">
+            <summary>načtení dat</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GDataTransferTab.FillData">
+            <summary>vyplnění karty</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GDataTransferTab.SetAccess">
+            <summary>nastavení přístupnosti ovládacích prvků</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GDataTransferTab.DisableAccess">
+            <summary>znepřístupnění ovládacích prvků</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GDataTransferTab.InitializeComponent">
+            <summary>inicializace vizuálních komponent</summary>
+        </member>
+        <member name="T:Gordic.Mpd.WinClient.GMpdTab">
+            <summary>základní třída pro karty</summary>
+        </member>
+        <member name="F:Gordic.Mpd.WinClient.GMpdTab.m_oDataTable">
+            <summary>data</summary>
+        </member>
+        <member name="F:Gordic.Mpd.WinClient.GMpdTab.m_oDataGrid">
+            <summary>datová mřížka</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GMpdTab.ClientLogic">
+            <summary>klientská logika administrace událostí</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GMpdTab.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMpdTab.#ctor">
+            <summary>veřejný konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMpdTab.OnLoad(System.Object,System.EventArgs)">
+            <summary>obsluha načtení karty</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">argumenty události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMpdTab.OnLoadData">
+            <summary>načtení dat</summary>
+            <returns>data</returns>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMpdTab.OnFillData">
+            <summary>vyplnění karty</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMpdTab.OnSetLayout(Gordic.General.GGridFormat)">
+            <summary>nastavení vzhledu</summary>
+            <param name="format">formát datové mřížky</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMpdTab.OnSetAccess">
+            <summary>nastavení přístupnosti ovládacích prvků</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMpdTab.SetFilesLayout(Gordic.General.GGridFormat,System.Boolean)">
+            <summary>nastavení vzhledu seznamu dávek s podrobnostmi</summary>
+            <param name="format">formát datové mřížky</param>
+            <param name="poznamka">příznak zobrazení sloupce poznámka</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMpdTab.SetFileListLayout(Gordic.General.GGridFormat)">
+            <summary>nastavení vzhledu seznamu dávek</summary>
+            <param name="format">formát datové mřížky</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMpdTab.FillDataGrid(Gordic.WinForms.DbControls.GDataGridViewCfg)">
+            <summary>vyplnění datové mřížky</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMpdTab.RefreshData(System.Data.DataTable,Gordic.WinForms.DbControls.GDataGridViewCfg)">
+            <summary>občerstvení dat v datové mřížce</summary>
+            <param name="dataTable">data</param>
+            <param name="dataGrid">datová mřížka</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMpdTab.SetGridFormat">
+            <summary>nastavení vzhledu datové mřížky</summary>
+        </member>
+        <member name="T:Gordic.Mpd.WinClient.Properties.Resources">
+            <summary>
+              Třída prostředků se silnými typy pro vyhledávání lokalizovaných řetězců atp.
+            </summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.Properties.Resources.ResourceManager">
+            <summary>
+              Vrací instanci ResourceManager uloženou v mezipaměti použitou touto třídou.
+            </summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.Properties.Resources.Culture">
+            <summary>
+              Potlačí vlastnost CurrentUICulture aktuálního vlákna pro všechna
+              vyhledání prostředků pomocí třídy prostředků se silnými typy.
+            </summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.Properties.Resources.Icons__Mpd__ArchivedFiles">
+            <summary>
+              Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.Properties.Resources.Icons__Mpd__DataTransfer">
+            <summary>
+              Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.Properties.Resources.Icons__Mpd__ExportedFiles">
+            <summary>
+              Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.Properties.Resources.Icons__Mpd__FilesToImport">
+            <summary>
+              Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.Properties.Resources.Icons__Mpd__FilesToSend">
+            <summary>
+              Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.Properties.Resources.Icons__Mpd__ImportedFiles">
+            <summary>
+              Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.Properties.Resources.Icons__Mpd__LastProcessedFiles">
+            <summary>
+              Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.Properties.Resources.Icons__Mpd__TransferDirections">
+            <summary>
+              Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.Properties.Resources.Icons__Mpd__TransferTypes">
+            <summary>
+              Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.Properties.Resources.Icons__Mpd__UnrealizedTransfers">
+            <summary>
+              Vyhledává lokalizovaný prostředek typu System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="T:Gordic.Mpd.WinClient.GWsSetting">
+            <summary>nastavení parametrů pro webové služby</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GWsSetting.ClientLogic">
+            <summary>klientská logika</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GWsSetting.Properties">
+            <summary>vlastnosti přenosů dat</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GWsSetting.Valid">
+            <summary>validní hodnota</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GWsSetting.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GWsSetting.#ctor">
+            <summary>veřejný konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GWsSetting.OnLoadDefaults">
+            <summary>načtení výchozího nastavení</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GWsSetting.OnLoadSetting">
+            <summary>načtení aktuálního nastavení</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GWsSetting.OnSaveSetting">
+            <summary>uložení aktuálního nastavení</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GWsSetting.Dispose(System.Boolean)">
+            <summary>finální uvolnění zdrojů</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GWsSetting.InitializeComponent">
+            <summary>inicializace vizuálních komponent</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GWsSetting.OnFillData">
+            <summary>vyplnění karty</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GWsSetting.OnSetAccess">
+            <summary>nastavení přístupnosti ovládacích prvků</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GWsSetting.OnSaveData">
+            <summary>uložení dat karty</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GWsSetting.OnClosingWindow(System.Object,System.ComponentModel.CancelEventArgs)">
+            <summary>obsluha před uzavřením karty</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">parametry události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GWsSetting.OnValidateData">
+            <summary>validace dat karty</summary>
+            <returns>příznak validních dat</returns>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GWsSetting.OnUseWsChanged(System.Object,System.EventArgs)">
+            <summary>obsluha změny příznaku používání webových služeb</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">parametry události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GWsSetting.OnAuthTypeChanged(System.Object,System.EventArgs)">
+            <summary>změna typu autentizace</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">parametry události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GWsSetting.OnTest(System.Object,System.EventArgs)">
+            <summary>otestování aktuálního nastavení</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">parametry události</param>
+        </member>
+        <member name="T:Gordic.Mpd.WinClient.GFtpSetting">
+            <summary>nastavení parametrů FTP</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GFtpSetting.ClientLogic">
+            <summary>klientská logika</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GFtpSetting.Properties">
+            <summary>vlastnosti přenosů dat</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GFtpSetting.Valid">
+            <summary>validní hodnota</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GFtpSetting.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFtpSetting.#ctor">
+            <summary>veřejný konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFtpSetting.OnLoadDefaults">
+            <summary>načtení výchozího nastavení</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFtpSetting.OnLoadSetting">
+            <summary>načtení aktuálního nastavení</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFtpSetting.OnSaveSetting">
+            <summary>uložení aktuálního nastavení</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFtpSetting.Dispose(System.Boolean)">
+            <summary>finální uvolnění zdrojů</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFtpSetting.InitializeComponent">
+            <summary>inicializace vizuálních komponent</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFtpSetting.OnFillData">
+            <summary>vyplnění karty</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFtpSetting.OnSetAccess">
+            <summary>nastavení přístupnosti ovládacích prvků</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFtpSetting.OnSaveData">
+            <summary>uložení dat karty</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFtpSetting.OnClosingWindow(System.Object,System.ComponentModel.CancelEventArgs)">
+            <summary>obsluha před uzavřením karty</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">parametry události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFtpSetting.OnValidateData">
+            <summary>validace dat karty</summary>
+            <returns>příznak validních dat</returns>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFtpSetting.OnUseFtpChanged(System.Object,System.EventArgs)">
+            <summary>obsluha změny příznaku používání FTP</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">parametry události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFtpSetting.OnTest(System.Object,System.EventArgs)">
+            <summary>otestování aktuálního nastavení</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">parametry události</param>
+        </member>
+        <member name="T:Gordic.Mpd.WinClient.GMainSetting">
+            <summary>obecné nastavení přenosů dat</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GMainSetting.ClientLogic">
+            <summary>klientská logika</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GMainSetting.Properties">
+            <summary>vlastnosti přenosů dat</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GMainSetting.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainSetting.#ctor">
+            <summary>veřejný konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainSetting.OnLoadDefaults">
+            <summary>načtení výchozího nastavení</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainSetting.OnLoadSetting">
+            <summary>načtení aktuálního nastavení</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainSetting.OnSaveSetting">
+            <summary>uložení aktuálního nastavení</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainSetting.Dispose(System.Boolean)">
+            <summary>finální uvolnění zdrojů</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainSetting.InitializeComponent">
+            <summary>inicializace vizuálních komponent</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainSetting.OnFillData">
+            <summary>vyplnění karty</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainSetting.OnSetAccess">
+            <summary>nastavení přístupnosti ovládacích prvků</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainSetting.OnSaveData">
+            <summary>uložení dat karty</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainSetting.OnClosingWindow(System.Object,System.ComponentModel.CancelEventArgs)">
+            <summary>obsluha před uzavřením karty</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">parametry události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainSetting.OnValidateData">
+            <summary>validace dat karty</summary>
+            <returns>příznak validních dat</returns>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainSetting.ValidateDirectory(Gordic.WinForms.Controls.GTbGString)">
+            <summary>kontrola správného nastavení adresáře</summary>
+            <param name="field">políčko obsahující cestu k adresáři</param>
+            <returns>příznak správného nastavení adresáře</returns>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainSetting.ValidateRange(Gordic.WinForms.Controls.GTbGInt32)">
+            <summary>kontrola správného nastavení hodnoty v předepsaném rozsahu</summary>
+            <param name="field">políčko</param>
+            <returns>příznak správného nastavení hodnoty</returns>
+        </member>
+        <member name="T:Gordic.Mpd.WinClient.GFilesToImportTab">
+            <summary>karta seznam dávek k načtení</summary>
+        </member>
+        <member name="F:Gordic.Mpd.WinClient.GFilesToImportTab.m_oDataTable">
+            <summary>data</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GFilesToImportTab.DataTable">
+            <summary>data</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GFilesToImportTab.DataGrid">
+            <summary>datová mřížka</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFilesToImportTab.#ctor">
+            <summary>veřejný konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFilesToImportTab.Dispose(System.Boolean)">
+            <summary>finální uvolnění zdrojů</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFilesToImportTab.InitializeComponent">
+            <summary>inicializace vizuálních komponent</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFilesToImportTab.OnLoadData">
+            <summary>načtení dat</summary>
+            <returns>data</returns>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFilesToImportTab.OnFillData">
+            <summary>vyplnění karty</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFilesToImportTab.OnSetLayout(Gordic.General.GGridFormat)">
+            <summary>nastavení vzhledu</summary>
+            <param name="format">formát datové mřížky</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFilesToImportTab.OnSetAccess">
+            <summary>nastavení přístupnosti ovládacích prvků</summary>
+        </member>
+        <member name="T:Gordic.Mpd.WinClient.GFilesToSendTab">
+            <summary>karta seznam dávek k přenosu</summary>
+        </member>
+        <member name="F:Gordic.Mpd.WinClient.GFilesToSendTab.m_oDataTable">
+            <summary>data</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GFilesToSendTab.DataTable">
+            <summary>data</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GFilesToSendTab.DataGrid">
+            <summary>datová mřížka</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFilesToSendTab.#ctor">
+            <summary>veřejný konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFilesToSendTab.Dispose(System.Boolean)">
+            <summary>finální uvolnění zdrojů</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFilesToSendTab.InitializeComponent">
+            <summary>inicializace vizuálních komponent</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFilesToSendTab.OnLoadData">
+            <summary>načtení dat</summary>
+            <returns>data</returns>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFilesToSendTab.OnFillData">
+            <summary>vyplnění karty</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFilesToSendTab.OnSetLayout(Gordic.General.GGridFormat)">
+            <summary>nastavení vzhledu</summary>
+            <param name="format">formát datové mřížky</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GFilesToSendTab.OnSetAccess">
+            <summary>nastavení přístupnosti ovládacích prvků</summary>
+        </member>
+        <member name="T:Gordic.Mpd.WinClient.GTransferTypesTab">
+            <summary>karta seznam typů přenosů</summary>
+        </member>
+        <member name="F:Gordic.Mpd.WinClient.GTransferTypesTab.m_oDataTable">
+            <summary>data</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GTransferTypesTab.DataTable">
+            <summary>data</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GTransferTypesTab.DataGrid">
+            <summary>datová mřížka</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GTransferTypesTab.#ctor">
+            <summary>veřejný konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GTransferTypesTab.Dispose(System.Boolean)">
+            <summary>finální uvolnění zdrojů</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GTransferTypesTab.InitializeComponent">
+            <summary>inicializace vizuálních komponent</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GTransferTypesTab.OnLoadData">
+            <summary>načtení dat</summary>
+            <returns>data</returns>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GTransferTypesTab.OnFillData">
+            <summary>vyplnění karty</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GTransferTypesTab.OnSetLayout(Gordic.General.GGridFormat)">
+            <summary>nastavení vzhledu</summary>
+            <param name="format">formát datové mřížky</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GTransferTypesTab.OnSetAccess">
+            <summary>nastavení přístupnosti ovládacích prvků</summary>
+        </member>
+        <member name="T:Gordic.Mpd.WinClient.GTransferDirectionsTab">
+            <summary>karta seznam směrů přenosů</summary>
+        </member>
+        <member name="F:Gordic.Mpd.WinClient.GTransferDirectionsTab.m_oDataTable">
+            <summary>data</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GTransferDirectionsTab.DataTable">
+            <summary>data</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GTransferDirectionsTab.DataGrid">
+            <summary>datová mřížka</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GTransferDirectionsTab.#ctor">
+            <summary>veřejný konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GTransferDirectionsTab.Dispose(System.Boolean)">
+            <summary>finální uvolnění zdrojů</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GTransferDirectionsTab.InitializeComponent">
+            <summary>inicializace vizuálních komponent</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GTransferDirectionsTab.OnLoadData">
+            <summary>načtení dat</summary>
+            <returns>data</returns>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GTransferDirectionsTab.OnFillData">
+            <summary>vyplnění karty</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GTransferDirectionsTab.OnSetLayout(Gordic.General.GGridFormat)">
+            <summary>nastavení vzhledu</summary>
+            <param name="format">formát datové mřížky</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GTransferDirectionsTab.OnSetAccess">
+            <summary>nastavení přístupnosti ovládacích prvků</summary>
+        </member>
+        <member name="T:Gordic.Mpd.WinClient.GLastProcessedFilesTab">
+            <summary>karta seznam naposledy zpracovávaných dávek</summary>
+        </member>
+        <member name="F:Gordic.Mpd.WinClient.GLastProcessedFilesTab.m_oDataTable">
+            <summary>data</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GLastProcessedFilesTab.DataTable">
+            <summary>data</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GLastProcessedFilesTab.DataGrid">
+            <summary>datová mřížka</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GLastProcessedFilesTab.#ctor">
+            <summary>veřejný konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GLastProcessedFilesTab.Dispose(System.Boolean)">
+            <summary>finální uvolnění zdrojů</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GLastProcessedFilesTab.InitializeComponent">
+            <summary>inicializace vizuálních komponent</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GLastProcessedFilesTab.OnLoadData">
+            <summary>načtení dat</summary>
+            <returns>data</returns>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GLastProcessedFilesTab.OnFillData">
+            <summary>vyplnění karty</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GLastProcessedFilesTab.OnSetLayout(Gordic.General.GGridFormat)">
+            <summary>nastavení vzhledu</summary>
+            <param name="format">formát datové mřížky</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GLastProcessedFilesTab.OnSetAccess">
+            <summary>nastavení přístupnosti ovládacích prvků</summary>
+        </member>
+        <member name="T:Gordic.Mpd.WinClient.GUnrealizedTransfersTab">
+            <summary>karta seznam nerealizovaných přenosů</summary>
+        </member>
+        <member name="F:Gordic.Mpd.WinClient.GUnrealizedTransfersTab.m_oDataTable">
+            <summary>data</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GUnrealizedTransfersTab.DataTable">
+            <summary>data</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GUnrealizedTransfersTab.DataGrid">
+            <summary>datová mřížka</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GUnrealizedTransfersTab.#ctor">
+            <summary>veřejný konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GUnrealizedTransfersTab.Dispose(System.Boolean)">
+            <summary>finální uvolnění zdrojů</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GUnrealizedTransfersTab.InitializeComponent">
+            <summary>inicializace vizuálních komponent</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GUnrealizedTransfersTab.OnLoadData">
+            <summary>načtení dat</summary>
+            <returns>data</returns>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GUnrealizedTransfersTab.OnFillData">
+            <summary>vyplnění karty</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GUnrealizedTransfersTab.OnSetLayout(Gordic.General.GGridFormat)">
+            <summary>nastavení vzhledu</summary>
+            <param name="format">formát datové mřížky</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GUnrealizedTransfersTab.OnSetAccess">
+            <summary>nastavení přístupnosti ovládacích prvků</summary>
+        </member>
+        <member name="T:Gordic.Mpd.WinClient.GImportedFilesTab">
+            <summary>karta seznam načtených dávek</summary>
+        </member>
+        <member name="F:Gordic.Mpd.WinClient.GImportedFilesTab.m_oDataTable">
+            <summary>data</summary>
+        </member>
+        <member name="F:Gordic.Mpd.WinClient.GImportedFilesTab.m_nLastFilterIndex">
+            <summary>index posledního zvoleného filtru</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GImportedFilesTab.DataTable">
+            <summary>data</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GImportedFilesTab.DataGrid">
+            <summary>datová mřížka</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GImportedFilesTab.#ctor">
+            <summary>veřejný konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GImportedFilesTab.Dispose(System.Boolean)">
+            <summary>finální uvolnění zdrojů</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GImportedFilesTab.InitializeComponent">
+            <summary>inicializace vizuálních komponent</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GImportedFilesTab.OnLoadData">
+            <summary>načtení dat</summary>
+            <returns>data</returns>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GImportedFilesTab.OnFillData">
+            <summary>vyplnění karty</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GImportedFilesTab.OnSetLayout(Gordic.General.GGridFormat)">
+            <summary>nastavení vzhledu</summary>
+            <param name="format">formát datové mřížky</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GImportedFilesTab.OnSetAccess">
+            <summary>nastavení přístupnosti ovládacích prvků</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GImportedFilesTab.OnSelectFilter(System.Object,System.EventArgs)">
+            <summary>obsluha změny filtru</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">parametry události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GImportedFilesTab.GetFilters">
+            <summary>získání filtrů</summary>
+            <returns>filtry</returns>
+        </member>
+        <member name="T:Gordic.Mpd.WinClient.GArchivedFilesTab">
+            <summary>karta seznam dávek v archivu</summary>
+        </member>
+        <member name="F:Gordic.Mpd.WinClient.GArchivedFilesTab.m_oDataTable">
+            <summary>data</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GArchivedFilesTab.DataTable">
+            <summary>data</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GArchivedFilesTab.DataGrid">
+            <summary>datová mřížka</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GArchivedFilesTab.#ctor">
+            <summary>veřejný konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GArchivedFilesTab.Dispose(System.Boolean)">
+            <summary>finální uvolnění zdrojů</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GArchivedFilesTab.InitializeComponent">
+            <summary>inicializace vizuálních komponent</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GArchivedFilesTab.OnLoadData">
+            <summary>načtení dat</summary>
+            <returns>data</returns>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GArchivedFilesTab.OnFillData">
+            <summary>vyplnění karty</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GArchivedFilesTab.OnSetLayout(Gordic.General.GGridFormat)">
+            <summary>nastavení vzhledu</summary>
+            <param name="format">formát datové mřížky</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GArchivedFilesTab.OnSetAccess">
+            <summary>nastavení přístupnosti ovládacích prvků</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GArchivedFilesTab.OnRecovery(System.Object,System.EventArgs)">
+            <summary>obnovení dávek z archivu</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">argumenty události</param>
+        </member>
+        <member name="T:Gordic.Mpd.WinClient.GExportedFilesTab">
+            <summary>karta seznam generovaných dávek</summary>
+        </member>
+        <member name="F:Gordic.Mpd.WinClient.GExportedFilesTab.m_oDataTable">
+            <summary>data</summary>
+        </member>
+        <member name="F:Gordic.Mpd.WinClient.GExportedFilesTab.m_nLastFilterIndex">
+            <summary>index posledního zvoleného filtru</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GExportedFilesTab.DataTable">
+            <summary>data</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GExportedFilesTab.DataGrid">
+            <summary>datová mřížka</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GExportedFilesTab.#ctor">
+            <summary>veřejný konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GExportedFilesTab.Dispose(System.Boolean)">
+            <summary>finální uvolnění zdrojů</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GExportedFilesTab.InitializeComponent">
+            <summary>inicializace vizuálních komponent</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GExportedFilesTab.OnLoadData">
+            <summary>načtení dat</summary>
+            <returns>data</returns>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GExportedFilesTab.OnFillData">
+            <summary>vyplnění karty</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GExportedFilesTab.OnSetLayout(Gordic.General.GGridFormat)">
+            <summary>nastavení vzhledu</summary>
+            <param name="format">formát datové mřížky</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GExportedFilesTab.OnSetAccess">
+            <summary>nastavení přístupnosti ovládacích prvků</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GExportedFilesTab.OnSelectFilter(System.Object,System.EventArgs)">
+            <summary>obsluha změny filtru</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">parametry události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GExportedFilesTab.GetFilters">
+            <summary>získání filtrů</summary>
+            <returns>filtry</returns>
+        </member>
+        <member name="T:Gordic.Mpd.WinClient.GMpdApplication">
+            <summary>hlavní třída aplikace přenosy dat</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GMpdApplication.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMpdApplication.Main">
+            <summary>hlavní smyčka aplikace</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMpdApplication.BackupLogFile">
+            <summary>odzálohování logovacího souboru</summary>
+        </member>
+        <member name="T:Gordic.Mpd.WinClient.GMainForm">
+            <summary>hlavní okno aplikace přenosy dat</summary>
+        </member>
+        <member name="F:Gordic.Mpd.WinClient.GMainForm.m_coClientLogic">
+            <summary>klientská logika</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GMainForm.Current">
+            <summary>aktuální instance hlavního okna aplikace</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GMainForm.ApplicationTasks">
+            <summary>seznam úloh aplikace</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GMainForm.ClientLogic">
+            <summary>klientská logika</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GMainForm.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.#ctor">
+            <summary>veřejný konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.Dispose(System.Boolean)">
+            <summary>finální uvolnění zdrojů</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.InitializeComponent">
+            <summary>inicializace vizuálních komponent</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.OnMainWindowLoad(System.Object,System.EventArgs)">
+            <summary>obsluha při načtení hlavního okna aplikace</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">parametry události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.OnMainWindowClosing(System.Object,System.ComponentModel.CancelEventArgs)">
+            <summary>obsluha uzavření hlavního okna aplikace</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">argumenty události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.OnGetSettings">
+            <summary>získání seznamu dostupných nastavení aplikace</summary>
+            <returns>seznam dostupných nastavení aplikace</returns>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.OnDataTransfer(System.Object,System.EventArgs)">
+            <summary>obsluha pro úlohu přenosy dat</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">parametry události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.OnExportedFiles(System.Object,System.EventArgs)">
+            <summary>obsluha pro úlohu generované dávky</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">parametry události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.OnImportedFiles(System.Object,System.EventArgs)">
+            <summary>obsluha pro úlohu načtené dávky</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">parametry události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.OnFilesToImport(System.Object,System.EventArgs)">
+            <summary>obsluha pro úlohu dávky k načtení</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">parametry události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.OnFilesToSend(System.Object,System.EventArgs)">
+            <summary>obsluha pro úlohu dávky k přenosu</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">parametry události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.OnTransferTypes(System.Object,System.EventArgs)">
+            <summary>obsluha pro úlohu typy přenosů</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">parametry události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.OnTransferDirections(System.Object,System.EventArgs)">
+            <summary>obsluha pro úlohu směry přenosů</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">parametry události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.OnLastProcessedFiles(System.Object,System.EventArgs)">
+            <summary>obsluha pro úlohu naposledy zpracovávané dávky</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">parametry události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.OnUnrealizedTransfers(System.Object,System.EventArgs)">
+            <summary>obsluha pro úlohu nerealizované přenosy</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">parametry události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.OnArchivedFiles(System.Object,System.EventArgs)">
+            <summary>obsluha pro úlohu dávky v archivu</summary>
+            <param name="sender">původce události</param>
+            <param name="eventArgs">parametry události</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.ShowMessage(System.Int32,System.String[])">
+            <summary>zobrazení modálního dialogu s upozorněním</summary>
+            <param name="resourceCode">kód upozornění ve zdrojích</param>
+            <param name="parameters">parametry upozornění</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.ShowMessage(Gordic.WinForms.Gui.GWin,System.Int32,System.String[])">
+            <summary>zobrazení modálního dialogu s upozorněním</summary>
+            <param name="parentWindow">rodičovské okno</param>
+            <param name="resourceCode">kód upozornění ve zdrojích</param>
+            <param name="parameters">parametry upozornění</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.ShowWarning(System.Int32,System.String[])">
+            <summary>zobrazení modálního dialogu s varováním</summary>
+            <param name="resourceCode">kód upozornění ve zdrojích</param>
+            <param name="parameters">parametry upozornění</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.ShowWarning(Gordic.WinForms.Gui.GWin,System.Int32,System.String[])">
+            <summary>zobrazení modálního dialogu s varováním</summary>
+            <param name="parentWindow">rodičovské okno</param>
+            <param name="resourceCode">kód upozornění ve zdrojích</param>
+            <param name="parameters">parametry upozornění</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.ShowQuestion(System.Int32,System.String[])">
+            <summary>zobrazení modálního dialogu s dotazem nad hlavním oknem aplikace</summary>
+            <param name="resourceCode">kód dotazu ve zdrojích</param>
+            <param name="parameters">parametry dotazu</param>
+            <returns>výsledek dotazu</returns>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.ShowQuestion(Gordic.WinForms.Gui.GWin,System.EventHandler,System.Int32,System.String[])">
+            <summary>zobrazení modálního dialogu s dotazem</summary>
+            <param name="parentWindow">rodičovské okno</param>
+            <param name="eventHandler">delegát metody pro obsloužení výsledku dotazu</param>
+            <param name="resourceCode">kód dotazu ve zdrojích</param>
+            <param name="parameters">parametry dotazu</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.ShowValidationResult(Gordic.Mpd.Interface.GMpdCommon.ValidationResult,System.String)">
+            <summary>zobrazení uživatelského hlášení pro daný výsledek validace</summary>
+            <param name="result">výsledek validace</param>
+            <param name="labelText">název pole</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.ShowMessageBox(Gordic.WinForms.Gui.GWin,System.Windows.Forms.MessageBoxIcon,System.Int32,System.String[])">
+            <summary>zobrazení modálního dialogu s upozorněním</summary>
+            <param name="parentWindow">rodičovské okno</param>
+            <param name="icon">ikona</param>
+            <param name="resourceCode">kód upozornění ve zdrojích</param>
+            <param name="parameters">parametry upozornění</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.CreateTasks(Gordic.WinForms.Gui.GTaskList,Gordic.Mpd.WinClient.GMainForm.GTaskInfo[])">
+            <summary>vytvoření stromu úloh</summary>
+            <param name="taskList">seznam úloh</param>
+            <param name="tasks">informace o úlohách</param>
+        </member>
+        <member name="T:Gordic.Mpd.WinClient.GMainForm.GTaskInfo">
+            <summary>informace o úloze</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GMainForm.GTaskInfo.NameCode">
+            <summary>kód názvu úlohy v resx souboru</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GMainForm.GTaskInfo.Image">
+            <summary>ikona úlohy</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GMainForm.GTaskInfo.TaskRun">
+            <summary>metoda pro aktivaci úlohy</summary>
+        </member>
+        <member name="P:Gordic.Mpd.WinClient.GMainForm.GTaskInfo.ChildTasks">
+            <summary>seznam podřízených úloh</summary>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.GTaskInfo.#ctor(System.Int32,System.Drawing.Bitmap,System.EventHandler)">
+            <summary>konstruktor</summary>
+            <param name="nameCode">kód názvu úlohy resx souboru</param>
+            <param name="image">ikona úlohy</param>
+            <param name="taskRun">metoda pro aktivaci úlohy</param>
+        </member>
+        <member name="M:Gordic.Mpd.WinClient.GMainForm.GTaskInfo.#ctor(System.Int32,System.Drawing.Bitmap,Gordic.Mpd.WinClient.GMainForm.GTaskInfo[])">
+            <summary>konstruktor</summary>
+            <param name="nameCode">kód názvu úlohy resx souboru</param>
+            <param name="image">ikona úlohy</param>
+            <param name="childTasks">seznam podřízených úloh</param>
+        </member>
+    </members>
+</doc>

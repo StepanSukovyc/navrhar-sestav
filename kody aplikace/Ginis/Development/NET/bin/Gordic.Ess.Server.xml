@@ -1,0 +1,486 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Ess.Server</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Ess.Server.GEssExport">
+            <summary>
+            interface na serverovou část obsluhy exportu offline XML dávek podle NS a to dokumentů a spisů
+            </summary>
+        </member>
+        <member name="F:Gordic.Ess.Server.GEssExport._ess_exp_range">
+            <summary>
+            Pomocná cache na hodnotu parametru
+            </summary>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssExport.Ns2024Export(Gordic.Rss.Interface.Ns2024ExportRequest)">
+            <summary>
+            Export podle NS2024
+            </summary>
+            <param name="exportRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssExport.spg_ess_ex_main01(Gordic.Support.Database.GDatabase,Gordic.General.GInt32,Gordic.General.GInt64,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32@,Gordic.General.GInt32@)">
+            <summary>
+            
+            </summary>
+            <param name="database"></param>
+            <param name="log_por_cislo"></param>
+            <param name="ikc"></param>
+            <param name="ixs_ext"></param>
+            <param name="typ_dav_rss"></param>
+            <param name="ucel_davky"></param>
+            <param name="poznamka"></param>
+            <param name="ixs_esu_puvodce"></param>
+            <param name="rss_por_cislo"></param>
+            <param name="davka_id"></param>
+            <exception cref="T:Gordic.Support.Database.GDBLockException"></exception>
+            <exception cref="T:Gordic.General.GException"></exception>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssExport.ExportDocumentForIxp(System.String,System.String,System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            Export XML souboru, který obsahuje data dokumentu nebo spisu z databáze GINIS a to podle specifikace NS2017
+            Požadovaný dokument je specifikovaný v PIDem
+            </summary>
+            <param name="ixp">PID dokumentu, který se má exportovat</param>
+            <param name="verze_ess">Verze rozhraní RZP, RZP3, ERMS - aktuálně povolená by měla být pouze ERMS</param>
+            <param name="mutace_ess">Mutace verze - standardně obsahuje namespace - 'http://nsess.public.cz/erms/v_02_00'</param>
+            <param name="ixs_ext">ID externího systému, pro který se má dokumentu exportovat</param>
+            <param name="useLinkOlny">Příznak, že u dokumentu a spisu se nemají exportovat kompletní data včetně obsahu el.souborů a kompletních vloženého dokumentu, ale že se mají použít pouze ID těchto prvků</param>
+            <param name="contentToLocalFile">ref T34848 - Příznak, že se base64 nemá zapisovat do XML ale položí se na disk a na místo BASE64 se uložení pouze jméno temp souboru.</param>
+            <returns>Strukturovaný výsledek akce</returns>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssExport.ReadDocumentPartsForIxp(System.String)">
+            <summary>
+            Z databáze načte jednotlivé části spisu/dokumentu
+            Výsledkem je pole IXB elektronických souborů spojených se zadaným IXP + případně pole IXP vložených do spisu
+            </summary>
+            <param name="ixp">PID dokumentu nebo spisu, pro který se mají zjišťovat jeho části. </param>
+            <returns>Kontejner s načtenými daty</returns>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssExport.ReadDocumentsForYear(System.Int32)">
+            <summary>
+            Z databáze načte seznam samostatných PIDů zapsaných do DB v zadaném  roce
+            </summary>
+            <param name="rok">Rok pro který se mají dokumenty exportovat</param>
+            <returns>Kontejner s načtenými daty</returns>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssExport.Get_ess_exp_range">
+            <summary>
+            Vrátí hodnotu DB parametru pro určení povoleného rozsahu exportu dat
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssExport.DbCheckIdAccess(System.String)">
+            <summary>
+            Kontrola oprávnění přístupu k datům PIDu nebo IXB
+            </summary>
+            <param name="id"></param>
+            <returns>true znamená přístup povolen</returns>
+        </member>
+        <member name="T:Gordic.Ess.Server.GEssExportAsyncTaskInternal">
+            <summary>
+            Asynchronní operace pro export z externího systému
+            </summary>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssExportAsyncTaskInternal.Ns2024ExportSingleDocumentInternal(Gordic.Ess.Interface.GEssExportInputDto)">
+            <summary>
+            Provede export zadaného seznamu PIDů
+            </summary>
+        </member>
+        <member name="T:Gordic.Ess.Server.GEssExportAsyncTask">
+            <summary>
+            Asynchronní operace pro export z externího systému
+            </summary>
+        </member>
+        <member name="P:Gordic.Ess.Server.GEssExportAsyncTask.IsCancellable">
+            <summary>Lze ulohu zrusit?</summary>
+        </member>
+        <member name="P:Gordic.Ess.Server.GEssExportAsyncTask.IsRelationOnly">
+            <summary>
+            Úloha má běžet pouze v případě, že uživatel je přihlášen
+            </summary>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssExportAsyncTask.RunAsync(Gordic.Ess.Interface.GEssExportInputDto,Gordic.General.ApplicationInterface.GAsyncProgressDto)">
+            <summary>
+            Async task pro export z externího systému
+            </summary>
+        </member>
+        <member name="T:Gordic.Ess.Server.GEssImport">
+            <summary>
+            Serverová část obsluhy importu offline XML dável podle NS a to dokumentů a spisů
+            </summary>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssImport.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssImport.GetSslssplDtoList">
+            <summary>
+            Získání seznamu spisových plánů
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssImport.GetIntsextDTOs">
+            <summary>
+            Získání seznamu externích systémů
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssImport.ImportPotvrzeni2024(System.String,System.String)">
+            <summary>
+            Import XML souboru s potvrzením exportované dávky
+            </summary>
+            <param name="filePath">PLná cesta na lokální XML soubor s potvrzením</param>
+            <param name="ixs_ext"></param>
+            <returns>V GProcessReeXmlResult.davka_id_potvrz by mělo být číslo potvrzené dávky.</returns>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssImport.ImportDocument2024(System.String,System.String)">
+            <summary>
+            Pouze testovací funkce - zatím tam chybí načtení el.souborů a tak to reálně nelze použít.
+            
+            Načtení el. souborů se bude muset realizovat podle Internal.ImportFiles()
+            
+            Import XML souboru, který obsahuje data dokumentu nebo spisu určená pro import do databáze GINIS a to podle specifikace NS2024
+            </summary>
+            <param name="filePath">ZIP soubor pro import</param>
+            <param name="ixs_ext">ID externího systému</param>
+            <returns>Strukturovaný popis výsledku akce</returns>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssImport.ImportDocumentPrepare2024(System.String,System.String)">
+            <summary>
+            (PŘÍPRAVA) Import ZIP dávky, která obsahuje data dokumentů, spisů nebo typových spisů určených pro import do databáze GINIS - podle NS2024
+            </summary>
+            <param name="filePath">ZIP soubor pro přípravu importu</param>
+            <param name="ixs_ext">ID externího systému</param>
+            <returns>Strukturovaný popis výsledku akce: 
+            listEntit: seznam prvků obsažených v ZIPu 
+            davka_id: interní číslo dávky jak je zaregistrována v rssddav</returns>
+            <exception cref="T:Gordic.General.GDataInvalidException"></exception>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssImport.ImportDataIntoDTO(System.String,Gordic.Ess.Interface.GEssImportEntityDto)">
+            <summary>
+                Z XML souboru vybere data a uloží do DTO
+            </summary>
+            <param name="xmlText"></param>
+            <param name="gEssImportEntityDto"></param>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssImport.GetNamespaceManager">
+            <summary>
+                Vytvo?ení "Namespace manageru" s pomocí dictonary pro daný XDocument
+            </summary>
+            <returns>Dictonary namespace - url</returns>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssImport.ImportDat(System.Xml.Linq.XDocument,System.Collections.Generic.Dictionary{System.String,System.Xml.Linq.XNamespace},Gordic.Ess.Interface.GEssImportEntityDto)">
+            <summary>
+                Výběr dat z XML dokumentu a uložení do DTO
+                pozn.: je důležité, aby hledaný element byl první v pořadí v dokumentu, když se používá Descendants() na celý Root
+            </summary>
+            <param name="xDoc"></param>
+            <param name="dict"></param>
+            <param name="gEssImportEntityDto"></param>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssImport.ImportKomponentFinalize2024(Gordic.Ess.Interface.GEssImportEntityDto[],System.Nullable{System.Int32},System.IO.Compression.ZipArchive,System.String,System.Func{Gordic.Rss.Interface.GProcessReeXmlResult,Gordic.Ess.Interface.GEssImportEntityDto,System.Boolean})">
+            <summary>
+            Hromadný import zadaného seznamu komponent
+            </summary>
+            <param name="list">Seznam prvků, které se mají importovat - získaný z manifestu a dodatečně vybraný uživatelem</param>
+            <param name="davka_id">Interní číslo ZIP dávky která se aktuálně načítá</param>
+            <param name="Archive">ZIP soubor pro import</param>
+            <param name="ixs_ext">ID externího systému</param>
+            <param name="delegat"></param>
+            <exception cref="T:Gordic.General.GDataInvalidException"></exception>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssImport.ImportDocumentFinalize2024(Gordic.Ess.Interface.GEssImportEntityDto[],System.Nullable{System.Int32},System.String,System.String,System.Func{Gordic.Rss.Interface.GProcessReeXmlResult,Gordic.Ess.Interface.GEssImportEntityDto,System.Boolean})">
+            <summary>
+            Import do systému jednotlivých prvků do databáze, podle zadaného listu již uživatelem vybraných prvků 
+            Metadata prvků se postupně berou ze zadaného ZIPu
+            </summary>
+            <param name="list">Seznam prvků, které se mají importovat - získaný z manifestu a dodatečně vybraný uživatelem</param>
+            <param name="davka_id">Interní číslo ZIP dávky která se aktuálně načítá</param>
+            <param name="filePath">ZIP soubor pro import</param>
+            <param name="ixs_ext">ID externího systému</param>
+            <param name="delegat">Funkce pro zpětné hlášení progressu akce</param>
+            <returns></returns>
+            <exception cref="T:Gordic.General.GDataInvalidException"></exception>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssImport.ImportDocumentFinalize2024(Gordic.Ess.Interface.GEssImportEntityDto[],System.Nullable{System.Int32},System.IO.Compression.ZipArchive,System.Collections.Generic.Dictionary{System.String,System.String},System.String,System.Func{Gordic.Rss.Interface.GProcessReeXmlResult,Gordic.Ess.Interface.GEssImportEntityDto,System.Boolean})">
+            <summary>
+            Import do systému jednotlivých prvků do databáze, podle zadaného listu již uživatelem vybraných prvků 
+            Metadata prvků se postupně berou ze zadaného ZIPu
+            </summary>
+            <param name="list">Seznam prvků, které se mají importovat - získaný z manifestu a dodatečně vybraný uživatelem</param>
+            <param name="davka_id">Interní číslo ZIP dávky která se aktuálně načítá - id podle rsssdav</param>
+            <param name="archive">ZIP soubor pro import</param>
+            <param name="zipContent">ZIP soubor pro import</param>
+            <param name="ixs_ext">ID externího systému</param>
+            <param name="delegat">Funkce pro zpětné hlášení progressu akce</param>
+            <returns></returns>
+            <exception cref="T:Gordic.General.GDataInvalidException"></exception>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssImport.ImportDocument(System.String,System.String,System.String,System.String)">
+            <summary>
+            OLD - Import XML souboru, který obsahuje data dokumentu nebo spisu určená pro import do databáze GINIS a to podle specifikace NS2017
+            </summary>
+            <param name="filePath">Soubor pro import</param>
+            <param name="typ_xml">Verze rozhraní RZP, RZP3, ERMS, NS2024 - aktuálně povolená by měla být pouze ERMS</param>
+            <param name="mutace_ess">Mutace verze - standardně obsahuje namespace - 'http://nsess.public.cz/erms/v_02_00'</param>
+            <param name="ixs_ext">ID externího systému</param>
+            <returns>Strukturovaný popis výsledku akce</returns>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssImport.ImportOldDocument(System.String)">
+            <summary>
+            OLD - Import dokumentu podle starého standardu platného do 2017
+            
+            Volá se pouze přes interface a to z Gordic.Ess.Client
+            
+            </summary>
+            <param name="filePath"></param>
+            <returns>String popisující lidsky výsledek akce</returns>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssImport.LoadManifest(System.IO.Compression.ZipArchive)">
+            <summary>
+            Načtení manifestu do XML ze ZIP archivu
+            </summary>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssImport.LoadEntityFromManifest(System.Xml.XmlDocument)">
+            <summary>
+            Načtení seznamu entity ze xml manifestu 
+            Načte jen základní data 
+            </summary>
+            <param name="Manifest">Xml dokument s načteným manifestem</param>
+            <returns>List DTO objektu popisujícího jednotlivé prvky obsažené v importní dávce</returns>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssImport.ConvertXmlDocumentToXDocument(System.Xml.XmlDocument)">
+            <summary>
+            Pomocná konverze s XmlDocument na XDocument
+            </summary>
+            <param name="xmlDocument"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssImport.GetZipFileContentDictionary(System.IO.Compression.ZipArchive)">
+            <summary>
+            Vybudování seznamu souborů obsažených v ZIPu. Znormalizuje se - velká/malá písmena + typ lomítka atd..
+            </summary>
+            <param name="archive">Otevřený ZIP archiv</param>
+            <returns>Slovník kde klíč je normalizovaná podoba jména souboru a hodnota je originální jméno souboru obsaženého v ZIPu - s pomocí hodnoty lze k souborům v ZIPu fyzicky přistupovat</returns>
+            <exception cref="T:Gordic.General.GDataInvalidException"></exception>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssImport.AddEntityDependenci(Gordic.Ess.Interface.GEssImportEntityDto[])">
+            <summary>
+            V rámci kolekce importovanych prvku prida vyber u podrizenych prvku, ktere jsou nutno pro import uzivatelem oznacenych prvku
+            </summary>
+            <param name="entityList"></param>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssImport.SetChildElementsAsInvisible(Gordic.Ess.Interface.GEssImportEntityDto[])">
+            <summary>
+            Funkce pro potlačení zobrazení podřízených prvků - aby např. uživatel nemohl vybrat dokument vložený ve spisu atd. (UmoznitVyberUzivatele = false)
+            </summary>
+            <param name="listEntities"></param>
+        </member>
+        <member name="T:Gordic.Ess.Server.GEssImportAsyncTaskInternal">
+            <summary>
+            Asynchronní úloha pro import z externího systému (interní)
+            </summary>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssImportAsyncTaskInternal.ImportFiles(System.IO.Compression.ZipArchive,Gordic.Ess.Interface.GEssImportInputDto,Gordic.Ess.Interface.GEssImportEntityDto[],System.Func{Gordic.Ess.Interface.GEssImportReportDto,System.Boolean})">
+            <summary>
+            Import komponent/souborů ze ZIPu do databáze
+            </summary>
+            <param name="Archive">Otevřený ZIP soubor</param>
+            <param name="davka">Popisná data dávky</param>
+            <param name="soubory">Seznam komponent, které se mají importovat</param>
+            <param name="progressDelegat">Funkce pro zpětné hlášení průběhu importu. Může být NULL</param>
+            <returns>Plní se položka GEssImportReportDto.Data seznamem naimportovaných komponent</returns>
+            <exception cref="T:Gordic.General.GDataInvalidException"></exception>
+            <exception cref="T:Gordic.General.GException"></exception>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssImportAsyncTaskInternal.ReadVersionOfFile(System.String)">
+            <summary>
+            Z importovaného XML načte seznam všech verzí jedné komponenty - jeden XML = jedna komponenta
+            </summary>
+            <param name="FileXml"></param>
+            <returns>SeznamVerzi, HodnotaID, ZdrojID</returns>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssImportAsyncTaskInternal.GetVersionCountFromWflhixb(Gordic.General.GString)">
+            <summary>
+            GetVersionCountFromWflhixb
+            </summary>
+            <param name="Ixb"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssImportAsyncTaskInternal.DbSaveIxbToIntddav(System.String,System.String,System.String)">
+            <summary>
+            Uložení externího ID el.souboru do převodní tabulky identifikátorů INTDDAV
+            </summary>
+        </member>
+        <member name="T:Gordic.Ess.Server.GEssImportAsyncTask">
+            <summary>
+            Asynchronní operace pro import z externího systému
+            </summary>
+        </member>
+        <member name="F:Gordic.Ess.Server.GEssImportAsyncTask.logger">
+            <summary>
+            NLOG
+            </summary>
+        </member>
+        <member name="P:Gordic.Ess.Server.GEssImportAsyncTask.IsCancellable">
+            <summary>Lze ulohu zrusit?</summary>
+        </member>
+        <member name="P:Gordic.Ess.Server.GEssImportAsyncTask.IsRelationOnly">
+            <summary>
+            Úloha má běžet pouze v případě, že uživatel je přihlášen
+            </summary>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssImportAsyncTask.RunAsync(Gordic.Ess.Interface.GEssImportInputDto,Gordic.General.ApplicationInterface.GAsyncProgressDto)">
+            <summary>
+            Async task pro import z externího systému
+            </summary>
+        </member>
+        <member name="T:Gordic.Ess.Server.GEssService">
+            <summary>
+            GEssService
+            </summary>
+        </member>
+        <member name="F:Gordic.Ess.Server.GEssService.logger">
+            <summary>
+            NLOG
+            </summary>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssService.GetEssOdpoved2024(Gordic.Ess.Interface.GEssImportInputDto)">
+            <summary>
+            Vygenerování XML potvrzení k naimportované dávce
+            </summary>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssService.Trans_ListRsssdav(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Ess.Interface.GEssRsssdavFilter})">
+            <summary>
+            Načtení davek z tabulky rsssdav
+            </summary>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssService.Trans_ListRssddav(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Ess.Interface.GEssRssddavFilter})">
+            <summary>
+            Načtení detailu jedne davky z tabulky rssddav
+            </summary>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssService.Trans_CheckIxsIntddav(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Ess.Interface.GEssImportIntdddavFilter})">
+            <summary>
+            Kontrola entity externí vs interní v tabulce intddav
+            </summary>
+            <param name="Rq"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssService.Trans_ListIxp(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Ess.Interface.GEssIslFilter})">
+            <summary>
+            Načte seznam identifikátorů písemnosti
+            </summary>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssService.GetIxbWithIxpFromIxpInput(System.Collections.Generic.List{Gordic.Ess.Interface.GEssExportIxpDto})">
+            <summary>
+            Vrať identifikátory souborů (ixb) s identifikátory písemností (ixp) dle identifikátorů písemností (ixp)
+            </summary>
+            <param name="Input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssService.GetSpisDokFromTypSpis(Gordic.Ess.Interface.GEssExportIxpDto)">
+            <summary>
+            GetSpisDokFromTypSpis
+            </summary>
+            <param name="Item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssService.GetDokFromSpis(Gordic.Ess.Interface.GEssExportIxpDto)">
+            <summary>
+            vrať všechny dokumenty ve spisu
+            </summary>
+            <param name="Item"></param>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssService.GetObrazIxb(Gordic.Ess.Interface.GEssExportIxpDto,System.Collections.Generic.List{Gordic.General.GString}@)">
+            <summary>
+            GetObrazIxb
+            </summary>
+            <param name="Item"></param>
+            <param name="IxbList"></param>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssService.GetPrilohyIxb(Gordic.Ess.Interface.GEssExportIxpDto,System.Collections.Generic.List{Gordic.General.GString}@)">
+            <summary>
+            GetPrilohyIxb
+            </summary>
+            <param name="Item"></param>
+            <param name="IxbList"></param>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssService.Gordic#Ess#Interface#IGEss#ListRsssdav(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Ess.Interface.GEssRsssdavFilter})">
+            <summary>Načtení davek z tabulky rsssdav</summary>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssService.ListRsssdav(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Ess.Interface.GEssRsssdavFilter},System.Boolean)">
+            <summary>Načtení davek z tabulky rsssdav</summary>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssService.Gordic#Ess#Interface#IGEss#ListRssddav(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Ess.Interface.GEssRssddavFilter})">
+            <summary>Načtení detailu jedne davky z tabulky rssddav</summary>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssService.ListRssddav(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Ess.Interface.GEssRssddavFilter},System.Boolean)">
+            <summary>Načtení detailu jedne davky z tabulky rssddav</summary>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssService.Gordic#Ess#Interface#IGEss#CheckIxsIntddav(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Ess.Interface.GEssImportIntdddavFilter})">
+            <summary>Kontrola entity externí vs interní v tabulce intddav</summary>
+            <param name="Rq"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssService.CheckIxsIntddav(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Ess.Interface.GEssImportIntdddavFilter},System.Boolean)">
+            <summary>Kontrola entity externí vs interní v tabulce intddav</summary>
+            <param name="Rq"></param>
+            <returns></returns>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssService.Gordic#Ess#Interface#IGEss#ListIxp(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Ess.Interface.GEssIslFilter})">
+            <summary>Načte seznam identifikátorů písemnosti</summary>
+        </member>
+        <member name="M:Gordic.Ess.Server.GEssService.ListIxp(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Ess.Interface.GEssIslFilter},System.Boolean)">
+            <summary>Načte seznam identifikátorů písemnosti</summary>
+        </member>
+        <member name="T:Gordic.Ess.Server.Properties.Resources">
+            <summary>
+              Třída prostředků se silnými typy pro vyhledávání lokalizovaných řetězců atp.
+            </summary>
+        </member>
+        <member name="P:Gordic.Ess.Server.Properties.Resources.ResourceManager">
+            <summary>
+              Vrací instanci ResourceManager uloženou v mezipaměti použitou touto třídou.
+            </summary>
+        </member>
+        <member name="P:Gordic.Ess.Server.Properties.Resources.Culture">
+            <summary>
+              Potlačí vlastnost CurrentUICulture aktuálního vlákna pro všechna
+              vyhledání prostředků pomocí třídy prostředků se silnými typy.
+            </summary>
+        </member>
+        <member name="P:Gordic.Ess.Server.Properties.Resources.dmBaseTypes">
+             <summary>
+               Vyhledá lokalizovaný řetězec podobný &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+            &lt;!-- ************************************************************************
+               XSD schema typů použitých ve WSDL pro manipulaci s datovými zprávami
+                                   verze 2.1    9.6.2009  novela
+                                   
+             Změny:  
+                 5.2.2009  verze 0.1   základní verze
+                10.2.2009  verze 0.2   - v typu tDelivery místo ID zprávy je nyní kompletní obálka včetně časového razítka a hashe, které se ale asi nepoužije, protože bez písemností neplatí         [zbytek řetězce byl zkrácen];.
+             </summary>
+        </member>
+        <member name="P:Gordic.Ess.Server.Properties.Resources.ess">
+             <summary>
+               Vyhledá lokalizovaný řetězec podobný &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+            &lt;!--Created with Liquid XML Studio - 30 Day Trial Edition 7.0.4.795 (http://www.liquid-technologies.com)--&gt;
+            &lt;!-- 
+            Toto je návrh obecného přenosového formátu pro výměnu dat mezi systémy Spisových služeb.
+            Tento návrh vznikl v rámci pracovní skupiny založené na základě memoranda:
+                        M e m o r a n d u m o s p o l u p r á c i
+                                         mezi
+                         Ministerstvem vnitra České republiky
+                           se sídlem Nad Štolou 3, Praha 7,
+             [zbytek řetězce byl zkrácen];.
+             </summary>
+        </member>
+    </members>
+</doc>

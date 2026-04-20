@@ -1,0 +1,2282 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Pdu.Server</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Pdu.Server.GPduMetadataException">
+            <summary> Výjimka používaná vrstvou pro komunikaci mezi objekty </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduMetadataException.#ctor(System.Int32,System.Int32,System.String[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduMetadataException.#ctor(System.Int32,System.Int32,System.Exception,System.String[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="innerException">vnitřní vyjímka</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduMetadataException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <exclude/>
+        </member>
+        <member name="T:Gordic.Pdu.Server.GPduServerLog">
+            <summary>
+            Log pro Pdu.Server
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduServerLog.#ctor(System.String)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="prefix">prefix</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduServerLog.WriteLn(System.Exception)">
+            <summary>
+            Zapsání řádku do logu
+            </summary>
+            <param name="ex">výjimka</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduServerLog.WriteLn(System.String,System.Exception)">
+            <summary>
+            Zapsání řádku do logu
+            </summary>
+            <param name="logText">text</param>
+            <param name="ex">výjimka</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduServerLog.WriteLn(System.String,System.Boolean)">
+            <summary>
+            Zapsání řádku do logu
+            </summary>
+            <param name="sDebugText">text</param>
+            <param name="error">zda se jedná o výpis chyby</param>
+        </member>
+        <member name="T:Gordic.Pdu.Server.GPduCommon">
+            <summary>
+            Společná logika
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.GPduCommon.Logger">
+            <summary>
+            instance třídy pro logování
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduCommon.CheckTempFileName(System.String)">
+            <summary>
+            Zjisti, zda na danem umisteni jiz soubor existuje, pokud ano, provede zmenu filename
+            </summary>
+            <param name="fileName">cesta k souboru</param>
+            <returns>nova cesta k souboru</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduCommon.FindSpisovyPlan(System.Object,System.Xml.XmlNamespaceManager,System.String)">
+            <summary>
+            Najde identifikátor spisového plánu uvnitř XML SIPu
+            </summary>
+            <param name="dokument">xml dokument (jedno, zda obsahuje spis, dokument...)</param>
+            <param name="namespaceManager">namespace manager</param>
+            <param name="nsesssPrefix">prefix nsesss</param>
+            <returns>identifikátor spisového plánu</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduCommon.AntivirovaKontrolaBalicku(Gordic.General.GString,System.String,System.Boolean)">
+            <summary>
+            Antivirová kontrola balíčku
+            </summary>
+            <param name="ixbSip">ixb SIPu</param>
+            <param name="sipFilePath">cesta k souboru SIPu</param>
+            <param name="newTransaction">zda provádět Reinit, Commit a Disconnect, případně Rollback</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduCommon.KontrolaTypuSouboru(Gordic.General.GString,System.String,System.Xml.XmlDocument,System.Boolean,System.Boolean)">
+            <summary>
+            Kontrola typů souboru
+            </summary>
+            <param name="ixbSip">ixb SIPu</param>
+            <param name="sipTempDir">dočasný sip adresář</param>
+            <param name="metsDoc">xml document</param>
+            <param name="souboryUvnitrXml">zda se kontroluji soubory uvnitř xml</param>
+            <param name="newTransaction">zda provádět Reinit, Commit a Disconnect, případně Rollback</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduCommon.KontrolaHashPsp(Gordic.General.GString,System.String,System.String,System.Boolean)">
+            <summary>
+            Kontrola hash všech souborů v PSP
+            </summary>
+            <param name="ixbSip">ixbSip</param>
+            <param name="sipDirPath">cesta k adresáři s PSP</param>
+            <param name="sipName">název psp</param>
+            <param name="newTransaction">nová transakce</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduCommon.KontrolaSouboruKdrSip(Gordic.General.GString,System.String,System.Xml.XmlDocument,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Kontrola typů souboru
+            </summary>
+            <param name="ixbSip">ixb SIPu</param>
+            <param name="sipDirPath">dočasný sip adresář</param>
+            <param name="document">xml document</param>
+            <param name="souboryUvnitrXml">zda se kontroluji soubory uvnitř xml</param>
+            <param name="kontrolaFormatu">zda provést kontrolu formátu souborů</param>
+            <param name="newTransaction">zda provádět Reinit, Commit a Disconnect, případně Rollback</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduCommon.KontrolaSouboruDroid(System.String)">
+            <summary>
+            Kontrola souborů pomocí droid
+            </summary>
+            <param name="dir">adresář se soubory ke kontrole</param>
+            <returns>zda prošel (prázdný string == prošel)</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduCommon.KontrolaSouboruDroid(System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Kontrola souborů pomocí droid
+            </summary>
+            <param name="dir">adresář se soubory ke kontrole</param>
+            <param name="soubory">seznam souborů (href, filename)</param>
+            <returns>zda prošel (prázdný string == prošel)</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduCommon.KontrolaPodpisuBalicku(Gordic.General.GString,Gordic.General.GString,System.String,Gordic.Security.Service.GVerifyXmlResult@,System.Boolean)">
+            <summary>
+            Kontrola podpisů balíčku
+            </summary>
+            <param name="ixbSip">ixb SIPu</param>
+            <param name="ixsTre">ixs strediska</param>
+            <param name="sipXmlPath">cesta k XML SIPu</param>
+            <param name="res">res</param>
+            <param name="newTransaction">zda provádět Reinit, Commit a Disconnect, případně Rollback</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduCommon.KontrolaCasovychRazitekBalicku(Gordic.General.GString,System.String,System.Boolean)">
+            <summary>
+            Kontrola časových razítek balíčku
+            </summary>
+            <param name="ixbSip">ixb SIPu</param>
+            <param name="sipXmlPath">cesta k XML SIPu</param>
+            <param name="newTransaction">zda provádět Reinit, Commit a Disconnect, případně Rollback</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduCommon.KontrolaValidaceBalicku(Gordic.General.GString,System.String,System.Boolean)">
+            <summary>
+            Kontrola validace balíčku
+            </summary>
+            <param name="ixbSip">ixb SIPu</param>
+            <param name="sipXmlPath">cesta k XML SIPu</param>
+            <param name="newTransaction">zda provádět Reinit, Commit a Disconnect, případně Rollback</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduCommon.KontrolaMetadat(Gordic.General.GString,System.String,Gordic.General.GString,System.String,System.Xml.XmlDocument,Gordic.Pdu.Server.GPduServerLog,System.Boolean)">
+            <summary>
+            Kontrola metadat
+            </summary>
+            <param name="ixbSip">ixb SIPu</param>
+            <param name="chybaValidace">chyba validace</param>
+            <param name="ixsTre">ixs střediska</param>
+            <param name="sipTempDir">cesta k dočasnému adresáři rozbaleného SIPu</param>
+            <param name="xmlDocument">xml document</param>
+            <param name="log">log</param>
+            <param name="newTransaction">zda provádět Reinit, Commit a Disconnect, případně Rollback</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduCommon.NacistKonfiguraci(Gordic.General.GString,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString@,Gordic.Pdu.Server.GPduServerLog,System.Boolean)">
+            <summary>
+            Nacteni administrovane konfigurace puvodce
+            </summary>
+            <param name="ixsTre">ixs strediska</param>
+            <param name="ixsSu">ixs spisoveho uzlu</param>
+            <param name="ixsIsu">ixs interniho subjektu</param>
+            <param name="ixsSpi">ixs spisovny</param>
+            <param name="ixsFun">ixs odpovedne osoby</param>
+            <param name="log">log</param>
+            <param name="newTransaction">zda vytvaret novou transakci</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduCommon.ZapsatZmenuFormatu(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.Pdu.Server.GPduServerLog,System.Boolean)">
+            <summary>
+            Zapsání změny formátu
+            </summary>
+            <param name="ixsEnt">ixs entity</param>
+            <param name="typObj">typ objektu(entity) 0-dokument, 1-spis</param>
+            <param name="ixsUloPuv">ixs ulo puvodniho souboru</param>
+            <param name="ixsUloVysl">ixs ulo výsledného</param>
+            <param name="log">log</param>
+            <param name="newTransaction">nová transakce</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduCommon.TryDeleteFile(System.String)">
+            <summary>
+            Pokus o smazání souboru
+            </summary>
+            <param name="filePath">cesta k souboru</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduCommon.TryDeleteDirectory(System.String)">
+            <summary>
+            Pokus o smazání adresáře
+            </summary>
+            <param name="directoryPath">cesta k adresáři</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduCommon.PripsatChybu(System.String@,System.String)">
+            <summary>
+            Připsání chyby do stringu
+            </summary>
+            <param name="chyba">chyba</param>
+            <param name="pripsanaChyba">chyba, která se připisuje</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduCommon.GetRokSkartace(System.Object,System.String@)">
+            <summary>
+            Získání roku skartace
+            </summary>
+            <param name="obj">objekt</param>
+            <param name="chybaMetadat">chyba metadat</param>
+            <returns>rok skartace</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduCommon.GetRokEvidence(System.Object,System.String@)">
+            <summary>
+            Získání roku skartace
+            </summary>
+            <param name="obj">objekt</param>
+            <param name="chybaMetadat">chyba metadat</param>
+            <returns>rok skartace</returns>
+        </member>
+        <member name="T:Gordic.Pdu.Server.GPduServerException">
+            <summary> Výjimka používaná vrstvou pro komunikaci mezi objekty </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduServerException.#ctor(System.Int32,System.Int32,System.String[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduServerException.#ctor(System.Int32,System.Int32,System.Exception,System.String[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="innerException">vnitřní vyjímka</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduServerException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <exclude/>
+        </member>
+        <member name="T:Gordic.Pdu.Server.GPduSipDownloader">
+            <summary>
+            Trida pro stahovani SipBalicku z ruznych umisteni
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduSipDownloader.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.GPduSipDownloader.IxsTre">
+            <summary>
+            Identifikator strediska
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.GPduSipDownloader.ServerType">
+            <summary>
+            Typ uloziste
+            10 - ftp
+            20 - filesystem
+            70 - sftp
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduSipDownloader.GetSipFile(System.String,System.String@,System.String@)">
+            <summary>
+            Stahne SIP balicek z prislusneho uloziste
+            </summary>
+            <param name="sipFileName"></param>
+            <param name="errMsg"></param>
+            <param name="errTxt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduSipDownloader.GetPspFiles(System.String@,System.String@)">
+            <summary>
+            Vrati seznam PSP pripravenych por stazeni
+            </summary>
+            <param name="errMsg"></param>
+            <param name="errTxt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduSipDownloader.ZpracujPsp(System.String,System.String@)">
+            <summary>
+            Zpracuje PSP
+            </summary>
+            <param name="pspName">Cesta k adresari balicku (run soubor)</param>
+            <param name="errMsg">Chybova hlaska</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduSipDownloader.KontrolaPspAip">
+            <summary>
+            Metoda projde uloziste a u baliku ktere jiz byly vyjmuty z uloziste vytvori out soubor
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduSipDownloader.KontrolaPspAipFtp">
+            <summary>
+            Metoda projde uloziste a u baliku ktere jiz byly vyjmuty z uloziste vytvori out soubor
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduSipDownloader.KontrolaPspAipFileSystem">
+            <summary>
+            Metoda projde uloziste a u baliku ktere jiz byly vyjmuty z uloziste vytvori out soubor
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduSipDownloader.ExistsAip(Gordic.General.GString,System.Boolean)">
+            <summary>
+            Zjisti zda byl dany balik jiz vyjmut z karanteny a zda byl vztvoren AIP
+            </summary>
+            <param name="pspName"></param>
+            <param name="newTransaction"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduSipDownloader.GetIxbSipByIdSipRootEnt(Gordic.General.GString,System.Boolean)">
+            <summary>
+            Zjisti zda byl dany balik jiz vyjmut z karanteny a zda byl vztvoren AIP
+            </summary>
+            <param name="pspName"></param>
+            <param name="newTransaction"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduSipDownloader.DownloadFTPFile(System.String,System.String@,System.String@)">
+            <summary>
+            Stazeni SIP balicku z FTP
+            </summary>
+            <param name="fileName"></param>
+            <param name="errMsg"></param>
+            <param name="errTxt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduSipDownloader.DownloadSFTPFile(System.String,System.String@,System.String@)">
+            <summary>
+            Stazeni SIP balicku z SFTP
+            </summary>
+            <param name="fileName"></param>
+            <param name="errMsg"></param>
+            <param name="errTxt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduSipDownloader.DownloadFileSystemFile(System.String,System.String@,System.String@)">
+            <summary>
+            Stazeni SIP balicku z FileSystem
+            </summary>
+            <param name="fileName"></param>
+            <param name="errMsg"></param>
+            <param name="errTxt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduSipDownloader.GetPspFilesFromFtp(System.String@,System.String@)">
+            <summary>
+            Vrati seznam PSP pro stazenich z file systemu
+            </summary>
+            <param name="errMsg"></param>
+            <param name="errTxt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduSipDownloader.GetPspFileSystemFiles(System.String@,System.String@)">
+            <summary>
+            Vrati seznam PSP pro stazenich z file systemu
+            </summary>
+            <param name="errMsg"></param>
+            <param name="errTxt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduSipDownloader.GetFileSystemFilePath(System.String)">
+            <summary>
+            Získání cesty k souboru SIP balicku z FileSystem
+            </summary>
+            <param name="fileName">název souboru</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduSipDownloader.GetFileSystemFilePath">
+            <summary>
+            Získání cesty k ulozisti z FileSystem (bez souboru)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Pdu.Server.GPduOvereniException">
+            <summary> Výjimka používaná vrstvou pro komunikaci mezi objekty </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduOvereniException.#ctor(System.Int32,System.Int32,System.String[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduOvereniException.#ctor(System.Int32,System.Int32,System.Exception,System.String[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="innerException">vnitřní vyjímka</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduOvereniException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <exclude/>
+        </member>
+        <member name="T:Gordic.Pdu.Server.GPduEle">
+            <summary>
+            Práce s elektronickými soubory pro GDU
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduEle.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduEle.UlozitBalicek(Gordic.General.GString)">
+            <summary>
+            Otevre el.dokument a ulozi na disk bez dotazu
+            </summary>
+            <param name="ixb">IXB SIP balíčku</param> 
+            <returns>cesta k ulozenemu souboru</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduEle.UlozitBalicekNaDisk(Gordic.General.GString,System.String@,System.String@)">
+            <summary>
+            Otevre SIP balíček a ulozi na disk bez dotazu. Pokud je SIP v archivu zip, rozbalí ho
+            </summary>
+            <param name="ixb">IXB SIP balíčku</param>
+            <param name="xmlFileName">název uloženého XML</param>
+            <param name="sipTempPath">cesta k uloženému SIP v jeho výchozím formátu (XML, ZIP, ...)</param>
+            <returns>cesta k adresari, v nemz je docasne ulozen SIP balicek</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduEle.StahnoutSipBalicek(Gordic.General.GString,Gordic.General.GString@)">
+            <summary>
+            Stážení SIP balíčku
+            </summary>
+            <param name="ixb">IXB SIP balíčku</param> 
+            <param name="fileName">název souboru</param>
+            <returns>Stream balíčku</returns>
+        </member>
+        <member name="T:Gordic.Pdu.Server.GSpisinb">
+            <summary>
+            AL pro práci s spisinb
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.SeznamKaranteny(Gordic.General.GFilter{Gordic.Pdu.Interface.ColSpisinb}[])">
+            <summary>
+            Seznam karantény
+            </summary>
+            <param name="filters">filtry</param>
+            <returns>seznam karantény</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.SeznamKaranteny(System.Boolean,System.Boolean,Gordic.General.GFilter{Gordic.Pdu.Interface.ColSpisinb}[])">
+            <summary>
+            Seznam karantény
+            </summary>
+            <param name="newTransaction">zda začínat novou transakci (ReinitServerContext)</param>
+            <param name="endTransaction">zda ukončit transakci (Commit, ConDbDisconnect)</param>
+            <param name="filters">filtry</param>
+            <returns>seznam karantény</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.DetailSip(Gordic.General.GString)">
+            <summary>
+            Seznam karantény
+            </summary>
+            <param name="ixbSip">IxbSip</param>
+            <returns>seznam karantény</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.DetailSip(Gordic.General.GString,System.Boolean)">
+            <summary>
+            Seznam karantény
+            </summary>
+            <param name="ixbSip">IxbSip</param>
+            <param name="newTransaction">zda začínat novou transakci (ReinitServerContext)</param>
+            <returns>seznam karantény</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.VypisKaranteny(Gordic.General.GFilter{Gordic.Pdu.Interface.ColSpisinb}[])">
+            <summary>
+            Výpis karantény ve formátu CSV
+            </summary>
+            <param name="filters">filtry</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.SeznamKarantenyBezSU(System.Boolean,System.Boolean,Gordic.General.GFilter{Gordic.Pdu.Interface.ColSpisinb}[])">
+            <summary>
+            Seznam karantény
+            </summary>
+            <param name="newTransaction">zda začínat novou transakci (ReinitServerContext)</param>
+            <param name="endTransaction">zda ukončit transakci (Commit, ConDbDisconnect)</param>
+            <param name="filters">filtry</param>
+            <returns>seznam karantény</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.VlozitSipDoKaranteny(System.IO.Stream,Gordic.Wfl.Interface.TypSipBalicku,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GDateTime)">
+            <summary>
+            Vložení SIP balíčku do karantény
+            </summary>
+            <param name="sipDokument">stream souboru balíčku</param>
+            <param name="typSipBalicku">typ SIP</param>
+            <param name="sipFileName">název souboru balíčku</param>
+            <param name="ixs_isu">interní subjekt (externí) - původce</param>
+            <param name="ixs_su_isu">SU od koho je u původce - kdo může pracovat na SIPem</param>
+            <param name="ixs_fun_isu">FUN od koho je u původce - kdo může pracovat na SIPem</param>
+            <param name="zpusob_dor">jak byl SIP doručen (wflczpd)</param>
+            <param name="popis">popis</param>
+            <param name="id_sip_root_ent">identifkace rootovské entity SIP balíčku</param>
+            <param name="typ_root_ent">Typ rootovské entity SIP balíčku (spicten)</param>
+            <param name="spis_pl">SPL první entity v SIPu</param>
+            <param name="spis_znak">SPZ první entity v SIPu</param>
+            <param name="skar_znak">SKZ první entity v SIPu</param>
+            <param name="skar_lhuta">SKL první entity v SIPu</param>
+            <param name="rok_skartace">rok skartace první entity v SIPu</param>
+            <param name="dat_overeni">datum posledního oveření SIPu dle kontrolního mechanismu (struktura, antivir, podpisy ...)</param>
+            <param name="vysl_overeni">výsledek posledního ověření (spicvov)</param>
+            <param name="dat_verif">datum verifikace podpisů</param>
+            <param name="priz_verif">příznak verifikace podpisů</param>
+            <param name="stav_verif">stav verifikace podpisů</param>
+            <param name="ixs_cer">ixs_cer</param>
+            <param name="dat_sgn">datum podepsání</param>
+            <param name="dat_verif_c">datum verifikace podpisů</param>
+            <param name="priz_verif_c">příznak verifikace podpisů</param>
+            <param name="stav_verif_c">stav verifikace podpisů</param>
+            <param name="ixs_cer_c">ixs_cer</param>
+            <param name="dat_sgn_c">datum podepsání</param>
+            <returns>ixb_sip</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.VlozitSipDoKaranteny(System.IO.Stream,Gordic.Wfl.Interface.TypSipBalicku,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GInt16,System.Boolean,System.Boolean)">
+            <summary>
+            Vložení SIP balíčku do karantény
+            </summary>
+            <param name="sipDokument">stream souboru balíčku</param>
+            <param name="typSipBalicku">typ SIP</param>
+            <param name="sipFileName">název souboru balíčku</param>
+            <param name="ixs_isu">interní subjekt (externí) - původce</param>
+            <param name="ixs_su_isu">SU od koho je u původce - kdo může pracovat na SIPem</param>
+            <param name="ixs_fun_isu">FUN od koho je u původce - kdo může pracovat na SIPem</param>
+            <param name="zpusob_dor">jak byl SIP doručen (wflczpd)</param>
+            <param name="popis">popis</param>
+            <param name="id_sip_root_ent">identifkace rootovské entity SIP balíčku</param>
+            <param name="typ_root_ent">Typ rootovské entity SIP balíčku (spicten)</param>
+            <param name="spis_pl">SPL první entity v SIPu</param>
+            <param name="spis_znak">SPZ první entity v SIPu</param>
+            <param name="skar_znak">SKZ první entity v SIPu</param>
+            <param name="skar_lhuta">SKL první entity v SIPu</param>
+            <param name="rok_skartace">rok skartace první entity v SIPu</param>
+            <param name="dat_overeni">datum posledního oveření SIPu dle kontrolního mechanismu (struktura, antivir, podpisy ...)</param>
+            <param name="vysl_overeni">výsledek posledního ověření (spicvov)</param>
+            <param name="dat_verif">datum verifikace podpisů</param>
+            <param name="priz_verif">příznak verifikace podpisů</param>
+            <param name="stav_verif">stav verifikace podpisů</param>
+            <param name="ixs_cer">ixs_cer</param>
+            <param name="dat_sgn">datum podepsání</param>
+            <param name="dat_verif_c">datum verifikace podpisů</param>
+            <param name="priz_verif_c">příznak verifikace podpisů</param>
+            <param name="stav_verif_c">stav verifikace podpisů</param>
+            <param name="ixs_cer_c">ixs_cer</param>
+            <param name="dat_sgn_c">datum podepsání</param>
+            <param name="priz_fikce">zda se jedná o fiktivní záznam (hned po přijetí se balíček rozebere)</param>
+            <param name="newTransaction">zda začínat novou transakci (ReinitServerContext)</param>
+            <param name="endTransaction">zda ukončit transakci (Commit, ConDbDisconnect)</param>
+            <returns>ixb_sip</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.VlozitSipDoKaranteny(System.String,System.IO.Stream,Gordic.Wfl.Interface.TypSipBalicku,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GInt16,System.Boolean,System.Boolean)">
+            <summary>
+            Vložení SIP balíčku do karantény
+            </summary>
+            <param name="filePath">cesta k souboru balíčku</param>
+            <param name="sipDokument">stream souboru balíčku</param>
+            <param name="typSipBalicku">typ SIP</param>
+            <param name="sipFileName">název souboru balíčku</param>
+            <param name="ixs_isu">interní subjekt (externí) - původce</param>
+            <param name="ixs_su_isu">SU od koho je u původce - kdo může pracovat na SIPem</param>
+            <param name="ixs_fun_isu">FUN od koho je u původce - kdo může pracovat na SIPem</param>
+            <param name="zpusob_dor">jak byl SIP doručen (wflczpd)</param>
+            <param name="popis">popis</param>
+            <param name="id_sip_root_ent">identifkace rootovské entity SIP balíčku</param>
+            <param name="typ_root_ent">Typ rootovské entity SIP balíčku (spicten)</param>
+            <param name="spis_pl">SPL první entity v SIPu</param>
+            <param name="spis_znak">SPZ první entity v SIPu</param>
+            <param name="skar_znak">SKZ první entity v SIPu</param>
+            <param name="skar_lhuta">SKL první entity v SIPu</param>
+            <param name="rok_skartace">rok skartace první entity v SIPu</param>
+            <param name="dat_overeni">datum posledního oveření SIPu dle kontrolního mechanismu (struktura, antivir, podpisy ...)</param>
+            <param name="vysl_overeni">výsledek posledního ověření (spicvov)</param>
+            <param name="dat_verif">datum verifikace podpisů</param>
+            <param name="priz_verif">příznak verifikace podpisů</param>
+            <param name="stav_verif">stav verifikace podpisů</param>
+            <param name="ixs_cer">ixs_cer</param>
+            <param name="dat_sgn">datum podepsání</param>
+            <param name="dat_verif_c">datum verifikace podpisů</param>
+            <param name="priz_verif_c">příznak verifikace podpisů</param>
+            <param name="stav_verif_c">stav verifikace podpisů</param>
+            <param name="ixs_cer_c">ixs_cer</param>
+            <param name="dat_sgn_c">datum podepsání</param>
+            <param name="priz_fikce">zda se jedná o fiktivní záznam (hned po přijetí se balíček rozebere)</param>
+            <param name="newTransaction">zda začínat novou transakci (ReinitServerContext)</param>
+            <param name="endTransaction">zda ukončit transakci (Commit, ConDbDisconnect)</param>
+            <returns>ixb_sip</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.VlozitSipDoKaranteny(Gordic.Wfl.Interface.TypSipBalicku,System.IO.MemoryStream,Gordic.General.GInt16,Gordic.General.GString,System.String@,System.Boolean)">
+            <summary>
+            Vložení SIP balíčku do karantény
+            </summary>
+            <param name="typSipBalicku">typ balíčku</param>
+            <param name="sipDokumentStream">stream souboru balíčku</param>
+            <param name="zpusobDoruceni">způsob doručení</param>
+            <param name="sipName">název SIPu</param>
+            <param name="duvodNevlozeniBalicku">důvod nevložení SIP balíčku</param>
+            <param name="chybaPodrobne">vypsat chybu podrobně</param>
+            <returns>ixb_sip</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.VlozitSipDoKaranteny(Gordic.Wfl.Interface.TypSipBalicku,System.IO.MemoryStream,Gordic.General.GInt16,Gordic.General.GString,System.Boolean,System.Boolean,System.String@,System.Boolean)">
+            <summary>
+            Vložení SIP balíčku do karantény
+            </summary>
+            <param name="typSipBalicku">typ balíčku</param>
+            <param name="sipDokumentStream">stream souboru balíčku</param>
+            <param name="zpusobDoruceni">způsob doručení</param>
+            <param name="sipName">název SIPu</param>
+            <param name="newTransaction">zda začínat novou transakci (ReinitServerContext)</param>
+            <param name="endTransaction">zda ukončit transakci (Commit, ConDbDisconnect)</param>
+            <param name="duvodNevlozeniBalicku">důvod nevložení SIP balíčku</param>
+            <param name="chybaPodrobne">vypsat chybu podrobně</param>
+            <returns>ixb_sip</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.VlozitSipDoKaranteny(Gordic.Wfl.Interface.TypSipBalicku,System.IO.MemoryStream,Gordic.General.GInt16,Gordic.General.GString,System.Boolean,System.Boolean,System.String@,Gordic.General.GString,System.Boolean)">
+            <summary>
+            Vložení SIP balíčku do karantény
+            </summary>
+            <param name="typSipBalicku">typ balíčku</param>
+            <param name="sipDokumentStream">stream souboru balíčku</param>
+            <param name="zpusobDoruceni">způsob doručení</param>
+            <param name="sipName">název SIPu</param>
+            <param name="newTransaction">zda začínat novou transakci (ReinitServerContext)</param>
+            <param name="endTransaction">zda ukončit transakci (Commit, ConDbDisconnect)</param>
+            <param name="duvodNevlozeniBalicku">důvod nevložení SIP balíčku</param>
+            <param name="ixsTre">ixs strediska</param>
+            <param name="chybaPodrobne">vypsat chybu podrobně</param>
+            <returns>ixb_sip</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.VlozitSipDoKaranteny(Gordic.Wfl.Interface.TypSipBalicku,System.IO.MemoryStream,Gordic.General.GInt16,Gordic.General.GString,System.Boolean,System.Boolean,System.Collections.Generic.Dictionary{System.Int32,System.String}@)">
+            <summary>
+            Vložení SIP balíčku do karantény
+            </summary>
+            <param name="typSipBalicku">typ balíčku</param>
+            <param name="sipDokumentStream">stream souboru balíčku</param>
+            <param name="zpusobDoruceni">způsob doručení</param>
+            <param name="sipName">název SIPu</param>
+            <param name="newTransaction">zda začínat novou transakci (ReinitServerContext)</param>
+            <param name="endTransaction">zda ukončit transakci (Commit, ConDbDisconnect)</param>
+            <param name="chyby">chyby (ve formátu klíč-hodnota, klíč - údaj z spicvov, hodnota - popis chyby)</param>
+            <returns>ixb_sip</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.VlozitSipDoKaranteny(Gordic.Wfl.Interface.TypSipBalicku,System.IO.MemoryStream,Gordic.General.GInt16,Gordic.General.GString,System.Boolean,System.Boolean,System.Collections.Generic.Dictionary{System.Int32,System.String}@,Gordic.General.GString)">
+            <summary>
+            Vložení SIP balíčku do karantény
+            </summary>
+            <param name="typSipBalicku">typ balíčku</param>
+            <param name="sipDokumentStream">stream souboru balíčku</param>
+            <param name="zpusobDoruceni">způsob doručení</param>
+            <param name="sipName">název SIPu</param>
+            <param name="newTransaction">zda začínat novou transakci (ReinitServerContext)</param>
+            <param name="endTransaction">zda ukončit transakci (Commit, ConDbDisconnect)</param>
+            <param name="chyby">chyby (ve formátu klíč-hodnota, klíč - údaj z spicvov, hodnota - popis chyby)</param>
+            <param name="ixsTre">ixs strediska</param>
+            <returns>ixb_sip</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.StahnoutBalicekPredZpracovanim(Gordic.General.GString)">
+            <summary>
+            Stažení balíčku uloženého v karanténě
+            </summary>
+            <param name="ixbSip">ixb SIP balíčku</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.StahnoutBalicekPredZpracovanim(Gordic.General.GString,System.Boolean,System.Boolean)">
+            <summary>
+            Stažení balíčku uloženého v karanténě
+            </summary>
+            <param name="ixbSip">ixb SIP balíčku</param>
+            <param name="newTransaction">zda začínat novou transakci (ReinitServerContext)</param>
+            <param name="endTransaction">zda ukončit transakci (Commit, ConDbDisconnect)</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.StornovatBalicek(Gordic.General.GString)">
+            <summary>
+            Stornování balíčku uloženého v karanténě
+            </summary>
+            <param name="ixbSip">ixb SIP balíčku</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.StornovatBalicek(Gordic.General.GString,System.Boolean,System.Boolean)">
+            <summary>
+            Stornování balíčku uloženého v karanténě
+            </summary>
+            <param name="ixbSip">ixb SIP balíčku</param>
+            <param name="newTransaction">zda začínat novou transakci (ReinitServerContext)</param>
+            <param name="endTransaction">zda ukončit transakci (Commit, ConDbDisconnect)</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.ZmenitVysledekOvereniBalicku(Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>
+            Změna výsledku ověření
+            </summary>
+            <param name="ixbSip">ixb SIP balíčku</param>
+            <param name="vysledekOvereni">výsledek ověření</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.ZmenitVysledekOvereniBalicku(Gordic.General.GString,Gordic.General.GInt16,System.Boolean,System.Boolean)">
+            <summary>
+            Změna výsledku ověření
+            </summary>
+            <param name="ixbSip">ixb SIP balíčku</param>
+            <param name="vysledekOvereni">výsledek ověření</param>
+            <param name="newTransaction">zda začínat novou transakci (ReinitServerContext)</param>
+            <param name="endTransaction">zda ukončit transakci (Commit, ConDbDisconnect)</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.OveritBalicek(Gordic.General.GString,System.Collections.Generic.List{Gordic.Pdu.Interface.TypKontrolySipBalicku},System.String@,System.String@,System.String@,System.String@,System.String@,System.String@)">
+            <summary>
+            Ověření balíčku
+            </summary>
+            <param name="ixbSip">ixb SIP balíčku</param>
+            <param name="typyKontroly">typy kontroly</param>
+            <param name="chybaValidace">zda prošel validací (prázdný string == prošel)</param>
+            <param name="chybaMetadat">zda prošel kontrolou metadat (prázdný string == prošel)</param>
+            <param name="chybaAntivir">zda prošel antivirovou kontrolou (prázdný string == prošel)</param>
+            <param name="chybaPodpisy">zda prošel kontrolou podpisu (prázdný string == prošel)</param>
+            <param name="chybaRazitka">zda prošel kontrolou časového razítka (prázdný string == prošel)</param>
+            <param name="chybaTypySouboru">zda prošel kontrolou na typy souborů (prázdný string == prošel)</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.GduDelete(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>
+            GduDelete - gspg_gdu_del_01
+            </summary>
+            <param name="ixsZup">ixsZup</param>
+            <param name="ixsSpi">ixsSpi</param>
+            <param name="ixsSu">ixsSu</param>
+            <param name="rezim">rezim</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.GduDelete(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,System.Boolean)">
+            <summary>
+            GduDelete - gspg_gdu_del_01
+            </summary>
+            <param name="ixsZup">ixsZup</param>
+            <param name="ixsSpi">ixsSpi</param>
+            <param name="ixsSu">ixsSu</param>
+            <param name="rezim">rezim</param>
+            <param name="newTransaction">newTransaction</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.OveritBalicekVerze2101PredUlozenim(System.String,System.String,System.Collections.Generic.Dictionary{System.Int32,System.String}@,Gordic.Security.Service.GVerifyXmlResult@,System.Boolean)">
+            <summary>
+            Ověřené balíčku - všechny typy ověření
+            </summary>
+            <param name="sipPath">cesta k SIP balíčku</param>
+            <param name="sipName">název SIP balíčku</param>
+            <param name="chyby">chyby (ve formátu klíč-hodnota, klíč - údaj z spicvov, hodnota - popis chyby)</param>
+            <param name="res">resu</param>
+            <param name="newTransaction">zda začínat novou transakci (ReinitServerContext, Commit, Disconnect)</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.OveritBalicekVKarantene(Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,System.String@)">
+            <summary>
+            Ověří balíček uložený v karanténě
+            </summary>
+            <param name="ixbSip">ixb SIP</param>
+            <param name="verzeSip">verze SIP</param>
+            <param name="ixsTre">ixs střediska</param>
+            <param name="chyba">chyba ověření</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.OveritBalickyVKarantene">
+            <summary>
+            Provede ověření všech balíčků v karanténě, chyby se zapisují do logu
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.OveritBalicekVerze2101(Gordic.General.GString,System.String@)">
+            <summary>
+            Ověřené balíčku - všechny typy ověření
+            </summary>
+            <param name="ixbSip">ixb SIP balíčku</param>
+            <param name="chyba">chyba ověření (prázdný string == prošel)</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.OveritBalicekVerze2101(Gordic.General.GString,Gordic.General.GString,System.String@)">
+            <summary>
+            Ověřené balíčku - všechny typy ověření
+            </summary>
+            <param name="ixbSip">ixb SIP balíčku</param>
+            <param name="ixsTre">ixsTre vlastníka SIP balíčku</param>
+            <param name="chyba">chyba ověření (prázdný string == prošel)</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.OveritBalicekVerze2101(Gordic.General.GString,System.String,System.String,System.Collections.Generic.List{Gordic.Pdu.Interface.TypKontrolySipBalicku},System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,Gordic.Security.Service.GVerifyXmlResult@,System.Boolean)">
+            <summary>
+            Ověření balíčku
+            </summary>
+            <param name="ixbSip">ixb SIP balíčku</param>
+            <param name="sipPath">cesta k SIP balíčku</param>
+            <param name="sipName">název SIP balíčku</param>
+            <param name="typyKontroly">typy kontroly</param>
+            <param name="chybaValidace">zda prošel validací (prázdný string == prošel)</param>
+            <param name="chybaMetadat">zda prošel kontrolou metadat (prázdný string == prošel)</param>
+            <param name="chybaAntivir">zda prošel antivirovou kontrolou (prázdný string == prošel)</param>
+            <param name="chybaPodpisy">zda prošel kontrolou podpisu (prázdný string == prošel)</param>
+            <param name="chybaRazitka">zda prošel kontrolou časového razítka (prázdný string == prošel)</param>
+            <param name="chybaTypySouboru">zda prošel kontrolou na typy souborů (prázdný string == prošel)</param>
+            <param name="res">res</param>
+            <param name="newTransaction">zda začínat novou transakci (ReinitServerContext, Commit, Disconnect)</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.OveritBalicekVerze2101(Gordic.General.GString,System.String,System.String,Gordic.General.GString,System.Collections.Generic.List{Gordic.Pdu.Interface.TypKontrolySipBalicku},System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,Gordic.Security.Service.GVerifyXmlResult@,System.Boolean)">
+            <summary>
+            Ověření balíčku
+            </summary>
+            <param name="ixbSip">ixb SIP balíčku</param>
+            <param name="sipPath">cesta k SIP balíčku</param>
+            <param name="sipName">název SIP balíčku</param>
+            <param name="ixsTre">ixsTre vlastníka SIP balíčku v spisinb</param>
+            <param name="typyKontroly">typy kontroly</param>
+            <param name="chybaValidace">zda prošel validací (prázdný string == prošel)</param>
+            <param name="chybaMetadat">zda prošel kontrolou metadat (prázdný string == prošel)</param>
+            <param name="chybaAntivir">zda prošel antivirovou kontrolou (prázdný string == prošel)</param>
+            <param name="chybaPodpisy">zda prošel kontrolou podpisu (prázdný string == prošel)</param>
+            <param name="chybaRazitka">zda prošel kontrolou časového razítka (prázdný string == prošel)</param>
+            <param name="chybaTypySouboru">zda prošel kontrolou na typy souborů (prázdný string == prošel)</param>
+            <param name="res">ixs cer</param>
+            <param name="newTransaction">zda začínat novou transakci (ReinitServerContext, Commit, Disconnect)</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.OveritBalicekVerze2101(Gordic.General.GString,System.Collections.Generic.List{Gordic.Pdu.Interface.TypKontrolySipBalicku},System.String@,System.String@,System.String@,System.String@,System.String@,System.String@)">
+            <summary>
+            Ověření balíčku
+            </summary>
+            <param name="ixbSip">ixb SIP balíčku</param>
+            <param name="typyKontroly">typy kontroly</param>
+            <param name="chybaValidace">zda prošel validací (prázdný string == prošel)</param>
+            <param name="chybaMetadat">zda prošel kontrolou metadat (prázdný string == prošel)</param>
+            <param name="chybaAntivir">zda prošel antivirovou kontrolou (prázdný string == prošel)</param>
+            <param name="chybaPodpisy">zda prošel kontrolou podpisu (prázdný string == prošel)</param>
+            <param name="chybaRazitka">zda prošel kontrolou časového razítka (prázdný string == prošel)</param>
+            <param name="chybaTypySouboru">zda prošel kontrolou na typy souborů (prázdný string == prošel)</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.OveritBalicekVerze2101(Gordic.General.GString,Gordic.General.GString,System.Collections.Generic.List{Gordic.Pdu.Interface.TypKontrolySipBalicku},System.String@,System.String@,System.String@,System.String@,System.String@,System.String@)">
+            <summary>
+            Ověření balíčku
+            </summary>
+            <param name="ixbSip">ixb SIP balíčku</param>
+            <param name="ixsTre">ixsTre vlastníka SIP balíčku</param>
+            <param name="typyKontroly">typy kontroly</param>
+            <param name="chybaValidace">zda prošel validací (prázdný string == prošel)</param>
+            <param name="chybaMetadat">zda prošel kontrolou metadat (prázdný string == prošel)</param>
+            <param name="chybaAntivir">zda prošel antivirovou kontrolou (prázdný string == prošel)</param>
+            <param name="chybaPodpisy">zda prošel kontrolou podpisu (prázdný string == prošel)</param>
+            <param name="chybaRazitka">zda prošel kontrolou časového razítka (prázdný string == prošel)</param>
+            <param name="chybaTypySouboru">zda prošel kontrolou na typy souborů (prázdný string == prošel)</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.GetVerzeSip(Gordic.General.GString)">
+            <summary>
+            Získání verze SIP balíčku
+            </summary>
+            <param name="ixbSip">ixb SIP balíčku</param>
+            <returns>verze</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.RozebratBalickyVKarantene">
+            <summary>
+            Rozebere všechny balíčky v karanténě, pro které vypršela karanténní doba
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.PrerazitkovatBalicek(Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Přerazítkování AIP balíčku.
+            Provede se přerazítkování balíčku a ten se uloží jako nová verze
+            </summary>
+            <param name="ixbAip">ixb AIP balíčku</param>
+            <param name="ixsTre">ixs strediska</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.MigraceSouboruBalicku(Gordic.General.GString)">
+            <summary>
+            Migrace
+            </summary>
+            <param name="ixbAip">ixbAip</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.GetIxpFromIxbAip(Gordic.General.GString,System.Boolean)">
+            <summary>
+            Získání PID z ixb AIP balíčku
+            </summary>
+            <param name="ixbAip">ixb aip</param>
+            <param name="newTransaction">nová transakce</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.RozebratSipBalicekDoDb(Gordic.General.GString,System.String@)">
+            <summary>
+            Provede rozbor SIP balíčku a uloží data do DB
+            </summary>
+            <param name="ixbSip">ixb balíčku v spisinb</param>
+            <param name="chyba">chyba</param>
+            <returns>PID založeného balíku</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.RozebratSipBalicekDoDb(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.String@)">
+            <summary>
+            Provede rozbor SIP balíčku a uloží data do DB
+            </summary>
+            <param name="ixbSip">ixb balíčku v spisinb</param>
+            <param name="ixsSu">ixs spis. uzlu</param>
+            <param name="ixsFunIsu">ixs odpovědné osoby</param>
+            <param name="chyba">chyba</param>
+            <returns>PID založeného balíku</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.ZmenitStavSipu(Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>
+            Změna stavu SIP balíčku
+            </summary>
+            <param name="ixbSip">ixb SIP balíčku</param>
+            <param name="stavSipInb">stav</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.ZmenitStavSipu(Gordic.General.GString,Gordic.General.GInt16,System.Boolean,System.Boolean)">
+            <summary>
+            Změna stavu SIP balíčku
+            </summary>
+            <param name="ixbSip">ixb SIP balíčku</param>
+            <param name="stavSipInb">stav</param>
+            <param name="newTransaction">zda začínat novou transakci (ReinitServerContext)</param>
+            <param name="endTransaction">zda ukončit transakci (Commit, ConDbDisconnect)</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.ZmenitDatumZpracovaniSipu(Gordic.General.GString,Gordic.General.GDateTime,System.Boolean,System.Boolean)">
+            <summary>
+            Změna stavu SIP balíčku
+            </summary>
+            <param name="ixbSip">ixb SIP balíčku</param>
+            <param name="datumZpracovani">stav</param>
+            <param name="newTransaction">zda začínat novou transakci (ReinitServerContext)</param>
+            <param name="endTransaction">zda ukončit transakci (Commit, ConDbDisconnect)</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.VlozitIxpKSipBalicku(Gordic.General.GString,Gordic.General.GString,System.Boolean,System.Boolean)">
+            <summary>
+            Vložení ixp k SIP balíčku
+            </summary>
+            <param name="ixbSip">ixb SIP balíčku</param>
+            <param name="ixp">ixp pisemnosti</param>
+            <param name="newTransaction">zda začínat novou transakci (ReinitServerContext)</param>
+            <param name="endTransaction">zda ukončit transakci (Commit, ConDbDisconnect)</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.VlozitIxbAip(Gordic.General.GString,Gordic.General.GString,System.Boolean,System.Boolean)">
+            <summary>
+            Vložení ixb aip k SIP balíčku
+            </summary>
+            <param name="ixbSip">ixb SIP balíčku</param>
+            <param name="ixbAip">ixb AIP balíčku</param>
+            <param name="newTransaction">zda začínat novou transakci (ReinitServerContext)</param>
+            <param name="endTransaction">zda ukončit transakci (Commit, ConDbDisconnect)</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.NajitSoubory(System.Xml.XmlDocument,System.Xml.XmlNamespaceManager,System.String,Gordic.General.GString)">
+            <summary>
+            Vrací slovník ve formátu fileId - stream
+            </summary>
+            <param name="sipBalicek"></param>
+            <param name="namespaceManager"></param>
+            <param name="sipDir"></param>
+            <param name="idExt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.RozebratSipBalicekDoDbVerze2101(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.String,System.Xml.XmlDocument,System.Boolean,System.String@,Gordic.Pdu.Server.NoveZalozenaPisemnostInfo@,System.Boolean)">
+            <summary>
+            Provede rozbor SIP balíčku a uloží data do DB
+            </summary>
+            <param name="ixbSip">ixb balíčku v spisinb</param>
+            <param name="ixsSu">ixs spis uzlu</param>
+            <param name="ixsFunIsu">ixs odpovedne osoby</param>
+            <param name="sipDir">adresář s balíčkem</param>
+            <param name="sipMetadata">xml balíčku</param>
+            <param name="pouzeKontrola">pouze kontrola - neuklada se do DB</param>
+            <param name="chybaMetadat">zda prošel kontrolou metadat (prázdný string == prošel)</param>
+            <param name="novaPisemnostInfo">info o nove zalozene pisemnosti</param>
+            <param name="newTransaction">nová transakce</param>
+            <returns>PID založené písemnosti</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.RozebratSipBalicekDoDbVerze2101(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.String,System.Xml.XmlDocument,System.Boolean,System.String@,Gordic.Pdu.Server.NoveZalozenaPisemnostInfo@,System.Boolean)">
+            <summary>
+            Provede rozbor SIP balíčku a uloží data do DB
+            </summary>
+            <param name="ixbSip">ixb balíčku v spisinb</param>
+            <param name="ixsSu">ixs spis uzlu</param>
+            <param name="ixsFunIsu">ixs odpovedne osoby</param>
+            <param name="ixsTre">ixsTre aktuálního vlastníka SIP balíčku v spisinb</param>
+            <param name="sipDir">adresář s balíčkem</param>
+            <param name="sipMetadata">xml balíčku</param>
+            <param name="pouzeKontrola">pouze kontrola - neuklada se do DB</param>
+            <param name="chybaMetadat">zda prošel kontrolou metadat (prázdný string == prošel)</param>
+            <param name="novaPisemnostInfo">info o nove zalozene pisemnosti</param>
+            <param name="newTransaction">nová transakce</param>
+            <returns>PID založené písemnosti</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisinb.OpravitSpatneZapsaneSoubory(Gordic.General.GDateTime,Gordic.General.GDateTime)">
+            <summary>
+            Opraví informace o souborech vytvořených špatným inmportem ze SIP balíčku - příponu a název souboru
+            </summary>
+            <param name="datumOd">datum příjmu SIP balíčku - Od</param>
+            <param name="datumDo">datum příjmu SIP balíčku - Do</param>
+        </member>
+        <member name="T:Gordic.Pdu.Server.NoveZalozenaPisemnostInfo">
+            <summary>
+            Info o nově založené písemnosti
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.NoveZalozenaPisemnostInfo.Ixp">
+            <summary>
+            Ixp
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.NoveZalozenaPisemnostInfo.IdExt">
+            <summary>
+            Id externí
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.NoveZalozenaPisemnostInfo.JeSpis">
+            <summary>
+            Zda je spis
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.NoveZalozenaPisemnostInfo.Nazev">
+            <summary>
+            Nazev
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.NoveZalozenaPisemnostInfo.SpisPl">
+            <summary>
+            SpisPl
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.NoveZalozenaPisemnostInfo.SpisZnak">
+            <summary>
+            SpisZnak
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.NoveZalozenaPisemnostInfo.AktZnacka">
+            <summary>
+            AktZnacka
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.NoveZalozenaPisemnostInfo.Denik">
+            <summary>
+            Denik
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.NoveZalozenaPisemnostInfo.Popis">
+            <summary>
+            Popis
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.NoveZalozenaPisemnostInfo.Poznamka">
+            <summary>
+            Poznamka
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.NoveZalozenaPisemnostInfo.SkarZnak">
+            <summary>
+            SkarZnak
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.NoveZalozenaPisemnostInfo.SkarLhuta">
+            <summary>
+            SkarLhuta
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.NoveZalozenaPisemnostInfo.RokEvidence">
+            <summary>
+            RokEvidence
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.NoveZalozenaPisemnostInfo.RokSkartace">
+            <summary>
+            RokSkartace
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.NoveZalozenaPisemnostInfo.TypBal">
+            <summary>
+            typ balíku (kod_tyz) - 10 (písemnost) nebo 20 (spis)
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.NoveZalozenaPisemnostInfo.PodrizenePisemnosti">
+            <summary>
+            PodrizenePisemnosti
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.NoveZalozenaPisemnostInfo.Soubory">
+            <summary>
+            Soubory (id_ext, ixs_ulo)
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdu.Server.GSpihinb">
+            <summary>
+            Třída pro práci s tabulkou historie SIP balíčku
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpihinb.ZapisDoHistorie(Gordic.General.GString,Gordic.Pdu.Server.SpictopEnum,Gordic.Pdu.Server.SpicvopEnum,Gordic.General.GString,Gordic.General.GString,System.Boolean)">
+            <summary>
+            Zápis do historie SIP balíčku
+            </summary>
+            <param name="ixbSip">IXB SIP balíčku</param>
+            <param name="typOperace">typ operace</param>
+            <param name="vysledekOperace">výsledek operace</param>
+            <param name="textHist">text - lze poslat i GString.Null - vytvoří se text na základě operace a výsledku</param>
+            <param name="poznamka">poznámka</param>
+            <param name="newTransaction">zda provádět Reinit, Commit a Disconnect, případně Rollback</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpihinb.GetTextOdmitnuto(Gordic.General.GString,System.Boolean)">
+            <summary>
+            Získání textu důvodu odmítnutí balíčku
+            </summary>
+            <param name="ixbSip">ixb balíčku</param>
+            <param name="newTransaction">newTransaction</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpihinb.HistorieBalicku(Gordic.General.GString,Gordic.General.GFilter{Gordic.Pdu.Interface.ColSpihinb}[])">
+            <summary>
+            Seznam historie
+            </summary>
+            <param name="ixbSip">ixb SIP balíčku</param>
+            <param name="filters">filtry</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpihinb.HistorieBalicku(Gordic.General.GString,System.Boolean,Gordic.General.GFilter{Gordic.Pdu.Interface.ColSpihinb}[])">
+            <summary>
+            Seznam historie
+            </summary>
+            <param name="ixbSip">ixb SIP balíčku</param>
+            <param name="newTransaction">zda se má provádět Reinit, Commit a Disconnect, případně Rollback</param>
+            <param name="filters">filtry</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpihinb.GetDetailedError(Gordic.General.GString,Gordic.General.GInt16,System.Boolean)">
+            <summary>
+            Získání podrobné chyby z historie
+            </summary>
+            <param name="ixbSip">ixb SIP balíčku</param>
+            <param name="typ">typ operace</param>
+            <param name="newTransaction">nová transakce (Reinit, Commit, Rollback, Disconnect)</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Pdu.Server.SpictopEnum">
+            <summary>
+            Číselník spictop
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.SpictopEnum.neurceno">
+            <summary>
+            Neurčeno
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.SpictopEnum.KontrolaStruktury">
+            <summary>
+            kontrola struktury SIP balíčku
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.SpictopEnum.KontrolaMetadat">
+            <summary>
+            kontrola metadat SIP balíčku
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.SpictopEnum.KontrolaFormatuSouboru">
+            <summary>
+            kontrola formátů souborů v SIP balíčku
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.SpictopEnum.KontrolaAntivir">
+            <summary>
+            antivirová kontrola SIP balíčku
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.SpictopEnum.KontrolaPodpisu">
+            <summary>
+            kontrola podpisů souborů v SIP balíčku
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.SpictopEnum.KontrolaRazitek">
+            <summary>
+            kontrola časových razítek souborů v SIP balíčku
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.SpictopEnum.KontrolaPuvodce">
+            <summary>
+            kontrola původce SIP balíčku
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.SpictopEnum.UzivatelskyZaznam">
+            <summary>
+            uživatelský záznam
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.SpictopEnum.EditaceMetadat">
+            <summary>
+            editace metadat SIP balíčku
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.SpictopEnum.PrijemDoKaranteny">
+            <summary>
+            příjem SIP balíčku do karantény
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.SpictopEnum.Odmitnuti">
+            <summary>
+            odmítnutí SIP balíčku
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.SpictopEnum.Zpracovani">
+            <summary>
+            zpracování SIP balíčku - uložení do AIP
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdu.Server.SpicvopEnum">
+            <summary>
+            Číselník spicvop
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.SpicvopEnum.Neurceno">
+            <summary>
+            Neurčeno
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.SpicvopEnum.Ok">
+            <summary>
+            OK
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdu.Server.SpicvopEnum.Chyba">
+            <summary>
+            Chyba
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdu.Server.GNdkSip">
+            <summary>
+            Třída pro práci se SIP (PSP) balíčky z NDK
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GNdkSip.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GNdkSip.MigraceFormatuSouboruBalicku(Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Migrace formatu
+            </summary>
+            <param name="ixp">ixp</param>
+            <param name="ixbAip">ixb AIP</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GNdkSip.MigraceFormatuSouboruBalicku(Gordic.General.GString)">
+            <summary>
+            Migrace formátů souborů AIP balíčku
+            </summary>
+            <param name="ixbAip"></param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GNdkSip.OveritNdkSip(System.Boolean,Gordic.General.GString,System.String,System.String,System.Collections.Generic.List{Gordic.Pdu.Interface.TypKontrolySipBalicku},System.String@,System.String@,System.String@,System.String@,System.Boolean)">
+            <summary>
+            Ověření balíčku
+            </summary>
+            <param name="narocneKontroly">zda provádět náročné kontroly (HASH, formát souboru...)</param>
+            <param name="ixbSip">ixb SIP balíčku</param>
+            <param name="sipDirPath">cesta k SIP balíčku</param>
+            <param name="mainXmlName">název SIP balíčku</param>
+            <param name="typyKontroly">typy kontroly</param>
+            <param name="chybaValidace">zda prošel validací (prázdný string == prošel)</param>
+            <param name="chybaMetadat">zda prošel kontrolou metadat (prázdný string == prošel)</param>
+            <param name="chybaAntivir">zda prošel antivirovou kontrolou (prázdný string == prošel)</param>
+            <param name="chybaTypySouboru">zda prošel kontrolou na typy souborů (prázdný string == prošel)</param>
+            <param name="newTransaction">zda začínat novou transakci (ReinitServerContext, Commit, Disconnect)</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GNdkSip.OveritNdkSip(System.Boolean,Gordic.General.GString,System.Collections.Generic.List{Gordic.Pdu.Interface.TypKontrolySipBalicku},System.String@,System.String@,System.String@,System.String@)">
+            <summary>
+            Ověření balíčku
+            </summary>
+            <param name="narocneKontroly">zda provádět náročné kontroly (HASH, formát souboru...)</param>
+            <param name="ixbSip">ixb SIP balíčku</param>
+            <param name="typyKontroly">typy kontroly</param>
+            <param name="chybaValidace">zda prošel validací (prázdný string == prošel)</param>
+            <param name="chybaMetadat">zda prošel kontrolou metadat (prázdný string == prošel)</param>
+            <param name="chybaAntivir">zda prošel antivirovou kontrolou (prázdný string == prošel)</param>
+            <param name="chybaTypySouboru">zda prošel kontrolou na typy souborů (prázdný string == prošel)</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GNdkSip.OveritNdkSip(System.Boolean,System.String,System.String,System.String@,System.Boolean,System.Boolean)">
+            <summary>
+            Overeni PSP
+            </summary>
+            <param name="narocneKontroly">zda provádět náročné kontroly (HASH, formát souboru...)</param>
+            <param name="sipDirPath"></param>
+            <param name="sipName"></param>
+            <param name="chyba"></param>
+            <param name="chybaPodrobne"></param>
+            <param name="newTransaction"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GNdkSip.VlozitNdkSipDoKaranteny(System.String,Gordic.General.GInt16,Gordic.General.GString,System.String@,System.Boolean)">
+            <summary>
+            Vložení SIP balíčku z NDK do karantény
+            </summary>
+            <param name="sipDirPath">cesta k adresáři SIPu</param>
+            <param name="zpusobDoruceni">způsob doručení</param>
+            <param name="sipName">jméno SIPu</param>
+            <param name="duvodNevlozeniBalicku">důvod nevložení balíčku</param>
+            <param name="chybaPodrobne"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GNdkSip.VlozitNdkSipDoKaranteny(System.String,Gordic.General.GInt16,Gordic.General.GString,System.Boolean,System.String@,System.Boolean)">
+            <summary>
+            Vložení SIP balíčku z NDK do karantény
+            </summary>
+            <param name="sipDirPath">cesta k adresáři SIPu</param>
+            <param name="zpusobDoruceni">způsob doručení</param>
+            <param name="sipName">jméno SIPu</param>
+            <param name="newTransaction">nová transakce</param>
+            <param name="duvodNevlozeniBalicku">důvod nevložení balíčku</param>
+            <param name="chybaPodrobne">zda vypisovat podrobnou chybu</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GNdkSip.VlozitNdkSipDoKaranteny(System.String,Gordic.General.GInt16,Gordic.General.GString,System.Boolean,System.String@,Gordic.General.GString,System.Boolean)">
+            <summary>
+            Vložení SIP balíčku z NDK do karantény
+            </summary>
+            <param name="sipDirPath">cesta k adresáři SIPu</param>
+            <param name="zpusobDoruceni">způsob doručení</param>
+            <param name="sipName">jméno SIPu</param>
+            <param name="newTransaction">nová transakce</param>
+            <param name="duvodNevlozeniBalicku">důvod nevložení balíčku</param>
+            <param name="ixsTre">ixs strediska</param>
+            <param name="chybaPodrobne">zda vypisovat podrobnou chybu</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GNdkSip.VytvoritPspBalicek(System.String,System.String,System.Collections.Generic.List{Gordic.Pdu.Interface.OaiDcTag})">
+            <summary>
+            Vytvoření PSP balíčku
+            </summary>
+            <param name="pspDirPath">cesta k adresáři s balíčkem</param>
+            <param name="newZipPath">cesta, kam uložit nový zazipovaný PSP balíček</param>
+            <param name="tags">tagy Dublin Core pro zapsání do hlavního METS souboru</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GNdkSip.VytvoritDip(Gordic.General.GString,System.String,System.Collections.Generic.List{System.String})">
+            <summary>
+            Vytvoření PSP balíčku
+            </summary>
+            <param name="ixp">ixp</param>
+            <param name="outputDir">výstupní adresář, kam uložit zip</param>
+            <param name="folders">které složky generovat</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GNdkSip.VytvoritPspBalicek(System.String,System.String,Gordic.Pdu.Interface.GPspInfo)">
+            <summary>
+            Vytvoření PSP balíčku
+            </summary>
+            <param name="pspDirPath">cesta k adresáři s balíčkem</param>
+            <param name="newZipPath">cesta, kam uložit nový zazipovaný PSP balíček - pokud je prazdna, zip se nevytvori</param>
+            <param name="info">info o PSP</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GNdkSip.GetMimeType(System.String,System.String)">
+            <summary>
+            Vybere příslušný mimetype
+            </summary>
+            <param name="ext">koncovka (.*)</param>
+            <param name="def">default</param>
+            <returns>mimetype</returns>
+        </member>
+        <member name="T:Gordic.Pdu.Server.GSpisfsa">
+            <summary>
+            Seznam formátů souborů SIP balíčků
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisfsa.NastavitFormaty(Gordic.General.GString,System.Collections.Generic.List{Gordic.General.GInt16},System.Boolean)">
+            <summary>
+            Uložit informace o formátech souborů AIP balíčku
+            </summary>
+            <param name="ixbAip">ixb AIP</param>
+            <param name="pronomIds">seznam formátů</param>
+            <param name="newTransaction">nová transakce</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GSpisfsa.ExistujeZaznam(Gordic.General.GString,System.Boolean)">
+            <summary>
+            Zda existuje záznam o existenci záznamu formátů souborů AIP balíčku
+            </summary>
+            <param name="ixbAip">ixb AIP</param>
+            <param name="newTransaction">nová transakce</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Pdu.Server.GPronom">
+            <summary>
+            Třída pro práci s registry PRONOM
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPronom.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPronom.GetPronomSignatureFile">
+            <summary>
+            Stažení číselníku PRONOM
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPronom.GetPronomSignatureFile(Gordic.General.GProxyType,System.String,System.String,System.String)">
+            <summary>
+            Stažení číselníku PRONOM
+            </summary>
+            <param name="proxyAuthType">typ autentizace k proxy serveru</param>
+            <param name="proxyUserName">uživatel pro proxy</param>
+            <param name="proxyPassword">heslo pro proxy</param>
+            <param name="proxyUrl">proxy url</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPronom.GetPronomSignatureFile(System.String,Gordic.General.GProxyType,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+             Stažení číselníku PRONOM
+            </summary>
+            <param name="pronomServiceUrl"></param>
+            <param name="proxyAuthType"></param>
+            <param name="proxyUserName"></param>
+            <param name="proxyPassword"></param>
+            <param name="proxyUrl"></param>
+            <param name="aibUrl"></param>
+            <param name="aibUserName"></param>
+            <param name="aibPassword"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPronom.GetProxy(Gordic.General.GProxyType,System.String,System.String,System.String)">
+            <summary>
+            Získání proxy
+            </summary>
+            <param name="proxyAuthType">typ autentizace k proxy serveru</param>
+            <param name="proxyUserName">uživatel pro proxy</param>
+            <param name="proxyPassword">heslo pro proxy</param>
+            <param name="proxyCompleteUrl">proxy url</param>
+            <returns>proxy</returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPronom.NacistPronom">
+            <summary>
+            Stažení souboru
+            </summary>
+            <returns>pole bajtů souboru</returns>
+        </member>
+        <member name="T:Gordic.Pdu.Server.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.Properties.Resources.Icons__Gin__vratit">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdu.Server.gspg_gdu_delpoer_01">
+            <summary>
+            Package   : 
+            Procedure : spg_gdu_delpoer_01
+            Version   : 372.01.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_gdu_delpoer_01.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_gdu_delpoer_01.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_delpoer_01.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_delpoer_01.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_delpoer_01.a_ixp">
+            <summary>a_ixp - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_delpoer_01.a_rezim">
+            <summary>0 ... provede se i mazání určených ke smazání z wflsixp</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_delpoer_01.v_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_delpoer_01.v_sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_delpoer_01.v_isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_delpoer_01.v_err_txt">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_delpoer_01.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_gdu_delpoer_01.SetInParams(Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_gdu_delpoer_01.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_gdu_delpoer_01.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_gdu_delpoer_01.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Pdu.Server.gspg_gdu_del_01">
+            <summary>
+            Package   : 
+            Procedure : spg_gdu_del_01
+            Version   : 372.01.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_gdu_del_01.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_gdu_del_01.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_del_01.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_del_01.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_del_01.a_ixs_zup_new">
+            <summary>PID nového balíku po zpracování</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_del_01.a_id_root">
+            <summary>identifikace root entity pro dohledání starého balíku ke smazání</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_del_01.a_ixs_spi">
+            <summary>aktuální spisovna - pro automat</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_del_01.a_ixs_su">
+            <summary>aktuální spisový uzel - pro automat</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_del_01.a_rezim">
+            <summary>rezim zda pouze smazat nebo navázat na verzi</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_del_01.v_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_del_01.v_sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_del_01.v_isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_del_01.v_err_txt">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_del_01.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_gdu_del_01.SetInParams(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_gdu_del_01.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_gdu_del_01.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_gdu_del_01.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Pdu.Server.gspg_gdu_existin_01">
+            <summary>
+            Package   : 
+            Procedure : spg_gdu_existin_01
+            Version   : 368.01.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_gdu_existin_01.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_gdu_existin_01.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_existin_01.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_existin_01.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_existin_01.a_ixs_su_isu">
+            <summary>a_ixs_su_isu - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_existin_01.a_id_sip_root_ent">
+            <summary>a_id_sip_root_ent - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_existin_01.v_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_existin_01.v_sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_existin_01.v_isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_existin_01.v_err_txt">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_existin_01.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_existin_01.o_ixb_sip">
+            <summary>o_ixb_sip - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_gdu_existin_01.SetInParams(Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_gdu_existin_01.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_gdu_existin_01.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_gdu_existin_01.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Pdu.Server.gspg_gdu_inb_in_02">
+            <summary>
+            Package   : 
+            Procedure : spg_gdu_inb_in_02
+            Version   : 372.01.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_gdu_inb_in_02.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_gdu_inb_in_02.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_ixb_sip">
+            <summary>a_ixb_sip - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_ixs_isu">
+            <summary>a_ixs_isu - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_ixs_su_isu">
+            <summary>a_ixs_su_isu - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_ixs_fun_isu">
+            <summary>a_ixs_fun_isu - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_zpusob_dor">
+            <summary>a_zpusob_dor - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_popis">
+            <summary>a_popis - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_id_sip_root_ent">
+            <summary>a_id_sip_root_ent - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_typ_root_ent">
+            <summary>a_typ_root_ent - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_spis_pl">
+            <summary>a_spis_pl - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_spis_znak">
+            <summary>a_spis_znak - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_skar_znak">
+            <summary>a_skar_znak - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_skar_lhuta">
+            <summary>a_skar_lhuta - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_rok_skartace">
+            <summary>a_rok_skartace - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_dat_overeni">
+            <summary>a_dat_overeni - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_vysl_overeni">
+            <summary>a_vysl_overeni - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_dat_verif">
+            <summary>a_dat_verif - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_priz_verif">
+            <summary>a_priz_verif - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_stav_verif">
+            <summary>a_stav_verif - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_ixs_cer">
+            <summary>a_ixs_cer - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_dat_sgn">
+            <summary>a_dat_sgn - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_dat_verif_c">
+            <summary>a_dat_verif_c - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_priz_verif_c">
+            <summary>a_priz_verif_c - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_stav_verif_c">
+            <summary>a_stav_verif_c - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_ixs_cer_c">
+            <summary>a_ixs_cer_c - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_dat_sgn_c">
+            <summary>a_dat_sgn_c - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_verze_sip">
+            <summary>a_verze_sip - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.a_priz_fikce">
+            <summary>a_priz_fikce - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.v_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.v_sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.v_isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.v_err_txt">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_gdu_inb_in_02.v_ixb_sip">
+            <summary>v_ixb_sip - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_gdu_inb_in_02.SetInParams(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_gdu_inb_in_02.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GInt16,Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_gdu_inb_in_02.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_gdu_inb_in_02.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Pdu.Server.gspg_set_g_typag_01">
+            <summary>
+            Package   : 
+            Procedure : spg_set_g_typag_01
+            Version   : 372.01.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_set_g_typag_01.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_set_g_typag_01.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_set_g_typag_01.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_set_g_typag_01.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_set_g_typag_01.a_g_typ_ag">
+            <summary>a_g_typ_ag - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_set_g_typag_01.v_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_set_g_typag_01.v_sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_set_g_typag_01.v_isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_set_g_typag_01.v_err_txt">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_set_g_typag_01.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_set_g_typag_01.o_g_typ_ag_puv">
+            <summary>o_g_typ_ag_puv - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_set_g_typag_01.SetInParams(Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_set_g_typag_01.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_set_g_typag_01.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_set_g_typag_01.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Pdu.Server.gspg_uda_zmefors_01">
+            <summary>
+            Package   : 
+            Procedure : spg_uda_zmefors_01
+            Version   : 372.01.
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_uda_zmefors_01.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_uda_zmefors_01.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_uda_zmefors_01.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_uda_zmefors_01.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_uda_zmefors_01.a_ixs">
+            <summary>Identifikátor entity</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_uda_zmefors_01.a_priz_obj">
+            <summary>Typ objektu (0=dokument, 1=spis, 3=balík)</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_uda_zmefors_01.a_ixs_ulo_puv">
+            <summary>Identifikátor původního souboru v elektronickém uložišti</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_uda_zmefors_01.a_ixs_ulo_new">
+            <summary>Identifikátor nového souboru v elektronickém uložišti</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_uda_zmefors_01.v_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_uda_zmefors_01.v_sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_uda_zmefors_01.v_isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_uda_zmefors_01.v_err_txt">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdu.Server.gspg_uda_zmefors_01.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_uda_zmefors_01.SetInParams(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_uda_zmefors_01.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_uda_zmefors_01.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.gspg_uda_zmefors_01.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Pdu.Server.AibPronomService.PronomService">
+            <remarks/>
+        </member>
+        <member name="M:Gordic.Pdu.Server.AibPronomService.PronomService.#ctor">
+            <remarks/>
+        </member>
+        <member name="E:Gordic.Pdu.Server.AibPronomService.PronomService.getSignatureFileV1Completed">
+            <remarks/>
+        </member>
+        <member name="M:Gordic.Pdu.Server.AibPronomService.PronomService.getSignatureFileV1">
+            <remarks/>
+        </member>
+        <member name="M:Gordic.Pdu.Server.AibPronomService.PronomService.getSignatureFileV1Async">
+            <remarks/>
+        </member>
+        <member name="M:Gordic.Pdu.Server.AibPronomService.PronomService.getSignatureFileV1Async(System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Gordic.Pdu.Server.AibPronomService.PronomService.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="T:Gordic.Pdu.Server.AibPronomService.getSignatureFileV1CompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Gordic.Pdu.Server.AibPronomService.getSignatureFileV1CompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Gordic.Pdu.Server.AibPronomService.getSignatureFileV1CompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Gordic.Pdu.Server.PronomService.PronomService">
+            <remarks/>
+        </member>
+        <member name="M:Gordic.Pdu.Server.PronomService.PronomService.#ctor">
+            <remarks/>
+        </member>
+        <member name="E:Gordic.Pdu.Server.PronomService.PronomService.getSignatureFileVersionV1Completed">
+            <remarks/>
+        </member>
+        <member name="E:Gordic.Pdu.Server.PronomService.PronomService.getSignatureFileV1Completed">
+            <remarks/>
+        </member>
+        <member name="M:Gordic.Pdu.Server.PronomService.PronomService.getSignatureFileVersionV1">
+            <remarks/>
+        </member>
+        <member name="M:Gordic.Pdu.Server.PronomService.PronomService.getSignatureFileVersionV1Async">
+            <remarks/>
+        </member>
+        <member name="M:Gordic.Pdu.Server.PronomService.PronomService.getSignatureFileVersionV1Async(System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Gordic.Pdu.Server.PronomService.PronomService.getSignatureFileV1">
+            <remarks/>
+        </member>
+        <member name="M:Gordic.Pdu.Server.PronomService.PronomService.getSignatureFileV1Async">
+            <remarks/>
+        </member>
+        <member name="M:Gordic.Pdu.Server.PronomService.PronomService.getSignatureFileV1Async(System.Object)">
+            <remarks/>
+        </member>
+        <member name="M:Gordic.Pdu.Server.PronomService.PronomService.CancelAsync(System.Object)">
+            <remarks/>
+        </member>
+        <member name="T:Gordic.Pdu.Server.PronomService.getSignatureFileVersionV1CompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Gordic.Pdu.Server.PronomService.getSignatureFileVersionV1CompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Gordic.Pdu.Server.PronomService.getSignatureFileVersionV1CompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Gordic.Pdu.Server.PronomService.getSignatureFileV1CompletedEventHandler">
+            <remarks/>
+        </member>
+        <member name="T:Gordic.Pdu.Server.PronomService.getSignatureFileV1CompletedEventArgs">
+            <remarks/>
+        </member>
+        <member name="P:Gordic.Pdu.Server.PronomService.getSignatureFileV1CompletedEventArgs.Result">
+            <remarks/>
+        </member>
+        <member name="T:Gordic.Pdu.Server.GGduServisEventActionProvider">
+            <summary>
+            Obslužná akce ZUD pro servisni metody GDU
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GGduServisEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GGduServisEventActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Pdu.Server.GGduAktualizaceDESAEventActionProvider">
+            <summary>
+            Obslužná akce ZUD pro zjisteni stavu balicku predanych do KDS
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GGduAktualizaceDESAEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GGduAktualizaceDESAEventActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Pdu.Server.GGduPrerazitkovaniAipEventActionProvider">
+            <summary>
+            Obslužná akce ZUD pro přerazítkovávání AIP balíčků dle potřeb uživatele
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GGduPrerazitkovaniAipEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GGduPrerazitkovaniAipEventActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Pdu.Server.GGduMigraceAipEventActionProvider">
+            <summary>
+            Obslužná akce ZUD pro proces migrace AIP balíčků dle výsledků kontroly
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GGduMigraceAipEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GGduMigraceAipEventActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Pdu.Server.GGduKontrolaAipProMigraciEventActionProvider">
+            <summary>
+            Obslužná akce ZUD pro kontrolu konzistence AIP balíčků (HASH, existence, zrcadlení) 
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GGduKontrolaAipProMigraciEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GGduKontrolaAipProMigraciEventActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Pdu.Server.GGduKontrolaKonzistenceAipEventActionProvider">
+            <summary>
+            Obslužná akce ZUD pro kontrolu konzistence AIP balíčků (HASH, existence, zrcadlení) 
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GGduKontrolaKonzistenceAipEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GGduKontrolaKonzistenceAipEventActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Pdu.Server.GPduStahovaniSipDoKarantenyEventActionProvider">
+            <summary>
+            Obslužná akce ZUD pro stahování SIP balíčků do karantény pro uložení. 
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduStahovaniSipDoKarantenyEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduStahovaniSipDoKarantenyEventActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Pdu.Server.GGduRozborSipEventActionProvider">
+            <summary>
+            Obslužná akce ZUD pro rozbor SIP balíčků čekajících na vložení do krajské KDS (krajské digitální spisovny). 
+            (rozbor, uložení a vznik AIP balíčků)
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GGduRozborSipEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GGduRozborSipEventActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Pdu.Server.GGduOvereniSipEventActionProvider">
+            <summary>
+            Obslužná akce ZUD pro ověření SIP balíčků čekajících v karanténě. 
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GGduOvereniSipEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GGduOvereniSipEventActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Pdu.Server.GZudCommon">
+            <summary>
+            Spolecna logika pro obsluhu udalosti ZUD 
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GZudCommon.StahniSipDoKaranteny">
+            <summary>
+            Metoda pro stazeni SIP balicku do karanteny
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GZudCommon.ZpracujDavku(Gordic.Pdu.Server.GZudCommon.GSpiDavka)">
+            <summary>
+            Zpracuje davku
+            </summary>
+            <param name="davkaToDo"></param>
+        </member>
+        <member name="T:Gordic.Pdu.Server.GZudCommon.GSpiDavka">
+            <summary>
+            Trida pro vyhodnocení zpracovani davky
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GZudCommon.GSpiDavka.NastavStatusZpracovavaSe">
+            <summary>
+            Nastavi status vsech zpracovavanych davek a jejich SIP balicku na hodnotu Zpracovava se 
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GZudCommon.GSpiDavka.NactiSIP">
+            <summary>
+            Nactu SIP balicky davky
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GZudCommon.KontrolaAip">
+            <summary>
+            Metoda pro kontrolu AIP balicku
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GZudCommon.MigraceAip">
+            <summary>
+            Metoda pro migrace AIP balicku
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GZudCommon.ZjisteniStavuSipPredanychKDS">
+            <summary>
+            Metoda pro kontrolu AIP balicku
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GZudCommon.GenerovaniProtokoluHistAip">
+            <summary>
+            Metoda pro kontrolu AIP balicku
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GZudCommon.PrerazitkovaniAip">
+            <summary>
+            Metoda pro prerazitkovani AIP balicků
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GZudCommon.UlozeniBalikuCasRaz(System.String,System.Collections.Generic.List{Gordic.General.GString},System.String,Gordic.Wfl.Interface.GWflOverInfoItem,Gordic.General.GString,System.Boolean)">
+            <summary>
+            Ulozeni protokolu pro hromadne podepsani do nove baliku
+            </summary>
+            <param name="protokolFilePath">Cesta k protokolu</param>
+            <param name="ixsZupList">Seznam prerazitkovavanych baliku</param>
+            <param name="ixsSpi">identifikator spisovny</param>
+            <param name="overInfo">vysledk overeni po podepsani protokolu</param>
+            <param name="ixsTre">Identifikator strediska</param>
+            <param name="newTransaction"></param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GZudCommon.PrerazitkovatSingle(Gordic.General.GString)">
+            <summary>
+            Prerazitkovani jednotlive balik po baliku
+            </summary>
+            <param name="ixsTre"></param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GZudCommon.LogError(System.String)">
+            <summary>
+            logovani chyb do souboru
+            </summary>
+            <param name="str"></param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GZudCommon.CreatePdfProtokol(Gordic.General.GString,System.Collections.Generic.List{Gordic.General.GString}@,Gordic.General.GString@,Gordic.Wfl.Interface.GWflOverInfoItem@)">
+            <summary>
+            Protokol obsahujici info o AIP urcenych pro prerazitkovani
+            </summary>
+            <param name="ixsTre"></param>
+            <param name="listIxsZup">Seznam vsech baliku v protokolu</param>
+            <param name="ixsSpi">IxsSpi</param>
+            <param name="overInfo">vysledek overeni po podepsani</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GZudCommon.ServisEvent">
+            <summary>
+            Metoda pro servisní zásahy v GDU (mazání souborů označených ke smazání)
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GZudCommon.SmazSouboryOznaceneKeSmazani">
+            <summary>
+            Metoda pro mazání souborů označených ke smazání
+            <returns>vrací návratový string zda vše proběhlo OK</returns>
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GZudCommon.SeznamSouboruKeSmazani(System.Boolean)">
+            <summary>
+            Seznam souborů označených ke smazání (typ_duv_del = 25)
+            </summary>
+            <param name="newTransaction">zda se má zakládat nová transakce - connect, commit, disconnect</param>
+            <returns>DataTable - seznam</returns>
+        </member>
+        <member name="T:Gordic.Pdu.Server.GGduStahovaniCiselnikuPronomActionProvider">
+            <summary>
+            Obslužná akce ZUD pro rozbor stazeni ciselniku formátů souborů PRONOM. 
+            (rozbor, uložení a vznik AIP balíčků)
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GGduStahovaniCiselnikuPronomActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GGduStahovaniCiselnikuPronomActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Pdu.Server.GGduStavSipPredanychKdsEventActionProvider">
+            <summary>
+            Obslužná akce ZUD pro zjisteni stavu balicku predanych do KDS
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GGduStavSipPredanychKdsEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GGduStavSipPredanychKdsEventActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="T:Gordic.Pdu.Server.GPduProtokolHistAipEventActionProvider">
+            <summary>
+            Obslužná akce ZUD pro vygenerovani Protokolu Hist. Aip 
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduProtokolHistAipEventActionProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary> 
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param> 
+            <param name="eventTypeId">identifikátor typu události</param> 
+            <param name="eventArised">kdy událost nastala</param>
+            <param name="eventParameters">parametry události</param> 
+            <param name="actionTypeId">identifikátor typu obslužné akce</param> 
+            <param name="actionParameters">výchozí parametry obslužné akce</param> 
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Pdu.Server.GPduProtokolHistAipEventActionProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,1549 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Xrg.WsAdmServer</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWsAdmBase">
+            <summary>
+            Společné funkce pro XRG-ADM
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWsAdmBase.m_nErrLocator">
+            <summary>
+            bližší lokace chyby
+            </summary> 
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmBase.TestPolozkyCeniku(Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Test položky ceníku
+            </summary>
+            <param name="pol"> položka ceníku </param>
+            <param name="ppol"> podpoložka </param>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmBase.CisPrizAnoNe(Gordic.General.GString)">
+            <summary>
+            Převede XML enum honodtu ano, ne na číselnou hodnotu 1, 0
+            </summary>
+            <param name="a_priz_ano_ne">XML enum pro příznakové sloupce</param>
+            <returns>DB příznak GINIS (0,1) pro (ne,ano)</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmBase.TransformationCisPrizAnoNe(System.String,System.String,Gordic.General.IGDbType,System.Object[])">
+            <summary>
+            Transformační funkce pro převod příznakových hondot ano/ne na interní hodnoty 1/0
+            </summary>
+            <param name="a_target_value_name"></param>
+            <param name="a_source_value_name"></param>
+            <param name="a_value"></param>
+            <param name="a_Params"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmBase.TransformationCisPrizAno10Ne(System.String,System.String,Gordic.General.IGDbType,System.Object[])">
+            <summary>
+            Transformační funkce pro převod příznakových hondot ano/ne na interní hodnoty 10/0
+            </summary>
+            <param name="a_target_value_name"></param>
+            <param name="a_source_value_name"></param>
+            <param name="a_value"></param>
+            <param name="a_Params"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmBase.TransformationCisStat(System.String,System.String,Gordic.General.IGDbType,System.Object[])">
+            <summary>
+            Transformace XML hodnoty státu na interní číselníkovou hodnotu
+            </summary>
+            <param name="a_target_value_name"></param>
+            <param name="a_source_value_name"></param>
+            <param name="a_value"></param>
+            <param name="a_Params"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmBase.TransformationToShort(System.String,System.String,Gordic.General.IGDbType,System.Object[])">
+            <summary>
+            Transformace XML hodnoty stringu na číselnou hodnotu odpovídající textu
+            </summary>
+            <param name="a_target_value_name"></param>
+            <param name="a_source_value_name"></param>
+            <param name="a_value"></param>
+            <param name="a_Params"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmBase.TransformationToNullableShort(System.String,System.String,System.String,Gordic.General.IGDbType,Gordic.General.IGDbType,System.Object[])">
+            <summary>
+            Transformace XML hodnoty čísla na G typ a to s akceptováním zadaného XML atributu příznaku NULL
+            </summary>
+            <param name="a_target_value_name">Jméno cílové proměnné v DTO objektu do které se má uložit transformovaná hodnota dvou uvedených sloupců</param>
+            <param name="a_source_value_name">Jméno zdrojového sloupce pro INT</param>
+            <param name="a_source_value_name2">Jméno zdrojového sloupce pro příznak NULL hodnoty - v XML odpovídá atributu spojeného s hlavním XML elementem</param>
+            <param name="a_value">Hodnota prvního sloupce - int číslo</param>
+            <param name="a_value2">Hodnota druhého sloupce - bool příznak že se jedná o null hodnotu</param>
+            <param name="a_Params">Žádné pomocné atributy</param>
+            <returns>Výsledná hodnota transformace</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmBase.TransformationToDate(System.String,System.String,Gordic.General.IGDbType,System.Object[])">
+            <summary>
+            Převod DateTime na GDate a ořezáním časové složky
+            </summary>
+            <param name="a_target_value_name"></param>
+            <param name="a_source_value_name"></param>
+            <param name="a_value"></param>
+            <param name="a_Params"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmBase.TransformationDbEnumShort(System.String,System.String,Gordic.General.IGDbType,System.Object[])">
+            <summary>
+            Transformační funkce pro převod XML enum honodty na GINIS číselníkovou hodnoutu a to s pomocí IGDbEnumShort třídy.
+            Převod se realizuje dynamicky s pomocí statické metody IGDbEnumShort Parse( string )
+            
+            Problém je, že statické funkce nelze definovat na základě interface
+            </summary>
+            <param name="a_target_value_name">Jméno cílové proměnné</param>
+            <param name="a_source_value_name">Jméno zdrojové proměnné např. XML tagu</param>
+            <param name="a_value">Cílová proměnné typu IGDbType</param>
+            <param name="a_Params">Type číselníkové třídy implementující rozhraní IDbEnumShort</param>
+            <returns>GInt16 konvertovaná návratová hodnota</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmBase.TransformationIntExtId(System.String,System.String,System.String,Gordic.General.IGDbType,Gordic.General.IGDbType,System.Object[])">
+            <summary>
+            Transformace XML hodnoty ID a externi na interní hodnotu podle INTDDAV
+            </summary>
+            <param name="a_target_value_name"></param>
+            <param name="a_source_value_name"></param>
+            <param name="a_source_value_name2"></param>
+            <param name="a_value"></param>
+            <param name="a_value2"></param>
+            <param name="a_Params">
+            První argument musí být string a to jméno INT segmentu
+            Druhý argument může být bool příznak, že se má vyhazovat exception v případě, že zadané ID není nalezeno v převodní tabulce</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmBase.DbCallSpgLoginNextCloseTrans">
+            <summary>
+            Funkce pro zaregistrování DB konektu do GINTSES a případně GINTAKT - volá spg_login_next
+            
+            Vše potřebné si bere z kontextů
+            
+            Může vyvolat GAppAccessException např. v případě uzamčení databáze.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmBase.DbCallSpgLogoutNextCloseTrans">
+            <summary>
+            Funkce pro odregistrování DB konektu do GINTSES a případně GINTAKT - volá spg_logout_next
+            Vše potřebné si bere z kontextů
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmBase.DbCallSpAusBeginCloseTrans(System.String,System.String,System.Int16,System.String,System.String,System.String,System.Int32)">
+            <summary>
+            Funkce pro zalogování počátku akce uživatele do GINSAUS - bez určení konkrétního subjektu, kterého se akce týká
+            </summary>
+            <param name="a_proces_id">Interní ID procesu</param>
+            <param name="a_proces_txt">Uživatelský popis procesu</param>
+            <param name="a_ktg_uziv_akce">Kategorie akce - zatím asi nepoužívám a všude dávám 0</param>
+            <param name="a_path_akce"></param>
+            <param name="a_class_akce">Třída, která zahájila akci</param>
+            <param name="a_param_akce">Interní popisné parametry akce</param>
+            <param name="a_gor_code">Lokalizační kód chyby akce.</param>
+            <returns>Z DB vygenerované unikátní ID akce: GINSAUS.IXS_AUS</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmBase.DbCallSpAusEndCloseTrans(System.String)">
+            <summary>
+            Funkce pro zalogování konce akce uživatele - bez určení konkrétního subjektu, kterého se akce týká
+            </summary>
+            <param name="a_ixs_aus">Z DB vygenerované unikátní ID akce, která se má uzavřít: GINSAUS.IXS_AUS</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWsAdmDataException">
+            <summary> Výjimka chybných dat pro XRG-ADM </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmDataException.#ctor(System.Int32,System.Int32,System.String[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmDataException.#ctor(System.Int32,System.Int32,System.Exception,System.String[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="innerException">vnitřní vyjímka</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWsAdmServerException">
+            <summary> Výjimka aplikační logiky pro XRG-ADM </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmServerException.#ctor(System.Int32,System.Int32,System.String[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmServerException.#ctor(System.Int32,System.Int32,System.Exception,System.String[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="innerException">vnitřní vyjímka</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmServerException.#ctor(System.Int32,System.String)">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="errortext">text výjimky</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWsAdmDataTransformation">
+            <summary>
+            Třída pro uchování parametrů datové transformace mezi dvěma poli G typů
+            
+            Slouží např. pro převod dat požadavku webové služby na interní reprezentaci těchto dat. Zajišťuje např. převod XML enum na interní číselníhové hondoty platné pro C tabulky v DB atd..
+            </summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWsAdmDataTransformation.TransformacniFunkce">
+            <summary>
+            Typ Transformační funkce pro převod jedné zadané vstupní hondoty na výslednou interní hondotu
+            </summary>
+            <param name="a_target_value_name">Jméno cílové položky - musí odpovídat přesně jménu v DTO objektu nebo v klíši v GDbTypeDictionary</param>
+            <param name="a_source_value_name">Jméno zdrojové položky - musí odpovídat přesně jménu tagu v XML</param>
+            <param name="a_value">Zdrojová hodnota získaná např. z XML požadavku - zajistí motor, který volá tyto obecné transformační funkce</param>
+            <param name="a_Params">Pole obecných upřesňujících parametrů - pro každou transformační funkci je očekáván jiný počet, typ a význam parametrů</param>
+            <returns>Výsledná transformovaná hodnota G typu</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWsAdmDataTransformation.TransformacniFunkce2">
+            <summary>
+            Typ Transformační funkce pro převod dvou zadaných vstupních hondot na výslednou interní hondotu
+            </summary>
+            <param name="a_target_value_name">Jméno cílové položky - musí odpovídat přesně jménu v DTO objektu nebo v klíši v GDbTypeDictionary</param>
+            <param name="a_source_value_name">Jméno zdrojové položky - musí odpovídat přesně jménu tagu v XML</param>
+            <param name="a_source_value_name2">Druhé jméno zdrojové položky - musí odpovídat přesně jménu tagu v XML</param>
+            <param name="a_value">Zdrojová hodnota získaná např. z XML požadavku - zajistí motor, který volá tyto obecné transformační funkce</param>
+            <param name="a_value2">Druhá zdrojová hodnota získaná např. z XML požadavku - zajistí motor, který volá tyto obecné transformační funkce</param>
+            <param name="a_Params">Pole obecných upřesňujících parametrů - pro každou transformační funkci je očekáván jiný počet, typ a význam parametrů</param>
+            <returns>Výsledná transformovaná hodnota G typu</returns>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWsAdmDataTransformation.TargetValueName">
+            <summary>
+            Jméno cílové položky - musí odpovídat přesně jménu v DTO objektu nebo v klíši v GDbTypeDictionary
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWsAdmDataTransformation.SourceValueName">
+            <summary>
+            Jméno zdrojové položky - musí odpovídat přesně jménu tagu v XML
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWsAdmDataTransformation.SourceValueName2">
+            <summary>
+            Druhé jméno zdrojové položky - musí odpovídat přesně jménu tagu v XML
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWsAdmDataTransformation.DataSetValueName">
+            <summary>
+            Jméno zdrojové položky normalizované do dataset podoby - musí odpovídat přesně jménu tagu v XML
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWsAdmDataTransformation.DataSetValueName2">
+            <summary>
+            Jméno druhé zdrojové položky normalizované do dataset podoby - musí odpovídat přesně jménu tagu v XML
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWsAdmDataTransformation.Transformator">
+            <summary>
+            Pointer na tranformační funkci s jednou vstupní hodnotou 
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWsAdmDataTransformation.Transformator2">
+            <summary>
+            Pointer na transformační funkci se dvěma vstupními hodnotama
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWsAdmDataTransformation.DualValueTransformation">
+            <summary>
+            Příznak, že se jedná o transformaci dvou zdrojových hodnot
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWsAdmDataTransformation.TransformationParams">
+            <summary>
+            Obecné pole parametrů pro realizaci konkrétní transformace. Upřesňují způsob tranformace. Pro každý typ transformace může být naplnění parametrů jiné.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmDataTransformation.#ctor(System.String,System.String,Gordic.Xrg.WsAdmServer.GWsAdmDataTransformation.TransformacniFunkce,System.Object[])">
+            <summary>
+            Vytvoření transformačnícho předpisu pro transformaci jedné externí hodnoty na interní hodnotu
+            </summary>
+            <param name="a_targer_value_name">Jméno cílové položky - musí odpovídat přesně jménu v DTO objektu nebo v klíši v GDbTypeDictionary</param>
+            <param name="a_source_value_name">Jméno zdrojové položky - musí odpovídat přesně jménu tagu v XML</param>
+            <param name="a_transformator">Pointer na transformační funkci typu TransformacniFunkce</param>
+            <param name="a_Params">Pole obecných upřesňujících parametrů - pro každou transformační funkci je očekáván jiný počet, typ a význam parametrů</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmDataTransformation.#ctor(System.String,System.String,System.String,Gordic.Xrg.WsAdmServer.GWsAdmDataTransformation.TransformacniFunkce2,System.Object[])">
+            <summary>
+            Vytvoření transformačnícho předpisu pro transformaci jedné externí hodnoty na interní hodnotu
+            </summary>
+            <param name="a_targer_value_name">Jméno cílové položky - musí odpovídat přesně jménu v DTO objektu nebo v klíši v GDbTypeDictionary</param>
+            <param name="a_source_value_name">Jméno zdrojové položky - musí odpovídat přesně jménu tagu v XML</param>
+            <param name="a_source_value_name2">Druhé jméno zdrojové položky - musí odpovídat přesně jménu tagu v XML</param>
+            <param name="a_transformator">Pointer na transformační funkci typu TransformacniFunkce2</param>
+            <param name="a_Params">Pole obecných upřesňujících parametrů - pro každou transformační funkci je očekáván jiný počet, typ a význam parametrů</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmDataTransformation.NormalizeRequestName(System.String)">
+            <summary>normalizace názvu XML elementu pro použití v typových datových sadách
+            Vykopírováno z GXrgWebService
+            </summary>
+            <param name="name">název XML elementu</param>
+            <returns>normalizovaný název</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWsAdmDataTransformations">
+            <summary>
+            Kolekce trasformačních pravidel, pro převod z jednoho pole pojmenovaných hodnot na jiné pole pojmenovaných hodnot s provedením současné datové úpravy na základě převodních funkcí.
+            Do této třídy se přidávají definice jednotlivých transformačních pravidel funkcí Add()
+            Potom se může realizovat jednorázová transformace a to příkazem Transformate()
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmDataTransformations.#ctor">
+            <summary>
+            Konstruktor - prázdný
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmDataTransformations.Transformate(Gordic.General.GDbTypeDictionary,Gordic.General.GDataRow)">
+            <summary>
+            Transformace hodnot z DataRow do Dictionary podle transformační pravidel
+            </summary>
+            <param name="a_target_values">Cílová kolekce pojmenovaných hodnot pro převod - GDbTypeDictionary</param>
+            <param name="a_datarow">Kolekce zdrojových pojmenovaných hondot pro převod - GDataRow</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmDataTransformations.Transformate(Gordic.General.GDbTypeDictionary,Gordic.General.GDbTypeDictionary)">
+            <summary>
+            Realizace hodnot jedné dictionary do druhé dictionary
+            </summary>
+            <param name="a_target_values">Cílová kolekce pojmenovaných hodnot pro převod - GDbTypeDictionary</param>
+            <param name="a_source_values">Kolekce zdrojových pojmenovaných hondot pro převod - GDataRow</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmDataTransformations.Add(System.String,System.String)">
+            <summary>
+            Přidání výchozí transformace typu prázdná. Tedy 1:1 - tedy pouze přiřazení ze vstupu na výstup
+            </summary>
+            <param name="a_target_value_name">Jméno zdrojové položky tranformace</param>
+            <param name="a_source_value_name">Jméno cílové položky transformace</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmDataTransformations.Add(System.String,System.String,Gordic.Xrg.WsAdmServer.GWsAdmDataTransformation.TransformacniFunkce,System.Object[])">
+            <summary>
+            Přidání jednohodnotové transformace do pole transformací
+            </summary>
+            <param name="a_target_value_name">Jméno cílové hondoty</param>
+            <param name="a_source_value_name">Jméno zdrojové hodnoty</param>
+            <param name="a_transformator">Transformační funkce</param>
+            <param name="a_Params">Obecné parametry upřesňující transformaci. Jsou pro každou funkci jiné.</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWsAdmDataTransformations.Add(System.String,System.String,System.String,Gordic.Xrg.WsAdmServer.GWsAdmDataTransformation.TransformacniFunkce2,System.Object[])">
+            <summary>
+            Přidání dvouhodnotové transformace do pole transformací - to znamená, že pro naplnění jedné cílové hodnoty je nutná znalost dvou vstupních hodnot ( např. u externích/interních identifikátorů )
+            </summary>
+            <param name="a_target_value_name">Jméno cílové hondoty</param>
+            <param name="a_source_value_name">Jméno první zdrojové hodnoty</param>
+            <param name="a_source_value_name2">Jméno druhé zdrojové hodnoty</param>
+            <param name="a_transformator">Transformační funkce</param>
+            <param name="a_Params">Obecné parametry upřesňující transformaci. Jsou pro každou funkci jiné.</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmDetailStrediskoUzlu">
+            <summary>
+            Webová služba PrehledFunkcnichMist.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmDetailStrediskoUzlu.Execute(Gordic.Xrg.WsAdmInterface.DetailStrediskoUzluRequestDataSet)">
+            <summary>
+            Provedení webové metody - řízení transakcí je v této jediné metodě
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmDetailStrediskoUzlu.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.DetailStrediskoUzluRequestDataSet)">
+            <summary>
+            Vykonani pozadovane akce
+            </summary>
+            <param name="inputDataSet"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmDetailStrediskoUzlu.NaplnVystupniDataset(Gordic.Xrg.WsAdmInterface.DetailStrediskoUzluRequestDataSet.DetailStrediskoUzluRow)">
+            <summary>
+            
+            </summary>
+            <param name="inputRow"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GXrgAdmServiceLogic">
+            <summary>XRG - aplikační logika služby ADM</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GXrgAdmServiceLogic.m_oOriginalServiceLogic">
+            <summary>aplikační logika původní služby</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.GXrgAdmServiceLogic.OriginalServiceLogic">
+            <summary>aplikační logika původní služby</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GXrgAdmServiceLogic.GetRequestDataset(System.String,System.String)">
+            <summary>získání prázdného datasetu pro vstupní data</summary>
+            <param name="methodName">název metody</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat</param>
+            <returns>prázdná instance datasetu pro vstupní data, v případě vrácení hodnoty null nebudou načítána žádná vstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GXrgAdmServiceLogic.ProcessRequest(System.String,System.String,Gordic.General.GDataSet)">
+            <summary>zpracování vstupních dat</summary>
+            <param name="methodName">název metody</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat</param>
+            <param name="requestDataSet">dataset se vstupními daty</param>
+            <returns>dataset s výstupními daty nebo null v případě, že nemají být vrácena žádná výstupní data</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.gspg_admchecklic03">
+            <summary>
+            Package   : 
+            Procedure : spg_admchecklic03
+            Version   : 374.05.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.gspg_admchecklic03.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.gspg_admchecklic03.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic03.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic03.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic03.a_typ_testu">
+            <summary>a_typ_testu - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic03.a_ixs_fun">
+            <summary>a_ixs_fun - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic03.o_gor_err">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic03.o_v_sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic03.o_v_isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic03.o_txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic03.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic03.o_je_poruseni">
+            <summary>o_je_poruseni - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic03.o_poruseni_txt">
+            <summary>o_poruseni_txt - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic03.o_byla_zmena_poctu">
+            <summary>o_byla_zmena_poctu - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic03.o_zmena_poctu_txt">
+            <summary>o_zmena_poctu_txt - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic03.o_delta">
+            <summary>o_delta - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.gspg_admchecklic03.SetInParams(Gordic.General.GInt16,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.gspg_admchecklic03.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.gspg_admchecklic03.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.gspg_admchecklic03.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.gspg_admchecklic04">
+            <summary>
+            Package   : 
+            Procedure : spg_admchecklic04
+            Version   : 374.05.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.gspg_admchecklic04.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.gspg_admchecklic04.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic04.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic04.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic04.a_typ_testu">
+            <summary>a_typ_testu - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic04.a_ixs_ref">
+            <summary>a_ixs_ref - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic04.o_gor_err">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic04.o_v_sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic04.o_v_isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic04.o_txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic04.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic04.o_je_poruseni">
+            <summary>o_je_poruseni - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic04.o_poruseni_txt">
+            <summary>o_poruseni_txt - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic04.o_byla_zmena_poctu">
+            <summary>o_byla_zmena_poctu - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic04.o_zmena_poctu_txt">
+            <summary>o_zmena_poctu_txt - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic04.o_delta">
+            <summary>o_delta - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.gspg_admchecklic04.SetInParams(Gordic.General.GInt16,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.gspg_admchecklic04.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.gspg_admchecklic04.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.gspg_admchecklic04.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.gspg_admchecklic05">
+            <summary>
+            Package   : 
+            Procedure : spg_admchecklic05
+            Version   : 374.05.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.gspg_admchecklic05.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.gspg_admchecklic05.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic05.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic05.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic05.a_typ_testu">
+            <summary>a_typ_testu - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic05.a_ixs_usr">
+            <summary>a_ixs_usr - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic05.o_gor_err">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic05.o_v_sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic05.o_v_isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic05.o_txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic05.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic05.o_je_poruseni">
+            <summary>o_je_poruseni - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic05.o_poruseni_txt">
+            <summary>o_poruseni_txt - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic05.o_byla_zmena_poctu">
+            <summary>o_byla_zmena_poctu - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic05.o_zmena_poctu_txt">
+            <summary>o_zmena_poctu_txt - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic05.o_delta">
+            <summary>o_delta - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.gspg_admchecklic05.SetInParams(Gordic.General.GInt16,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.gspg_admchecklic05.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.gspg_admchecklic05.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.gspg_admchecklic05.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.gspg_admchecklic06">
+            <summary>
+            Package   : 
+            Procedure : spg_admchecklic06
+            Version   : 374.05.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.gspg_admchecklic06.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.gspg_admchecklic06.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic06.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic06.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic06.a_typ_testu">
+            <summary>a_typ_testu - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic06.a_ixs_su">
+            <summary>a_ixs_su - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic06.o_gor_err">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic06.o_v_sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic06.o_v_isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic06.o_txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic06.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic06.o_je_poruseni">
+            <summary>o_je_poruseni - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic06.o_poruseni_txt">
+            <summary>o_poruseni_txt - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic06.o_byla_zmena_poctu">
+            <summary>o_byla_zmena_poctu - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic06.o_zmena_poctu_txt">
+            <summary>o_zmena_poctu_txt - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsAdmServer.gspg_admchecklic06.o_delta">
+            <summary>o_delta - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.gspg_admchecklic06.SetInParams(Gordic.General.GInt16,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.gspg_admchecklic06.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.gspg_admchecklic06.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.gspg_admchecklic06.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmClenKonfiguracniSkupiny">
+            <summary> Aplikační logika metody clen-konfiguracni-skupiny </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWmClenKonfiguracniSkupiny.m_sIxsFun">
+            <summary>
+            Id. funkce
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWmClenKonfiguracniSkupiny.m_sIxsUsr">
+            <summary>
+            Id. konfigurační skupiny
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWmClenKonfiguracniSkupiny.m_nAktivita">
+            <summary>
+            kód aktivity
+            </summary> 
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmClenKonfiguracniSkupiny.Execute(Gordic.Xrg.WsAdmInterface.ClenKonfiguracniSkupinyRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmClenKonfiguracniSkupiny.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.ClenKonfiguracniSkupinyRequestDataSet)">
+            <summary> provedení web. služby </summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmClenKonfiguracniSkupiny.ZpracujVstupniDataset(Gordic.Xrg.WsAdmInterface.ClenKonfiguracniSkupinyRequestDataSet)">
+            <summary>
+            Otestuje a naformátuje vstupní data webové služby
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmClenKonfiguracniSkupiny.NaplnVystupniDataset">
+            <summary>
+            Tvorba XML odpovědi
+            </summary>
+            <returns> výstupní dataset </returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmEditIsu">
+            <summary> Aplikační logika metody edit-isu </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWmEditIsu.m_sIxsIsuOut">
+            <summary>
+            Návratové IXS_ISU
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditIsu.Execute(Gordic.Xrg.WsAdmInterface.EditIsuRequestDataSet)">
+            <summary>
+            Vstupní bod pro provedení webové metody - jediné místo otevření a uzavření transakce
+            
+            Připojení k DB + zahájení transakce
+            Zajišťuje také registraci konektu a registraci uživatelské akce
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditIsu.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.EditIsuRequestDataSet)">
+            <summary> provedení web. služby </summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditIsu.ZpracujVstupniDataset(Gordic.Xrg.WsAdmInterface.EditIsuRequestDataSet)">
+            <summary>
+            Do DB uloží data podle předpisu v datasetu.
+            </summary>
+            <param name="inputDataSet">vstupní dataset obsahující DataSet podle předpisu adm.edit-isu.request.xsd</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditIsu.ReplaceDbCollNameToXmTaglName(System.String)">
+            <summary>
+            Záměna jmen DB sloupců za jména XML tagů.
+            </summary>
+            <param name="a_message">Text chyby s uvedením jmen DB sloupců ohraničených hranatými závorkami, např. [aktivita]</param>
+            <returns>Text chyby s nahrazenými jmény DB sloupců za jména XML tagů, ohraničených úvozovkami, např. "Aktivita".</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditIsu.NaplnVystupniDataset">
+            <summary>
+            Tvorba XML odpovědi
+            </summary>
+            <returns> výstupní dataset </returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmEditOrj">
+            <summary> Aplikační logika metody edit-orj </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWmEditOrj.m_sIxsOrj">
+            <summary>
+            IXS_ORJ
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditOrj.Execute(Gordic.Xrg.WsAdmInterface.EditOrjRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditOrj.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.EditOrjRequestDataSet)">
+            <summary> provedení web. služby </summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditOrj.ZpracujVstupniDataset(Gordic.Xrg.WsAdmInterface.EditOrjRequestDataSet)">
+            <summary>
+            Otestuje a naformátuje vstupní data webové služby
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditOrj.ReplaceDbCollNameToXmTaglName(System.String)">
+            <summary>
+            Záměna jmen DB sloupců za jména XML tagů.
+            </summary>
+            <param name="a_message">Text chyby s uvedením jmen DB sloupců ohraničených hranatými závorkami, např. [aktivita]</param>
+            <returns>Text chyby s nahrazenými jmény DB sloupců za jména XML tagů, ohraničených úvozovkami, např. "Aktivita".</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditOrj.NaplnVystupniDataset">
+            <summary>
+            Tvorba XML odpovědi
+            </summary>
+            <returns> výstupní dataset </returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GAdmWebService">
+            <summary> Server webových služeb ADM </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GAdmWebService.TestNamespace(System.String,System.String)">
+            <summary>
+            Otestuje, zda je danný namespace správně zadaný
+            </summary>
+            <param name="namespce">namespace</param>
+            <param name="exceptedNamespace">očekávaný namespace</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GAdmWebService.GetRequestSchemaFileName(System.String,System.String)">
+            <summary>získání názvu souboru obsahujícího XML schéma pro validaci vstupních dat webové služby</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <returns>název souboru s XML schématem ( tj. *.xsd ), v případě vrácení hodnoty null nebo prázdného řetězce nebude kontrola vstupních dat webové služby provedena</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GAdmWebService.GetRequestDataset(System.String,System.String)">
+            <summary>získání prázdného typového datasetu pro načtení vstupních dat</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <returns>prázdná instance typového datasetu určená pro načtení vstupních dat nebo hodnota null v případě, že aplikační logika webové služby vstupní data neočekává</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GAdmWebService.ProcessRequest(System.String,System.String,System.Data.DataSet)">
+            <summary>zpracování vstupních dat webové služby</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <param name="requestDataSet">instance typového datasetu naplněná vstupními daty webové služby</param>
+            <returns>dataset s výstupními daty webové služby, nebo null v případě, že webová služba nevrací žádná data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GAdmWebService.ProcessRequestInternal(System.String,System.String,System.Data.DataSet)">
+            <summary>zpracování vstupních dat webové služby</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <param name="requestDataSet">instance typového datasetu naplněná vstupními daty webové služby</param>
+            <returns>dataset s výstupními daty webové služby, nebo null v případě, že webová služba nevrací žádná data</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmEditFunkcniMisto">
+            <summary> Aplikační logika metody edit-funkcni-misto </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWmEditFunkcniMisto.m_sIxsFunOut">
+            <summary>
+            Interní návratové ID funkce
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditFunkcniMisto.Execute(Gordic.Xrg.WsAdmInterface.EditFunkcniMistoRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditFunkcniMisto.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.EditFunkcniMistoRequestDataSet)">
+            <summary> provedení web. služby </summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditFunkcniMisto.ZpracujVstupniDataset(Gordic.Xrg.WsAdmInterface.EditFunkcniMistoRequestDataSet)">
+            <summary>
+            Otestuje a naformátuje vstupní data webové služby
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditFunkcniMisto.ReplaceDbCollNameToXmTaglName(System.String)">
+            <summary>
+            Záměna jmen DB sloupců za jména XML tagů.
+            </summary>
+            <param name="a_message">Text chyby s uvedením jmen DB sloupců ohraničených hranatými závorkami, např. [aktivita]</param>
+            <returns>Text chyby s nahrazenými jmény DB sloupců za jména XML tagů, ohraničených úvozovkami, např. "Aktivita".</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditFunkcniMisto.NaplnVystupniDataset">
+            <summary>
+            Tvorba XML odpovědi
+            </summary>
+            <returns> výstupní dataset </returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmEditReferent">
+            <summary> Aplikační logika metody edit-referent </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWmEditReferent.m_oInputRow">
+            <summary>
+            Vstupní řádek XML requestu
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWmEditReferent.m_sIxsRefOut">
+            <summary>
+            Výstupní ID referenta
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditReferent.Execute(Gordic.Xrg.WsAdmInterface.EditReferentRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditReferent.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.EditReferentRequestDataSet)">
+            <summary> provedení web. služby </summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditReferent.ZpracujVstupniDataset(Gordic.Xrg.WsAdmInterface.EditReferentRequestDataSet)">
+            <summary>
+            Otestuje a naformátuje vstupní data webové služby
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditReferent.ReplaceDbCollNameToXmTaglName(System.String)">
+            <summary>
+            Záměna jmen DB sloupců za jména XML tagů.
+            </summary>
+            <param name="a_message">Text chyby s uvedením jmen DB sloupců ohraničených hranatými závorkami, např. [aktivita]</param>
+            <returns>Text chyby s nahrazenými jmény DB sloupců za jména XML tagů, ohraničených úvozovkami, např. "Aktivita".</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmEditSpisovyUzel">
+            <summary> Aplikační logika metody edit-spisovy-uzel </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWmEditSpisovyUzel.m_sIxsSuOut">
+            <summary>
+            Návratové IXS_SU SU
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditSpisovyUzel.Execute(Gordic.Xrg.WsAdmInterface.EditSpisovyUzelRequestDataSet)">
+            <summary>
+            Vstupní bod pro provedení webové metody - jediné místo otevření a uzavření transakce
+            
+            Připojení k DB + zahájení transakce
+            Zajišťuje také registraci konektu a registraci uživatelské akce
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditSpisovyUzel.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.EditSpisovyUzelRequestDataSet)">
+            <summary> provedení web. služby </summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditSpisovyUzel.ZpracujVstupniDataset(Gordic.Xrg.WsAdmInterface.EditSpisovyUzelRequestDataSet)">
+            <summary>
+            Do DB uloží data podle předpisu v datasetu.
+            </summary>
+            <param name="inputDataSet">vstupní dataset obsahující DataSet podle předpisu adm.edit-spisovy-uzel.request.xsd</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditSpisovyUzel.ReplaceDbCollNameToXmTaglName(System.String)">
+            <summary>
+            Záměna jmen DB sloupců za jména XML tagů.
+            </summary>
+            <param name="a_message">Text chyby s uvedením jmen DB sloupců ohraničených hranatými závorkami, např. [aktivita]</param>
+            <returns>Text chyby s nahrazenými jmény DB sloupců za jména XML tagů, ohraničených úvozovkami, např. "Aktivita".</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditSpisovyUzel.NaplnVystupniDataset">
+            <summary>
+            Tvorba XML odpovědi
+            </summary>
+            <returns> výstupní dataset </returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmEditUrovenPristupuOsoby">
+            <summary> Aplikační logika metody edit-uroven-pristupu-osoby </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditUrovenPristupuOsoby.Execute(Gordic.Xrg.WsAdmInterface.EditUrovenPristupuOsobyRequestDataSet)">
+            <summary>
+            Vstupní bod pro provedení webové metody - jediné místo otevření a uzavření transakce
+            
+            Připojení k DB + zahájení transakce
+            Zajišťuje také registraci konektu a registraci uživatelské akce
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditUrovenPristupuOsoby.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.EditUrovenPristupuOsobyRequestDataSet)">
+            <summary> provedení web. služby </summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditUrovenPristupuOsoby.ZpracujVstupniDataset(Gordic.Xrg.WsAdmInterface.EditUrovenPristupuOsobyRequestDataSet)">
+            <summary>
+            Do DB uloží data podle předpisu v datasetu.
+            </summary>
+            <param name="inputDataSet">vstupní dataset obsahující DataSet podle předpisu adm.edit-spisovy-uzel.request.xsd</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditUrovenPristupuOsoby.ReplaceDbCollNameToXmTaglName(System.String)">
+            <summary>
+            Záměna jmen DB sloupců za jména XML tagů.
+            </summary>
+            <param name="a_message">Text chyby s uvedením jmen DB sloupců ohraničených hranatými závorkami, např. [aktivita]</param>
+            <returns>Text chyby s nahrazenými jmény DB sloupců za jména XML tagů, ohraničených úvozovkami, např. "Aktivita".</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditUrovenPristupuOsoby.NaplnVystupniDataset">
+            <summary>
+            Tvorba XML odpovědi
+            </summary>
+            <returns> výstupní dataset </returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmEditVazbyDenikUzel">
+            <summary> Aplikační logika metody edit-spisovy-uzel </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditVazbyDenikUzel.Execute(Gordic.Xrg.WsAdmInterface.EditVazbyDenikUzelRequestDataSet)">
+            <summary>
+            Vstupní bod pro provedení webové metody - jediné místo otevření a uzavření transakce
+            
+            Připojení k DB + zahájení transakce
+            Zajišťuje také registraci konektu a registraci uživatelské akce
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditVazbyDenikUzel.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.EditVazbyDenikUzelRequestDataSet)">
+            <summary> provedení web. služby </summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditVazbyDenikUzel.ZpracujVstupniDataset(Gordic.Xrg.WsAdmInterface.EditVazbyDenikUzelRequestDataSet)">
+            <summary>
+            Do DB uloží data podle předpisu v datasetu.
+            </summary>
+            <param name="inputDataSet">vstupní dataset obsahující DataSet podle předpisu adm.edit-spisovy-uzel.request.xsd</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditVazbyDenikUzel.ReplaceDbCollNameToXmTaglName(System.String)">
+            <summary>
+            Záměna jmen DB sloupců za jména XML tagů.
+            </summary>
+            <param name="a_message">Text chyby s uvedením jmen DB sloupců ohraničených hranatými závorkami, např. [aktivita]</param>
+            <returns>Text chyby s nahrazenými jmény DB sloupců za jména XML tagů, ohraničených úvozovkami, např. "Aktivita".</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditVazbyDenikUzel.NaplnVystupniDataset">
+            <summary>
+            Tvorba XML odpovědi
+            </summary>
+            <returns> výstupní dataset </returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmEditDenikEss">
+            <summary> Aplikační logika metody edit-spisovy-uzel </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditDenikEss.Execute(Gordic.Xrg.WsAdmInterface.EditDenikEssRequestDataSet)">
+            <summary>
+            Vstupní bod pro provedení webové metody - jediné místo otevření a uzavření transakce
+            
+            Připojení k DB + zahájení transakce
+            Zajišťuje také registraci konektu a registraci uživatelské akce
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditDenikEss.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.EditDenikEssRequestDataSet)">
+            <summary> provedení web. služby </summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditDenikEss.ZpracujVstupniDataset(Gordic.Xrg.WsAdmInterface.EditDenikEssRequestDataSet)">
+            <summary>
+            Do DB uloží data podle předpisu v datasetu.
+            </summary>
+            <param name="inputDataSet">vstupní dataset obsahující DataSet podle předpisu adm.edit-spisovy-uzel.request.xsd</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditDenikEss.ReplaceDbCollNameToXmTaglName(System.String)">
+            <summary>
+            Záměna jmen DB sloupců za jména XML tagů.
+            </summary>
+            <param name="a_message">Text chyby s uvedením jmen DB sloupců ohraničených hranatými závorkami, např. [aktivita]</param>
+            <returns>Text chyby s nahrazenými jmény DB sloupců za jména XML tagů, ohraničených úvozovkami, např. "Aktivita".</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditDenikEss.NaplnVystupniDataset">
+            <summary>
+            Tvorba XML odpovědi
+            </summary>
+            <returns> výstupní dataset </returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmEditParametrStrediska">
+            <summary> Aplikační logika metody edit-spisovy-uzel </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditParametrStrediska.Execute(Gordic.Xrg.WsAdmInterface.EditParametrStrediskaRequestDataSet)">
+            <summary>
+            Vstupní bod pro provedení webové metody - jediné místo otevření a uzavření transakce
+            
+            Připojení k DB + zahájení transakce
+            Zajišťuje také registraci konektu a registraci uživatelské akce
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditParametrStrediska.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.EditParametrStrediskaRequestDataSet)">
+            <summary> provedení web. služby </summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditParametrStrediska.ZpracujVstupniDataset(Gordic.Xrg.WsAdmInterface.EditParametrStrediskaRequestDataSet)">
+            <summary>
+            Do DB uloží data podle předpisu v datasetu.
+            </summary>
+            <param name="inputDataSet">vstupní dataset obsahující DataSet podle předpisu adm.edit-spisovy-uzel.request.xsd</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditParametrStrediska.ReplaceDbCollNameToXmTaglName(System.String)">
+            <summary>
+            Záměna jmen DB sloupců za jména XML tagů.
+            </summary>
+            <param name="a_message">Text chyby s uvedením jmen DB sloupců ohraničených hranatými závorkami, např. [aktivita]</param>
+            <returns>Text chyby s nahrazenými jmény DB sloupců za jména XML tagů, ohraničených úvozovkami, např. "Aktivita".</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditParametrStrediska.NaplnVystupniDataset">
+            <summary>
+            Tvorba XML odpovědi
+            </summary>
+            <returns> výstupní dataset </returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmEditStrediskoUzlu">
+            <summary> Aplikační logika metody edit-spisovy-uzel </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWmEditStrediskoUzlu.m_sIxsTreOut">
+            <summary>
+            Návratové IXS_TRE
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditStrediskoUzlu.Execute(Gordic.Xrg.WsAdmInterface.EditStrediskoUzluRequestDataSet)">
+            <summary>
+            Vstupní bod pro provedení webové metody - jediné místo otevření a uzavření transakce
+            
+            Připojení k DB + zahájení transakce
+            Zajišťuje také registraci konektu a registraci uživatelské akce
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditStrediskoUzlu.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.EditStrediskoUzluRequestDataSet)">
+            <summary> provedení web. služby </summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditStrediskoUzlu.ZpracujVstupniDataset(Gordic.Xrg.WsAdmInterface.EditStrediskoUzluRequestDataSet)">
+            <summary>
+            Do DB uloží data podle předpisu v datasetu.
+            </summary>
+            <param name="inputDataSet">vstupní dataset obsahující DataSet podle předpisu adm.edit-spisovy-uzel.request.xsd</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditStrediskoUzlu.ReplaceDbCollNameToXmTaglName(System.String)">
+            <summary>
+            Záměna jmen DB sloupců za jména XML tagů.
+            </summary>
+            <param name="a_message">Text chyby s uvedením jmen DB sloupců ohraničených hranatými závorkami, např. [aktivita]</param>
+            <returns>Text chyby s nahrazenými jmény DB sloupců za jména XML tagů, ohraničených úvozovkami, např. "Aktivita".</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmEditStrediskoUzlu.NaplnVystupniDataset">
+            <summary>
+            Tvorba XML odpovědi
+            </summary>
+            <returns> výstupní dataset </returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmDetailIsu">
+            <summary>
+            Webová služba PrehledFunkcnichMist.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmDetailIsu.Execute(Gordic.Xrg.WsAdmInterface.DetailIsuRequestDataSet)">
+            <summary>
+            Provedení webové metody - řízení transakcí je v této jediné metodě
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmDetailIsu.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.DetailIsuRequestDataSet)">
+            <summary>
+            Vykonani pozadovane akce
+            </summary>
+            <param name="inputDataSet"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmDetailIsu.NaplnVystupniDataset(Gordic.Xrg.WsAdmInterface.DetailIsuRequestDataSet.DetailIsuRow)">
+            <summary>
+            
+            </summary>
+            <param name="inputRow"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmPrehledUrovenPristupuOsoby">
+            <summary>
+            Webová služba GWmPrehledUrovenPristupuOsoby
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmPrehledUrovenPristupuOsoby.Execute(Gordic.Xrg.WsAdmInterface.PrehledUrovenPristupuOsobyRequestDataSet)">
+            <summary>
+            Provedení webové metody - řízení transakcí je v této jediné metodě
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmPrehledUrovenPristupuOsoby.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.PrehledUrovenPristupuOsobyRequestDataSet)">
+            <summary>
+            Vykonani pozadovane akce
+            </summary>
+            <param name="inputDataSet"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmPrehledUrovenPristupuOsoby.NaplnVystupniDataset(Gordic.Xrg.WsAdmInterface.PrehledUrovenPristupuOsobyRequestDataSet.PrehledUrovenPristupuOsobyRow)">
+            <summary>
+            
+            </summary>
+            <param name="inputRow"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmPrehledIsu">
+            <summary>
+            Webová služba PrehledFunkcnichMist.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmPrehledIsu.Execute(Gordic.Xrg.WsAdmInterface.PrehledIsuRequestDataSet)">
+            <summary>
+            Provedení webové metody - řízení transakcí je v této jediné metodě
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmPrehledIsu.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.PrehledIsuRequestDataSet)">
+            <summary>
+            Vykonani pozadovane akce
+            </summary>
+            <param name="inputDataSet"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmPrehledIsu.NaplnVystupniDataset(Gordic.Xrg.WsAdmInterface.PrehledIsuRequestDataSet.PrehledIsuRow)">
+            <summary>
+            
+            </summary>
+            <param name="inputRow"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmPrehledInstanceFunkcnihoMista">
+            <summary>
+            Webová služba GWmPrehledInstanceFunkcnihoMista
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmPrehledInstanceFunkcnihoMista.Execute(Gordic.Xrg.WsAdmInterface.PrehledInstanceFunkcnihoMistaRequestDataSet)">
+            <summary>
+            Provedení webové metody - řízení transakcí je v této jediné metodě
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmPrehledInstanceFunkcnihoMista.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.PrehledInstanceFunkcnihoMistaRequestDataSet)">
+            <summary>
+            Vykonani pozadovane akce
+            </summary>
+            <param name="inputDataSet"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmPrehledInstanceFunkcnihoMista.NaplnVystupniDataset(Gordic.Xrg.WsAdmInterface.PrehledInstanceFunkcnihoMistaRequestDataSet.PrehledInstanceFunkcnihoMistaRow)">
+            <summary>
+            
+            </summary>
+            <param name="inputRow"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmPrehledParametrFunkcnihoMista">
+            <summary>
+            Webová služba PrehledParametrFunkcnihoMista.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmPrehledParametrFunkcnihoMista.Execute(Gordic.Xrg.WsAdmInterface.PrehledParametrFunkcnihoMistaRequestDataSet)">
+            <summary>
+            Provedení webové metody - řízení transakcí je v této jediné metodě
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmPrehledParametrFunkcnihoMista.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.PrehledParametrFunkcnihoMistaRequestDataSet)">
+            <summary>
+            Vykonani pozadovane akce
+            </summary>
+            <param name="inputDataSet"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmPrehledParametrFunkcnihoMista.NaplnVystupniDataset(Gordic.Xrg.WsAdmInterface.PrehledParametrFunkcnihoMistaRequestDataSet.PrehledParametrFunkcnihoMistaRow)">
+            <summary>
+            
+            </summary>
+            <param name="inputRow"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmPrehledStrediskoUzlu">
+            <summary>
+            Webová služba PrehledFunkcnichMist.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmPrehledStrediskoUzlu.Execute(Gordic.Xrg.WsAdmInterface.PrehledStrediskoUzluRequestDataSet)">
+            <summary>
+            Provedení webové metody - řízení transakcí je v této jediné metodě
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmPrehledStrediskoUzlu.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.PrehledStrediskoUzluRequestDataSet)">
+            <summary>
+            Vykonani pozadovane akce
+            </summary>
+            <param name="inputDataSet"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmPrehledStrediskoUzlu.NaplnVystupniDataset(Gordic.Xrg.WsAdmInterface.PrehledStrediskoUzluRequestDataSet.PrehledStrediskoUzluRow)">
+            <summary>
+            
+            </summary>
+            <param name="inputRow"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmPrehledVazbyDenikUzel">
+            <summary>
+            Webová služba PrehledFunkcnichMist.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmPrehledVazbyDenikUzel.Execute(Gordic.Xrg.WsAdmInterface.PrehledVazbyDenikUzelRequestDataSet)">
+            <summary>
+            Provedení webové metody - řízení transakcí je v této jediné metodě
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmPrehledVazbyDenikUzel.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.PrehledVazbyDenikUzelRequestDataSet)">
+            <summary>
+            Vykonani pozadovane akce
+            </summary>
+            <param name="inputDataSet"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmPrehledVazbyDenikUzel.NaplnVystupniDataset(Gordic.Xrg.WsAdmInterface.PrehledVazbyDenikUzelRequestDataSet.PrehledVazbyDenikUzelRow)">
+            <summary>
+            
+            </summary>
+            <param name="inputRow"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmIszrPrehledAgend">
+            <summary>
+            Webová metoda - Přehled agend ISZR v IS GINIS
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWmIszrPrehledAgend.m_FilterList">
+            <summary>
+            kolekce vst. filtrů
+            </summary>        
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmIszrPrehledAgend.Execute(Gordic.Xrg.WsAdmInterface.IszrPrehledAgendRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmIszrPrehledAgend.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.IszrPrehledAgendRequestDataSet)">
+            <summary>Nalezení externího subjektu podle IČO</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmIszrPrehledAgend.ZpracujVstupniDataset(Gordic.Xrg.WsAdmInterface.IszrPrehledAgendRequestDataSet)">
+            <summary>
+            Provede otestování validity zadaných vstupních hodnot
+            </summary>
+            <param name="inputDataSet">Vstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmIszrEditAgenda">
+            <summary>
+            Webová metoda - Správa agend ISZR v IS GINIS
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmIszrEditAgenda.Execute(Gordic.Xrg.WsAdmInterface.IszrEditAgendaRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmIszrEditAgenda.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.IszrEditAgendaRequestDataSet)">
+            <summary>Nalezení externího subjektu podle IČO</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmIszrEditAgenda.ZpracujVstupniDataset(Gordic.Xrg.WsAdmInterface.IszrEditAgendaRequestDataSet)">
+            <summary>
+            Provede otestování validity zadaných vstupních hodnot
+            </summary>
+            <param name="inputDataSet">Vstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmIszrEditAgendovaRole">
+            <summary>
+            Webová metoda - Správa agendových rolí ISZR v IS GINIS
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmIszrEditAgendovaRole.Execute(Gordic.Xrg.WsAdmInterface.IszrEditAgendovaRoleRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmIszrEditAgendovaRole.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.IszrEditAgendovaRoleRequestDataSet)">
+            <summary>Nalezení externího subjektu podle IČO</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmIszrEditAgendovaRole.ZpracujVstupniDataset(Gordic.Xrg.WsAdmInterface.IszrEditAgendovaRoleRequestDataSet)">
+            <summary>
+            Provede otestování validity zadaných vstupních hodnot
+            </summary>
+            <param name="inputDataSet">Vstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmIszrPrehledAgendovychRoli">
+            <summary>
+            Přehled agendových rolí ISZR, evidovaných v IS GINIS
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWmIszrPrehledAgendovychRoli.m_oRow">
+            <summary>
+            řádek XML requestu
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWmIszrPrehledAgendovychRoli.m_FilterList">
+            <summary>
+            kolekce vst. filtrů
+            </summary>        
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmIszrPrehledAgendovychRoli.Execute(Gordic.Xrg.WsAdmInterface.IszrPrehledAgendovychRoliRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmIszrPrehledAgendovychRoli.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.IszrPrehledAgendovychRoliRequestDataSet)">
+            <summary>Nalezení externího subjektu podle IČO</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmIszrPrehledAgendovychRoli.ZpracujVstupniDataset(Gordic.Xrg.WsAdmInterface.IszrPrehledAgendovychRoliRequestDataSet)">
+            <summary>
+            Provede otestování validity zadaných vstupních hodnot
+            </summary>
+            <param name="inputDataSet">Vstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmIszrSpravaVazebFunkcnichMist">
+            <summary>
+            Správa vazeb funkčního místa na agendy a role ISZR
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWmIszrSpravaVazebFunkcnichMist.m_sIxsFun">
+            <summary>
+            Id. funkce
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWmIszrSpravaVazebFunkcnichMist.m_nAktivita">
+            <summary>
+            Aktivita
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmIszrSpravaVazebFunkcnichMist.Execute(Gordic.Xrg.WsAdmInterface.IszrSpravaVazebFunkcnichMistRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmIszrSpravaVazebFunkcnichMist.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.IszrSpravaVazebFunkcnichMistRequestDataSet)">
+            <summary>Nalezení externího subjektu podle IČO</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmIszrSpravaVazebFunkcnichMist.ZpracujVstupniDataset(Gordic.Xrg.WsAdmInterface.IszrSpravaVazebFunkcnichMistRequestDataSet)">
+            <summary>
+            Provede otestování validity zadaných vstupních hodnot
+            </summary>
+            <param name="inputDataSet">Vstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmVytvoritLogin">
+            <summary> Aplikační logika metody vytvorit-login </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWmVytvoritLogin.m_nTypAuth">
+            <summary> 
+            Typ autentizace pro účet 
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWmVytvoritLogin.m_sIxsRef">
+            <summary>
+            Interní ID referenta
+            </summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsAdmServer.GWmVytvoritLogin.m_bDelLogin">
+            <summary>
+            Příznak smazání loginu
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmVytvoritLogin.Execute(Gordic.Xrg.WsAdmInterface.VytvoritLoginRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmVytvoritLogin.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.VytvoritLoginRequestDataSet)">
+            <summary>  provedení web. služby  </summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmVytvoritLogin.ZpracujVstupniDataset(Gordic.Xrg.WsAdmInterface.VytvoritLoginRequestDataSet)">
+            <summary>
+            Otestuje a naformátuje vstupní data webové služby
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmVytvoritLogin.VytvorPrimarniLogin">
+            <summary>
+            Vytvoří primární účet
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmVytvoritLogin.VytvorAlternativniLogin">
+            <summary>
+            Vytvoří primární účet
+            </summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsAdmServer.GWmIszrPrehledVazebFunkcnichMist">
+            <summary>
+            Přehled vazeb funkčních míst na agendy a role ISZR
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmIszrPrehledVazebFunkcnichMist.Execute(Gordic.Xrg.WsAdmInterface.IszrPrehledVazebFunkcnichMistRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmIszrPrehledVazebFunkcnichMist.ExecuteWebMethod(Gordic.Xrg.WsAdmInterface.IszrPrehledVazebFunkcnichMistRequestDataSet)">
+            <summary>Nalezení externího subjektu podle IČO</summary>
+            <param name="inputDataSet">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsAdmServer.GWmIszrPrehledVazebFunkcnichMist.ZpracujVstupniDataset(Gordic.Xrg.WsAdmInterface.IszrPrehledVazebFunkcnichMistRequestDataSet)">
+            <summary>
+            Provede otestování validity zadaných vstupních hodnot
+            </summary>
+            <param name="inputDataSet">Vstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsGinServer.GWsGinNoRecordException">
+            <summary> Výjimka při neexistenci záznamu pro XRG-GIN </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsGinServer.GWsGinNoRecordException.#ctor(System.Int32,System.Int32,System.String[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsGinServer.GWsGinNoRecordException.#ctor(System.Int32,System.Int32,System.Exception,System.String[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="innerException">vnitřní vyjímka</param>
+            <param name="parameters">parametry</param>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,196 @@
+﻿/***********************************************************
+ * g-outline styly
+ */
+
+@import "base";
+
+$colorInactive: #C3CAD8;
+$colorActive: #6699FF;
+$circleBackground: #fff;
+
+$itemHeight: 3rem;
+
+.g-outline {
+    background-color: white;
+    counter-reset: gtab-counter;
+}
+
+.g-outline__item {
+    cursor: pointer;
+    display: none;
+    line-height: $itemHeight;
+    padding: 0 .2rem;
+    padding-left: $itemHeight;
+    position: relative;
+}
+
+.g-outline__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.g-outline__state-error > .g-outline__item {
+    color: red;
+}
+
+[data-goutline-level="0"] > .g-outline__branch {
+    & > .g-outline__item {
+        $circleDiameter: $itemHeight - 1rem;
+        $circleBorderSize: 0.125rem;
+        $circleMargin: ($itemHeight - $circleDiameter) / 2;
+
+        display: block;
+        font-weight: 800;
+        text-transform: uppercase;
+
+
+        &::before {
+            // liniová spojnice
+            background-color: $colorInactive;
+            content: "";
+            display: block;
+            height: $itemHeight;
+            left: $itemHeight / 2;
+            position: absolute;
+            top: -$itemHeight / 2;
+            transform: translateX(-50%);
+            width: 1px;
+        }
+
+        &::after {
+            // kolečko s číslovkou
+            background-color: $circleBackground;
+            border: $circleBorderSize solid $colorInactive;
+            border-radius: 50%;
+            color: $colorInactive;
+            content: counter(gtab-counter);
+            counter-increment: gtab-counter;
+            display: block;
+            font-weight: 800;
+            height: $circleDiameter;
+            left: $circleMargin;
+            line-height: $circleDiameter - 2 * $circleBorderSize;
+            position: absolute;
+            text-align: center;
+            top: $circleMargin;
+            width: $circleDiameter;
+            z-index: 1;
+        }
+    }
+
+    &:first-child > .g-outline__item::before {
+        display: none;
+    }
+
+    &.g-outline__state-inactive > .g-outline__item {
+    }
+
+    &.g-outline__state-active {
+
+        .g-outline__item {
+            display: block;
+        }
+
+        & > .g-outline__item {
+            &::before {
+                background-color: $colorInactive;
+            }
+
+            &::after {
+                color: $colorActive;
+                border-color: $colorActive;
+            }
+        }
+    }
+
+    &.g-outline__state-active-through > .g-outline__item {
+        &::before {
+            background-color: $colorInactive;
+        }
+
+        &::after {
+            color: $colorInactive;
+            border-color: $colorInactive;
+        }
+    }
+
+    &.g-outline__state-active-parent {
+
+        .g-outline__item {
+            display: block;
+        }
+
+        & > .g-outline__item {
+            &::before {
+                background-color: $colorInactive;
+            }
+
+            &::after {
+                color: $colorActive;
+                border-color: $colorActive;
+            }
+        }
+    }
+}
+
+[data-goutline-level="1"] > .g-outline__branch {
+
+    & > .g-outline__item {
+        $circleDiameter: .5rem;
+        $circleMargin: ($itemHeight - $circleDiameter) / 2;
+
+        &::before {
+            background-color: $colorInactive;
+            content: "";
+            display: block;
+            height: $itemHeight;
+            left: $itemHeight / 2;
+            position: absolute;
+            top: -$itemHeight / 2;
+            transform: translateX(-50%);
+            width: 1px;
+        }
+
+        &::after {
+            background-color: $colorActive;
+            border-radius: 50%;
+            content: "";
+            display: none;
+            height: $circleDiameter;
+            left: $circleMargin;
+            position: absolute;
+            top: $circleMargin;
+            width: $circleDiameter;
+            z-index: 1;
+        }
+    }
+
+    &.g-outline__state-inactive > .g-outline__item {
+    }
+
+    &.g-outline__state-active > .g-outline__item {
+        color: $colorActive;
+        font-weight: 800;
+
+        &::after {
+            display: block;
+        }
+
+        &::before {
+            background-color: $colorActive;
+        }
+    }
+
+    &.g-outline__state-active-through > .g-outline__item {
+        &::before {
+            background-color: $colorActive;
+        }
+    }
+
+    &.g-outline__state-active-parent > .g-outline__item {
+        &::before {
+            background-color: $colorActive;
+        }
+    }
+}

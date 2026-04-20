@@ -1,0 +1,2595 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Iissp.WinClient</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Iissp.WinClient.GIisspHistoryRezUserControl">
+            <summary>
+            Zobrazuje historii volání rezervací (založení, aktualizaci, dotaz na stav)
+            na dvojklik nebo zavoláním metody ZobrazDetail pak otevře detail volání (XML vstup a výstup).
+            Musí být vložen do GTabu.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryRezUserControl.#ctor">
+            <summary>
+            Konstr.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryRezUserControl.LoadData(Gordic.General.GString,System.Boolean)">
+            <summary>
+            Načte data
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GIisspHistoryRezUserControl.MyGridFormat">
+            <summary>
+            Formátování gridu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryRezUserControl.MyGridFormatCreate">
+            <summary>
+            sestaví sloupce gridu el. obrazu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryRezUserControl.ZobrazDetail">
+            <summary>
+            Zobrazení detailu
+            </summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GIisspHistoryRezUserControl.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryRezUserControl.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryRezUserControl.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GIisspWinBase">
+            <summary>
+            Base třída pro Gordic.Iissp.WinClient
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GIisspWinBase.ProVsechny">
+            <summary>
+            Jen pro hrom. rez. – zda volbu uplatnit pro všechny
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspWinBase.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspWinBase.SetColorForControl(System.Windows.Forms.Control,System.Char)">
+            <summary>
+            Nastaví barvu
+            </summary>
+            <param name="control"></param>
+            <param name="status"></param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspWinBase.Log(System.String,System.Object[])">
+            <summary>
+            Zapíše logovací zprávu úrovně Info, pod daným LogId
+            </summary>
+            <param name="text">zpráva</param>
+            <param name="p">parametry zprávy</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspWinBase.TypKomunikaceIissp(Gordic.General.GInt16,Gordic.General.GString,System.Boolean)">
+            <summary>
+            Zjistí typ komunikace s IISSP, pro vvt = null uživatel v simulaci nic nezvolil -> je potřeba ukončit volání
+            </summary>
+            <param name="rok"></param>
+            <param name="ico"></param>
+            <param name="hromRez">u hrom. rezervace umoznim pouziti volby nafurt</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspWinBase.SetColorFormattingHistorieIISSP(Gordic.WinForms.Controls.GDataGridView)">
+            <summary>
+            Nastaveni barev seznamu hlavicek
+            </summary>
+            <param name="gridView"></param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspWinBase.SelectImageOnlineOfflineX(System.Data.DataRow,System.String)">
+            <summary>
+            delegát pro dohledání obrázku pro sloupec s obrázky
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GDnpServices">
+            <summary>
+            Obsluha IISSP pro DNP
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GDnpServices.LogStringBuilder">
+            <summary>Log</summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GDnpServices.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GDnpServices.Service4500(System.String,System.String,System.String,System.String@,System.String@)">
+            <summary>
+            Rezervace celého případu (serviceid = 4500)
+            </summary>
+            <param name="param1">ixs_hpr#ixs_ref#ico#ucs#rok
+            ( ixs_hpr ... identifikátor případu sspshpr.ixs_hpr
+            | ixs_ref ... pod jeho jménem se odesílá do Státní pokladny (správce rezervací)
+            | ico ... ico případu
+            | ucs ... ucs případu
+            | rok ... aktuální rozpočtové období případu (zřejmě rok aktuální knihy případu))
+            | hromadne/jedna ... zda se jedná o hromadnou rezervaci (H nebo výčet Hn, kde 'n' je celé číslo) nebo o jednu rezervaci (J)
+            </param>
+            <param name="param2">nepouziva se</param>
+            <param name="param3">nepouziva se</param>
+            <param name="outParam">OK/CHYBA</param>
+            <param name="outParam2">prázdný řetězec/text chyby</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GDnpServices.Service4500NoDnp(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,System.Boolean)">
+            <summary>
+            Service 4500 pro .NET moduly (zakládání a aktualizace rezervací z ROZu)
+            </summary>
+            <param name="ixs_hpr"></param>
+            <param name="pid_rd">pro aktualizaci, protože tam je možné, že pid bude nový</param>
+            <param name="ixs_ref"></param>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="rok"></param>
+            <param name="zobrazitVysledek">zda zobrazit výslednou zprávu při schválení/schválení s výhradou</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GDnpServices.Service4501(System.String,System.String,System.String,System.String@,System.String@)">
+            <summary>
+            Zobrazení historie Rezervace případu ve Státní pokladně (IISSP) (serviceid = 4501)
+            </summary>
+            <param name="param1">ixs_hpr</param>
+            <param name="param2">nepouziva se</param>
+            <param name="param3">nepouziva se</param>
+            <param name="outParam">OK/CHYBA</param>
+            <param name="outParam2">OK – prázdný řetězec / CHYBA – text chyby</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GDnpServices.Service4502(System.String,System.String,System.String,System.String@,System.String@)">
+            <summary>
+            Zobrazí okno se stavem rezervací případu ve Státní pokladně
+            </summary>
+            <param name="param1">
+            hodnoty ve formátu: ixs_hpr#ixs_ref#ico#ucs#volat_ws
+              ixs_hpr ... identifikátor případu sspshpr.ixs_hpr
+              ixs_ref ... pod jeho jménem se odesílá do Státní pokladny (správce rezervací)
+              ico ... ico případu
+              ucs ... ucs případu
+              volat_ws ... (true/false) zda se má zavolat web služba na stav v IISSP – pokud ještě stav v IISSP není v GINIS tabulkách uložen, tak se web služba zavolá i pro volat_ws=false
+            </param>
+            <param name="param2"></param>
+            <param name="param3"></param>
+            <param name="outParam"></param>
+            <param name="outParam2"></param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GDnpServices.Service4503(System.String,System.String,System.String,System.String@,System.String@)">
+            <summary>
+            Zobrazí okno s porovnáním stavu rezervací případu ve Státní pokladně a GINISu
+            </summary>
+            <param name="param1">
+            hodnoty ve formátu: ixs_hpr#ixs_ref#ico#ucs#volat_ws#otevrit_okno
+              ixs_hpr ... identifikátor případu sspshpr.ixs_hpr
+              ixs_ref ... pod jeho jménem se odesílá do Státní pokladny (správce rezervací)
+              ico ... ico případu
+              ucs ... ucs případu
+              volat_ws ... (true/false) zda se má zavolat web služba na stav v IISSP – pokud ještě stav v IISSP není v GINIS tabulkách uložen, tak se web služba zavolá i pro volat_ws=false
+              otevrit_okno ... (true/false) zda se má otevřít okno nebo jen načíst do tabulek
+            </param>
+            <param name="param2"></param>
+            <param name="param3"></param>
+            <param name="outParam">OK#b_lze_uvolnit#txt_proc_nelze_uvolnit</param>
+            <param name="outParam2"></param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GDnpServices.Service4504(System.String,System.String,System.String,System.String@,System.String@)">
+            <summary>
+            Univerzální metoda pro volání funkce podle task_id
+            </summary>
+            <param name="param1">task_id#...</param>
+            <param name="param2">nepoužívá se</param>
+            <param name="param3">nepoužívá se</param>
+            <param name="outParam">OK/CHYBA</param>
+            <param name="outParam2">OK – prázdný řetězec / CHYBA – text chyby</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GDnpServices.SaveToXmlFile(System.String,System.Collections.Generic.List{System.String},System.String,System.String)">
+            <summary>
+            Uloží xml string, používá XmlDocument (kontrola xml + formátování)
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GDnpServices.Service4521(System.String)">
+            <summary>
+            Okna EDS/SMVS
+            </summary>
+            <param name="param1"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GRezervace">
+            <summary>
+            Práce s rezervacema a přeúčt. skutečnosti IISSP
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezervace.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezervace.RezervaceDnp(System.String,System.Boolean@,System.String@)">
+            <summary>
+            Rezervace celého případu
+            </summary>
+            <param name="param1">idPripadu#ixsRef nebo idPripadu#ixsRef#ico#ucs#rok#hrom_rez (tj. identifikátor případu sspshpr.ixs_hpr a ixs_ref pod kt. budeme dohledávat PersonId ve Státní pokladně)</param>
+            <param name="hromRez">zde se jedná o hrom rez</param>
+            <param name="hromRezVvt">vrácení volající straně #H0, #H1, ... aby mi to zase poslala</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezervace.SetHromRezVvt(System.Boolean,System.String)">
+            <summary>
+            Do proměnné vracené z DNP přihodí # + H0, H1, ... dle potřeby, ale pouze když se jedná o hromadnou rezervaci
+            </summary>
+            <param name="hromRez"></param>
+            <param name="hromRezVvt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezervace.RezervacePripadu(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,System.Boolean,System.Nullable{Gordic.Iissp.Interface.VysledekVolaniTest},System.String@,System.Boolean)">
+            <summary>
+            Rezervace celého případu
+            </summary>
+            <param name="ixs_hpr">identifikátor případu sspshpr.ixs_hpr</param>
+            <param name="ixs_ref">pod kým se chystáme to odeslat</param>
+            <param name="ico">IČO - vztahující se k případu</param>
+            <param name="ucs">UCS - vztahující se k případu</param>
+            <param name="rok">Rok - ekonomický parametr</param>
+            <param name="pid_rd">PID aktualizačního dokladu ROZ</param>
+            <param name="hromRez">zda jde o hrom. rez.</param>
+            <param name="vvtHromRez">výsl. vol. test pro hrom. rez.</param>
+            <param name="hromRezVvt">vrácení volající straně #H0, #H1, ... aby mi to zase poslala</param>
+            <param name="zobrazitVysledek">zda zobrazit výslednou zprávu při schválení/schválení s výhradou</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezervace.PreuctovaniSkutecnostiStart(System.Int32)">
+            <summary>
+            zahájení PSK
+            </summary>
+            <param name="pocet"></param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezervace.PreuctovaniSkutecnosti(Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,System.Nullable{Gordic.Iissp.Interface.VysledekVolaniTest}@,System.Xml.XmlNode)">
+            <summary>
+            Přeúčtování skutečnosti B_EKIS_SP_PSK, nutno nejdříve volat PreuctovaniSkutecnostiStart
+            </summary>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="rok"></param>
+            <param name="vvt">před cyklem nejdříve inicializovat na null, pak používat vrácenou hodnotu</param>
+            <param name="psk"></param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezervace.PolozkyDoChyby(System.Collections.Generic.List{Gordic.Iissp.Interface.GZpracovaniHlaseniZaDoklad})">
+            <summary>
+            Převede seznam dokladů a k vrácených chybových zpráv do textové podoby
+            </summary>
+            <param name="l_dokErrPolozky"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GIisspWinClientException">
+            <summary>Výjimka používáná pro tlustého klienta Iissp</summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspWinClientException.#ctor(System.Int32,System.Int32,System.Object[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspWinClientException.#ctor(System.Int32,System.Int32,System.Exception,System.Object[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="innerException">vnitřní vyjímka</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspWinClientException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <exclude/>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GRozpOpatreni">
+            <summary>
+            Hlavní vstupní .Iissp třída pro zpracování Rozpočtového opatření ve Státní pokladně
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRozpOpatreni.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRozpOpatreni.Zalozeni(Gordic.Iissp.Interface.RozpoctoveOpatreniType,Gordic.General.GString,System.Nullable{Gordic.Iissp.Interface.VysledekVolaniTest})">
+            <summary>
+            Založení rozp. opatření v IISSP
+            </summary>
+            <param name="rop">data rozp. opatření</param>
+            <param name="ixs_ref">uživatel pod kt. data odešleme – správce rozpočtu, ...</param>
+            <param name="vvt">když nebude zadán, tak se podle roku a ico dokladu zjistí automaticky</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRozpOpatreni.DotazNaStav(Gordic.General.GString,Gordic.Iissp.Interface.RozpoctoveOpatreniIdentifikaceType,Gordic.General.GString,System.Nullable{Gordic.Iissp.Interface.VysledekVolaniTest})">
+            <summary>
+            Dotaz na stav rozp. opatření v IISSP
+            </summary>
+            <param name="ixp">doklad</param>
+            <param name="ropi"></param>
+            <param name="ixs_ref"></param>
+            <param name="vvt"></param>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GDialogVyberRoz">
+            <summary>
+            Výběr typu odpovědi z IISSP
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GDialogVyberRoz.VysledekVolani">
+            <summary>
+            Vybrany typ odpovedi
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GDialogVyberRoz.ProVsechny">
+            <summary>
+            Jen pro hrom. rez. – zda volbu uplatnit pro všechny
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GDialogVyberRoz.#ctor(Gordic.Iissp.Interface.IisspMetody)">
+            <summary>
+            Výběr typu odpovědi z IISSP
+            </summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GDialogVyberRoz.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GDialogVyberRoz.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GDialogVyberRoz.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GEdsErrorsTab">
+            <summary>
+            Okno chyb EDS/SMVS
+            </summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GEdsErrorsTab.m_edsExt">
+            <summary>klient AL</summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GEdsErrorsTab.m_bPozadavek">
+            <summary>id požadavku</summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GEdsErrorsTab.id_eds_exp_exd">
+            <summary>id požadavku/dotazu</summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GEdsErrorsTab.m_oGridFormat">
+            <summary>grid format</summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GEdsErrorsTab.#ctor(System.Boolean,Gordic.General.GInt32)">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GEdsErrorsTab.LoadData">
+            <summary>
+            LoadData
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GEdsErrorsTab.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GEdsErrorsTab.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GEdsErrorsTab.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GEdsExportTab">
+            <summary>
+            Zobrazí stav aktualizace EDS/SMVS Export
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GEdsExportTab.OnLoad(System.EventArgs)">
+            <summary>
+            Onload
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GEdsExportTab.#ctor(System.String,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GEdsExportTab.LoadData">
+            <summary>
+            LoadData
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GEdsExportTab.m_oProjektyAction_Start(System.Object,System.EventArgs)">
+            <summary>
+            Zobrazí projekty požadavku
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GEdsExportTab.m_oPozGrid_CellClick(System.Object,System.Windows.Forms.DataGridViewCellEventArgs)">
+            <summary>
+            Je-li klik na GRID a zároveň stisknutý CTRL, tak filtruje (nebo ruší filtr, při opakovaném kliku)
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GEdsExportTab.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GEdsExportTab.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GEdsExportTab.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GEdsExpXmlTab">
+            <summary>
+            Zobrazí xml obsah požadavku/dotazu EDS/SMVS
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GEdsExpXmlTab.#ctor(System.Boolean,System.Int32)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="isPozadavek">true=pozadavek;false=dotaz na pozadavky</param>
+            <param name="id_eds_exp_or_exd">id požadavku</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GEdsExpXmlTab.LoadData">
+            <summary>
+            Načte data (nejdřív nastává konstruktor, potom LoadData()
+            </summary>
+            <returns>false = bez dat/chyba = neotvirat</returns>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GEdsExpXmlTab.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GEdsExpXmlTab.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GEdsExpXmlTab.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GEdsProjektyTab">
+            <summary>
+            Seznam přijatých projektů/akcí na EisExportPozadavek
+            </summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GEdsProjektyTab.m_edsExt">
+            <summary>klient AL</summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GEdsProjektyTab.m_bPozadavek">
+            <summary>id požadavku</summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GEdsProjektyTab.id_eds_exp_exd">
+            <summary>id požadavku/dotazu</summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GEdsProjektyTab.m_oGridFormat">
+            <summary>grid format</summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GEdsProjektyTab.#ctor(System.Boolean,Gordic.General.GInt32)">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GEdsProjektyTab.LoadData">
+            <summary>
+            LoadData
+            </summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GEdsProjektyTab.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GEdsProjektyTab.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GEdsProjektyTab.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GEdsPromazaniTab">
+            <summary>
+            Promaže staré požadavky a dotazy
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GEdsPromazaniTab.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GEdsPromazaniTab.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GEdsPromazaniTab.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GEdsPromazaniTab.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GIisspHistoryDetailTabPsk">
+            <summary>
+            Detail volání rozhraní státní pokladny
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryDetailTabPsk.#ctor(Gordic.General.GInt32)">
+            <summary>
+            Detail volání rozhraní státní pokladny
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryDetailTabPsk.OnLoad(System.EventArgs)">
+            <summary>
+            on load
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryDetailTabPsk.LoadData(Gordic.Iissp.Interface.GEkisSpPskHistDataSet.SeznamRow)">
+            <summary>
+            Načte data (nejdřív nastává konstruktor, potom LoadData()
+            </summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GIisspHistoryDetailTabPsk.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryDetailTabPsk.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryDetailTabPsk.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GIisspHistoryPskTab">
+            <summary>
+            Seznam vyvěšených souborů
+            </summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GIisspHistoryPskTab.m_oIdExt">
+            <summary>
+            id ext
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryPskTab.#ctor(Gordic.General.GString)">
+            <summary>
+            konstr.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryPskTab.LoadData">
+            <summary>
+            Načte data
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GIisspHistoryPskTab.MyGridFormat">
+            <summary>
+            Formátování gridu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryPskTab.MyGridFormatCreate">
+            <summary>
+            sestaví sloupce gridu el. obrazu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryPskTab.ZobrazDetail">
+            <summary>
+            Zobrazení detailu
+            </summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GIisspHistoryPskTab.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryPskTab.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryPskTab.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GShowCertificatesTab">
+            <summary>
+            Zobrazí certifikáty k el. podpisu z GStore.GetAvailableCertificates
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GShowCertificatesTab.SelectedCertificateHash">
+            <summary>
+            Vybraný certifikát
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GShowCertificatesTab.#ctor">
+            <summary>
+            Konstr.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GShowCertificatesTab.LoadData">
+            <summary>
+            Načte data (nejdřív nastává konstruktor, potom LoadData()
+            </summary>
+            <returns>false = bez dat/chyba</returns>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GShowCertificatesTab.MyGridFormat">
+            <summary>
+            Formátování gridu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GShowCertificatesTab.MyGridFormatCreate">
+            <summary>
+            sestaví sloupce gridu el. obrazu
+            </summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GShowCertificatesTab.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GShowCertificatesTab.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GShowCertificatesTab.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GRezHistory">
+            <summary>
+            Historie stavu rezervací případu {0} ve Státní pokladně
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezHistory.#ctor(Gordic.General.GString,System.Boolean)">
+            <summary>
+            Konstr.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezHistory.LoadData">
+            <summary>
+            Načte data (nejdřív nastává konstruktor, potom LoadData()
+            </summary>
+            <returns>false = bez dat/chyba</returns>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezHistory.SelectImageOtevrenoUzavreno(System.Data.DataRow,System.String)">
+            <summary>
+            delegát pro dohledání obrázku pro sloupec s obrázky
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GRezHistory.MyGridFormat">
+            <summary>
+            Formátování gridu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezHistory.MyGridFormatCreate">
+            <summary>
+            sestaví sloupce gridu el. obrazu
+            </summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GRezHistory.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezHistory.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezHistory.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GRezDetailTab">
+            <summary>
+            Stav rezervací případu v IISSP
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezDetailTab.#ctor(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.Boolean,Gordic.General.GString)">
+            <summary>
+            Konstr.
+            </summary>
+            <param name="ixs_hpr"></param>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="volatWebSluzbu">zda se při otevření okna současně provede také dotaz do IISSP</param>
+            <param name="ixs_ref"></param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezDetailTab.LoadData">
+            <summary>
+            Načte data (nejdřív nastává konstruktor, potom LoadData()
+            </summary>
+            <returns>false = bez dat/chyba = neotvirat</returns>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GRezDetailTab.MyGridFormat2">
+            <summary>
+            Formátování gridu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezDetailTab.MyGridFormatCreate2">
+            <summary>
+            sestaví sloupce gridu el. obrazu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezDetailTab.SelectImageOtevrenoUzavreno(System.Data.DataRow,System.String)">
+            <summary>
+            delegát pro dohledání obrázku pro sloupec s obrázky
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezDetailTab.SetColorFormattingGrid2(Gordic.WinForms.Controls.GDataGridView)">
+            <summary>
+            Nastaveni barev seznamu hlavicek
+            </summary>
+            <param name="gridView"></param>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GRezDetailTab.MyGridFormat">
+            <summary>
+            Formátování gridu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezDetailTab.MyGridFormatCreate">
+            <summary>
+            sestaví sloupce gridu el. obrazu
+            </summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GRezDetailTab.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezDetailTab.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezDetailTab.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GCerpanoTab">
+            <summary>
+            Položky a částky
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GCerpanoTab.#ctor(Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Položky a částky
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GCerpanoTab.LoadData">
+            <summary>
+            Načte data (nejdřív nastává konstruktor, potom LoadData()
+            </summary>
+            <returns>true = bez dat/chyba = neotvirat</returns>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GCerpanoTab.MyGridFormat">
+            <summary>
+            Formátování gridu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GCerpanoTab.MyGridFormatCreate">
+            <summary>
+            sestaví sloupce gridu el. obrazu
+            </summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GCerpanoTab.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GCerpanoTab.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GCerpanoTab.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GIisspHistoryDetailTabRop">
+            <summary>
+            Detail volání rozhraní státní pokladny
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryDetailTabRop.#ctor(Gordic.General.GInt32)">
+            <summary>
+            Detail volání rozhraní státní pokladny
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryDetailTabRop.OnLoad(System.EventArgs)">
+            <summary>
+            on load
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryDetailTabRop.LoadData">
+            <summary>
+            Načte data (nejdřív nastává konstruktor, potom LoadData()
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryDetailTabRop.SelectImageOnlineOffline(System.Data.DataRow,System.String)">
+            <summary>
+            delegát pro dohledání obrázku pro sloupec s obrázky
+            </summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GIisspHistoryDetailTabRop.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryDetailTabRop.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryDetailTabRop.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GRezDetailExtTab">
+            <summary>
+            Porovnání stavu rezervací případu v IISSP vs. GINIS
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GRezDetailExtTab.Rok">
+            <summary>
+            Rok
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezDetailExtTab.#ctor(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.Boolean,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GInt32)">
+            <summary>
+            Konstr.
+            </summary>
+            <param name="ixs_hpr"></param>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="volatWebSluzbu">zda se při otevření okna současně provede také dotaz do IISSP</param>
+            <param name="ixs_ref">možnost zadat referenta, pod kterým dotaz proběhne</param>
+            <param name="id_hdr_ris">možnost zadat id_hdr_ris, které se v okně rezervací zvýrazní (pracuje v kombinaci s id_hdr)</param>
+            <param name="radek_hdr_ris">možnost zadat číslo řádku, které se v okně položek zvýrazní</param>
+            <param name="id_hdr">možnost zadat id_hdr, které se v okně rezervací zvýrazní (pracuje v kombinaci s id_hdr_ris)</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezDetailExtTab.LoadData">
+            <summary>
+            Načte data (nejdřív nastává konstruktor, potom LoadData()
+            </summary>
+            <returns>false = bez dat/chyba = neotvirat</returns>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GRezDetailExtTab.MyGridFormat2">
+            <summary>
+            Formátování gridu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezDetailExtTab.MyGridFormatCreate2">
+            <summary>
+            sestaví sloupce gridu el. obrazu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezDetailExtTab.SelectImageOtevrenoUzavreno(System.Data.DataRow,System.String)">
+            <summary>
+            delegát pro dohledání obrázku pro sloupec s obrázky
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezDetailExtTab.SetColorFormattingGrid2(Gordic.WinForms.Controls.GDataGridView)">
+            <summary>
+            Nastaveni barev seznamu hlavicek
+            </summary>
+            <param name="gridView"></param>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GRezDetailExtTab.MyGridFormat">
+            <summary>
+            Formátování gridu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezDetailExtTab.MyGridFormatCreate">
+            <summary>
+            sestaví sloupce gridu el. obrazu
+            </summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GRezDetailExtTab.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezDetailExtTab.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GRezDetailExtTab.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GTvorbaDavekTabRop">
+            <summary>
+            Seznam vyvěšených souborů
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GTvorbaDavekTabRop.#ctor">
+            <summary>
+            konstr.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GTvorbaDavekTabRop.OnLoad(System.EventArgs)">
+            <summary>
+            inicializace dialogu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GTvorbaDavekTabRop.LoadData">
+            <summary>
+            Načte data (nejdřív nastává konstruktor, potom LoadData()
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GTvorbaDavekTabRop.DavkyGridFormat">
+            <summary>
+            Formátování gridu
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GTvorbaDavekTabRop.MyGridFormat">
+            <summary>
+            Formátování gridu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GTvorbaDavekTabRop.SelectImageStav(System.Data.DataRow,System.String)">
+            <summary>
+            delegát pro dohledání obrázku pro sloupec s obrázky
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GTvorbaDavekTabRop.m_oActionUlozit_Start(System.Object,System.EventArgs)">
+            <summary>
+            Uložení vybrané dávky na disk
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GTvorbaDavekTabRop.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GTvorbaDavekTabRop.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GTvorbaDavekTabRop.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GObsahDavkyTab">
+            <summary>
+            Zobrazení obsahu vstupní a výstupní dávky
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GObsahDavkyTab.#ctor(Gordic.General.GInt32,System.Boolean)">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GObsahDavkyTab.OnLoad(System.EventArgs)">
+            <summary>
+            Onload
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GObsahDavkyTab.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GObsahDavkyTab.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GObsahDavkyTab.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GTvorbaDavekTab">
+            <summary>
+            Seznam vyvěšených souborů
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GTvorbaDavekTab.#ctor">
+            <summary>
+            konstr.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GTvorbaDavekTab.OnLoad(System.EventArgs)">
+            <summary>
+            inicializace dialogu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GTvorbaDavekTab.LoadData">
+            <summary>
+            Načte data (nejdřív nastává konstruktor, potom LoadData()
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GTvorbaDavekTab.DavkyGridFormat">
+            <summary>
+            Formátování gridu
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GTvorbaDavekTab.MyGridFormat">
+            <summary>
+            Formátování gridu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GTvorbaDavekTab.SelectImageStav(System.Data.DataRow,System.String)">
+            <summary>
+            delegát pro dohledání obrázku pro sloupec s obrázky
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GTvorbaDavekTab.m_oActionUlozit_Start(System.Object,System.EventArgs)">
+            <summary>
+            Uložení vybrané dávky na disk
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GTvorbaDavekTab.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GTvorbaDavekTab.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GTvorbaDavekTab.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GDialogVyberOdpoved">
+            <summary>
+            Výběr typu odpovědi z IISSP
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GDialogVyberOdpoved.VysledekVolani">
+            <summary>
+            Vybrany typ odpovedi
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GDialogVyberOdpoved.ProVsechny">
+            <summary>
+            Jen pro hrom. rez. – zda volbu uplatnit pro všechny
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GDialogVyberOdpoved.#ctor(Gordic.General.GInt16,System.Boolean)">
+            <summary>
+            Výběr typu odpovědi z IISSP
+            </summary>
+            <param name="typ_kom_iissp"></param>
+            <param name="hromRez"></param>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GDialogVyberOdpoved.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GDialogVyberOdpoved.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GDialogVyberOdpoved.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GIisspHistoryTab">
+            <summary>
+            Seznam vyvěšených souborů
+            </summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GIisspHistoryTab.ixs_hpr">
+            <summary>
+            id případu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryTab.#ctor(Gordic.General.GString,System.Boolean)">
+            <summary>
+            konstr.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryTab.LoadData">
+            <summary>
+            Načte data
+            </summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GIisspHistoryTab.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryTab.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryTab.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GIisspHistoryDetailTab">
+            <summary>
+            Detail volání rozhraní státní pokladny
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryDetailTab.#ctor(System.Boolean)">
+            <summary>
+            Detail volání rozhraní státní pokladny
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryDetailTab.LoadData(Gordic.Iissp.Interface.GEkisSpRezHistDataSet.SeznamRow)">
+            <summary>
+            Načte data (nejdřív nastává konstruktor, potom LoadData()
+            </summary>
+            <param name="row"></param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryDetailTab.SelectImageOnlineOffline(System.Data.DataRow,System.String)">
+            <summary>
+            delegát pro dohledání obrázku pro sloupec s obrázky
+            </summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GIisspHistoryDetailTab.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryDetailTab.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GIisspHistoryDetailTab.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450004">
+            <summary>
+              Looks up a localized string similar to Výběr typu odpovědi z IISSP.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450006">
+            <summary>
+              Looks up a localized string similar to Detail volání rozhraní státní pokladny.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450011">
+            <summary>
+              Looks up a localized string similar to Historie volání Státní pokladny pro případ {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450012">
+            <summary>
+              Looks up a localized string similar to Id volání.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450013">
+            <summary>
+              Looks up a localized string similar to Doklad.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450015">
+            <summary>
+              Looks up a localized string similar to Metoda.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450016">
+            <summary>
+              Looks up a localized string similar to Výsledek.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450017">
+            <summary>
+              Looks up a localized string similar to Datum.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450018">
+            <summary>
+              Looks up a localized string similar to Číslo rezervace.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450019">
+            <summary>
+              Looks up a localized string similar to Příz.akt..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450020">
+            <summary>
+              Looks up a localized string similar to Zpr. č..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450021">
+            <summary>
+              Looks up a localized string similar to Typ zpr..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450022">
+            <summary>
+              Looks up a localized string similar to Ident. zprávy.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450023">
+            <summary>
+              Looks up a localized string similar to Text zprávy.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450024">
+            <summary>
+              Looks up a localized string similar to Text chyby.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450025">
+            <summary>
+              Looks up a localized string similar to Není vybrán žádný řádek.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450026">
+            <summary>
+              Looks up a localized string similar to Detail volání rozhraní Státní pokladny pro doklad {0} a id volání {1}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450027">
+            <summary>
+              Looks up a localized string similar to Informace o výjimce:.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450033">
+            <summary>
+              Looks up a localized string similar to Výsledek volání se nepodařilo zjistit. Pravděpodobně došlo k zavolání webové služby, ale aplikace byla ukončena dříve, než byla ze serveru vrácena odpověď..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450035">
+            <summary>
+              Looks up a localized string similar to Tvorba dávek pro Státní pokladnu.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450036">
+            <summary>
+              Looks up a localized string similar to Čeká na odeslání.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450037">
+            <summary>
+              Looks up a localized string similar to Čeká na odpověď.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450038">
+            <summary>
+              Looks up a localized string similar to Voláno.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450041">
+            <summary>
+              Looks up a localized string similar to #.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450042">
+            <summary>
+              Looks up a localized string similar to Id dávky.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450043">
+            <summary>
+              Looks up a localized string similar to Dokladů.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450044">
+            <summary>
+              Looks up a localized string similar to Schváleno.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450045">
+            <summary>
+              Looks up a localized string similar to Výhrada.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450046">
+            <summary>
+              Looks up a localized string similar to Chybných.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450047">
+            <summary>
+              Looks up a localized string similar to Schváleno s výhradou.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450048">
+            <summary>
+              Looks up a localized string similar to Stav.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450049">
+            <summary>
+              Looks up a localized string similar to Vytvořeno.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450050">
+            <summary>
+              Looks up a localized string similar to Přijato.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450051">
+            <summary>
+              Looks up a localized string similar to Vytvořil.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450052">
+            <summary>
+              Looks up a localized string similar to Přijal.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450053">
+            <summary>
+              Looks up a localized string similar to Uložení XML dávky {0} na disk/médium.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450054">
+            <summary>
+              Looks up a localized string similar to Adresář uložení dávky.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450055">
+            <summary>
+              Looks up a localized string similar to Název souboru.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450058">
+            <summary>
+              Looks up a localized string similar to Online (voláním WS).
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450059">
+            <summary>
+              Looks up a localized string similar to Offline (přes dávku).
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450060">
+            <summary>
+              Looks up a localized string similar to Typ.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450067">
+            <summary>
+              Looks up a localized string similar to Nad vybraným řádkem nelze jednoznačně určit Id volání a zobrazit detail..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450069">
+            <summary>
+              Looks up a localized string similar to Čas volání.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450070">
+            <summary>
+              Looks up a localized string similar to Číslo RO.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450071">
+            <summary>
+              Looks up a localized string similar to Zanesení do evidence.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450073">
+            <summary>
+              Looks up a localized string similar to Pro případ {0} nebyla v historii volání IISSP nalezena žádná data..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450074">
+            <summary>
+              Looks up a localized string similar to Probíhá odesílání dokladu do Státní pokladny.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450079">
+            <summary>
+              Looks up a localized string similar to Aktualizace čerpaných částek.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450080">
+            <summary>
+              Looks up a localized string similar to Datum volání IISSP.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450082">
+            <summary>
+              Looks up a localized string similar to Rezervovaná částka.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450083">
+            <summary>
+              Looks up a localized string similar to Čerpaná částka.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450084">
+            <summary>
+              Looks up a localized string similar to Aktualizace.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450088">
+            <summary>
+              Looks up a localized string similar to Chyba komunikace s IISSP, přejete si volání opakovat?.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450089">
+            <summary>
+              Looks up a localized string similar to Uzavřeno.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450090">
+            <summary>
+              Looks up a localized string similar to Stav rezervací případu {0} ve Státní pokladně.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450093">
+            <summary>
+              Looks up a localized string similar to Porovnání stavu rezervace případu {0} - IISSP vs. GINIS.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450097">
+            <summary>
+              Looks up a localized string similar to Případ {0} nemá v IISSP žádnou rezervaci..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450098">
+             <summary>
+               Looks up a localized string similar to Probíhá odesílání rezervace
+            případu {0}
+            do systému Státní pokladny.
+             </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450099">
+             <summary>
+               Looks up a localized string similar to Probíhá uzavírání rezervace
+            č. {0}.
+             </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450100">
+            <summary>
+              Looks up a localized string similar to Historie stavu rezervací případu {0} ve Státní pokladně.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450101">
+            <summary>
+              Looks up a localized string similar to Historie stavů případu neobsahuje žádná data.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450102">
+             <summary>
+               Looks up a localized string similar to Probíhá načítání stavu rezervace
+            případu {0}
+            ze systému Státní pokladny.
+             </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450103">
+            <summary>
+              Looks up a localized string similar to Nahlížet na stav případu v IISSP je možné pouze u online komunikace s IISSP..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450104">
+            <summary>
+              Looks up a localized string similar to Porovnávat stav rezervace v IISSP a GINIS je možné pouze u online komunikace s IISSP..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450105">
+            <summary>
+              Looks up a localized string similar to Případ {0} byl v IISSP uzavřen..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450108">
+             <summary>
+               Looks up a localized string similar to Probíhá odesílání do IISSP
+            {0} / {1}
+            {2}.
+             </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450111">
+            <summary>
+              Looks up a localized string similar to Historie volání přeúčtování skutečnosti.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450112">
+            <summary>
+              Looks up a localized string similar to Nenalezena žádná data.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450114">
+            <summary>
+              Looks up a localized string similar to Detail volání rozhraní Státní pokladny pro id volání {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450115">
+            <summary>
+              Looks up a localized string similar to Dokl. číslo.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450116">
+            <summary>
+              Looks up a localized string similar to Druh.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450117">
+            <summary>
+              Looks up a localized string similar to ID ext.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450118">
+            <summary>
+              Looks up a localized string similar to Datum od.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450119">
+            <summary>
+              Looks up a localized string similar to Datum.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450120">
+            <summary>
+              Looks up a localized string similar to Zbývá: {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450121">
+            <summary>
+              Looks up a localized string similar to Stav volání Inbox IISSP.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450122">
+             <summary>
+               Looks up a localized string similar to Probíhá převzetí zpráv
+            dávky {0} z IISSP
+            {1}/{2}.
+             </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450123">
+            <summary>
+              Looks up a localized string similar to Historie volání IISSP v rámci inbox dávky id {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450124">
+            <summary>
+              Looks up a localized string similar to Vstupní a výstupní XML pro volání IISSP id {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450125">
+            <summary>
+              Looks up a localized string similar to Probíhá dotaz na stav dávky {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450126">
+            <summary>
+              Looks up a localized string similar to Seznam všech pohybů za vybrané období k položce rezervace.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450127">
+            <summary>
+              Looks up a localized string similar to Výkazy IISSP.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450128">
+            <summary>
+              Looks up a localized string similar to Historie volání IISSP v rámci Výkazu id {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450129">
+            <summary>
+              Looks up a localized string similar to Zaslání žádosti na vygenerování výkazu v IISSP.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450131">
+            <summary>
+              Looks up a localized string similar to Výkazy IISSP - pouze prohlížení.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450132">
+            <summary>
+              Looks up a localized string similar to Xml obsah požadavku {0} s náhledem na dotazy.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450133">
+            <summary>
+              Looks up a localized string similar to Xml obsah dotazu {0} s náhledem na zodpovězené požadavky.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450138">
+            <summary>
+              Looks up a localized string similar to Stav aktualizace dat EDS/SMVS.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450139">
+             <summary>
+               Looks up a localized string similar to Probíhá dotaz na nová data do EDS/SMVS
+            (může to být časově náročná operace).
+             </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450140">
+            <summary>
+              Looks up a localized string similar to Akce požadavku {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450142">
+            <summary>
+              Looks up a localized string similar to Akce dotazu {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450143">
+            <summary>
+              Looks up a localized string similar to Chyby požadavku {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450144">
+            <summary>
+              Looks up a localized string similar to Chyby dotazu {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450145">
+            <summary>
+              Looks up a localized string similar to Odstranění starých požadavků a dotazů na Export EDS/SMVS.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450146">
+            <summary>
+              Looks up a localized string similar to Bylo odstraněno {0} požadavků a {1} dotazů..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450147">
+            <summary>
+              Looks up a localized string similar to Nenalezeny žádné požadavky a dotazy k odstranění..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450148">
+            <summary>
+              Looks up a localized string similar to Načítání dat....
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450149">
+             <summary>
+               Looks up a localized string similar to Probíhá otevírání rezervace
+            č. {0}.
+             </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450155">
+            <summary>
+              Looks up a localized string similar to Vyberte certifikát k el. podpisu.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient._24450156">
+            <summary>
+              Looks up a localized string similar to Nebyly nalezeny žádné certifikáty..
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450001">
+            <summary>
+              Looks up a localized string similar to Chybný formát parametru param1={0}, je očekáváno {1}..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450002">
+            <summary>
+              Looks up a localized string similar to Případ byl ve Státní pokladně zamítnut. Chybové zprávy zaslané z IISSP:{0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450003">
+            <summary>
+              Looks up a localized string similar to Neočekávaná hodnota {0} enumerace {1}..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450007">
+            <summary>
+              Looks up a localized string similar to Hodnota enumerace {0} není obsloužena..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450010">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se zpracovat uloženou informaci o výsledku volání IISSP (result={0}, input={1}, output={2})..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450056">
+            <summary>
+              Looks up a localized string similar to Nemáte právo pro zobrazení této úlohy..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450057">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se převést seznam dokladů a vrácených chybových zpráv do textové podoby pro zobrazení v chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450062">
+            <summary>
+              Looks up a localized string similar to Object {0} je null..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450064">
+            <summary>
+              Looks up a localized string similar to Neočekávaný výsledek z volání IISSP: {0}..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450065">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se jednoznačně určit PersonId uživatele..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450066">
+            <summary>
+              Looks up a localized string similar to Dávku {0} se do souboru {1} nepodařilo uložit..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450072">
+            <summary>
+              Looks up a localized string similar to Pod id_volani = {0} není metoda pro Rozpočtové opatření..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450075">
+            <summary>
+              Looks up a localized string similar to Pokusná chyba, viz podrobnosti..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450076">
+            <summary>
+              Looks up a localized string similar to Nepodařila se kontrola vstupního objektu RozpoctoveOpatreniIdentifikaceType, kt. se posílá do IISSP..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450077">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se připravit dotaz na stav ROP v IISSP..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450078">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se sestavit hlášení z IISSP do MessageBox zprávy pro uživatele..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450085">
+            <summary>
+              Looks up a localized string similar to Chyba komunikace s IISSP.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450086">
+            <summary>
+              Looks up a localized string similar to Zamítnuto v IISSP.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450087">
+            <summary>
+              Looks up a localized string similar to Chyba GINIS.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450091">
+            <summary>
+              Looks up a localized string similar to Objekt {0} musí být umístěn na GTab..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450094">
+            <summary>
+              Looks up a localized string similar to Parametr param1 DNP metody je null nebo neobsahuje žádnou hodnotu..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450096">
+            <summary>
+              Looks up a localized string similar to Nepodařilo se převést rok={0} na číslo..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450106">
+            <summary>
+              Looks up a localized string similar to Neočekávaná hodnota DNP parametru pro označení hromadné rezervace {0}..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450107">
+            <summary>
+              Looks up a localized string similar to Chyba při zobrazování zprávy o výsledku rezervace v IISSP. Rezervace: {0}..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450109">
+            <summary>
+              Looks up a localized string similar to Při zpracování v IISSP došlo k chybě. Příčinu chyby se nepodařilo zjistit..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450110">
+            <summary>
+              Looks up a localized string similar to Přeúčtování skutečnosti bylo ve Státní pokladně zamítnuto. Chybové zprávy zaslané z IISSP (celkem {0}):{1}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450113">
+            <summary>
+              Looks up a localized string similar to Pod id_volani = {0} není metoda pro přeúčtování skutečnosti..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450130">
+            <summary>
+              Looks up a localized string similar to Neznámý typ výkazu {0}..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450134">
+            <summary>
+              Looks up a localized string similar to Vstupní parametr &apos;{0}&apos; musí začínat na &apos;verze#okno&apos;..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450135">
+            <summary>
+              Looks up a localized string similar to Nekompatibilní verze rozhraní DNP. Z modulu zaslána verze {0}, je očekáváno {1}. Celý DNP vstup: {2}..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450136">
+            <summary>
+              Looks up a localized string similar to Vstupní parametr &apos;{0}&apos; neobsahuje definici parametrů okna, např. &quot;exp#123&quot;..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450137">
+            <summary>
+              Looks up a localized string similar to Chybné volání DNP služby 4521, neznámé jméno okna {0} ve vstupním parametru {1}..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450141">
+            <summary>
+              Looks up a localized string similar to Vstupní parametr &apos;{0}&apos; neobsahuje definici parametrů okna &quot;...#ico#ucs&quot;..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450150">
+            <summary>
+              Looks up a localized string similar to Neočekávaná hodnota parametru param1 {0} služby 4504, parametr nezačíná na podporovaný task_id (rozhraní {1})..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450151">
+            <summary>
+              Looks up a localized string similar to U zasílání BÚ a jejich vlastníků do IISSP je podporováno pouze přímé volání přes WS B_EKIS_SP_SBUV..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450152">
+            <summary>
+              Looks up a localized string similar to Chybný formát parametru param2={0}, je očekáváno {1}..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450153">
+            <summary>
+              Looks up a localized string similar to Neočekávaný výsledek zpracování {0}..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450154">
+            <summary>
+              Looks up a localized string similar to Nebyl vybrán uživatelský certifikát pro podpis platebního příkazu..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450158">
+            <summary>
+              Looks up a localized string similar to Funkčnost není přes ISL zatím implementována..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450160">
+            <summary>
+              Looks up a localized string similar to Chybný formát parametru param1={0}, je očekáváno {1}..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450161">
+            <summary>
+              Looks up a localized string similar to Chybný formát parametru param2={0}, je očekáváno {1}..
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Gordic_Iissp_WinClient_Exceptions._24450162">
+            <summary>
+              Looks up a localized string similar to Chyba při práci s rozhraním Fiddo..
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GInboxPorovnaniTab">
+            <summary>
+            Porovnání výkazu GINIS x IISSP
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxPorovnaniTab.#ctor(Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDateTime,System.Data.DataTable,System.Int32)">
+            <summary>
+            Konstr.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxPorovnaniTab.OnLoad(System.EventArgs)">
+            <summary>
+            Onload
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxPorovnaniTab.LoadData">
+            <summary>
+            Načte data (nejdřív nastává konstruktor, potom LoadData())
+            </summary>
+            <returns>false = bez dat/chyba</returns>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GInboxPorovnaniTab.MyGridFormatGlo">
+            <summary>
+            Formátování gridu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxPorovnaniTab.MyGridFormatCreateGlo">
+            <summary>
+            sestaví sloupce gridu el. obrazu
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GInboxPorovnaniTab.MyGridFormatRek">
+            <summary>
+            Formátování gridu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxPorovnaniTab.MyGridFormatCreateRek">
+            <summary>
+            sestaví sloupce gridu el. obrazu
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GInboxPorovnaniTab.MyGridFormatZuk">
+            <summary>
+            Formátování gridu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxPorovnaniTab.MyGridFormatCreateZuk">
+            <summary>
+            sestaví sloupce gridu el. obrazu
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GInboxPorovnaniTab.MyGridFormatNnv">
+            <summary>
+            Formátování gridu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxPorovnaniTab.MyGridFormatCreateNnv">
+            <summary>
+            sestaví sloupce gridu el. obrazu
+            </summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GInboxPorovnaniTab.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxPorovnaniTab.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxPorovnaniTab.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GStskPohybyTab">
+            <summary>
+            Historie stavu rezervací případu {0} ve Státní pokladně
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GStskPohybyTab.#ctor(Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GInt32)">
+            <summary>
+            Konstr.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GStskPohybyTab.OnLoad(System.EventArgs)">
+            <summary>
+            Onload
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GStskPohybyTab.LoadData">
+            <summary>
+            Načte data (nejdřív nastává konstruktor, potom LoadData())
+            </summary>
+            <returns>false = bez dat/chyba</returns>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GStskPohybyTab.MyGridFormat">
+            <summary>
+            Formátování gridu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GStskPohybyTab.MyGridFormatCreate">
+            <summary>
+            sestaví sloupce gridu el. obrazu
+            </summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GStskPohybyTab.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GStskPohybyTab.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GStskPohybyTab.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GInboxHistorieTab">
+            <summary>
+            Historie volání IISSP v rámci dané inbox dávky
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxHistorieTab.#ctor(Gordic.General.GInt32,Gordic.General.GInt32,Gordic.Iissp.WinClient.GInboxMainTab.Typ)">
+            <summary>
+            Konstr.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxHistorieTab.OnLoad(System.EventArgs)">
+            <summary>
+            Onload
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxHistorieTab.LoadData">
+            <summary>
+            Načte data (nejdřív nastává konstruktor, potom LoadData())
+            </summary>
+            <returns>false = bez dat/chyba</returns>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GInboxHistorieTab.MyGridFormat">
+            <summary>
+            Formátování gridu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxHistorieTab.MyGridFormatCreate">
+            <summary>
+            sestaví sloupce gridu el. obrazu
+            </summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GInboxHistorieTab.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxHistorieTab.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxHistorieTab.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GInboxMainTab">
+            <summary>
+            Stav volání Inbox/Výkazů IISSP
+            </summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GInboxMainTab.m_oInboxClient">
+            <summary>GInboxClient, pro propertu InboxClient</summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GInboxMainTab.m_oIdInboxSspIn">
+            <summary>Jak dělám refresh, tak dokud nezmáčkne checkbox, tak tam budu držet ty co Převzal</summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GInboxMainTab.InboxClient">
+            <summary>
+            Vrátí instanci klienta
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GInboxMainTab.Typ">
+            <summary>Typ okna (Inbox = metody Stro+Cero+Stsk, Vykaz = Výkazy)</summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GInboxMainTab.Typ.Inbox">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GInboxMainTab.Typ.Vykaz">
+            <summary></summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxMainTab.#ctor(Gordic.Iissp.WinClient.GInboxMainTab.Typ,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,System.Boolean)">
+            <summary>
+            Konstr. = nový
+            </summary>
+            <param name="typ">typ okna: inbox/výkazy</param>
+            <param name="ico">ekonomický parametr</param>
+            <param name="ucs">ekonomický parametr</param>
+            <param name="rok">ekonomický parametr</param>
+            <param name="fim">fin. místo</param>
+            <param name="povolGenerovani">x</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxMainTab.OnLoad(System.EventArgs)">
+            <summary>
+            Onload
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxMainTab.LoadData(System.Boolean)">
+            <summary>
+            Načte data (nejdřív nastává konstruktor, potom LoadData())
+            </summary>
+            <param name="keepKey"></param>
+            <returns>false = bez dat/chyba</returns>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GInboxMainTab.MyGridFormat">
+            <summary>
+            Formátování gridu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxMainTab.MyGridFormatCreate">
+            <summary>
+            sestaví sloupce gridu el. obrazu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxMainTab.ChangeOpacity(System.Drawing.Image,System.Single)">
+            <summary>
+            Nastaví Opacity
+            </summary>
+            <param name="img"></param>
+            <param name="opacityvalue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxMainTab.CleanTemporary">
+            <summary>
+            Volat před začátkem každé ....Action_Start
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GInboxMainTab.InboxDetailEventArgs">
+            <summary>Otevření detailu Inbox</summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GInboxMainTab.InboxDetailEventArgs.Maska">
+            <summary>Maska</summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GInboxMainTab.InboxDetailEventArgs.KeDniOd">
+            <summary>Ke dni od (jen Cero a Stsk)</summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GInboxMainTab.InboxDetailEventArgs.KeDni">
+            <summary>Ke dni</summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GInboxMainTab.InboxDetailEventArgs.Stro">
+            <summary>STRO</summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GInboxMainTab.InboxDetailEventArgs.Cero">
+            <summary>CERO</summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GInboxMainTab.InboxDetailEventArgs.Metoda">
+            <summary>Metoda velkými písmeny ("STRO", "CERO", "STSK")</summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GInboxMainTab.InboxDetailEventArgs.StskTyp">
+            <summary>Stsk_typ dle číselníku vas.sspcsts (0=Není Stsk;10=S IK;20=S Rez;30=D Rez;40=D Par,Pol)</summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GInboxMainTab.InboxDetailEventHandler">
+            <summary>Otevření detailu Inbox</summary>
+        </member>
+        <member name="E:Gordic.Iissp.WinClient.GInboxMainTab.InboxDetail">
+            <summary>Událost otevření detailu Inbox</summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxMainTab.OnInboxDetail(Gordic.Iissp.WinClient.GInboxMainTab.InboxDetailEventArgs)">
+            <exclude/>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GInboxMainTab.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxMainTab.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxMainTab.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GInboxHistorieObsahTab">
+            <summary>
+            Zobrazení obsahu vstupního a výstupního XML
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxHistorieObsahTab.#ctor(Gordic.General.GInt32)">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxHistorieObsahTab.OnLoad(System.EventArgs)">
+            <summary>
+            Onload
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GInboxHistorieObsahTab.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxHistorieObsahTab.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GInboxHistorieObsahTab.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.GObsahInboxTab">
+            <summary>
+            Zobrazení obsahu vstupní a výstupní dávky
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GObsahInboxTab.#ctor(Gordic.General.GInt32)">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GObsahInboxTab.OnLoad(System.EventArgs)">
+            <summary>
+            Onload
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.GObsahInboxTab.MyGridFormat">
+            <summary>
+            Formátování gridu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GObsahInboxTab.MyGridFormatCreate">
+            <summary>
+            sestaví sloupce gridu el. obrazu
+            </summary>
+        </member>
+        <member name="F:Gordic.Iissp.WinClient.GObsahInboxTab.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GObsahInboxTab.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Iissp.WinClient.GObsahInboxTab.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.WinClient.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__App__gin01">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Eko__financovani">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__akce">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__aplikace_info">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__cenik">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__data_export">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__data_import">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__detail">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__detail_symbol">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__dialog_stop">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__export_chyba">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__logo_gordic">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__nic">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__offline">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__online">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__pripraveno_k_provedeni">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__soucet">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__stav_castecne_hotovo_barva">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__stav_hotovo_barva">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__stav_navrh">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__stav_nehotovo_barva">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__stav_nevyrizeno">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__stav_odemceno">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__stav_overeni_negativni">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__stav_overeni_neprovedeno">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__stav_overeni_neurceno">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__stav_overeni_pozitivni">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__stav_pripraveno">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__stav_provedeno">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__stav_provedeno_s_varovanim">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__stav_skonceno_chybou">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__stav_stornovano">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__stav_uzavreno">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__stav_zastaveno">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Gin__vymazat">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Ost__statni_pokladna">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Ost__test_vysledek_negativni">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Pam__stav_prijato_do_mezd">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.WinClient.Properties.Resources.Icons__Wfl__dokument_priznak_schvaleno">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+    </members>
+</doc>

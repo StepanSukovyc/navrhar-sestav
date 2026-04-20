@@ -1,0 +1,394 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Develop.InstallerServiceInterface</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Develop.InstallerService.GDevState">
+            <summary>DTO pro novou notifikaci
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GDevState.state">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GDevState.text">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GDevState.message">
+            <summary></summary>
+        </member>
+        <member name="T:Gordic.Develop.InstallerService.IGInstallerService">
+            <summary> Interface pro spolupráci mezi IS a klienty. Tento interface implementuje IS. 
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.IGInstallerService.GetConstants">
+            <summary>Metoda vrati vybrane konstanty serveru</summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.IGInstallerService.IsPrivilegedUser(System.String)">
+            <summary>Dotaz na pristup k rozsirenym uloham</summary>
+            <param name="userName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.IGInstallerService.PauseServer(System.Boolean,System.String)">
+            <summary>Prikaz k pause/unpause IS</summary>
+            <param name="newState"></param>
+            <param name="userName"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.IGInstallerService.GetPackageList(System.String)">
+            <summary>Vrati seznam baliku se vsemi verejnymi detaily o balicich</summary>
+            <param name="etag">informace o poslednich stazenych datech a trigger, ze chci jen novejsi zmeny</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.IGInstallerService.GetPackageListJSON(System.String)">
+            <summary>Vrati seznam baliku se vsemi verejnymi detaily o balicich v optimalizovanem JSON formatu (pro protazeni binaryserializerem, ktery ma problem se strukturovanym DTO)</summary>
+            <param name="etag">informace o poslednich stazenych datech a trigger, ze chci jen novejsi zmeny</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.IGInstallerService.GetPackageContent(System.String,System.String)">
+            <summary>Vrati obsah daneho souboru</summary>
+            <param name="packageId">identifikator baliku</param>
+            <param name="fileId">typ souboru baliku</param>
+            <returns>obsah souboru; null..pokud soubor neexistuje</returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.IGInstallerService.PublishPackage(System.String)">
+            <summary>vypublikovani modulu na automat</summary>
+            <param name="packageId">identifikator baliku</param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.IGInstallerService.GetAutomatWaitingList">
+            <summary>Vrati naplnenou DataTable s uplnym obsahem uloziste</summary>
+            <returns>seznam baliku v ulozisti k odeslani na automat</returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.IGInstallerService.GetBranches">
+            <summary> Vrací seznam dostupných velkých verzí, tedy vlastně seznam větví ze svn. </summary>
+            <remarks>
+            Jde vlastně o seznam větví ze svn. Není zaručeno že se budou jmenovat číselně, např. 452-2, nebo něco podobného.
+            Metoda funguje tak, že se podívá do adresáře builds a vylistuje ho.
+            </remarks>
+            <returns>Seznam dostupných velkých verzí (větví svn), např. {452,453,454,...}</returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.IGInstallerService.GetKnownModules">
+            <summary> Vrátí pole známých (již použitých) modulů </summary>
+            <returns>pole známých (již použitých) modulů</returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.IGInstallerService.PredictRevision(System.String,System.String,System.String)">
+            <summary>Vrati informace o nove vznikle revizi, ktera by mela vzniknout pro request</summary>
+            <param name="branch"></param>
+            <param name="targetModule"></param>
+            <param name="customer"></param>
+            <returns>41USU0552311T14</returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.IGInstallerService.NewRequest(Gordic.Develop.InstallerService.RequestInfo)">
+            <summary>Metoda zaregistruje nový požadavek na vytvoření msi balíku.</summary>
+            <param name="requestInfo">objekt s informacemi o pozadavku</param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.IGInstallerService.GetQueue">
+            <summary> Vrací frontu požadavků jaká byla v čas volání této metody. </summary>
+            <returns>Fronta registrovaných požadavků. Setříděno od nejstaršího k nejnovějšímu. Jde o frontu. např. 
+            {40GIN0145202X01, 41AUT0145201X01, ...}</returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.IGInstallerService.RemoveRequest(System.String,System.String,System.String)">
+            <summary>pokusi se odstranit balik z fronty</summary>
+            <param name="idRequest"></param>
+            <param name="user"></param>
+            <param name="reason"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.IGInstallerService.PriorityRequest(System.String,System.String,System.String)">
+            <summary>posune balik v poradi priorit vyse</summary>
+            <param name="idRequest"></param>
+            <param name="user"></param>
+            <param name="reason"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.IGInstallerService.GetStatus">
+            <summary> Vrací informace popisující stav služby. </summary>
+            <returns>DTO popisující aktuální stav služby</returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.IGInstallerService.GetStatusJSON">
+            <summary> Vrací informace popisující stav služby (optimalizovana verze obchazejici remoting+binarySerializer). </summary>
+            <returns>DTO popisující aktuální stav služby</returns>
+        </member>
+        <member name="T:Gordic.Develop.InstallerService.GInstallServerQueueItem">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerQueueItem.id">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerQueueItem.branch">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerQueueItem.branchFailed">
+            <summary>pro future se overuje stav vetve</summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerQueueItem.build">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerQueueItem.author">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerQueueItem.mail">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerQueueItem.revision">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerQueueItem.localized">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerQueueItem.requested">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerQueueItem.status">
+            <summary>future | ready | running | done | failed | aborting | aborted | unknown </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerQueueItem.statusText">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerQueueItem.processTime">
+            <summary>doba zpracovani</summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerQueueItem.priorityPackage">
+            <summary>priznak a obsah priority baliku</summary>
+        </member>
+        <member name="T:Gordic.Develop.InstallerService.GInstallServerAutomatItemDto">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerAutomatItemDto.file">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerAutomatItemDto.created">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerAutomatItemDto.warning">
+            <summary></summary>
+        </member>
+        <member name="T:Gordic.Develop.InstallerService.GInstallServerStatus">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerStatus.serviceStatus">
+            <summary>stav sluzby (init, running, paused, exiting, remoteException)</summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerStatus.serviceVersion">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerStatus.clientVersion">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerStatus.clientMessage">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerStatus.queueTotal">
+            <summary>celkovy pocet requestu ve fronte (vcetne dokoncenych/fail, apod.)</summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerStatus.queueWaiting">
+            <summary>pocet cekajicich</summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerStatus.queueRunning">
+            <summary>pocet bezicich</summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerStatus.automatTotal">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerStatus.automatWarning">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerStatus.gdevState">
+            <summary> Stav GDEV/ESL
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerStatus.gdevStatusMessage">
+            <summary> Posledni duvod selhani GDEV/ESL
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerStatus.packages">
+            <summary> celkovy pocet baliku</summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerStatus.adt07url">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerStatus.queue">
+            <summary></summary>
+        </member>
+        <member name="T:Gordic.Develop.InstallerService.GInstallServerBuildDto">
+            <summary> DTO pro branch
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerBuildDto.branch">
+            <summary> vetev (52310_T681)
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerBuildDto.location">
+            <summary> umisteni vetve v ramci struktur ("branches/5231_T681", "Development")
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerBuildDto.latestBuildText">
+            <summary> posledni uspesny build ve formatovanem tvaru 
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerBuildDto.branchFailed">
+            <summary> uplne posledni build je failed 
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerBuildDto.branchType">
+            <summary> D, P, S, F, T
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerBuildDto.branchTypeFull">
+            <summary> Development, Production, Stable, Feature, WebTest
+            </summary>
+        </member>
+        <member name="T:Gordic.Develop.InstallerService.GInstallServerBranchDto">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerBranchDto.current">
+            <summary> priznak aktualne pouzivanych verzi (maximalne jeden D, P, S by mel byt oznacen)
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerBranchDto.obsolete">
+            <summary> priznak hodne starych verzi (skoro by se nemel ani nabizet) 
+            </summary>
+        </member>
+        <member name="T:Gordic.Develop.InstallerService.GInstallServerModuleDto">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerModuleDto.customer">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerModuleDto.targetModule">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerModuleDto.format">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:Gordic.Develop.InstallerService.GInstallServerRepositoryList">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerRepositoryList.etag">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerRepositoryList.data">
+            <summary></summary>
+        </member>
+        <member name="T:Gordic.Develop.InstallerService.GPriorityPackageInfo">
+            <summary> Doplnujici informace o priorite
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.InstallerService.GPriorityPackageInfo.user">
+            <summary>Uzivatelske jmeno iniciatora</summary>
+        </member>
+        <member name="P:Gordic.Develop.InstallerService.GPriorityPackageInfo.reason">
+            <summary>Zduvodneni</summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GPriorityPackageInfo.#ctor(System.String,System.String)">
+            <summary></summary>
+            <param name="aUser"></param>
+            <param name="aReason"></param>
+        </member>
+        <member name="T:Gordic.Develop.InstallerService.GInstallServerRepositoryContent">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerRepositoryContent.Content">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerRepositoryContent.ContentType">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallServerRepositoryContent.Name">
+            <summary></summary>
+        </member>
+        <member name="T:Gordic.Develop.InstallerService.GInstallerServiceConstantsDto">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallerServiceConstantsDto.ADT07URL">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:Gordic.Develop.InstallerService.RequestInfo">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.RequestInfo.LatestBuild">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.RequestInfo.SvnMy">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.RequestInfo.SvnHead">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.RequestInfo.branch">
+            <summary> Nazev branch ("52322", "52322_T9874" )
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.RequestInfo.svnRevMin">
+            <summary> 0=ANY; -1=SVNMY; -2=SVNHEAD 
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.RequestInfo.customer">
+            <summary> zákazník 
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.RequestInfo.targetModule">
+            <summary> modul 41USU01
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.RequestInfo.mail">
+            <summary> mailová adresa na kterou se má odesílat avizace zpracování požadavku
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.RequestInfo.mailText">
+            <summary> text který bude obsažen v mailu
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.RequestInfo.localize">
+            <summary> zda se má lokalizovat
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.RequestInfo.author">
+            <summary> zadavatel pozadavku 
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.RequestInfo.requested">
+            <summary> skutecne datum vytvoreni pozadavku uzivatelem (do zaznamu)
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.RequestInfo.format">
+            <summary> Pozadovany format baliku (ZIP, MSI, MSIv2, ...)
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.RequestInfo.publish">
+            <summary> automaticky publikovat balik
+            </summary>
+        </member>
+        <member name="T:Gordic.Develop.InstallerService.NoticeInfo">
+            <summary>DTO pro novou notifikaci
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.NoticeInfo.packages">
+            <summary> seznam identifikatoru baliku (packageId), ke kterym se prida notifikace
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.NoticeInfo.notice">
+            <summary> Text poznámky
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.NoticeInfo.sendEmail">
+            <summary> Odeslat / neodeslat email s upozorněním
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.NoticeInfo.author">
+            <summary> Jméno autora poznámky
+            </summary>
+        </member>
+    </members>
+</doc>

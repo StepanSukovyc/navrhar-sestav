@@ -1,0 +1,1349 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Xrg.WsFiaServer</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWsFiaCommon">
+            <summary>
+            Společné funkce kontrol a čtení číselníků pro Fia
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWsFiaCommon.VratAkci(Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16@)">
+            <summary>
+            Převod org->akce
+            </summary>
+            <param name="org"></param>
+            <param name="ico"></param>
+            <param name="rok"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWsFiaCommon.Substring(System.String,System.Int32,System.Int32,System.String)">
+            <summary>
+            Funkce pro substring podle stroje, při začátku na 1. pozici se použije LIKE
+            </summary>
+            <param name="column"></param>
+            <param name="length"></param>
+            <param name="startIdx"></param>
+            <param name="hodnota"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWsFiaCommon.VratIdBpl(Gordic.General.GString,Gordic.General.GString,System.String,System.String,Gordic.General.GString)">
+            <summary>
+            Vrátí identifikátory akce
+            </summary>
+            <param name="ico"></param>
+            <param name="org"></param>
+            <param name="typ">KdfPouPre</param>
+            <param name="priVyd">příjem/výdej</param>
+            <param name="ucs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWsFiaCommon.VratPolozkyKdfPou(Gordic.General.GString,Gordic.General.GString,System.String)">
+            <summary>
+            Vrátí položky kdf, pou
+            </summary>
+            <param name="ixp"></param>
+            <param name="ucs"></param>
+            <param name="typ"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWsFiaCommon.VratPolozkyPre(Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Vrátí položky bpl
+            </summary>
+            <param name="ixp"></param>
+            <param name="ucs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWsFiaCommon.VratDetailKdfPou(Gordic.General.GString,System.String,Gordic.General.GString)">
+            <summary>
+            Vrátí detail poukazu
+            </summary>
+            <param name="ixp"></param>
+            <param name="typ"></param>
+            <param name="ucs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWsFiaCommon.VratDetailPre(Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Vrátí detail převodu
+            </summary>
+            <param name="ixp"></param>
+            <param name="ucs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWsFiaCommon.VratParamAkce(Gordic.General.GString,Gordic.General.GString,System.Int32@,System.Int32@)">
+            <summary>
+            Vrátí parametry akce
+            </summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GXrgFiaServiceLogic">
+            <summary>XRG - aplikační logika služby Fia</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GXrgFiaServiceLogic.m_oOriginalServiceLogic">
+            <summary>aplikační logika původní služby</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.GXrgFiaServiceLogic.OriginalServiceLogic">
+            <summary>aplikační logika původní služby</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.GXrgFiaServiceLogic.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GXrgFiaServiceLogic.GetRequestDataset(System.String,System.String)">
+            <summary>získání prázdného datasetu pro vstupní data</summary>
+            <param name="methodName">název metody</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat</param>
+            <returns>prázdná instance datasetu pro vstupní data, v případě vrácení hodnoty null nebudou načítána žádná vstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GXrgFiaServiceLogic.ProcessRequest(System.String,System.String,Gordic.General.GDataSet)">
+            <summary>zpracování vstupních dat</summary>
+            <param name="methodName">název metody</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat</param>
+            <param name="requestDataSet">dataset se vstupními daty</param>
+            <returns>dataset s výstupními daty nebo null v případě, že nemají být vrácena žádná výstupní data</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GFiaWebService">
+            <summary>Server webových služeb Fia</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaEkoTestExistenceOrgRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaSmlSeznamSmluvRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaSmlDetailSmlouvyRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaSmlPolozkySmlouvyRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaObjSeznamObjednavekRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaObjDetailObjednavkyRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaObjPolozkyObjednavkyRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaKdfSeznamFakturRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaKdfDetailFakturyRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaKdfPolozkyFakturyRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaPrePriSeznamPrevodnichPoukazuRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaPrePriDetailPrevodnihoPoukazuRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaPrePriPolozkyPrevodnihoPoukazuRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaPreVydSeznamPrevodnichPoukazuRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaPreVydDetailPrevodnihoPoukazuRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaPreVydPolozkyPrevodnihoPoukazuRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaPouVydSeznamPoukazuRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaPouVydDetailPoukazuRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaPouVydPolozkyPoukazuRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaPouPriSeznamPoukazuRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaPouPriDetailPoukazuRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaPouPriPolozkyPoukazuRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaUctSeznamPreuctovacichDokladuRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaUctDetailPreuctovacihoDokladuRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaUctPolozkyPreuctovacihoDokladuRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaMajSeznamMajetkuRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaMajDetailMajetkuRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaMajPolozkyMajetkuRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaUctSeznamUcetnichDokladuRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsFiaServer.GFiaWebService.m_csFiaEkoSeznamKrytiRozpoctuRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GFiaWebService.GetRequestSchemaFileName(System.String,System.String)">
+            <summary>získání názvu souboru obsahujícího XML schéma pro validaci vstupních dat webové služby</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <returns>název souboru s XML schématem ( tj. *.xsd ), v případě vrácení hodnoty null nebo prázdného řetězce nebude kontrola vstupních dat webové služby provedena</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GFiaWebService.GetRequestDataset(System.String,System.String)">
+            <summary>získání prázdného typového datasetu pro načtení vstupních dat</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <returns>prázdná instance typového datasetu určená pro načtení vstupních dat nebo hodnota null v případě, že aplikační logika webové služby vstupní data neočekává</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GFiaWebService.ProcessRequest(System.String,System.String,System.Data.DataSet)">
+            <summary>zpracování vstupních dat webové služby</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <param name="requestDataSet">instance typového datasetu naplněná vstupními daty webové služby</param>
+            <returns>dataset s výstupními daty webové služby, nebo null v případě, že webová služba nevrací žádná data</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.ggetrzvtextobe">
+            <summary>
+            Package   : 
+            Procedure : getrzvtextobe
+            Version   : 364.03
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.ggetrzvtextobe.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.ggetrzvtextobe.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.ggetrzvtextobe.in_ico">
+            <summary>in_ico - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.ggetrzvtextobe.in_rok">
+            <summary>in_rok - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.ggetrzvtextobe.in_ucs">
+            <summary>in_ucs - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.ggetrzvtextobe.in_nks">
+            <summary>in_nks - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.ggetrzvtextobe.in_uea">
+            <summary>in_uea - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.ggetrzvtextobe.in_ueb">
+            <summary>in_ueb - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.ggetrzvtextobe.in_uec">
+            <summary>in_uec - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.ggetrzvtextobe.in_ued">
+            <summary>in_ued - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.ggetrzvtextobe.in_uee">
+            <summary>in_uee - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.ggetrzvtextobe.in_uef">
+            <summary>in_uef - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.ggetrzvtextobe.in_ueg">
+            <summary>in_ueg - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.ggetrzvtextobe.in_ueh">
+            <summary>in_ueh - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.ggetrzvtextobe.in_uei">
+            <summary>in_uei - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.ggetrzvtextobe.in_uej">
+            <summary>in_uej - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.ggetrzvtextobe.in_te0">
+            <summary>in_te0 - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.ggetrzvtextobe.in_te1">
+            <summary>in_te1 - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.ggetrzvtextobe.in_te2">
+            <summary>in_te2 - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.ggetrzvtextobe.in_te3">
+            <summary>in_te3 - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.ggetrzvtextobe.in_te4">
+            <summary>in_te4 - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.ggetrzvtextobe.in_uroven_num">
+            <summary>in_uroven_num - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.ggetrzvtextobe.outparam_1">
+            <summary>outparam_1 - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.ggetrzvtextobe.SetInParams(Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.ggetrzvtextobe.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.gspg_ekoakce">
+            <summary>
+            Package   : 
+            Procedure : spg_ekoakce
+            Version   : 360.1
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.gspg_ekoakce.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.gspg_ekoakce.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.gspg_ekoakce.a_log_por_cislo">
+            <summary>povinné</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.gspg_ekoakce.a_com_mode">
+            <summary>povinné</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.gspg_ekoakce.a_ico">
+            <summary>povinné</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.gspg_ekoakce.a_rok">
+            <summary>povinné účetní období</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.gspg_ekoakce.a_te1">
+            <summary>povinné ORG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.gspg_ekoakce.o_gor_err">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.gspg_ekoakce.o_sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.gspg_ekoakce.o_isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.gspg_ekoakce.o_txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.gspg_ekoakce.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsFiaServer.gspg_ekoakce.o_cislo">
+            <summary>o_cislo - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.gspg_ekoakce.SetInParams(Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.gspg_ekoakce.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.gspg_ekoakce.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.gspg_ekoakce.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaEkoSeznamKrytiRozpoctu">
+            <summary>Seznam krytí rozpočtu</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaEkoSeznamKrytiRozpoctu.Execute(Gordic.Xrg.WsFiaInterface.EkoSeznamKrytiRozpoctuRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaEkoSeznamKrytiRozpoctu.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.EkoSeznamKrytiRozpoctuRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaEkoSeznamKrytiRozpoctu.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.EkoSeznamKrytiRozpoctuRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaEkoSeznamKrytiRozpoctu.SeznamKrytiRozpoctu(Gordic.Xrg.WsFiaInterface.EkoSeznamKrytiRozpoctuResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaEkoSeznamKrytiRozpoctu.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.EkoSeznamKrytiRozpoctuResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaUctSeznamUcetnichDokladu">
+            <summary>Seznam účetních dokladů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaUctSeznamUcetnichDokladu.Execute(Gordic.Xrg.WsFiaInterface.UctSeznamUcetnichDokladuRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaUctSeznamUcetnichDokladu.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.UctSeznamUcetnichDokladuRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaUctSeznamUcetnichDokladu.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.UctSeznamUcetnichDokladuRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaUctSeznamUcetnichDokladu.SeznamUcetnichDokladu(Gordic.Xrg.WsFiaInterface.UctSeznamUcetnichDokladuResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaUctSeznamUcetnichDokladu.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.UctSeznamUcetnichDokladuResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaObjDetailObjednavky">
+            <summary>Detail objednávky </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaObjDetailObjednavky.Execute(Gordic.Xrg.WsFiaInterface.ObjDetailObjednavkyRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaObjDetailObjednavky.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.ObjDetailObjednavkyRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaObjDetailObjednavky.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.ObjDetailObjednavkyRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaObjDetailObjednavky.DetailObjednavky(Gordic.Xrg.WsFiaInterface.ObjDetailObjednavkyResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaObjDetailObjednavky.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.ObjDetailObjednavkyResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaObjPolozkyObjednavky">
+            <summary>Položky objednávky</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaObjPolozkyObjednavky.Execute(Gordic.Xrg.WsFiaInterface.ObjPolozkyObjednavkyRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaObjPolozkyObjednavky.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.ObjPolozkyObjednavkyRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaObjPolozkyObjednavky.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.ObjPolozkyObjednavkyRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaObjPolozkyObjednavky.PolozkyObjednavky(Gordic.Xrg.WsFiaInterface.ObjPolozkyObjednavkyResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaObjPolozkyObjednavky.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.ObjPolozkyObjednavkyResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaPouPriPolozkyPoukazu">
+            <summary>Položky poukazu příjmového</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouPriPolozkyPoukazu.Execute(Gordic.Xrg.WsFiaInterface.PouPriPolozkyPoukazuRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouPriPolozkyPoukazu.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.PouPriPolozkyPoukazuRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouPriPolozkyPoukazu.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.PouPriPolozkyPoukazuRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouPriPolozkyPoukazu.PolozkyPoukazu(Gordic.Xrg.WsFiaInterface.PouPriPolozkyPoukazuResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouPriPolozkyPoukazu.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.PouPriPolozkyPoukazuResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaPouVydPolozkyPoukazu">
+            <summary>Položky poukazu výdajového</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouVydPolozkyPoukazu.Execute(Gordic.Xrg.WsFiaInterface.PouVydPolozkyPoukazuRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouVydPolozkyPoukazu.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.PouVydPolozkyPoukazuRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouVydPolozkyPoukazu.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.PouVydPolozkyPoukazuRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouVydPolozkyPoukazu.PolozkyPoukazu(Gordic.Xrg.WsFiaInterface.PouVydPolozkyPoukazuResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouVydPolozkyPoukazu.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.PouVydPolozkyPoukazuResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaPreVydPolozkyPrevodnihoPoukazu">
+            <summary>Položky převodního poukazu výdajového</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPreVydPolozkyPrevodnihoPoukazu.Execute(Gordic.Xrg.WsFiaInterface.PreVydPolozkyPrevodnihoPoukazuRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPreVydPolozkyPrevodnihoPoukazu.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.PreVydPolozkyPrevodnihoPoukazuRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPreVydPolozkyPrevodnihoPoukazu.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.PreVydPolozkyPrevodnihoPoukazuRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPreVydPolozkyPrevodnihoPoukazu.PolozkyPrevodnihoPoukazu(Gordic.Xrg.WsFiaInterface.PreVydPolozkyPrevodnihoPoukazuResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPreVydPolozkyPrevodnihoPoukazu.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.PreVydPolozkyPrevodnihoPoukazuResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaPrePriPolozkyPrevodnihoPoukazu">
+            <summary>Položky převodního poukazu příjmového</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPrePriPolozkyPrevodnihoPoukazu.Execute(Gordic.Xrg.WsFiaInterface.PrePriPolozkyPrevodnihoPoukazuRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPrePriPolozkyPrevodnihoPoukazu.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.PrePriPolozkyPrevodnihoPoukazuRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPrePriPolozkyPrevodnihoPoukazu.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.PrePriPolozkyPrevodnihoPoukazuRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPrePriPolozkyPrevodnihoPoukazu.PolozkyPrevodnihoPoukazu(Gordic.Xrg.WsFiaInterface.PrePriPolozkyPrevodnihoPoukazuResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPrePriPolozkyPrevodnihoPoukazu.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.PrePriPolozkyPrevodnihoPoukazuResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaKdfPolozkyFaktury">
+            <summary>Položky faktury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaKdfPolozkyFaktury.Execute(Gordic.Xrg.WsFiaInterface.KdfPolozkyFakturyRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaKdfPolozkyFaktury.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.KdfPolozkyFakturyRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaKdfPolozkyFaktury.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.KdfPolozkyFakturyRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaKdfPolozkyFaktury.PolozkyFaktury(Gordic.Xrg.WsFiaInterface.KdfPolozkyFakturyResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaKdfPolozkyFaktury.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.KdfPolozkyFakturyResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaPouVydDetailPoukazu">
+            <summary>Detail poukazu výdajového </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouVydDetailPoukazu.Execute(Gordic.Xrg.WsFiaInterface.PouVydDetailPoukazuRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouVydDetailPoukazu.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.PouVydDetailPoukazuRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouVydDetailPoukazu.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.PouVydDetailPoukazuRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouVydDetailPoukazu.DetailPoukazu(Gordic.Xrg.WsFiaInterface.PouVydDetailPoukazuResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouVydDetailPoukazu.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.PouVydDetailPoukazuResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaPouPriDetailPoukazu">
+            <summary>Detail poukazu příjmového </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouPriDetailPoukazu.Execute(Gordic.Xrg.WsFiaInterface.PouPriDetailPoukazuRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouPriDetailPoukazu.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.PouPriDetailPoukazuRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouPriDetailPoukazu.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.PouPriDetailPoukazuRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouPriDetailPoukazu.DetailPoukazu(Gordic.Xrg.WsFiaInterface.PouPriDetailPoukazuResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouPriDetailPoukazu.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.PouPriDetailPoukazuResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaPreVydDetailPrevodnihoPoukazu">
+            <summary>Detail převodního poukazu výdajového </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPreVydDetailPrevodnihoPoukazu.Execute(Gordic.Xrg.WsFiaInterface.PreVydDetailPrevodnihoPoukazuRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPreVydDetailPrevodnihoPoukazu.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.PreVydDetailPrevodnihoPoukazuRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPreVydDetailPrevodnihoPoukazu.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.PreVydDetailPrevodnihoPoukazuRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPreVydDetailPrevodnihoPoukazu.DetailPoukazu(Gordic.Xrg.WsFiaInterface.PreVydDetailPrevodnihoPoukazuResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPreVydDetailPrevodnihoPoukazu.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.PreVydDetailPrevodnihoPoukazuResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaPrePriDetailPrevodnihoPoukazu">
+            <summary>Detail převodního poukazu příjmového </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPrePriDetailPrevodnihoPoukazu.Execute(Gordic.Xrg.WsFiaInterface.PrePriDetailPrevodnihoPoukazuRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPrePriDetailPrevodnihoPoukazu.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.PrePriDetailPrevodnihoPoukazuRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPrePriDetailPrevodnihoPoukazu.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.PrePriDetailPrevodnihoPoukazuRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPrePriDetailPrevodnihoPoukazu.DetailPoukazu(Gordic.Xrg.WsFiaInterface.PrePriDetailPrevodnihoPoukazuResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPrePriDetailPrevodnihoPoukazu.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.PrePriDetailPrevodnihoPoukazuResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaKdfDetailFaktury">
+            <summary>Detail faktury </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaKdfDetailFaktury.Execute(Gordic.Xrg.WsFiaInterface.KdfDetailFakturyRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaKdfDetailFaktury.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.KdfDetailFakturyRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaKdfDetailFaktury.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.KdfDetailFakturyRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaKdfDetailFaktury.DetailFaktury(Gordic.Xrg.WsFiaInterface.KdfDetailFakturyResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaKdfDetailFaktury.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.KdfDetailFakturyResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaPouPriSeznamPoukazu">
+            <summary>Seznam převodních poukazů příslušejících akci</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouPriSeznamPoukazu.Execute(Gordic.Xrg.WsFiaInterface.PouPriSeznamPoukazuRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouPriSeznamPoukazu.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.PouPriSeznamPoukazuRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouPriSeznamPoukazu.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.PouPriSeznamPoukazuRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouPriSeznamPoukazu.SeznamPoukazu(Gordic.Xrg.WsFiaInterface.PouPriSeznamPoukazuResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouPriSeznamPoukazu.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.PouPriSeznamPoukazuResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaPouVydSeznamPoukazu">
+            <summary>Seznam  poukazů výdajových příslušejících akci</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouVydSeznamPoukazu.Execute(Gordic.Xrg.WsFiaInterface.PouVydSeznamPoukazuRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouVydSeznamPoukazu.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.PouVydSeznamPoukazuRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouVydSeznamPoukazu.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.PouVydSeznamPoukazuRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouVydSeznamPoukazu.SeznamPoukazu(Gordic.Xrg.WsFiaInterface.PouVydSeznamPoukazuResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPouVydSeznamPoukazu.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.PouVydSeznamPoukazuResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaPreVydSeznamPrevodnichPoukazu">
+            <summary>Seznam převodních poukazů výdajových příslušejících akci</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPreVydSeznamPrevodnichPoukazu.Execute(Gordic.Xrg.WsFiaInterface.PreVydSeznamPrevodnichPoukazuRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPreVydSeznamPrevodnichPoukazu.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.PreVydSeznamPrevodnichPoukazuRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPreVydSeznamPrevodnichPoukazu.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.PreVydSeznamPrevodnichPoukazuRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPreVydSeznamPrevodnichPoukazu.SeznamPrevodnichPoukazu(Gordic.Xrg.WsFiaInterface.PreVydSeznamPrevodnichPoukazuResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPreVydSeznamPrevodnichPoukazu.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.PreVydSeznamPrevodnichPoukazuResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaPrePriSeznamPrevodnichPoukazu">
+            <summary>Seznam převodních poukazů příslušejících akci</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPrePriSeznamPrevodnichPoukazu.Execute(Gordic.Xrg.WsFiaInterface.PrePriSeznamPrevodnichPoukazuRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPrePriSeznamPrevodnichPoukazu.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.PrePriSeznamPrevodnichPoukazuRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPrePriSeznamPrevodnichPoukazu.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.PrePriSeznamPrevodnichPoukazuRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPrePriSeznamPrevodnichPoukazu.SeznamPrevodnichPoukazu(Gordic.Xrg.WsFiaInterface.PrePriSeznamPrevodnichPoukazuResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaPrePriSeznamPrevodnichPoukazu.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.PrePriSeznamPrevodnichPoukazuResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaKdfSeznamFaktur">
+            <summary>Seznam faktur příslušejících akci</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaKdfSeznamFaktur.Execute(Gordic.Xrg.WsFiaInterface.KdfSeznamFakturRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaKdfSeznamFaktur.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.KdfSeznamFakturRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaKdfSeznamFaktur.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.KdfSeznamFakturRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaKdfSeznamFaktur.SeznamFaktur(Gordic.Xrg.WsFiaInterface.KdfSeznamFakturResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaKdfSeznamFaktur.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.KdfSeznamFakturResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaMajPolozkyMajetku">
+            <summary>Položky majetku</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaMajPolozkyMajetku.Execute(Gordic.Xrg.WsFiaInterface.MajPolozkyMajetkuRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaMajPolozkyMajetku.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.MajPolozkyMajetkuRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaMajPolozkyMajetku.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.MajPolozkyMajetkuRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaMajPolozkyMajetku.PolozkyMajetku(Gordic.Xrg.WsFiaInterface.MajPolozkyMajetkuResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaMajPolozkyMajetku.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.MajPolozkyMajetkuResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaMajDetailMajetku">
+            <summary>Detail majetku </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaMajDetailMajetku.Execute(Gordic.Xrg.WsFiaInterface.MajDetailMajetkuRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaMajDetailMajetku.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.MajDetailMajetkuRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaMajDetailMajetku.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.MajDetailMajetkuRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaMajDetailMajetku.DetailMajetku(Gordic.Xrg.WsFiaInterface.MajDetailMajetkuResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaMajDetailMajetku.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.MajDetailMajetkuResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaSmlPolozkySmlouvy">
+            <summary>Položky smluv</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaSmlPolozkySmlouvy.Execute(Gordic.Xrg.WsFiaInterface.SmlPolozkySmlouvyRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaSmlPolozkySmlouvy.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.SmlPolozkySmlouvyRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaSmlPolozkySmlouvy.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.SmlPolozkySmlouvyRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaSmlPolozkySmlouvy.PolozkySmlouvy(Gordic.Xrg.WsFiaInterface.SmlPolozkySmlouvyResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaSmlPolozkySmlouvy.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.SmlPolozkySmlouvyResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaUctPolozkyPreuctovacihoDokladu">
+            <summary>Položky přeúčtovacího dokladu</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaUctPolozkyPreuctovacihoDokladu.Execute(Gordic.Xrg.WsFiaInterface.UctPolozkyPreuctovacihoDokladuRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaUctPolozkyPreuctovacihoDokladu.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.UctPolozkyPreuctovacihoDokladuRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaUctPolozkyPreuctovacihoDokladu.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.UctPolozkyPreuctovacihoDokladuRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaUctPolozkyPreuctovacihoDokladu.PolozkyPreuctovacihoDokladu(Gordic.Xrg.WsFiaInterface.UctPolozkyPreuctovacihoDokladuResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaUctPolozkyPreuctovacihoDokladu.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.UctPolozkyPreuctovacihoDokladuResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaUctDetailPreuctovacihoDokladu">
+            <summary>Detail Přeúčtovacího dokladu </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaUctDetailPreuctovacihoDokladu.Execute(Gordic.Xrg.WsFiaInterface.UctDetailPreuctovacihoDokladuRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaUctDetailPreuctovacihoDokladu.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.UctDetailPreuctovacihoDokladuRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaUctDetailPreuctovacihoDokladu.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.UctDetailPreuctovacihoDokladuRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaUctDetailPreuctovacihoDokladu.DetailPreuctovacihoDokladu(Gordic.Xrg.WsFiaInterface.UctDetailPreuctovacihoDokladuResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaUctDetailPreuctovacihoDokladu.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.UctDetailPreuctovacihoDokladuResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaUctSeznamPreuctovacichDokladu">
+            <summary>Seznam přeúčtovacích dokladů příslušejících akci</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaUctSeznamPreuctovacichDokladu.Execute(Gordic.Xrg.WsFiaInterface.UctSeznamPreuctovacichDokladuRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaUctSeznamPreuctovacichDokladu.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.UctSeznamPreuctovacichDokladuRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaUctSeznamPreuctovacichDokladu.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.UctSeznamPreuctovacichDokladuRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaUctSeznamPreuctovacichDokladu.SeznamPreuctovacichDokladu(Gordic.Xrg.WsFiaInterface.UctSeznamPreuctovacichDokladuResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaUctSeznamPreuctovacichDokladu.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.UctSeznamPreuctovacichDokladuResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaObjSeznamObjednavek">
+            <summary>Seznam objednávek příslušejících akci</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaObjSeznamObjednavek.Execute(Gordic.Xrg.WsFiaInterface.ObjSeznamObjednavekRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaObjSeznamObjednavek.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.ObjSeznamObjednavekRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaObjSeznamObjednavek.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.ObjSeznamObjednavekRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaObjSeznamObjednavek.SeznamObjednavek(Gordic.Xrg.WsFiaInterface.ObjSeznamObjednavekResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaObjSeznamObjednavek.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.ObjSeznamObjednavekResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaMajSeznamMajetku">
+            <summary>Seznam majetku příslušejících akci</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaMajSeznamMajetku.Execute(Gordic.Xrg.WsFiaInterface.MajSeznamMajetkuRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaMajSeznamMajetku.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.MajSeznamMajetkuRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaMajSeznamMajetku.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.MajSeznamMajetkuRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaMajSeznamMajetku.SeznamMajetku(Gordic.Xrg.WsFiaInterface.MajSeznamMajetkuResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaMajSeznamMajetku.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.MajSeznamMajetkuResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaSmlDetailSmlouvy">
+            <summary>Detail smlouvy </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaSmlDetailSmlouvy.Execute(Gordic.Xrg.WsFiaInterface.SmlDetailSmlouvyRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaSmlDetailSmlouvy.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.SmlDetailSmlouvyRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaSmlDetailSmlouvy.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.SmlDetailSmlouvyRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaSmlDetailSmlouvy.DetailSmlouvy(Gordic.Xrg.WsFiaInterface.SmlDetailSmlouvyResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaSmlDetailSmlouvy.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.SmlDetailSmlouvyResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaSmlSeznamSmluv">
+            <summary>Seznam smluv příslušejících akci</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaSmlSeznamSmluv.Execute(Gordic.Xrg.WsFiaInterface.SmlSeznamSmluvRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaSmlSeznamSmluv.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.SmlSeznamSmluvRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaSmlSeznamSmluv.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.SmlSeznamSmluvRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaSmlSeznamSmluv.SeznamSmluv(Gordic.Xrg.WsFiaInterface.SmlSeznamSmluvResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaSmlSeznamSmluv.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.SmlSeznamSmluvResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsFiaServer.GWmFiaEkoTestExistenceOrg">
+            <summary>Test existence Org</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaEkoTestExistenceOrg.Execute(Gordic.Xrg.WsFiaInterface.EkoTestExistenceOrgRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaEkoTestExistenceOrg.ExecuteWebMethod(Gordic.Xrg.WsFiaInterface.EkoTestExistenceOrgRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaEkoTestExistenceOrg.ZpracujVstupniDataSet(Gordic.Xrg.WsFiaInterface.EkoTestExistenceOrgRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaEkoTestExistenceOrg.TestExistenceOrg(Gordic.Xrg.WsFiaInterface.EkoTestExistenceOrgResponseDataSet)">
+            <summary>
+            Načte z databáze informace do výstupního datasetu
+            </summary>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsFiaServer.GWmFiaEkoTestExistenceOrg.NaformatujVystupniDataset(Gordic.Xrg.WsFiaInterface.EkoTestExistenceOrgResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+    </members>
+</doc>

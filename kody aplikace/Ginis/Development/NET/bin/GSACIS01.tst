@@ -1,0 +1,6 @@
+[program]
+revize=40CIS0152510X01
+
+[REQUIRED]
+MODULES=GSADEF01
+GSADEF01_mandatory=TRUE

@@ -1,0 +1,141 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Sah2.Server</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Sah2.Server.GSah2Common">
+            <summary>
+            Serverová část přístupu k DB pro SAH02.
+            </summary>
+        </member>
+        <member name="M:Gordic.Sah2.Server.GSah2Common.GenerujIxs(System.String,System.Boolean)">
+            <summary>
+            Vygeneruje nový unikátní identifikátor ze zadané r-kové tabulky
+            </summary>
+            <param name="rTabulka">název r-kové tabulky</param>
+            <param name="newTransaction">zda se má otevírat a uzavírat transakce a připojení - podmiňuje provádění ReinitServerContext, Commit a CondDbDisconnect</param>
+            <returns>nový IXS</returns>
+        </member>
+        <member name="T:Gordic.Sah2.Server.GSah2ServerException">
+            <summary> Výjimka používaná vrstvou pro komunikaci mezi objekty </summary>
+        </member>
+        <member name="M:Gordic.Sah2.Server.GSah2ServerException.#ctor(System.Int32,System.Int32,System.String[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="M:Gordic.Sah2.Server.GSah2ServerException.#ctor(System.Int32,System.Int32,System.Exception,System.String[])">
+            <summary>
+            Konstruktor vyjímky
+            </summary>
+            <param name="localization">lokalizace</param>
+            <param name="resourceCode">kód resources</param>
+            <param name="innerException">vnitřní vyjímka</param>
+            <param name="parameters">parametry</param>
+        </member>
+        <member name="T:Gordic.Sah2.Server.GZapisDDP">
+            <summary>
+            Serverová část pro zápis do DDP
+            </summary>
+        </member>
+        <member name="M:Gordic.Sah2.Server.GZapisDDP.Trans_Commit_ZaevidovaniPripaduDoDDP(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDecimal,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GDate)">
+            <summary>
+            Založení nového případu DDP - povinné položky
+            </summary>
+            <param name="idDdpPripadu">Identifikátor případu DDP. Slouží jako jednoznačná identifikace případu v agendě DDP</param>
+            <param name="ixs_esu">Identifikátor externího subjektu. Slouží jako jednoznačná identifikace externího subjektu případu DDP ( tj. poplatníka )</param>
+            <param name="popis">Popis případu agendy DDP</param>
+            <param name="castka">Orientační roční celková částka případu DDP v jednotce měny. Celková částka případu DDP v haléřích s desetinnou tečkou (vždy kladná – debet/kredit rozlišován dle typu účetního případu)</param>
+            <param name="datumPorizeni">Datum porizeni</param>
+            <param name="datumSplatnosti">Datum splatnosti</param>
+            <param name="vs">Variabilní symbol</param>
+            <param name="knihaDdp">Identifikátor knihy DDP</param>
+            <param name="typPohledavky">Identifikátor typu pohledávky. Určuje typ příjmového případu</param>
+            <param name="ixsFun">Funkce, která bude vlastníkem pohledávky</param>
+            <param name="kategorieUcetnihoPohybu">Kategorie účetního pohybu</param>
+            <param name="datumPlatnostiDo">Datum platnosti</param>
+            <returns>ID nového případu</returns>
+        </member>
+        <member name="M:Gordic.Sah2.Server.GZapisDDP.DPHKDatu(Gordic.General.GInt32,Gordic.General.GInt32)">
+            <summary>
+            Vraci DPH k datumu
+            </summary>
+            <param name="dan_typ"> Sazba typu daně </param>
+            <param name="datum"> Datum </param>
+            <returns> Procento daně </returns>
+        </member>
+        <member name="M:Gordic.Sah2.Server.GZapisDDP.GetEkoparams(System.Int32@,System.String@,System.String@,System.String@)">
+            <summary>
+            Získání ekonomických parametrů
+            </summary>
+            <param name="Rok">Rok</param>
+            <param name="Ico">Identifikační číslo</param>
+            <param name="Ucs">Účetní středisko</param>
+            <param name="Nks">Nákladové středisko</param>
+        </member>
+        <member name="M:Gordic.Sah2.Server.GZapisDDP.Trans_SaldoPohledavky(Gordic.General.GString,Gordic.General.GDecimal@,Gordic.General.GDecimal@,Gordic.General.GDecimal@,Gordic.General.GDateTime@)">
+            <summary>
+            Zjištění salda
+            </summary>
+            <param name="idDdpPripadu">Identifikátor případu DDP. Slouží jako jednoznačná identifikace případu v agendě DDP</param>
+            <param name="saldoPripadu">saldoPripadu</param>
+            <param name="sumaPredpisu">sumaPredpisu</param>
+            <param name="sumaPlateb">sumaPlateb</param>
+            <param name="datPosledniPlatby">datPosledniPlatby</param>
+        </member>
+        <member name="M:Gordic.Sah2.Server.GZapisDDP.Gordic#Sah2#Interface#IGZapisDDP#ZaevidovaniPripaduDoDDP(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDecimal,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GDate)">
+            <summary>Založení nového případu DDP - povinné položky</summary>
+            <param name="idDdpPripadu">Identifikátor případu DDP. Slouží jako jednoznačná identifikace případu v agendě DDP</param>
+            <param name="ixs_esu">Identifikátor externího subjektu. Slouží jako jednoznačná identifikace externího subjektu případu DDP ( tj. poplatníka )</param>
+            <param name="popis">Popis případu agendy DDP</param>
+            <param name="castka">Orientační roční celková částka případu DDP v jednotce měny. Celková částka případu DDP v haléřích s desetinnou tečkou (vždy kladná – debet/kredit rozlišován dle typu účetního případu)</param>
+            <param name="datumPorizeni">Datum porizeni</param>
+            <param name="datumSplatnosti">Datum splatnosti</param>
+            <param name="vs">Variabilní symbol</param>
+            <param name="knihaDdp">Identifikátor knihy DDP</param>
+            <param name="typPohledavky">Identifikátor typu pohledávky. Určuje typ příjmového případu</param>
+            <param name="ixsFun">Funkce, která bude vlastníkem pohledávky</param>
+            <param name="kategorieUcetnihoPohybu">Kategorie účetního pohybu</param>
+            <param name="datumPlatnostiDo">Datum platnosti</param>
+            <returns>ID nového případu</returns>
+        </member>
+        <member name="M:Gordic.Sah2.Server.GZapisDDP.ZaevidovaniPripaduDoDDP(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDecimal,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GDate,System.Boolean)">
+            <summary>Založení nového případu DDP - povinné položky</summary>
+            <param name="idDdpPripadu">Identifikátor případu DDP. Slouží jako jednoznačná identifikace případu v agendě DDP</param>
+            <param name="ixs_esu">Identifikátor externího subjektu. Slouží jako jednoznačná identifikace externího subjektu případu DDP ( tj. poplatníka )</param>
+            <param name="popis">Popis případu agendy DDP</param>
+            <param name="castka">Orientační roční celková částka případu DDP v jednotce měny. Celková částka případu DDP v haléřích s desetinnou tečkou (vždy kladná – debet/kredit rozlišován dle typu účetního případu)</param>
+            <param name="datumPorizeni">Datum porizeni</param>
+            <param name="datumSplatnosti">Datum splatnosti</param>
+            <param name="vs">Variabilní symbol</param>
+            <param name="knihaDdp">Identifikátor knihy DDP</param>
+            <param name="typPohledavky">Identifikátor typu pohledávky. Určuje typ příjmového případu</param>
+            <param name="ixsFun">Funkce, která bude vlastníkem pohledávky</param>
+            <param name="kategorieUcetnihoPohybu">Kategorie účetního pohybu</param>
+            <param name="datumPlatnostiDo">Datum platnosti</param>
+            <returns>ID nového případu</returns>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Sah2.Server.GZapisDDP.Gordic#Sah2#Interface#IGZapisDDP#SaldoPohledavky(Gordic.General.GString,Gordic.General.GDecimal@,Gordic.General.GDecimal@,Gordic.General.GDecimal@,Gordic.General.GDateTime@)">
+            <summary>Zjištění salda</summary>
+            <param name="idDdpPripadu">Identifikátor případu DDP. Slouží jako jednoznačná identifikace případu v agendě DDP</param>
+            <param name="saldoPripadu">saldoPripadu</param>
+            <param name="sumaPredpisu">sumaPredpisu</param>
+            <param name="sumaPlateb">sumaPlateb</param>
+            <param name="datPosledniPlatby">datPosledniPlatby</param>
+        </member>
+        <member name="M:Gordic.Sah2.Server.GZapisDDP.SaldoPohledavky(Gordic.General.GString,Gordic.General.GDecimal@,Gordic.General.GDecimal@,Gordic.General.GDecimal@,Gordic.General.GDateTime@,System.Boolean)">
+            <summary>Zjištění salda</summary>
+            <param name="idDdpPripadu">Identifikátor případu DDP. Slouží jako jednoznačná identifikace případu v agendě DDP</param>
+            <param name="saldoPripadu">saldoPripadu</param>
+            <param name="sumaPredpisu">sumaPredpisu</param>
+            <param name="sumaPlateb">sumaPlateb</param>
+            <param name="datPosledniPlatby">datPosledniPlatby</param>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+    </members>
+</doc>

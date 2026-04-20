@@ -1,0 +1,1529 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Install.Setup</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Support.AdtEditor.GUserControlDirectory">
+            <summary>
+            Ovládací prvek pro WinForm. 
+            Umožňuje zobrazit a zadávat existující adresář z Filesystému.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtEditor.GUserControlDirectory.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtEditor.GUserControlDirectory.IsSettingByEnum">
+            <summary>
+            Výčet typů, kdo vyvolal změnu hodnoty ovládacího prvku
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtEditor.GUserControlDirectory.IsSettingByEnum.program">
+            <summary>
+            Změna byla vyvolána algoritmem programu - např. nastavení výchozí hodnoty, nebo nastavení hodnoty z DB
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtEditor.GUserControlDirectory.IsSettingByEnum.user">
+            <summary>
+            Změna byla vyvolána přímým editačním zásahem uživatele nad tímto ovládacím prvkem.
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtEditor.GUserControlDirectory.ValueValidEventArg">
+            <summary>
+            Struktura pro přenos údajů v rámci události "ValueIsValided" a "ValueIsInvalided"
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtEditor.GUserControlDirectory.ValueIsValidCallBack">
+            <summary>
+            Obslužná funkce-delegát pro událost "ValueIsValided"
+            </summary>
+        </member>
+        <member name="E:Gordic.Support.AdtEditor.GUserControlDirectory.ValueIsValided">
+            <summary>
+            Událost se vyvolá vždy, kdy se uživatelsky editovaná hodnota v ovládacím prvku stává validní.
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtEditor.GUserControlDirectory.ValueIsInvalidCallBack">
+            <summary>
+            Obslužná funkce-delegát pro událost "ValueIsInvalided"
+            </summary>
+        </member>
+        <member name="E:Gordic.Support.AdtEditor.GUserControlDirectory.ValueIsInvalided">
+            <summary>
+            Událost se vyvolá vždy, kdy se uživatelsky editovaná hodnota v ovládacím prvku stává nevalidní.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtEditor.GUserControlDirectory._RegKeyLastValue">
+            <summary>
+            Interní proměnná pro vlastnost "RegKeyLastValue"
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.GUserControlDirectory.RegKeyLastValue">
+            <summary>
+            Název klíče v registrech, který odkazuje na poslední uživatelem nastavenou hodnotu. 
+            V registrech se ukládá uživatelem naposledy nastavená hodnota - adresář. 
+            Programátor podle klíče v registrech určuje typ použití adresáře. Např. adresář pro importovací soubory, adresář pro uložení sestav.
+            Uživateli se potom ve stejné situaci předplní adresář, který použil posledně.
+            Pokud v registech není poslední použitá hodnota nastavena, potom se musí přednastavit výchozí hodtnota přesnastavená programátorem.
+            Poslední uložená hodnota se čte z USER registrů. Pokud není nalezena, pokouší se prvek načíst nastavení z All user a poté z Local Machine
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtEditor.GUserControlDirectory._RegKeyPathLastValue">
+            <summary>
+            Cesta v registrech pro uložení poslední uživatelem nastavené hodnoty. 
+            Zatím natvrdo s tím, že podle charakteru hodnotu ( SHARED nebo FAZE ) se cesta do registrů bude vyskládávat.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtEditor.GUserControlDirectory._DefaultLastValue">
+            TODO: časem předělat tak, aby programátor určil, zda se jedná o obecnou GINIS hodnotu ( potom to patří do SHARE ) a nebo zda se jedná pouze o hodnotu využívanou fází ( potom se jedná o větev registrů platnou pouze pro fázi )
+            <summary>
+            Interní proměnná pro vlastnost "DefaultLastValue"
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.GUserControlDirectory.DefaultLastValue">
+            TODO: Předělat na adresář Dokumenty
+            <summary>
+            Default hodnota, která se má přednastavit v v případě že není uložená uživatelem naposledy nastavená hodnota.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtEditor.GUserControlDirectory._IsSettingBy">
+            <summary>
+            Interní stav, který označuje, zda je hodnota pole nastavována uživatelským zásahem a nebo na zásahem programu.
+            Výchozí hodnota je false - nastavení hodnoty programu je realizováno uživatelem.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.GUserControlDirectory.IsSettingBy">
+            <summary>
+            Příznak, že aktuální změna je prováděna programem a nebo zásahem uživatele.
+            Tento příznak je určen pro použití v rámci událostí "ValueIsValided" a "ValueIsInvalided"
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.GUserControlDirectory.Text">
+            <summary>
+            Zobrazovaná hodnota ovládacího prvku - adresář souborového systému.
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEditor.GUserControlDirectory.LoadLastValue">
+            <summary>
+            Načtení uživatelem naposledy nastavené hodnoty.
+            Pokud v registrech není poslední nastavená hodnota uložena, použije se přednastavená defaul hodnota.
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEditor.GUserControlDirectory.SaveLastValue">
+            <summary>
+            Uložení aktuální hodnoty jako hodnoty uživatelem naposledy nastavené. ( Pro příští přednastavení naposledy použitého adresáře )
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEditor.GUserControlDirectory.#ctor">
+            <summary>
+            Kontruktor ovládacího prvku
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEditor.GUserControlDirectory.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEditor.GUserControlDirectory.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEditor.GUserControlDirectory.button1_Click(System.Object,System.EventArgs)">
+            <summary>
+            Událost kdy uživatel klikne na tlačítko 
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtEditor.GUserControlDirectory.ShowDialogChangeDir">
+            <summary>
+            Funkce vyvolá zobrazení systémového dialogu pro výběr adresáře.
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEditor.GUserControlDirectory.textBox1_MouseDown(System.Object,System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Událost kdy uživatel klikne do editačního pole pravým tlačítkem myši
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtEditor.GUserControlDirectory.textBox1_TextChanged(System.Object,System.EventArgs)">
+            <summary>
+            Událost kdy se mění text pole. Může nastat jak programově tak zásahem uživatele.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtEditor.GUserControlDirectory.SetValueIsValid">
+            <summary>
+            Funkce vyvolávající událost - oznámení o změně stavu pole z neplatného na platný.
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEditor.GUserControlDirectory.SetValueIsInvalid">
+            <summary>
+            Funkce vyvolávající událost - oznámení o změně stavu pole z platného na neplatný.
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEditor.GUserControlDirectory.GUserControlDirectory_Load(System.Object,System.EventArgs)">
+            <summary>
+            Událost při vytvoření prvku. Inicializace default hodnoty.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.GUserControlDirectory.ReadOnly">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtEditor.DirectoryBox">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.DirectoryBox.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.DirectoryBox.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.DirectoryBox.button1_Font">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Font similar to [Font: Name=Microsoft Sans Serif, Size=8,25, Units=3, GdiCharSet=1, GdiVerticalFont=False].
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.DirectoryBox.button1_Location">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Point similar to {X=80,Y=0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.DirectoryBox.button1_Size">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Size similar to {Width=24, Height=23}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.DirectoryBox.button1_TabIndex">
+            <summary>
+              Looks up a localized resource of type System.Int32 similar to 3.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.DirectoryBox.button1_Text">
+            <summary>
+              Looks up a localized string similar to ....
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.DirectoryBox.textBox1_Location">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Point similar to {X=0,Y=0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.DirectoryBox.textBox1_Size">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Size similar to {Width=80, Height=20}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.DirectoryBox.textBox1_TabIndex">
+            <summary>
+              Looks up a localized resource of type System.Int32 similar to 2.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.DirectoryBox.textBox1_Text">
+            <summary>
+              Looks up a localized string similar to c:\.
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtEditor.GUserControlFile">
+            <summary>
+            Ovládací prvek pro WinForm. 
+            Umožňuje zobrazit a zadávat existující adresář z Filesystému.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtEditor.GUserControlFile.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtEditor.GUserControlFile.IsSettingByEnum">
+            <summary>
+            Výčet typů, kdo vyvolal změnu hodnoty ovládacího prvku
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtEditor.GUserControlFile.IsSettingByEnum.program">
+            <summary>
+            Změna byla vyvolána algoritmem programu - např. nastavení výchozí hodnoty, nebo nastavení hodnoty z DB
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtEditor.GUserControlFile.IsSettingByEnum.user">
+            <summary>
+            Změna byla vyvolána přímým editačním zásahem uživatele nad tímto ovládacím prvkem.
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtEditor.GUserControlFile.ValueValidEventArg">
+            <summary>
+            Struktura pro přenos údajů v rámci události "ValueIsValided" a "ValueIsInvalided"
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtEditor.GUserControlFile.ValueIsValidCallBack">
+            <summary>
+            Obslužná funkce-delegát pro událost "ValueIsValided"
+            </summary>
+        </member>
+        <member name="E:Gordic.Support.AdtEditor.GUserControlFile.ValueIsValided">
+            <summary>
+            Událost se vyvolá vždy, kdy se uživatelsky editovaná hodnota v ovládacím prvku stává validní.
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtEditor.GUserControlFile.ValueIsInvalidCallBack">
+            <summary>
+            Obslužná funkce-delegát pro událost "ValueIsInvalided"
+            </summary>
+        </member>
+        <member name="E:Gordic.Support.AdtEditor.GUserControlFile.ValueIsInvalided">
+            <summary>
+            Událost se vyvolá vždy, kdy se uživatelsky editovaná hodnota v ovládacím prvku stává nevalidní.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtEditor.GUserControlFile._RegKeyLastValue">
+            <summary>
+            Interní proměnná pro vlastnost "RegKeyLastValue"
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.GUserControlFile.RegKeyLastValue">
+            <summary>
+            Název klíče v registrech, který odkazuje na poslední uživatelem nastavenou hodnotu. 
+            V registrech se ukládá uživatelem naposledy nastavená hodnota - adresář. 
+            Programátor podle klíče v registrech určuje typ použití adresáře. Např. adresář pro importovací soubory, adresář pro uložení sestav.
+            Uživateli se potom ve stejné situaci předplní adresář, který použil posledně.
+            Pokud v registech není poslední použitá hodnota nastavena, potom se musí přednastavit výchozí hodtnota přesnastavená programátorem.
+            Poslední uložená hodnota se čte z USER registrů. Pokud není nalezena, pokouší se prvek načíst nastavení z All user a poté z Local Machine
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtEditor.GUserControlFile._RegKeyPathLastValue">
+            <summary>
+            Cesta v registrech pro uložení poslední uživatelem nastavené hodnoty. 
+            Zatím natvrdo s tím, že podle charakteru hodnotu ( SHARED nebo FAZE ) se cesta do registrů bude vyskládávat.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtEditor.GUserControlFile._DefaultLastValue">
+            TODO: časem předělat tak, aby programátor určil, zda se jedná o obecnou GINIS hodnotu ( potom to patří do SHARE ) a nebo zda se jedná pouze o hodnotu využívanou fází ( potom se jedná o větev registrů platnou pouze pro fázi )
+            <summary>
+            Interní proměnná pro vlastnost "DefaultLastValue"
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.GUserControlFile.DefaultLastValue">
+            TODO: Předělat na adresář Dokumenty
+            <summary>
+            Default hodnota, která se má přednastavit v v případě že není uložená uživatelem naposledy nastavená hodnota.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtEditor.GUserControlFile._IsSettingBy">
+            <summary>
+            Interní stav, který označuje, zda je hodnota pole nastavována uživatelským zásahem a nebo na zásahem programu.
+            Výchozí hodnota je false - nastavení hodnoty programu je realizováno uživatelem.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.GUserControlFile.IsSettingBy">
+            <summary>
+            Příznak, že aktuální změna je prováděna programem a nebo zásahem uživatele.
+            Tento příznak je určen pro použití v rámci událostí "ValueIsValided" a "ValueIsInvalided"
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.GUserControlFile.Text">
+            <summary>
+            Zobrazovaná hodnota ovládacího prvku - adresář souborového systému.
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEditor.GUserControlFile.LoadLastValue">
+            <summary>
+            Načtení uživatelem naposledy nastavené hodnoty.
+            Pokud v registrech není poslední nastavená hodnota uložena, použije se přednastavená defaul hodnota.
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEditor.GUserControlFile.SaveLastValue">
+            <summary>
+            Uložení aktuální hodnoty jako hodnoty uživatelem naposledy nastavené. ( Pro příští přednastavení naposledy použitého adresáře )
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEditor.GUserControlFile.#ctor">
+            <summary>
+            Kontruktor ovládacího prvku
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEditor.GUserControlFile.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEditor.GUserControlFile.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEditor.GUserControlFile.button1_Click(System.Object,System.EventArgs)">
+            <summary>
+            Událost kdy uživatel klikne na tlačítko 
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtEditor.GUserControlFile.ShowDialogChangeFile">
+            <summary>
+            Funkce vyvolá zobrazení systémového dialogu pro výběr adresáře.
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEditor.GUserControlFile.textBox1_MouseDown(System.Object,System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Událost kdy uživatel klikne do editačního pole pravým tlačítkem myši
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtEditor.GUserControlFile.textBox1_TextChanged(System.Object,System.EventArgs)">
+            <summary>
+            Událost kdy se mění text pole. Může nastat jak programově tak zásahem uživatele.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtEditor.GUserControlFile.SetValueIsValid">
+            <summary>
+            Funkce vyvolávající událost - oznámení o změně stavu pole z neplatného na platný.
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEditor.GUserControlFile.SetValueIsInvalid">
+            <summary>
+            Funkce vyvolávající událost - oznámení o změně stavu pole z platného na neplatný.
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEditor.GUserControlFile.GUserControlFile_Load(System.Object,System.EventArgs)">
+            <summary>
+            Událost při vytvoření prvku. Inicializace default hodnoty.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="T:Gordic.Support.AdtEditor.FileBox">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.FileBox.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.FileBox.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.FileBox.button1_Anchor">
+            <summary>
+              Looks up a localized resource of type System.Windows.Forms.AnchorStyles similar to Top, Right.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.FileBox.button1_Font">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Font similar to [Font: Name=Microsoft Sans Serif, Size=8,25, Units=3, GdiCharSet=1, GdiVerticalFont=False].
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.FileBox.button1_Location">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Point similar to {X=80,Y=0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.FileBox.button1_Size">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Size similar to {Width=24, Height=23}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.FileBox.button1_TabIndex">
+            <summary>
+              Looks up a localized resource of type System.Int32 similar to 3.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.FileBox.button1_Text">
+            <summary>
+              Looks up a localized string similar to ....
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.FileBox.textBox1_Anchor">
+            <summary>
+              Looks up a localized resource of type System.Windows.Forms.AnchorStyles similar to Top, Left, Right.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.FileBox.textBox1_Location">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Point similar to {X=0,Y=0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.FileBox.textBox1_Size">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Size similar to {Width=80, Height=20}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.FileBox.textBox1_TabIndex">
+            <summary>
+              Looks up a localized resource of type System.Int32 similar to 2.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEditor.FileBox.textBox1_Text">
+            <summary>
+              Looks up a localized string similar to c:\.
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.DbProfiles">
+             <summary>
+            Represents a strongly typed in-memory cache of data.
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.DbProfiles.ProfilesDataTable">
+             <summary>
+            Represents the strongly named DataTable class.
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.DbProfiles.ProfilesRow">
+             <summary>
+            Represents strongly named DataRow class.
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.DbProfiles.ProfilesRowChangeEvent">
+             <summary>
+            Row event argument class
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.Form1">
+            <summary>
+            Hlavní instalační okno
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.btNext_Click(System.Object,System.EventArgs)">
+            <summary>
+            Přechod na další stránku
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.Form1_Load(System.Object,System.EventArgs)">
+            <summary>
+            Načtení výchozích dat na okno při jeho otevření
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.PrepareDistributionPackages(System.Threading.CancellationToken,Gordic.Install.Server.Distribuce.GFazeRevizeDataSet.ginsfilDataTable,Gordic.Install.Server.GDistributionUtils.GProgressBarChenged)">
+            <summary>
+            Z disku načte seznam distribučních sad - vyfiltruje podle písmen zákazníka a vyhledá nejvyšší verze balíků pro každou fázi
+            </summary>
+            <param name="cancellationToken"></param>
+            <param name="ginsfil">Seznam na disku nainstalovaných fází a jejich revizí</param>
+            <param name="progressBarChenged">lopp back funkce pro zobrazení progressu</param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.ReadInstalled(System.Threading.CancellationToken,Gordic.Install.Server.GDistributionUtils.GProgressBarChenged)">
+            <summary>
+            Načtení aktuálně nainstalovaných modulů na tomto PC
+            </summary>
+            <param name="cancellationToken"></param>
+            <param name="progressBarChenged"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.comboBox1_SelectedIndexChanged(System.Object,System.EventArgs)">
+            <summary>
+            Změna výběru písmene zákazníka - v políčku s nápovědou
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.comboBox2_SelectedIndexChanged(System.Object,System.EventArgs)">
+            <summary>
+            Proveden výběr z listu nainstalovaných INFORMIX klientů
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.tbxOraAdr_Validated(System.Object,System.EventArgs)">
+            <summary>
+             Změna hodnoty v políčku pro oracle adr
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.tbxOraAdrList_SelectedIndexChanged(System.Object,System.EventArgs)">
+            <summary>
+            Změna výběru ze seznamu detekovaných instalací ORACLE klientů
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.CheckOracleVersion">
+            <summary>
+            Kontrola korektního nastavení/instalace ORACLE klienta
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.cbxInstallOracle_CheckedChanged(System.Object,System.EventArgs)">
+            <summary>
+            Změna na zatržítku pro instalaci ORACLE klienta
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.ShowprogressBar1(System.String,System.Int32,System.Int32)">
+            <summary>
+            Funkce pro zobrazení průběhu na dílčím progress baru
+            </summary>
+            <param name="a_text"></param>
+            <param name="max_value"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.ShowprogressBar2(System.String,System.Int32,System.Int32)">
+            <summary>
+            Funkce pro zobrazení průběhu na dílčím progress baru
+            </summary>
+            <param name="a_text"></param>
+            <param name="max_value"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.ShowProgressBarPanel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.HideProgressBarPanel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.ShowFindPanel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.HideFindPanel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.ShowFinishPanel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.HideFinishPanel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.btReadDistr_Click(System.Object,System.EventArgs)">
+            <summary>
+            tlačítko pro načtení a připravení instalační sady
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.VolbaAktualizace(System.Threading.CancellationToken)">
+            <summary>
+            Načtení aktuálně nainstalovaných modulů a modulů připravených pro instalaci/aktualizaci - příprava před samotnou instalací
+            Ošetřen běh na jiném threadu
+            </summary>
+            <param name="cancellationToken"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.btInstall_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tlačítko pro instalaci
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.ScrollToRow(System.Data.DataRow,System.String)">
+            <summary>
+            Pomocná funkce - Scroll na zadaný řádek, tak aby pod ním byly vidět ještě 4 řádky
+            </summary>
+            <param name="a_table_row">Číslo řádku, na který se má najet</param>
+            <param name="a_text">text, který se má zapsat do zadaného řádku</param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.DoInstalationOneZip(System.Threading.CancellationToken,System.String,Gordic.Install.Server.Distribuce.GDistributionPackageDataSet.fazeRow)">
+            <summary>
+            Realizace instalace jednoho balíku
+            </summary>
+            <param name="cancellationToken"></param>
+            <param name="v_zip_name"></param>
+            <param name="row"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.ConsolePrint(System.String)">
+            <summary>
+            Připojení textu do konzole na konec aktuálního řádku
+            </summary>
+            <param name="a_text"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.ConsolePrintLn">
+            <summary>
+            Odřádkování
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.ConsolePrintLn(System.String)">
+            <summary>
+            Připojení textu do konzole na konec aktuálního řádku a odřádkování
+            </summary>
+            <param name="a_text"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.ConsolePrintCr(System.String)">
+            <summary>
+            Připojení textu do konzole na konec aktuálního řádku a odřádkování
+            </summary>
+            <param name="a_text"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.ConsoleCls">
+            <summary>
+            Vymazání obsahu konzole
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.tbxFindDbProfil_TextChanged(System.Object,System.EventArgs)">
+            <summary>
+            změna textu v hledacím políčku pro zadání DB profilu
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.tbxFindInstall_TextChanged(System.Object,System.EventArgs)">
+            <summary>
+            změna textu v hledacím políčku pro seznam s připravenými balíky pro instalaci
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.button2_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tlačítko na zrušení uživatelského filtru
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.LoadDbProfil(System.String)">
+            <summary>
+            Načtení parametrů databázového profilu na obrazovku
+            </summary>
+            <param name="profil"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.ShowEmptyDbProfilPanel">
+            <summary>
+            Zobrazení žádného DB profilu
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.LoadDbProfil(Gordic.Install.Server.GGinisDbProfileInfo)">
+            <summary>
+            Načtení parametrů databázového profilu na obrazovku
+            </summary>
+            <param name="a_profil"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.CompareText(System.Object,System.String)">
+            <summary>
+            Porovnání zadaného textu s textem v políčku a případné rozsvícení tečky za políčkem
+            </summary>
+            <param name="sender"></param>
+            <param name="a_text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.CompareBool(System.Object,System.Boolean,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="a_old_value"></param>
+            <param name="lodValueTxt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.GetDbProfilIndex(System.Int32)">
+            <summary>
+            Převede index v DataView na index v pod tím ležící DataTable( ale +1, protože je to PowerBuilder konvence )
+            </summary>
+            <param name="a_row_index">Index v DataGridView</param>
+            <returns>Index v DataTable zvětšený o 1.</returns>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.CheckDbProfilChange">
+            <summary>
+            Test a zobrazení příznakum že se popis DB profilu změnil
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.btCancel_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tlačítko zrušit na stránce s DB profily
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.btSave_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tlačítko pro uložení změn na DB profilu
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.DeleteCurrentProfil">
+            <summary>
+            Odmazání aktuálního profilu do registrů, sql.ini, odbc atd...
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.SaveCurrentProfil(System.Boolean)">
+            <summary>
+            Uložení aktuálního profilu do registrů, sql.ini, odbc atd...
+            </summary>
+            <param name="doLoadNewData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.ClearChangedDataAtrib">
+            <summary>
+            Zruší všechny příznaky editace dat
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.btDbProfilLoad_Click(System.Object,System.EventArgs)">
+            <summary>
+            Občerstvení seznamu DB profilů
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.LoadAllDbProfiles">
+            <summary>
+            Načtení všech DB profilů
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.dataGridView2_CellContentClick(System.Object,System.Windows.Forms.DataGridViewCellEventArgs)">
+            <summary>
+            Kliknutí v tabulce balíků pro instalace
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.btPlus_Click(System.Object,System.EventArgs)">
+            <summary>
+            Hromadné označení řádků instalačních balíků na ANO - instalovat
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.btMinus_Click(System.Object,System.EventArgs)">
+            <summary>
+            Hromadné označení řádků instalačních balíků na ANO - instalovat
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.button1_Click_1(System.Object,System.EventArgs)">
+            <summary>
+            Tlačítko pro přidání nového DB profilu
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.SelectRowInDataGridView(System.String)">
+            <summary>
+            Zvýraznění řádku v tabulce
+            </summary>
+            <param name="a_profil">profil, jejíž řádek chci v tabulce zvýraznit.</param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.btDelete_Click(System.Object,System.EventArgs)">
+            <summary>
+            tl. na odmazání DB profilu
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.cbxInf_CheckedChanged(System.Object,System.EventArgs)">
+            <summary>
+            Zatržítko pro INF
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.cbxOra_CheckedChanged(System.Object,System.EventArgs)">
+            <summary>
+            Zatržítko pro ORA
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.cbxMss_CheckedChanged(System.Object,System.EventArgs)">
+            <summary>
+            Zatržítko pro MSS
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.AutChanged">
+            <summary>
+            Zobrazí nebo skryje záložku pro zadání parametrů aktualizační služby
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.DbChanged">
+            <summary>
+            Výběr cílových DB změněn - okno se má překreslit
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.IcoChanged">
+            <summary>
+            Výběr zda se mají vytvářet ikony
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.tcBaseParams_Deselecting(System.Object,System.Windows.Forms.TabControlCancelEventArgs)">
+            <summary>
+            Odchod ze záložky
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.tcBaseParams_Selected(System.Object,System.Windows.Forms.TabControlEventArgs)">
+            <summary>
+            Vstup na záložku
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.SaveBaseParams">
+            <summary>
+            Uložení základních popisných informací o instalaci GINIS
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.button3_Click(System.Object,System.EventArgs)">
+            <summary>
+            Zrušení filtru na seznamu aplikací
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.btnLoadWebApps_Click(System.Object,System.EventArgs)">
+            <summary>
+            Načtení webových aplikace a zobrazení v tabulce
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.btNext_Click_1(System.Object,System.EventArgs)">
+            <summary>
+            Tlačítko další
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.buttonRecovery_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tlačítko na opravu posledního nedokončeného stavu instalace/aktualizace
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.dataGridViewDbProfiles_CellDoubleClick(System.Object,System.Windows.Forms.DataGridViewCellEventArgs)">
+            <summary>
+            Dvouklik na gridu s DB profily - zobrazeni jednoho DB profilu
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.dataGridViewDbProfiles_SelectionChanged(System.Object,System.EventArgs)">
+            <summary>
+            Změna řídku v rámci tabulky s DB profily -> vede na zobrazení detail okna DB profilu
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.btSaveAs_Click(System.Object,System.EventArgs)">
+            <summary>
+            SaveAs tlačítko na záložce s DB profily
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.btTestDbConnect_Click(System.Object,System.EventArgs)">
+            <summary>
+            tl. pro test připojení
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.cbxAsRds_CheckedChanged(System.Object,System.EventArgs)">
+            <summary>
+            Zatržítko pro klienta jako RDS
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.ReadInstalledExeFileLinks">
+            <summary>
+            Funkce pro načtení informací o vytvořených ikonách pro aplikace
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.SaveInstalledExeFileLinks">
+            <summary>
+            Funkce pro uložení požadovaných změn realizovaných v tabulce ikon aplikací GINIS
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.button17_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tlačítko občerstvit na záložce pro ikony
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.tbxFindExe_TextChanged(System.Object,System.EventArgs)">
+            <summary>
+            Hledací políčko nad seznamem ikon
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.button16_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tlačítko s křížkem nad seznamem ikon
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.button18_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tl.pro uložení linků
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.cbxIcoByChoese_CheckedChanged(System.Object,System.EventArgs)">
+            <summary>
+            Změna na zatržítku pro vytváření ikon
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.cbxUseWsAut03_CheckedChanged(System.Object,System.EventArgs)">
+            <summary>
+            Změna hodnoty na zatržítku pro URL na AUT03
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.tbxUrlAut03Prim_TextChanged(System.Object,System.EventArgs)">
+            <summary>
+            Změna dat na políčku URL prim
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.tbxUrlAut03Sec_TextChanged(System.Object,System.EventArgs)">
+            <summary>
+            Změna dat na políčku URL sec.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="F:Gordic.Install.Setup.Form1.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Install.Setup.Form1.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.GInstalledExeFaze">
+             <summary>
+            Represents a strongly typed in-memory cache of data.
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.GInstalledExeFaze.ExeFazeListDataTable">
+             <summary>
+            Represents the strongly named DataTable class.
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.GInstalledExeFaze.ExeFazeListRow">
+             <summary>
+            Represents strongly named DataRow class.
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.GInstalledExeFaze.ExeFazeListRowChangeEvent">
+             <summary>
+            Row event argument class
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.Gordic_Install_Setup">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.Gordic_Install_Setup.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.Gordic_Install_Setup.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.GTextBoxWriter">
+            <summary>
+            Pomůcka pro přesměrování Console.Write do winworm control
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.ListBoxWriter">
+            <summary>
+            Pomůcka pro přesměrování Console.Write do winworm control
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.GLoginTestForm">
+            <summary>
+            Okno pro zadání parametrů nového DB profilu
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.GLoginTestForm.DbProfil">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.GLoginTestForm.DbLogin">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.GLoginTestForm.DbPassword">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.GLoginTestForm.btOk_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tlačítko OK
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="F:Gordic.Install.Setup.GLoginTestForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.GLoginTestForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Install.Setup.GLoginTestForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.GMultiTextWriter">
+            <summary>
+            Pomůcka pro přesměrování Console.Write do winworm control
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.GSaveAsProfileForm">
+            <summary>
+            Okno pro zadání parametrů nového DB profilu
+            </summary>
+        </member>
+        <member name="F:Gordic.Install.Setup.GSaveAsProfileForm.DbProfilesList">
+            <summary>
+            Seznam již existujících DB profilů
+            </summary>
+        </member>
+        <member name="F:Gordic.Install.Setup.GSaveAsProfileForm._typDb">
+            <summary>
+            Typ databáze
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.GSaveAsProfileForm.DbProfil">
+            <summary>
+            Výsledek tohoto okna
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.GSaveAsProfileForm.TypDb">
+            <summary>
+            Typ databáze
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.GSaveAsProfileForm.#ctor(System.String[])">
+            <summary>
+            Konstruktor se zadáním povolených typů DB strojů
+            </summary>
+            <param name="dbProfilesList">Seznam již existujících DB profilů</param>
+        </member>
+        <member name="M:Gordic.Install.Setup.GSaveAsProfileForm.textBox1_TextChanged(System.Object,System.EventArgs)">
+            <summary>
+            Opuštění textového pole se jménem DB profilu
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.GSaveAsProfileForm.btOk_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tlačítko OK
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="F:Gordic.Install.Setup.GSaveAsProfileForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.GSaveAsProfileForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Install.Setup.GSaveAsProfileForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.GAddProfileForm">
+            <summary>
+            Okno pro zadání parametrů nového DB profilu
+            </summary>
+        </member>
+        <member name="F:Gordic.Install.Setup.GAddProfileForm.DbProfilesList">
+            <summary>
+            Seznam již existujících DB profilů
+            </summary>
+        </member>
+        <member name="F:Gordic.Install.Setup.GAddProfileForm._typDb">
+            <summary>
+            Typ databáze
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.GAddProfileForm.DbProfil">
+            <summary>
+            Výsledek tohoto okna
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.GAddProfileForm.TypDb">
+            <summary>
+            Typ databáze
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.GAddProfileForm.#ctor(System.Boolean,System.Boolean,System.Boolean,System.String[])">
+            <summary>
+            Konstruktor se zadáním povolených typů DB strojů
+            </summary>
+            <param name="isInf"></param>
+            <param name="isOra"></param>
+            <param name="isMss"></param>
+            <param name="dbProfilesList">Seznam již existujících DB profilů</param>
+        </member>
+        <member name="M:Gordic.Install.Setup.GAddProfileForm.textBox1_TextChanged(System.Object,System.EventArgs)">
+            <summary>
+            Opuštění textového pole se jménem DB profilu
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.GAddProfileForm.btOk_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tlačítko OK
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="F:Gordic.Install.Setup.GAddProfileForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.GAddProfileForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Install.Setup.GAddProfileForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.GInstalledFaze">
+             <summary>
+            Represents a strongly typed in-memory cache of data.
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.GInstalledFaze.FazeListDataTable">
+             <summary>
+            Represents the strongly named DataTable class.
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.GInstalledFaze.FazeListRow">
+             <summary>
+            Represents strongly named DataRow class.
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.GInstalledFaze.FazeListRowChangeEvent">
+             <summary>
+            Row event argument class
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.Gordic_Install_Setup_Exceptions">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.Gordic_Install_Setup_Exceptions.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.Gordic_Install_Setup_Exceptions.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.WebApplications.ApplicationInfoDto">
+            <summary>
+            objekt pro předávání informací o nainstalované aplikaci
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.WebApplications.ApplicationInfoDto.name">
+            <summary>
+            název aplikace
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.WebApplications.ApplicationInfoDto.physicalPath">
+            <summary>
+            fyzická cesta
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.WebApplications.ApplicationInfoDto.type">
+            <summary>
+            webService, webApp
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.WebApplications.ApplicationInfoDto.virtualPath">
+            <summary>
+            virtuální cesta
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.WebApplications.ApplicationInfoDto.applicationPool">
+            <summary>
+            název aplikačního poolu
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.WebApplications.ApplicationInfoDto.webSiteName">
+            <summary>
+            název webové stránky
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.WebApplications.ApplicationInfoDto.webSiteId">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.WebApplications.ApplicationInfoDto.port">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.WebApplications.ApplicationInfoDto.tstInfo">
+            <summary>
+            informace o aplikaci z TST souboru
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.WebApplications.ApplicationInfoDto.fullVersion">
+            <summary>
+            plná verze
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.WebApplications.ApplicationTstInfo">
+            <summary>
+            objekt pro předávání informací o nainstalované aplikaci
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.WebApplications.ApplicationTstInfo.Name">
+            <summary>
+            název aplikace
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.WebApplications.ApplicationTstInfo.FullVersion">
+            <summary>
+            plná verze
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.WebApplications.ApplicationTstInfo.Version">
+            <summary>
+            verze
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.WebApplications.ApplicationTstInfo.Subversion">
+            <summary>
+            subverze
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.WebApplications.ApplicationTstInfo.Revision">
+            <summary>
+            revize
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.WebApplications.ApplicationTstInfo.Phase">
+            <summary>
+            fáze (ze jména TST souboru)
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.WebApplications.ApplicationTstInfo.InstallType">
+            <summary>
+            typ instalace
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.WebApplications.ApplicationTstInfo.Type">
+            <summary>
+            typ aplikace
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.WebApplications.ApplicationTstInfo.Modified">
+            <summary>
+            datum, kdy byl záznam modifikován
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.WebApplications.GInstallType">
+            <summary>
+            enum pro určení typu instalace aplikace
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.WebApplications.GAppType">
+            <summary>
+            enum pro určení typu aplikace
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.IisApplicationsManager">
+            <summary>
+            Pomocná utilita pro práci s web aplikacemi a web službami
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.IisApplicationsManager.GetWebSites">
+            <summary>
+            vrátí dictionary aplikací (id,nazev)
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.IisApplicationsManager.GetInstalledApplications(Microsoft.Web.Administration.Site)">
+            <summary>
+            vrátí seznam aplikací nainstalovaných na IIS pro všechny webové stránky
+            </summary>
+            <param name="site"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Install.Setup.Program.Main">
+            <summary>
+            The main entry point for the application.
+            </summary>
+        </member>
+        <member name="T:Gordic.Install.Setup.TabControlHelper">
+            <summary>
+            https://stackoverflow.com/questions/552579/how-to-hide-tabpage-from-tabcontrol
+            </summary>
+        </member>
+        <member name="M:Gordic.Install.Setup.TabControlHelper.ShowPage(System.Windows.Forms.TabPage,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="tabpage"></param>
+            <param name="setOnTop"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.TabControlHelper.InsertTabPage(System.Windows.Forms.TabPage,System.Int32,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="tabpage"></param>
+            <param name="index"></param>
+            <param name="setOnTop"></param>
+        </member>
+        <member name="M:Gordic.Install.Setup.TabControlHelper.SwapTabPages(System.Windows.Forms.TabPage,System.Windows.Forms.TabPage)">
+            <summary>
+            
+            </summary>
+            <param name="tabpage1"></param>
+            <param name="tabpage2"></param>
+        </member>
+        <member name="T:Gordic.Install.Setup.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.Properties.Resources.Bitmap_168">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.Properties.Resources.GinisSetup">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.Properties.Resources.GordicDialog">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.Properties.Resources.preloader_final">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.Properties.Resources.setup32i390">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.Properties.Resources.setup32i524">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.Properties.Resources.setup32i5241">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Install.Setup.Properties.Resources.setup32i525_">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+    </members>
+</doc>

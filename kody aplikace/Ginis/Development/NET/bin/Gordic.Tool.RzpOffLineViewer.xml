@@ -1,0 +1,537 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Tool.RzpOffLineViewer</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory">
+            <summary>
+            Ovládací prvek pro WinForm. 
+            Umožňuje zobrazit a zadávat existující adresář z Filesystému.
+            </summary>
+        </member>
+        <member name="F:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="T:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.IsSettingByEnum">
+            <summary>
+            Výčet typů, kdo vyvolal změnu hodnoty ovládacího prvku
+            </summary>
+        </member>
+        <member name="F:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.IsSettingByEnum.program">
+            <summary>
+            Změna byla vyvolána algoritmem programu - např. nastavení výchozí hodnoty, nebo nastavení hodnoty z DB
+            </summary>
+        </member>
+        <member name="F:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.IsSettingByEnum.user">
+            <summary>
+            Změna byla vyvolána přímým editačním zásahem uživatele nad tímto ovládacím prvkem.
+            </summary>
+        </member>
+        <member name="T:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.ValueValidEventArg">
+            <summary>
+            Struktura pro přenos údajů v rámci události "ValueIsValided" a "ValueIsInvalided"
+            </summary>
+        </member>
+        <member name="F:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.ValueValidEventArg.OldValue">
+            <summary>
+            Stará hodnota
+            </summary>
+        </member>
+        <member name="F:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.ValueValidEventArg.NewValue">
+            <summary>
+            NOvá hodnota
+            </summary>
+        </member>
+        <member name="F:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.ValueValidEventArg.IsSettingBy">
+            <summary>
+            Nastaven od
+            </summary>
+        </member>
+        <member name="T:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.ValueIsValidCallBack">
+            <summary>
+            Obslužná funkce-delegát pro událost "ValueIsValided"
+            </summary>
+        </member>
+        <member name="E:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.ValueIsValided">
+            <summary>
+            Událost se vyvolá vždy, kdy se uživatelsky editovaná hodnota v ovládacím prvku stává validní.
+            </summary>
+        </member>
+        <member name="T:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.ValueIsInvalidCallBack">
+            <summary>
+            Obslužná funkce-delegát pro událost "ValueIsInvalided"
+            </summary>
+        </member>
+        <member name="E:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.ValueIsInvalided">
+            <summary>
+            Událost se vyvolá vždy, kdy se uživatelsky editovaná hodnota v ovládacím prvku stává nevalidní.
+            </summary>
+        </member>
+        <member name="F:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory._RegKeyLastValue">
+            <summary>
+            Interní proměnná pro vlastnost "RegKeyLastValue"
+            </summary>
+        </member>
+        <member name="P:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.RegKeyLastValue">
+            <summary>
+            Název klíče v registrech, který odkazuje na poslední uživatelem nastavenou hodnotu. 
+            V registrech se ukládá uživatelem naposledy nastavená hodnota - adresář. 
+            Programátor podle klíče v registrech určuje typ použití adresáře. Např. adresář pro importovací soubory, adresář pro uložení sestav.
+            Uživateli se potom ve stejné situaci předplní adresář, který použil posledně.
+            Pokud v registech není poslední použitá hodnota nastavena, potom se musí přednastavit výchozí hodtnota přesnastavená programátorem.
+            Poslední uložená hodnota se čte z USER registrů. Pokud není nalezena, pokouší se prvek načíst nastavení z All user a poté z Local Machine
+            </summary>
+        </member>
+        <member name="F:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory._RegKeyPathLastValue">
+            <summary>
+            Cesta v registrech pro uložení poslední uživatelem nastavené hodnoty. 
+            Zatím natvrdo s tím, že podle charakteru hodnotu ( SHARED nebo FAZE ) se cesta do registrů bude vyskládávat.
+            </summary>
+        </member>
+        <member name="F:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory._DefaultLastValue">
+            TODO: časem předělat tak, aby programátor určil, zda se jedná o obecnou GINIS hodnotu ( potom to patří do SHARE ) a nebo zda se jedná pouze o hodnotu využívanou fází ( potom se jedná o větev registrů platnou pouze pro fázi )
+            <summary>
+            Interní proměnná pro vlastnost "DefaultLastValue"
+            </summary>
+        </member>
+        <member name="P:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.DefaultLastValue">
+            TODO: Předělat na adresář Dokumenty
+            <summary>
+            Default hodnota, která se má přednastavit v v případě že není uložená uživatelem naposledy nastavená hodnota.
+            </summary>
+        </member>
+        <member name="F:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory._IsSettingBy">
+            <summary>
+            Interní stav, který označuje, zda je hodnota pole nastavována uživatelským zásahem a nebo na zásahem programu.
+            Výchozí hodnota je false - nastavení hodnoty programu je realizováno uživatelem.
+            </summary>
+        </member>
+        <member name="P:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.IsSettingBy">
+            <summary>
+            Příznak, že aktuální změna je prováděna programem a nebo zásahem uživatele.
+            Tento příznak je určen pro použití v rámci událostí "ValueIsValided" a "ValueIsInvalided"
+            </summary>
+        </member>
+        <member name="P:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.Text">
+            <summary>
+            Zobrazovaná hodnota ovládacího prvku - adresář souborového systému.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.LoadLastValue">
+            <summary>
+            Načtení uživatelem naposledy nastavené hodnoty.
+            Pokud v registrech není poslední nastavená hodnota uložena, použije se přednastavená defaul hodnota.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.SaveLastValue">
+            <summary>
+            Uložení aktuální hodnoty jako hodnoty uživatelem naposledy nastavené. ( Pro příští přednastavení naposledy použitého adresáře )
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.#ctor">
+            <summary>
+            Kontruktor ovládacího prvku
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.button1_Click(System.Object,System.EventArgs)">
+            <summary>
+            Událost kdy uživatel klikne na tlačítko 
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.ShowDialogChangeDir">
+            <summary>
+            Funkce vyvolá zobrazení systémového dialogu pro výběr adresáře.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.textBox1_MouseDown(System.Object,System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Událost kdy uživatel klikne do editačního pole pravým tlačítkem myši
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.textBox1_TextChanged(System.Object,System.EventArgs)">
+            <summary>
+            Událost kdy se mění text pole. Může nastat jak programově tak zásahem uživatele.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.SetValueIsValid">
+            <summary>
+            Funkce vyvolávající událost - oznámení o změně stavu pole z neplatného na platný.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.SetValueIsInvalid">
+            <summary>
+            Funkce vyvolávající událost - oznámení o změně stavu pole z platného na neplatný.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.GUserControlDirectory.GUserControlDirectory_Load(System.Object,System.EventArgs)">
+            <summary>
+            Událost při vytvoření prvku. Inicializace default hodnoty.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="T:Gordic.Tool.RzpOffLineViewer.FormXmlViewer">
+            <summary>
+            Okno pro vizualizaci XML dokumentů uložených v DB
+            </summary>
+        </member>
+        <member name="P:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.Xml_Typ">
+            <summary>
+            Tímto přepínačem se řídí, podle jakého schématu ( jaké verze ) se bude validovat.
+            </summary>
+        </member>
+        <member name="P:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.Show_Warning">
+            <summary>
+            Příznak, zda se při validaci mají zobrazovat také warningy
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.#ctor">
+            <summary>
+            Konstruktor.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.LoadValueFromRegistry(System.String,System.String)">
+            <summary>
+            Nacteni konfiguracni hodnoty z registrů
+            </summary>
+            <param name="a_valus_name">Jméno konfigurační parametru</param>
+            <param name="a_default_value">Výchozí hodnota konfiguračního parametru</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.SaveValueToRegistry(System.String,System.String)">
+            <summary>
+            Uložení jedné konfigurační hodnoty.
+            </summary>
+            <param name="a_valus_name">Jméno proměnné</param>
+            <param name="a_value_value">Hodnota proměnné</param>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.button2_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tl. na validaci XML
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.GetCurrentWord">
+            <summary>
+            Pomocná funkce pro práci s RTF editorem - vrátí aktuální slovo na pozici kurzoru.
+            </summary>
+            <returns>Nalezené slovo</returns>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.GetCharIndexFromLine(System.String,System.Int32)">
+            <summary>
+            Vrátí index znaku v RTF editoru podle zadaného čísla řádku
+            </summary>
+            <param name="a_text">Text obsažený v rtf editoru</param>
+            <param name="a_line">Číslo řádku, pro který se má vrátit pozice formou indexu znaku prvního znaku na řádku</param>
+            <returns>Index znaku, který je prvním na požadovaném řádku.</returns>
+        </member>
+        <member name="T:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.XmlFoldStart">
+            <summary>
+            Holds information about the start of a fold in an xml string.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.XmlFoldStart.#ctor(System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            Konstruktor třídy pro popis foldingu
+            </summary>
+            <param name="prefix">prefix</param>
+            <param name="name">name</param>
+            <param name="line">line</param>
+            <param name="col">col</param>
+        </member>
+        <member name="P:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.XmlFoldStart.Line">
+            <summary>
+            The line where the fold should start.  Lines start from 0.
+            </summary>
+        </member>
+        <member name="P:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.XmlFoldStart.Column">
+            <summary>
+            The column where the fold should start.  Columns start from 0.
+            </summary>
+        </member>
+        <member name="P:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.XmlFoldStart.Name">
+            <summary>
+            The name of the xml item with its prefix if it has one.
+            </summary>
+        </member>
+        <member name="P:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.XmlFoldStart.FoldText">
+            <summary>
+            The text to be displayed when the item is folded.
+            </summary>
+        </member>
+        <member name="T:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.XmlFoldingStrategy">
+            <summary>
+            Determines folds for an xml string in the editor.
+            </summary>
+        </member>
+        <member name="F:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.XmlFoldingStrategy.showAttributesWhenFolded">
+            <summary>
+            Flag indicating whether attributes should be displayed on folded
+            elements.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.XmlFoldingStrategy.#ctor">
+            <summary>
+            Konstruktor třídy pro folding 
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.XmlFoldingStrategy.GenerateFoldMarkers(ICSharpCode.TextEditor.Document.IDocument,System.String,System.Object)">
+            <summary>
+            Adds folds to the text editor around each start-end element pair.
+            </summary>
+            <remarks>
+            <para>If the xml is not well formed then no folds are created.</para> 
+            <para>Note that the xml text reader lines and positions start 
+            from 1 and the SharpDevelop text editor line information starts
+            from 0.</para>
+            </remarks>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.XmlFoldingStrategy.CreateCommentFold(ICSharpCode.TextEditor.Document.IDocument,System.Collections.ArrayList,System.Xml.XmlTextReader)">
+            <summary>
+            Creates a comment fold if the comment spans more than one line.
+            </summary>
+            <remarks>The text displayed when the comment is folded is the first 
+            line of the comment.</remarks>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.XmlFoldingStrategy.CreateElementFoldStart(System.Xml.XmlTextReader)">
+            <summary>
+            Creates an XmlFoldStart for the start tag of an element.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.XmlFoldingStrategy.CreateElementFold(ICSharpCode.TextEditor.Document.IDocument,System.Collections.ArrayList,System.Xml.XmlTextReader,Gordic.Tool.RzpOffLineViewer.FormXmlViewer.XmlFoldStart)">
+            <summary>
+            Create an element fold if the start and end tag are on 
+            different lines.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.XmlFoldingStrategy.GetAttributeFoldText(System.Xml.XmlTextReader)">
+            <summary>
+            Gets the element's attributes as a string on one line that will
+            be displayed when the element is folded.
+            </summary>
+            <remarks>
+            Currently this puts all attributes from an element on the same
+            line of the start tag.  It does not cater for elements where attributes
+            are not on the same line as the start tag.
+            </remarks>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.XmlFoldingStrategy.XmlEncodeAttributeValue(System.String,System.Char)">
+            <summary>
+            Xml encode the attribute string since the string returned from
+            the XmlTextReader is the plain unencoded string and .NET
+            does not provide us with an xml encode method.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.ShowDialogSaveFile(System.String)">
+            <summary>
+            Pomocná funkce vyvolá zobrazení systémového dialogu pro výběr souboru pro uložení.
+            </summary>
+            <param name="a_default_file_name">Výchozí nastavení jména otevíraného souboru pro zápis. Z tohoto jména se přednastavuje adresář a přípona souboru.</param>
+            <returns>Plné jméno souboru do kterého se následně bude ukládat obsah editoru.</returns>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.Find(System.Text.RegularExpressions.Regex,System.Int32)">
+            <summary>
+            Pomocná funkce pro RTF editor - podle zadaného regulárního výrazu hledá první další výskyt - používá se z okna pro FIND ( F5 )
+            </summary>
+            <param name="regex">Regulární výraz, který popisuje hledaný text.</param>
+            <param name="startPos">Pozice od které se má začít hledat.</param>
+            <returns>Nalezená pozice nebo 0 v případě, že se nic nenajde.</returns>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.Replace(System.Text.RegularExpressions.Regex,System.Int32,System.String)">
+            <summary>
+            Pomocná funkce pro RTF editor - podle zadaného regulárního výrazu hledá text a přepíše jej zadaným novým textem 
+            </summary>
+            <param name="regex">Hledaný výraz</param>
+            <param name="startPos">Hledat od pozice</param>
+            <param name="replaceWith">Nový text, kterým se má původní hledaný text nahradit</param>
+            <returns>Výsledný tvar textu</returns>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.ReplaceAll(System.Text.RegularExpressions.Regex,System.String)">
+            <summary>
+            Pomocná funkce pro RTF editor - podle zadaného regulárního výrazu hledá texty a přepíše je zadaným novým textem - přepis všeho
+            </summary>
+            <param name="regex">Hledaný text</param>
+            <param name="replaceWith">Nový text, kterým se má původní zaměnit.</param>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.FindNext">
+            <summary>
+            Pomocná funkce pro RTF editor - hledání dalšího výskytu textu
+            </summary>
+            <returns>Pozice nalezeného textu</returns>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.GoToLine">
+            <summary>
+            Pomocná funkce pro RTF editor - přechod na zadaný řádek - nejprve se ale zeptá dialogem na zadané číslo řádku, na který se má skočit
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.GoToLine(System.Int32)">
+            <summary>
+            Pomocná funkce pro RTF editor - přechod na zadaný řádek
+            </summary>
+            <param name="line">Číslo požadovaného řádku</param>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.UpdateFolding">
+            <summary>
+            Funkce na překreslení foildingu
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.BeginUpdate">
+            <summary>
+            Funkce oznámí editoru, že se zahajují změny obsahu a že na toto nemá graficky reagovat.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.EndUpdate">
+            <summary>
+            Funkce oznámí editoru, že se ukončují změny obsahu a že má svůj obsah překreslit.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.Select(System.Int32,System.Int32)">
+            <summary>
+            Pomocná funkce pro RTF editor - výběr textu podle zadaných parametrů
+            </summary>
+            <param name="startPos">od pozice</param>
+            <param name="length">v délce</param>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.LoadFile(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="file_name"></param>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.TestFileContent(System.String)">
+            <summary>
+            Test na obsah souboru
+            </summary>
+            <param name="soubor"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.TestTextContent(System.String)">
+            <summary>
+            Test obsahu textů
+            </summary>
+            <param name="text"></param>
+            <returns></returns>
+        </member>
+        <member name="F:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:Gordic.Tool.RzpOffLineViewer.FormXmlViewer.richTextBox1">
+            <summary>
+            RTF editor je public, protože do něj přímo hrabu z dalších oken a to přes pointer na okno.
+            </summary>
+        </member>
+        <member name="T:Gordic.Tool.RzpOffLineViewer.FrmGotoLine">
+            <summary>
+            Summary description for FrmGotoLine.
+            </summary>
+        </member>
+        <member name="F:Gordic.Tool.RzpOffLineViewer.FrmGotoLine.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FrmGotoLine.#ctor(Gordic.Tool.RzpOffLineViewer.FormXmlViewer,System.Int32,System.Int32)">
+            <summary>
+            Formulář pro zadání čísla řádku, na který se má v rámci RTF editoru skočit.
+            </summary>
+            <param name="frmQuery">Pointer na rodičovské okno</param>
+            <param name="currentPosition">číslo aktuální pozice v rámci RTF editoru</param>
+            <param name="lastPosition">Poslední číslo řádku v RTF editoru</param>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FrmGotoLine.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FrmGotoLine.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Tool.RzpOffLineViewer.FrmSearch">
+            <summary>
+            Summary description for FrmSearch.
+            </summary>
+        </member>
+        <member name="F:Gordic.Tool.RzpOffLineViewer.FrmSearch.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FrmSearch.#ctor(Gordic.Tool.RzpOffLineViewer.FormXmlViewer)">
+            <summary>
+            Okno pro realizaci uživatelské funkce FIND nad RTF editorem
+            </summary>
+            <param name="a_FormDbToXmlViewer"></param>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FrmSearch.#ctor(Gordic.Tool.RzpOffLineViewer.FormXmlViewer,System.Boolean)">
+            <summary>
+            Konstruktor, který umožní předat pointer na rodičovské okno a tím je umožněno do něho zasahovat
+            </summary>
+            <param name="a_FormDbToXmlViewer">Pointer na rodičovské okno.</param>
+            <param name="replace">Nepoužito - toto je pozůstatek něčeho starého</param>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FrmSearch.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.FrmSearch.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpOffLineViewer.Program.Main">
+            <summary>
+            The main entry point for the application.
+            </summary>
+        </member>
+        <member name="T:Gordic.Tool.RzpOffLineViewer.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Tool.RzpOffLineViewer.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Tool.RzpOffLineViewer.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+    </members>
+</doc>

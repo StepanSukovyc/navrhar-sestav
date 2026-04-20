@@ -1,0 +1,249 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Ebp.Service</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Ebp.Service.GExtSystemPublisherFactory">
+            <summary>
+            
+            </summary>
+            <param name="Sender"></param>
+            <param name="Journal"></param>
+            <param name="Configuration"></param>
+        </member>
+        <member name="M:Gordic.Ebp.Service.GExtSystemPublisherFactory.#ctor(Gordic.Ebp.Interface.IGExtSystemMessageSender,Gordic.Ebp.Interface.IGRestPublisherJournal,Gordic.Ebp.Service.IGConfiguration)">
+            <summary>
+            
+            </summary>
+            <param name="Sender"></param>
+            <param name="Journal"></param>
+            <param name="Configuration"></param>
+        </member>
+        <member name="T:Gordic.Ebp.Service.GRestPublisherService">
+            <summary>
+            Provides functionality to manage and publish messages to a pool of REST publishers.
+            </summary>
+            <remarks>This service is responsible for coordinating the retrieval of messages from an event reader and
+            distributing them to a pool of REST publishers. It ensures that publishers process messages in the correct order,
+            handles backpressure when publishers cannot accept new messages, and manages missed messages for publishers that
+            fall behind.  The service operates in a loop, periodically fetching messages from the event reader and distributing
+            them to publishers. Publishers that are unable to process messages due to capacity constraints are temporarily
+            skipped, and their missed messages are tracked for later processing.</remarks>
+        </member>
+        <member name="F:Gordic.Ebp.Service.GRestPublisherService.missedMessageIds">
+            <summary>
+            Dictionary to store the last message ID for each publisher that is behind
+            </summary>
+        </member>
+        <member name="F:Gordic.Ebp.Service.GRestPublisherService.lastProcessedMessages">
+            <summary>
+            Dictionary to store the last processed message ID for each publisher
+            </summary>
+        </member>
+        <member name="T:Gordic.Ebp.Service.Program">
+            <summary>Program</summary>
+        </member>
+        <member name="M:Gordic.Ebp.Service.Program.Main(System.String[])">
+            <summary>StartPoint</summary>
+        </member>
+        <member name="F:Gordic.Ebp.Service.GExtSystemRestPublisherPool.ExtSystemPublisherRecord.instance">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.Ebp.Service.GExtSystemRestPublisherPool.ExtSystemPublisherRecord.token">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.Ebp.Service.GExtSystemRestPublisherPool._pool">
+            <summary>
+            Represents a collection of unique <see cref="T:Gordic.Ebp.Service.GExtSystemRestPublisherPool.ExtSystemPublisherRecord"/> objects.
+            </summary>
+            <remarks>This field is used to store a pool of <see cref="T:Gordic.Ebp.Service.GExtSystemRestPublisherPool.ExtSystemPublisherRecord"/> instances,
+            ensuring that each record in the pool is unique.</remarks>
+        </member>
+        <member name="M:Gordic.Ebp.Service.GExtSystemRestPublisherPool.Refresh">
+            <summary>
+            Refreshes the pool of external system publishers.
+            Ensures that all configured publishers are running, removes stopped publishers,
+            and adds the test message publisher if it is not present.
+            </summary>
+        </member>
+        <member name="T:Gordic.Ebp.Service.GExtSystemRestPublisher">
+            <summary>
+            Represents a REST-based publisher for external systems, responsible for processing and sending messages to
+            configured endpoints based on subscription settings.
+            </summary>
+            <remarks>This class extends GQueuedMessageRestPublisher and implements <see
+            cref="T:Gordic.Ebp.Interface.IGRestPublisher"/>. It processes messages by validating them against subscription configurations and sending
+            them to the appropriate endpoints. If a message fails to be sent, it handles retries and logs the failure.</remarks>
+        </member>
+        <member name="M:Gordic.Ebp.Service.GExtSystemRestPublisher.#ctor(Gordic.Ebp.Interface.IGExtSystemMessageSender,Gordic.Ebp.Interface.IGRestPublisherJournal,Gordic.Ebp.Service.IGConfiguration)">
+            <summary>
+            Constructor for GExtSystemRestPublisher
+            </summary>
+            <param name="sender"></param>
+            <param name="journal"></param>
+            <param name="configuration"></param>
+        </member>
+        <member name="M:Gordic.Ebp.Service.GExtSystemRestPublisher.ProcessMessage(Gordic.General.GEventRecord)">
+            <summary>
+            
+            </summary>
+            <param name="message"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Ebp.Service.GQueuedMessageRestPublisher`1">
+            <summary>
+            Message publisher with a queue for messages
+            </summary>
+        </member>
+        <member name="T:Gordic.Ebp.Service.GTestMessageRestPublisher">
+            <summary>
+            RestPublisher for sending test messages to endpoints. Allways present.
+            </summary>
+        </member>
+        <member name="T:Gordic.Ebp.Service.GConfigurationMonitorService">
+            <summary>Sluzba pro monitorovani zmen v appsettings.json a vynuceny zivy reload konfigurace za behu</summary>
+        </member>
+        <member name="M:Gordic.Ebp.Service.GConfigurationMonitorService.#ctor(Microsoft.Extensions.Configuration.IConfiguration,Gordic.Ebp.Service.IGConfiguration)">
+            <summary>Ctor</summary>
+        </member>
+        <member name="T:Gordic.Ebp.Service.GCurrentDBSetup">
+            <summary>
+            Initializer interface for setting up the current database configuration.
+            </summary>
+        </member>
+        <member name="T:Gordic.Ebp.Service.GCurrentDBSetupExtensions">
+            <summary>
+            Provides extension methods for initializing the current database setup within a service scope.
+            </summary>
+            <remarks>This class contains methods that extend the functionality of <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceScope"/>  to
+            configure the current database setup using a specified <see cref="T:Gordic.Support.Database.GDBSetup"/> instance.</remarks>
+        </member>
+        <member name="M:Gordic.Ebp.Service.GCurrentDBSetupExtensions.InitializeCurrentDB(Microsoft.Extensions.DependencyInjection.IServiceScope,Gordic.Support.Database.GDBSetup)">
+            <summary>
+            Initializes the current database setup for the application within the specified service scope.
+            </summary>
+            <remarks>This method resolves an implementation of <see cref="T:Gordic.Ebp.Interface.IGCurrentDBSetupInitializer"/> from the
+            service provider and sets its <c>Current</c> property to the specified <paramref name="dbSetup"/>.</remarks>
+            <param name="scope">The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceScope"/> that provides the service provider for resolving dependencies.</param>
+            <param name="dbSetup">The <see cref="T:Gordic.Support.Database.GDBSetup"/> instance representing the database setup to be initialized.</param>
+        </member>
+        <member name="P:Gordic.Ebp.Service.GDBExtensions.GDatabaseProfileConfigDto.Profile">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gordic.Ebp.Service.GDBExtensions.GDatabaseProfileConfigDto.User">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gordic.Ebp.Service.GDBExtensions.GDatabaseProfileConfigDto.Database">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gordic.Ebp.Service.GDBExtensions.GDatabaseProfileConfigDto.Server">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gordic.Ebp.Service.GDBExtensions.GDatabaseProfileConfigDto.DatabaseSource">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gordic.Ebp.Service.GDBExtensions.GDatabaseProfileConfigDto.Description">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gordic.Ebp.Service.GDBExtensions.GDatabaseProfileConfigDto.AuthMode">
+            <summary>
+             sql, win, mix
+            </summary>
+        </member>
+        <member name="P:Gordic.Ebp.Service.GDBExtensions.GDatabaseProfileConfigDto.ProviderType">
+            <summary>
+            jedna z hodnot oledb, native
+            </summary>
+        </member>
+        <member name="P:Gordic.Ebp.Service.GDBExtensions.GDatabaseProfileConfigDto.DatabaseType">
+            <summary>
+            jedna z hodnot informix, oracle, mssql
+            </summary>
+        </member>
+        <member name="P:Gordic.Ebp.Service.GDBExtensions.GDatabaseProfileConfigDto.Faze">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gordic.Ebp.Service.GDBExtensions.GDatabaseProfileConfigDto.LPC">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.Ebp.Service.GDBExtensions.AddGordicDBProfiles(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            
+            </summary>
+            <param name="collection"></param>
+            <param name="configuration"></param>
+        </member>
+        <member name="P:Gordic.Ebp.Service.IGConfiguration.Configuration">
+            <summary>Konfigurace</summary>
+        </member>
+        <member name="M:Gordic.Ebp.Service.IGConfiguration.ReloadConfiguration">
+            <summary>Vynuceny reload konfigurace</summary>
+        </member>
+        <member name="T:Gordic.Ebp.Service.GEbpConfiguration">
+            <summary>Testovaci userprocess</summary>
+        </member>
+        <member name="T:Gordic.Ebp.Service.GRestPublisherUserProcess">
+            <summary>Testovaci userprocess</summary>
+        </member>
+        <member name="M:Gordic.Ebp.Service.GRestPublisherUserProcess.#cctor">
+            <summary>Staticky ctor</summary>
+        </member>
+        <member name="M:Gordic.Ebp.Service.GRestPublisherUserProcess.#ctor(Gordic.General.GCommon.ApplicationType,Gordic.Ebp.Service.IGConfiguration,Gordic.Support.Database.GDBSetup)">
+            <summary>Ctor</summary>
+        </member>
+        <member name="M:Gordic.Ebp.Service.GRestPublisherUserProcess.OnLoadConfiguration(Gordic.General.IGApplicationInfo)">
+            <summary>Priprava konfigurace</summary>
+        </member>
+        <member name="M:Gordic.Ebp.Service.GRestPublisherUserProcess.OnCreateApplicationInfo">
+            <summary>Priprava appInfo</summary>
+        </member>
+        <member name="M:Gordic.Ebp.Service.GRestPublisherUserProcess.OnGetLoginInfo(Gordic.General.GCommon.AuthorizationResult)">
+            <summary>Prihlasovani</summary>
+        </member>
+        <member name="M:Gordic.Ebp.Service.GRestPublisherUserProcess.OnCreateUserProcessId">
+            <summary>UpId</summary>
+        </member>
+        <member name="M:Gordic.Ebp.Service.GRestPublisherUserProcess.OnGetUserProcessId">
+            <summary>UpId</summary>
+        </member>
+        <member name="T:Gordic.Ebp.Service.IGGinisContextService">
+            <summary>Contextova sluzba</summary>
+        </member>
+        <member name="P:Gordic.Ebp.Service.IGGinisContextService.UserProcess">
+            <summary>Pripraveny userprocess</summary>
+        </member>
+        <member name="T:Gordic.Ebp.Service.IGGinisContextServiceInitializer">
+            <summary>Pomocny iface pro setnuti userprocessu</summary>
+        </member>
+        <member name="M:Gordic.Ebp.Service.IGGinisContextServiceInitializer.SetUserProcess(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Priprava userprocessu (nepouzivat setter!!!)</summary>
+        </member>
+        <member name="T:Gordic.Ebp.Service.GGinisContextService">
+            <summary>Contextova sluzba</summary>
+        </member>
+        <member name="P:Gordic.Ebp.Service.GGinisContextService.UserProcess">
+            <summary>Priprava userprocessu (nepouzivat setter!!!)</summary>
+        </member>
+    </members>
+</doc>

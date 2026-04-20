@@ -1,0 +1,1 @@
+﻿TESTSTREAM - test přechodu od MemoryStream na sdílený stream

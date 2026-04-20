@@ -1,0 +1,275 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Tools.RzpXmlToDbWinClient</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile">
+            <summary>
+            Ovládací prvek pro WinForm. 
+            Umožňuje zobrazit a zadávat existující adresář z Filesystému.
+            </summary>
+        </member>
+        <member name="F:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="T:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.IsSettingByEnum">
+            <summary>
+            Výčet typů, kdo vyvolal změnu hodnoty ovládacího prvku
+            </summary>
+        </member>
+        <member name="F:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.IsSettingByEnum.program">
+            <summary>
+            Změna byla vyvolána algoritmem programu - např. nastavení výchozí hodnoty, nebo nastavení hodnoty z DB
+            </summary>
+        </member>
+        <member name="F:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.IsSettingByEnum.user">
+            <summary>
+            Změna byla vyvolána přímým editačním zásahem uživatele nad tímto ovládacím prvkem.
+            </summary>
+        </member>
+        <member name="T:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.ValueValidEventArg">
+            <summary>
+            Struktura pro přenos údajů v rámci události "ValueIsValided" a "ValueIsInvalided"
+            </summary>
+        </member>
+        <member name="F:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.ValueValidEventArg.OldValue">
+            <summary>
+            x
+            </summary>
+        </member>
+        <member name="F:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.ValueValidEventArg.NewValue">
+            <summary>
+            x
+            </summary>
+        </member>
+        <member name="F:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.ValueValidEventArg.IsSettingBy">
+            <summary>
+            x
+            </summary>
+        </member>
+        <member name="T:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.ValueIsValidCallBack">
+            <summary>
+            Obslužná funkce-delegát pro událost "ValueIsValided"
+            </summary>
+        </member>
+        <member name="E:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.ValueIsValided">
+            <summary>
+            Událost se vyvolá vždy, kdy se uživatelsky editovaná hodnota v ovládacím prvku stává validní.
+            </summary>
+        </member>
+        <member name="T:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.ValueIsInvalidCallBack">
+            <summary>
+            Obslužná funkce-delegát pro událost "ValueIsInvalided"
+            </summary>
+        </member>
+        <member name="E:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.ValueIsInvalided">
+            <summary>
+            Událost se vyvolá vždy, kdy se uživatelsky editovaná hodnota v ovládacím prvku stává nevalidní.
+            </summary>
+        </member>
+        <member name="F:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile._RegKeyLastValue">
+            <summary>
+            Interní proměnná pro vlastnost "RegKeyLastValue"
+            </summary>
+        </member>
+        <member name="P:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.RegKeyLastValue">
+            <summary>
+            Název klíče v registrech, který odkazuje na poslední uživatelem nastavenou hodnotu. 
+            V registrech se ukládá uživatelem naposledy nastavená hodnota - adresář. 
+            Programátor podle klíče v registrech určuje typ použití adresáře. Např. adresář pro importovací soubory, adresář pro uložení sestav.
+            Uživateli se potom ve stejné situaci předplní adresář, který použil posledně.
+            Pokud v registech není poslední použitá hodnota nastavena, potom se musí přednastavit výchozí hodtnota přesnastavená programátorem.
+            Poslední uložená hodnota se čte z USER registrů. Pokud není nalezena, pokouší se prvek načíst nastavení z All user a poté z Local Machine
+            </summary>
+        </member>
+        <member name="F:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile._RegKeyPathLastValue">
+            <summary>
+            Cesta v registrech pro uložení poslední uživatelem nastavené hodnoty. 
+            Zatím natvrdo s tím, že podle charakteru hodnotu ( SHARED nebo FAZE ) se cesta do registrů bude vyskládávat.
+            </summary>
+        </member>
+        <member name="F:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile._DefaultLastValue">
+            TODO: časem předělat tak, aby programátor určil, zda se jedná o obecnou GINIS hodnotu ( potom to patří do SHARE ) a nebo zda se jedná pouze o hodnotu využívanou fází ( potom se jedná o větev registrů platnou pouze pro fázi )
+            <summary>
+            Interní proměnná pro vlastnost "DefaultLastValue"
+            </summary>
+        </member>
+        <member name="P:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.DefaultLastValue">
+            TODO: Předělat na adresář Dokumenty
+            <summary>
+            Default hodnota, která se má přednastavit v v případě že není uložená uživatelem naposledy nastavená hodnota.
+            </summary>
+        </member>
+        <member name="F:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile._IsSettingBy">
+            <summary>
+            Interní stav, který označuje, zda je hodnota pole nastavována uživatelským zásahem a nebo na zásahem programu.
+            Výchozí hodnota je false - nastavení hodnoty programu je realizováno uživatelem.
+            </summary>
+        </member>
+        <member name="P:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.IsSettingBy">
+            <summary>
+            Příznak, že aktuální změna je prováděna programem a nebo zásahem uživatele.
+            Tento příznak je určen pro použití v rámci událostí "ValueIsValided" a "ValueIsInvalided"
+            </summary>
+        </member>
+        <member name="P:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.Text">
+            <summary>
+            Zobrazovaná hodnota ovládacího prvku - adresář souborového systému.
+            </summary>
+        </member>
+        <member name="P:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.Filter">
+            <summary>
+            x
+            </summary>
+        </member>
+        <member name="P:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.DefaultExt">
+            <summary>
+            x
+            </summary>
+        </member>
+        <member name="P:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.InitialDirectory">
+            <summary>
+            x
+            </summary>
+        </member>
+        <member name="P:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.IsValid">
+            <summary>
+            x
+            </summary>
+        </member>
+        <member name="M:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.LoadLastValue">
+            <summary>
+            Načtení uživatelem naposledy nastavené hodnoty.
+            Pokud v registrech není poslední nastavená hodnota uložena, použije se přednastavená defaul hodnota.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.SaveLastValue">
+            <summary>
+            Uložení aktuální hodnoty jako hodnoty uživatelem naposledy nastavené. ( Pro příští přednastavení naposledy použitého adresáře )
+            </summary>
+        </member>
+        <member name="M:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.#ctor">
+            <summary>
+            Kontruktor ovládacího prvku
+            </summary>
+        </member>
+        <member name="M:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.button1_Click(System.Object,System.EventArgs)">
+            <summary>
+            Událost kdy uživatel klikne na tlačítko 
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.ShowDialogChangeFile">
+            <summary>
+            Funkce vyvolá zobrazení systémového dialogu pro výběr adresáře.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.textBox1_MouseDown(System.Object,System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Událost kdy uživatel klikne do editačního pole pravým tlačítkem myši
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.textBox1_TextChanged(System.Object,System.EventArgs)">
+            <summary>
+            Událost kdy se mění text pole. Může nastat jak programově tak zásahem uživatele.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.SetValueIsValid">
+            <summary>
+            Funkce vyvolávající událost - oznámení o změně stavu pole z neplatného na platný.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.SetValueIsInvalid">
+            <summary>
+            Funkce vyvolávající událost - oznámení o změně stavu pole z platného na neplatný.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tools.RzpXmlToDbWinClient.GUserControlFile.GUserControlFile_Load(System.Object,System.EventArgs)">
+            <summary>
+            Událost při vytvoření prvku. Inicializace default hodnoty.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="T:Gordic.Tools.RzpXmlToDbWinClient.GMainForm">
+            <summary>
+            x
+            </summary>
+        </member>
+        <member name="M:Gordic.Tools.RzpXmlToDbWinClient.GMainForm.#ctor">
+            <summary>
+            x
+            </summary>
+        </member>
+        <member name="M:Gordic.Tools.RzpXmlToDbWinClient.GMainForm.button2_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tl.pro načtení do databáze.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="F:Gordic.Tools.RzpXmlToDbWinClient.GMainForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tools.RzpXmlToDbWinClient.GMainForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Tools.RzpXmlToDbWinClient.GMainForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:Gordic.Tools.RzpXmlToDbWinClient.GMainForm.richTextBox1">
+            <summary>
+            x
+            </summary>
+        </member>
+        <member name="T:Gordic.Tools.RzpXmlToDbWinClient.GExampleApplication">
+            <summary>vzorová aplikace typu tlustý klient</summary>    
+        </member>
+        <member name="M:Gordic.Tools.RzpXmlToDbWinClient.GExampleApplication.Main">
+            <summary>hlavní smyčka aplikace</summary>
+        </member>
+        <member name="T:Gordic.Tools.RzpXmlToDbWinClient.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Tools.RzpXmlToDbWinClient.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Tools.RzpXmlToDbWinClient.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+    </members>
+</doc>

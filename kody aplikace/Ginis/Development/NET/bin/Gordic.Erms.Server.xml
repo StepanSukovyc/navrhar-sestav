@@ -1,0 +1,1845 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Erms.Server</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Erms.Server.GXMLCanonicalizerC14n">
+            <summary>
+            Třída, která kanonikalizuje xml text podle specifikace W3C - se zachováním významových mezer
+            (viz http://www.w3.org/TR/2000/WD-xml-c14n-20001011)
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GXMLCanonicalizerC14n.Xml">
+            <summary>Canonicalized Xml</summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GXMLCanonicalizerC14n.XmlUTF8">
+            <summary>Canonicalized Xml in UTF8 encoded byte array</summary>
+        </member>
+        <member name="M:Gordic.Erms.Server.GXMLCanonicalizerC14n.#ctor(System.Xml.XmlNamespaceManager)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="xnsm">namespace manager</param>
+        </member>
+        <member name="M:Gordic.Erms.Server.GXMLCanonicalizerC14n.Process(System.Xml.XmlDocument,System.String)">
+            <summary>
+            Zpracuje část XML dokumentu na cestě XPATH
+            </summary>
+            <returns>Return <b>false</b> when no nodes are selected by the xpath</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.GXMLCanonicalizerC14n.ProcessNodes(System.Xml.XmlNodeList,System.Int32)">
+            <summary>
+            Zpracuje uzly
+            </summary>
+            <param name="xlist">uzly</param>
+            <param name="nLevel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.GXMLCanonicalizerC14n.ProcessNode(System.Xml.XmlNode,System.Int32)">
+            <summary>
+            Zpracuje uzly
+            </summary>
+            <param name="xnode">uzly</param>
+            <param name="nLevel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.GXMLCanonicalizerC14n.RebuildNode(System.Xml.XmlNode,System.Int32)">
+            <summary>
+            Sortuje atributy lexikograficky, odstraňuje zbytečné namespacy, 
+            přidává nové namespacy do stacku
+            </summary>
+            <returns>Upravený xml text</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.GXMLCanonicalizerC14n.CanonalizeXmlC14N2000(System.Xml.XmlDocument,System.String,System.Xml.XmlNamespaceManager)">
+            <summary>
+            kanonizace
+            </summary>
+            <param name="document"></param>
+            <param name="canonizePath"></param>
+            <param name="namespaceManager"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Erms.Server.GNSTrio">
+            <summary>
+            Namespace trio [name, value, level]
+            </summary>
+        </member>
+        <member name="T:Gordic.Erms.Server.GNSTrio.GNS">
+            <summary>
+            Namespace
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GNSTrio.GNS.Name">
+            <summary>Jméno</summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GNSTrio.GNS.Value">
+            <summary>Hodnota</summary>
+        </member>
+        <member name="M:Gordic.Erms.Server.GNSTrio.GNS.CompareTo(System.Object)">
+            <summary>
+            Porovnání
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Gordic.Erms.Server.GNSTrio.Ns">
+            <summary>Namespace</summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GNSTrio.Level">
+            <summary>Level</summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GNSTrio.IsNs">
+            <summary>
+            Zda je to namespace
+            </summary>
+        </member>
+        <member name="M:Gordic.Erms.Server.GNSTrio.CompareTo(System.Object)">
+            <summary>
+            Compare
+            </summary>
+            <param name="obj">objekt</param>
+            <returns>stav</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.GNSTrio.#ctor(System.String,System.String)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="name">jméno</param>
+            <param name="val">hodnota</param>
+        </member>
+        <member name="M:Gordic.Erms.Server.GNSTrio.#ctor(System.String,System.String,System.Int32)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="name">jméno</param>
+            <param name="val">hodnota</param>
+            <param name="level">úroveň</param>
+        </member>
+        <member name="M:Gordic.Erms.Server.GNSTrio.ToString">
+            <summary>
+            Převedení trio na řetězec
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Erms.Server.NSSLexiSorter">
+            <summary>
+            Lexikální sorter pro namespace
+            </summary>
+        </member>
+        <member name="M:Gordic.Erms.Server.NSSLexiSorter.Compare(System.Object,System.Object)">
+            <summary>
+            Porovnání dvou NS
+            </summary>
+            <param name="x">X</param>
+            <param name="y">Y</param>
+            <returns>výsledek porovnání</returns>
+        </member>
+        <member name="T:Gordic.Erms.Server.NSStack">
+            <summary>
+            Namespace stack
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.NSStack.Count">
+            <summary>
+            Počet namespace v stacku
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.NSStack.MaxLevel">
+            <summary>
+            Maximální zanoření namespace
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.NSStack.Stack">
+            <summary>
+            Samotný stack
+            </summary>
+        </member>
+        <member name="M:Gordic.Erms.Server.NSStack.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Erms.Server.NSStack.NSExists(Gordic.Erms.Server.GNSTrio)">
+            <summary>
+            Zda je namespace v stacku
+            </summary>
+            <param name="nstFind"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.NSStack.Push(Gordic.Erms.Server.GNSTrio)">
+            <summary>
+            Vložení do stacku
+            </summary>
+            <param name="nst">namespace trio</param>
+        </member>
+        <member name="M:Gordic.Erms.Server.NSStack.Push(Gordic.Erms.Server.NSStack)">
+            <summary>
+            Vložení položek v jiném stacku do tohoto stacku
+            </summary>
+            <param name="nss"></param>
+        </member>
+        <member name="M:Gordic.Erms.Server.NSStack.PushNew(Gordic.Erms.Server.NSStack)">
+            <summary>Vloží namespace, který zatím není vložen</summary>
+            <returns>New NSStack filled with the ADDED namespaces</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.NSStack.Pop">
+            <summary>
+            Vytažení hodnoty z stacku namespace
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.NSStack.CountLevel(System.Int32)">
+            <summary>
+            Počet namespace v stanovené úrovni
+            </summary>
+            <param name="nLevel">úroveň</param>
+            <returns>počet namespace v danné úrovni</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.NSStack.CountMaxLevel">
+            <summary>
+            Počet v nejvyšší úrovni
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.NSStack.PopLevel(System.Int32)">
+            <summary>
+            Odstraní z stacku všechny namespace v stanovené úrovni
+            </summary>
+            <param name="nLevel"></param>
+        </member>
+        <member name="M:Gordic.Erms.Server.NSStack.PopMaxLevel">
+            <summary>
+            Odstraní z stacku všechny namespace v nejvyšší úrovni
+            </summary>
+        </member>
+        <member name="M:Gordic.Erms.Server.NSStack.LexiSort">
+            <summary>
+            Provede lexikální seřazení namespace
+            </summary>
+        </member>
+        <member name="M:Gordic.Erms.Server.NSStack.FindMaxLevel">
+            <summary>
+            Zjistí maximální level
+            </summary>
+        </member>
+        <member name="T:Gordic.Erms.Server.FastXmlRewriter">
+            <summary>
+            Pomocná třída pro vyhledání specifických XML tagů obsahujících base64 obsah souborů a jejich uložení na disk a nahrazení jménem souboru, kam byl bin obsah uložen.
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.FastXmlRewriter.TempPath">
+            <summary>
+            Cesta k temp adresáři
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.FastXmlRewriter.FilePrefix">
+            <summary>
+            Prefix pro jména temp souborů, které se budou tvořit v rámci vytěžení XML 
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.FastXmlRewriter.FileExtension">
+            <summary>
+            Přípona temp souborů
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.FastXmlRewriter.TempFiles">
+            <summary>
+            Seznam vytvořených dočasných souborů
+            </summary>
+        </member>
+        <member name="M:Gordic.Erms.Server.FastXmlRewriter.#ctor(System.String,System.String,System.String)">
+            private GTempFile TempFile { set; get; }
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="tempPath">Pokud je zadáno, potom určuje adresář pro dočasné umístění souborů. Pokud není zadáno, objekt si určí sám.</param>
+            <param name="filePrefix">Pokud je zadáno, potom určuje začátek jmen pro dočasné soubory. Pokud není zadáno, objekt si určí sám.</param>
+            <param name="fileExtension">Pokud je zadáno, potom určuje příponu pro dočasné soubory. Pokud není zadáno, objekt si určí sám.</param>
+        </member>
+        <member name="M:Gordic.Erms.Server.FastXmlRewriter.XmlModify(System.String,System.String,System.Collections.Generic.List{Gordic.General.GTempFile}@)">
+            <summary>
+            Přeformátuje vstupní XML soubor do výstupního a to se záměnou některých XML elementů
+            </summary>
+            <param name="inFile">Vstupní soubor</param>
+            <param name="outFile">Výstupní soubor</param>
+            <param name="tempFiles">Seznam vytvořených dočasných souborů.</param>
+        </member>
+        <member name="M:Gordic.Erms.Server.FastXmlRewriter.HandleElement(System.Xml.XmlReader,System.Xml.XmlWriter)">
+            <summary>
+            Funkce která může zasáhnout do dat XML elementu a do výstupu poslat něco jiného
+            </summary>
+            <param name="reader"></param>
+            <param name="writer"></param>
+            <returns>Příznak, že bylo do zpracování zasaženo.</returns>
+        </member>
+        <member name="T:Gordic.Erms.Server.GVerzeEssEnum">
+            <summary>
+            Výčet povolených hodnot pro sloupec https://robot.gordic.cz/ginisdoc/db/intsext/verze_ess
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GVerzeEssEnum.RZP">
+            <summary>
+            Stará verze rozhraní podle již neplatného rozhraní RŽP
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GVerzeEssEnum.RZP3">
+            <summary>
+            Nová verze RŽP rozhraní podle standardu BEST PRACTICES ( v 2018 přestane platit )
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GVerzeEssEnum.RSS4">
+            <summary>
+            Varinata podle ICZ a to pro zveřejňování smluv - rozšiřuje seznam událostí o události pro zveřejňování - jinak vychází z verze RZP3
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GVerzeEssEnum.ESS">
+            <summary>
+            Mutace podle export-import formátu dokumentů podle NS
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GVerzeEssEnum.ERMS">
+            <summary>
+            Mutace NS2017
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GVerzeEssEnum.NS2024">
+            <summary>
+            Mutace NS2024
+            </summary>
+        </member>
+        <member name="T:Gordic.Erms.Server.GMutaceEssValue">
+            <summary>
+            Pomocná třída pro realizaci stringové hodnoty enum vyjadřující odpovídající NameSpace verze xsd schématu
+            </summary>
+        </member>
+        <member name="T:Gordic.Erms.Server.GVerzeEssEnumExtension">
+            <summary>
+            Pomocná třída pro převod ENUM hodnoty na odpovídající URL
+            </summary>
+        </member>
+        <member name="M:Gordic.Erms.Server.GVerzeEssEnumExtension.MutaceEss(Gordic.Erms.Server.GVerzeEssEnum)">
+            <summary>
+            Funkce pro načtení atributu GMutaceEssValue z Enum hodnoty
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Erms.Server.GExtSystemParamsDto">
+            <summary>
+            Technické parametry externího systému
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GExtSystemParamsDto.IxsExt">
+            <summary>
+            ID externího systému
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GExtSystemParamsDto.IdNss">
+            <summary>
+            Identifikace externího systému podle Národního standardu
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GExtSystemParamsDto.IdNssThis">
+            <summary>
+            Identifikace tohoto systému podle Národního standardu
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GExtSystemParamsDto.TypEss">
+            <summary>
+            RZP, ICZ, GINIS, FUTURA, SAP
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GExtSystemParamsDto.VerzeEss">
+            <summary>
+            Verze rozhraní RZP, RZP3, ERMS, NS2024 
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GExtSystemParamsDto.MutaceEss">
+            <summary>
+            name space typu schématu
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GExtSystemParamsDto.Url">
+            <summary>
+            URL služeb, které se mají volat
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GExtSystemParamsDto.ClientCertificatePath">
+            <summary>
+            Klientský certifikát pro HTTPS - cesta na disk
+            Nebo login pro base autentikaci HTTPS
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GExtSystemParamsDto.ClientCertificatePwd">
+            <summary>
+            Heslo k certifikátu nebo k loginu
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GExtSystemParamsDto.SigningCertificatePath">
+            <summary>
+            Cesta k podpisovému certifikátu pro podpis SOAP body
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GExtSystemParamsDto.SigningCertificatePwd">
+            <summary>
+            Heslo k podpisovému certifikátu
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GExtSystemParamsDto.ProxyJmeno">
+            <summary>
+            Login k síťové proxy
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GExtSystemParamsDto.ProxyHeslo">
+            <summary>
+            Heslo k séťové proxy
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GExtSystemParamsDto.ProxyDomain">
+            <summary>
+            Doména k loginu k síťové proxy
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GExtSystemParamsDto.ProxyHost">
+            <summary>
+            Proxy server
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GExtSystemParamsDto.ProxyPort">
+            <summary>
+            Proxy port
+            </summary>
+        </member>
+        <member name="T:Gordic.Erms.Server.GErmsTools">
+            <summary>
+            Pomocné funkce pro práci s XML znaky a stringy
+            </summary>
+        </member>
+        <member name="M:Gordic.Erms.Server.GErmsTools.CleanInvalidXmlChars(System.String)">
+            <summary>
+            Funkce pro odstranění případných invalidních XML znaků z hodnot XML 
+            
+            Funkce se používá při načtení XML z DB a to na úrovni kódů jednotlivých znaků
+            </summary>
+            <param name="text">Nekódovaný text, který může obsahovat znaky nepřípustné pro obsah XML elementu</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.GErmsTools.CleanInvalidXmlChars(System.String,System.String)">
+            <summary>
+            Pomocná funkce pro odstranění invalidních znaků z XML stringu
+            
+            Používám ji při odeslání dat do externí WS a to na úrovni XML kódování jednotlivých znaků - tedy escape hexa sekvencí jednotlivých znaků
+            2015-11-25
+            </summary>
+            <param name="Xml">String obsahující XML hodnotu elementu - tedy escape kódovaný do XML podoby hodnoty elementu - některé escape sekvence ale obsahují zakódované znaky, které jsou v rámci XML nepřípustné.</param>
+            <param name="XMLVersion">Verze XML, podle které se budou znaky odstraňovat. Povolené hodnoty jsou "1.0" a "1.1"</param>
+            <returns>String obsahující původní XML s případným odstraněním závadných znaků - z pohledu XML standardu</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.GErmsTools.UnescapeXmlString(System.String)">
+            <summary>
+            Escape XML sekvence převede na odpovídající znaky
+            </summary>
+            <param name="Xml">Text v XML escape sekvenci kódování znaků</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Erms.Server.GErmsWsCaller">
+            <summary>
+            Třída pro volání WS typu erms rozhraní.
+            Zajišťuje podpis odesílaného XML, odeslání, příjem a logování chyb a odeslaných a přijatých XML.
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GErmsWsCaller._Logger">
+            <summary>
+            Logování
+            </summary>
+        </member>
+        <member name="T:Gordic.Erms.Server.GErmsWsCaller.LogTypeEnum">
+            <summary>
+            Typy zalogovaných dávek
+            </summary>
+        </member>
+        <member name="T:Gordic.Erms.Server.GErmsWsCaller.CallStateEnum">
+            <summary>
+            Stav volání WS
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GErmsWsCaller.CallStateEnum.NONE">
+            <summary>
+            Volání WS zatím nenastalo.
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GErmsWsCaller.CallStateEnum.REQUEST">
+            <summary>
+            Volání nastalo a zatím je ve stavu voláno, odpověď zatím nepřijata
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GErmsWsCaller.CallStateEnum.RESPONSE_OK">
+            <summary>
+            Odpověď přijata a vše je OK.
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GErmsWsCaller.CallStateEnum.RESPONSE_ERROR">
+            <summary>
+            Při volání nastala lokální chyba ( webový server neexistuje, problém s logováním do lokálních adresářů atd.. 
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GErmsWsCaller.CallStateEnum.RESPONSE_WS_ERROR">
+            <summary>
+            Chyba ve volání 
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GErmsWsCaller.CallStateEnum.RESPONSE_HTML_ERROR">
+            <summary>
+            Chyba ve volání - volaná strana odpověděla HTML stránkou ( adresář neexistuje, malá práva atd... )
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GErmsWsCaller.CallStateEnum.RESPONSE_XML_ERROR">
+            <summary>
+            Chyba ve volání - volaná strana odpověděla ve formě SOAP Error - tedy XML
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GErmsWsCaller._Vysledek">
+            <summary>
+            Textový výsledek akce. Může obsahovat upřesnění případně vzniklé chyby.
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GErmsWsCaller._XmlResponse">
+            <summary>
+            Kompletní XML, které bylo zpět přijato
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GErmsWsCaller._CallState">
+            <summary>
+            Stav zpracování požadavku o WS
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GErmsWsCaller._rssWsMethodName">
+            <summary>
+            Jméno webové metody, která se volá
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GErmsWsCaller._HtmlResponse">
+            <summary>
+            HTML chybová odpověď.
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GErmsWsCaller._LogPath">
+            <summary>
+            Cesta, kam se mají logovat odesílané a přijímané dávky, případně přijaté texty chyb.
+            Pokud je tato proměnná nastavena na NULL, potom se dávky nelogují.
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GErmsWsCaller._LogPoradoveCisloLogu">
+            <summary>
+            Dávky se na disk logují do souborů tvořených pořadovým číslem a nebo datumem a časem. 
+            Pokud je pořadové číslo nastaveno, potom se logují do souborů obsahujících toto pořadové číslo.
+            </summary>
+        </member>
+        <member name="M:Gordic.Erms.Server.GErmsWsCaller.GetLogFileName(Gordic.Erms.Server.GErmsWsCaller.LogTypeEnum)">
+            <summary>
+            Vrátí jméno požadovaného log. souboru a nebo NULL, pokud se dávky logovat nemají.
+            </summary>
+            <param name="a_log_type">Typ logování - REQUEST, RESPONSE, RESPONSE_ERROR</param>
+            <returns></returns>
+        </member>
+        <member name="P:Gordic.Erms.Server.GErmsWsCaller.VysledekTxt">
+            <summary>
+            Textový popis výsledku volání webové služby.
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GErmsWsCaller.HtmlResonse">
+            <summary>
+            Vrátí HTML odpověď na volání.
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GErmsWsCaller.CallState">
+            <summary>
+            Stav zpracování WS požadavku. Vrací datový typ CallStateEnum.
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GErmsWsCaller.LogPath">
+            <summary>
+            Adresář, do kterého se má logovat.
+            Pokud se nastaví NULL, potom se nebude logovat.
+            POkud se nastaví nesmyslná hodnota, adresář který nelze vytvořit, potom se vyhlásí chyba 
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GErmsWsCaller.PoradoveCisloLogu">
+            <summary>
+            Pořadové číslo dávky, pod kterým se má zalogovat.
+            Povolená je i hodnota null, potom se logovat bude také, ale jméno souboru nebude obsahovat pořadové číslo dávky.
+            </summary>
+        </member>
+        <member name="M:Gordic.Erms.Server.GErmsWsCaller.#ctor">
+            <summary>
+            Konstruktor.
+            </summary>
+        </member>
+        <member name="M:Gordic.Erms.Server.GErmsWsCaller.CallErmsWs(System.String,System.String,System.String,System.String,System.Xml.XmlDocument,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String,System.Nullable{System.Int32},System.Xml.XmlDocument@)">
+            <summary>
+             Odeslání zadaného XML na zadanou URL s voláním zadané WS
+            </summary>
+            <param name="a_verze_ess">Typ - verze rozhraní - bude řídit, jaká validace se na XML použije - stará verze RZP, nová verze RZP3</param>
+            <param name="a_mutace_ess">Mutace rozhraní zadaná s pomocí namespace kořenového elementu.</param>
+            <param name="rssUrl">URL volané WS</param>
+            <param name="rssWsMethodName">Jméno volané metody - pro verze rozhraní ERMS a NS2024 je to shodné s SOAPAction</param>
+            <param name="rssXmlDoc">XML, které se má odeslat</param>
+            <param name="rssClientCertificatePath">klientský certifikát pro HTTPS komunikaci (zadaný jako soubor na disku) 
+            nebo login (neexistuje na disku, potom je to login).</param>
+            <param name="rssClientCertificatePwd">Heslo k certifikátu pro HTTPS komunikaci nabo heslo ke klientskému loginu.</param>
+            <param name="rssSigningCertificatePath">Certifikát pro podepsání XML obsahu.</param>
+            <param name="rssSigningCertificatePwd">Heslo k certifikátu pro podepsání XML obsahu.</param>
+            <param name="a_proxy_jmeno">login pro proxy server</param>
+            <param name="a_proxy_heslo">heslo pro proxy server</param>
+            <param name="a_proxy_domain">doména loginu pro proxy server</param>
+            <param name="a_proxy_host">IP proxy serveru</param>
+            <param name="a_proxy_port">port proxy serveru</param>
+            <param name="a_logPath">Plné jméno k log souboru.</param>
+            <param name="logNumber">Číslo, které pokud je zadané se přidá do jména zalogovaných souborů odeslaných a přihjatých dávek. Pokud je NULL, potom se pořadové číslo do jmen log. souborů nebude přidávat.</param>
+            <param name="a_xml_doc_out">XML dokument získaný z wolání WS - pozor! Je kempletní, včetně podpisů atd...</param>
+            <returns>Příznak úspěšného zpracování</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.GErmsWsCaller.CallErmsWsInternal(System.String,System.String,System.String,System.String,System.Xml.XmlDocument,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Int32,System.Xml.XmlDocument@)">
+            <summary>
+            Odeslání zadaného XML na zadanou URL s voláním zadané WS
+            </summary>
+            <param name="a_verze_ess">Verze rozhraní - bude řídit, jaká validace se na XML použije - stará verze RZP, nová verze RZP3</param>
+            <param name="a_mutace_ess">Mutace rozhraní zadaná s pomocí namespace kořenového elementu.</param>
+            <param name="rssUrl">URL volané WS</param>
+            <param name="rssWsMethodName">Jméno volané metody - pro verze rozhraní ERMS a NS2024 je to shodné s SOAPAction</param>
+            <param name="rssXmlDoc">XML, které se má odeslat</param>
+            <param name="rssClientCertificatePath">klientský certifikát pro HTTPS komunikaci (zadaný jako soubor na disku) 
+            nebo login (neexistuje na disku, potom je to login).</param>
+            <param name="rssClientCertifiacatePwd">Heslo k certifikátu pro HTTPS komunikaci.</param>
+            <param name="rssSigningCertificatePath">Certifikát pro podepsání XML obsahu.</param>
+            <param name="rssSigningCertifiacatePwd">Heslo k certifikátu pro podepsání XML obsahu.</param>
+            <param name="a_proxy_jmeno">login pro proxy server</param>
+            <param name="a_proxy_heslo">heslo pro proxy server</param>
+            <param name="a_proxy_domain">doména loginu pro proxy server</param>
+            <param name="a_proxy_host">IP proxy serveru</param>
+            <param name="a_proxy_port">port proxy serveru</param>
+            <param name="a_xml_doc_out">XML dokument získaný z wolání WS - pozor! Je kempletní, včetně podpisů atd...</param>
+            <returns>Příznak úspěšného zpracování</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.GErmsWsCaller.ConvertByteArrayToXml(System.Byte[])">
+            <summary>
+            Převod pole byte na XML - otestovat na příjmu XML, třeba to bude rychlejší
+            </summary>
+            <param name="data"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.GErmsWsCaller.LogRequest(System.String)">
+            <summary>
+            Zalogování textu požadavky na disk.
+            </summary>
+            <param name="request">Text požadavku.</param>
+        </member>
+        <member name="M:Gordic.Erms.Server.GErmsWsCaller.LogRequestXml(System.Xml.XmlDocument)">
+            <summary>
+            Zalogování textu požadavky na disk.
+            </summary>
+            <param name="request">Text požadavku.</param>
+        </member>
+        <member name="M:Gordic.Erms.Server.GErmsWsCaller.LogHttpError(System.String)">
+            <summary>
+            Zalogování získané HTTP chyby na disk.
+            </summary>
+            <param name="a_html_text">Exception od web požadavku - která se má zalogovat</param>
+        </member>
+        <member name="M:Gordic.Erms.Server.GErmsWsCaller.LogTxtError(System.Net.WebException)">
+            <summary>
+            Zalogování získané TXT chyby na disk.
+            </summary>
+            <param name="a_wexc">Exception od web požadavku - která se má zalogovat</param>
+        </member>
+        <member name="M:Gordic.Erms.Server.GErmsWsCaller.LogRespose(System.Xml.XmlDocument)">
+            <summary>
+            Zalogování odpovědi na disk.
+            </summary>
+            <param name="v_xml_response">XML dokument, který volání WS vrátilo.</param>
+        </member>
+        <member name="M:Gordic.Erms.Server.GErmsWsCaller.LogRespose(System.String)">
+            <summary>
+            Zalogování odpovědi na disk.
+            </summary>
+            <param name="v_xml_response">XML dokument, který volání WS vrátilo.</param>
+        </member>
+        <member name="M:Gordic.Erms.Server.GErmsWsCaller.LogResposeSoapError(System.Xml.XmlDocument)">
+            <summary>
+            Zalogování chybne XML odpovědi na disk.
+            </summary>
+            <param name="v_xml_response_error">XML dokument, který volání WS vrátilo jako soap chybu.</param>
+        </member>
+        <member name="M:Gordic.Erms.Server.GErmsWsCaller.XmlNodeToString(System.Xml.XmlNode)">
+            <summary>
+            Konverzní funkce pro převod XML dokumentu na lidsky přijatelně formátovaný text.
+            </summary>
+            <param name="a_node">Xml dokument, ktery se ma prevest na string</param>
+            <returns>text obsahujici naformatovany obsah XML dokumentu.</returns>
+        </member>
+        <member name="T:Gordic.Erms.Server.GErmsXmlValidator">
+            <summary>
+            Třída pro validaci XML schémat.
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GErmsXmlValidator._Logger">
+            <summary>
+            Logování
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GErmsXmlValidator._Vysledek">
+            <summary>
+            Textový výsledek akce. Může obsahovat upřesnění případně vzniklé chyby.
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GErmsXmlValidator._Verze_Ess">
+            <summary>
+            Typ rozhraní - možné hondoty jsou RZP a RZP3
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GErmsXmlValidator._Mutace_Ess">
+            <summary>
+            Mutace verze rozhraní - pro staré chování, kdy se vše řídilo pouze položkou _Verze_Ess bude NULL. Pro nové chování zde bude uveden root namespace, pro který se schéma má kontrolovat
+            2014-04-07
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.GErmsXmlValidator._show_warning">
+            <summary>
+            Příznak, že se má kontrolovat a vypisovat i warning
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GErmsXmlValidator.Verze_Ess">
+            <summary>
+            Verzerozhraní - možné hodnoty jsou RZP, RZP3, ERMS, NS2024
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GErmsXmlValidator.Mutace_Ess">
+            <summary>
+            Mutace verze rozhraní - pro staré chování, kdy se vše řídilo pouze položkou _Verze_Ess bude NULL. Pro nové chování zde bude uveden root namespace, pro který se schéma má kontrolovat
+            Povolené hodnoty:
+                RZP a RSS verze rozhraní 2 -                    http://nsess.public.cz/erms/v_01_00
+                RZP a RSS verze rozhraní 3 podle BP -           http://nsess.public.cz/erms/v_01_01
+                RSS verze rozhraní 3 podle BP rozšíření HP -    urn:cz:isvs:espis:schemas:erms:v1
+                RSS verze rozhraní pro FUTURA                   FUTURA - v databázi a v XML se ale bude pracovat s http://nsess.public.cz/erms/v_01_01
+                ERMS verze rozhraní podle NS 2017               http://nsess.public.cz/erms/v_02_00
+                NS2024 verze rozhraní podle NS 2023             http://www.mvcr.cz/nsesss/2024/api
+            2014-04-07
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GErmsXmlValidator.VysledekTxt">
+            <summary>
+            Textový popis výsledku volání.
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.GErmsXmlValidator.MyXmlReaderSettings">
+            <summary>
+            Vrátí XmlReaderSettings s načtenými XSD schématy
+            </summary>
+        </member>
+        <member name="M:Gordic.Erms.Server.GErmsXmlValidator.WriteErrorText(System.String)">
+            <summary>
+            Funkce pro zápis jednoho z textů chyb do výstupního textu s celkovým popisem chyb XML.
+            </summary>
+            <param name="a_err_text">Text, který se má připsat do celkového popisu chyb.</param>
+        </member>
+        <member name="F:Gordic.Erms.Server.GErmsXmlValidator._IsXsdError">
+            <summary>
+            Příznak, že poslední validace skončila s chybou
+            </summary>
+        </member>
+        <member name="M:Gordic.Erms.Server.GErmsXmlValidator.#ctor">
+            <summary>
+            Konstruktor.
+            </summary>
+        </member>
+        <member name="M:Gordic.Erms.Server.GErmsXmlValidator.ReformatXmlText(System.Xml.XmlDocument,System.Boolean)">
+            <summary>
+            Přeformátuje XML zobrazený v rámci editoru 
+            </summary>
+            <param name="v_xml_doc"></param>
+            <param name="newLineOnAttributes"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.GErmsXmlValidator.ValidateRssXml(System.String,System.String,System.String,System.Boolean,System.String@)">
+            <summary>
+            Zvaliduje XML dokument podle XSD schématu.
+            </summary>
+            <param name="a_typ_xml">Typ - verze rozhraní - bude řídit, jaká validace se na XML použije - stará verze RZP, nová verze RZP3</param>
+            <param name="a_mutace_ess">Mutace verze rozhraní - bude řídit, jaká validace se na XML použije - obsahuje root namespace kontrolovaného schématu a nebo NULL pro staré chování.</param>
+            <param name="a_xml_text">XML text, který se má podle schématu validovat.</param>
+            <param name="newLineOnAttributes"></param>
+            <param name="a_vysledek_txt">Výstupní proměnná - textový popis výsledku nebo případného neúspěchu</param>
+            <returns>Příznak validnosti XML souboru proti XML schématu.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.GErmsXmlValidator.ValidateRssXml(System.String,System.String,System.IO.Stream,System.String@)">
+            <summary>
+            validuje XML dokument podle XSD schématu.
+            </summary>
+            <param name="a_typ_xml">Typ - verze rozhraní - bude řídit, jaká validace se na XML použije - stará verze RZP, nová verze RZP3</param>
+            <param name="a_mutace_ess">Mutace verze rozhraní - bude řídit, jaká validace se na XML použije - obsahuje root namespace kontrolovaného schématu a nebo NULL pro staré chování.</param>
+            <param name="a_xml">Stream s XML textem, který se má podle schématu validovat.</param>
+            <param name="a_vysledek_txt">Výstupní proměnná - textový popis výsledku nebo případného neúspěchu</param>
+            <returns>Příznak validnosti XML souboru proti XML schématu.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.GErmsXmlValidator.ValidationCallBack(System.Object,System.Xml.Schema.ValidationEventArgs)">
+            <summary>
+            Pomocná funkce pro zachycení textu a místa případně chyby v XML souboru při kontrole proti XSD schématu.
+            Vykopírováno z https://balajiramesh.wordpress.com/2008/05/30/strip-illegal-xml-characters-based-on-w3c-standard/
+            a z http://stackoverflow.com/questions/20762/how-do-you-remove-invalid-hexadecimal-characters-from-an-xml-based-data-source-p
+            </summary>
+            <param name="sender"></param>
+            <param name="args"></param>
+        </member>
+        <member name="T:Gordic.Erms.Server.Gordic_Erms_Server_Exceptions">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.Gordic_Erms_Server_Exceptions.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.Gordic_Erms_Server_Exceptions.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.Gordic_Erms_Server_Exceptions._21300001">
+            <summary>
+              Looks up a localized string similar to Chyba při zápisu - zalogování requestu volání WS na disk..
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.Gordic_Erms_Server_Exceptions._21300002">
+            <summary>
+              Looks up a localized string similar to Chyba při zápisu response - chyby na disk..
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.Gordic_Erms_Server_Exceptions._21300003">
+            <summary>
+              Looks up a localized string similar to Chyba při zápisu response na disk..
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.Gordic_Erms_Server_Exceptions._24567001">
+            <summary>
+              Looks up a localized string similar to Nebyl nalezen žádný XML node..
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.Gordic_Erms_Server_Exceptions._24567002">
+            <summary>
+              Looks up a localized string similar to Neznámý typ RSS dávky..
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.Gordic_Erms_Server_Exceptions._24567003">
+            <summary>
+              Looks up a localized string similar to Chyba při zpracování vstupního XML: {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.Gordic_Erms_Server_Exceptions._24567004">
+            <summary>
+              Looks up a localized string similar to Při volání SP došlo k chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.Gordic_Erms_Server_Exceptions._24567005">
+            <summary>
+              Looks up a localized string similar to {0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.Gordic_Erms_Server_Exceptions._24567006">
+            <summary>
+              Looks up a localized string similar to Při běhu SP došlo k chybě..
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.Gordic_Erms_Server_Exceptions._24567014">
+            <summary>
+              Looks up a localized string similar to Při volání služby ICZ došlo k chybě. URL &apos;{0}&apos;, eventId {1}, actionTypeId {2}..
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.Gordic_Erms_Server_Exceptions._24567015">
+            <summary>
+              Looks up a localized string similar to V parametrech ZUD nebyla nalezena URL adresa služby RSS-ICZ..
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.Gordic_Erms_Server_Exceptions._24567016">
+            <summary>
+              Looks up a localized string similar to V parametrech ZUD nebyla nalezena cesta ke klientskému certifikátu pro připojení ke službě RSS-ICZ..
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.Gordic_Erms_Server_Exceptions._24567017">
+            <summary>
+              Looks up a localized string similar to V parametrech ZUD nebyla nalezena cesta k podpisovému certifikátu pro XML komunikaci se službou RSS-ICZ..
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.Gordic_Erms_Server_Exceptions._24567018">
+            <summary>
+              Looks up a localized string similar to Operaci nelze provést - neznámý typ autentizace ({0})..
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.Gordic_Erms_Server_Exceptions._24567019">
+            <summary>
+              Looks up a localized string similar to Při volání služby ISDS find-databox došlo k chybě..
+            </summary>
+        </member>
+        <member name="T:Gordic.Erms.Server.GSoapMessageSignature">
+            <summary>
+            Třída, která podepisuje xml - se zachováním významových mezer
+            (viz http://www.w3.org/TR/2000/WD-xml-c14n-20001011)
+            </summary>
+        </member>
+        <member name="M:Gordic.Erms.Server.GSoapMessageSignature.SignSoapMessage(System.Xml.XmlDocument@,Gordic.Security.Service.GCertificate)">
+            <summary>
+            Podpis XML souboru
+            </summary>
+            <param name="a_xml_doc">Pointer na XML dokument.</param>
+            <param name="a_certifikat">Certifikát, kterým se má podepsat.</param>
+        </member>
+        <member name="M:Gordic.Erms.Server.GSoapMessageSignature.PrepareSoapMessage(System.Xml.XmlDocument@)">
+            <summary>
+            příprava soap obálky k podpisu - doplnění potřebných částí do XML
+            </summary>
+            <param name="envelope">obálka soap zprávy</param>
+        </member>
+        <member name="M:Gordic.Erms.Server.GSoapMessageSignature.SignRzpNew(System.Xml.XmlDocument@,Gordic.Security.Service.GCertificate,System.String@,System.String@,System.String@)">
+            <summary>
+            Vytvoří podpis do XML
+            </summary>
+            <param name="a_XmlDoc">XML dokument, který se má podepisovat.</param>
+            <param name="Certificate">Certifikát, kterým se má podepisovat.</param>
+            <param name="Signature">Návratová hodnota - Signature - umisťuje se do výsledného XML</param>
+            <param name="CertContent">Návratová hodnota - CertContent - umisťuje se do výsledného XML</param>
+            <param name="Digest">Návratová hodnota - Digest - umisťuje se do výsledného XML</param>
+        </member>
+        <member name="T:Gordic.Erms.Server.StrFce">
+            <summary>
+            Třída obsahující funkce pro manipulace se stringem. 
+            Funkce jsou odvozeny od PowerBuilder funkcí.
+            Hlavní rozdíl oproti funkcím DOT.NETu je indexování pozice řetězce od čísla 1.
+            Dále jiné chování k požadavkům na manipulace s řetězci mimo povolený rozsah indexu znaků. 
+            DOT.NET vzhlašuje v takovém případě chybu. Tyto funkce se zachovají podle pravidel PowerBuilderu a chybu nevyhlásí.
+            
+            Verze 2008.08.01.1
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.#ctor">
+            <summary>
+            Základní konstruktor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Erms.Server.StrFce.CaseSensitiveEnum">
+            <summary>
+            Přepinač zda operace je CaseInsensitive nebo CaseSensitive
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.StrFce.CaseSensitiveEnum.CI">
+            <summary>
+            Přepinač Case Insensitive
+            </summary>
+        </member>
+        <member name="F:Gordic.Erms.Server.StrFce.CaseSensitiveEnum.CS">
+            <summary>
+             Přepinač Case Sensitive
+            </summary>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.Reverse(System.String)">
+            <summary>
+            Funkce otočí pořadí znaků v textu. První bude na konci a obráceně. Obdoba interní PB funkce Reverse()
+            </summary>
+            <param name="a_text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.CountExist(Gordic.Erms.Server.StrFce.CaseSensitiveEnum,System.String,System.String)">
+            <summary>
+            Vrátí počet výskytů zadaného řetězce v zadaném textu
+            </summary>
+            <param name="a_case">Příznak, zda se při hledání výskytů má postupovat case sensitive.</param>
+            <param name="a_text">Text ve kterém se hledá</param>
+            <param name="a_find_text">Text který se hledá</param>
+            <returns>Počet nalezených výskytů.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.CountExist(System.String,System.String)">
+            <summary>
+            Vrátí počet výskytů zadaného řetězce v zadaném textu. Hledání je CASE SENSITIVE
+            </summary>
+            <param name="a_text">Text ve kterém se hledá</param>
+            <param name="a_find_text">Text který se hledá</param>
+            <returns>Počet nalezených výskytů.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.TestExist(Gordic.Erms.Server.StrFce.CaseSensitiveEnum,System.String,System.String)">
+            <summary>
+            Test existence substringu v zadané textu
+            </summary>
+            <param name="a_case">Příznak, zda se při hledání výskytů má postupovat case sensitive.</param>
+            <param name="a_text">Text který se prohledává.</param>
+            <param name="a_find_text">Text který se hledá</param>
+            <returns>True pokud substring byl nalezen.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.TestExist(System.String,System.String)">
+            <summary>
+            Test existence substringu v zadané textu. Hledání je CASE SENSITIVE
+            </summary>
+            <param name="a_text">Text který se prohledává.</param>
+            <param name="a_find_text">Text který se hledá</param>
+            <returns>True pokud substring byl nalezen.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.TextExist(Gordic.Erms.Server.StrFce.CaseSensitiveEnum,System.String,System.String)">
+            <summary>
+            Test existence substringu v zadané textu
+            </summary>
+            <param name="a_case">Příznak, zda se při hledání výskytů má postupovat case sensitive.</param>
+            <param name="a_text">Text který se prohledává.</param>
+            <param name="a_find_text">Text který se hledá</param>
+            <returns>True pokud substring byl nalezen.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.TextExist(System.String,System.String)">
+            <summary>
+            Test existence substringu v zadané textu. Hledání je CASE SENSITIVE
+            </summary>
+            <param name="a_text">Text který se prohledává.</param>
+            <param name="a_find_text">Text který se hledá</param>
+            <returns>True pokud substring byl nalezen.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.CutFrom(System.String,System.String,System.String)">
+            <summary>
+            Vyříznutí textu od prvního nalezeného výskytu zadaného hraničního textu. Vyříznutý text neobsahuje hraniční text.
+            Hledání hraničního textu je CASE SENSITIVE a to proti obsahu maskovacího textu.
+            </summary>
+            <param name="a_text">Originální text ze kterého se má vyřezává.</param>
+            <param name="a_text_vzor">Maskovací vzorový text, podle kterého se má vyhledávat hraniční text. 
+            V maskovacím textu se hledá výskyt hraničního textu a podle nalezené pozice se vyřízne text ze zadaného originálním textu.
+            Aby maskovací text šlo použít, musí pozice znaků v originálním a maskovacím textu sedět. 
+            Maskování lze použít např. na odstínění obsahu obsaženém uvnitř závorek. Vše co je uvnitř závorek se nejprve musí nahradit odpovídajícím počtem mezer a následně se takto upravený text použije jako maska pro funkci na vyřezávání textu.</param>
+            <param name="a_from_text">Hraniční text, od kterého se má vyřezávat.</param>
+            <returns>Výsledný text. Pokud maskovací text neobsahuje žádný výskyt hraničního textu, potom se vrátí prázdný string.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.CutFrom(System.String,System.String)">
+            <summary>
+            Vyříznutí textu od prvního nalezeného výskytu zadaného hraničního textu. Vyříznutý text neobsahuje hraniční text.
+            Hledání hraničního textu je CASE SENSITIVE
+            </summary>
+            <param name="a_text">Originální text ve kterém se hledá hraniční text a ze kterého se vyřízne text následující za hraničním.</param>
+            <param name="a_from_text">Hraniční text od kterého se vyřízne výsledný text.</param>
+            <returns>Vyříznutý text.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.Pos(System.String,System.String,System.Int32)">
+            <summary>
+            Obdoba POS funkce z PowerBuilderu. 
+            Vrací první nalezenou pozici zadaného textu v jiném textu. Vrácená pozice je indexována ne od 0, ale podle PowerBuilder konvence od 1.
+            Tato fuknce slouží pro přepis PowerBuilder algoritmů stylem 1:1.
+            </summary>
+            <param name="a_text">Text který je prohledáván.</param>
+            <param name="a_find_text">Hledaný text.</param>
+            <param name="a_start_index">Pozice, od které se má zahájit hledání. Indexování pozice znaků podle PB, tedy první znak má index 1.</param>
+            <returns>Vrácená pozice prvního znaku zadaného hledaného textu.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.Pos(System.String,System.String)">
+            <summary>
+            Obdoba POS funkce z PowerBuilderu. 
+            Vrací první nalezenou pozici zadaného textu v jiném textu. Vrácená pozice je indexována ne od 0, ale podle PowerBuilder konvence od 1.
+            Tato fuknce slouží pro přepis PowerBuilder algoritmů stylem 1:1.
+            Hledá se vždy od prvního znaku.
+            </summary>
+            <param name="a_text">Text který je prohledáván.</param>
+            <param name="a_find_text">Hledaný text.</param>
+            <returns>Vrácená pozice prvního znaku zadaného hledaného textu.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.PosReverse(System.String,System.String,System.Int32)">
+            <summary>
+            Hledání pozice zadaného substringu v zadaném textu. Hledá se ale od zadu.
+            Pozor! Jedná se o typ hledání podle standardu Powerbuilder - tedy první pozice znaku má index 1.
+            </summary>
+            <param name="a_text">Prohledávaný text</param>
+            <param name="a_find_text">Hledaný text</param>
+            <param name="a_start_index">Startovací pozice, od které se hledání zahajuje.</param>
+            <returns>Index nalezeného textu</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.PosReverse(System.String,System.String)">
+            <summary>
+            Hledání pozice zadaného substringu v zadaném textu. Hledá se ale od zadu.
+            Pozor! Jedná se o typ hledání podle standardu Powerbuilder - tedy první pozice znaku má index 1.
+            </summary>
+            <param name="a_text">Prohledávaný text</param>
+            <param name="a_find_text">Hledaný text</param>
+            <returns>Index nalezeného textu</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.Mid(System.String,System.Int32,System.Int32)">
+            <summary>
+            Obdoba MID funkce z PowerBuilderu. 
+            Pozor! Pozice znaků v stringu je indexována ne od 0, ale podle PowerBuilder konvence od 1.
+            </summary>
+            <param name="a_text">Text ze kterého se vyřezává.</param>
+            <param name="a_start_pos">Pozice od které se vyřezává.</param>
+            <param name="a_len">Délka vyřezávaného textu.</param>
+            <returns>Vyříznuty text. Pokud je délka a nebo pozice mimo možný rozsah originálního textu, potom to nevyhlásí exception jako u klasické .NET funkce ale vrátí se kratší nebo prázdný string.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.Mid(System.String,System.Int32)">
+            <summary>
+            Obdoba MID funkce z PowerBuilderu. 
+            Pozor! Pozice znaků v stringu je indexována ne od 0, ale podle PowerBuilder konvence od 1.
+            </summary>
+            <param name="a_text">Text ze kterého se vyřezává.</param>
+            <param name="a_start_pos">Pozice od které se vyřezává.</param>
+            <returns>Vyříznuty text. Pokud je délka a nebo pozice mimo možný rozsah originálního textu, potom to nevyhlásí exception jako u klasické .NET funkce ale vrátí se kratší nebo prázdný string.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.Len(System.String)">
+            <summary>
+            Obdoba LEN funkce z PowerBuilderu. 
+            Pozor! Pozice znaků v stringu je indexována ne od 0, ale podle PowerBuilder konvence od 1.
+            </summary>
+            <param name="a_text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.Left(System.String,System.Int32)">
+            <summary>
+            Vyříznutí prvních n znaků podle konvence PowerBuilder
+            </summary>
+            <param name="a_text">Text ze kterého se má řezat</param>
+            <param name="a_delka">Počet znaků z leva, které se mají vrátit. Pokud je počet znaků větší jak délka celého stringu, potom to není považováno za chybu.</param>
+            <returns>Vrácených prvních x znaků.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.Right(System.String,System.Int32)">
+            <summary>
+            Vyříznutí posledních n znaků podle konvence PowerBuilder
+            </summary>
+            <param name="a_text">Text ze kterého se má řezat</param>
+            <param name="a_delka">Počet znaků z prava, které se mají vrátit. Pokud je počet znaků větší jak délka celého stringu, potom to není považováno za chybu.</param>
+            <returns>Vrácených prvních x znaků.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.CutFromKey(System.Int32,System.String,System.String,System.String)">
+            <summary>
+            Vyříznutí textu ze skládaného klíče. 
+            </summary>
+            <param name="a_cislo">Číslo sekce ze které se má vyřezávat</param>
+            <param name="a_string">Text - skládaný klíč</param>
+            <param name="a_text_vzor">Maskovací text pro hledání sekcí</param>
+            <param name="a_separ_znak">Oddělovací string použitý pro oddělení jednotlivých sekcí.</param>
+            <returns>Obsah zadané sekce skládaného klíče</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.CutFromKey(System.Int32,System.String,System.String)">
+            <summary>
+            Vyříznutí textu ze skládaného klíče. 
+            </summary>
+            <param name="a_cislo">Číslo sekce ze které se má vyřezávat</param>
+            <param name="a_string">Text - skládaný klíč</param>
+            <param name="a_separ_znak">Oddělovací string použitý pro oddělení jednotlivých sekcí.</param>
+            <returns>Obsah zadané sekce skládaného klíče</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.CutFromKey(System.Int32,System.String)">
+            <summary>
+            Vyříznutí textu ze skládaného klíče. 
+            Jako oddělovací znak je použit znak '#'
+            </summary>
+            <param name="a_cislo">Číslo sekce ze které se má vyřezávat</param>
+            <param name="a_string">Text - skládaný klíč</param>
+            <returns>Obsah zadané sekce skládaného klíče</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.CutTo(System.String,System.String,System.String)">
+            <summary>
+            Vyříznutí textu po první výskyt zadaného substringu
+            </summary>
+            <param name="a_text">Text ze kterého se vyřezává</param>
+            <param name="a_text_vzor">Maskovací text, který slouží jako základ pro hledání hraničního textu</param>
+            <param name="a_to_text">Hraniční substring, ke kterému se má text vyříznout</param>
+            <returns>Vyříznutý text od začátku zadaného a_text až po první výskyt hraničního textu nalezeného v maskovacím textu.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.CutTo(System.String,System.String)">
+            <summary>
+            Vyříznutí textu po první výskyt zadaného substringu
+            </summary>
+            <param name="a_text">Text ze kterého se vyřezává</param>
+            <param name="a_to_text">Hraniční substring, ke kterému se má text vyříznout</param>
+            <returns>Vyříznutý text od začátku zadaného a_text až po první výskyt hraničního textu nalezeného textu.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.Lower(System.String,System.String)">
+            <summary>
+            Převede znaky uvedené v maskovacím řetězci na malá písmena.
+            </summary>
+            <param name="a_text">Vstupní text</param>
+            <param name="a_maska">Maskovací řetězec obsahující mezery na místě znaků, které 
+            se nemají převádět na malá písmena.</param>
+            <returns>Upravený řetězec.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.Space(System.Int32)">
+            <summary>
+            Funkce vytvoří řetězec obsahující pouze zadaný počet mezer.
+            </summary>
+            <param name="a_pocet_znaku">Počet požadovaného počtu mezer.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.Replace(System.String,System.Int32,System.Int32,System.String)">
+            <summary>
+            Funkce pro přepis textu od zadané pozice v zadané délce novým textem
+            Pokud je pozice pro přepis mimo délku původního textu, potom se vrátí původní text.
+            Pozor! Pozice v textu je číslována od indexu 1.
+            </summary>
+            <param name="a_orig_text">Text který do kterého se má vpisovat.</param>
+            <param name="a_start_pos">Pozice od které má být v originálním textu přepisováno. 
+            Pokud je startovací pozice mimo délku originálního textu, potom funkce vrací pouze originální text.
+            Pozor. Pro indexování pozice v textu je platí pro znak 1 index 1.</param>
+            <param name="a_delka">Délka textu, která má být z originálního textu nahrazena novým textem</param>
+            <param name="a_new_text">Nový text který má být vepsán do originálního textu</param>
+            <returns>Upravený text.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.ReplaceText(System.String,System.String,System.String,System.String)">
+            <summary>
+            Funkce pro náhradu všech výskyků zadaného textu za nový zadaný text a to podle maskovacího textu.
+            </summary>
+            <param name="a_zdroj">Originální text ve kterém má být přepisováno.</param>
+            <param name="a_mask_zdroj">Maskovací text který je použit pro vzhledávání textu pro přepisování.
+            Délka a pozice jednotlivých znaků musí odpovídat originálnímu textu.
+            Texty které se mají vyřadit z prohledávání a přepisování se v maskovacím řetězci nahradí mezerami.</param>
+            <param name="a_orig_text">Řetězec který má být přepisován - nahrazován.</param>
+            <param name="a_new_text">Nový řetězec, který má nahrazovat přepisovaný text.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.ReplaceText(System.String,System.String,System.String)">
+            <summary>
+            Funkce pro přepis všech výskztů řetězce v textu za jiný řetězec. 
+            Tato funkce duplikuje DOT.NET funkci a je zde umístěna pouze pro snadnější přepis PB algoritmů. 
+            Časem by veškerá volání této funkce měla být nahrazena originál DOT.NET funkcí.
+            </summary>
+            <param name="a_zdroj">Originální text ve kterém se má přepisovat.</param>
+            <param name="a_old_text">Řetězec který se má přepisovat.</param>
+            <param name="a_new_text">Řetězec kterým se má přepisovet.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.UnEscape(System.String)">
+            <summary>
+              Prevede text obsahujici lomitka nasledovana zastupnymi znaku zpet na obecny text
+              napr. ze znaku ENTER vytrori \n a z lomitka udela dve
+              prevodni tabulka 
+              CHAR(13)		-		\n
+              CHAR(10)		-		\r
+              \				-		\\
+              #				-		\x23					- odpovidajici hexa kod
+            </summary>
+            <param name="a_text">Text</param>
+            <returns>Odkódovaný text</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.Hex1ToInt(System.String)">
+            <summary>
+            Převod jednoho hexa znaku na odpovídající číselnou hodnotu.
+            </summary>
+            <param name="a_znak">Znak od 0-9 a A-F</param>
+            <returns>DEC Číselná hodnota</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.HexToInt(System.String)">
+            <summary>
+             Prevede string na decimalni cislo, ktere odpovida hexidacimalnimu cislu zadanemu v stringu
+            </summary>
+            <param name="a_hex">Text který odpovídá HEX vyjádření čísla</param>
+            <returns>Odpovídající DEC hodnota</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.Upper(System.String)">
+            <summary>
+            Funkce převede zadaný řetězec na velká písmena.
+            </summary>
+            <param name="a_text">Převáděný řetězec.</param>
+            <returns>Řetězec převedený na velká písmena.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.SubsSubstr(System.String)">
+             <summary>
+             Upravi obecny retezec tak, ze uvozene substringy nahradi mezerami.
+             napr.:
+             		Print "fsdfsdf' fsd fs" + 'dfs' Trim( 'df"""df s' )
+             prevede na 
+             		Print "               " + "   " Trim( "         " )
+            
+             Tento prevedeny "maskovaci" retezec lze dale pouzit na zpracovani (interpretaci) prikacu, nebot vse mezi uvozovkami 
+             jsou substringy a pri porovnani s originalnim stringem je lze z retezce vypreparovat
+             </summary>
+             <param name="a_text"></param>
+             <returns></returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.SubsSubstr(System.String,System.Char)">
+            <summary>
+            Funkce pro vymaskování substringů uvedených v úvozovkách nebo apostrofech
+            </summary>
+            <param name="a_text">Originál text</param>
+            <param name="a_mask_znak">Znak, který se má substring vymaskovat</param>
+            <returns>Výsledný text</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.SubsSubstr(System.String,System.String,System.String)">
+            <summary>
+            Upravi obecny retezec tak, ze uvozene substringy nahradi mezerami.
+            Pritom uvozovaci znaky substringů jsou zadany v parametrech a_prvni_znak a a_druhy_znak
+            Tento prevedeny "maskovaci" retezec lze dale pouzit na zpracovani (interpretaci) prikacu, nebot vse mezi napr. zavorkami
+            jsou substringy a pri porovnani s originalnim stringem je lze z retezce takto vypreparovat
+            </summary>
+            <param name="a_text"></param>
+            <param name="a_prvni_znak"></param>
+            <param name="a_druhy_znak"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.RightTrim(System.String)">
+            <summary>
+            Ořezání mezer a tabelátorů z prava
+            </summary>
+            <param name="a_text">Text</param>
+            <returns>Ořezaný text</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.LeftTrim(System.String)">
+            <summary>
+            Ořezání mezer a tabelátorů z leva
+            </summary>
+            <param name="a_text">Text</param>
+            <returns>Ořezaný text</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.Trim(System.String)">
+            <summary>
+            Ořezání mezer a tabelátorů z obou stran
+            </summary>
+            <param name="a_text">Text</param>
+            <returns>Ořezaný text</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.TestZacatek(Gordic.Erms.Server.StrFce.CaseSensitiveEnum,System.String,System.String)">
+            <summary>
+            Funkce slouzi pro porovnani zacatku retezce na shodu se zadanym retezcem. 
+            Velka a mala pismena se ignoruji
+            </summary>
+            <param name="a_case"></param>
+            <param name="a_text"></param>
+            <param name="a_test_text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.TestZacatek(System.String,System.String)">
+            <summary>
+            Test na shodu začátků zadaných textů.
+            </summary>
+            <param name="a_text">Delší text na porovnání</param>
+            <param name="a_test_text">Kratší text na porovnání</param>
+            <returns>Příznak shody</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.TestKonec(Gordic.Erms.Server.StrFce.CaseSensitiveEnum,System.String,System.String)">
+            <summary>
+            Funkce slouží pro porovnání konce řetezce na shodu se zadaným řetězcem. 
+            </summary>
+            <param name="a_case">Příznak zda se při porovnání má brát ohled na velikost písmen.</param>
+            <param name="a_text">Prohledávaný text.</param>
+            <param name="a_test_text">Hledaný text</param>
+            <returns>Vrátí true, pokud se konec textu shoduje s hledaným řetězcem.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.TestKonec(System.String,System.String)">
+            <summary>
+            Funkce slouží pro porovnání konce řetezce na shodu se zadaným řetězcem. 
+            Při porovnání se nebere zřetel na velikost písmen.
+            </summary>
+            <param name="a_text">Prohledávaný text.</param>
+            <param name="a_test_text">Hledaný text</param>
+            <returns>Vrátí true, pokud se konec textu shoduje s hledaným řetězcem.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.NormalizeText(System.String)">
+            <summary>
+            Funkce přepíše speciální znaky jako CR,LF,TAB na mezery. Vícenásobné mezery jsou přepsány vždy na jednoduchou mezeru.
+            </summary>
+            <param name="a_text">Text který má být znormalizován.</param>
+            <returns>Upravený text.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.GetSectionFromTo(System.String,System.String,System.String[])">
+            <summary>
+            Funkce na vyříznutí textu podobná funkci CutFromTo.
+            Rozdíl je v tom, že koncový hraniční text může být zadán výcenásobně a výsledný text bude vyříznut ke konečnému hraničnámu textu, který je nejblíže výchozímu hraničnímu textu.
+            Jedná se o poněkud speciální funkci, která slouží především u rozboru SQL příkazů, kde je např. potřeba vyříznout část selectu a to sekci FROM a ta 
+            může začínat pouze klíčovým slovem FROM ale končit může několika klíčovými slovy. Proto koncový hraniční string lze zadat proměnný počet vstpních argumentů.
+            </summary>
+            <param name="a_text">Text ze kterého se vyřezává.</param>
+            <param name="a_from_key">Startovací hraniční string od kterého se vyřezává. Např. "FROM"</param>
+            <param name="a_to_key">Koncové hraniční stringy, ke kterým se má vyříznout. Např. "WHERE", "ORDER", "GROUP" </param>
+            <returns>Vyříznutý text.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.IsNumber(System.String)">
+            <summary>
+            Test zda string obsahuje obdobu celočíselného, případně záporného čísla.
+            </summary>
+            <param name="a_text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.IsDecimal(System.String)">
+            <summary>
+            Test zda string obsahuje obdobu i neceločíselného, případně i záporného čísla.
+            </summary>
+            <param name="a_text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.GetRowTextByLineNumber(System.String,System.Int32)">
+            <summary>
+            Ze zadaného textu, který obsahuje i znaky odřádkování, vrátí text z řádku podle zadaného čísla.
+            První řádek má index 0.
+            </summary>
+            <param name="a_text"></param>
+            <param name="a_line_number"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.VyhodKomentarRadek(System.String,System.String)">
+            <summary>
+            Funkce na odstranění komentáře ze zadaného textu - řádku.
+            Počáteční znaky komentáře lze zadat, např. -- pro SQL nebo // pro PowerBuilder.
+            </summary>
+            <param name="a_radek">Text ze kterého má být odstraněna zakomentovaná část.</param>
+            <param name="a_comment_begin">String, který označuje začátek komentáře.</param>
+            <returns>Text bez zakomentované části.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.VyhodKomentarRadek(System.String)">
+            <summary>
+            Vyhodí z konce řádku komentářovou část typu "-- " tedy SQL komentáře, které se podle konvence vývoje GINIS mají před distribucí SQL k zákazníkovi odstraňovat.
+            </summary>
+            <param name="a_radek">Vstupní řádek.</param>
+            <returns>Výstupní řádek s odstraněným komentářem.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.VyhodKomentarRadky(System.String)">
+            <summary>
+            Vyhodí z textu ze všech řádků komentář typů "-- ".
+            </summary>
+            <param name="a_text">Text obsahující řádky SQL kódu.</param>
+            <returns>Text obsahující řádky SQL kódu s odstraněnými komentáři typu "-- ".</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.TrimRadky(System.String)">
+            <summary>
+            Otrimování mezer a tabelátorů z leva i z prava a to u všech řádků obsažených v textu.
+            </summary>
+            <param name="a_text">Text s řádky, které se mají otrimovat.</param>
+            <returns>Ořezané řádky.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.VyhodPrazdneRadky(System.String)">
+            <summary>
+            Vyhozeni prazdnych radku z textu.
+            </summary>
+            <param name="a_text">Text s řádky, které se mají redukovat - odstranit prazdne radky.</param>
+            <returns>Redukovane radky.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.Date_To_String1(System.DateTime)">
+            <summary>
+            Převod datumu a času na string, který obsahuje formátování YYYYMMDDHHMMSS
+            Už přesně nevím, k čemu tato funkce byla - možná něco s překladačem.
+            </summary>
+            <param name="a_datum">Datum a čas určený pro převod</param>
+            <returns>Text obsahující naformátovanou hodnotu datumu a času</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.BoolToString(System.Boolean)">
+            <summary>
+            Převod bool hodnoty na odpovídající hodnotu ve stringu
+            </summary>
+            <param name="a_value">Hodnota pro převod</param>
+            <returns>Převedená hodnota</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.StringToBool(System.String)">
+            <summary>
+            Převod textové hodnoty na odpovídající bool hodnotu
+            Pokud se nejedná o jednu ze známých hodnota pro ANO, potom se vždy vrátí false.
+            </summary>
+            <param name="a_value">Text který se má převést</param>
+            <returns>Odpovídající bool hodnota</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.CutFromTo(System.String,System.String,System.String)">
+            <summary>
+            Vyříznutí text ze stringu a to od prvního výskytu zadaného startovacího hraničního substringu 
+            po první další výskyt koncového hraničního substringu.
+            </summary>
+            <param name="a_text">Text ze kterého se má vyřezávat.</param>
+            <param name="a_cut_from">Startovací hraniční substring</param>
+            <param name="a_cu_to">Koncový hraniční substring.</param>
+            <returns>Vyřiznutý text a to bez hraničních substringů. Pokud vstupní text neobsahuje zadané hraniční znaky, 
+            potom se vrátí prázdný string.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.DorovnaniLong(System.Int32,System.Int32)">
+            <summary>
+            Pomocná funkce pro výpočet mezer při převodu tabelátorů na mezery.
+            </summary>
+            <param name="a_in"></param>
+            <param name="a_tab_size"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.TabToSpace(System.String,System.Int32)">
+            <summary>
+            Funkce převede tabelátory v textu na mezery tak, aby i po převodu opticky texty souhlasily. 
+            Pro převod je nutné zadat, jak bylo v původním editoru nastaveno odsazení jednoho tabelátoru ( počet mezer na jeden tabelátor )
+            </summary>
+            <param name="a_text">Původní text, který může obsahovat tabelátory.</param>
+            <param name="a_tab_size">Původní velikost tabelátoru.</param>
+            <returns>Text s nahrazenými tabelátory mezerami.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.SpaceToTab(System.String,System.Int32)">
+            <summary>
+            Odstraní z textu mezery a nahradí je tabelátory ( přitom vynechá texty uvedené v substringu ( označený apostrofy nebo úvozovkami )
+            </summary>
+            <param name="a_text">Vstupní text, který obsahuje mezery.</param>
+            <param name="a_tab_size">Velikost tebelátoru urcena poctem znaku</param>
+            <returns>Vystupni text, u ktereho jsou mezery nahrazeny tabelatorem. Pokud to nevychazi na cely tabelator, potom se vysledny text zkracuje tak, aby to na cely tabelator vyslo.</returns>
+        </member>
+        <member name="M:Gordic.Erms.Server.StrFce.TabRight(System.String,System.Int32,System.Int32)">
+            <summary>
+            Něco s tabelatory - asi dosazeni tabelatoru z prava tak, aby následný text zařezával
+            </summary>
+            <param name="a_text">Původní text, který se má doplnit tabelátory z prava</param>
+            <param name="a_target_tab_size">Výsledná požadovaná délka výsledného textu</param>
+            <param name="a_tab_size">velikost tabelátoru v počtu mezer</param>
+            <returns>Výsledný text</returns>
+        </member>
+        <member name="P:Gordic.Erms.Server.XmlResourceResolver.Verze_Ess">
+            <summary>
+            Verze rozhraní ( povolené hodnoty jsou pouze RZP a RZP3 )
+            </summary>
+        </member>
+        <member name="P:Gordic.Erms.Server.XmlResourceResolver.Mutace_Ess">
+            <summary>
+            Mutace rozhraní - může obsahovat root namespace
+            </summary>
+        </member>
+        <member name="M:Gordic.Erms.Server.XmlResourceResolver.GetEntity(System.Uri,System.String,System.Type)">
+            <summary>
+            Podle řetězce uvedeného v XSD v části import v položce schemaLocation='http://www.w3.org/TR/2002/REC-xmldsig-core-20020212/xmldsig-core-schema.xsd' vrátí Stream obsahující xsd schéma, které je požadováno
+            </summary>
+            <param name="absoluteUri"></param>
+            <param name="role"></param>
+            <param name="ofObjectToReturn"></param>
+            <returns></returns>
+        </member>
+        <member name="T:CPI.DirectoryServices.DN">
+            <summary>
+            A distinguished name (DN) is a name that uniquely identifies an object in an LDAP
+            directory by using the relative distinguished name (RDN) of the object itself, plus
+            the names of its container object.  A DN identifies the object as well as its location 
+            in a tree.  An example of a distinguished name is CN=Pete,OU=People,DC=example,DC=com
+            </summary>
+        </member>
+        <member name="P:CPI.DirectoryServices.DN.CharsToEscape">
+            <summary>
+            Gets or sets the categories of special characters that will be 
+            escaped with a backslash when the DN is printed as a string.
+            </summary>
+        </member>
+        <member name="P:CPI.DirectoryServices.DN.RDNs">
+            <summary>
+            Gets a list of all of the relative distinguished names that
+            make up this distinguished name.
+            </summary>
+        </member>
+        <member name="P:CPI.DirectoryServices.DN.Parent">
+            <summary>
+            Gets a DN object representing the object that contains the current DN.
+            </summary>
+        </member>
+        <member name="M:CPI.DirectoryServices.DN.#ctor(System.String)">
+            <summary>
+            Constructs a new DN object based on a string representation of an LDAP distinguished name.
+            </summary>
+            <param name="dnString">a string representation of a distinguished name</param>
+        </member>
+        <member name="M:CPI.DirectoryServices.DN.#ctor(System.String,CPI.DirectoryServices.EscapeChars)">
+            <summary>
+            Constructs a new DN object based on a string representation of an LDAP distinguished name.
+            </summary>
+            <param name="dnString">a string representation of a distinguished name</param>
+            <param name="escapeChars">the categories of special characters to be escaped when the DN is printed as a string</param>
+        </member>
+        <member name="M:CPI.DirectoryServices.DN.Equals(System.Object)">
+            <summary>
+            Determines whether the specified object is equal to the current DN
+            </summary>
+            <param name="obj">the object to compare to the current DN</param>
+            <returns>true if the specified object equals the current DN; false otherwise</returns>
+        </member>
+        <member name="M:CPI.DirectoryServices.DN.GetHashCode">
+            <summary>
+            Serves as a hash function, suitable for use in hashing algorithms and data structures like a hash table.
+            </summary>
+            <returns>a 32-bit integer representing the hash code of the current object</returns>
+        </member>
+        <member name="M:CPI.DirectoryServices.DN.ToString">
+            <summary>
+            Returns a string that represents the current DN.
+            </summary>
+            <returns>a string that represents the current DN</returns>
+        </member>
+        <member name="M:CPI.DirectoryServices.DN.ToString(CPI.DirectoryServices.EscapeChars)">
+            <summary>
+            Returns a string that represents the current DN.
+            </summary>
+            <param name="escapeChars">the categories of characters to be escaped</param>
+            <returns>a string that represents the current DN</returns>
+        </member>
+        <member name="M:CPI.DirectoryServices.DN.Contains(CPI.DirectoryServices.DN)">
+             <summary>
+             Checks whether the current DN is a parent object of the specified DN.
+            
+             For example:
+             The DN OU=People,DC=example,DC=com
+             contains CN=Mike,OU=Marketing,OU=People,DC=example,DC=com
+            
+             </summary>
+             <param name="childDN">The DN object to check against the current object</param>
+             <returns>true if childDN is a child of the current DN; false otherwise</returns>
+        </member>
+        <member name="M:CPI.DirectoryServices.DN.GetChild(System.String)">
+            <summary>
+            Gets a DN object representing a child object of the current DN.
+            </summary>
+            <param name="childRDN">a string representing the relative path to the child object</param>
+            <returns>a DN object representing a child object of the current DN</returns>
+        </member>
+        <member name="M:CPI.DirectoryServices.DN.op_Equality(CPI.DirectoryServices.DN,CPI.DirectoryServices.DN)">
+            <summary>
+            Checks to see whether two DN objects are equal.
+            </summary>
+            <param name="obj1">a DN object</param>
+            <param name="obj2">a DN object</param>
+            <returns>true if the two objects are equal; false otherwise</returns>
+        </member>
+        <member name="M:CPI.DirectoryServices.DN.op_Inequality(CPI.DirectoryServices.DN,CPI.DirectoryServices.DN)">
+            <summary>
+            Checks to see whether two DN objects are not equal.
+            </summary>
+            <param name="obj1">a DN object</param>
+            <param name="obj2">a DN object</param>
+            <returns>true if the two objects are not equal; false otherwise</returns>
+        </member>
+        <member name="P:CPI.DirectoryServices.DN.DefaultEscapeChars">
+            <summary>
+            Gets or sets the categories of characters that will be 
+            escaped by default when a DN is converted to a string
+            </summary>
+        </member>
+        <member name="T:CPI.DirectoryServices.EscapeChars">
+            <summary>
+            Bit flag that represents different categories of special characters and 
+            whether they should be escaped when the DN is displayed as a string.
+            </summary>
+        </member>
+        <member name="F:CPI.DirectoryServices.EscapeChars.None">
+            <summary>
+            No special characters will be escaped.
+            </summary>
+        </member>
+        <member name="F:CPI.DirectoryServices.EscapeChars.ControlChars">
+            <summary>
+            Characters lower than ascii 32, such as tab and linefeed
+            </summary>
+        </member>
+        <member name="F:CPI.DirectoryServices.EscapeChars.SpecialChars">
+            <summary>
+            The disinguished name special characters ',', '=', '+', '', '', '#', ';', '\\', '"'
+            </summary>
+        </member>
+        <member name="F:CPI.DirectoryServices.EscapeChars.MultibyteChars">
+            <summary>
+            Any characters >= 128, which are represented as multiple bytes in UTF-8
+            </summary>
+        </member>
+        <member name="T:CPI.DirectoryServices.RDN">
+             <summary>
+             a relative distinguished name (RDN) identifies an object in an LDAP directory, but does
+             not identify its location in a tree.  A full DN is constructed from the RDN of an object
+             plus the RDNs of all its container objects.
+            
+             Multivalued RDNs are supported by this class.
+             </summary>
+        </member>
+        <member name="P:CPI.DirectoryServices.RDN.Components">
+            <summary>
+            Gets a collection of components that make up this RDN
+            </summary>
+        </member>
+        <member name="M:CPI.DirectoryServices.RDN.Equals(System.Object)">
+            <summary>
+            Determines whether the specified object is equal to the current RDN
+            </summary>
+            <param name="obj">the object to compare to the current RDN</param>
+            <returns>true if the specified object equals the current RDN; false otherwise</returns>
+        </member>
+        <member name="M:CPI.DirectoryServices.RDN.GetHashCode">
+            <summary>
+            Serves as a hash function, suitable for use in hashing algorithms and data structures like a hash table.
+            </summary>
+            <returns>a 32-bit integer representing the hash code of the current object</returns>
+        </member>
+        <member name="M:CPI.DirectoryServices.RDN.ToString">
+            <summary>
+            Returns a string that represents the current RDN.
+            </summary>
+            <returns>a string that represents the current RDN</returns>
+        </member>
+        <member name="M:CPI.DirectoryServices.RDN.ToString(CPI.DirectoryServices.EscapeChars)">
+            <summary>
+            Returns a string that represents the current RDN.
+            </summary>
+            <param name="escapeChars">the categories of characters to be escaped</param>
+            <returns>a string that represents the current RDN</returns>
+        </member>
+        <member name="M:CPI.DirectoryServices.RDN.IsAlpha(System.Char)">
+            <summary>
+            Determines whether the specified character is alphabetic (A-Z or a-z).
+            </summary>
+            <param name="c">the character to check</param>
+            <returns>true if the specified character is alphabetic; false otherwise</returns>
+        </member>
+        <member name="M:CPI.DirectoryServices.RDN.IsDigit(System.Char)">
+            <summary>
+            Determines whether the specified character is a numeric digit (0-9).
+            </summary>
+            <param name="c">the character to check</param>
+            <returns>true if the specified character is a digit; false otherwise</returns>
+        </member>
+        <member name="M:CPI.DirectoryServices.RDN.IsHexDigit(System.Char)">
+            <summary>
+            Determines whether the specified character is a hex digit (0-9 or A-F or a-f).
+            </summary>
+            <param name="c">the character to check</param>
+            <returns>true if the specified character is a hex digit; false otherwise</returns>
+        </member>
+        <member name="M:CPI.DirectoryServices.RDN.IsSpecialChar(System.Char)">
+            <summary>
+            Determines whether the specified character is an LDAP DN special character
+            (, or = or + or  or  or # or ; or \ or ")
+            </summary>
+            <param name="c">the character to check</param>
+            <returns>true if the specified character is a special character; false otherwise</returns>
+        </member>
+        <member name="M:CPI.DirectoryServices.RDN.op_Equality(CPI.DirectoryServices.RDN,CPI.DirectoryServices.RDN)">
+            <summary>
+            Checks to see whether two RDN objects are equal.
+            </summary>
+            <param name="obj1">an RDN object</param>
+            <param name="obj2">an RDN object</param>
+            <returns>true if the two objects are equal; false otherwise</returns>
+        </member>
+        <member name="M:CPI.DirectoryServices.RDN.op_Inequality(CPI.DirectoryServices.RDN,CPI.DirectoryServices.RDN)">
+            <summary>
+            Checks to see whether two RDN objects are not equal.
+            </summary>
+            <param name="obj1">an RDN object</param>
+            <param name="obj2">an RDN object</param>
+            <returns>true if the two objects are not equal; false otherwise</returns>
+        </member>
+        <member name="T:CPI.DirectoryServices.RDNList">
+            <summary>
+            A read-only collection of RDN objects
+            </summary>
+        </member>
+        <member name="P:CPI.DirectoryServices.RDNList.Length">
+            <summary>
+            Gets a 32-bit integer that represents the total number of elements in the collection.
+            </summary>
+        </member>
+        <member name="P:CPI.DirectoryServices.RDNList.Item(System.Int32)">
+            <summary>
+            Gets the RDN object at the specified index
+            </summary>
+        </member>
+        <member name="M:CPI.DirectoryServices.RDNList.GetEnumerator">
+            <summary>
+            Gets an enumerator object for the current RDNList
+            </summary>
+            <returns>an enumerator object for the current RDNList</returns>
+        </member>
+        <member name="T:CPI.DirectoryServices.RDNComponent">
+            <summary>
+            Encapsulates a component of an RDN.  Most RDNs are made up of a single component,
+            but a multivalued RDN has multiple components, separated by a plus sign.
+            </summary>
+        </member>
+        <member name="T:CPI.DirectoryServices.RDNComponent.RDNValueType">
+            <summary>
+            Specifies whether the value of the component is a string value, or a binary
+            value represented as a string of hex digits
+            </summary>
+        </member>
+        <member name="F:CPI.DirectoryServices.RDNComponent.RDNValueType.StringValue">
+            <summary>
+            Represents a string value
+            </summary>
+        </member>
+        <member name="F:CPI.DirectoryServices.RDNComponent.RDNValueType.HexValue">
+            <summary>
+            Represents a hex-encoded binary value
+            </summary>
+        </member>
+        <member name="P:CPI.DirectoryServices.RDNComponent.ComponentType">
+            <summary>
+            Gets the RDN component type ('CN', 'OU', 'DC', etc.)
+            </summary>
+        </member>
+        <member name="P:CPI.DirectoryServices.RDNComponent.ComponentValue">
+            <summary>
+            Gets the value of the RDN component
+            </summary>
+        </member>
+        <member name="P:CPI.DirectoryServices.RDNComponent.ComponentValueType">
+            <summary>
+            Gets the encoding type of the RDN value (either a string or hex-encoded binary value)
+            </summary>
+        </member>
+        <member name="M:CPI.DirectoryServices.RDNComponent.Equals(System.Object)">
+            <summary>
+            Determines whether the specified object is equal to the current RDNComponent
+            </summary>
+            <param name="obj">the object to compare to the current RDNComponent</param>
+            <returns>true if the specified object equals the current RDNComponent; false otherwise</returns>
+        </member>
+        <member name="M:CPI.DirectoryServices.RDNComponent.GetHashCode">
+            <summary>
+            Serves as a hash function, suitable for use in hashing algorithms and data structures like a hash table.
+            </summary>
+            <returns>a 32-bit integer representing the hash code of the current object</returns>
+        </member>
+        <member name="M:CPI.DirectoryServices.RDNComponent.ToString">
+            <summary>
+            Returns a string that represents the current RDNComponent.
+            </summary>
+            <returns>a string that represents the current RDNComponent</returns>
+        </member>
+        <member name="M:CPI.DirectoryServices.RDNComponent.ToString(CPI.DirectoryServices.EscapeChars)">
+            <summary>
+            Returns a string that represents the current RDNComponent.
+            </summary>
+            <param name="escapeChars">the categories of characters to be escaped</param>
+            <returns>a string that represents the current RDNComponent</returns>
+        </member>
+        <member name="M:CPI.DirectoryServices.RDNComponent.EscapeValue(System.String,CPI.DirectoryServices.EscapeChars)">
+            <summary>
+            Takes an input string and escapes the specified categories of characters.
+            </summary>
+            <param name="s">the input string</param>
+            <param name="escapeChars">the categories of characters to escape</param>
+            <returns>an escaped string</returns>
+        </member>
+        <member name="M:CPI.DirectoryServices.RDNComponent.op_Equality(CPI.DirectoryServices.RDNComponent,CPI.DirectoryServices.RDNComponent)">
+            <summary>
+            Checks to see whether two RDNComponent objects are equal.
+            </summary>
+            <param name="obj1">an RDNComponent object</param>
+            <param name="obj2">an RDNComponent object</param>
+            <returns>true if the two objects are equal; false otherwise</returns>
+        </member>
+        <member name="M:CPI.DirectoryServices.RDNComponent.op_Inequality(CPI.DirectoryServices.RDNComponent,CPI.DirectoryServices.RDNComponent)">
+            <summary>
+            Checks to see whether two RDNComponent objects are not equal.
+            </summary>
+            <param name="obj1">an RDNComponent object</param>
+            <param name="obj2">an RDNComponent object</param>
+            <returns>true if the two objects are not equal; false otherwise</returns>
+        </member>
+        <member name="T:CPI.DirectoryServices.RDNComponentList">
+            <summary>
+            A read-only collection of RDNComponent objects
+            </summary>
+        </member>
+        <member name="P:CPI.DirectoryServices.RDNComponentList.Length">
+            <summary>
+            Gets a 32-bit integer that represents the total number of elements in the collection.
+            </summary>
+        </member>
+        <member name="P:CPI.DirectoryServices.RDNComponentList.Item(System.Int32)">
+            <summary>
+            Gets the RDNComponent object at the specified index
+            </summary>
+        </member>
+        <member name="M:CPI.DirectoryServices.RDNComponentList.GetEnumerator">
+            <summary>
+            Gets an enumerator object for the current RDNComponentList
+            </summary>
+            <returns>an enumerator object for the current RDNComponentList</returns>
+        </member>
+    </members>
+</doc>

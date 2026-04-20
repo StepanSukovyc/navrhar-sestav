@@ -1,0 +1,15 @@
+[program]
+revize=40PEV0152610X01
+verze_db_min=525
+sub_verze_db_min=1
+rev_db_min=1
+
+[REQUIRED]
+MODULES=GINGRR01,GINDEP01,GINGIN01,GMSPEVS1,GSAPEVD1,GSAPEVH1,GMSGINS1
+GINGRR01_mandatory=TRUE
+GINDEP01_mandatory=TRUE
+GINGIN01_mandatory=TRUE
+GMSPEVS1_mandatory=FALSE
+GSAPEVD1_mandatory=FALSE
+GSAPEVH1_mandatory=FALSE
+GMSGINS1_mandatory=FALSE

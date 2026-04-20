@@ -1,0 +1,3153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+    <assembly>
+        <name>SecuSign_NET</name>
+    </assembly>
+    <members>
+        <member name="P:Software602.SecuSign.SDK.RegistryLicence.Country">
+            <summary>
+            Country in which the licence is valid
+            </summary>
+        </member>
+        <member name="P:Software602.SecuSign.SDK.RegistryLicence.Type">
+            <summary>
+            entityType (EBA), licence type (SK)
+            </summary>
+        </member>
+        <member name="P:Software602.SecuSign.SDK.RegistryLicence.Scope">
+            <summary>
+            service code (EBA), scope type (SK)
+            </summary>
+        </member>
+        <member name="P:Software602.SecuSign.SDK.RegistryLicence.ValidFrom">
+            <summary>
+            Licence valid from date
+            </summary>
+        </member>
+        <member name="P:Software602.SecuSign.SDK.RegistryLicence.ValidTo">
+            <summary>
+            Licence valid to date
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.SecuSignBase">
+            <summary xml:lang="cz">
+            Nastavení konfigurace SecuSign SDK
+            </summary>
+            <summary xml:lang="en">
+            SecuSign SDK configuration settings
+            </summary>
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.SecuSignBase.Config">
+            <summary xml:lang="cz">
+            Nastavení konfigurace SecuSign SDK. Pozor: hodnoty <see cref="P:Software602.SecuSign.SDK.SecuSignBase.Config.Environment" />, <see cref="P:Software602.SecuSign.SDK.SecuSignBase.Config.InstallDir" /> a <see cref="T:Software602.SecuSign.SDK.SecuSignBase.Config.Proxy" /> je třeba nastavit před vytvářením instancí třídy SecuSugnNET.
+            </summary>
+            <summary xml:lang="en">
+            Set up the SecuSign SDK configuration. Attention: <see cref="P:Software602.SecuSign.SDK.SecuSignBase.Config.Environment" />, <see cref="P:Software602.SecuSign.SDK.SecuSignBase.Config.InstallDir" /> and <see cref="T:Software602.SecuSign.SDK.SecuSignBase.Config.Proxy" /> values ​​must be set before instantiating the SecuSugnNET class.
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.SecuSignBase.Config.AuthMode">
+            <summary xml:lang="cz">
+            Enumerátor obsahující možnosti autorizace
+            </summary>
+            <summary xml:lang="en">
+            Enum containing authorization options
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SecuSignBase.Config.AuthMode.None">
+            <summary xml:lang="cz">
+            Bez autorizace je možné volat metody, ktere lze provést na účet SDK, tedy validaci, preservaci, odběr razítka a pečetění.
+            Metody pro vzdálené podepisování (HSM) vraceji HttpException 401.
+            </summary>
+            <summary xml:lang="en">
+            Without authorization, it is possible to call methods that can be performed to the SDK account, i.e. validation, preservation, stamp collection and sealing.
+            Remote signing methods (HSM) return HttpException 401.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SecuSignBase.Config.AuthMode.Basic">
+            <summary xml:lang="cz">
+            Volání metod SecuSignNET vyžaduje nastavení instance NetworkCredential se jménem a heslem uživatele v property <see cref="F:Software602.SecuSign.SDK.SecuSignBase.Credentials" />
+            </summary>
+            <summary xml:lang="en">
+            Calling SecuSignNET methods requires setting up a NetworkCredential instance with the username and password in the <see cref="F:Software602.SecuSign.SDK.SecuSignBase.Credentials" /> property      
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SecuSignBase.Config.AuthMode.TrustUserID">
+            <summary xml:lang="cz">
+            Režim kdy identitu uživatele ověřuje volající. Basic autentizace se nevyžaduje, metodám se parametru Params předává id_user=[id uživatele]
+            </summary>
+            <summary xml:lang="en">
+            Mode when the user's identity is verified by the caller. Basic authentication is not required, id_user=[user id] is passed to the Params parameter to the methods     
+            </summary>
+        </member>
+        <member name="P:Software602.SecuSign.SDK.SecuSignBase.Config.Environment">
+            <summary xml:lang="cz">
+            Backend prostředí, na které se SecuSign SDK spojuje, viz <see cref="T:Software602.SecuSign.SDK.EnvironmentCode" />.
+            Konfiguraci je třeba nastavit před vytvářením instancí třídy SecuSugnNET.
+            </summary>
+            <summary xml:lang="en">
+            See <see cref="T:Software602.SecuSign.SDK.EnvironmentCode" /> for the backend environment that the SecuSign SDK connects to.
+            Configuration must be set before instantiating the SecuSugnNET class.
+            </summary>
+        </member>
+        <member name="P:Software602.SecuSign.SDK.SecuSignBase.Config.InstallDir">
+            <summary xml:lang="cz">
+            Složka ve které je nainstalováno SecuSign SDK. Konfiguraci je třeba nastavit před vytvářením instancí třídy SecuSignNET.
+            </summary>
+            <summary xml:lang="en">
+            Installation directory of SecuSign SDK. Parameter must be set before creation of SecuSignNET class instance.
+            </summary>
+        </member>
+        <member name="P:Software602.SecuSign.SDK.SecuSignBase.Config.VerifyUsersInSofa">
+            <summary xml:lang="cz">
+            Přepíná ověřování basic autentizace uživatele proti Sofa nebo SecuSign backendu. 
+            Nepovinné, pokud je <see cref="P:Software602.SecuSign.SDK.SecuSignBase.Config.AuthorizationMode" /> TrustUserID, jinak musí být nastaveno.
+            </summary>
+            <summary xml:lang="en">
+            Toggles basic user authentication with the Sofa or SecuSign backend. 
+            Optional if <see cref="P:Software602.SecuSign.SDK.SecuSignBase.Config.AuthorizationMode" /> is TrustUserID, otherwise must be set.
+            </summary>
+        </member>
+        <member name="P:Software602.SecuSign.SDK.SecuSignBase.Config.AuthorizationMode">
+            <summary xml:lang="cz">
+            Vráti nebo nastaví režim autorizace na základě nastavení konfigurace.
+            Mezi režimy patří None, Basic a TrustUserID. Změnou režimu se aktualizují
+            příslušná nastavení konfigurace.
+            </summary>
+            <summary xml:lang="en">
+            Gets or sets the authorization mode based on the configuration settings.
+            The modes include None, Basic, and TrustUserID. Changing the mode will update
+            respective configuration settings accordingly.
+            </summary>
+        </member>
+        <member name="P:Software602.SecuSign.SDK.SecuSignBase.Config.EncodeADObjectGUID">
+            <summary xml:lang="cz">
+            Pouze pro režim TrustUserID. Pokud v on-prem AD umí spisová služba získat pouze ObjectGUID (předává id_user=ADP#[ObjectGUID]),
+            nastavení EncodeADObjectGUID=1 zajistí překódovaní ObjectGUID do base64 formy, která odpovídá Immutable AD ID, 
+            se kterým pracuje AD synchronizovaná Sofa.
+            </summary>
+            <summary xml:lang="en">
+            For TrustUserID mode only. If in on-prem AD the file service can only get the ObjectGUID (passing id_user=ADP#[ObjectGUID]),
+            setting EncodeADObjectGUID=1 ensures that the ObjectGUID is transcoded into a base64 form that corresponds to an Immutable AD ID,
+            with which AD synchronized Sofa works.
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.SecuSignBase.Config.Debug">
+            <summary xml:lang="cz">
+            Třída pro nastavení/ziskání konfigurace Debug logu
+            </summary>
+            <summary xml:lang="en">
+            Class for setting/getting Debug log configuration
+            </summary>
+        </member>
+        <member name="P:Software602.SecuSign.SDK.SecuSignBase.Config.Debug.LogLevel">
+            <summary xml:lang="cz">
+            Nastavení úrovně logování: 1 - kritické chyby (CRITICAL), 2 - chyby (ERROR), 3 - varování (WARNING), 4 - informace (INFO),  5 - debug (DEBUG),  6 - průchody funkcemi (TRACE).
+            Výchozí hodnota je 5 - DEBUG
+            </summary>
+            <summary xml:lang="en">
+            Setting the logging level: 1 - critical errors (CRITICAL), 2 - errors (ERROR), 3 - warning (WARNING), 4 - information (INFO), 5 - debug (DEBUG), 6 - function traversals (TRACE).
+            Default value is 5 - DEBUG
+            </summary>
+        </member>
+        <member name="P:Software602.SecuSign.SDK.SecuSignBase.Config.Debug.LogPath">
+            <summary xml:lang="cz">
+            Cesta k debug log souboru. Pokud není nastaveno, neloguje se.
+            </summary>
+            <summary xml:lang="en">
+            Path to the debug log file. If not set, log is not available.
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.SecuSignBase.Config.LogMethodCalls">
+            <summary xml:lang="cz">
+            Třída pro nastavení/ziskání konfigurace LogMethodCalls logu
+            </summary>
+            <summary xml:lang="en">
+            Class for setting/getting LogMethodCalls log configuration
+            </summary>
+        </member>
+        <member name="P:Software602.SecuSign.SDK.SecuSignBase.Config.LogMethodCalls.Path">
+            <summary xml:lang="cz">
+            Cesta pro CSV log, do kterého se zapisují základní údaje o tom kdo a jakou metodu volal. 
+            Pokud není nastaveno, log se nevytváří.
+            </summary>
+            <summary xml:lang="en">
+            The path for the CSV log, in which the basic data about who called and which method is written.
+            If not set, no log is created.
+            </summary>
+        </member>
+        <member name="P:Software602.SecuSign.SDK.SecuSignBase.Config.LogMethodCalls.AddIO">
+            <summary xml:lang="cz">
+            Přidá do CSV logu sloupce Input file name; Input file size; Input file hash; Output file name; Output file size; Output file hash
+            </summary>
+            <summary xml:lang="en">
+            Adds columns to the CSV log Input file name; Input file size; Input file hash; Output file name; Output file size; Output file hash
+            </summary>
+        </member>
+        <member name="P:Software602.SecuSign.SDK.SecuSignBase.Config.LogMethodCalls.AddJobID">
+            <summary xml:lang="cz">
+            Přidá do logu sloupec Job ID s ID, které se zároveň vyskytuje u všech zápisů tohoto volání v debug logu. 
+            Pak se dá jednoduše průběh volání grepnout z debug logu, např. pro Job ID 5496325412: grep 5496325412 -U Debug.log &gt;5496325412.log
+            </summary>
+            <summary xml:lang="en">
+            Adds a Job ID column to the log with an ID that also occurs in all entries of this call in the debug log. 
+            Then you can simply grep the progress of the call from the debug log, e.g. for Job ID 5496325412: grep 5496325412 -U Debug.log &gt;5496325412.log
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.SecuSignBase.Config.Proxy">
+            <summary xml:lang="cz">
+            Nastavení Proxy, použité pro přístup k backend službám, jako odběr časového razítka, SecuSign backend nebo HSM služba.
+            Konfiguraci je třeba nastavit před vytvářením instancí třídy SecuSugnNET.
+            </summary>
+            <summary xml:lang="en">
+            Proxy settings, used to access backend services, such as timestamping, SecuSign backend or HSM service.
+            Configuration must be set before instantiating the SecuSugnNET class.
+            </summary>
+        </member>
+        <member name="P:Software602.SecuSign.SDK.SecuSignBase.Config.Proxy.URL">
+            <summary xml:lang="cz">
+            Nastavení adresy proxy serveru - hodnota je ve tvaru ip_adresa[:port]
+            </summary>
+            <summary xml:lang="en">
+            Setting the proxy server address - the value is in the form ip_address[:port]
+            </summary>
+        </member>
+        <member name="P:Software602.SecuSign.SDK.SecuSignBase.Config.Proxy.User">
+            <summary xml:lang="cz">
+            Nastavení uživatelského účtu pro autentizaci k proxy serveru
+            </summary>
+            <summary xml:lang="en">
+            Setting the user account for authentication to the proxy server
+            </summary>
+        </member>
+        <member name="P:Software602.SecuSign.SDK.SecuSignBase.Config.Proxy.Pass">
+            <summary xml:lang="cz">
+            Nastavení hesla k uživatelskému účtu pro autentizaci k proxy serveru
+            </summary>
+            <summary xml:lang="en">
+            Setting the user account password for authentication to the proxy server
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.SecuSignBase.Config.TSA">
+            <summary xml:lang="cz">
+            Nastaveni vlastního zdroje časových razítek
+            </summary>
+            <summary xml:lang="en">
+            Setting custom timestamp source
+            </summary>
+        </member>
+        <member name="P:Software602.SecuSign.SDK.SecuSignBase.Config.TSA.URL">
+            <summary xml:lang="cz">
+            Nastavení adresy serveru časových razítek - hodnota je ve tvaru ip_adresa[:port]
+            </summary>
+            <summary xml:lang="en">
+            Setting the address of the timestamp server - the value is in the form ip_address[:port]
+            </summary>
+        </member>
+        <member name="P:Software602.SecuSign.SDK.SecuSignBase.Config.TSA.EnableURL">
+            <summary xml:lang="cz">
+            Nastavení povolení používání vlastního serveru časových razítek. 
+            Ve výchozím stavu je součástí služby SecuSign odběr časových razítek se serverů SecuSign.
+            Odběr časových razítek z vlastního zrdoje je třeba dohodnout s obchodním zástupcem.
+            </summary>
+            <summary xml:lang="en">
+            Set to allow use of custom timestamp server.
+            By default, the SecuSign service includes the timestamping from SecuSign servers.
+            Timestamping from your own source must be agreed with the sales representative.
+            </summary>
+        </member>
+        <member name="P:Software602.SecuSign.SDK.SecuSignBase.Config.TSA.CertHash">
+            <summary xml:lang="cz">
+            Nastavení klientského autentizačního certifikátu k serveru časových razítek.
+            Jedná se o hexadecimální řetězec získaný z vlastností certifikátu, pole SHA1 otisk/Thumbprint
+            </summary>
+            <summary xml:lang="en">
+            Setting the client authentication certificate to the timestamp server.
+            This is a hexadecimal string obtained from the certificate's properties, the SHA1 thumbprint field
+            </summary>
+        </member>
+        <member name="P:Software602.SecuSign.SDK.SecuSignBase.Config.TSA.User">
+            <summary xml:lang="cz">
+            Nastavení uživatelského účtu pro autentizaci k serveru časových razítek
+            </summary>
+            <summary xml:lang="en">
+            Setting the user account to authenticate to the timestamp server
+            </summary>
+        </member>
+        <member name="P:Software602.SecuSign.SDK.SecuSignBase.Config.TSA.Pass">
+            <summary xml:lang="cz">
+            Nastavení hesla k uživatelskému účtu pro autentizaci k serveru časových razítek
+            </summary>
+            <summary xml:lang="en">
+            Setting the user account password for authentication to the timestamp server
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.SecuSignBase.Config.HSM">
+            <summary xml:lang="cz">
+            Nastaveni konfigurace přístupu ke službě vzdáleného podepisování/pečetění
+            </summary>
+            <summary xml:lang="en">
+            Configure access to the remote signing/sealing service
+            </summary>
+        </member>
+        <member name="P:Software602.SecuSign.SDK.SecuSignBase.Config.HSM.EnableAuthCertSeal">
+            <summary xml:lang="cz">
+            Umožní, aby se uživatelům v ListCerts vracely i certifikáty pro pečeť a aby šly použít v metodách Seal/SealEx/SignHash. 
+            Pozor: Certifikáty se tak zpřístupní všem uživatelům organizace. To, jestli má uživatel certifikát v ListCerts vidět, 
+            se řídí přidáním parametru IncludeSealCerts=0/1.
+            </summary>
+            <summary xml:lang="en">
+            Allow seal certificates to also be returned to users in ListCerts and to be used in Seal/SealEx/SignHash methods.
+            Attention: This will make the certificates available to all users of the organization. Whether the user can see the certificate in ListCerts
+            is controlled by adding parameter IncludeSealCerts=0/1
+            </summary>
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignBase.Config.Get(System.String)">
+            <summary xml:lang="cz">
+            Zjištění nastavení konfiguračních klíčů, podporovaných ve web.config webové služby, které nemají specifickou typovanou property.
+            </summary>
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignBase.Config.Set(System.String,System.String)">
+            <summary xml:lang="cz">
+            Nastavení konfiguračních klíčů, podporovaných ve web.config webové služby.
+            Slouží pro nastavení klíčů, které nemají ve třídě Config specifickou typovanou property.
+            </summary>
+            <summary xml:lang="en">
+            Sets configuration keys, supported in web.config of the web service.
+            Used to set keys that do not have a specific typed property in the Config class
+            </summary>
+        </member>
+        <member name="P:Software602.SecuSign.SDK.SecuSignBase.HttpContext">
+            <summary>
+            In case of using of SecuSignNET from a web service, specify HttpContext of processed request.
+            Some methods are reading Headers property to get information to authorize users or for logging User-Agent
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SecuSignBase.Credentials">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignBase.HSMCertManagementEnabled(Software602.SecuSign.Public.UserInfo,System.Boolean@,System.String@)">
+            <summary>
+            Povoleni generovani a spravy HSM certifikatu pro Signery, kterych se netyka ProviderMode.
+            Pridano 28.11.2022, Mantis#23059, logika vychazi z tabulky "SecuSign SDK - Chování pro Signer HSM pro jednotlivce" s kombinacemi ProviderMode - id_master_user - IsHsmOrg
+            </summary>
+            <param name="user"></param>
+            <param name="ProviderModeEnabled"></param>
+            <param name="StatusMessage"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignBase.IsMobileApp(System.String)">
+            <summary>
+            Detekujeme mobilni Signery, protoze pri HSM podpisu odesilaji cely dokument na Seal, coz be ProviderMode nechcem povolit
+            </summary>
+            <param name="UserAgent">Hodnota HTTP headeru User-agent</param>
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignBase.CheckIncludeAuthCertSeal(System.String@)">
+            <summary>
+            Prida do params IncludeAuthCertSeal=1, pokud je ve web.config nastaven klic HSM_EnableAuthCertSeal. 
+            Umozni se tak pouziti peceti na zaklade autentizacniho certifikatu, aniz by byl id_user uveden v jejim ACL. Viz Viz mantis#23265
+            Pridano 11.11.2022
+            </summary>
+            <param name="Params"></param>
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignBase.ForceTransactionID(System.String)">
+            <summary>
+            Mantis#24595 - pokud klient nepoda id_transaction, vymyslim si svoje. Usnadni to parovani logu mezi SecuSign SDK a HSM WS
+            </summary>
+            <param name="Params">Strednikem oddeleny seznam name=value</param>
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignBase.GetDocType(System.String,System.Byte[],System.Byte[],System.Boolean)">
+            <summary>
+            Determine <see cref="T:Software602.SecuSign.SDK.DocType">DocType</see> of document by file extension and external signature type
+            </summary>
+            <param name="FileName">File name of document. Must contain file extension</param>
+            <param name="FileData">Data of document</param>
+            <param name="ExternalSignature">Data of external signeture</param>
+            <param name="DefaultToExtCMS">If type is not recognized, assume DocType.CMSPKCS7Ext</param>
+            <returns>DocType of provided document</returns>
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignBase.GetDocType(System.String,System.Byte[],System.Byte[],System.Boolean,System.Boolean)">
+            <summary>
+            Determine <see cref="T:Software602.SecuSign.SDK.DocType">DocType</see> of document by file extension and external signature type
+            </summary>
+            <param name="FileName">File name of document. Must contain file extension</param>
+            <param name="FileData">Data of document</param>
+            <param name="ExternalSignature">Data of external signeture</param>
+            <param name="DefaultToExtCMS">If type is not recognized, assume DocType.CMSPKCS7Ext</param>
+            <param name="ThrowException">If set to true and DocType cannot be determined, GetDocType throws an Exception</param>
+            <returns>DocType of provided document</returns>
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignBase.VerifyUser(System.String,System.String@)">
+            <summary>
+            Verify user of WebSevice, based webservice on configuration. Internal use only.
+            </summary>
+            <param name="Params"></param>
+            <param name="Error"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignBase.Preserve_getInfo(System.String,System.Byte[],System.Byte[],System.String,Software602.SecuSign.SDK.GetInfoProperties,Software602.SecuSign.SDK.DocEvidence@,System.Byte[]@,System.Byte[]@,System.Byte[]@,System.String@)">
+            <summary xml:lang="en">
+            Retrieves information about a given document (DocID) or about a group of documents matching the specified filters (expirationLimit, sortInfoMask)
+            </summary>
+            <param name="DocID">Document ID of previously registered document. If specified, all other parameters will be ignored - optional</param>    
+            <param name="FileData">If document ID is unknown/unspecified, method tries to match DocID based on hash of provided FileData (optional)</param>
+            <param name="ExternalSignature">Data of external signature. Deprecated, use null</param>
+            <param name="Params">Optional string parameters</param>
+            <param name="Properties">Specifies requested report formats</param>
+            <param name="Report">Structured report - <see cref="T:Software602.SecuSign.SDK.DocInfo" /></param>
+            <param name="XMLReport">Report in form of signed XML</param>
+            <param name="HTMLReport">Human readable report in HTML form for web GUI use</param>
+            <param name="PDFReport">Human readable report on form of signed PDF</param>
+            <param name="StatusMessage">Status message in case of error (return value != 0)</param>
+            <returns>Zero if no error. See documentation for list of possible values.</returns>
+            <summary xml:lang="cz">
+            Získává informace o daném dokumentu (DocID) nebo o skupině dokumentů odpovídajících zadaným filtrům (expirationLimit, sortInfoMask)
+            </summary>
+            <param name="DocID">ID dokumentu dříve zaevidovaného. Pokud je specifikováno, všechny ostatní parametry budou ignorovány - volitelné</param>
+            <param name="FileData">Pokud je ID dokumentu neznámé/není specifikováno, metoda se pokusí najít DocID na základě hashe poskytnutých dat FileData (volitelné)</param>
+            <param name="ExternalSignature">Data externího podpisu. Zastaralé, použijte null</param>
+            <param name="Params">Volitelné parametry</param>
+            <param name="Properties">Specifikuje požadované formáty zpráv</param>
+            <param name="Report">Strukturovaná zpráva - <see cref="T:Software602.SecuSign.SDK.DocInfo" /></param>
+            <param name="XMLReport">Zpráva ve formě podepsaného XML</param>
+            <param name="HTMLReport">Člověkem čitelná zpráva ve formě HTML pro použití v webovém GUI</param>
+            <param name="PDFReport">Člověkem čitelná zpráva ve formě podepsaného PDF</param>
+            <param name="StatusMessage">Stavová zpráva v případě chyby (návratová hodnota != 0)</param>
+            <returns>Nula, pokud nenastala žádná chyba. Seznam možných hodnot naleznete v dokumentaci.</returns>
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignBase.Preserve_getForUpdate(System.DateTime,System.String,Software602.SecuSign.SDK.DocType,System.Int32,System.String,System.String[]@,System.String@)">
+            <summary xml:lang="en">
+            Returns list of DocIDs of documents which signatures will be expired after specified ExpirationLimit
+            </summary>
+            <param name="ExpirationLimit">After this DateTime signatures of returned doecumens will be expired = cannot be validated.</param>
+            <param name="SortInfoMask">Additinal info to enable groupig documents</param>
+            <param name="FileType">Enable to filter returned document IDs by DocType</param>
+            <param name="MaxResCount">Maximum number of documents to return</param>
+            <param name="Params">Optional string parameters</param>
+            <param name="DocIDs">List of IDs of documents metting specified criteria</param>
+            <param name="StatusMessage">Status message in case of error (return value != 0)</param>
+            <returns>Zero if no error. See documentation for list of possible values.</returns>
+            <summary xml:lang="cz">
+            Vrátí seznam DocID dokumentů, jejichž podpisům vyprší platnost po zadaném ExpirationLimit
+            </summary>
+            <param name="ExpirationLimit">Po tomto DateTime vyprší platnost podpisů vrácených dokumentů = nelze ověřit.</param>
+            <param name="SortInfoMask">Další informace pro povolení skupinových dokumentů</param>
+            <param name="FileType">Povolit filtrování vrácených ID dokumentů podle DocType</param>
+            <param name="MaxResCount">Maximální počet dokumentů k vrácení</param>
+            <param name="Params">Volitelné parametry</param>
+            <param name="DocIDs">Seznam ID dokumentů splňující zadaná kritéria</param>
+            <param name="StatusMessage">Stavová zpráva v případě chyby (návratová hodnota != 0)</param>
+            <returns>Nula, pokud nenastala žádná chyba. Seznam možných hodnot naleznete v dokumentaci.</returns>
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignBase.Preserve_getForUpdate(System.DateTime,System.String,Software602.SecuSign.SDK.DocType,System.Int32,System.Int32,System.String,System.String[]@,System.String@)">
+            <summary xml:lang="en">
+            Returns list of DocIDs of documents which signatures will be expired after specified ExpirationLimit
+            </summary>
+            <param name="ExpirationLimit">After this DateTime signatures of returned doecumens will be expired = cannot be validated.</param>
+            <param name="SortInfoMask">Additinal info to enable groupig documents</param>
+            <param name="FileType">Enable to filter returned document IDs by DocType</param>
+            <param name="MaxResCount">Maximum number of documents to return</param>
+            <param name="Offset">Skips first Offset IDs from all document IDs matching the specified criteria (optional)</param>
+            <param name="Params">Optional string parameters</param>
+            <param name="DocIDs">List of IDs of documents metting specified criteria</param>
+            <param name="StatusMessage">Status message in case of error (return value != 0)</param>
+            <returns>Zero if no error. See documentation for list of possible values.</returns>
+            <summary xml:lang="cz">
+            Vrátí seznam DocID dokumentů, jejichž podpisům vyprší platnost po zadaném ExpirationLimit
+            </summary>
+            <param name="ExpirationLimit">Po tomto DateTime vyprší platnost podpisů vrácených dokumentů = nelze ověřit.</param>
+            <param name="SortInfoMask">Další informace pro povolení skupinových dokumentů</param>
+            <param name="FileType">Povolit filtrování vrácených ID dokumentů podle DocType</param>
+            <param name="MaxResCount">Maximální počet dokumentů k vrácení</param>
+            <param name="Params">Volitelné parametry</param>
+            <param name="DocIDs">Seznam ID dokumentů splňující zadaná kritéria</param>
+            <param name="StatusMessage">Stavová zpráva v případě chyby (návratová hodnota != 0)</param>
+            <returns>Nula, pokud nenastala žádná chyba. Seznam možných hodnot naleznete v dokumentaci.</returns>
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignBase.Preserve_unregister(System.String,System.String,System.String@)">
+            <summary xml:lang="en">
+            Delete specified document ID from qualified preservation service evidence. Unregistered document never will be returned in result of Preserve_getForUpdate.
+            Also Preserve_getInfo and Preserve_update will fail for unregistered document id.
+            </summary>
+            <param name="DocID">Document id to unregister</param>
+            <param name="Params">Optional string parameters</param>
+            <param name="StatusMessage">Status message in case of error (return value != 0)</param>
+            <returns>Zero if no error. See documentation for list of possible values.</returns>
+            <summary xml:lang="en">
+            Smaže zadané ID dokumentu z evidence kvalifikované služby konzervace. Smazaný dokument se nikdy nebude vracet ve výsledku Preserve_getForUpdate.
+            V případě smazaného dokumentu volání metod Preserve_getInfo a Preserve_update selže.
+            </summary>
+            <param name="DocID">ID dokumentu ke smazání z evidence</param>
+            <param name="Params">Volitelné parametry</param>
+            <param name="StatusMessage">Stavová zpráva v případě chyby (návratová hodnota != 0)</param>
+            <returns>Nula, pokud nenastala žádná chyba. Seznam možných hodnot naleznete v dokumentaci.</returns>
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignBase.Seal(System.String,System.Byte[],System.Byte[]@,Software602.SecuSign.SDK.DocType,System.String,System.String,Software602.SecuSign.SDK.SignatureType,System.String,Software602.SecuSign.SDK.Param[],System.String@)">
+            <summary xml:lang="en">
+            Signs/seals the input document (adds a new signature/seal). This method does NOT perform ANY preservation nor validation.
+            </summary>
+            <param name="FileName">Filename of document do be signed</param>
+            <param name="Input">Data of document to be signed</param>
+            <param name="Output">Signed/sealed document</param>
+            <param name="FileType">DocType of provided document. Specify DocType.UNKNOWN to determine DocType by file extension.</param>
+            <param name="CertificateID">QStore:[Cert alias] = sign document using specified certificate stored in SecuSign KeyVault. 
+            PKCS11:[Cert alias] = sign document using specified certificate acessible through configured PKCS11 dll. 
+            Base64:[PFX data] = sign document using provided PFX certificate.
+            HStore:[CertID] = sign document using specifed certificate stored in SecuSign HSM
+            If not specified, sign document using the certificate set by SigningCertPath configuration values.</param>
+            <param name="PrivateKeyPIN">PIN/password of specified certificate. If not set, SigningCertPass configuration value will be used.</param>
+            <param name="SignatureType">See <see cref="T:Software602.SecuSign.SDK.SignatureType" /> description</param>
+            <param name="Params">Optional string parameters</param>
+            <param name="ParamsEx">Optional structured parameters</param>
+            <param name="StatusMessage">Status message in case of error (return value != 0)</param>
+            <returns>Zero if no error. See documentation for list of possible values.</returns>
+            <summary xml:lang="cz">
+            Podepíše/opečetí vstupní dokument (přidá nový podpis/pečeť). Tato metoda NEPROVÁDÍ validací ani úschovu.
+            </summary>
+            <param name="FileName">Název souboru dokumentu k podpisu</param>
+            <param name="Input">Data dokumentu k podpisu</param>
+            <param name="Output">Podepsaný/opečetěný dokument</param>
+            <param name="FileType">DocType poskytnutého dokumentu. Pro určení DocType podle přípony souboru zadejte DocType.UNKNOWN.</param>
+            <param name="CertificateID">QStore:[Cert alias] = podepsat dokument pomocí zadaného certifikátu uloženého v SecuSign KeyVault.
+            PKCS11:[Cert alias] = podepsat dokument pomocí zadaného certifikátu přístupného přes nakonfigurovanou knihovnu PKCS11 dll.
+            Base64:[PFX data] = podepsat dokument pomocí zadaného PFX certifikátu.
+            HStore:[CertID] = podepsat dokument pomocí zadaného certifikátu uloženého v SecuSign HSM
+            Pokud není uvedeno, dokument se podepíše pomocí certifikátu nastaveného konfigurační hodnotou SigningCertPath.</param>
+            <param name="PrivateKeyPIN">PIN/heslo zadaného certifikátu. Pokud není nastaveno, použije se konfigurační hodnota SigningCertPass.</param>
+            <param name="SignatureType">Viz <viz cref="T:Software602.SecuSign.SDK.SignatureType" /> popis</param>
+            <param name="Params">Volitelné parametry</param>
+            <param name="ParamsEx">Volitelné strukturované parametry</param>
+            <param name="StatusMessage">Stavová zpráva v případě chyby (návratová hodnota != 0)</param>
+            <returns>Nula, pokud nenastala žádná chyba. Seznam možných hodnot naleznete v dokumentaci.</returns>
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignBase.Timestamp(System.String,System.Byte[],System.Byte[],System.Byte[]@,Software602.SecuSign.SDK.DocType,System.Boolean,System.String,System.String@)">
+            <summary xml:lang="en">
+            Adds archive timestamp to already signed document. This method does NOT perform ANY preservation nor validation.
+            </summary>
+            <param name="FileName">FileName of provided document</param>
+            <param name="Input">Data of document to be timestamped</param>
+            <param name="ExternalSignature">Data of external signature</param>
+            <param name="Output">Timestamped document</param>
+            <param name="FileType">DocType of provided document. Set DocType.UNKNOWN to determine DocType by file extension</param>
+            <param name="ForRegistration">Set true if timestamped is used to prepare document for further calling of Preserve_register</param>
+            <param name="Params">Optional string parameters</param>
+            <param name="StatusMessage">Status message in case of error (return value != 0)</param>
+            <returns>Zero if no error. See documentation for list of possible values.</returns>
+            <summary xml:lang="cz">
+            Přidá archivační časové razítko do již podepsaného dokumentu. Tato metoda NEPROVÁDÍ validaci ani uchování.
+            </summary>
+            <param name="FileName">Název souboru daného dokumentu</param>
+            <param name="Input">Data dokumentu, do kterého se přidá časové razítko</param>
+            <param name="ExternalSignature">Data externího podpisu</param>
+            <param name="Output">Výsledný dokument s přidaným časovým razítkem</param>
+            <param name="FileType">DocType daného dokumentu. Nastavte DocType.UNKNOWN pro určení DocType dle přípony souboru</param>
+            <param name="ForRegistration">Nastavte true, pokud se k přípravě dokumentu pro další volání Preserve_register použije časové razítko</param>
+            <param name="Params">Volitelné parametry</param>
+            <param name="StatusMessage">Stavová zpráva v případě chyby (návratová hodnota != 0)</param>
+            <returns>Nula, pokud nenastala žádná chyba. Seznam možných hodnot naleznete v dokumentaci.</returns>
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignBase.GetTimestamp(System.Byte[],System.Byte[]@,System.String,System.String@)">
+            <summary>
+            Gets a timestamp according to RFC 3161
+            </summary>
+            <param name="TSRequest">DER encoded TimeStampReq structure according to RFC 3161</param>
+            <param name="TSResponse">DER encoded TimeStampResp structure according to RFC 3161</param>
+            <param name="Params">Optional string parameters</param>
+            <param name="StatusMessage">Status message in case of error (return value != 0)</param>
+            <returns>Zero if no error. See documentation for list of possible values.</returns>
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignBase.GetVersionInfo">
+            <summary>
+            Gets the version info string containg installed components versions etc.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.Status">
+            <summary>
+            Standard enumerator for method results.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.OK">
+            <summary>
+            Success...
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.ERROR">
+            <summary>
+            Unknown error
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.METHOD_NOT_ALLOWED">
+            <summary>
+            User is not allowed to call this method (e.g. Premium plan or remote sealing required)
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.UNAUTHORIZED">
+            <summary>
+            VerifyUser failed to verify basic authentication or licence certificate (used for login to backend service)
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.INTERRUPTED_UNEXPECTEDLY">
+            <summary>
+            Operace byla neocekavane prerusena (v transakcnim logu je zacatek, ale chybi konec)
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.INVALID_PARAMETER">
+            <summary>
+            Neplatne nastaveni vstupnich parametru (napr. validate a nenastaven format vystupu)
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.INVALID_INPUT">
+            <summary>
+            Prazdny nebo neodpovidajici obsah vstupniho souboru
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.ERROR_ACCESS_SEALING_CERT">
+            <summary>
+            Chyba přístupu k certifikátu pro pečetění
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.NOT_IMPLEMENTED">
+            <summary>
+            Function not implemented
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.EXCEPTION">
+            <summary>
+            Exception raised during File processing
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.LTV_ANALYZE_ERROR">
+            <summary>
+            Error in ltvAnalyze
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.LTV_REGISTER_ERROR">
+            <summary>
+            Error in ltvRegister
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.LTV_UPDATE_ERROR">
+            <summary>
+            Error in ltvUpdate
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.LTV_UNREGISTER_ERROR">
+            <summary>
+            Error in ltvUnregister
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.LTV_GETINFO_ERROR">
+            <summary>
+            Error in ltvGetInfo
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.LTV_GETFORUPDATE_ERROR">
+            <summary>
+            Error in ltvGetForUpdate
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.LTV_SIGN_ERROR">
+            <summary>
+            Error in ltvSign
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.LTV_TIMESTAMP_ERROR">
+            <summary>
+            Error in ltvTimestamp
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.DOCUMENT_NOT_SIGNED">
+            <summary>
+            Document does not contain required digital signature or timestamp
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.LTV_UPDATE_ID_NOT_FOUND">
+            <summary>
+            Document with specified ID not found. Document must be registered before update.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.LTV_UPDATE_HASH_MISMATCH">
+            <summary>
+            Document hash does not correspond to specified ID
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.LTV_UPDATE_FAILED">
+            <summary>
+            Unable to extend signature validity. For PDF, 602XMLForm and IDSOC the last signature must be VALID. For other formats, all signatures must be VALID and no one from registered signatures can be missing.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.LTV_INCONVENIENT_CONDITIONS">
+            <summary>
+            Document does not comply with conditions for LTV. All/last/at least one signature must be marked as VALID.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.DOCUMENT_NOT_REGISTERED">
+            <summary>
+            Dokument se zadanym DocID nebo hashem nebyl registovan (nebyl nalezen opovidajici evidencni zaznam)
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.LICENCE_ERROR">
+            <summary>
+            Chybe pri overovani licence/role
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.HSM_ERROR_OK">
+            <summary>
+            K teto hodnote se pricita chybovy kod vraceny funkcemi HSM, 0 ~ 100 == OK, 1 ~ 101 == HSMError.UNKNOWN, 2 ~ 102 == HSMError.USER_ACCESS_DENIED ...
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.Status.HSM_ERROR_LAST">
+            <summary>
+            Konec rozsahu HSM chyb
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.ProcesStatus">
+            <summary xml:lang="en">
+            Signature preservation result
+            </summary>
+            <summary xml:lang="cz">
+            Výsledek prodloužení ověřitelnosti podpisu
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.ProcesStatus.NONE">
+            <summary>
+            Validační data NEBYLA přidána
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.ProcesStatus.FULL">
+            <summary>
+            Validační data BYLA přidána
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.ProcesStatus.PARTIAL">
+            <summary>
+            Validační data byla přidána částečně, některá validační data se nepodařilo získat
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.ProcesStatus.UNKNOWN">
+            <summary>
+            Neznámý stav prodloužení ověřitelnosti
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.SigValidityCondition">
+            <summary>
+            Specifies which signatures must be valid to register document dor preservation
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SigValidityCondition.ALL">
+            <summary>
+            All signatures must be valid
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SigValidityCondition.AT_LEAST_ONE">
+            <summary>
+            At least one signature must be valid
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SigValidityCondition.LAST">
+            <summary>
+            Last signature must be valid
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.DocType">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocType.UNKNOWN">
+            <summary>
+            Unknown or unsupported signature
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocType.CMSPKCS7">
+            <summary>
+            Internal CMS/PKCS7, CAdES signature
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocType.CMSPKCS7Ext">
+            <summary>
+            External CMS/PKCS7, CAdES signature
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocType.PDF">
+            <summary>
+            PDF-ISO, PAdES signature
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocType.XML">
+            <summary>
+            XML or XAdES digital signature 
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocType.XML602FORM">
+            <summary>
+            602 XML Form
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocType.XMLISDOC">
+            <summary>
+            ISDOC
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocType.ASiC_S_CAdES">
+            <summary>
+            ASiC-S with CAdES
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocType.ASiC_S_XAdES">
+            <summary>
+            ASiC-S with XAdES
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocType.ASiC_S_Tst">
+            <summary>
+            ASiC-S with timestamp
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocType.ASiC_E_CAdES_Tst">
+            <summary>
+            ASiC-E with CAdES or Timestamp
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocType.ASiC_E_XAdES">
+            <summary>
+            ASiC-E with XAdES
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocType.MS_WORD">
+            <summary>
+            Microsoft Office XML - Word document
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocType.MS_EXCEL">
+            <summary>
+            Microsoft Office XML - Excel document
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocType.MS_PWR_PNT">
+            <summary>
+            Microsoft Office XML - PowerPoint document
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocType.ODF">
+            <summary>
+            Open Document Format - OpenOffice document
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocType.EML">
+            <summary>
+            17 - email EML
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocType.MSG">
+            <summary>
+            18 - email MSG (Outlook)
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocType.CERTIFICATE">
+            <summary>
+            19 - certifikát
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.EidasType">
+            <summary>
+            Signature/timestamp type according to eIDAS (REGULATION (EU) No 910/2014 OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL) and 
+            Czech law 297/2016 Sb (Zákon o službách vytvářejících důvěru pro elektronické transakce)
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.EidasType.ADVANCED_SIGNATURE">
+            <summary>
+            AdES - Advanced Electronic Signature = Zaručený elektronický podpis
+            Any digital signature not fit in fllowing categories
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.EidasType.ACREDITED_SIGNATURE">
+            <summary>
+            Czech special - Zaručený elektronický podpis, založený na kvalifikovaném certifikátu (ZoSVD odst.2 §6, dříve Uznávaný elektronický podpis)
+            Qualified certificate but no QSCD used
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.EidasType.QUALIFIED_SIGNATURE">
+            <summary>
+            Qualified Electronic Signature = Kvalifikovaný elektronický podpis
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.EidasType.ADVANCED_SEAL">
+            <summary>
+            Advanced electronic seal = Zaručená elektronická pečeť
+            Any digital signature for electronic seals not fit in following categories
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.EidasType.TRUSTED_SEAL">
+            <summary>
+            Advanced electronic seal, cert verified by TSL = Zaručená elektronická pečeť, certifikat od duveryhodneho poskytovatele (uveden na TSL)
+            Provider is not acredited to issue certificates for eSeals
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.EidasType.ACREDITED_SEAL">
+            <summary>
+            Czech special - Zaručená elektronická pečeť, založená na kvalifikovaném certifikátu pro elektronické pečeti (ZoSVD odst.2 §9)
+            Qualified certificate for electronic seals but no QSCD used
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.EidasType.QUALIFIED_SEAL">
+            <summary>
+            Qualified electronic seal = Kvalifikovana eletronicka pečeť
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.EidasType.TIMESTAMP">
+            <summary>
+            Electronic Time Stamp = Elektronické časové razítko
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.EidasType.QUALIFIED_TIMESTAMP">
+            <summary>
+            Qualified electronic time stamp = Kvalifikované elektronické časové razítko
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.EidasType.SYSTEM_SIGNATURE">
+            <summary>
+            Elektronická značka
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.SdarAdesType">
+            <summary>
+            Signature format
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.UNKNOWN">
+            <summary>
+            Unknown or unsupported signature format.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.PKCS7CMS">
+            <summary>
+            General PKCS#7 or CMS.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.PKCS7CMS_WITH_TST">
+            <summary>
+            General PKCS#7 or CMS with timestamp. Does not meet any of the AdES formats.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.CADES_BES">
+            <summary>
+            CAdES-BES - basic form just satisfying Directive legal requirements for advanced signature
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.CADES_EPES">
+            <summary>
+            CAdES-EPES
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.CADES_T">
+            <summary>
+            CAdES-T (timestamp), adding timestamp field to protect against repudiation
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.CADES_C">
+            <summary>
+            CAdES-C (complete), adding references to verification data (certificates and revocation lists) to the signed documents to allow off-line verification and verification in future (but not storing actual verification data)
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.CADES_X1">
+            <summary>
+            CAdES-X type 1, timestamp over C -- not currently supported -  adding timestamps on the references introduced by CAdES-C to protect against possible compromise of certificates in chain in future
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.CADES_X2">
+            <summary>
+            CAdES-X type 2, timestamp over references only -- not currently supported
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.CADES_XL">
+            <summary>
+            CAdES-X Long type 1 or 2, cert and revocation values - adding actual certificates and revocation lists to the signed document to allow verification in future even if their original source is not available
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.CADES_XL1">
+            <summary>
+            CAdES-X Long type 1, cert and revocation values + timestamp over C
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.CADES_XL2">
+            <summary>
+            CAdES-X Long type 2
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.CADES_LTV">
+            <summary>
+            CAdES-AdES (long term, unsupported), adding usage of "tree-hashing" algorithm and "evidence records" (RFC 4998). In latest CAdES standard the profile in fact considered "deprecated"
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.CADES_A">
+            <summary>
+            CAdES-A
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.GENERAL_TIMESTAMP">
+            <summary>
+            General Timestamp
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.PDF_DOC_TIMESTAMP">
+            <summary>
+            PDF Document Timestamp.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.CADES_T_TIMESTAMP">
+            <summary>
+            Timestamp within the CAdES-T signature.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.CADES_X_TIMESTAMP">
+            <summary>
+            Timestamp within the CAdES-X Long Type 1 signature.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.CADES_A_TIMESTAMP">
+            <summary>
+            Timestamp within the CAdES-A signature.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.CADES_A3_TIMESTAMP">
+            <summary>
+            CAdES archive timestamp (related with a CAdES-A signature - ATSv3).
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.PADES_BASIC">
+            <summary>
+            PAdES Basic
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.PADES_BASIC_WITH_TST">
+            <summary>
+            PAdES Basic with timestamp
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.PADES_BES_EPES">
+            <summary>
+            PAdES BES/EPES
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.PADES_BES_EPES_WITH_TST">
+            <summary>
+            PAdES BES/EPES with timestamp
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.PADES_LTV">
+            <summary>
+            PAdES AdES
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.XMLDSIG">
+            <summary>
+            XMLDSIG - a general XML signature. Conforms to none of the AdES formats.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.XMLDSIG_WITH_TST">
+            <summary>
+            XMLDSIG - a general XML signature with timestamp. Conforms to none of the AdES formats.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.XMLDSIG_WITH_ARCH_TST">
+            <summary>
+            XMLDSIG - a general XML signature with archive timestamp and validation data. Conforms to none of the AdES formats.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.XADES_BES">
+            <summary>
+            XAdES-BES signature.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.XADES_EPES">
+            <summary>
+            XAdES-EPES signature.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.XADES_T">
+            <summary>
+            XAdES-T signature.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.XADES_C">
+            <summary>
+            XAdES-C signature. Contains a validation data references.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.XADES_X1">
+            <summary>
+            XAdES-X type 1 signature. Contains a timestamp over the signature value and validation data references.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.XADES_X2">
+            <summary>
+            XAdES-X type 1 signature. Contains a timestamp over validation data references only.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.XADES_XL">
+            <summary>
+            XAdES-X long signature. Contains validation data values.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.XADES_A">
+            <summary>
+            XAdES-A signature. Contains validation data values and archive timestamp.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.XADES_T_TIMESTAMP">
+            <summary>
+            Signature timestamp
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.XADES_X1_TIMESTAMP">
+            <summary>
+            Revocation references and signature value timestamp
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.XADES_X2_TIMESTAMP">
+            <summary>
+            Revocation references timestamp
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarAdesType.XADES_A_TIMESTAMP">
+            <summary>
+            Archive timestamp
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.SdarBaselineType">
+            <summary>
+            New signature baseline format according COMMISSION IMPLEMENTING DECISION 2014/148/EU (<![CDATA[http://eur-lex.europa.eu/legal-content/CS/TXT/HTML/?uri=CELEX:32014D0148&from=EN]]>)
+            and COMMISSION IMPLEMENTING DECISION 2015/1506/EU (<![CDATA[http://eur-lex.europa.eu/legal-content/CS/TXT/HTML/?uri=CELEX:32015D1506&from=EN]]>)
+            2015/1506/EU ommits the LTA form that is currently revised
+            ETSI TS 103 171-174 and ETSI EN 319 122/132/142/162 (CAdES/XAdES/PAdES/ASiC)
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarBaselineType.LEGACY">
+            <summary>
+            Is not baseline but standard profile
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarBaselineType.CADES_B">
+            <summary>
+            CAdES Baseline B profile.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarBaselineType.CADES_T">
+            <summary>
+            CAdES Baseline T profile.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarBaselineType.CADES_LT">
+            <summary>
+            CAdES Baseline LT profile.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarBaselineType.CADES_LTA">
+            <summary>
+            CAdES Baseline LTA profile.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarBaselineType.PADES_B">
+            <summary>
+            PAdES Baseline B profile.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarBaselineType.PADES_T">
+            <summary>
+            PAdES Baseline T profile.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarBaselineType.PADES_LT">
+            <summary>
+            PAdES Baseline LT profile.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarBaselineType.PADES_LTA">
+            <summary>
+            PAdES Baseline LTA profile.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarBaselineType.XADES_B">
+            <summary>
+            PAdES Baseline B profile.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarBaselineType.XADES_T">
+            <summary>
+            XAdES Baseline T profile.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarBaselineType.XADES_LT">
+            <summary>
+            XAdES Baseline LT profile.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarBaselineType.XADES_LTA">
+            <summary>
+            XAdES Baseline LTA profile.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarBaselineType.ASIC_B">
+            <summary>
+            ASiC Baseline B profile.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarBaselineType.ASIC_T">
+            <summary>
+            ASiC Baseline T profile.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarBaselineType.ASIC_LT">
+            <summary>
+            ASiC Baseline LT profile.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SdarBaselineType.ASIC_LTA">
+            <summary>
+            ASiC Baseline LTA profile.
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.CmsStatus">
+            <summary>
+            Signature evaluation status
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsStatus.GENERAL_ERROR">
+            <summary>
+            General error.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsStatus.VALID">
+            <summary>
+            The signature was verified successfully and is considered as valid at the time of verification. 
+            Folowing conditions must be fulfilled:
+            - a proof of signing time must exist (applied timestamp or sequence of timestamps)
+            - the signing certificate has not expired or been revoked before signing time
+            - the signature's integrity has not been corrupted since signing time
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsStatus.VALID_WITH_WARNINGS">
+            <summary>
+            The signature was verified successfully and is considered as valid at the time of verification.
+            Folowing conditions must be fulfilled:
+             - a proof of signing time must exist (applied timestamp or sequence of timestamps)
+             - the signing certificate has not expired or been revoked before signing time
+             - the signature's integrity has not been corrupted since signing time
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsStatus.INVALID_REVOKED">
+            <summary>
+            The signature's certificate has been revoked before signing time.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsStatus.INVALID_HASH_FAILURE">
+            <summary>
+            Signed data hash does not match the signature's message digest.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsStatus.INVALID_SIG_CRYPTO_FAILURE">
+            <summary>
+            Signature's public key wasn't successfully verified.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsStatus.INVALID_EXPIRED">
+            <summary>
+            The signature's certificate has expired.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsStatus.INVALID_NOT_YET_VALID">
+            <summary>
+            The signature's certificate was not yet valid at the time of verification.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsStatus.INVALID_FORMAT_FAILURE">
+            <summary>
+            Signature data was't recognized. Probably not a CMS/PKCS#7/CAdES/PAdES format.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsStatus.INVALID_SIG_CONSTRAINTS_FAILURE">
+            <summary>
+            Signature's constrains were not fulfilled (missing some of signed attributes, bad policy, ... ).
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsStatus.INVALID_CHAIN_CONSTRAINTS_FAILURE">
+            <summary>
+            General system error when building a path for the signing certificate.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsStatus.INVALID_ATS_HASH_INDEX_FAILURE">
+            <summary>
+            verification of an ats-hash-index within the ATSv3 failed - some components are not present
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsStatus.INDETERMINATE_NO_SIGNER_CERTIFICATE_FOUND">
+            <summary>
+            No signing certificate was found within the signature structure.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsStatus.INDETERMINATE_NO_CERTIFICATE_CHAIN_FOUND">
+            <summary>
+            TSL service was unable to build a valid certification path for the signing certificate 
+            (unknown/unsupported issuing CA, missing CRL, unknown CRL distribution point, ...).
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsStatus.INDETERMINATE_REVOKED_NO_POE">
+            <summary>
+            sign cert revoked at verify time but uncertain signing time
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsStatus.INDETERMINATE_NO_POE">
+            <summary>
+            No relevant proof of evidence exists for signing or superior CA certificate 
+            (the crl comes from inappropriate time or source or is unavailable).
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsStatus.INDETERMINATE_TRY_LATER">
+            <summary>
+            This is a temporal status. The signature has not been verified due to signature's freshness or
+            no relevant revocation data are at disposal at the moment - please, try later.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsStatus.INDETERMINATE_SIGNED_DATA_NOT_FOUND">
+            <summary>
+            Missing data whose signature was about to be verified.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsStatus.INDETERMINATE_UNKNOWN_SIGNING_TIME">
+            <summary>
+            Although the signature was not found invalid, the signing time was unknown. 
+            It does not indicate that this signature will be valid in the future automatically.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsStatus.INDETERMINATE_TRY_LATER_TSL_CONNECTION_ERROR">
+            <summary>
+            This is a temporal status. The signature has not been verified due to connection error to the TSL service. Please, try later.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsStatus.UNKNOWN">
+            <summary>
+            Unknown signature status or unknown value returned from underlying service
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.GlobalStatus">
+            <summary>
+            Sumarizes the document status based on all signatures and timestamps
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.GlobalStatus.OK">
+            <summary>
+            All signatures and document timestamps are valid
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.GlobalStatus.WARNING">
+            <summary>
+            Unable to deterimine validity of some signatures or document timestamps
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.GlobalStatus.ERROR">
+            <summary>
+            Some signatures or document timestamps are invalid, e.g. revoked certificate, document hash corrupted, visual changes after signature etc.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.GlobalStatus.NO_SIGNATURES">
+            <summary>
+            Document contain no signatures nor document timestamps
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.CertType">
+            <summary>
+            Type of the signing certificate
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CertType.UNKNOWN">
+            <summary>
+            Unknown, integer code = 0.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CertType.QUALIFIED">
+            <summary>
+            Qualified, integer code = 1.
+            18.12.2016 QUALIFIED se ze Secustamp vraci, pokud je certifikat odvozen od certifikatu uvedeneho na TSL
+            Na to aby byl spravne kvalifikovany podle eIDAS, musi mit v QcStatements uvedeno 0.4.0.1862.1.1 (Evropsky kvalifikovany certifikat)
+            Pokud tento OID nema, zmenim CertType na TRUSTED (= je na TSL = certifikat od kval.poskytovatele sluzeb vydavani certifikatu)
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CertType.COMMERCIAL">
+            <summary>
+            Commercial, integer code = 2.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CertType.OST">
+            <summary>
+            Operation system trusted, integer code = 3.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CertType.INTERNAL">
+            <summary>
+            Internal authorities, eg. SignMaster CA, integer code = 4.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CertType.TRUSTED">
+            <summary>
+            Certifikat ma kotvu na TSL, ale nema proznak, ze je kvalifikovany
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CertType.SYSTEM">
+            <summary>
+            Kvalifikovany systemovy certifikat podle zakona 227/2000 Sb.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CertType.TEST">
+            <summary>
+            Testovací autority
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.QualifiedCertType">
+            <summary>
+            Qualified Certificate Type as defined in Regulation (EU) No 910/2014
+            (0.4.0.1862.1.6 = id-etsi-qcs-QcType (Certificate type), see ETSI EN 319 412-5)
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.QualifiedCertType.LEGACY">
+            <summary>
+            Qualified certificate type not specified
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.QualifiedCertType.ESIGN">
+            <summary>
+            id-etsi-qct-esign -  Certificate for electronic signatures
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.QualifiedCertType.ESEAL">
+            <summary>
+            id-etsi-qct-eseal - Certificate for electronic seals
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.QualifiedCertType.WEB">
+            <summary>
+            id-etsi-qct-web - Certificate for website authentication
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.SigType">
+            <summary>
+            This enumeration incorporates supported signature types.
+            The aim is to make a difference between an ordinary signature and a technical one used in 602 XML Forms.
+            Hence the signature type refers to {@link SigType#STANDARD} unless an appropriate {@link DocType} points to the 602 XML Form ({@link DocType#XML602FORM}). 
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SigType.UNKNOWN">
+            <summary>
+            Unknown signature type.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SigType.STANDARD">
+            <summary>
+            Standard XML or XAdES signature.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SigType.XML602FORM_TECHNICAL">
+            <summary>
+            Technical signature within the 602 XML Forms. No archivation will be performed on such a signature.
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.SignatureType">
+            <summary>
+            Type of signature to create in Seal method
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SignatureType.DEFAULT">
+            <summary>
+            Default signature type for each document type
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SignatureType.ENVELOPED">
+            <summary>
+            XAdES signature - enveloped type
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SignatureType.DETACHED">
+            <summary>
+            External CAdES or XAdES signature
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SignatureType.ENCAPSULATE">
+            <summary>
+            CAdES signature - encapsulate type
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SignatureType.DETACHED_FROM_HASH">
+            <summary>
+            External CAdES signature - signature is created from precalculated hash and does not need the input file data to calculate hash itself.
+            External XAdES not implemented at this moment (28.4.2017)
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.KeyParams">
+            <summary>
+            Parametry páru klíčů, vytvořeného v v HSM v rámci volání metody <seealso cref="!:CreateCertRequest2" />
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.SecuSignHSM">
+            <summary>
+            SecuSign HSM
+            </summary>
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignHSM.CreateOrganization(System.String,System.String,System.String,System.String,System.String,System.String@)">
+            \cond
+            <summary>
+            Used for custom server signing/sealing projects only. Contact technical support for more info.
+            </summary>
+            <param name="Name"></param>
+            <param name="Description"></param>
+            <param name="OrganizationID"></param>
+            <param name="SecustampOrgID"></param>
+            <param name="CertHash"></param>
+            <param name="StatusMessage"></param>
+            <returns></returns>
+            \endcond
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignHSM.CreateCert(System.String,System.String,System.String,System.String,System.String,System.String@,System.String@)">
+            \cond
+            <summary>
+            Used for custom server signing/sealing projects only. Contact technical support for more info.
+            </summary>
+            <param name="OrganizationID"></param>
+            <param name="UserID"></param>
+            <param name="CertSubject"></param>
+            <param name="CertPIN"></param>
+            <param name="CertPUK"></param>
+            <param name="CertificateID"></param>
+            <param name="StatusMessage"></param>
+            <returns></returns>
+            \endcond
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignHSM.RenewCert(System.String,System.String,System.String,System.String@,System.String@)">
+            \cond
+            <summary>
+            Used for custom server signing/sealing projects only. Contact technical support for more info.
+            </summary>
+            <param name="OrganizationID"></param>
+            <param name="UserID"></param>
+            <param name="CertificateID"></param>
+            <param name="NewCertificateID"></param>
+            <param name="StatusMessage"></param>
+            <returns></returns>
+            \endcond
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignHSM.SetCertProperty(System.String,System.String,System.String,System.String,System.String,System.String,System.String@)">
+            \cond
+            <summary>
+            Set HSM certificate property
+            </summary>
+            <param name="OrganizationID"></param>
+            <param name="UserID"></param>
+            <param name="CertificateID"></param>
+            <param name="CertPIN">Private key PIN for PropertyName=pin, PUK for PropertyName=pin_reset</param>
+            <param name="PropertyName">Possible values: pin, pin_reset</param>
+            <param name="PropertyValue"></param>
+            <param name="StatusMessage"></param>
+            <returns></returns>
+            \endcond
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignHSM.GetCertProperty(System.String,System.String,System.String,System.String,System.String@,System.String@)">
+            \cond ENG
+            <summary>
+            Gets HSM certificate property
+            </summary>
+            <param name="OrganizationID">Organization ID</param>
+            <param name="UserID">User ID</param>
+            <param name="CertificateID">Certificate ID</param>
+            <param name="PropertyName">Property namne. Possible values: status,authmode</param>
+            <param name="PropertyValue">Output parameter, value of requested certificate property</param>
+            <param name="StatusMessage">Status message in case of error (return value != 0)</param>
+            <returns>Zero if no error. See documentation for list of possible values.</returns>
+            \endcond
+            \cond CZE
+            <summary>
+            Metoda pro získání dané vlastnosti HSM certifikátu
+            </summary>
+            <param name="OrganizationID">ID organizace</param>
+            <param name="UserID">ID uživatele</param>
+            <param name="CertificateID">ID certifikátu</param>
+            <param name="PropertyName">Název vlastnosti. Možné hodnoty: status,authmode</param>
+            <param name="PropertyValue">Výstupní parametr, hodnota požadované vlastnosti certifikátu</param>
+            <param name="StatusMessage">Stavová zpráva v případě chyby (návratová hodnota != 0)</param>
+            <returns>Nula, pokud nenastala žádná chyba. Seznam možných hodnot naleznete v dokumentaci.</returns>
+            \endcond
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignHSM.DeleteCert(System.String,System.String,System.String,System.String,System.String@)">
+            \cond
+            <summary>
+            Used for custom server signing/sealing projects only. Contact technical support for more info.
+            </summary>
+            <param name="OrganizationID"></param>
+            <param name="UserID"></param>
+            <param name="CertificateID"></param>
+            <param name="CertPIN"></param>
+            <param name="StatusMessage"></param>
+            <returns></returns>
+            \endcond
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignHSM.ListCerts(System.String,System.Boolean,Software602.SecuSign.SDK.PKCS11CertInfo[]@,System.String@)">
+            \cond ENG
+            <summary>
+            Returns list of certificates accessible to logged-in user.
+            </summary>
+            <param name="Params">Optional string parameters</param>
+            <param name="IncludeNotEnabled">Returned list contains also DISABLED and REVOKED certificates</param>
+            <param name="CertList">List of certificates accessible to logged in user</param>
+            <param name="StatusMessage">Status message in case of error (return value != 0)</param>
+            <returns>Zero if no error. See documentation for list of possible values.</returns>
+            \endcond
+            \cond CZE
+            <summary>
+            Metoda pro získání seznamu certifikátů přístupných přihlášenému uživateli.
+            </summary>
+            <param name="Params">Volitelné parametry</param>
+            <param name="IncludeNotEnabled">Vrácený seznam obsahuje také ZAKÁZANÉ a REVOKOVANÉ certifikáty</param>
+            <param name="CertList">Seznam certifikátů přístupných přihlášenému uživateli</param>
+            <param name="StatusMessage">Stavová zpráva v případě chyby (návratová hodnota != 0)</param>
+            <returns>Nula, pokud nenastala žádná chyba. Seznam možných hodnot naleznete v dokumentaci.</returns>
+            \endcond
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignHSM.ListCerts2(System.String,System.Boolean,Software602.SecuSign.SDK.PKCS11CertInfo2[]@,System.String@)">
+            \cond ENG
+            <summary>
+            Return list of certificates accessible to logged in user including info about signature auhentication mode for each cert.
+            See <paramref name="CertList" />[].AuthMode which can contain PIN or 602KEY values, indicating certificate authorization method.
+            </summary>
+            <param name="Params">Optional string parameters</param>
+            <param name="IncludeNotEnabled">Returned list contains also DISABLED and REVOKED certificates</param>
+            <param name="CertList">List of certificates accessible to logged in user</param>
+            <param name="StatusMessage">Status message in case of error (return value != 0)</param>
+            <returns>Zero if no error. See documentation for list of possible values.</returns>
+            \endcond
+            \cond CZE
+            <summary>
+            Vrátí seznam certifikátů přístupných přihlášenému uživateli včetně informace o způsobu autentizace podpisu pro každý certifikát.
+            Viz <paramref name="CertList" />[].AuthMode, který může obsahovat hodnoty PIN nebo 602KEY označující způsob autentizace certifikátu.
+            </summary>
+            <param name="Params">Volitelné parametry</param>
+            <param name="IncludeNotEnabled">Vrácený seznam obsahuje také ZAKÁZANÉ a REVOKOVANÉ certifikáty</param>
+            <param name="CertList">Seznam certifikátů přístupných přihlášenému uživateli</param>
+            <param name="StatusMessage">Stavová zpráva v případě chyby (návratová hodnota != 0)</param>
+            <returns>Nula, pokud nenastala žádná chyba. Seznam možných hodnot naleznete v dokumentaci.</returns>
+            \endcond
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignHSM.GetCertificate(System.String,System.String,System.Byte[]@,System.String@)">
+            \cond ENG
+            <summary>
+            Returns data of specified X509 certificate
+            </summary>
+            <param name="CertificateID">Certificate ID to return</param>
+            <param name="Params">Optional string parameters</param>
+            <param name="X509Certificate">Data of specified X509 certificate</param>
+            <param name="StatusMessage">Status message in case of error (return value != 0)</param>
+            <returns>Zero if no error. See documentation for list of possible values.</returns>
+            \endcond
+            \cond CZE
+            <summary>
+            Metoda pro získání dat daného X509 certifikátu
+            </summary>
+            <param name="CertificateID">ID poždavaného certifikátu</param>
+            <param name="Params">Volitelné parametry</param>
+            <param name="X509Certificate">Data požadovaného certifikátu</param>
+            <param name="StatusMessage">Stavová zpráva v případě chyby (návratová hodnota != 0)</param>
+            <returns>Nula, pokud nenastala žádná chyba. Seznam možných hodnot naleznete v dokumentaci.</returns>
+            \endcond
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignHSM.SignHash(System.Byte[],System.String,System.Byte[]@,System.String,System.String,System.Int32,System.String,System.Byte[]@,System.String@)">
+            \cond ENG
+            <summary>
+            Signs the provided data (see <paramref name="SignatureFormat" /> for further details) using specified certificate stored in SecuSign HSM
+            </summary>
+            <param name="Hash">Hash of signed document</param>
+            <param name="HashAlgOID">OID of used hash algorithm</param>
+            <param name="Output">Signed data</param>
+            <param name="CertificateID">ID of certificate to sign the specified hash</param>
+            <param name="PrivateKeyPIN">Private key PIN of specified certificate</param>
+            <param name="SignatureFormat">0 = CMS (detached CMS according to eIDAS), 1 = PKCS1 RSA signature, 2 = PKCS1 RSA signature but <paramref name="Hash">Hash</paramref> parameter already contains the DER encoded DigestInfo structure</param>
+            <param name="Params">Optional string parameters</param>
+            <param name="SigningCert">Return data of X509 certificate used to sign the provided hash</param>
+            <param name="StatusMessage">Status message in case of error (return value != 0)</param>
+            <returns>Zero if no error. See documentation for list of possible values.</returns>
+            \endcond
+            \cond CZE
+            <summary>
+            Podepíše požadovaná data (další podrobnosti viz <paramref name="SignatureFormat" />) pomocí zadaného certifikátu uloženého v SecuSign HSM
+            </summary>
+            <param name="Hash">Hash k podepsání</param>
+            <param name="HashAlgOID">OID použitého hashovacího algoritmu</param>
+            <param name="Output">Podepsaná data</param>
+            <param name="CertificateID">ID certifikátu k podepsání zadaného hashe</param>
+            <param name="PrivateKeyPIN">PIN k privátnímu klíči zadaného certifikátu</param>
+            <param name="SignatureFormat">0 = CMS (oddělený CMS podle eIDAS), 1 = podpis PKCS1 RSA, 2 = podpis PKCS1 RSA, ale parametr <paramref name="Hash">Hash</paramref> již obsahuje DER struktura DigestInfo</param>
+            <param name="Params">Volitelné parametry řetězce</param>
+            <param name="SigningCert">Vrátí data certifikátu X509 použitého k podepsání poskytnutého hashe</param>
+            <param name="StatusMessage">Stavová zpráva v případě chyby (návratová hodnota != 0)</param>
+            <returns>Nula, pokud nenastala žádná chyba. Seznam možných hodnot naleznete v dokumentaci.</returns>
+            \endcond
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignHSM.Decrypt(System.String,System.String,System.Byte[],System.String,System.Byte[]@,System.String@)">
+            \cond ENG
+            <summary>
+            Method for decryption of provided data
+            </summary>
+            <param name="CertificateID">Certificate ID</param>
+            <param name="CertificatePIN">PIN for the certificate</param>
+            <param name="EncryptedData">Encryted data provided for decryption</param>
+            <param name="Params">Decryption parameters</param>
+            <param name="DecryptedData">Output parameter where decrypted data will be stored</param>
+            <param name="StatusMessage">Status message in case of error (return value != 0)</param>
+            <returns>Zero if no error. See documentation for list of possible values.</returns>
+            \endcond
+            \cond CZE
+            <summary>
+            Metoda pro dešifrování poskytnutých dat.
+            </summary>
+            <param name="CertificateID">ID certifikátu</param>
+            <param name="CertificatePIN">PIN k certifikátu</param>
+            <param name="EncryptedData">Zašifrovaná data určená k dešifrování</param>
+            <param name="Params">Parametry dešifrování</param>
+            <param name="DecryptedData">Výstupní parametr, kde budou uložena dešifrovaná data</param>
+            <param name="StatusMessage">Stavová zpráva v případě chyby (návratová hodnota != 0)</param>
+            <returns>Nula, pokud nenastala žádná chyba. Seznam možných hodnot naleznete v dokumentaci.</returns>
+            \endcond
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignHSM.CreateCertRequest2(System.String,System.String,System.String,System.String,System.String,System.Int32,System.String,System.Byte[]@,System.String@,System.String@,System.String@,System.Byte[]@,System.Byte[]@,Software602.SecuSign.SDK.KeyParams@,System.String@)">
+            \cond
+            <summary>
+            
+            </summary>
+            <param name="OrganizationID"></param>
+            <param name="UserID"></param>
+            <param name="CertSubject"></param>
+            <param name="CertPIN"></param>
+            <param name="CertPUK"></param>
+            <param name="CertificateType"></param>
+            <param name="Params"></param>
+            <param name="PKCS10Request"></param>
+            <param name="ModuleSerial"></param>
+            <param name="CardSerial"></param>
+            <param name="CertificateID"></param>
+            <param name="SubjectKeyID"></param>
+            <param name="SignedCSR"></param>
+            <param name="KeyParams"></param>
+            <param name="StatusMessage"></param>
+            <returns></returns>
+            \endcond
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignHSM.CreateRenewRequest(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String@,System.Byte[]@,System.String@,System.String@,System.String@,System.Byte[]@,System.Byte[]@,System.Byte[]@,System.String@)">
+            \cond
+            <summary>
+            
+            </summary>
+            <param name="OrganizationID"></param>
+            <param name="UserID"></param>
+            <param name="CertificateID"></param>
+            <param name="CertPIN"></param>
+            <param name="NewCertPIN"></param>
+            <param name="NewCertPUK"></param>
+            <param name="RequestTextTemplate"></param>
+            <param name="Params"></param>
+            <param name="RequestText"></param>
+            <param name="PKCS10Request"></param>
+            <param name="ModuleSerial"></param>
+            <param name="CardSerial"></param>
+            <param name="NewCertificateID"></param>
+            <param name="SubjectKeyID"></param>
+            <param name="SignedCSR"></param>
+            <param name="SignedRenewRequest"></param>
+            <param name="StatusMessage"></param>
+            <returns></returns>
+            \endcond
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignHSM.ImportCert(System.String,System.String,System.Byte[],System.String@,System.String@)">
+            \cond
+            <summary>
+            
+            </summary>
+            <param name="OrganizationID"></param>
+            <param name="UserID"></param>
+            <param name="X509Certificate"></param>
+            <param name="CertificateID"></param>
+            <param name="StatusMessage"></param>
+            <returns></returns>
+            \endcond
+        </member>
+        
+        <member name="F:Software602.SecuSign.SDK.LicCertInfo.LicCert">
+            <summary>
+            Licencni certifikat SecuSign SDK. Prihlasuje se jim na awsc.secusign.cz/tsa/info_acc pro zjisteni roli. Prihlasuje se jim na SecuSgin backend.
+            Pokud neni nastaven specialni autentizacni certifikat, prihlasuje se jim k HSM sluzbe. Verejnou casti se sifruje komunikace pri vloani HSM metody SealEx (AdES tomu rika EncryptCert)
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.LicCertInfo.LicCertData">
+            <summary>
+            Data licencniho certifikatu. Viz popis k <see cref="F:Software602.SecuSign.SDK.LicCertInfo.LicCert" />
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.LicCertInfo.LicCertPath">
+            <summary>
+            Cesta k souboru licencniho certifikatu. Viz popis k <see cref="F:Software602.SecuSign.SDK.LicCertInfo.LicCert" />
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.LicCertInfo.LicCertPass">
+            <summary>
+            Heslo licencniho certifikatu. Viz popis k <see cref="F:Software602.SecuSign.SDK.LicCertInfo.LicCert" />
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.LicCertInfo.AuthCert">
+            <summary>
+            Certifikat, pouzivany pro autentizaci k HSM sluzbe. Pokud neni nastaveno, pouziva se licencni certifikat.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.LicCertInfo.AuthCertData">
+            <summary>
+            Certifikat pro autentizaci k HSM sluzbe. Viz popis k <see cref="F:Software602.SecuSign.SDK.LicCertInfo.AuthCert" />
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.LicCertInfo.AuthCertPass">
+            <summary>
+            Heslo certifikatu pro autentizaci k HSM sluzbe. Viz popis k <see cref="F:Software602.SecuSign.SDK.LicCertInfo.AuthCert" />
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.LicCertInfo.TSACertData">
+            <summary>
+            Certifikat pouzivany k autentizaci k TSA sluzbe. Pokud neni nastaveno, pouziji se udaje nastavene v TSA_xxx config klicich.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.LicCertInfo.TSACertPass">
+            <summary>
+            Heslo certifikatu pro autentizaci k TSA sluzbe. Viz popis k <see cref="F:Software602.SecuSign.SDK.LicCertInfo.TSACertData" />
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.LicCertInfo.UsingLicKeys">
+            <summary>
+            1.11.2019 Když najdu alespoň jeden ze souborů LicKey.bin, AuthKey.bin nebo TSAKey.bin, předpokládám že jde o novou 
+            konfiguraci a AdES_WP inicializuju přes AdES_WP_init, jinak jde o starou konfiguraci a jedu přes příkazovou řádku
+            </summary>
+        </member>
+        <member name="M:Software602.SecuSign.SDK.LicCertInfo.DecryptKey(System.Byte[],System.Byte[]@,System.String@)">
+            <summary>
+            Helper function to decrypt AES data previously encrypted by EncryptKey. Internal use only.
+            </summary>
+            <param name="Input">Data to be decrypted</param>
+            <param name="Data">Decrypted data</param>
+            <param name="Password">Password</param>
+        </member>
+        <member name="M:Software602.SecuSign.SDK.LicCertInfo.EncryptKey(System.Byte[],System.String)">
+            <summary>
+            Helper function to encrypt data using AES. Internal use only.
+            </summary>
+            <param name="Data">Data to encrypt</param>
+            <param name="Password">Password</param>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.ValidationProperties.GetReport">
+            <summary xml:lang="cs">
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.ValidationProperties.ValidationTime">
+            <summary>
+            EN: Date/time to validate signatures to
+            CZ: Čas, ke kterému se provádi oveření podpisů. Ověření podpisů se provede, jakoby probíhalo v čase, nastaveném ve ValidationTime.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.ValidationProperties.IgnoreNoPOE">
+            <summary>
+            EN: Enable validation of signatures without qualified time (POE = proof of existence)
+            CZ: Umožní, aby byl podpis bez kvalifikovaného časového razítka vyhodnocen jako VALID (jinak se, pokud nebude jiný problém, vyhodnotí jako INDETERMINATE_UNKNOWN_SIGNING_TIME).
+                Pozn: V případě PDF se "vnější" časová razítka aplikují i na vnitřnější podpisy.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.ValidationProperties.UseClaimedTimeIfNoTS">
+            <summary>
+            EN: Use user claimed signature time to verify signatures without qualified timestamp.
+            CZ: Pokud podpis není znám čas kvalifikovaného časového razítka, použije se čas z hodin autora podpisu (claimed time).
+                POZOR: Je třeba zároveň nastavit volbu <seealso cref="F:Software602.SecuSign.SDK.ValidationProperties.IgnoreNoPOE" /> a nesmí být nastavena hodnota <seealso cref="F:Software602.SecuSign.SDK.ValidationProperties.ValidationTime" />.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.ValidationProperties.DontUseGracePeriodForQCerts">
+            <summary>
+            EN: Don't apply grace period in qualified certificates revocation checking = use any CRL/OCSP issued between decisive moment and cert expiration may be used.
+            CZ: Při ověření revokace kvalifikovaných certifikátů se neuplatňuje 24hod grace perioda = využije se libovolné CRL/OCSP vydané mezi rozhodným okamžikem a koncem platnosti certifikátu.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.ValidationProperties.Psd2Scope">
+            <summary>
+            Validated scope. The certificate shall have this scope and the scope shall be in registry.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.ValidationProperties.Psd2Country">
+            <summary>
+            Country where the licence is valid.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.PreservationProperties.PreserveIndeterminate">
+            <summary>
+            EN: When set true signatures/DocTimeStamps that are indeterminate are also preserved (added CRL/OCSP and certificates).
+            CZ: Pokud je nastaveno na true, přidávají se validační metadata i podpisům/razítkům vuhodnoceným jako INDETERMINATE.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.PreservationProperties.AddTimeStampIfNeeded">
+            <summary>
+            EN: Add timestamp it requred for successfull registration
+            CZ: Pokud je to třeba pro úspěšnou registraci, přidá dokumentu časové razítko
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.SecuSignNET">
+            <summary xml:lang="en">
+            .NET API of SecuSign SDK. These methods are called from WebService methods of same name
+            </summary>
+            \endcond
+            <summary xml:lang="cz">
+            .NET API SecuSign SDK. Tyto metody jsou volány z WebService metod se stejným názvem
+            </summary>
+            \endcond
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignNET.#ctor(System.String,System.String)">
+            <summary xml:lang="en">
+            SecuSignNET constructor
+            </summary>
+            <param name="LicCertPath">Path to license certificate PFX/P12</param>
+            <param name="LicCertPass">Password for license certificate PFX/P12</param>
+            \endcond
+            <summary xml:lang="cz">
+            SecuSignNET constructor
+            </summary>
+            <param name="LicCertPath">Cesta k licenčnímu certifikátu PFX/P12</param>
+            <param name="LicCertPass">Heslo k licenčnímu certifikátu PFX/P12</param>
+            \endcond
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignNET.#ctor(System.String,System.String,System.String)">
+            <summary xml:lang="en">
+            SecuSignNET constructor
+            </summary>
+            <param name="LicCertPath">Path to license certificate PFX/P12</param>
+            <param name="LicCertPass">Password for license certificate PFX/P12</param>
+            <param name="DebugLogPath">Path to debug log file</param>
+            \endcond
+            <summary xml:lang="cz">
+            SecuSignNET constructor
+            </summary>
+            <param name="LicCertPath">Cesta k licenčnímu certifikátu PFX/P12</param>
+            <param name="LicCertPass">Heslo k licenčnímu certifikátu PFX/P12</param>
+            <param name="DebugLogPath">Cesta k debug log souboru</param>
+            \endcond
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignNET.#ctor(System.String,System.String,System.String,System.String)">
+            <summary xml:lang="en">
+            SecuSignNET constructor
+            </summary>
+            <param name="LicCertPath">Path to license certificate PFX/P12</param>
+            <param name="LicCertPass">Password for license certificate PFX/P12</param>
+            <param name="AuthCertPath">Path to authorization certificate PFX/P12</param>
+            <param name="AuthCertPass">Password for authorization certificate PFX/P12</param>
+            \endcond
+            <summary xml:lang="cz">
+            SecuSignNET constructor
+            </summary>
+            <param name="LicCertPath">Cesta k licenčnímu certifikátu PFX/P12</param>
+            <param name="LicCertPass">Heslo k licenčnímu certifikátu PFX/P12</param>
+            <param name="AuthCertPath">Cesta k autorizačnímu certifikátu PFX/P12</param>
+            <param name="AuthCertPass">Heslo k autorizačnímu PFX/P12</param>
+            \endcond
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignNET.#ctor(System.String,System.String,System.String,System.String,System.String)">
+            <summary xml:lang="en">
+            SecuSignNET constructor
+            </summary>
+            <param name="LicCertPath">Path to license certificate PFX/P12</param>
+            <param name="LicCertPass">Password for licence certificate PFX/P12</param>
+            <param name="AuthCertPath">Path to authorization certificate PFX/P12</param>
+            <param name="AuthCertPass">Password for authorization certificate PFX/P12</param>
+            <param name="DebugLogPath">Path to debug log file</param>
+            \endcond
+            <summary xml:lang="cz">
+            SecuSignNET constructor
+            </summary>
+            <param name="LicCertPath">Cesta k licenčnímu certifikátu PFX/P12</param>
+            <param name="LicCertPass">Heslo k licenčnímu certifikátu PFX/P12</param>
+            <param name="AuthCertPath">Cesta k autorizačnímu certifikátu PFX/P12</param>
+            <param name="AuthCertPass">Heslo k autorizačnímu PFX/P12</param>
+            <param name="DebugLogPath">Cesta k debug log souboru</param>
+            \endcond
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignNET.Validate(System.String,System.Byte[],Software602.SecuSign.SDK.DocType,Software602.SecuSign.SDK.ValidationProperties,System.String,Software602.SecuSign.SDK.DocInfo@,System.Byte[]@,System.Byte[]@,System.Byte[]@,System.String@)">
+            <summary xml:lang="en">
+            Validation of qualified signatures/seals according to eIDAS
+            </summary>
+            <param name="FileName">Filename of validated document</param>
+            <param name="FileData">Data of validated document</param>
+            <param name="FileType">Type of validated document - see <see cref="T:Software602.SecuSign.SDK.DocType" /> for further reference</param>
+            <param name="Properties">Properties specifying validation policy</param>
+            <param name="Params">Optional string parameters</param>
+            <param name="Report">Structured validation report - <see cref="T:Software602.SecuSign.SDK.DocInfo" /></param>
+            <param name="XMLReport">Validation report in form of signed XML</param>
+            <param name="HTMLReport">Human readable validation report in HTML form for web GUI use</param>
+            <param name="PDFReport">Human readable validation report on form of signed PDF</param>
+            <param name="StatusMessage">Status message in case of error (return value != 0)</param>
+            <returns>Zero if no error. See documentation for list of possible values.</returns>
+            \endcond
+            <summary xml:lang="cz">
+            Ověření kvalifikovaných podpisů/pečetí dle eIDAS
+            </summary>
+            <param name="FileName">Název souboru ověřovaného dokumentu</param>
+            <param name="FileData">Data ověřovaného dokumentu</param>
+            <param name="FileType">Typ ověřovaného dokumentu - viz <see cref="T:Software602.SecuSign.SDK.DocType" /> pro více informací</param>
+            <param name="Properties">Vlastnosti určující zásady ověřování</param>
+            <param name="Params">Volitelné parametry</param>
+            <param name="Report">Strukturovaná zpráva o ověření - <see cref="T:Software602.SecuSign.SDK.DocInfo" /></param>
+            <param name="XMLReport">Ověřovací zpráva ve formě podepsaného XML</param>
+            <param name="HTMLReport">Člověkem čitelná ověřovací zpráva ve formě HTML pro použití s ​​webovým GUI</param>
+            <param name="PDFReport">Člověkem čitelná zpráva o ověření ve formě podepsaného PDF</param>
+            <param name="StatusMessage">Stavová zpráva v případě chyby (návratová hodnota != 0)</param>
+            <returns>Nula, pokud nenastala žádná chyba. Seznam možných hodnot naleznete v dokumentaci.</returns>
+            \endcond
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignNET.Validate(System.String,System.Byte[],Software602.SecuSign.SDK.DocType,System.String,System.Byte[],Software602.SecuSign.SDK.ValidationProperties,System.String,Software602.SecuSign.SDK.DocInfo@,System.Byte[]@,System.Byte[]@,System.Byte[]@,System.String@)">
+            <summary xml:lang="en">
+            Validation of qualified signatures/seals according to eIDAS
+            </summary>
+            <param name="FileName">Filename of validated document</param>
+            <param name="FileData">Data of validated document</param>
+            <param name="FileType">Type of validated document - see <see cref="T:Software602.SecuSign.SDK.DocType" /> for further reference</param>
+            <param name="ExternalSignatureFileName">File name of external signature</param>
+            <param name="ExternalSignature">Data of external signature</param>
+            <param name="Properties">Properties specifying validation policy</param>
+            <param name="Params">Optional string parameters</param>
+            <param name="Report">Structured validation report - <see cref="T:Software602.SecuSign.SDK.DocInfo" /></param>
+            <param name="XMLReport">Validation report in form of signed XML</param>
+            <param name="HTMLReport">Human readable validation report in HTML form for web GUI use</param>
+            <param name="PDFReport">Human readable validation report on form of signed PDF</param>
+            <param name="StatusMessage">Status message in case of error (return value != 0)</param>
+            <returns>Zero if no error. See documentation for list of possible values.</returns>
+            \endcond
+            <summary xml:lang="cz">
+            Ověření kvalifikovaných podpisů/pečetí dle eIDAS
+            </summary>
+            <param name="FileName">Název souboru ověřovaného dokumentu</param>
+            <param name="FileData">Data ověřovaného dokumentu</param>
+            <param name="FileType">Typ ověřovaného dokumentu - viz <see cref="T:Software602.SecuSign.SDK.DocType" /> for further reference</param>
+            <param name="ExternalSignatureFileName">Název souboru externího podpisu</param>
+            <param name="ExternalSignature">Data externího podpisu</param>
+            <param name="Properties">Vlastnosti určující zásady ověřování</param>
+            <param name="Params">Volitelné parametry</param>
+            <param name="Report">Strukturovaná zpráva o ověření - <see cref="T:Software602.SecuSign.SDK.DocInfo" /></param>
+            <param name="XMLReport">Ověřovací zpráva ve formě podepsaného XML</param>
+            <param name="HTMLReport">Člověkem čitelná ověřovací zpráva ve formě HTML pro použití s ​​webovým GUI</param>
+            <param name="PDFReport">Člověkem čitelná zpráva o ověření ve formě podepsaného PDFF</param>
+            <param name="StatusMessage">Stavová zpráva v případě chyby (návratová hodnota != 0)</param>
+            <returns>Nula, pokud nenastala žádná chyba. Seznam možných hodnot naleznete v dokumentaci.</returns>
+            \endcond
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignNET.ValidateCertificate(System.String,System.Byte[],Software602.SecuSign.SDK.DocType,Software602.SecuSign.SDK.ValidationProperties,System.String,Software602.SecuSign.SDK.CertificateValidationReport@,System.String@)">
+            <summary xml:lang="en">
+            Validate certificate trustworthiness using European TSL, certificate validity and revocation using online sources or SecuSign CRL storage
+            </summary>
+            <param name="FileName">Filename of validated document</param>
+            <param name="FileData">Data of validated document</param>
+            <param name="FileType">Must be the DocType.CERTIFICATE value</param>
+            <param name="Properties">Properties specifying validation policy</param>
+            <param name="Params">Optional string parameters</param>
+            <param name="Report">Structured validation report - <see cref="T:Software602.SecuSign.SDK.DocInfo" /></param>
+            <param name="StatusMessage">Status message in case of error (return value != 0)</param>
+            <returns>Zero if no error. See documentation for list of possible values.</returns>
+            \endcond
+            <summary xml:lang="cz">
+            Ověření důvěryhodnosti certifikátu pomocí evropského TSL, platnost certifikátu a revokaci pomocí online zdrojů nebo úložištěm CRL SecuSign
+            </summary>
+            <param name="FileName">Název souboru ověřovaného dokumentu</param>
+            <param name="FileData">Data ověřovaného dokumentu</param>
+            <param name="FileType">Musí to být hodnota DocType.CERTIFICATE</param>
+            <param name="Properties">Vlastnosti určující zásady ověřování</param>
+            <param name="Params">Volitelné parametry</param>
+            <param name="Report">Strukturovaná zpráva o ověření - <see cref="T:Software602.SecuSign.SDK.DocInfo" /></param>
+            <param name="StatusMessage">Stavová zpráva v případě chyby (návratová hodnota != 0)</param>
+            <returns>Nula, pokud nenastala žádná chyba. Seznam možných hodnot naleznete v dokumentaci.</returns>
+            \endcond
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignNET.Preserve_register(System.String,System.Byte[],Software602.SecuSign.SDK.DocType,Software602.SecuSign.SDK.SigValidityCondition,Software602.SecuSign.SDK.PreservationProperties,System.String,System.String,System.String,System.Byte[]@,Software602.SecuSign.SDK.DocEvidence@,Software602.SecuSign.SDK.DocInfo@,System.String@)">
+            <summary xml:lang="en">
+            Method providing qualified preservation of qualified signatures. Sucessfully registered document contains data enabling long-term 
+            validation of preserved signatured. Document also obtains <see cref="F:Software602.SecuSign.SDK.DocEvidence.docId">evidence ID</see> used as reference in other preservation methods.
+            </summary>
+            <param name="FileName">Filename of registered document</param>
+            <param name="FileData">Data of registered document</param>
+            <param name="FileType">Type of registered document <see cref="T:Software602.SecuSign.SDK.DocType" /></param>
+            <param name="SigValidityCondition">See <see cref="T:Software602.SecuSign.SDK.SigValidityCondition" /></param>
+            <param name="Properties">See <see cref="T:Software602.SecuSign.SDK.PreservationProperties" /></param>
+            <param name="SortInfo">Additional string to stored in evidence database to enable sorting of registered documents (e.g. file path). Value can be empty.</param>
+            <param name="UserComment">User defined comment. Value can be empty.</param>
+            <param name="Params">Optional string parameters</param>
+            <param name="OutputData">Data of registered document, containnig revocation data, signature, timestamp etc.</param>
+            <param name="PreservationInfo">Structure containing preservation info and status of each signature</param>
+            <param name="DocInfo">When the file cannot be registered (return value != 0) this strusture contains information to enable further analyze. See <see cref="T:Software602.SecuSign.SDK.DocInfo" /> for furher description.</param>
+            <param name="StatusMessage">Status message in case of error (return value != 0)</param>
+            <returns>Zero if no error. See documentation for list of possible values.</returns>
+            \endcond
+            <summary xml:lang="cz">
+            Metoda zajišťující kvalifikované uchování kvalifikovaných podpisů. Úspěšně zaevidovaný dokument obsahuje údaje umožňující dlouhodobé
+            ověření uchovaného podpisu. Dokument také získává <see cref="F:Software602.SecuSign.SDK.DocEvidence.docId">evidenční ID</see> používané jako reference v ostatních uchovávacích metodách.
+            </summary>
+            <param name="FileName">Název souboru evidovaného dokumentu</param>
+            <param name="FileData">Data evidovaného dokumentu</param>
+            <param name="FileType">Typ evidovaného dokumentu <see cref="T:Software602.SecuSign.SDK.DocType" /></param>
+            <param name="SigValidityCondition">Viz <see cref="T:Software602.SecuSign.SDK.SigValidityCondition" /></param>
+            <param name="Properties">Viz <see cref="T:Software602.SecuSign.SDK.PreservationProperties" /></param>
+            <param name="SortInfo">Doplňující řetězec pro uložení v databázi pro třídění zaevidovaných dokumentů (např. cesta k souboru). Hodnota může být prázdná.</param>
+            <param name="UserComment">Komentář uživatele. Hodnota může být prázdná</param>
+            <param name="Params">Volitelné parametry</param>
+            <param name="OutputData">Data evidovaného dokumentu obsahující revokační data, podpis, časové razítrko atd.</param>
+            <param name="PreservationInfo">Struktura obsahující informace o uchování a stavu každého podpisu</param>
+            <param name="DocInfo">Pokud soubor nelze zaevidovat (návratová hodnota != 0), obsahuje tato struktura informace umožňující následnou analýzu. Další popis viz <see cref="T:Software602.SecuSign.SDK.DocInfo" />.</param>
+            <param name="StatusMessage">Stavová zpráva v případě chyby (návratová hodnota != 0)</param>
+            <returns>Nula, pokud nenastala žádná chyba. Seznam možných hodnot naleznete v dokumentaci.</returns>
+            \endcond
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignNET.Preserve_register(System.String,System.Byte[],Software602.SecuSign.SDK.DocType,System.String,System.Byte[],Software602.SecuSign.SDK.SigValidityCondition,Software602.SecuSign.SDK.PreservationProperties,System.String,System.String,System.String,System.Byte[]@,Software602.SecuSign.SDK.DocEvidence@,Software602.SecuSign.SDK.DocInfo@,System.String@)">
+            <summary xml:lang="en">
+            Method providing qualified preservation of qualified signatures. Sucessfully registered document contains data enabling long-term 
+            validation of preserved signatured. Document also obtains <see cref="F:Software602.SecuSign.SDK.DocEvidence.docId">evidence ID</see> used as reference in other preservation methods.
+            </summary>
+            <param name="FileName">Filename of registered document</param>
+            <param name="FileData">Data of registered document</param>
+            <param name="FileType">Type of registered document <see cref="T:Software602.SecuSign.SDK.DocType" /></param>
+            <param name="ExternalSignatureFileName">Filename of external signature (optional)</param>
+            <param name="ExternalSignature">Data of external signature (optional)</param>
+            <param name="SigValidityCondition">See <see cref="T:Software602.SecuSign.SDK.SigValidityCondition" /></param>
+            <param name="Properties">See <see cref="T:Software602.SecuSign.SDK.PreservationProperties" /></param>
+            <param name="SortInfo">Additional string to stored in evidence database to enable sorting of registered documents (e.g. file path). Value can be empty.</param>
+            <param name="UserComment">User define comment. Value can be empty.</param>
+            <param name="Params">Optional string parameters</param>
+            <param name="OutputData">Data of registered document, containnig revocation data, signature, timestamp etc.</param>
+            <param name="PreservationInfo">Structure containing preservation info and status of each signature</param>
+            <param name="DocInfo">When the file cannot be registered (return value != 0) this strusture contains information to enable further analyze. See <see cref="T:Software602.SecuSign.SDK.DocInfo" /> for furher description.</param>
+            <param name="StatusMessage">Status message in case of error (return value != 0)</param>
+            <returns>Zero if no error. See documentation for list of possible values.</returns>
+            \endcond
+            <summary xml:lang="cz">
+            Metoda zajišťující kvalifikované uchování kvalifikovaných podpisů. Úspěšně zaevidovaný dokument obsahuje údaje umožňující dlouhodobé
+            ověření uchovaného podpisu. Dokument také získává <see cref="F:Software602.SecuSign.SDK.DocEvidence.docId">evidenční ID</see> používané jako reference v ostatních uchovávacích metodách.
+            </summary>
+            <param name="FileName">Název souboru evidovaného dokumentu</param>
+            <param name="FileData">Data evidovaného dokumentu</param>
+            <param name="FileType">Typ evidovaného dokumentu <see cref="T:Software602.SecuSign.SDK.DocType" /></param>
+            <param name="ExternalSignatureFileName">Název souboru externího podpisu (volitelné)</param>
+            <param name="ExternalSignature">Data externího podpisu (volitelné)</param>
+            <param name="SigValidityCondition">Viz <see cref="T:Software602.SecuSign.SDK.SigValidityCondition" /></param>
+            <param name="Properties">Viz <see cref="T:Software602.SecuSign.SDK.PreservationProperties" /></param>
+            <param name="SortInfo">Doplňující řetězec pro uložení v databázi pro třídění zaevidovaných dokumentů (např. cesta k souboru). Hodnota může být prázdná.</param>
+            <param name="UserComment">Komentář uživatele. Hodnota může být prázdná.</param>
+            <param name="Params">Volitelné parametry</param>
+            <param name="OutputData">Data evidovaného dokumentu obsahující revokační data, podpis, časové razítrko atd.</param>
+            <param name="PreservationInfo">Struktura obsahující informace o uchování a stavu každého podpisu</param>
+            <param name="DocInfo">Pokud soubor nelze zaevidovat (návratová hodnota != 0), obsahuje tato struktura informace umožňující následnou analýzu. Další popis viz <see cref="T:Software602.SecuSign.SDK.DocInfo" />.</param>
+            <param name="StatusMessage">Stavová zpráva v případě chyby (návratová hodnota != 0)</param>
+            <returns>Nula, pokud nenastala žádná chyba. Seznam možných hodnot naleznete v dokumentaci.</returns>
+            \endcond
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignNET.Preserve_update(System.String,System.String,System.Byte[],Software602.SecuSign.SDK.DocType,Software602.SecuSign.SDK.PreservationProperties,System.String,System.String,System.String,System.Byte[]@,Software602.SecuSign.SDK.DocEvidence@,System.String@)">
+            <summary xml:lang="en">
+            Method adds archive timestamp to extend period of possible signature validation. Must be called before signature exipration.
+            </summary>
+            <param name="DocID">Document ID received in case of successfull call of Preserve_register</param>
+            <param name="FileName">Filename of registered document</param>
+            <param name="FileData">Data of registered document</param>
+            <param name="FileType">Type of registered document <see cref="T:Software602.SecuSign.SDK.DocType" /></param>
+            <param name="Properties">See <see cref="T:Software602.SecuSign.SDK.PreservationProperties" /></param>
+            <param name="SortInfo">Additional string to stored in evidence database to enable sorting of registered documents (e.g. file path). Value can be empty.</param>
+            <param name="UserComment">User defined comment. Value can be empty.</param>
+            <param name="Params">Optional string parameters</param>
+            <param name="OutputData">Data of registered document, containnig revocation data, signature, timestamp etc.</param>
+            <param name="Info">Structure containing preservation info and status of each signature</param>
+            <param name="StatusMessage">Status message in case of error (return value != 0)</param>
+            <returns>Zero if no error. See documentation for list of possible values.</returns>
+            \endcond
+            <summary xml:lang="cz">
+            Metoda přidává archivní časové razítko pro prodloužení doby možného ověření podpisu. Nutno zavolat před vypršením platnosti podpisu.
+            </summary>
+            <param name="DocID">Přijaté ID dokumentu v případě úspěšného volání Preserve_register</param>
+            <param name="FileName">Název souboru zaevidovaného dokumentu</param>
+            <param name="FileData">Data zaevidovaného dokumentu</param>
+            <param name="FileType">Typ zaevidovaného dokumentu viz <see cref="T:Software602.SecuSign.SDK.DocType" /></param>
+            <param name="Properties">Viz <see cref="T:Software602.SecuSign.SDK.PreservationProperties" /></param>
+            <param name="SortInfo">Doplňující řetězec pro uložení v databázi pro třídění zaevidovaných dokumentů (např. cesta k souboru). Hodnota může být prázdná.</param>
+            <param name="UserComment">Komentář uživatele. Hodnota může být prázdná.</param>
+            <param name="Params">Volitelné parametry</param>
+            <param name="OutputData">Data zaevidovaného dokumentu obsahující revokační data, podpis, časové razítrko atd.</param>
+            <param name="Info">Struktura obsahující informace o uchování a stavu každého podpisu.</param>
+            <param name="StatusMessage">Stavová zpráva v případě chyby (návratová hodnota != 0)</param>
+            <returns>Nula, pokud nenastala žádná chyba. Seznam možných hodnot naleznete v dokumentaci.</returns>
+            \endcond
+        </member>
+        <member name="M:Software602.SecuSign.SDK.SecuSignNET.Preserve_update(System.String,System.String,System.Byte[],Software602.SecuSign.SDK.DocType,System.String,System.Byte[],Software602.SecuSign.SDK.PreservationProperties,System.String,System.String,System.String,System.Byte[]@,Software602.SecuSign.SDK.DocEvidence@,System.String@)">
+            <summary xml:lang="en">
+            Method adds archive timestamp to extend period of possible signature validation. Must be called before signature exipration.
+            </summary>
+            <param name="DocID">Document ID received in case of successfull call of Preserve_register</param>
+            <param name="FileName">Filename of registered document</param>
+            <param name="FileData">Data of registered document</param>
+            <param name="FileType">Type of registered document <see cref="T:Software602.SecuSign.SDK.DocType" /></param>
+            <param name="ExternalSignatureFileName">Filename of external signature (optional)</param>
+            <param name="ExternalSignature">Data of external signature (optional)</param>
+            <param name="Properties">See <see cref="T:Software602.SecuSign.SDK.PreservationProperties" /></param>
+            <param name="SortInfo">Additional string to stored in evidence database to enable sorting of registered documents (e.g. file path). Value can be empty.</param>
+            <param name="UserComment">User define comment. Value can be empty.</param>
+            <param name="Params">Optional string parameters</param>
+            <param name="OutputData">Data of registered document, containnig revocation data, signature, timestamp etc.</param>
+            <param name="Info">Structure containing preservation info and status of each signature</param>
+            <param name="StatusMessage">Status message in case of error (return value != 0)</param>
+            <returns>Zero if no error. See documentation for list of possible values.</returns>
+            \endcond
+            <summary xml:lang="cz">
+            Metoda přidává archivní časové razítko pro prodloužení doby možného ověření podpisu. Nutno zavolat před vypršením platnosti podpisu.
+            </summary>
+            <param name="DocID">Přijaté ID dokumentu v případě úspěšného volání Preserve_register</param>
+            <param name="FileName">Název souboru zaevidovaného dokumentu</param>
+            <param name="FileData">Data zaevidovaného dokumentu</param>
+            <param name="FileType">Typ zaevidovaného dokumentu viz <see cref="T:Software602.SecuSign.SDK.DocType" /></param>
+            <param name="ExternalSignatureFileName">Název souboru externího podpisu (volitelné)</param>
+            <param name="ExternalSignature">Data externího podpisu (volitelné)</param>
+            <param name="Properties">Viz <see cref="T:Software602.SecuSign.SDK.PreservationProperties" /></param>
+            <param name="SortInfo">Doplňující řetězec pro uložení v databázi pro třídění zaevidovaných dokumentů (např. cesta k souboru). Hodnota může být prázdná.</param>
+            <param name="UserComment">Komentář uživatele. Hodnota může být prázdná.</param>
+            <param name="Params">Volitelné parametry</param>
+            <param name="OutputData">Data zaevidovaného dokumentu obsahující revokační data, podpis, časové razítrko atd.</param>
+            <param name="Info">Struktura obsahující informace o uchování a stavu každého podpisu.</param>
+            <param name="StatusMessage">Stavová zpráva v případě chyby (návratová hodnota != 0)</param>
+            <returns>Nula, pokud nenastala žádná chyba. Seznam možných hodnot naleznete v dokumentaci.</returns>
+            \endcond
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsStatusEN.indication">
+            <summary>
+            Main state of signature: VALID, INVALID, WARNING, INDETERMINATE or UNKNOWN
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsStatusEN.subindication">
+            <summary>
+            Empty for UNKNOWN indication. Empty or WARNING for VALID indication. Closer reason in case of INVALID or INDETERMINATE indication.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.PreservationInfo.sid">
+            <summary>
+            Uniques signature ID. Only for CMS/PKCS7/CAdES signed files.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocEvidence.CreationDateTime">
+            <summary>
+            Date/time of creation of this structure
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocEvidence.docId">
+            <summary>
+            Document Id assigned by the Evidence server
+            </summary>
+        </member>
+        <member name="P:Software602.SecuSign.SDK.DocEvidence.docType">
+            <summary>
+            type of the signed document, @see DocType for details
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocEvidence.sortInfo">
+            <summary>
+            Document sorting information in the form of directory structure, for example /Folder1/Folder2/MyGroup/
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocEvidence.lastUpdate">
+            <summary>
+            Last time the register or update function has been called
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocEvidence.expiration">
+            <summary>
+            date of expiry of the most recent signature's or timestamp's certificate
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocEvidence.docDataHash">
+            <summary>
+            Document hash of the whole (externally) signed data
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocEvidence.docDataHashAlg">
+            <summary>
+            Hash algorithm OID for docDataHash
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocEvidence.currSignHashAlg">
+            <summary>
+            Hash algorithm used for the most recent TST request or signature
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocEvidence.sigValidityCondition">
+            <summary>
+            Value of SigValidityCondition parameter used in Preserve_register call
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocEvidence.sigsPreservationStatus">
+            <summary>
+            Results of preservation for each signature
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocEvidence.preservationHistory">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.RevocationData">
+            <summary>
+            Containing information about certificate's revocation
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.RevocationData.Data">
+            <summary>
+            CRL/cert/OCSP data
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.RevocationData.Source">
+            <summary>
+            Where are the revocation data retrieved from
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.RevocationData.DistributionPointChecked">
+            <summary>
+            True if distrtibution point of revocation information has bee checked during the validation
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.RevocationData.DistributionPoint">
+            <summary>
+            URL address of distribution point of revocation information
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.RevocationData.DistributionPointCheckDate">
+            <summary>
+            Time at which distribution point of revocation information has been checked
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.RevocationData.DistributionPointThisUpdate">
+            <summary>
+            ThisUpdate value of CRL available at DistributionPoint URL
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.RevocationData.DistributionPointHash">
+            <summary>
+            SHA-1 hash of CRL available at DistributionPoint URL
+            </summary>
+        </member>
+        <member name="M:Software602.SecuSign.SDK.RevocationData.RevocationIsEmpty">
+            ShouldSerializeXYZ je zde kvůli tomu, aby bylo možné vynechat některé prvky
+            při serializaci do XML. Je to kvůli tomu, aby se zobrazili tzv. "prázdná" pole
+            pro revokační data.
+        </member>
+        <member name="T:Software602.SecuSign.SDK.XmlSignedReference">
+            <summary>
+            Information about a single reference object within a signed XML document.
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.PKCS11CertInfo">
+            <summary>
+            Contains information about certificate stored in PKCS11 accessible signing device
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.PKCS11CertInfo.Status">
+            <summary>
+            Jedna z hodnot ENABLED, DISABLED, REVOKED
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.PKCS11CertInfo2">
+            <summary>
+            Contains information about certificate stored in PKCS11 accessible signing device
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.PKCS11CertInfo2.AuthMode">
+            <summary>
+            Possible values: PIN, 602KEY, AUTHCERT (od HSM WS 27.1.2022)
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.CmsInfo">
+            <summary>
+            This class holds results of a previously verified electronic signature or timestamp.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsInfo.status">
+            <summary>
+            cms verification status, @see CmsStatus for details
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsInfo.message">
+            <summary>
+            status message or null
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsInfo.warning">
+            <summary>
+            warning message or null
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsInfo.warningCode">
+            <summary>
+            Warning code
+            
+            values:
+            OK(0), DIGEST_ALGORITHM_UNSUPPORTED(1), SIGNATURE_ALGORITHM_UNSUPPORTED(2), DIGEST_ALGORITHM_NOT_SECURED(3), SIGNATURE_ALGORITHM_NOT_SECURED(4), DIGEST_ALGORITHM_NOT_OBTAINED(5), SIGNATURE_ALGORITHM_NOT_OBTAINED(6).
+            
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsInfo.certType">
+            <summary>
+            Description of type of signing certificate, ie. "qualified, commercial, ... ", @see CertType for details
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsInfo.adesType">
+            <summary>
+            current signature type, @see SdarAdesType for details
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsInfo.eidasType">
+            <summary>
+            signature type according to eIDAS, @see EidasType for details
+            </summary>
+        </member>
+        <member name="M:Software602.SecuSign.SDK.CmsInfo.IsTimestamp">
+            <summary>
+            Determines from adesType if this is a timestamp.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsInfo.signCert">
+            <summary>
+            Signing certificate
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsInfo.qcStatements">
+            <summary>
+            ETSI TS QCStatements info element retrieved from signing certificate.
+            0.4.0.1862.1.1 = qualified certificate issued according to EU direction 93/1999
+            0.4.0.1862.1.4 = qualified certificate stored in SSCD
+            0.4.0.1862.1.5 = PKI Disclosure Statements (PDS)/Zpráva pro uživatele
+            0.4.0.1862.1.6 = ???
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsInfo.signCertIsPseudonyme">
+            <summary>
+            Certifikat je vystaven na pseudonym pokud je v poli subjekt bud:
+              1) pseudonym (2.5.4.65 - id-at-pseudonym) nebo 
+              2) givenName + surName
+            Pro commonName plati:
+              1) V případě uvedení položek givenName a surName musí být tyto taktéž obsahem položky commonName
+              2) V případě uvedení položky pseudonym složeno z jejího obsahu a doplněno řetězcem „ - PSEUDONYM“
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsInfo.time">
+            <summary>
+            signature time or TST gen time
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsInfo.timeFromComputerClock">
+            <summary>
+            signature time from computer clock
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsInfo.validTo">
+            <summary>
+            total validity date of this cms structure (concerning revocation dates, tst chains, ...)
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsInfo.certPath">
+            <summary>
+            certificate chain, without end certificate
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsInfo.crlPath">
+            <summary>
+            CRLs issued by CA whose list is held in certPath
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsInfo.lastHashAlgOid">
+            <summary>
+            last hash algorithm OID used in this signature
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsInfo.digestAlgorithm">
+            <summary>
+            Message digest algorithm OID
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsInfo.signatureAlgorithm">
+            <summary>
+            Signature encryption algorithm (i.e. RSA)
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.CmsInfo.keySize">
+            <summary>
+            Key size
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.SigInfo">
+            <summary>
+            Inherited class from CmsInfo, holding information about signatures
+            This class contains information about signatures or timestamps present in the analyzed document.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SigInfo.id">
+            <summary>
+            Zero-based index of the current signature as it was applied to its signed data.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SigInfo.sid">
+            <summary>
+            Signature's unique identifier.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SigInfo.counterSignsSignatureSid">
+            <summary>
+            If signature is a countersignature, contains sid of original signature
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SigInfo.DecisiveMoment">
+            <summary>
+            Time to which the signature is validated
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SigInfo.DecisiveMomentSource">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SigInfo.sigTimestamps">
+            <summary>
+            List of timestamps connected to the given signature.
+            The list is not null and not empty if the signature's type conforms CmsType.CADES_T, CmsType.CADES_X* or CmsType.CADES_A.
+            First element is always CmsType.CADES_T_TIMESTAMP which can be followed by CmsType.CADES_X_TIMESTAMP or CmsType.CADES_A_TIMESTAMP timestamps.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SigInfo.sigType">
+            <summary>
+            This enumeration incorporates supported signature types.
+            The aim is to make a difference between an ordinary signature and a technical one used in 602 XML Forms.
+            Hence the signature type refers to {@link SigType#STANDARD} unless an appropriate {@link DocType} points to the 602 XML Form ({@link DocType#XML602FORM}). 
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SigInfo.xmlSignedReferences">
+            <summary>
+            Non-emtpy if the current instance of SigInfo refers to a XML/602Form signature
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SigInfo.pdfByteRange">
+            <summary>
+            Non-empty if the current instance of SigInfo refers to a PDF signature
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SigInfo.hasFurtherChanges">
+            <summary>
+            Indicates that some visual changes have been made into the document after aplying this signature.
+            Valid for PDF formarmat only.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SigInfo.Reason">
+            <summary>
+            Only for PDF: Reason of signing the document
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SigInfo.Location">
+            <summary>
+            Only for PDF: Location info for PDF signature
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SigInfo.Contact">
+            <summary>
+            Only for PDF: Contact info of signature author
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocInfo.CreationDateTime">
+            <summary>
+            Date/time of creation of this structure
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocInfo.FileName">
+            <summary>
+            File name of signed file
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocInfo.FileSize">
+            <summary>
+            File size of signed file
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocInfo.ExtSigFileName">
+            <summary>
+            File name of external signature (for externally signed files)
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocInfo.ExtSigFileSize">
+            <summary>
+            File size of external signature (for externally signed files)
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocInfo.PDFVersion">
+            <summary>
+            Version in case of docType == "PDF"
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocInfo.PDFNumOfPages">
+            <summary>
+            In case of docType == "PDF" the property contains number of pages in PDF file
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocInfo.docType">
+            <summary>
+            type of the signed document, @see DocType for details
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocInfo.expiration">
+            <summary>
+            date of expiry of the most recent signature's or timestamp's certificate
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocInfo.docDataHash">
+            <summary>
+            Document hash of the whole (externally) signed data
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocInfo.docDataHashAlg">
+            <summary>
+            Hash algorithm OID for docDataHash
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocInfo.currSignHashAlg">
+            <summary>
+            Hash algorithm used for the most recent TST request or signature
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocInfo.globalStatus">
+            <summary>
+            Global status of signature verification process, @see GlobalStatus for details
+            </summary>
+        </member>
+        <member name="M:Software602.SecuSign.SDK.DocInfo.GetGlobalStatus">
+            <summary>
+            Global status of signature verification process, @see GlobalStatus for details
+            </summary>
+            <returns>GlobalStatus</returns>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.DocInfo.sigInfos">
+            <summary>
+            verification states of all signature(s) or timestamps included in the document
+            </summary>
+        </member>
+        <member name="T:Software602.SecuSign.SDK.SigValidationProps">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SigValidationProps.ValidationTime">
+            <summary>
+            Date/time to validate signatures to
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SigValidationProps.CustomValidationTime">
+            <summary>
+            true if ValidationProperties.ValidationDate has been set to specify date/time to validate sigatures to
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SigValidationProps.IgnoreNoPOE">
+            <summary>
+            EN: Enable validation of signatures without qualified time (POE = proof of existence)
+            CZ: Umožní, aby byl podpis bez kvalifikovaného časového razítka vyhodnocen jako VALID (jinak se, pokud nebude jiný problém, vyhodnotí jako INDETERMINATE_UNKNOWN_SIGNING_TIME).
+                Pozn: V případě PDF se "vnější" časová razítka aplikují i na vnitřnější podpisy.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SigValidationProps.UseClaimedTimeIfNoTS">
+            <summary>
+            EN: Use user claimed signature time to verify signatures without qualified timestamp.
+            CZ: Pokud podpis není znám čas kvalifikovaného časového razítka, použije se čas z hodin autora podpisu (claimed time).
+                POZOR: Je třeba zároveň nastavit volbu <seealso cref="F:Software602.SecuSign.SDK.SigValidationProps.IgnoreNoPOE" /> a nesmí být nastavena hodnota <seealso cref="F:Software602.SecuSign.SDK.SigValidationProps.ValidationTime" />.
+            </summary>
+        </member>
+        <member name="F:Software602.SecuSign.SDK.SigValidationProps.DontUseGracePeriodForQCerts">
+            <summary>
+            EN: Don't apply grace period in qualified certificates revocation checking = use any CRL/OCSP issued between decisive moment and cert expiration may be used.
+            CZ: Při ověření revokace kvalifikovaných certifikátů se neuplatňuje 24hod grace perioda = využije se libovolné CRL/OCSP vydané mezi rozhodným okamžikem a koncem platnosti certifikátu.
+            </summary>
+        </member>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    </members>
+</doc>

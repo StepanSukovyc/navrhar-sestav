@@ -1,0 +1,327 @@
+<AddIn name        = "Xml Editor"
+       author      = "Mgr. Stepan Sukovyč"
+       description = "gres:29451041"
+       addInManagerHidden = "preinstalled"
+       version="5.25.0.1">
+
+	<Manifest>
+		<Identity name = "Gordic.GFE.WinClient.XmlEditor"/>
+	</Manifest>
+
+	<Runtime>
+		<Import assembly=":Gordic.GFE.WinClient">
+			<ConditionEvaluator name = "StylesheetAssigned" class = "Gordic.GFE.WinClient.XmlEditor.StylesheetAssignedCondition"/>
+		</Import>
+	</Runtime>
+
+	<!-- Xml Editor View -->
+	<Path name = "/Desktop/DisplayBindings">
+		<DisplayBinding id = "XmlEditor"
+						insertafter = "DataEditor"
+						insertbefore = "Text"
+						title = "gres:29450770"
+						class = "Gordic.GFE.WinClient.XmlEditor.Gui.Editor.XmlDisplayBinding"/>
+	</Path>
+	<!-- konec Xml Editor View -->
+
+	<!-- XML analyzátory -->
+	<Path name = "/Workspace/Parser">
+		<Parser id = "XmlFoldingParser"
+		        supportedextensions  = ".xme;.xml;.xsl;.xslt;.xsd;.manifest;.config;.addin;.xshd;.wxs;.wxi;.wxl;.proj;.csproj;.vbproj;.ilproj;.build;.xfrm;.targets;.xpt;.xft;.map;.wsdl;.disco;.ssr;"
+		        class = "Gordic.GFE.WinClient.XmlEditor.Parser"/>
+	</Path>
+	<!-- XML analyzátory konec-->
+
+	<!-- XML souborový filter -->
+	<Path name = "/Desktop/FileFilter">
+		<FileFilter id = "XML"
+						name = "gres:29450771"
+						insertbefore="AllFiles"
+						extensions = "*.xml"/>
+		<FileFilter id = "XME"
+						insertbefore="XML"
+						name = "gres:29450772"
+						extensions = "*.xme"/>
+		<FileFilter id = "XSL"
+						insertbefore="XME"
+						name = "gres:29450773"
+						extensions = "*.xsl;*.xslt"/>
+	</Path>
+
+	<!-- XML menu -->
+	<Path name = "/ReportDesigner/MainMenu">
+		<Condition name = "WindowActive" activewindow="ITextEditorControlProvider">
+			<MenuItem id = "Xml" insertafter="View" insertbefore="Tools" label="gres:29450962" type = "Menu">
+				<MenuItem id = "ToUpper"
+						  label = "gres:29450774"
+						  type = "Item"
+						  shortcut = "Control|U"
+						  loadclasslazy = "false"
+						  class = "Gordic.GFE.WinClient.TextContentCommands.ToUpper"/>
+				<MenuItem id = "ToLower"
+						  label = "gres:29450775"
+						  type = "Item"
+						  shortcut = "Control|Shift|U"
+						  loadclasslazy = "false"
+						  class = "Gordic.GFE.WinClient.TextContentCommands.ToLower"/>
+				<Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.XmlEditor.Gui.Editor.XmlView">
+					<MenuItem id = "Separator3" type = "Separator"  />
+					<MenuItem id = "Comment"
+					  icon  = "Icons.16x16.CommentRegion"
+					  label = "gres:29450755"
+					  shortcut = "Control|/"
+					  class= "Gordic.GFE.WinClient.DefaultTextEditorCommands.CommentRegion"/>
+					<MenuItem id = "Indent"
+					  label = "gres:29450756"
+					  icon  = "Icons__Gin__posun_doprava"
+					  shortcut = "Control|I"
+					  class = "Gordic.GFE.WinClient.DefaultTextEditorCommands.IndentSelection" />
+					<MenuItem id = "CreateSchema"
+							  label = "gres:29450776"
+							  class = "Gordic.GFE.WinClient.XmlEditor.CreateSchemaCommand" />
+					<MenuItem id = "ValidateXml"
+							  label = "gres:29450205"
+							  class = "Gordic.GFE.WinClient.XmlEditor.ValidateXmlCommand"
+							  shortcut = "Control|Shift|V" />
+					<MenuItem id = "MmDocValidation"
+							  icon = "Icons__Gin__kontrola"
+							  loadclasslazy = "false"
+							  label = "gres:29450805"
+							  class = "Gordic.GFE.WinClient.XmlEditor.AlfValidateCommand"/>
+					<MenuItem id = "Separator1" type = "Separator"/>
+					<ComplexCondition action="Disable">
+						<Not>
+							<Condition name = "WindowActive" activewindow = "Gordic.GFE.WinClient.XmlEditor.XslOutputView"/>
+						</Not>
+						<!--<MenuItem id="AssignStylesheet"
+					          label="přiřadit XSLT..."
+					          class="Gordic.GFE.WinClient.XmlEditor.AssignStylesheetCommand"/>
+					<ComplexCondition action="Disable">
+						-->
+						<!-- ocenění StylesheetAssigned pouze pokud XmlView je aktivní -->
+						<!--
+						<And>
+							<Condition name = "WindowActive" activewindow = "Gordic.GFE.WinClient.XmlEditor.Gui.Editor.XmlView"/>
+							<Condition name = "StylesheetAssigned" action="Disable"/>
+						</And>
+						<MenuItem id="OpenStylesheet"
+						          label="otevřít XSLT"
+						          class="Gordic.GFE.WinClient.XmlEditor.OpenStylesheetCommand"/>
+					</ComplexCondition>-->
+						<MenuItem id="RunTransform"
+								  label="gres:29450777"
+								  class="Gordic.GFE.WinClient.XmlEditor.RunXslTransformCommand"
+								  shortcut="Control|Shift|T"/>
+					</ComplexCondition>
+					<MenuItem id = "Separator2" type = "Separator"/>
+					<MenuItem id = "Format"
+							  label = "gres:29450778"
+							  class = "Gordic.GFE.WinClient.XmlEditor.FormatXmlCommand"
+										shortcut="Shift|Alt|F"/>
+				</Condition>
+			</MenuItem>
+		</Condition>
+	</Path>
+
+	<!-- Kontextové menu -->
+	<Path name = "/ReportDesigner/ViewContent/XmlEditor/ContextMenu">
+		<Include id = "Cut" item = "/ReportDesigner/MainMenu/Edit/Cut"/>
+		<Include id = "Copy" item = "/ReportDesigner/MainMenu/Edit/Copy"/>
+		<Include id = "Paste" item = "/ReportDesigner/MainMenu/Edit/Paste"/>
+		<Include id = "Delete" item = "/ReportDesigner/MainMenu/Edit/Delete"/>
+		<MenuItem id = "Separator1" type = "Separator"/>
+		<Include id = "Save" item = "/ReportDesigner/MainMenu/File/Save"/>
+		<Include id = "SaveAs" item = "/ReportDesigner/MainMenu/File/SaveAs"/>
+		<Include id = "SaveDb" item = "/ReportDesigner/MainMenu/File/SaveDb"/>
+		<Include id = "CloseFile" item = "/ReportDesigner/MainMenu/File/Close/CloseFile"/>
+		<MenuItem id = "Separator2" type = "Separator"/>
+		<MenuItem id = "Comment"
+				  icon  = "Icons.16x16.CommentRegion"
+				  label = "gres:29450755"
+				  shortcut = "Control|/"
+				  class= "Gordic.GFE.WinClient.DefaultTextEditorCommands.CommentRegion"/>
+		<MenuItem id = "Indent"
+					  label = "gres:29450756"
+				  icon  = "Icons__Gin__posun_doprava"
+					  shortcut = "Control|I"
+					  class = "Gordic.GFE.WinClient.DefaultTextEditorCommands.IndentSelection" />
+		<!--<MenuItem id = "HideXPathResults"
+			      label = "odstranit zvýraznění XPath výsledků"
+			      class = "Gordic.GFE.WinClient.XmlEditor.RemoveXPathHighlightingCommand"/>
+		<MenuItem id = "GoToDefinition"
+			      label = "přejit k definicí"
+			      class = "Gordic.GFE.WinClient.XmlEditor.GoToSchemaDefinitionCommand"/>-->
+		<MenuItem id = "FileMode" label = "syntaxe" type="Menu">
+			<MenuItem id = "HighlightBuilder" type="Builder" class = "Gordic.GFE.WinClient.DefaultTextEditorCommands.HighlightingTypeBuilder" />
+		</MenuItem>
+		<MenuItem id = "Separator3" type = "Separator"/>
+		<MenuItem id = "Options"
+					  label = "gres:29450758"
+					  icon = "Icons.16x16.PropertiesIcon"
+					  class ="Gordic.GFE.WinClient.ToolsCommands.ShowTextEditorOptions"/>
+	</Path>
+
+	<!-- nástrojové líšty -->
+	<Path name = "/ReportDesigner/ToolBarMenu/Standard">
+		<Condition name = "WindowActive" activewindow="Gordic.GFE.Parsers.DefaultEditor.ITextEditorControlProvider">
+			<ToolbarItem id = "TextEditorSeparator" type = "Separator" insertafter="Redo" />
+			<ToolbarItem id = "Comment"
+				type = "Item"
+				icon  = "Icons.16x16.CommentRegion"
+				tooltip = "gres:29450779"
+				loadclasslazy = "false"
+				class= "Gordic.GFE.WinClient.DefaultTextEditorCommands.CommentRegion"/>
+			<ToolbarItem id = "Indent"
+				type = "Item"
+				icon  = "Icons__Gin__posun_doprava"
+				tooltip = "gres:29450780"
+				shortcut = "Control|I"
+				loadclasslazy = "false"
+				class = "Gordic.GFE.WinClient.DefaultTextEditorCommands.IndentSelection" />
+			<ToolbarItem id = "EnableFolding"
+				tooltip = "gres:29450781"
+				icon = "Icons__Gin__plus_centralni"
+				loadclasslazy = "false"
+				type="CheckBox"
+				class = "Gordic.GFE.WinClient.DefaultTextEditorCommands.EnableFolding"/>
+			<ToolbarItem id = "LineNumbers"
+				tooltip = "gres:29450782"
+				icon = "Icons_48x48_LineNumbers"
+				loadclasslazy = "false"
+				type="CheckBox"
+				class = "Gordic.GFE.WinClient.DefaultTextEditorCommands.LineNumbers"/>
+			<ToolbarItem id = "Pilcrow"
+				tooltip = "gres:29450783"
+				icon = "Icons_32x32_Pilcrow"
+				loadclasslazy = "false"
+				type="CheckBox"
+				class = "Gordic.GFE.WinClient.DefaultTextEditorCommands.Pilcrow"/>
+			<!--<ToolbarItem id = "Syntax"
+          tooltip = "zěmna syntaxe"
+          icon = "Icons__Ost__zdrojovy_kod"
+          loadclasslazy = "false"
+          class = "Gordic.GFE.WinClient.DefaultTextEditorCommands.Syntax"/>-->
+			<ToolbarItem id = "TextEditorSeparator" type = "Separator" insertafter="Indent" />
+			<ToolbarItem id = "NewPID"
+				type = "Item"
+				icon  = "Icons__Gin__pridat_sejmutim_pidu"
+				tooltip = "gres:29450784"
+				loadclasslazy = "false"
+				class= "Gordic.GFE.WinClient.Database.NewPID"/>
+		</Condition>
+	</Path>
+	<!-- Options panel -->
+	<!-- události textového editoru -->
+	<Path name = "/AddIns/XmlEditor/EditActions">
+		<EditAction id = "CompletionPopup" class = "Gordic.GFE.WinClient.DefaultEditor.CodeCompletionPopup"  keys = "Control|Space"/>
+		<!--<EditAction id = "GoToDefinition" class = "XmlEditor.GoToSchemaDefinitionEditAction" keys = "Control|Enter"/>
+    -->
+	</Path>
+	<!-- konec události textového editoru -->
+
+	<!-- XPath Query podložka -->
+	<Path name = "/ReportDesigner/Desktop/Pads">
+		<Pad id = "XPathQueryPad"
+		     category = "Tools"
+		     icon = "PadIcons.XPathQuery"
+		     title = "gres:29450785"
+		     class = "Gordic.GFE.WinClient.XPathQuery.XPathQueryPad"/>
+	</Path>
+
+	<!-- Možností nabídky vypnout XPath Query zvýraznění -->
+	<Path name = "/ReportDesigner/MainMenu/Edit/Format">
+		<Condition name = "WindowActive" activewindow="Gordic.GFE.WinClient.XmlEditor.Gui.Editor.XmlView">
+			<MenuItem id = "RemoveXPathHighlighting"
+			          label = "gres:29450786"
+			          class = "Gordic.GFE.WinClient.XmlEditor.RemoveXPathHighlightingCommand"/>
+		</Condition>
+	</Path>
+
+	<!-- XML Tree kontextové menu -->
+	<Path name = "/AddIns/XmlEditor/XmlTree/AttributesGrid/ContextMenu">
+		<Condition name = "Ownerstate" ownerstate="ElementSelected" action="Disable">
+			<MenuItem id = "AddAttribute"
+				label = "gres:29450787"
+				class = "Gordic.GFE.WinClient.XmlEditor.AddAttributeCommand"/>
+		</Condition>
+		<Condition name = "Ownerstate" ownerstate="AttributeSelected" action="Disable">
+			<MenuItem id = "RemoveAttribute"
+				label = "gres:29450788"
+				icon = "Icons.16x16.DeleteIcon"
+				class = "Gordic.GFE.WinClient.XmlEditor.RemoveAttributeCommand"/>
+		</Condition>
+	</Path>
+
+	<Path name = "/AddIns/XmlEditor/XmlTree/ContextMenu">
+		<Include id = "Cut" item = "/ReportDesigner/MainMenu/Edit/Cut"/>
+		<Include id = "Copy" item = "/ReportDesigner/MainMenu/Edit/Copy"/>
+		<Include id = "Paste" item = "/ReportDesigner/MainMenu/Edit/Paste"/>
+		<Include id = "Delete" item = "/ReportDesigner/MainMenu/Edit/Delete"/>
+		<MenuItem id = "EditItemsSeparator" type = "Separator"/>
+		<ComplexCondition action = "Disable">
+			<Or>
+				<Condition name = "Ownerstate" ownerstate = "CommentSelected"/>
+				<And>
+					<Condition name = "Ownerstate" ownerstate = "ElementSelected"/>
+					<Not>
+						<Condition name = "Ownerstate" ownerstate = "RootElementSelected"/>
+					</Not>
+				</And>
+			</Or>
+			<MenuItem id = "InsertElementBefore"
+				label = "gres:29450790"
+				class = "Gordic.GFE.WinClient.XmlEditor.InsertElementBeforeCommand"/>
+			<MenuItem id = "InsertElementAfter"
+				label = "gres:29450789"
+				class = "Gordic.GFE.WinClient.XmlEditor.InsertElementAfterCommand"/>
+		</ComplexCondition>
+		<Condition name = "Ownerstate" ownerstate = "ElementSelected" action = "Disable">
+			<MenuItem id = "AddChildElement"
+				label = "gres:29450791"
+				class = "Gordic.GFE.WinClient.XmlEditor.AddChildElementCommand"/>
+		</Condition>
+		<ComplexCondition action = "Disable">
+			<Or>
+				<Condition name = "Ownerstate" ownerstate = "TextNodeSelected"/>
+				<Condition name = "Ownerstate" ownerstate = "CommentSelected"/>
+				<And>
+					<Condition name = "Ownerstate" ownerstate = "ElementSelected"/>
+					<Not>
+						<Condition name = "Ownerstate" ownerstate = "RootElementSelected"/>
+					</Not>
+				</And>
+			</Or>
+			<MenuItem id = "TextNodeCommandsSeparator" type = "Separator"/>
+			<MenuItem id = "InsertTextNodeBefore"
+				label = "gres:29450792"
+				class = "Gordic.GFE.WinClient.XmlEditor.InsertTextNodeBeforeCommand"/>
+			<MenuItem id = "InsertTextNodeAfter"
+				label = "gres:29450793"
+				class = "Gordic.GFE.WinClient.XmlEditor.InsertTextNodeAfterCommand"/>
+		</ComplexCondition>
+		<Condition name = "Ownerstate" ownerstate = "ElementSelected" action = "Disable">
+			<MenuItem id = "AddChildTextNode"
+				label = "gres:29450794"
+				class = "Gordic.GFE.WinClient.XmlEditor.AddChildTextNodeCommand"/>
+		</Condition>
+		<ComplexCondition action = "Disable">
+			<Or>
+				<Condition name = "Ownerstate" ownerstate = "TextNodeSelected"/>
+				<Condition name = "Ownerstate" ownerstate = "ElementSelected"/>
+				<Condition name = "Ownerstate" ownerstate = "CommentSelected"/>
+			</Or>
+			<MenuItem id = "CommentNodeCommandsSeparator" type = "Separator"/>
+			<MenuItem id = "InsertCommentBefore"
+				label = "gres:29450795"
+				class = "Gordic.GFE.WinClient.XmlEditor.InsertCommentBeforeCommand"/>
+			<MenuItem id = "InsertCommentAfter"
+				label = "gres:29450796"
+				class = "Gordic.GFE.WinClient.XmlEditor.InsertCommentAfterCommand"/>
+		</ComplexCondition>
+		<Condition name = "Ownerstate" ownerstate = "ElementSelected" action = "Disable">
+			<MenuItem id = "AddChildCommentNode"
+				label = "gres:29450797"
+				class = "Gordic.GFE.WinClient.XmlEditor.AddChildCommentCommand"/>
+		</Condition>
+	</Path>
+</AddIn>

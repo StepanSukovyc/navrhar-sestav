@@ -1,0 +1,889 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Support.PDFCreator</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Support.PDFCreator.Win32">
+            <summary>
+            Podpora pro volani win api funkci
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.PDFCreator.Win32.BN_CLICKED">
+            <summary>
+            Konstanta BN_CLICKED
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.PDFCreator.Win32.WM_CLOSE">
+            <summary>
+            Konstanta WM_CLOSE
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.PDFCreator.Win32.WM_SETTEXT">
+            <summary>
+            WM_SETTEXT
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.PDFCreator.Win32.WM_SYSCOMMAND">
+            <summary>
+            WM_SYSCOMMAND
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.PDFCreator.Win32.SC_CLOSE">
+            <summary>
+            SC_CLOSE
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.PDFCreator.Win32.WM_LBUTTONUP">
+            <summary>
+            WM_LBUTTONUP
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.PDFCreator.Win32.WM_LBUTTONDOWN">
+            <summary>
+            WM_LBUTTONDOWN
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.Win32.GetParent(System.IntPtr)">
+            <summary>
+            Get parent
+            </summary>
+            <param name="hWnd"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.Win32.GetDesktopWindow">
+            <summary>
+            Get desktop Window
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.Win32.FindWindow(System.String,System.String)">
+            <summary>
+            Najde nejvrchnější okno podle názvu třídy a jména okna
+            </summary>
+            <param name="lpClassName">jméno třídy</param>
+            <param name="lpWindowName">jmíno okna</param>
+            <returns>handle</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.Win32.FindWindowEx(System.IntPtr,System.IntPtr,System.String,System.String)">
+            <summary>
+            Najde okno podle názvu třídy a jména okna
+            </summary>
+            <param name="parentHandle">handle rodiče</param>
+            <param name="childAfter">handle potomka</param>
+            <param name="className">jméno třídy</param>
+            <param name="windowTitle">název okna</param>
+            <returns>handle</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.Win32.SendMessage(System.Int32,System.UInt32,System.Int32,System.String)">
+            <summary>
+            Odeslání zprávy do okna/oken
+            </summary>
+            <param name="hWnd">handle okna</param>
+            <param name="Msg">zpráva</param>
+            <param name="wParam">dodatkové informace zprávy</param>
+            <param name="str">dodatkové informace zprávy</param>
+            <returns>výsledek</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.Win32.SendMessage(System.Int32,System.UInt32,System.Int32,System.Int32)">
+            <summary>
+            Odeslání zprávy do okna/oken
+            </summary>
+            <param name="hWnd">handle okna</param>
+            <param name="Msg">zpráva</param>
+            <param name="wParam">dodatkové informace zprávy</param>
+            <param name="lParam">dodatkové informace zprávy</param>
+            <returns>výsledek</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.Win32.GetWindowText(System.Int32,System.Text.StringBuilder,System.Int32)">
+            <summary>
+            Zkopíruje název okna do bufferu
+            </summary>
+            <param name="hWnd">handle okna</param>
+            <param name="text">text</param>
+            <param name="count">počet znaků, které se mají kopírovat</param>
+            <returns>pokud se oprace zdaří, vrátí se délka zkopírovaného text, jinak 0</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.Win32.WritePrivateProfileString(System.String,System.String,System.String,System.String)">
+            <summary>
+            Zapíše string do vybrané části souboru
+            </summary>
+            <param name="lpAppName">sekce</param>
+            <param name="lpKeyName">klíč asociovaný se stringem</param>
+            <param name="lpString">string</param>
+            <param name="lpFileName">soubor</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.PDFCreator.GPdfCreatorPrinter">
+            <summary>
+            Hlavní výkonná třída pro konverze pomocí PDFCreatoru
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.PDFCreator.GPdfCreatorPrinter.m_cnTypeFilePDF_A">
+            <summary>
+            output type file PDF/A
+            0=PDF, 1=PNG, 2=JPG, 3=BMP, 4=PCX, 5=TIFF, 6=PS, 7= EPS, 8=ASCII, 9=PDF/A 1.4 (A-2b), 10=PDF 1.3 , 11=PSD, 12=PCL, 13=RAW, 14=SVG
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.PDFCreator.GPdfCreatorPrinter.m_pErr">
+            <summary>
+            Instance clsPDFCreatorError
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.PDFCreator.GPdfCreatorPrinter.m_oCreator">
+            <summary>
+            Instance clsPDFCreator
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.PDFCreator.GPdfCreatorPrinter.PDFCreatorPrinterName">
+            <summary>
+            Jméno tiskárny PDFCreator
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.PDFCreator.GPdfCreatorPrinter.DefaultPrinterName">
+            <summary>
+            Jméno výchozí tiskárny
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.PDFCreator.GPdfCreatorPrinter.m_oTimerError">
+            <summary>
+            Timer cekající na chybu z PDFCreatoru
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.PDFCreator.GPdfCreatorPrinter.m_sError">
+            <summary>
+            Chyba, kterou vyhodí PDFCreator
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.GetPdfCreatorPrinterName">
+            <summary>
+            Zjištění názvu tiskárny PDFCreator z registrůs
+            </summary>
+            <returns>název tiskárny</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.GetInternalDefaultPrinter">
+            <summary>
+            Zjistí výchozí tiskárnu systému
+            </summary>
+            <returns>název tiskárny</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.MaSePrepinatTiskarna">
+            <summary>
+            Zjisti zda se bude tiskarna prepinat ve windows; 
+            SetPrinterPDFCreator = TRUE -> tiskarna se bude prepinat    tj. bude se zjistovat defaultni tiskarna
+            </summary>
+            <returns>výsledek</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.GetDefaultPrinter">
+            <summary>
+            Zjistí výchozí tiskárnu systému
+            </summary>
+            <returns>název tiskárny</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.Initialise(System.String@,Gordic.DocConv.Common.GDocConvLog)">
+            <summary>
+            Inicializace
+            </summary>
+            <param name="ErrText">chyba</param>
+            <param name="debug">debug</param>
+            <returns>zda se inicializace podařila</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.IsSupportedType(System.String)">
+            <summary>
+            Zda je pro danou koncovku konverze podporována
+            </summary>
+            <param name="extens">koncovka</param>
+            <returns>výsledek</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.ToPdf(System.Byte[],System.String,System.Byte[]@)">
+            <summary>
+            Konverze do PDF
+            </summary>
+            <param name="sourcedata">zdrojová data</param>
+            <param name="sourcefilename">zdrojový soubor</param>
+            <param name="destdata">cílová data</param>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.ToPdf(System.String,System.String)">
+            <summary>
+            Konverze do PDF
+            </summary>
+            <param name="sourcefile">zdrojový soubor</param>
+            <param name="destinfile">cílový soubor</param>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.ToPdf(System.String,System.String@,System.String@)">
+            <summary>
+            Konverze do PDF
+            </summary>
+            <param name="sourcefile">zdrojový soubor</param>
+            <param name="destinfile">cílový soubor</param>
+            <param name="errortext">chyba</param>
+            <returns>zda se operace zdařila</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.Done(System.Boolean)">
+            <summary>
+            Ukončení
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.PDFCreator.GPdfCreatorPrinter.Timeout">
+            <summary>
+            Timeout v sekundách
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.PDFCreator.GPdfCreatorPrinter.RemainingTimeout">
+            <summary>
+            Remaining timeout in milliseconds
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.all2pdf(System.String,System.String@,System.String@)">
+            <summary>
+            Převod souboru do PDF - hlavní metoda, zde se provádí rozkok dle typu souboru
+            </summary>
+            <param name="sourceFilename">zdrojový soubor</param>
+            <param name="destFile">cílový soubor</param>
+            <param name="errorText">chyba</param>
+            <returns>zda se operace zdařila</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.Image2pdf(System.String,System.String@,System.String@)">
+            <summary>
+            Převod obrázku na PDF
+            </summary>
+            <param name="sourceFilename">zdrojový soubor</param>
+            <param name="destFile">cílový soubor</param>
+            <param name="errorText">chyba</param>
+            <returns>zda se operace zdařila</returns>
+        </member>
+        <member name="P:Gordic.Support.PDFCreator.GPdfCreatorPrinter.SID">
+            <summary>
+            User SID
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.zfo2pdf_NEW_2(System.String,System.String@,System.String@)">
+            <summary>
+            Via Microsoft XPS Document Writer
+            </summary>
+            <param name="sourceFilename"></param>
+            <param name="destFile"></param>
+            <param name="errorText"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.zfo2pdf_NEW(System.String,System.String@,System.String@)">
+            <summary>
+            Převod textového souboru do PDF
+            </summary>
+            <param name="sourceFilename">zdrojový soubor</param>
+            <param name="destFile">cílový soubor</param>
+            <param name="errorText">chyba</param>
+            <returns>zda se operace zdařila</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.RunCommand(System.String,System.String,System.Int32,System.String@)">
+            <summary>
+            Spuštení procesu
+            </summary>
+            <param name="cmd">příkaz</param>
+            <param name="cmdParams">argumenty</param>
+            <param name="timeoutSec">timeout</param>
+            <param name="output">output</param>
+            <returns>exit code</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.zfo2pdf(System.String,System.String@,System.String@)">
+            <summary>
+            Převod textového souboru do PDF
+            </summary>
+            <param name="sourceFilename">zdrojový soubor</param>
+            <param name="destFile">cílový soubor</param>
+            <param name="errorText">chyba</param>
+            <returns>zda se operace zdařila</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.PrintHtml(System.String,System.String@,System.String@,System.Boolean)">
+            <summary>
+            Tisk přes MSHTML
+            Nefunguje na serveru
+            </summary>
+            <param name="sourceFilePath"></param>
+            <param name="destFile"></param>
+            <param name="errorText"></param>
+            <param name="impersonate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.PrintOnStaThread(System.String)">
+            <summary>
+            Vytiskne HTML pomocí Windows.Forms.WebBrowser komponenty
+            Funguje klientsky pro 1.7, 2.0.2
+            Nefunguje serverově pro 2.0.2 ani 1.7
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.PrintHtmlFromWebBrowser(System.String,System.String@,System.String@)">
+            <summary>
+            Vytiskne HTML pomocí Windows.Forms.WebBrowser komponenty
+            Funguje klientsky pro 1.7, 2.0.2
+            Nefunguje serverově pro 2.0.2
+            </summary>
+            <param name="sourceFilePath"></param>
+            <param name="destFile"></param>
+            <param name="errorText"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.html2pdf(System.String,System.String@,System.String@)">
+            <summary>
+            Převod html souboru do PDF
+            </summary>
+            <param name="sourceFilePath">zdrojový soubor</param>
+            <param name="destFile">cílový soubor</param>
+            <param name="errorText">chyba</param>
+            <returns>zda se operace zdařila</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.txt2pdf(System.String,System.String@,System.String@)">
+            <summary>
+            Převod textového souboru do PDF
+            </summary>
+            <param name="sourceFilename">zdrojový soubor</param>
+            <param name="destFile">cílový soubor</param>
+            <param name="errorText">chyba</param>
+            <returns>zda se operace zdařila</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.doc2pdf(System.String,System.String@,System.String@)">
+            <summary>
+            Převod dokumentu Word do PDF
+            </summary>
+            <param name="sourceFilename">zdrojový soubor</param>
+            <param name="destFile">cílový soubor</param>
+            <param name="errorText">chyba</param>
+            <returns>zda se operace zdařila</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.xls2pdf(System.String,System.String@,System.String@)">
+            <summary>
+            Převod sešitu Excel do PDF
+            </summary>
+            <param name="sourceFileName">zdrojový soubor</param>
+            <param name="destFile">cílový soubor</param>
+            <param name="errorText">chyba</param>
+            <returns>zda se operace zdařila</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.ClearWordObjects(Microsoft.Office.Interop.Word.ApplicationClass)">
+            <summary>
+            Zavře všechny otevřené word objekty
+            </summary>
+            <param name="wordApp">Word aplikace</param>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.pdf2pdfA(System.String,System.String@,System.String@)">
+            <summary>
+            Převod PDF do PDF-A
+            </summary>
+            <param name="sourceFilename">zdrojový soubor</param>
+            <param name="destFile">cílový soubor</param>
+            <param name="errorText">chyba</param>
+            <returns>zda se operace zdařila</returns>
+        </member>
+        <member name="T:Gordic.Support.PDFCreator.GPdfCreatorPrinter.PdfReaderType">
+            <summary>
+            Typ readeru PDF
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.PDFCreator.GPdfCreatorPrinter.PdfReaderType.FoxitReader">
+            <summary>
+            Foxit Reader
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.PDFCreator.GPdfCreatorPrinter.PdfReaderType.AdobeReader">
+            <summary>
+            Adobe Reader
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.pdf2pdfA(System.String,Gordic.Support.PDFCreator.GPdfCreatorPrinter.PdfReaderType,System.String,System.String@,System.String@)">
+            <summary>
+            Převod PDF do PDF-A
+            </summary>
+            <param name="sourceFilename">zdrojový soubor</param>
+            <param name="reader">typ readeru PDF pro tisk</param>
+            <param name="readerPath">cesta ke spouštěcímu souboru PDF readeru</param>
+            <param name="destFile">cílový soubor</param>
+            <param name="errorText">chyba</param>
+            <returns>zda se operace zdařila</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.m_oTimerError_Tick(System.Object,System.EventArgs)">
+            <summary>
+            Tiknutí timeru čekajícího na chybu PDFCreatoru
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.InitializeTimer">
+            <summary>
+            Inicializace timeru čekajícího na chybu PDFCreatoru
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.IsPDFCreatorInstalled(System.String@,System.String@,Gordic.DocConv.Common.GDocConvLog)">
+            <summary>
+            Zda je nainstalován PDFCreator
+            </summary>
+            <returns>výsledek</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.IsPDFCreatorInstalled(System.String@,System.String@,System.String@,Gordic.DocConv.Common.GDocConvLog)">
+            <summary>
+            Zda je nainstalován PDFCreator
+            </summary>
+            <returns>výsledek</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.ReadSettingsTimeForPDFCreator(System.Int32@,System.Int32@)">
+            <summary>
+            Načte nastavení pro timer
+            </summary>
+            <param name="l_nTimeOutTimer">kolikrát má být metoda timeru vykonána</param>
+            <param name="l_nTimeKillProces">maximální povolený čas života procesu v minutách</param>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.RunAndSettingsPDFCreator(System.IO.FileInfo,System.String,System.Boolean,System.String@)">
+            <summary>
+            Run proces PDFCreator, set options for PDFCreator, find default printer ...
+            </summary>
+            <param name="InputFile">zdrojový soubor</param>
+            <param name="destfile">cílový soubor</param>
+            <param name="changeAutosave">zda zmenit adresar pro automaticke ukladani</param>
+            <param name="errortext">chyba</param>
+            <returns>zda se operace zdařila</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter.ClosePDFCreator(System.String@)">
+            <summary>
+            Zavření PDFCreatoru
+            </summary>
+            <param name="errorText">chyba</param>
+            <returns>zda se operace zdařila</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter._PDFCreator_eError">
+            <summary>
+            Odchytává chybu na PDF Creatoru
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GPdfCreatorPrinter._PDFCreator_eReady">
+            <summary>
+            Odchytává událost eReady
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.PDFCreator.SUPPORTED_TYPE">
+            <summary>
+            Podporované typy
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.PDFCreator.GOpenOffice">
+            <summary>
+            Konverze pomocí Open Office
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.PDFCreator.GOpenOffice.m_sError">
+            <summary>
+            Chyba, kterou vyhodí PDFCreator
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GOpenOffice.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GOpenOffice.SetParam(System.Int32,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="type"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GOpenOffice.Initialise(System.String@,Gordic.DocConv.Common.GDocConvLog)">
+            <summary>
+            Inicializace
+            </summary>
+            <param name="ErrText">chyba</param>
+            <param name="debug">debug</param>
+            <returns>zda se inicializace podařila</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GOpenOffice.IsSupportedType(System.String)">
+            <summary>
+            Zda je pro danou koncovku konverze podporována
+            </summary>
+            <param name="extens">koncovka</param>
+            <returns>výsledek</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GOpenOffice.ToPdf(System.Byte[],System.String,System.Byte[]@)">
+            <summary>
+            Konverze do PDF
+            </summary>
+            <param name="sourcedata">zdrojová data</param>
+            <param name="sourcefilename">zdrojový soubor</param>
+            <param name="destdata">cílová data</param>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GOpenOffice.ToPdf(System.String,System.String)">
+            <summary>
+            Konverze do PDF
+            </summary>
+            <param name="sourcefile">zdrojový soubor</param>
+            <param name="destinfile">cílový soubor</param>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GOpenOffice.ToPdf(System.String,System.String@,System.String@)">
+            <summary>
+            Konverze do PDF
+            </summary>
+            <param name="sourcefile">zdrojový soubor</param>
+            <param name="destinfile">cílový soubor</param>
+            <param name="errortext">chyba</param>
+            <returns>zda se operace zdařila</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GOpenOffice.Done(System.Boolean)">
+            <summary>
+            Done
+            </summary>
+            <param name="killProcesses"></param>
+        </member>
+        <member name="P:Gordic.Support.PDFCreator.GOpenOffice.Timeout">
+            <summary>
+            Timeout v sekundách
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GOpenOffice.StartOpenOffice(System.String@)">
+            <summary> 
+            Starts the open office.
+            </summary> 
+            <returns></returns> 
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GOpenOffice.initDocument(unoidl.com.sun.star.frame.XComponentLoader,System.String,System.String)">
+            <summary> 
+            Load a given file or create a new blank file 
+            </summary> 
+            <param name="aLoader">A ComponentLoader</param> 
+            <param name="file">The file</param> 
+            <param name="target">The target</param> 
+            <returns>Th Component</returns> 
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GOpenOffice.PathConverter(System.String)">
+            <summary> 
+            Convert into OO file format 
+            </summary> 
+            <param name="file">The file.</param> 
+            <returns>The converted file</returns> 
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GOpenOffice.saveDocument(unoidl.com.sun.star.lang.XComponent,System.String)">
+            <summary> 
+            Saves the document. 
+            </summary> 
+            <param name="xComponent">The x component.</param> 
+            <param name="fileName">Name of the file.</param> 
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GOpenOffice.all2PDF(System.String,System.String@,System.String@)">
+            <summary>
+            convert all support types
+            </summary>
+            <param name="sourcefile"></param>
+            <param name="destinationfile"></param>
+            <param name="errorText"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.PDFCreator.PdfCreator3">
+            <summary>
+            PDFCreator version 3
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.PDFCreator.PdfCreator3.TimeoutMs">
+            <summary>
+            Timeout v sekundách
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.PDFCreator.PdfCreator3.RemainingTimeout_S">
+            <summary>
+            Remaining timeout in milliseconds
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.PDFCreator.PdfCreator3.RemainingTimeout_Ms">
+            <summary>
+            Remaining timeout in milliseconds
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.PDFCreator.PdfCreator3.UseCmdForPrinting">
+            <summary>
+            Use command line for printing (instead of
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.PDFCreator.PdfCreator3.ImpersonatePrinting">
+            <summary>
+            Impersonate printing process
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.PdfCreator3.#ctor(Gordic.DocConv.Common.GDocConvLog)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="log"></param>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.PdfCreator3.Init">
+            <summary>
+            Init
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.PdfCreator3.Dispose">
+            <summary>
+            Dispose
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.PdfCreator3.Release">
+            <summary>
+            Finalize
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.PdfCreator3.HasJobInQueue(System.Boolean)">
+            <summary>
+            Zda existuje tisková úloha ve frontě
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.PdfCreator3.PrintToPdf(System.IO.FileInfo,System.String@,System.Double,System.String@)">
+            <summary>
+            Print
+            </summary>
+            <param name="inputFile">input file</param>
+            <param name="destFile">dest file</param>
+            <param name="timeoutMs">timeout in miliseconds</param>
+            <param name="err">error</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.PDFCreator.TimerForOpenOffice">
+            <summary>
+            Time pro OO
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.TimerForOpenOffice.RunTimer">
+            <summary>
+            Spuštění timeru
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.TimerForOpenOffice.DoTestWarningOODialog(System.Object)">
+            <summary>
+            event of timer
+            </summary>
+            <param name="state"></param>
+        </member>
+        <member name="T:Gordic.Support.PDFCreator.TimerStateOO">
+            <summary>
+            Predstavuje stav timeru.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.PDFCreator.TimerStateOO.Count">
+            <summary>
+            Urcuje kolikrat byla metoda timeru spustena
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.PDFCreator.TimerStateOO.EndCount">
+            <summary>
+            Pocet kolikrat ma byt metoda timeru vykonana
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.PDFCreator.TimerStateOO.Timer">
+            <summary>
+            Odkaz na timer (bude mozne s nim manipulovat v timer metode)
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.PDFCreator.Gordic_Support_PDFCreator_Exceptions">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.PDFCreator.Gordic_Support_PDFCreator_Exceptions.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.PDFCreator.Gordic_Support_PDFCreator_Exceptions.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.PDFCreator.GProcessOO">
+            <summary>
+            Trida pro manipulaci s procesem PDFCreatoru
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.PDFCreator.GProcessOO.ProcessName">
+            <summary>
+            Jméno procesu
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GProcessOO.Init(Gordic.DocConv.Common.GDocConvLog)">
+            <summary>
+            Init
+            </summary>
+            <param name="dbg">debug</param>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GProcessOO.KillAllProcessOO">
+            <summary>
+            Ukonci proces PDFCreatoru
+            </summary>
+            <returns>true kdyz je alsespon jeden proces ukoncen</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GProcessOO.IsRunningProcessOpenOffice">
+            <summary>
+            Zjisti zda uz bezi proces PDFCreatoru
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GProcessOO.GetAllRunningProcessOO">
+            <summary>
+            Vrací odkaz na vsechny bezici procesy PDFCreatoru
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.PDFCreator.PdfCreator2">
+            <summary>
+            PDFCreator v2
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.PDFCreator.PdfCreator2.PdfCreator2Clsid">
+            <summary>
+            PdfCreator clsid
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.PDFCreator.PdfCreator2.PdfCreator2QueueClsid">
+            <summary>
+            PDFCreator Queue clsid
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.PdfCreator2.Init">
+            <summary>
+            Init
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.PdfCreator2.Dispose">
+            <summary>
+            Dispose
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.PdfCreator2.Release">
+            <summary>
+            Finalize
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.PdfCreator2.HasJobInQueue">
+            <summary>
+            Zda existuje tisková úloha ve frontě
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.PdfCreator2.PrintToPdf(System.IO.FileInfo,System.String@,System.String@)">
+            <summary>
+            Print
+            </summary>
+            <param name="inputFile">input file</param>
+            <param name="destFile">dest file</param>
+            <param name="err">error</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.PDFCreator.GProcessPDFCreator">
+            <summary>
+            Trida pro manipulaci s procesem PDFCreatoru
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GProcessPDFCreator.Init(Gordic.DocConv.Common.GDocConvLog)">
+            <summary>
+            Inicializace
+            </summary>
+            <param name="dbg">debug</param>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GProcessPDFCreator.KillAllProcessPDFCreator(System.Boolean)">
+            <summary>
+            Ukonci proces PDFCreatoru
+            </summary>
+            <returns>true kdyz je alespon jeden proces ukoncen</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GProcessPDFCreator.IsRunningProcessPDFCreator">
+            <summary>
+            Zjisti zda uz bezi proces PDFCreatoru
+            </summary>
+            <returns>počet běžících procesů</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GProcessPDFCreator.GetAllRunningProcessPDFCreator">
+            <summary>
+            Vrací odkaz na vsechny bezici procesy PDFCreatoru
+            </summary>
+            <returns>běžící procesy PDFCreatoru</returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GProcessPDFCreator.FindTimeRunningProcess">
+            <summary>
+            Zjistí dobu života procesu v minutách (jak dlouho již proces běží)
+            </summary>
+            <returns>doba života</returns>
+        </member>
+        <member name="T:Gordic.Support.PDFCreator.TimerState">
+            <summary>
+            Predstavuje stav timeru.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.PDFCreator.TimerState.Count">
+            <summary>
+            Urcuje kolikrat byla metoda timeru spustena
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.PDFCreator.TimerState.EndCount">
+            <summary>
+            Pocet kolikrat ma byt metoda timeru vykonana
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.PDFCreator.TimerState.Timer">
+            <summary>
+            Odkaz na timer (bude mozne s nim manipulovat v timer metode)
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.PDFCreator.TimerState.stoptimeprocess">
+            <summary>
+            maximalni povoleny cas zivota procesu v minutach nez bude ukoncen!
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.TimerForPDFCreator.RunTimer">
+            <summary>Run timer/// </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.TimerForPDFCreator.DoWork(System.Object)">
+            <summary>
+            procedura ktera se vykonava pri praci timeru
+            </summary>
+            <param name="state"></param>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.TimerForPDFCreator.StopTimer">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.PDFCreator.GSupportOpenOffice">
+            <summary>
+            Podporované verze Open Office
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GSupportOpenOffice.IsSupportedVerOO(System.String)">
+            <summary>
+            Zda je verze mezi podporovanými
+            </summary>
+            <param name="ver"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GSupportOpenOffice.IsSupportedVerLibre(System.String)">
+            <summary>
+            Zda je verze mezi podporovanými
+            </summary>
+            <param name="ver"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GSupportOpenOffice.IsInstalledLibreOffice(System.String@)">
+            <summary>
+            Zda je instalován Open Office
+            </summary>
+            <param name="version">verze nainstalovaného Open Office</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GSupportOpenOffice.IsInstalledOO(System.String@)">
+            <summary>
+            Zda je instalován Open Office
+            </summary>
+            <param name="version">verze nainstalovaného Open Office</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.PDFCreator.GSupportOpenOffice.GetSupportedVersion">
+            <summary>
+            Získání podporovaných verzí
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,3506 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Gfe.FormFiller</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Gfe.FormFiller.CallHelper">
+            <summary>
+            Pomocná třída spuštění aplikace
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.CallHelper.InitApplicationCore(Gordic.Gfe.FormFiller.FormFillerHost.CallbackHelper,Gordic.Gfe.FormFiller.StartupSettings)">
+            <summary>
+            Inicializace jádra
+            </summary>
+            <param name="callback">Metoda zpětného volání</param>
+            <param name="properties">Vlastnosti spuštění</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.CallHelper.RunDesktop(Gordic.GFE.Parsers.Core.DesktopSettings)">
+            <summary>
+            Spuštění aplikace se zadaným nastavením
+            </summary>
+            <param name="settings">Nastavení spuštění</param>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.FormFillerHost">
+            <summary>
+            Tato třída může hostit instanci FormFilleru uvnitř jiné AppDomain.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.FormFillerHost.InvokeTarget">
+            <summary>
+            Získá/Nastaví objekt pro synchronizací všech události ve vlákně.
+            Výchozí hodnota NULL.
+            </summary>
+        </member>
+        <member name="E:Gordic.Gfe.FormFiller.FormFillerHost.BeforeRunDesktop">
+            <summary>
+            Událost před rozběhnutím pracovního stolu.
+            </summary>
+        </member>
+        <member name="E:Gordic.Gfe.FormFiller.FormFillerHost.DesktopClosed">
+            <summary>
+            Událost p uvolění pracovního stolu.
+            </summary>
+        </member>
+        <member name="E:Gordic.Gfe.FormFiller.FormFillerHost.FileLoaded">
+            <summary>
+            Událost po načtení souboru uvnitř FormFiller.
+            </summary>
+        </member>
+        <member name="E:Gordic.Gfe.FormFiller.FormFillerHost.FileSaved">
+            <summary>
+            Událost po uložení souboru uvnitř FormFiller.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.FormFillerHost.FFAssembly">
+            <summary>
+            Sestavení prohlížeče
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FormFillerHost.#ctor(System.AppDomain,Gordic.Gfe.FormFiller.StartupSettings)">
+            <summary>
+            Hostitel Prohlížeče ve stávajícím AppDomain.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FormFillerHost.RunDesktop(Gordic.GFE.Parsers.Core.DesktopSettings)">
+            <summary>
+            Inicializuje pracovní plochu (vytvoří instanci MainForm, sestaví nabídku dle AddInTree apod.)
+            a spustí pomocí dodaných nastavení.
+            Tím se spustí nová smyčka pro pracovní stůl. Dle výchozího nastavení smyčka se
+            se vytvoří v novém vlákně, ale nastavení lze změnit tak, aby se smyčka 
+            vytvářela ve vlákně RunDesktop.
+            V tomto případě, RunDesktop bude blokovat spuštění dokud se FormFiller neukončí!
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.Commands.InsertLineBefore">
+            <summary>
+            Ukončení aplikace
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Commands.InsertLineBefore.IsEnabled">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Commands.InsertLineBefore.Run">
+            <summary>
+            Spuštění příkazu ukončení
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.Commands.InsertLineAfter">
+            <summary>
+            přepnutí na úplnou obrazovku
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Commands.InsertLineAfter.Run">
+            <summary>
+            Spuštění příkazu
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.Gui.DocfrmSender">
+            <summary>
+            Odesílání formuláře
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.Gui.DocfrmCompilationUnit">
+            <summary>
+            Zkontrolovaná a přeložená jednotka GRF sestavy
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.DocfrmCompilationUnit.OpenedFile">
+            <summary>
+            Otevřený soubor nad kterým se provádí operace
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.DocfrmCompilationUnit.ResourcesFile">
+            <summary>
+            cesta k šabloně dokumentu
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.DocfrmCompilationUnit.NamespaceURI">
+            <summary>
+            URI aktuálního elementu
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.DocfrmCompilationUnit.SyncRoot">
+            <summary>
+            Získání objektu, ve kterém je StructureViewEntry uzamčeno.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmCompilationUnit.#ctor(Gordic.GFE.Parsers.Services.OpenedFile)">
+            <summary>
+            Konstruktor třídy s otevřeným souborem
+            </summary>
+            <param name="openedFile">Otevřený soubor sestavy</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmCompilationUnit.#ctor(System.String)">
+            <summary>
+            Vytvoření jednotky dle obsahu
+            </summary>
+            <param name="fileContent">Daný obsah</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmCompilationUnit.Compile(Gordic.GFE.Parsers.Dom.DefaultAbstractSecondaryViewContent)">
+            <summary>
+            Kompilace jednotky - vytvoření XML obsahu.
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.Gui.DocfrmDisplayBinding">
+            <summary>
+            Vázba na Docfrm obálku
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.DocfrmDisplayBinding.AfterInitialize">
+            <summary>
+            události po inicializací 
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmDisplayBinding.CreateContent(Gordic.GFE.Parsers.Services.OpenedFile)">
+            <summary>
+            Vytvoření obsahu pro soubor
+            </summary>
+            <param name="file">Otevřený soubor</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmDisplayBinding.CanCreateContent(System.String,System.String)">
+            <summary>
+            Indikuje, zda lze vytvořit obsah pro soubor z daným rozšířením, specifikovaným v 
+            SyntaxModes.xml souboru
+            </summary>
+            <param name="fileName">Název souboru pro specifikací</param>
+            <param name="content">Případný obsah</param>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.Gui.DocfrmFiller">
+            <summary>
+            Obsahuje informace o souboréch projektu
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmFiller.OpenedFile(System.String)">
+            <summary>
+            vytvoření sekundarního pohledu na data
+            </summary>
+            <param name="dataFile">datový soubor</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmFiller.GetExtensions(Gordic.GFE.Parsers.Dom.FillerExtensions)">
+            <summary>
+            Koncovky souboru dle konfigurace
+            </summary>
+            <param name="key">Cesta ke konfigurační větví</param>
+            <returns>Seznam obsahující koncovky dle konfigurace</returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmFiller.Dispose(System.Boolean)">
+            <summary>
+            Uvolnění objektu
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmFiller.#ctor">
+            <summary>
+            Vytvoření nové instance třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.DocfrmFiller.Opener">
+            <summary/>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.Gui.DocfrmView">
+            <summary>
+            Třída pro zobrazení GRF sestav
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.DocfrmView.StructureViewEntry">
+            <summary>
+            Struktura
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmView.SaveCommand">
+            <summary>
+            Uložení sestavy
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmView.SaveAsCommand">
+            <summary>
+            Uložení sestavy
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmView.SaveToDatabaseCommand(Gordic.GFE.Parsers.Gui.EventHandlerOpenedFileArgument)">
+            <summary>
+            Uložení souboru do databáze
+            </summary>
+            <returns>TRUE, pokud operace je dostupná</returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmView.SetMemento(Gordic.GFE.Parsers.Core.Property)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmView.CreateMemento">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.DocfrmView.DataManager">
+            <summary>
+            správce dostupných dat
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.DocfrmView.FileData">
+            <summary>
+            data formuláře
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.DocfrmView.FileContent">
+            <summary>
+            Zdrojový soubor, ze kterého byla vytvořená jednotka.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.DocfrmView.Structure">
+            <summary>
+            Přidružená datová struktura
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.DocfrmView.PropertyKey">
+            <summary>
+            Klíč vlastnosti
+            </summary>
+        </member>
+        <member name="F:Gordic.Gfe.FormFiller.Gui.DocfrmView.Language">
+            <summary>
+            Jazyk - vázaný na dané zobrazení
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmView.Open">
+            <summary>
+            "otevření" (načtení všech potřebných dat) pohledu
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmView.DocumentChanged(System.Object,Gordic.TextEditor.Document.DocumentEventArgs)">
+            <summary>
+            Po změně dokumentu se volá daná metoda.
+            Označí otevřený soubor pohledu jako pozměněný
+            </summary>
+            <param name="sender">Objekt volaný</param>
+            <param name="e">Argument metody</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmView.IsFileNameHandled(System.String)">
+            <summary>
+            Indikuje, zda daný pohled může zpracovat specifický soubor
+            </summary>
+            <param name="fileName">Název souboru</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmView.Dispose(System.Boolean)">
+            <summary>
+            uvolnění objektu
+            </summary>
+            <param name="disposing">indikuje uvolnění objektu</param>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.Gui.DocfrmViewContent">
+            <summary>
+            Sekundární pohled na obsah zobrazeného GRF dokumentu.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmViewContent.Dispose(System.Boolean)">
+            <summary>
+            uvolnění objektu
+            </summary>
+            <param name="disposing">indikuje uvolnění objektu</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmViewContent.SwitchToThisWithoutSaveLoad(Gordic.GFE.Parsers.Services.OpenedFile,Gordic.GFE.Parsers.Gui.IViewContent)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmViewContent.SwitchFromThisWithoutSaveLoad(Gordic.GFE.Parsers.Services.OpenedFile,Gordic.GFE.Parsers.Gui.IViewContent)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmViewContent.CreateMemento">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmViewContent.SetMemento(Gordic.GFE.Parsers.Core.Property)">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.DocfrmViewContent.ZoomValue">
+            <summary>
+            Hodnota zvětšení
+            </summary>
+            <remarks>Math.Round být musí, protože bez něj se místo 90 % zobrazí pouze 89 %</remarks>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.DocfrmViewContent.EnableShowGrid">
+            <summary>
+            veličina indikujíci dostupnosti změny viditelnosti rozlišení
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.DocfrmViewContent.EnableShowOrder">
+            <summary>
+            veličina indikujíci dostupnosti změny viditelnosti řazení
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.DocfrmViewContent.ShowColorOf">
+            <summary>
+            Indikátor podbarevní datových položek
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.DocfrmViewContent.ShowColorOfObjects">
+            <summary>
+            Indikátor podbarevní datových položek
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.DocfrmViewContent.ShowGrid">
+            <summary>
+            Indikátor zobrazení mřížky
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.DocfrmViewContent.ShowOrder">
+            <summary>
+            Indikátor zobrazení řazení
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.DocfrmViewContent.Zoom">
+            <summary>
+            Faktor zvětšení
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.DocfrmViewContent.Reindex">
+            <summary>
+            Pře indexace
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.DocfrmViewContent.EnablePreviewEdit">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmViewContent.Preview">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmViewContent.PreviewEdit">
+            <exclude/>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.Gui.DocfrmFormationDocument">
+            <summary>
+            Dokument obsahující informace o stránkách a vlastnostech sestavy.
+            Přes tuto třídu probíha aktuálizace obsahu stránek.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmFormationDocument.Dispose">
+            <summary>
+            Uvolnění dokumentu
+            </summary>
+        </member>
+        <member name="E:Gordic.Gfe.FormFiller.Gui.DocfrmFormationDocument.Loaded">
+            <summary>
+            Volá se po načtení documentu
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.DocfrmFormationDocument.Pages">
+            <summary>
+            Kolekce stránek dokumentu.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmFormationDocument.#ctor(Gordic.Gfe.FormFiller.Gui.ICurrentDocumentView,Gordic.GFE.Parsers.Gui.IViewContent)">
+            <summary>
+            Vytvoření nové instance třídy
+            </summary>
+            <param name="documentView"></param>
+            <param name="view"></param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.DocfrmFormationDocument.LoadPages(Gordic.GFE.Parsers.Core.GFEFormatGRF,Gordic.GFE.Parsers.Dom.DefaultDataManager)">
+            <summary>
+            Načtení stránek z formátu.
+            </summary>
+            <param name="grf">Formát s informací o sestavě.</param>
+            <param name="manager">Správce dat</param>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.Gui.ICurrentDocumentView">
+            <summary>
+            Rozhraní pohledu na GRF dokument
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.ICurrentDocumentView.Document">
+            <summary>
+            GRF dokument
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.Gui.LayoutConfiguration">
+            <summary>
+            Konfigurace rozložení
+            </summary>
+        </member>
+        <member name="F:Gordic.Gfe.FormFiller.Gui.LayoutConfiguration.DataLayoutSubPath">
+            <summary>
+            umístění zdrojů dat
+            </summary>
+        </member>
+        <member name="F:Gordic.Gfe.FormFiller.Gui.LayoutConfiguration.Layouts">
+            <summary>
+            Výčet možných rozložení
+            </summary>
+        </member>
+        <member name="F:Gordic.Gfe.FormFiller.Gui.LayoutConfiguration.DefaultLayouts">
+            <summary>
+            Výchozí rozložení
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.LayoutConfiguration.Custom">
+            <summary>
+            Indikuje vlastní rozložení
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.LayoutConfiguration.FileName">
+            <summary>
+            Název souboru konfigurace
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.LayoutConfiguration.Name">
+            <summary>
+            Název konfigurace
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.LayoutConfiguration.DisplayName">
+            <summary>
+            Zobrazovací název
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.LayoutConfiguration.ReadOnly">
+            <summary>
+            Indikuje stav pouze pro čtení
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.LayoutConfiguration.#ctor">
+            <summary>
+            Vytvoření nové instance třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.LayoutConfiguration.#ctor(System.Xml.XmlElement,System.Boolean)">
+            <summary>
+            Vytvoření nové instance třídy
+            </summary>
+            <param name="el">Elemnt prezentující konfigurace</param>
+            <param name="custom">Indikuje vlastní konfiguraci</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.LayoutConfiguration.CreateCustom(System.String)">
+            <summary>
+            Vytvoření vlastní konfigurace
+            </summary>
+            <param name="name">Název vlastní konfigurace</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.LayoutConfiguration.ToString">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.LayoutConfiguration.CurrentLayoutName">
+            <summary>
+            Název aktuálního rozložení
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.LayoutConfiguration.ReloadDefaultLayout">
+            <summary>
+            Opětovné načtení výchozího rozložení
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.LayoutConfiguration.CurrentLayoutFileName">
+            <summary>
+            Název aktuálního souboru rozložení
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.LayoutConfiguration.CurrentLayoutTemplateFileName">
+            <summary>
+            Název souboru šablony aktuálního rozložení
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.LayoutConfiguration.CurrentLayout">
+            <summary>
+            Aktuální rozložení
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.LayoutConfiguration.GetLayout(System.String)">
+            <summary>
+            Získání rozložení
+            </summary>
+            <param name="name">Název potřebného rozložení</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.LayoutConfiguration.LoadLayoutConfiguration">
+            <summary>
+            Načtení konfigurace rozložení
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.LayoutConfiguration.SaveCustomLayoutConfiguration">
+            <summary>
+            Uložení konfigurace vlastního rozložení
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.LayoutConfiguration.OnLayoutChanged(System.EventArgs)">
+            <summary>
+            Reakce na změnu rozložení
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="E:Gordic.Gfe.FormFiller.Gui.LayoutConfiguration.LayoutChanged">
+            <summary>
+            Volá se po změně rozložení
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.Gui.FillerDesktopLayout">
+            <summary>
+            Pracovní prostor s jednoduchým rozhraním pro dokumenty
+            </summary>
+        </member>
+        <member name="E:Gordic.Gfe.FormFiller.Gui.FillerDesktopLayout.ActiveDesktopWindowChanged">
+            <summary>
+            Volá se po změně pracovního okna na jiné
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FillerDesktopLayout.ActiveDesktopWindow">
+            <summary>
+            Aktivní okno pracovní plochy
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FillerDesktopLayout.ActiveContent">
+            <summary>
+            Aktivní obsah. Může být IViewContent nebo nějaký objekt, 
+            záleží na tom, kde se nachází fokus
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerDesktopLayout.Attach(Gordic.GFE.Parsers.Gui.IDesktop)">
+            <summary>
+            Připojení daného správce rozvržení k pracovní ploše
+            </summary>
+            <param name="desktop">Daná pracovní plocha</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerDesktopLayout.Detach">
+            <summary>
+            Odpojení tohoto správce od aktuální pracovní plochy
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerDesktopLayout.RedrawAllComponents">
+            <summary>
+            Opětovná inicializace všech komponent správce rozvržení
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerDesktopLayout.LoadConfiguration">
+            <summary>
+            Načtení nastavení
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerDesktopLayout.StoreConfiguration">
+            <summary>
+            Uložení nastavení
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerDesktopLayout.HidePad(Gordic.GFE.Parsers.PadDescriptor)">
+            <summary>
+            Skrýtí podložky <see cref="T:Gordic.GFE.Parsers.Gui.IPadContent"/>.
+            </summary>
+            <param name="padContent">Podložka s obsahem</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerDesktopLayout.UnloadPad(Gordic.GFE.Parsers.PadDescriptor)">
+            <summary>
+            Zavření a uvolnění <see cref="T:Gordic.GFE.Parsers.Gui.IPadContent"/>.
+            </summary>
+            <param name="padContent">Podložka s obsahem</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerDesktopLayout.ShowPad(Gordic.GFE.Parsers.PadDescriptor)">
+            <summary>
+            Zobrazení nové <see cref="T:Gordic.GFE.Parsers.Gui.IPadContent"/>.
+            </summary>
+            <param name="content">Obsah</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerDesktopLayout.ActivatePad(Gordic.GFE.Parsers.PadDescriptor)">
+            <summary>
+            Aktivace podložky (Show udělá podložku pouze viditelnou
+            ale Activate zároveň převede podložku do popředí)
+            </summary>
+            <param name="padContent">Obsah podložky</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerDesktopLayout.ActivatePad(System.String)">
+            <summary>
+            Aktivace podložky
+            </summary>
+            <param name="fullyQualifiedTypeName">úplný název typu podložky</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerDesktopLayout.IsVisible(Gordic.GFE.Parsers.PadDescriptor)">
+            <summary>
+            Vrácí TRUE, pokud padContent je viditelný;
+            </summary>
+            <param name="padContent">Obsah</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerDesktopLayout.ShowView(Gordic.GFE.Parsers.Gui.IViewContent,System.Boolean)">
+            <summary>
+            Zobrazení nového <see cref="T:Gordic.GFE.Parsers.Gui.IViewContent"/> a případné přepnutí na něj.
+            </summary>
+            <param name="content">Obsah k zobrazení.</param>
+            <param name="switchToOpenedView">Indikuje potřebu přepnutí na něj.</param>
+            <returns></returns>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.ViewTabControl">
+            <summary>
+            pohled na záložky
+            </summary>
+        </member>
+        <member name="F:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.visibleContents">
+            <summary>
+            viditelné pohledy
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.VisibleContents">
+            <summary>
+            Získání/Nastavení kolekce viditelných pohledů pracovního prostoru
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.ClearContent">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.RegisterNewContent(Gordic.GFE.Parsers.Gui.IViewContent)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.CreateViewTabControl">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.UnregisterContent(Gordic.GFE.Parsers.Gui.IViewContent)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.UpdateActiveViewContent">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.Title">
+            <summary>
+            titulek okna.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.ActiveViewContent">
+            <summary>
+            Gets/Sets aktuálně zobrazený v okně obsah
+            </summary>
+        </member>
+        <member name="E:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.ActiveViewContentChanged">
+            <summary>
+            Aktivuje se po změně vlastnosti ActiveViewContent
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.ViewContents">
+            <summary>
+            Seznam pohledů na obsah daného okna
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.SwitchView(System.Int32)">
+            <summary>
+            Aktivace pohledu se specifickým indexem
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.CloseWindow(System.Boolean)">
+            <summary>
+            Uzavřění okna, pokud force == true uzavře okno bez dotazu, i když obsah byl pozměněn
+            </summary>
+            <returns>true, pokud okno je zavřené</returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.SelectWindow">
+            <summary>
+            Zobrazení daného okna na popředí a nastavení uživatelského fokusu na toto okno.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.RedrawContent">
+            <summary>
+            Opětovná inicializace obsahu a překreslení komponenty.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.OnWindowSelected(System.EventArgs)">
+            <summary>
+            Pro vnitřní použití:
+            Tato metoda se vola pracovní plochou pro zjištění, zda okno je vybrané
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.OnWindowDeselected(System.EventArgs)">
+            <summary>
+            Pouze interně:
+            Tato metoda volá pracovní stul s tím, že okno bylo uvolněno
+            </summary>
+            <param name="e">Argument metody</param>
+        </member>
+        <member name="E:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.WindowSelected">
+            <summary>
+            Volá se povybrání okna.
+            </summary>
+        </member>
+        <member name="E:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.WindowDeselected">
+            <summary>
+            Volá se po uvolnění okna
+            </summary>
+        </member>
+        <member name="E:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.TitleChanged">
+            <summary>
+            Volá se po změně titulku okna.
+            </summary>
+        </member>
+        <member name="E:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.CloseEvent">
+            <summary>
+            Po zavření okna.
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.OpenFileTabStates">
+            <summary>
+            Stavy
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.InternalState">
+            <summary>
+            Vnitřní stav
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.Dispose(System.Boolean)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.OnClosing(System.ComponentModel.CancelEventArgs)">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.IsDirty">
+            <summary>
+            Indikuje, zda alespoň jeden z pohledu má změny od poslední operace SAVE/LOAD.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FillerWorkspaceWindow.#ctor">
+            <summary>
+            Vytvoření nové instance třídy
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.Gui.FormFillerProperties">
+            <summary>
+            Nastaveí aplikace
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.Instance">
+            <summary>
+            Instance třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.VidRunPath">
+            <summary>
+            Cesta ke spouštěčí prohlížeče
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.XmePath">
+            <summary>
+            Cesta ke složce s XME soubory
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.RecentOpenMaxCount">
+            <summary>
+            Maximální počet naposledy otevřených souborů
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.Uri">
+            <summary>
+            URI pro GRR, GRF, MSE, atd. sestavy
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.UriSsr">
+            <summary>
+            URI pro ssr soubory
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.Version">
+            <summary>
+            VERSION pro GRR, GRF, MSE, atd. sestavy
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.PageSpacing">
+            <summary>
+            Rozestup mezí stránkami
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.PageLeft">
+            <summary>
+            Odstup stránky zlevá
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.FirstPageTop">
+            <summary>
+            Top pozice první stránky
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.BottomDark">
+            <summary>
+            Velikost černého průhu na stránce dole (simulace stránky)
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.RightDark">
+            <summary>
+            Velikost černého průhu po prave stráně (simulace stránky)
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.DocfrmStructureName">
+            <summary>
+            Název structury
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.DocfrmStructureNote">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.DocfrmStructureIxsAlv">
+            <summary>
+            Název structury
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.DocfrmStructureDateFrom">
+            <summary>
+            Název structury
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.DocfrmStructureDateTo">
+            <summary>
+            Název structury
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.DocfrmStructureFormationOutput">
+            <summary>
+            Název structury
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.DocfrmWflIxsXme">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.DocfrmWflVla">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.StepBetween">
+            <summary>
+            Indikuje krok mezí štítky
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.DefaultLabelWidth">
+            <summary>
+            Výchozí velikost štítku
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.DefaultGroupWidth">
+            <summary>
+            Výchozí velikost skupiny
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.DefaultLabelFontSize">
+            <summary>
+            Výchozí velikost písma štítku skupiny
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.DefaultGroupFontSize">
+            <summary>
+            Výchozí velikost písma štítku skupiny
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.DefaultResolution">
+            <summary>
+            Výchozí rozlíšení mřížky grf sestav
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.DefaultShowGrid">
+            <summary>
+            Výchozí hodnota indikátoru zobrazení mřížky
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.DefaultShowOrder">
+            <summary>
+            Výchozí hodnota indikátoru zobrazení řazení
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.DefaultZoom">
+            <summary>
+            Výchozí hodnota zvětšení
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.DefaultShowColorOf">
+            <summary>
+            Výchozí hodnota indikátoru zobrazení mřížky
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.Resolution">
+            <summary>
+            Výchozí rozlíšení mřížky grf sestav
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.GetResolution(Gordic.GFE.Parsers.Gui.IViewContent)">
+            <summary>
+            Získání hodnoty rozlišení z nastavení pro daný pohled
+            </summary>
+            <param name="content">Pohled pro získání nastavení rozlišení</param>
+            <returns>Hodnota rozlišení</returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.SetResolution(Gordic.GFE.Parsers.Gui.IViewContent,Gordic.GFE.Parsers.Utils.SizeValue)">
+            <summary>
+            Nastavení rozlišení
+            </summary>
+            <param name="content">Pohled, pro který se hodnota nastavuje.
+            Použij NULL pro aktuální pohled</param>
+            <param name="value">Nastavovaná hodnota</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.AddResolutionChanged(Gordic.GFE.Parsers.Gui.IViewContent,System.EventHandler)">
+            <summary>
+            Nastavení metody reakce na změnu rozlišení
+            </summary>
+            <param name="content">Pohled, na který se váže metoda</param>
+            <param name="handlerChanged">Reakční metoda</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.RemoveResolutionChanged(Gordic.GFE.Parsers.Gui.IViewContent,System.EventHandler)">
+            <summary>
+            Odstranění metody reakce na změnu rozlišení
+            </summary>
+            <param name="content">Pohled, na který se váže metoda</param>
+            <param name="handlerChanged">Reakční metoda</param>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.ShowGrid">
+            <summary>
+            Výchozí hodnota indikátoru zobrazení mřížky
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.GetShowGrid(Gordic.GFE.Parsers.Gui.IViewContent)">
+            <summary>
+            Získání hodnoty ShowGrid z nastavení pro daný pohled
+            </summary>
+            <param name="content">Pohled pro získání nastavení mřížky</param>
+            <returns>TRUE  pokud v aktuálním pohledu se má zobrazit mřížka jinak FALSE</returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.SetShowGrid(Gordic.GFE.Parsers.Gui.IViewContent,System.Boolean)">
+            <summary>
+            Nastavení indikátoru zobrazení mřížky
+            </summary>
+            <param name="content">Pohled, pro který se hodnota nastavuje.
+            Použij NULL pro aktuální pohled</param>
+            <param name="value">Nastavovaná hodnota</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.AddShowGridChanged(Gordic.GFE.Parsers.Gui.IViewContent,System.EventHandler)">
+            <summary>
+            Nastavení metody reakce na změnu zobrazení mřížky
+            </summary>
+            <param name="content">Pohled, na který se váže metoda</param>
+            <param name="handlerChanged">Reakční metoda</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.RemoveShowGridChanged(Gordic.GFE.Parsers.Gui.IViewContent,System.EventHandler)">
+            <summary>
+            Odstranění metody reakce na změnu zobrazení mřížky
+            </summary>
+            <param name="content">Pohled, na který se váže metoda</param>
+            <param name="handlerChanged">Reakční metoda</param>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.ShowOrder">
+            <summary>
+            Výchozí hodnota indikátoru zobrazení mřížky
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.GetShowOrder(Gordic.GFE.Parsers.Gui.IViewContent)">
+            <summary>
+            Získání hodnoty ShowGrid z nastavení pro daný pohled
+            </summary>
+            <param name="content">Pohled pro získání nastavení mřížky</param>
+            <returns>TRUE  pokud v aktuálním pohledu se má zobrazit mřížka jinak FALSE</returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.SetShowOrder(Gordic.GFE.Parsers.Gui.IViewContent,System.Boolean)">
+            <summary>
+            Nastavení indikátoru zobrazení řazení
+            </summary>
+            <param name="content">Pohled, pro který se hodnota nastavuje.
+            Použij NULL pro aktuální pohled</param>
+            <param name="value">Nastavovaná hodnota</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.AddShowOrderChanged(Gordic.GFE.Parsers.Gui.IViewContent,System.EventHandler)">
+            <summary>
+            Nastavení metody reakce na změnu zobrazení řazení
+            </summary>
+            <param name="content">Pohled, na který se váže metoda</param>
+            <param name="handlerChanged">Reakční metoda</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.RemoveShowOrderChanged(Gordic.GFE.Parsers.Gui.IViewContent,System.EventHandler)">
+            <summary>
+            Odstranění metody reakce na změnu zobrazení řazení
+            </summary>
+            <param name="content">Pohled, na který se váže metoda</param>
+            <param name="handlerChanged">Reakční metoda</param>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.Zoom">
+            <summary>
+            Výchozí hodnota zvětšení
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.GetZoom(Gordic.GFE.Parsers.Gui.IViewContent)">
+            <summary>
+            Získání faktoru zvětšení pro daný pohled
+            </summary>
+            <param name="content">Pohled pro získání faktoru zvětšení</param>
+            <returns>Hodnota faktoru zvětšení</returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.SetZoom(Gordic.GFE.Parsers.Gui.IViewContent,System.Single)">
+            <summary>
+            Nastavení faktoru zvětšení
+            </summary>
+            <param name="content">Pohled, pro který se hodnota nastavuje.
+            Použij NULL pro aktuální pohled</param>
+            <param name="value">Nastavovaná hodnota</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.AddZoomChanged(Gordic.GFE.Parsers.Gui.IViewContent,System.EventHandler)">
+            <summary>
+            Nastavení metody reakce na změnu zobrazení mřížky
+            </summary>
+            <param name="content">Pohled, na který se váže metoda</param>
+            <param name="handlerChanged">Reakční metoda</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.RemoveZoomChanged(Gordic.GFE.Parsers.Gui.IViewContent,System.EventHandler)">
+            <summary>
+            Odstranění metody reakce na změnu faktoru zvětšení
+            </summary>
+            <param name="content">Pohled, na který se váže metoda</param>
+            <param name="handlerChanged">Reakční metoda</param>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.ShowColorOf">
+            <summary>
+            Výchozí hodnota indikátoru zobrazení mřížky
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.GetShowColorOf(Gordic.GFE.Parsers.Gui.IViewContent)">
+            <summary>
+            Získání hodnoty podbarvení z nastavení pro daný pohled
+            </summary>
+            <param name="content">Pohled pro získání nastavení mřížky</param>
+            <returns>TRUE  pokud v aktuálním pohledu se má zobrazit podbarvení jinak FALSE</returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.SetShowColorOf(Gordic.GFE.Parsers.Gui.IViewContent,System.Boolean)">
+            <summary>
+            Nastavení indikátoru zobrazení podbarvení
+            </summary>
+            <param name="content">Pohled, pro který se hodnota nastavuje.
+            Použij NULL pro aktuální pohled</param>
+            <param name="value">Nastavovaná hodnota</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.AddShowColorOfChanged(Gordic.GFE.Parsers.Gui.IViewContent,System.EventHandler)">
+            <summary>
+            Nastavení metody reakce na změnu zobrazení podbarvení
+            </summary>
+            <param name="content">Pohled, na který se váže metoda</param>
+            <param name="handlerChanged">Reakční metoda</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.RemoveShowColorOfChanged(Gordic.GFE.Parsers.Gui.IViewContent,System.EventHandler)">
+            <summary>
+            Odstranění metody reakce na změnu zobrazení podbarvení
+            </summary>
+            <param name="content">Pohled, na který se váže metoda</param>
+            <param name="handlerChanged">Reakční metoda</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.RemoveItem(Gordic.GFE.Parsers.Gui.IViewContent)">
+            <summary>
+            Uvolnění cach pro daný pohled
+            </summary>
+            <param name="content">Pohled</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.GetUserDefineColors">
+            <summary>
+            Seznam uživatelem definovaných barev
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.FormFillerProperties.AddUserDefineColors(System.String,System.String)">
+            <summary>
+            Přidání záznamu do seznamu uživatelských barev
+            </summary>
+            <param name="key">Český název barvy</param>
+            <param name="value">Anglický název - dle tohoto názvu se bude volat parser</param>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.Gui.SimpleDesktop">
+            <summary>
+            Jednoduchá pracovní plocha
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.SimpleDesktop.MainForm">
+            <summary>
+            Hlavní formulář.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.SimpleDesktop.Desktop">
+            <summary>
+            Pracovní plocha.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Gui.SimpleDesktop.ActiveControl">
+            <summary>
+            Aktivní ovladač
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.SimpleDesktop.InitializeDesktop">
+            <summary>
+            Spuštění ínicializace pracovní plochy.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.SimpleDesktop.InitializeDesktop(Gordic.GFE.Parsers.Gui.IDesktop,Gordic.GFE.Parsers.Gui.IDesktopLayout)">
+            <summary>
+            Inicializace pracovní plochy
+            </summary>
+            <param name="desktop">Pracovní plocha</param>
+            <param name="layout">Rozvržení</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.SimpleDesktop.OnDesktopUnloaded">
+            <summary>
+            Spuštění procesu uvolnění pracovní ploch.
+            </summary>
+        </member>
+        <member name="E:Gordic.Gfe.FormFiller.Gui.SimpleDesktop.DesktopCreated">
+            <summary>
+            Volá se po vytvoření pracovní plochy
+            </summary>
+        </member>
+        <member name="E:Gordic.Gfe.FormFiller.Gui.SimpleDesktop.DesktopUnloaded">
+            <summary>
+            Volá se po uvolnění pracovní plochy
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Gui.SimpleDesktop.GetActiveViewContent">
+            <summary>
+            Získání aktuálního obsahu.
+            </summary>
+            <returns>Aktivní pohled na obsah</returns>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.DefaultEditor.AddInTreeSyntaxModeProvider">
+            <summary>
+            Popis AddInTreeSyntaxModeProvider.
+            Načtení syntaxe z konfiguračního stromu
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultEditor.AddInTreeSyntaxModeProvider.SyntaxModes">
+            <summary>
+            Dostupné syntaxe
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.AddInTreeSyntaxModeProvider.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.AddInTreeSyntaxModeProvider.GetSyntaxModeFile(Gordic.TextEditor.Document.SyntaxMode)">
+            <summary>
+            Získání souboru syntaxe
+            </summary>
+            <param name="syntaxMode">Syntaxe</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.AddInTreeSyntaxModeProvider.UpdateSyntaxModeList">
+            <summary>
+            Atualizace syntaxí
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.DefaultEditor.ClipboardHandling">
+            <summary>
+            Vložení textu do schránky.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.ClipboardHandling.Initialize">
+            <summary>
+            Inicializace
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.DefaultEditor.Gui.Editor.AdvancedHighlightingStrategy">
+            <summary>
+            Změna IHighlightingStrategy textového editoru aby bylo možné připojit
+            <see cref="T:Gordic.Gfe.FormFiller.DefaultEditor.IAdvancedHighlighter"/>.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.Gui.Editor.AdvancedHighlightingStrategy.#ctor(Gordic.TextEditor.Document.DefaultHighlightingStrategy,Gordic.Gfe.FormFiller.DefaultEditor.IAdvancedHighlighter)">
+            <summary>
+            Vytvoření nové instance třídy
+            </summary>
+            <param name="baseStrategy">Výchozí zvýraznění</param>
+            <param name="highlighter">Pokročilý zvýrazňovač</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.Gui.Editor.AdvancedHighlightingStrategy.MarkTokens(Gordic.TextEditor.Document.IDocument)">
+            <summary>
+            Označení klíčů
+            </summary>
+            <param name="document">Dokument s obsahem</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.Gui.Editor.AdvancedHighlightingStrategy.MarkTokens(Gordic.TextEditor.Document.IDocument,System.Collections.Generic.List{Gordic.TextEditor.Document.LineSegment})">
+            <summary>
+            Oznažčení klíčových objektů
+            </summary>
+            <param name="document">Dokument s obsahem</param>
+            <param name="inputLines">Řádky</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.Gui.Editor.AdvancedHighlightingStrategy.OnParsedLine(Gordic.TextEditor.Document.IDocument,Gordic.TextEditor.Document.LineSegment,System.Collections.Generic.List{Gordic.TextEditor.Document.TextWord})">
+            <exclude/>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.DefaultEditor.FormFillerTextAreaControl">
+            <summary>
+            Základní textový ovladač editoru obsahu Návrháře sestav
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultEditor.FormFillerTextAreaControl.Language">
+            <summary>
+            Jazyk - vázaný na daný editor
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.FormFillerTextAreaControl.ShowCompletionWindow(Gordic.TextEditor.Gui.CompletionWindow.ICompletionDataProvider,System.Char)">
+            <summary>
+            Zobrazení okna doplněnís
+            </summary>
+            <param name="completionDataProvider">Poskytovatel dat</param>
+            <param name="ch">Stisknutá klávesa</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.FormFillerTextAreaControl.GetWordBeforeCaret">
+            <summary>
+            Získání slova před posuvníkem
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.FormFillerTextAreaControl.InsertTemplate(Gordic.GFE.Parsers.DefaultEditor.CodeTemplate)">
+            <exclude/>
+        </member>
+        <member name="F:Gordic.Gfe.FormFiller.DefaultEditor.FormFillerTextAreaControl.contextMenuPath">
+            <summary>
+            cesta k popisu položek kontextového menu
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultEditor.FormFillerTextAreaControl.CodeCompletionBindings">
+            <summary>
+            Vazba na kompletací textu
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultEditor.FormFillerTextAreaControl.InsightWindowVisible">
+            <summary>
+            Okno nápovědy je zbrazeno
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultEditor.FormFillerTextAreaControl.HighlightingExplicitlySet">
+            <summary>
+            Sada explicitního zvýraznění
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.FormFillerTextAreaControl.#ctor">
+            <summary>
+            Vytvoření nové instance třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.FormFillerTextAreaControl.#ctor(System.Boolean)">
+            <summary>
+            Vytvoření nové instance třídy
+            </summary>
+            <param name="enableFolding">Indikuje povolení strategii skládání</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.FormFillerTextAreaControl.SetHighlighting(System.String)">
+            <summary>
+            Explicitněn nastavené zvýraznění.
+            Na pořád.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.FormFillerTextAreaControl.InitializeAdvancedHighlighter">
+            <summary>
+            Inicializace pokročilejšího zvýraznění
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.FormFillerTextAreaControl.InitializeFormatter">
+            <summary>
+            Inicializace formátování
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.FormFillerTextAreaControl.StartCtrlSpaceCompletion">
+            <summary>
+            Reakce na stisknutí Ctrl+Space
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.FormFillerTextAreaControl.ShowInsightWindow(Gordic.TextEditor.Gui.InsightWindow.IInsightDataProvider)">
+            <summary>
+            Zobrazení okna s nápovědou
+            </summary>
+            <param name="insightDataProvider">POskytovatel dat pro doplnění</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.FormFillerTextAreaControl.DeleteWordBeforeCaret">
+            <summary>
+            Odstranění slova před posuvníkem
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.FormFillerTextAreaControl.InitializeTextAreaControl(Gordic.TextEditor.TextAreaControl)">
+            <summary>
+            Inicializace objektu
+            </summary>
+            <param name="newControl">Textový ovladač</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.FormFillerTextAreaControl.Dispose(System.Boolean)">
+            <summary>
+            Uvolnění objektu
+            </summary>
+            <param name="disposing">Indikuje uvolnění</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.FormFillerTextAreaControl.OnReloadHighlighting(System.Object,System.EventArgs)">
+            <exclude/>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.DefaultEditor.IAdvancedHighlighter">
+            <summary>
+            Rozhraní pokročíleho zvýraznění.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.IAdvancedHighlighter.Initialize(Gordic.TextEditor.TextEditorControl)">
+            <summary>
+            Volá se jednou po vytvoření zvýrazňovače.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.IAdvancedHighlighter.BeginUpdate(Gordic.TextEditor.Document.IDocument,System.Collections.Generic.IList{Gordic.TextEditor.Document.LineSegment})">
+            <summary>
+            Před aktualizací obsahu
+            </summary>
+            <param name="document">Dokument s obsahem</param>
+            <param name="inputLines">Řádky pro implikací zvýraznění</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.IAdvancedHighlighter.EndUpdate">
+            <summary>
+            Konec aktualizací obsahu
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.IAdvancedHighlighter.MarkLine(System.Int32,Gordic.TextEditor.Document.LineSegment,System.Collections.Generic.List{Gordic.TextEditor.Document.TextWord})">
+            <summary>
+            Změna zvýraznění slov
+            </summary>
+            <param name="lineNumber">Pozice řádku v obsahu</param>
+            <param name="currentLine">Aktuálnní řádek</param>
+            <param name="words">Slova</param>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBinding">
+            <summary>
+            Vazba na textový editor souborů
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBinding.AfterInitialize">
+            <summary>
+            události po inicializací 
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBinding.CanCreateContent(System.String,System.String)">
+            <summary>
+            Tato třída vrací TRUE, pokud vazbu lze vytvořit.
+            Je to dle názvu souboru
+            </summary>
+            <param name="fileName">Název souboru</param>
+            <param name="content">Případný obsah</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBinding.CreateContent(Gordic.GFE.Parsers.Services.OpenedFile)">
+            <summary>
+            Vytvoření nového IViewContent objektu dle otevřeného souboru
+            </summary>
+            <param name="file">Otevřený soubor</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBinding.InitializeSyntaxModes">
+            <summary>
+            vynucený statický konstruktor třídy. 
+            Jinak, ostatní editory jako XML nepoužívají vlastní zvýrazňovací strategii 
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBinding.CreateWrapper(Gordic.GFE.Parsers.Services.OpenedFile)">
+            <summary>
+            Vytvoření obálky nad soubore
+            </summary>
+            <param name="file">Otevřený soubor</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper">
+            <summary>
+            Obálka ovladače textu
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.Control">
+            <summary>
+            Ovladač pohledu
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.Save(Gordic.GFE.Parsers.Services.OpenedFile,System.IO.Stream)">
+            <summary>
+            Uložení obsahu
+            </summary>
+            <param name="file">Soubor</param>
+            <param name="stream">Proud v paměti</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.Load(Gordic.GFE.Parsers.Services.OpenedFile,System.IO.Stream)">
+            <summary>
+            NAčtení souboru
+            </summary>
+            <param name="file"></param>
+            <param name="stream"></param>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.IsReadOnly">
+            <summary>
+            Indikuje, že obsah je pouze pro čtení
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper._OnFileNameChanged(Gordic.GFE.Parsers.Services.OpenedFile)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper._OnDesktopWindowChanged">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.CreateMemento">
+            <summary>
+            Vytvoření nového memento ze stavu.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.SetMemento(Gordic.GFE.Parsers.Core.Property)">
+            <summary>
+            Uložení stavu do daného memento.
+            </summary>
+            <param name="properties">Vlastnosti, do kterých se ukládá.</param>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.EnableCut">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.EnableCopy">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.EnablePaste">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.EnableDelete">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.EnableSelectAll">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.SelectAll">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.Delete">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.Paste">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.Copy">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.Cut">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.EnableUndo">
+            <summary>
+            Dostupnost operace UNDO
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.EnableRedo">
+            <summary>
+            Dostupnost operace REDO
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.Undo">
+            <summary>
+            Operace UNDO
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.Redo">
+            <summary>
+            Opoerace REDO
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.TextEditorControl">
+            <summary>
+            Ovladač obsahu
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.GetDocumentForFile(Gordic.GFE.Parsers.Services.OpenedFile)">
+            <summary>
+            Získání dokumentu pro soubor
+            </summary>
+            <param name="file">Otevřený soubor</param>
+            <returns></returns>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.Text">
+            <summary>
+            Text dokumentu
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.ParseInformationUpdated(Gordic.GFE.Parsers.Dom.ParseInformation)">
+            <summary>
+            Aktualizace informaci analyzátoru
+            </summary>
+            <param name="parseInfo"></param>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.PrintDocument">
+            <summary>
+            Vytisknutí obsahu dokumentu
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.JumpTo(System.Int32,System.Int32)">
+            <summary>
+            Nastavení posuvníka na určitou pozici, kde Y je řádek (začináje od 0).
+            A X je sloupec (začínaje od 0 také).
+            </summary>
+            <param name="line">číslo řádku</param>
+            <param name="column">číslo sloupce</param>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.Line">
+            <summary>
+            Získání pozici řádku posuvníka
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.Column">
+            <summary>
+            Pozice sloupce posuvníka
+            </summary>
+        </member>
+        <member name="F:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.textEditorControl">
+            <summary>
+            textový ovladač
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.GetText">
+            <summary>
+            Obsah dokumentu
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.CreateTextEditorControl">
+            <summary>
+            Vytvoření textového editora návrháře
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.Initialize(Gordic.GFE.Parsers.Services.OpenedFile)">
+            <summary>
+            inicializace pohledu
+            </summary>
+            <param name="file">Primární soubor zobrazení.</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.RedrawContent">
+            <summary>
+            Překreslení obsahu
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.Dispose(System.Boolean)">
+            <summary>
+            uvolnění objektu
+            </summary>
+            <param name="disposing">indikuje uvolnění objektu</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.ForceFoldingUpdate">
+            <summary>
+            Aktualizace skládání
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.ToString">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.ReplaceAll(System.String)">
+            <summary>
+            Nahrazení celého XML/obyčejného textu daným
+            </summary>
+            <param name="xml">Daný XML/obyčejný text</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.TextEditorDisplayBindingWrapper.UpdateFolding">
+            <summary>
+            Aktualizace skládání
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.DefaultEditor.AddInTreeSyntaxMode">
+            <summary>
+            Syntaxe z konfiguračního stromu
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.AddInTreeSyntaxMode.#ctor(Gordic.GFE.Parsers.Core.Runtime[],System.String,System.String,System.String[])">
+            <summary>
+            Konstruktor třídy
+            </summary>
+            <param name="runtimes">běhová prostředí</param>
+            <param name="fileName">název souboru</param>
+            <param name="name">název syntaxe</param>
+            <param name="extensions">koncovky</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.AddInTreeSyntaxMode.CreateTextReader">
+            <summary>
+            Vytvoření čtečky syntaxe
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.DefaultEditor.SyntaxModeMaker">
+            <summary>
+            Vytvoření AddInTreeSyntaxMode objektů zabalujících .xshd režim syntaxe uložený ve zdroji
+            přidaného sestavení.
+            </summary>
+            <attribute name="name" use="required">
+            Název jazyka, pro který se používá režim syntaxe.
+            </attribute>
+            <attribute name="extensions" use="required">
+            Středníkem oddělený seznam přípon, pro které se používá režim syntaxe.
+            </attribute>
+            <attribute name="resource" use="required">
+            Plně kvalifikovaný název zdrojového souboru.
+            </attribute>
+            <usage>Pouze v ViewContent/DefaultTextEditor/SyntaxModes</usage>
+            <returns>
+            AddInTreeSyntaxMode objekt, který načte zdroj z doplňku sestavení, když se volá jeho
+            CreateTextReader metoda.
+            </returns>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultEditor.SyntaxModeMaker.HandleConditions">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultEditor.SyntaxModeMaker.BuildItem(System.Object,Gordic.GFE.Parsers.Core.Entity,System.Collections.ArrayList)">
+            <summary>
+            Vytvoření položek
+            </summary>
+            <param name="caller"></param>
+            <param name="entity"></param>
+            <param name="subItems"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties">
+            <summary>
+            Vlastnosti výchozího textového editoru
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.Instance">
+            <summary>
+            Instance třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.TabIndent">
+            <summary>
+            Odrážka
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.IndentationSize">
+            <summary>
+            Velikost odrážky
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.IndentationString">
+            <summary>
+            řetězec odrážky
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.IndentStyle">
+            <summary>
+            Styl odrážky
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.DocumentSelectionMode">
+            <summary>
+            režim výberu
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.CaretLine">
+            <summary>
+            aktuální pozice
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.AllowCaretBeyondEOL">
+            <summary>
+            Povolit kurzor za koncem řádku?
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.UnderlineErrors">
+            <summary>
+            zobrazení chyb
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.ShowMatchingBracket">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.ShowLineNumbers">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.ShowSpaces">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.ShowTabs">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.ShowEOLMarker">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.ShowInvalidLines">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.IsIconBarVisible">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.EnableFolding">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.ShowHorizontalRuler">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.ShowVerticalRuler">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.ConvertTabsToSpaces">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.MouseWheelScrollDown">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.MouseWheelTextZoom">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.HideMouseCursor">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.CutCopyWholeLine">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.Encoding">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.EncodingCodePage">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.VerticalRulerRow">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.LineViewerStyle">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.LineTerminator">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.AutoInsertCurlyBracket">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.AutoInsertQuotationMarks">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.AutoInsertTemplates">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.Font">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.FontContainer">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.BracketMatchingStyle">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.SupportReadOnlySegments">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.TextRenderingHint">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.CreateBackupCopy">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.Highlighting">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.FormFillerTextEditorProperties.UseAntiAliasedFont">
+            <exclude/>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.AddIns.AlfCompilationUnit">
+            <summary>
+            výchozí kompilační jednotka
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.AlfCompilationUnit.LexerTags">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.AlfCompilationUnit.FileEncoding">
+            <summary>
+            Kódování souboru
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.AlfCompilationUnit.Language">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.AlfCompilationUnit.ErrorMessage">
+            <summary>
+            chybová hláška
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.AlfCompilationUnit.FileName">
+            <summary>
+            Zdrojový soubor, ze kterého byla vytvořená jednotka.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.AlfCompilationUnit.FileContent">
+            <summary>
+            Zdrojový soubor, ze kterého byla vytvořená jednotka.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.AlfCompilationUnit.NameSpaceManager">
+            <summary>
+            Správce namespace
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.AddIns.AlfCompilationUnit.Compile">
+            <summary>
+            překlad jednotky
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.AlfCompilationUnit.ErrorsDuringCompile">
+            <summary>
+            Chyba během kompilace
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.AddIns.AlfCompilationUnit.GetAttributeValue(System.String,System.String)">
+            <summary>
+            Informace z kompilované jednotky
+            </summary>
+            <param name="nodeXpath">Hledaný atribut</param>
+            <param name="attributeName">Indikuje, že atribut je kořenový</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.AddIns.AlfCompilationUnit.GetSection(System.String)">
+            <summary>
+            získání sekce jednotky
+            </summary>
+            <param name="nodeXPath">Cesta k sekcí</param>
+            <returns>seznam nalezených sekcí</returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.AddIns.AlfCompilationUnit.GetID">
+            <summary>
+            Získání identifikátoru souboru
+            </summary>
+            <returns>Idfentifikátor souboru</returns>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.AlfCompilationUnit.OpenedFile">
+            <summary>
+            Otevřený soubor
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.AddIns.AlfCompilationUnit.StructureViewEntry">
+            <summary>
+            Jednotka struktury
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.AddIns.AlfCompilationUnit.#ctor">
+            <summary>
+            Prázdný konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.AddIns.AlfCompilationUnit.#ctor(System.String)">
+            <summary>
+            Vytvoření nové instance třídy
+            </summary>
+            <param name="fileContent">obsah souboru</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.AddIns.AlfCompilationUnit.Compile(Gordic.GFE.Parsers.Dom.DefaultAbstractSecondaryViewContent)">
+            <summary>
+            překlad jednotky
+            </summary>
+            <param name="view"></param>
+        </member>
+        <member name="E:Gordic.Gfe.FormFiller.AddIns.AlfCompilationUnit.AfterCompile">
+            <summary>
+            Volá se po kompilací souboru
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.AddIns.AlfCompilationUnit.OnAfterCompile">
+            <summary>
+            Volá se po kompilaci souboru
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.AddIns.AlfCompilationUnit.UpdateContent(System.String,System.Boolean)">
+            <summary>
+            aktualizace obsahu
+            </summary>
+            <param name="content">obsah k aktualizací</param>
+            <param name="showError">TRUE - zobrazení hlášení o chybě</param>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.Core.ActiveWindowStateConditionEvaluator">
+            <summary>
+            zjištění, v jakém režímu je aktivní okno pracovní plochy
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Core.ActiveWindowStateConditionEvaluator.IsValid(System.Object,Gordic.GFE.Parsers.Core.Condition)">
+            <summary>
+            Je platná podmína?
+            </summary>
+            <param name="caller">Volající</param>
+            <param name="condition">Podmínka</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.Core.FormationTypeConditionEvaluator">
+            <summary>
+            zjištění formátu aktivního okna
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Core.FormationTypeConditionEvaluator.IsValid(System.Object,Gordic.GFE.Parsers.Core.Condition)">
+            <summary>
+            Je platná podmína?
+            </summary>
+            <param name="caller">Volající</param>
+            <param name="condition">Podmínka</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.Core.OpenWindowStateConditionEvaluator">
+            <summary>
+            Zkouší, zda okno má určitý stav.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Core.OpenWindowStateConditionEvaluator.IsValid(System.Object,Gordic.GFE.Parsers.Core.Condition)">
+            <summary>
+            Kontrola platností podmínky
+            </summary>
+            <param name="caller">volající</param>
+            <param name="condition">podmínka</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.Core.WindowActiveConditionEvaluator">
+            <summary>
+            Zjištění, zda aktuální okno je určitého typu nebo implementuje rozhraní.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Core.WindowActiveConditionEvaluator.IsValid(System.Object,Gordic.GFE.Parsers.Core.Condition)">
+            <summary>
+            Kontrola platností
+            </summary>
+            <param name="caller">volající</param>
+            <param name="condition">větev konfiguračního stromu</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.Core.ApplicationKeyHandler">
+            <summary>
+            Odchycení zpráv hlavní aplikace
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Core.ApplicationKeyHandler.PreFilterMessage(System.Windows.Forms.Message@)">
+            <summary>
+            Odchycení zpráv aplikace
+            </summary>
+            <param name="m">Odchycená zprava</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.Core.MessageFilterManager">
+            <summary>
+            Správce filtrů zpráv aplikace
+            </summary>
+        </member>
+        <member name="F:Gordic.Gfe.FormFiller.Core.MessageFilterManager.filters">
+            <summary>
+            dostupné filtry zpráv
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Core.MessageFilterManager.LoadMessageFilter(System.Type)">
+            <summary>
+            Načtení filtrů dle typu
+            </summary>
+            <param name="type">Daný typ</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Core.MessageFilterManager.UnloadMessageFilter(System.Type)">
+            <summary>
+            Uvolnění všech filtrů dle typu
+            </summary>
+            <param name="type">Daný typ</param>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.Core.StartDesktopCommand">
+            <summary>
+            Příkaz spuštění aplikace
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Core.StartDesktopCommand.Run(System.Collections.Generic.IList{Gordic.GFE.Parsers.Core.StartupFile})">
+            <summary>
+            Spuštění příkazu
+            </summary>
+            <param name="fileList">Seznam souborů k spuštění</param>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.StartPage.ShowStartPageCommand">
+            <summary>
+            Příkaz spuštění startovací stránky
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.StartPage.ShowStartPageCommand.Run">
+            <summary>
+            Spuštění příkazu
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.StartPage.StartViewPane">
+            <summary>
+            Obsah startovacího okna
+            </summary>
+        </member>
+        <member name="E:Gordic.Gfe.FormFiller.StartPage.StartViewPane.Closed">
+            <summary>
+            Obsluha události zavření stránky
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.StartPage.StartViewPane.Close">
+            <summary>
+            Zavření ViewContent obsahující dané podokno.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.StartPage.StartViewPane.#ctor">
+            <summary>
+            Vytvoření nové instance třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.StartPage.StartViewPane.RefreshRecentOpen">
+            <summary>
+            //Zobrazení seznamu naposledy otevřených souborů
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.StartPage.StartViewPane.GetTextByWidth(System.String,System.Int32,Gordic.WinForms.Controls.GLinkLabel)">
+            <summary>
+            Zpracuje text dle šířky a písma tak, aby bylo vidět název souboru
+            </summary>
+            <param name="p_text">Text</param>
+            <param name="p_width">Šířka</param>
+            <param name="p_link">Štítek</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.StartPage.StartPane">
+            <summary>
+            Podokno startovácí stránky
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.StartPage.StartPane.Control">
+            <summary>
+            Je Windows.Forms ovladač pro dané zobrazení.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.StartPage.StartPane.SwitchToThisWithoutSaveLoad(Gordic.GFE.Parsers.Services.OpenedFile,Gordic.GFE.Parsers.Gui.IViewContent)">
+            <summary>
+            Provedé se před přepnutím ze starého zobrazení na dané.
+            </summary>
+            <param name="file">Primární soubor zobrazení</param>
+            <param name="oldView">Zobrazení, ze kterého se přepínáme.</param>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.StartPage.StartPane.StartViewPane">
+            <summary>
+            Ovladač obsahu startovací stránky
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.StartPage.StartPane.#ctor">
+            <summary>
+            Vytvoření nové instance třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.StartPage.StartPane.Dispose(System.Boolean)">
+            <summary>
+            uvolnění objektu
+            </summary>
+            <param name="disposing">indikuje uvolnění objektu</param>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.StructureView.StructureViewEntry">
+            <summary>
+            Jednotka prezentující položku seznamu struktur.
+            Má v sobě informací o datové struktuře.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.StructureView.StructureViewEntry.GetOrCreate(System.String)">
+            <summary>
+            Vytvoření nové instance třídy se specifickou kategorii
+            a přidání jí do podložky StructureViewPad.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.StructureView.StructureViewEntry.Create(Gordic.Gfe.FormFiller.StructureView.StructureViewEntry@,Gordic.GFE.Parsers.Services.OpenedFile)">
+            <summary>
+            Vytvoření položky struktury
+            </summary>
+            <param name="structure"></param>
+            <param name="file">Název souboru sestavy! dle kterého se hledá struktura</param>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.StructureView.StructureViewEntry.Structure">
+            <summary>
+            Struktura
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.StructureView.StructureViewEntry.StructureID">
+            <summary>
+            Prezentuje text jednotky
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.StructureView.StructureViewEntry.FileName">
+            <summary>
+            Soubor struktury dat
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.StructureView.StructureViewEntry.#ctor">
+            <summary>
+            Vytvoření nové instance třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.StructureView.StructureViewEntry.#ctor(System.String)">
+            <summary>
+            Vytvoření nové instance třídy
+            </summary>
+            <param name="fileName">název souboru struktury</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.StructureView.StructureViewEntry.Refresh">
+            <summary>
+            Aktualizace struktury
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.StructureView.StructureViewEntry.GetStructureRootRegion">
+            <summary>
+            Získání hlavního regionu struktury dle aktuálně otevřeného souboru
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.StructureView.StructureViewEntry.GetInfoAttributeValue(System.String)">
+            <summary>
+            Získání hodnoty atributu dle klíče
+            </summary>
+            <param name="key">Klíč k hodnptě atributu</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.StructureView.StructureViewEntry.GetDataItem(System.String)">
+            <summary>
+            Získání položky struktury dat dle úplného názvu
+            </summary>
+            <param name="fullName">úplný název položky</param>
+            <returns>Hledaná položka</returns>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.StructureView.IStructureHost">
+            <summary>
+            Rozhraní obsahů používajícíc strukturu
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.StructureView.IStructureHost.StructureViewEntry">
+            <summary>
+            Jednotka struktury
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.StructureView.StructureViewPad.Instance">
+            <summary>
+            Instance třídy
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.StructureView.StructureViewPad.Entries">
+            <summary>
+            Seznam načtených struktur
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.StructureView.StructureViewPad.AddItem(Gordic.Gfe.FormFiller.StructureView.StructureViewEntry)">
+            <summary>
+            Přidání položky dp zobrazení zpráv.
+            </summary>
+            <param name="entry">Přidávaná struktura</param>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.StartupSettings">
+            <summary>
+            Tato třída obsahuje vlastnosti, které konfiguruji spuštění aplikace.
+            Zejména v této třídě se vytvoří seznam dostupných doplňků, 
+            které se před uložením do seznamu fyzicky vytvoří ze zdrojů.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.StartupSettings.AllowAddInConfigurationAndExternalAddIns">
+            <summary>
+            Použití souboru <see cref="P:Gordic.Gfe.FormFiller.StartupSettings.ConfigDirectory"/>\AddIns.xml pro 
+            uložení seznamu neaktivních doplňků a seznamu externích doplňků.
+            Výchozí hodnota je true.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.StartupSettings.AllowUserAddIns">
+            <summary>
+             Povoluení uživatelských doplňků uložených ve složce "data aplikace".
+            Výchozí hodnota je false.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.StartupSettings.ApplicationRootPath">
+            <summary>
+            Kořenová složka aplikace.
+            NULL (výchozí hodnota) pro použití hlavní složky FormFiller AppDomain.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.StartupSettings.ConfigDirectory">
+            <summary>
+            Získá/Nastaví složka pro uložení vlastností a uživatelských doplňků FoemFilleru.
+            NULL (výchozí hodnota) pro "ApplicationData\ApplicationName"
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.StartupSettings.DataDirectory">
+            <summary>
+            Získá/Nastavi název datového adresáře pro načítání zdrojů.
+            NULL (výchozí) pro "ApplicationRootPath\data".
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.StartupSettings.PropertiesName">
+            <summary>
+            Získá/Nastavi název, používaný pro soubor vlastnosti (bez cesty a přípony).
+            NULL (výchozí) - použije výchozí název.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.StartupSettings.AddAddInsFromDirectory(System.String)">
+            <summary>
+            složka s dpňky.
+            </summary>
+            <param name="addInDir">Přidávaná složka</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.StartupSettings.AddAddInFile(System.String)">
+            <summary>
+            Přidání specifického souboru .config.
+            </summary>
+            <param name="addInFile">Přidávaný soubor</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.StartupSettings.AddAddInFromResources(System.String)">
+            <summary>
+            Přidání doplňků ze zdroju
+            </summary>
+            <param name="addInDir">Složka s doplňky</param>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.DefaultDesktop">
+            <summary>
+            Hlavní modul aplikace
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultDesktop.MainForm">
+            <summary>
+            Hlavní formulář pracovního stolu
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultDesktop.Title">
+            <summary>
+            Název v záhlaví
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultDesktop.IsActiveWindow">
+            <summary>
+            Zjištění, zda GFE je aktivní aplikace ve Windows.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultDesktop.ViewContentCollection">
+            <summary>
+             Kolekce, v níž jsou uloženy všechny otevřené zobrazení obsahu 
+             (včetně všech sekundárních zobrazení obsahu).
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultDesktop.PrimaryViewContents">
+            <summary>
+            Kolekce, v niž jsou uložené všechny primární pohledy na obsah
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultDesktop.DesktopWindowCollection">
+            <summary>
+            Kolekce, v niž jsou uloženy všechny okna pracovního prostoru
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultDesktop.ActiveDesktopWindow">
+            <summary>
+            Aktivní okno pracovního stolu.
+            Toto okno obsahuje aktivní pohled na obsah.
+            </summary>
+        </member>
+        <member name="E:Gordic.Gfe.FormFiller.DefaultDesktop.ActiveDesktopWindowChanged">
+            <summary>
+             Je volána, po změně vlastnosti ActiveDesktopWindow.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultDesktop.ActiveViewContent">
+            <summary>
+            Aktivní pohled na obsah uvnitř aktivního okna pracovního stolu
+            </summary>
+        </member>
+        <member name="E:Gordic.Gfe.FormFiller.DefaultDesktop.ActiveViewContentChanged">
+            <summary>
+            Volá se po změně aktivního pohledu na obsah
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultDesktop.ActiveContent">
+            <summary>
+            Aktivní obsah, závislý na tom, kde se nachází focus.
+            Pokud aktuálně je aktivní dokument, pak tato hodnota se rovná ActiveViewContent,
+            jinak aktivní objekt.
+            </summary>
+        </member>
+        <member name="E:Gordic.Gfe.FormFiller.DefaultDesktop.ActiveContentChanged">
+            <summary>
+            Volá se po změně aktivního obsahu.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultDesktop.DesktopLayout">
+            <summary>
+            Rozložení pracovní plochy
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultDesktop.Initialize">
+            <summary>
+            Inicializace pracovní plochy.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultDesktop.ShowView(Gordic.GFE.Parsers.Gui.IViewContent)">
+            <summary>
+            Vložení nového <see cref="T:Gordic.GFE.Parsers.Gui.IViewContent"/> objektu na pracovní plochu a přepnutí na nový pohled.
+            </summary>
+            <param name="content">Vytvářený pohled</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultDesktop.ShowView(Gordic.GFE.Parsers.Gui.IViewContent,System.Boolean)">
+            <summary>
+            Vložení nového <see cref="T:Gordic.GFE.Parsers.Gui.IViewContent"/> objektu na pracovní plochu.
+            </summary>
+            <param name="content">Vytvářený pohled</param>
+            <param name="switchToOpenedView">Indikuje potřebu přepnutí na nový pohled</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultDesktop.CloseContent(Gordic.GFE.Parsers.Gui.IViewContent)">
+            <summary>
+            Zavření IViewContent obsahu pokud je otevřený.
+            </summary>
+            <param name="content">Obsah k zavření</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultDesktop.CloseAllViews(System.Boolean)">
+            <summary>
+            Zavření všech pohledů pracovní plochy
+            </summary>
+            <param name="solution">indikuje potřebu zavření pouze všech pohledů sestavení</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultDesktop.RedrawAllComponents">
+            <summary>
+            Opětovná inicializace všech komponent pracovní plochy, 
+            může se volát po změně speciální vlastnosti která má vliv na rozložení
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultDesktop.UpdateRenderer">
+            <summary>
+            Aktualizace toolstrip renderer.
+            </summary>
+        </member>
+        <member name="E:Gordic.Gfe.FormFiller.DefaultDesktop.ViewOpened">
+            <summary>
+            Volá se po otevření pohledu
+            </summary>
+        </member>
+        <member name="E:Gordic.Gfe.FormFiller.DefaultDesktop.ViewClosed">
+            <summary>
+            Volá se po zavření pohledu pracovního stolu
+            </summary>
+        </member>
+        <member name="E:Gordic.Gfe.FormFiller.DefaultDesktop.ProcessCommandKey">
+            <summary>
+            Volá se po stisknutí klávesy. Slouží k zachycení příkazových kláves.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultDesktop.GetFocus">
+            <summary>
+            získání ovladače okna s fokusem 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultDesktop.ShowViewNext">
+            <summary>
+            Zobrazení dalšího obsahu
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultDesktop.ShowViewPrev">
+            <summary>
+            Zobrazení předchozího obsahu
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultDesktop.CreateMemento">
+            <summary>
+            Vytvoření vlastnosti
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultDesktop.SetMemento(Gordic.GFE.Parsers.Core.Property)">
+            <summary>
+            Nastavení dle vlastnosti
+            </summary>
+            <param name="properties"></param>
+        </member>
+        <member name="F:Gordic.Gfe.FormFiller.DefaultDesktop.TopMenu">
+            <summary>
+            Menu
+            </summary>
+        </member>
+        <member name="F:Gordic.Gfe.FormFiller.DefaultDesktop.ToolBars">
+            <summary>
+            Nástrojové lišty
+            </summary>
+        </member>
+        <member name="F:Gordic.Gfe.FormFiller.DefaultDesktop.normalBounds">
+            <summary>
+            výchozí hodnoty ohraničení
+            </summary>
+        </member>
+        <member name="F:Gordic.Gfe.FormFiller.DefaultDesktop.defaultWindowState">
+            <summary>
+            výchozí status okna modulu
+            </summary>
+        </member>
+        <member name="F:Gordic.Gfe.FormFiller.DefaultDesktop.mainMenuPath">
+            <summary>
+            cesta k větví hlavního menu v konfiguračním souboru
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultDesktop.FullScreen">
+            <summary>
+            Zobrazení přes celý displej
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultDesktop.#ctor">
+            <summary>
+            Vytvoření instance nové třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultDesktop.OnResize(System.EventArgs)">
+            <summary>
+            Přetížení metody s účelem získání informace o poloze a velikosti okna
+            </summary>
+            <param name="e">argumet</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultDesktop.OnLocationChanged(System.EventArgs)">
+            <summary>
+            Přetížení metody s účelem získání informace o poloze a velikosti okna
+            </summary>
+            <param name="e">argumet</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultDesktop.OnClosing(System.ComponentModel.CancelEventArgs)">
+            <summary>
+            Zavření vsupního okna
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultDesktop.OnDragDrop(System.Windows.Forms.DragEventArgs)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultDesktop.OnDragOver(System.Windows.Forms.DragEventArgs)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultDesktop.OnActivated(System.EventArgs)">
+            <summary>
+            Po aktivaci formu
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultDesktop.OnDeactivate(System.EventArgs)">
+            <summary>
+            Po deaktivací formu
+            </summary>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultDesktop.ProcessCmdKey(System.Windows.Forms.Message@,System.Windows.Forms.Keys)">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultDesktop.IsAltGRPressed">
+            <summary>
+            Indikace stisknutí klávey AltGr
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.DefaultDesktop.PadContentCollection">
+            <summary>
+            Kolekce všech uložených aktivních oken plochy.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultDesktop.ShowPad(Gordic.GFE.Parsers.PadDescriptor)">
+            <summary>
+            Vložení nového objektu na plochu.
+            </summary>
+            <param name="content">Podložka s obsahem</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultDesktop.UnloadPad(Gordic.GFE.Parsers.PadDescriptor)">
+            <summary>
+            Zavření a uvolnění.
+            </summary>
+            <param name="content">Podložka s obsahem</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.DefaultDesktop.GetPad(System.Type)">
+            <summary>
+            Získání podložky specifického typu
+            </summary>
+            <param name="type">Typ podložky</param>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.ApplicationCommands.ExitDesktopCommand">
+            <summary>
+            Ukončení aplikace
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.ApplicationCommands.ExitDesktopCommand.Run">
+            <summary>
+            Spuštění příkatu ukončení
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.ApplicationCommands.ToggleFullscreenCommand">
+            <summary>
+            přepnutí na úplnou obrazovku
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.ApplicationCommands.ToggleFullscreenCommand.Run">
+            <summary>
+            Spuštění příkazu
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.FileCommands.OpenFile">
+            <summary>
+            Otevřit
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileCommands.OpenFile.Run">
+            <summary>
+            Spuštění příkazu Open
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileCommands.OpenFile.OnOpen(System.Object,System.EventArgs)">
+            <summary>
+            Otevření souboru
+            </summary>
+            <param name="sender">vlastník příkazu</param>
+            <param name="args">argumenty příkazu</param>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.FileCommands.SaveFile">
+            <summary>
+            Uložení souboru
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileCommands.SaveFile.Run">
+            <summary>
+            Spuštění příkazu
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileCommands.SaveFile.Save(Gordic.GFE.Parsers.Gui.IDesktopWindow)">
+            <summary>
+            Uložení souboru okna
+            </summary>
+            <param name="window">Okno s pohledem na obsah</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileCommands.SaveFile.Save(Gordic.GFE.Parsers.Gui.IViewContent)">
+            <summary>
+            Uložení obsahu
+            </summary>
+            <param name="content">Obsah pro uložení</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileCommands.SaveFile.Save(Gordic.GFE.Parsers.Services.OpenedFile)">
+            <summary>
+            Uložení otevřeného souboru
+            </summary>
+            <param name="file">otevřený soubor</param>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.FileCommands.SaveFileAs">
+            <summary>
+            Příkaz Uložit jako...
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.FileCommands.SaveFileAs.IsEnabled">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileCommands.SaveFileAs.Run">
+            <summary>
+            Spuštění příkazu Uložit jako...
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileCommands.SaveFileAs.Save(Gordic.GFE.Parsers.Gui.IDesktopWindow)">
+            <summary>
+            Uložení obsahu okna
+            </summary>
+            <param name="window">Okno pro uložení</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileCommands.SaveFileAs.Save(Gordic.GFE.Parsers.Services.OpenedFile)">
+            <summary>
+            Uožení souboru (s vyvoláním okna Uložit jako)
+            </summary>
+            <param name="file">Ukládaný soubor</param>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.FileCommands.SaveFileToDatabase">
+            <summary>
+            Uložení souboru
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.FileCommands.SaveFileToDatabase.IsEnabled">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileCommands.SaveFileToDatabase.Run">
+            <summary>
+            Spuštění příkazu
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileCommands.SaveFileToDatabase.Save(Gordic.GFE.Parsers.Gui.EventHandlerOpenedFileArgument)">
+            <summary>
+            Uložení obsahu do databáze
+            </summary>
+            <param name="eventHandlerOpenedFileArgument"></param>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.FileCommands.CloseFile">
+            <summary>
+            Zavření souboru
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileCommands.CloseFile.Run">
+            <summary>
+            Spuštění příkazu
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.FileCommands.OpenFolderContainingFile">
+            <summary>
+            Otevře složku obsahující vybraný soubor.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileCommands.OpenFolderContainingFile.Run">
+            <summary>
+            Spuštění příkazu
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileCommands.OpenFolderContainingFile.OpenContainingFolderInExplorer(System.String)">
+            <summary>
+            Otevření složky obsahující uvedený soubor
+            </summary>
+            <param name="fileName">Název souboru</param>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.FileCommands.RemoveRecentOpen">
+            <summary>
+            Otevře složku obsahující vybraný soubor.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileCommands.RemoveRecentOpen.Run">
+            <summary>
+            Spuštění příkazu
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.FileCommands.CloseAllWindows">
+            <summary>
+            Zavření všech oken
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileCommands.CloseAllWindows.Run">
+            <summary>
+            Spuštění příkazu
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.FileCommands.SaveAllFiles">
+            <summary>
+            Uložit všechny aktuálně otevřené
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileCommands.SaveAllFiles.SaveAll">
+            <summary>
+            Uložit vše
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileCommands.SaveAllFiles.Run">
+            <summary>
+            Spuštění příkazu
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.FileTabStripCommands.CloseAllButThisFileTab">
+            <summary>
+            Reakce na příkaz Zavřít vše kromě aktuálního
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileTabStripCommands.CloseAllButThisFileTab.Run">
+            <summary>
+            Spuštění příkazu
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.FileTabStripCommands.CopyPathName">
+            <summary>
+            Kopírování cesty (do clipboardu).
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileTabStripCommands.CopyPathName.Run">
+            <summary>
+            Spuštění příkazu
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.FileTabStripCommands.OpenFolderContainingFile">
+            <summary>
+            Otevře složku do schránky
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileTabStripCommands.OpenFolderContainingFile.Run">
+            <summary>
+            Spuštění příkazu
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.ToolCommands.OptionsCommand">
+            <summary>
+            Příkaz možnosti
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.ToolCommands.OptionsCommand.ShowTabbedOptions(System.String,Gordic.GFE.Parsers.Core.AddInTreeNode)">
+            <summary>
+            Zobrazení jmenovaných možnosti
+            </summary>
+            <param name="dialogTitle">titulek dialogového okna</param>
+            <param name="node">větev konfiguračníh ostromu</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.ToolCommands.OptionsCommand.Run">
+            <summary>
+            Spuštění příkazu
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.ToolCommands.ShowApplicationOptions">
+            <summary>
+            Vlastností
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.ToolCommands.ShowApplicationOptions.Run">
+            <summary>
+            Spuštění příkazu
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.ToolCommands.ShowApplicationOptions.ShowSettings">
+            <summary>
+            Zobrazení nastavení aplikace
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.ToolCommands.ContentPreview">
+            <summary>
+            Náhled sestavy
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.ToolCommands.ContentPreview.IsEnabled">
+            <summary>
+            Indikuje, zda operace je povolená či nikoliv
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.ToolCommands.ContentPreview.Run">
+            <summary>
+            Uložení souboru
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.ToolCommands.PdfExport">
+            <summary>
+            Export do PDF
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.ToolCommands.PdfExport.IsEnabled">
+            <summary>
+            Indikuje, zda operace je povolená či nikoliv
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.ToolCommands.PdfExport.Run">
+            <summary>
+            Spuštění příkazu
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.ToolCommands.SendFile">
+            <summary>
+            Odeslaní souboru
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.ToolCommands.SendFile.IsEnabled">
+            <summary>
+            Indikuje, zda operace je povolená či nikoliv
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.ToolCommands.SendFile.Run">
+            <summary>
+            Spuštění příkazu
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.XmlForms.BaseXmlForm">
+            <summary>
+            Základní form návrháře
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.XmlForms.BaseXmlForm.SetupXmlLoader">
+            <summary>
+            Nastavení XML čtečky
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.XmlForms.BaseXmlForm.SetEnabledStatus(System.Boolean,System.String[])">
+            <summary>
+            Nastavení statusu dostupnosti objektu
+            </summary>
+            <param name="enabled">indikátor dostuúnosti</param>
+            <param name="controlNames">jména nastavovaných ovladačů</param>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.XmlForms.BaseXmlForm.AssemblyName">
+            <summary>
+            Název sestavení
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.FormFillerMain">
+            <summary>
+            Prohlížeč - klientská aplikace
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.FormFillerMain.Current">
+            <summary>
+            Odkaz na stávající aplikaci
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.FormFillerMain.CommandLineArgs">
+            <summary>
+            Argument spuštění aplikace
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FormFillerMain.ParseCommandLine">
+            <summary>načtení parametrů z příkazové řádky (pro automaticke prihlaseni)</summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FormFillerMain.Main(System.String[])">
+            <summary>hlavní smyčka aplikace</summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.RevisionClass">
+            <summary>
+            Informace o verzích aplikace
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.RevisionClass.Assembly">
+            <summary>
+            sestavení
+            </summary>
+        </member>
+        <member name="F:Gordic.Gfe.FormFiller.RevisionClass.Major">
+            <summary>
+            Majoritní verze
+            </summary>
+        </member>
+        <member name="F:Gordic.Gfe.FormFiller.RevisionClass.Minor">
+            <summary>
+            Minoritní
+            </summary>
+        </member>
+        <member name="F:Gordic.Gfe.FormFiller.RevisionClass.Build">
+            <summary>
+            Sestavení
+            </summary>
+        </member>
+        <member name="F:Gordic.Gfe.FormFiller.RevisionClass.Revision">
+            <summary>
+            Revize
+            </summary>
+        </member>
+        <member name="F:Gordic.Gfe.FormFiller.RevisionClass.MainVersion">
+            <summary>
+            Hlavní verze
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.RevisionClass.FullVersion">
+            <summary>
+            Plná verze
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.RevisionClass.ApplicationName">
+            <summary>
+            Název aplikace
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.CompilationService">
+            <summary>
+            Služba pro práci s zkontrolovanými jednotkami
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.CompilationService.Units">
+            <summary>
+            Kolekce kompilovaných jednotek otevřeného souboru
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.CompilationService.InitializeUnit(Gordic.GFE.Parsers.Services.OpenedFile)">
+            <summary>
+            Inicializace jednotky
+            </summary>
+            <param name="file">Otevřený soubor jednotky</param>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.FileChangeWatcher">
+            <summary>
+            Hlídání změn souboru
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.FileChangeWatcher.DetectExternalChangesOption">
+            <summary>
+            Indikuje, zda je zapotřebí hlídat externí změny
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.FileChangeWatcher.AutoLoadExternalChangesOption">
+            <summary>
+            Automatické načtení externích změn
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileChangeWatcher.DisableAllChangeWatchers">
+            <summary>
+            Zakázat pozorování změn
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileChangeWatcher.EnableAllChangeWatchers">
+            <summary>
+            Povolení pozorování změn
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileChangeWatcher.#ctor(Gordic.GFE.Parsers.Services.OpenedFile)">
+            <summary>
+            Vytvoření nové instance třídy
+            </summary>
+            <param name="file">Otevřený soubor pozorovaného</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileChangeWatcher.Dispose">
+            <summary>
+            Uvolnění objektu
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.FileChangeWatcher.Enabled">
+            <summary>
+            Pozorovátel je povolen nebo není
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.FileAgent">
+            <summary>
+            Služba zaměřená na práci se soubory
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.FileAgent.RecentOpen">
+            <summary>
+            Naposledy otevřené soubory
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileAgent.Unload">
+            <summary>
+            Po ukončení aplikaci se uloží nastavení naposledy otevřených souborů
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileAgent.InitializeService">
+            <summary>
+            Inicializace služby
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.FileAgent.OpenedFiles">
+            <summary>
+            Kolekce všech aktuálně otevřených souborů.
+            Kolekce je pouze kopiemi pro čtení všech aktuálně otevřených souborů.
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileAgent.GetOpenedFile(System.String)">
+            <summary>
+            Získání otevřených souboru nebo vrácení NULL pokud soubor není otevřený.
+            </summary>
+            <param name="fileName">Soubor k otevření</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileAgent.GetOrCreateOpenedFile(System.String)">
+            <summary>
+            Vrátí nebo vytvoří soubor.
+            </summary>
+            <param name="fileName">Soubor k otevření</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileAgent.OpenedFileFileNameChange(Gordic.GFE.Parsers.Services.OpenedFile,System.String,System.String)">
+            <summary>
+            Volá se z OpenedFile.set_FileName pro aktualizaci seznamu.
+            </summary>
+            <param name="file">Otevřený soubor sestavy</param>
+            <param name="oldName">Starý název souboru</param>
+            <param name="newName">Nový název souboru</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileAgent.OpenedFileClosed(Gordic.GFE.Parsers.Services.OpenedFile)">
+            <summary>
+            Volá se OpenedFile.UnregisterView pro aktualizaci slovniku.
+            </summary>
+            <param name="file">Název otevřeného souboru</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileAgent.IsOpen(System.String)">
+            <summary>
+            Indikuje, zda soubor je otevřen
+            </summary>
+            <param name="fileName">Název souboru</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileAgent.OpenFile(System.String)">
+            <summary>
+            Otevře obsah zobrazení specifického souboru a přepné se na otevřené zobrazení 
+            a vrátí stávající zobrazení obsahu pro soubor pokud je již zobrazen
+            </summary>
+            <param name="fileName">Název souboru pro otevření.</param>
+            <returns>existující nebo nové vytvořený obsah specifického souboru.</returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileAgent.OpenFile(System.String,System.Boolean)">
+            <summary>
+            Otevře obsah zobrazení specifického souboru a přepné se na otevřené zobrazení 
+            a vrátí stávající zobrazení obsahu pro soubor pokud je již zobrazen
+            </summary>
+            <param name="fileName">Název souboru pro otevření.</param>
+            <param name="switchToOpenedView">Indikuje okamžité přepnutí na soubor po otevření.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileAgent.OpenFile(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Otevře obsah zobrazení specifického souboru a přepné se na otevřené zobrazení 
+            a vrátí stávající zobrazení obsahu pro soubor pokud je již zobrazen
+            </summary>
+            <param name="fileName">Název souboru pro otevření.</param>
+            <param name="switchToOpenedView">Indikuje okamžité přepnutí na soubor po otevření.</param>
+            <param name="recentOpen">Přidání do seznamu naposledy otevřených souborů</param>
+            <returns>Pohled na obsah souboru</returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileAgent.GetOpenFiles">
+            <summary>
+            Seznam primárních souborů otevřených v pohledech
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileAgent.GetViewForFile(System.String)">
+            <summary>
+            Získání pohledu na otevřený soubor
+            </summary>
+            <param name="fileName">Název souboru</param>
+            <returns></returns>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.FileAgent.SaveUsingTemporaryFile">
+            <summary>
+            Indikuje uložení souboru s použitím dočasných souborů
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileAgent.RenameFile(System.String,System.String,System.Boolean)">
+            <summary>
+            Přejmenování nebo přesunutí souboru.
+            </summary>
+            <param name="oldName">Starý název</param>
+            <param name="newName">Nový název</param>
+            <param name="isDirectory">Indikuje, že se jedná o složku</param>
+        </member>
+        <member name="E:Gordic.Gfe.FormFiller.FileAgent.FileRenaming">
+            <summary>
+            Volá se před přejmenováním souboru
+            </summary>
+        </member>
+        <member name="E:Gordic.Gfe.FormFiller.FileAgent.FileRenamed">
+            <summary>
+            Volá se po přejmenování souboru
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileAgent.JumpToFilePosition(System.String,System.Int32,System.Int32)">
+            <summary>
+            Otevření specifického souboru na skok na určitou pozici.
+            </summary>
+            <param name="fileName">Soubor k otevření</param>
+            <param name="line">Řádek pozice</param>
+            <param name="column">Sloupec pozice</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileAgent.OpenFile(Gordic.GFE.Parsers.Utils.RecentOpenFile)">
+            <summary>
+            otevření naposledy souboru ze seznamu naposledy otevřených souborů
+            </summary>
+            <param name="rof">položka seznamu naposledy otevřených souborů</param>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.FileServiceOpenedFile">
+            <summary>
+            Služba pro práci s otevřenými soubory
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileServiceOpenedFile.ChangeFileName(System.String)">
+            <summary>
+            Změna názvu souboru
+            </summary>
+            <param name="newValue">Nový název souboru</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileServiceOpenedFile.#ctor(System.String)">
+            <summary>
+            Vytvoření nové instane třídy
+            </summary>
+            <param name="fileName">úplná cesta k souboru</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileServiceOpenedFile.#ctor(System.Byte[])">
+            <summary>
+            Vytvoření nové instance třídy dle obsahu pohledu
+            </summary>
+            <param name="fileData">Obsah souboru</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileServiceOpenedFile.#ctor">
+            <summary>
+            Pro účely DOM objektů
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.FileServiceOpenedFile.RegisteredViewContents">
+            <summary>
+            Seznam pohledu na obbsah registrovaných tímto otevřeným souborem
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileServiceOpenedFile.ForceInitializeView(Gordic.GFE.Parsers.Gui.IViewContent)">
+            <summary>
+            Inicializace pohledu
+            </summary>
+            <param name="view">Pohled k inicializací</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileServiceOpenedFile.RegisterView(Gordic.GFE.Parsers.Gui.IViewContent)">
+            <summary>
+            Regstrace pohledu
+            </summary>
+            <param name="view">Pohled k registraci</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileServiceOpenedFile.UnregisterView(Gordic.GFE.Parsers.Gui.IViewContent)">
+            <summary>
+            Zrušení registrace uvedeného pohledu
+            </summary>
+            <param name="view">Daný pohled</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileServiceOpenedFile.CloseIfAllViewsClosed">
+            <summary>
+            Zavření všech pohledů na soubor
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.FileServiceOpenedFile.SaveToDisk">
+            <summary>
+            Uložení souboru na disk
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.IconService">
+            <summary>
+            Služba pro práci s ikonkami
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.IconService.GetGhostBitmap(System.String)">
+            <summary>
+            Získání obrázku dle názvu
+            </summary>
+            <param name="name">Název obrázku</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.IconService.GetGhostBitmap(System.Drawing.Bitmap)">
+            <summary>
+            Získání obrázku dle originálu
+            </summary>
+            <param name="bitmap">originál</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.IconService.GetBitmap(System.String)">
+            <summary>
+            Získání obrázku dle názvu
+            </summary>
+            <param name="name">název obrázku</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.IconService.GetIcon(System.String)">
+            <summary>
+            Získání ikonky dle názvu
+            </summary>
+            <param name="name">Název ikonky</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.IconService.GetImageForProjectType(System.String)">
+            <summary>
+            Získání obrázku dle typu projektu
+            </summary>
+            <param name="projectType"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.IconService.GetImageForFile(System.String)">
+            <summary>
+            Získání obrázku dle názvu souboru
+            </summary>
+            <param name="fileName">Název souboru</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.ServiceService">
+            <summary>
+            Služba pro práci se službami
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.ServiceService.ServiceSelection">
+            <summary>
+            Služba pro prácí s výběrem
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.XmlDocumentService">
+            <summary>
+            Služba pro práci s XML dokumentem
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.XmlDocumentService.CopyInfoSection(System.Xml.XmlDocument,System.Xml.XmlElement,Gordic.GFE.Parsers.Gui.XmlDocumentPosition)">
+            <summary>
+            kolpírování sekce INFO z dokumetu <paramref name="xmlOldDoc"/> 
+            do větve <paramref name="xmlFormat"/> dokumentu <paramref name="xmlDoc"/>
+            </summary>
+            <param name="xmlOldDoc">Zdrojový dokument</param>
+            <param name="xmlFormat">Větev cílového dokumentu</param>
+            <param name="xmlDoc">Cílový dokument</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.XmlDocumentService.CopyTemplateSection(System.Xml.XmlDocument,System.Xml.XmlElement,Gordic.GFE.Parsers.Gui.XmlDocumentPosition)">
+            <summary>
+            kolpírování sekce TEMPLATE z dokumetu <paramref name="xmlOldDoc"/> 
+            do větve <paramref name="xmlFormat"/> dokumentu <paramref name="xmlDoc"/>
+            </summary>
+            <param name="xmlOldDoc">Zdrojový dokument</param>
+            <param name="xmlFormat">Větev cílového dokumentu</param>
+            <param name="xmlDoc">Cílový dokument</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.XmlDocumentService.GetXmlAsString(System.Xml.XmlDocument)">
+            <summary>
+            Získání pěkné schodišťové struktury
+            </summary>
+            <param name="xmlDoc">Xml dokument s obsahem</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.ToolbarService">
+            <summary>
+            Služba pro práci s Nástrojovou lištou
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.ToolbarService.TopologicalSort">
+            <summary>
+            Podpora třídění informačních jednotek s použitím InsertBefore/InsertAfter
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.ToolbarService.TopologicalSort.Execute">
+            <summary>
+            Spuštění třídění
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.ToolbarService.CreateToolStripItems(System.String,System.Object,System.Boolean)">
+            <summary>
+            Vytvoření položek ToolBar
+            </summary>
+            <param name="path">Cesta k popisu položek</param>
+            <param name="owner">Vlastník</param>
+            <param name="throwOnNotFound">Indikuje, že je zapotřebí vyhodit chybu v případě nenalezení položky</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.ToolbarService.CreateToolStripItems(System.Object,Gordic.GFE.Parsers.Core.AddInTreeNode)">
+            <summary>
+            Vytvoření položek ToolBar
+            </summary>
+            <param name="owner">Vlastník</param>
+            <param name="treeNode">Větev konfiguračního stromu</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.ToolbarService.CreateToolStrip(System.Object,Gordic.GFE.Parsers.Core.AddInTreeNode)">
+            <summary>
+            Vytvoření ToolStripu
+            </summary>
+            <param name="owner">Vlastník</param>
+            <param name="treeNode">Větev konfiguračního stromu</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.ToolbarService.CreateToolStrip(System.Object,System.String)">
+            <summary>
+            Vytvoření ToolStripu
+            </summary>
+            <param name="owner">Vlastník</param>
+            <param name="addInTreePath">Cesta k popisu</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.ToolbarService.CreateToolbars(System.Object,System.String)">
+            <summary>
+            Vytvoření nástrojové lišty
+            </summary>
+            <param name="owner">Vlastník</param>
+            <param name="addInTreePath">Cesta</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.ToolbarService.CreateToolbarItems(System.Object,System.String)">
+            <summary>
+            Vytvoření nástrojové lišty
+            </summary>
+            <param name="owner">Vlastník</param>
+            <param name="addInTreePath">Cesta</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.ToolbarService.UpdateToolbar(System.Windows.Forms.ToolStrip)">
+            <summary>
+            Aktualizace toolbaru
+            </summary>
+            <param name="toolStrip">Pruh menu</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.ToolbarService.UpdateToolbarText(System.Windows.Forms.ToolStrip)">
+            <summary>
+            Aktualizace textu nástrojové lišty
+            </summary>
+            <param name="toolStrip">Pruh menu</param>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.ToolbarService.AddItemsToBar(System.Windows.Forms.ToolStripItemCollection,System.Object,System.String)">
+            <summary>
+            Vložení položek konfiguračního stromu do dané kolekce
+            </summary>
+            <param name="toolStripItemCollection">Daná kolekce</param>
+            <param name="owner">Vlastnik položek</param>
+            <param name="path">Cesta v konfiguračním stromě</param>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.Pads.AbstractPadContent">
+            <summary>
+            abstractní třída záložek
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Pads.AbstractPadContent.Control">
+            <summary>
+            Ovladač uvnitř záložky
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Pads.AbstractPadContent.RedrawContent">
+            <summary>
+            Překreslení obsahu záložky
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Pads.AbstractPadContent.Dispose">
+            <summary>
+            Uvolnění záložky
+            </summary>
+        </member>
+        <member name="M:Gordic.Gfe.FormFiller.Pads.AbstractPadContent.BringToFront(Gordic.GFE.Parsers.Gui.IDesktopLayout)">
+            <summary>
+            Přenesení záložky do popředí
+            </summary>
+            <param name="layout">Rozvržení pracovní plochy</param>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Pads.AbstractPadContent.PadDescriptor">
+            <summary>
+            Descriptor záložky
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Pads.AbstractPadContent.IsVisible">
+            <summary>
+            Indikuje viditelnost záložky
+            </summary>
+        </member>
+        <member name="T:Gordic.Gfe.FormFiller.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.gordic">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__App__agx01">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__App__gfe01">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__aplikace_ukonceni">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__casove_platne">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__ciselnik">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__fajfka_zelena">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__format_sloupce">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__logo_gordic_modul">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__oblast">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__odebrat">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__odstornovat">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__okno_zavrit">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__polozka_povinna">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__polozky">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__polozky_neplanovane">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__polozky_uzamcene">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__pridat">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__sestava">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__slozka">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__slozka_otevrena">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__soubor_gor">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__soubor_otevrit">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__soubor_textovy">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__stornovat">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__symbol_cislo">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__tabulka">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__tisk_nahled">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__ulozit">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__ulozit_do_databaze">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__ulozit_jako">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Gin__webove_sluzby">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Ost__struktura">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Ost__ulozne_misto">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Gfe.FormFiller.Properties.Resources.Icons__Wfl__dokument_konverze_do_pdf">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,1920 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.GdtSupport.WinClient</name>
+    </assembly>
+    <members>
+        <member name="T:GDNSER06002.GUserControlDirectory">
+            <summary>
+            Ovládací prvek pro WinForm. 
+            Umožňuje zobrazit a zadávat existující adresář z Filesystému.
+            </summary>
+        </member>
+        <member name="F:GDNSER06002.GUserControlDirectory.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="T:GDNSER06002.GUserControlDirectory.IsSettingByEnum">
+            <summary>
+            Výčet typů, kdo vyvolal změnu hodnoty ovládacího prvku
+            </summary>
+        </member>
+        <member name="F:GDNSER06002.GUserControlDirectory.IsSettingByEnum.program">
+            <summary>
+            Změna byla vyvolána algoritmem programu - např. nastavení výchozí hodnoty, nebo nastavení hodnoty z DB
+            </summary>
+        </member>
+        <member name="F:GDNSER06002.GUserControlDirectory.IsSettingByEnum.user">
+            <summary>
+            Změna byla vyvolána přímým editačním zásahem uživatele nad tímto ovládacím prvkem.
+            </summary>
+        </member>
+        <member name="T:GDNSER06002.GUserControlDirectory.ValueValidEventArg">
+            <summary>
+            Struktura pro přenos údajů v rámci události "ValueIsValided" a "ValueIsInvalided"
+            </summary>
+        </member>
+        <member name="T:GDNSER06002.GUserControlDirectory.ValueIsValidCallBack">
+            <summary>
+            Obslužná funkce-delegát pro událost "ValueIsValided"
+            </summary>
+        </member>
+        <member name="E:GDNSER06002.GUserControlDirectory.ValueIsValided">
+            <summary>
+            Událost se vyvolá vždy, kdy se uživatelsky editovaná hodnota v ovládacím prvku stává validní.
+            </summary>
+        </member>
+        <member name="T:GDNSER06002.GUserControlDirectory.ValueIsInvalidCallBack">
+            <summary>
+            Obslužná funkce-delegát pro událost "ValueIsInvalided"
+            </summary>
+        </member>
+        <member name="E:GDNSER06002.GUserControlDirectory.ValueIsInvalided">
+            <summary>
+            Událost se vyvolá vždy, kdy se uživatelsky editovaná hodnota v ovládacím prvku stává nevalidní.
+            </summary>
+        </member>
+        <member name="F:GDNSER06002.GUserControlDirectory._RegKeyLastValue">
+            <summary>
+            Interní proměnná pro vlastnost "RegKeyLastValue"
+            </summary>
+        </member>
+        <member name="P:GDNSER06002.GUserControlDirectory.RegKeyLastValue">
+            <summary>
+            Název klíče v registrech, který odkazuje na poslední uživatelem nastavenou hodnotu. 
+            V registrech se ukládá uživatelem naposledy nastavená hodnota - adresář. 
+            Programátor podle klíče v registrech určuje typ použití adresáře. Např. adresář pro importovací soubory, adresář pro uložení sestav.
+            Uživateli se potom ve stejné situaci předplní adresář, který použil posledně.
+            Pokud v registech není poslední použitá hodnota nastavena, potom se musí přednastavit výchozí hodtnota přesnastavená programátorem.
+            Poslední uložená hodnota se čte z USER registrů. Pokud není nalezena, pokouší se prvek načíst nastavení z All user a poté z Local Machine
+            </summary>
+        </member>
+        <member name="F:GDNSER06002.GUserControlDirectory._RegKeyPathLastValue">
+            <summary>
+            Cesta v registrech pro uložení poslední uživatelem nastavené hodnoty. 
+            Zatím natvrdo s tím, že podle charakteru hodnotu ( SHARED nebo FAZE ) se cesta do registrů bude vyskládávat.
+            </summary>
+        </member>
+        <member name="F:GDNSER06002.GUserControlDirectory._DefaultLastValue">
+            TODO: časem předělat tak, aby programátor určil, zda se jedná o obecnou GINIS hodnotu ( potom to patří do SHARE ) a nebo zda se jedná pouze o hodnotu využívanou fází ( potom se jedná o větev registrů platnou pouze pro fázi )
+            <summary>
+            Interní proměnná pro vlastnost "DefaultLastValue"
+            </summary>
+        </member>
+        <member name="P:GDNSER06002.GUserControlDirectory.DefaultLastValue">
+            TODO: Předělat na adresář Dokumenty
+            <summary>
+            Default hodnota, která se má přednastavit v v případě že není uložená uživatelem naposledy nastavená hodnota.
+            </summary>
+        </member>
+        <member name="F:GDNSER06002.GUserControlDirectory._IsSettingBy">
+            <summary>
+            Interní stav, který označuje, zda je hodnota pole nastavována uživatelským zásahem a nebo na zásahem programu.
+            Výchozí hodnota je false - nastavení hodnoty programu je realizováno uživatelem.
+            </summary>
+        </member>
+        <member name="P:GDNSER06002.GUserControlDirectory.IsSettingBy">
+            <summary>
+            Příznak, že aktuální změna je prováděna programem a nebo zásahem uživatele.
+            Tento příznak je určen pro použití v rámci událostí "ValueIsValided" a "ValueIsInvalided"
+            </summary>
+        </member>
+        <member name="P:GDNSER06002.GUserControlDirectory.Text">
+            <summary>
+            Zobrazovaná hodnota ovládacího prvku - adresář souborového systému.
+            </summary>
+        </member>
+        <member name="M:GDNSER06002.GUserControlDirectory.LoadLastValue">
+            <summary>
+            Načtení uživatelem naposledy nastavené hodnoty.
+            Pokud v registrech není poslední nastavená hodnota uložena, použije se přednastavená defaul hodnota.
+            </summary>
+        </member>
+        <member name="M:GDNSER06002.GUserControlDirectory.SaveLastValue">
+            <summary>
+            Uložení aktuální hodnoty jako hodnoty uživatelem naposledy nastavené. ( Pro příští přednastavení naposledy použitého adresáře )
+            </summary>
+        </member>
+        <member name="M:GDNSER06002.GUserControlDirectory.#ctor">
+            <summary>
+            Kontruktor ovládacího prvku
+            </summary>
+        </member>
+        <member name="M:GDNSER06002.GUserControlDirectory.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:GDNSER06002.GUserControlDirectory.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:GDNSER06002.GUserControlDirectory.button1_Click(System.Object,System.EventArgs)">
+            <summary>
+            Událost kdy uživatel klikne na tlačítko 
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:GDNSER06002.GUserControlDirectory.ShowDialogChangeDir">
+            <summary>
+            Funkce vyvolá zobrazení systémového dialogu pro výběr adresáře.
+            </summary>
+        </member>
+        <member name="M:GDNSER06002.GUserControlDirectory.textBox1_MouseDown(System.Object,System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Událost kdy uživatel klikne do editačního pole pravým tlačítkem myši
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:GDNSER06002.GUserControlDirectory.textBox1_TextChanged(System.Object,System.EventArgs)">
+            <summary>
+            Událost kdy se mění text pole. Může nastat jak programově tak zásahem uživatele.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:GDNSER06002.GUserControlDirectory.SetValueIsValid">
+            <summary>
+            Funkce vyvolávající událost - oznámení o změně stavu pole z neplatného na platný.
+            </summary>
+        </member>
+        <member name="M:GDNSER06002.GUserControlDirectory.SetValueIsInvalid">
+            <summary>
+            Funkce vyvolávající událost - oznámení o změně stavu pole z platného na neplatný.
+            </summary>
+        </member>
+        <member name="M:GDNSER06002.GUserControlDirectory.GUserControlDirectory_Load(System.Object,System.EventArgs)">
+            <summary>
+            Událost při vytvoření prvku. Inicializace default hodnoty.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="T:GDNSER06002.GUserControlFile">
+            <summary>
+            Ovládací prvek pro WinForm. 
+            Umožňuje zobrazit a zadávat existující adresář z Filesystému.
+            </summary>
+        </member>
+        <member name="F:GDNSER06002.GUserControlFile.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="T:GDNSER06002.GUserControlFile.IsSettingByEnum">
+            <summary>
+            Výčet typů, kdo vyvolal změnu hodnoty ovládacího prvku
+            </summary>
+        </member>
+        <member name="F:GDNSER06002.GUserControlFile.IsSettingByEnum.program">
+            <summary>
+            Změna byla vyvolána algoritmem programu - např. nastavení výchozí hodnoty, nebo nastavení hodnoty z DB
+            </summary>
+        </member>
+        <member name="F:GDNSER06002.GUserControlFile.IsSettingByEnum.user">
+            <summary>
+            Změna byla vyvolána přímým editačním zásahem uživatele nad tímto ovládacím prvkem.
+            </summary>
+        </member>
+        <member name="T:GDNSER06002.GUserControlFile.ValueValidEventArg">
+            <summary>
+            Struktura pro přenos údajů v rámci události "ValueIsValided" a "ValueIsInvalided"
+            </summary>
+        </member>
+        <member name="T:GDNSER06002.GUserControlFile.ValueIsValidCallBack">
+            <summary>
+            Obslužná funkce-delegát pro událost "ValueIsValided"
+            </summary>
+        </member>
+        <member name="E:GDNSER06002.GUserControlFile.ValueIsValided">
+            <summary>
+            Událost se vyvolá vždy, kdy se uživatelsky editovaná hodnota v ovládacím prvku stává validní.
+            </summary>
+        </member>
+        <member name="T:GDNSER06002.GUserControlFile.ValueIsInvalidCallBack">
+            <summary>
+            Obslužná funkce-delegát pro událost "ValueIsInvalided"
+            </summary>
+        </member>
+        <member name="E:GDNSER06002.GUserControlFile.ValueIsInvalided">
+            <summary>
+            Událost se vyvolá vždy, kdy se uživatelsky editovaná hodnota v ovládacím prvku stává nevalidní.
+            </summary>
+        </member>
+        <member name="F:GDNSER06002.GUserControlFile._RegKeyLastValue">
+            <summary>
+            Interní proměnná pro vlastnost "RegKeyLastValue"
+            </summary>
+        </member>
+        <member name="P:GDNSER06002.GUserControlFile.RegKeyLastValue">
+            <summary>
+            Název klíče v registrech, který odkazuje na poslední uživatelem nastavenou hodnotu. 
+            V registrech se ukládá uživatelem naposledy nastavená hodnota - adresář. 
+            Programátor podle klíče v registrech určuje typ použití adresáře. Např. adresář pro importovací soubory, adresář pro uložení sestav.
+            Uživateli se potom ve stejné situaci předplní adresář, který použil posledně.
+            Pokud v registech není poslední použitá hodnota nastavena, potom se musí přednastavit výchozí hodtnota přesnastavená programátorem.
+            Poslední uložená hodnota se čte z USER registrů. Pokud není nalezena, pokouší se prvek načíst nastavení z All user a poté z Local Machine
+            </summary>
+        </member>
+        <member name="F:GDNSER06002.GUserControlFile._RegKeyPathLastValue">
+            <summary>
+            Cesta v registrech pro uložení poslední uživatelem nastavené hodnoty. 
+            Zatím natvrdo s tím, že podle charakteru hodnotu ( SHARED nebo FAZE ) se cesta do registrů bude vyskládávat.
+            </summary>
+        </member>
+        <member name="F:GDNSER06002.GUserControlFile._DefaultLastValue">
+            TODO: časem předělat tak, aby programátor určil, zda se jedná o obecnou GINIS hodnotu ( potom to patří do SHARE ) a nebo zda se jedná pouze o hodnotu využívanou fází ( potom se jedná o větev registrů platnou pouze pro fázi )
+            <summary>
+            Interní proměnná pro vlastnost "DefaultLastValue"
+            </summary>
+        </member>
+        <member name="P:GDNSER06002.GUserControlFile.DefaultLastValue">
+            TODO: Předělat na adresář Dokumenty
+            <summary>
+            Default hodnota, která se má přednastavit v v případě že není uložená uživatelem naposledy nastavená hodnota.
+            </summary>
+        </member>
+        <member name="F:GDNSER06002.GUserControlFile._IsSettingBy">
+            <summary>
+            Interní stav, který označuje, zda je hodnota pole nastavována uživatelským zásahem a nebo na zásahem programu.
+            Výchozí hodnota je false - nastavení hodnoty programu je realizováno uživatelem.
+            </summary>
+        </member>
+        <member name="P:GDNSER06002.GUserControlFile.IsSettingBy">
+            <summary>
+            Příznak, že aktuální změna je prováděna programem a nebo zásahem uživatele.
+            Tento příznak je určen pro použití v rámci událostí "ValueIsValided" a "ValueIsInvalided"
+            </summary>
+        </member>
+        <member name="P:GDNSER06002.GUserControlFile.Text">
+            <summary>
+            Zobrazovaná hodnota ovládacího prvku - adresář souborového systému.
+            </summary>
+        </member>
+        <member name="M:GDNSER06002.GUserControlFile.LoadLastValue">
+            <summary>
+            Načtení uživatelem naposledy nastavené hodnoty.
+            Pokud v registrech není poslední nastavená hodnota uložena, použije se přednastavená defaul hodnota.
+            </summary>
+        </member>
+        <member name="M:GDNSER06002.GUserControlFile.SaveLastValue">
+            <summary>
+            Uložení aktuální hodnoty jako hodnoty uživatelem naposledy nastavené. ( Pro příští přednastavení naposledy použitého adresáře )
+            </summary>
+        </member>
+        <member name="M:GDNSER06002.GUserControlFile.#ctor">
+            <summary>
+            Kontruktor ovládacího prvku
+            </summary>
+        </member>
+        <member name="M:GDNSER06002.GUserControlFile.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:GDNSER06002.GUserControlFile.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:GDNSER06002.GUserControlFile.button1_Click(System.Object,System.EventArgs)">
+            <summary>
+            Událost kdy uživatel klikne na tlačítko 
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:GDNSER06002.GUserControlFile.ShowDialogChangeFile">
+            <summary>
+            Funkce vyvolá zobrazení systémového dialogu pro výběr adresáře.
+            </summary>
+        </member>
+        <member name="M:GDNSER06002.GUserControlFile.textBox1_MouseDown(System.Object,System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Událost kdy uživatel klikne do editačního pole pravým tlačítkem myši
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:GDNSER06002.GUserControlFile.textBox1_TextChanged(System.Object,System.EventArgs)">
+            <summary>
+            Událost kdy se mění text pole. Může nastat jak programově tak zásahem uživatele.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:GDNSER06002.GUserControlFile.SetValueIsValid">
+            <summary>
+            Funkce vyvolávající událost - oznámení o změně stavu pole z neplatného na platný.
+            </summary>
+        </member>
+        <member name="M:GDNSER06002.GUserControlFile.SetValueIsInvalid">
+            <summary>
+            Funkce vyvolávající událost - oznámení o změně stavu pole z platného na neplatný.
+            </summary>
+        </member>
+        <member name="M:GDNSER06002.GUserControlFile.GUserControlFile_Load(System.Object,System.EventArgs)">
+            <summary>
+            Událost při vytvoření prvku. Inicializace default hodnoty.
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.DirectoryBox">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.DirectoryBox.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.DirectoryBox.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.DirectoryBox.button1_Font">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Font similar to [Font: Name=Microsoft Sans Serif, Size=8,25, Units=3, GdiCharSet=1, GdiVerticalFont=False].
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.DirectoryBox.button1_Location">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Point similar to {X=80,Y=0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.DirectoryBox.button1_Size">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Size similar to {Width=24, Height=23}.
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.DirectoryBox.button1_TabIndex">
+            <summary>
+              Looks up a localized resource of type System.Int32 similar to 3.
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.DirectoryBox.button1_Text">
+            <summary>
+              Looks up a localized string similar to ....
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.DirectoryBox.textBox1_Location">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Point similar to {X=0,Y=0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.DirectoryBox.textBox1_Size">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Size similar to {Width=80, Height=20}.
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.DirectoryBox.textBox1_TabIndex">
+            <summary>
+              Looks up a localized resource of type System.Int32 similar to 2.
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.DirectoryBox.textBox1_Text">
+            <summary>
+              Looks up a localized string similar to c:\.
+            </summary>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.FileBox">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.FileBox.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.FileBox.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.FileBox.button1_Anchor">
+            <summary>
+              Looks up a localized resource of type System.Windows.Forms.AnchorStyles similar to Top, Right.
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.FileBox.button1_Font">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Font similar to [Font: Name=Microsoft Sans Serif, Size=8,25, Units=3, GdiCharSet=1, GdiVerticalFont=False].
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.FileBox.button1_Location">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Point similar to {X=80,Y=0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.FileBox.button1_Size">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Size similar to {Width=24, Height=23}.
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.FileBox.button1_TabIndex">
+            <summary>
+              Looks up a localized resource of type System.Int32 similar to 3.
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.FileBox.button1_Text">
+            <summary>
+              Looks up a localized string similar to ....
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.FileBox.textBox1_Anchor">
+            <summary>
+              Looks up a localized resource of type System.Windows.Forms.AnchorStyles similar to Top, Left, Right.
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.FileBox.textBox1_Location">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Point similar to {X=0,Y=0}.
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.FileBox.textBox1_Size">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Size similar to {Width=80, Height=20}.
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.FileBox.textBox1_TabIndex">
+            <summary>
+              Looks up a localized resource of type System.Int32 similar to 2.
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.FileBox.textBox1_Text">
+            <summary>
+              Looks up a localized string similar to c:\.
+            </summary>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.FileDataSet">
+             <summary>
+            Represents a strongly typed in-memory cache of data.
+            </summary>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.FileDataSet.FilesDataTableDataTable">
+             <summary>
+            Represents the strongly named DataTable class.
+            </summary>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.FileDataSet.FilesDataTableRow">
+             <summary>
+            Represents strongly named DataRow class.
+            </summary>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.FileDataSet.FilesDataTableRowChangeEvent">
+             <summary>
+            Row event argument class
+            </summary>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.Form1">
+            <summary>
+            Hlavní okno aplikace - nástroj pro vytváření GDZ balíčků
+            </summary>
+        </member>
+        <member name="F:Gordic.GdtSupport.WinClient.Form1.setByProgram">
+            <summary>
+            Příznak, že hodnoty byly nastaveny programově
+            </summary>
+        </member>
+        <member name="F:Gordic.GdtSupport.WinClient.Form1.m_config_name">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.GdtSupport.WinClient.Form1.m_tmp_adr">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.GdtSupport.WinClient.Form1.v_home_adr">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.GdtSupport.WinClient.Form1.m_config">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.GdtSupport.WinClient.Form1.m_verze_spg">
+            <summary>
+            Verze balíčku
+            </summary>
+        </member>
+        <member name="F:Gordic.GdtSupport.WinClient.Form1.is_dist_cond_valid">
+            <summary>
+            Výraz podmínky pro distribuci
+            </summary>
+        </member>
+        <member name="F:Gordic.GdtSupport.WinClient.Form1.is_run_cond_valid">
+            <summary>
+            Výraz podmínky pro spuštění
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.#ctor(System.String[])">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.Form1_Load(System.Object,System.EventArgs)">
+            <summary>
+            Otevření okna
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.ReadDir(System.String,System.Collections.Generic.List{System.String}@)">
+            <summary>
+            Pomocná funkce využitá z funkce Volba_prelozit().
+            Slouží pro načtení seznamu souborů zadaného adresáře. Seznam následně slouží pro realizaci hromadného překladu.
+            </summary>
+            <param name="a_path">Cesta k adresáři, který se má načíst.</param>
+            <param name="a_array">Výstupní pole obsahuje plná jména souborů, které jsou v adresáři obsaženy.</param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.MakeNewIxsGdt">
+            <summary>
+            Na serveru zaregistruje nový script ve stavu příprava - získá IXS_GDT
+            V tomto okamžiku musí být zadány popisné údaje
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.GetAktVersion">
+            <summary>
+            Podle políčka na obrazovce vrátí verzi, která je další na řadě
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.GetNextVersion">
+            <summary>
+            Podle políčka na obrazovce vrátí verzi, která je další na řadě
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.MakeTst">
+            <summary>
+            Vytvoří na disku TST soubor a podpis a přidá to do gridu
+            Pokud již existovaly, potom je smaže a zcela nově vytvoří
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.button4_Click(System.Object,System.EventArgs)">
+            <summary>
+            Uložit konfiguraci
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.SaveCfg">
+            <summary>
+            Uloží konfiguraci
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.SignFile(System.String,System.String,System.String,System.String)">
+            <summary>
+            Funkce pro vytvoření externího podpisu souboru ve formátu PKCS7
+            </summary>
+            <param name="a_in_file">Soubor, který se má podepsat</param>
+            <param name="a_out_file">Výstupní soubor</param>
+            <param name="a_cert_file">Soubor s privátním klíčem, kterým se má podepsat</param>
+            <param name="a_password">Heslo k privátnímu klíči</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.FileToByteArray(System.String)">
+            <summary>
+            Načtení souboru do pole Byte
+            </summary>
+            <param name="fileName">Jméno vstupního souboru</param>
+            <returns>Naplněné pole Byte</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.ByteArrayToFile(System.String,System.Byte[])">
+            <summary>
+            Zapis pole Byte do zadaného souboru
+            </summary>
+            <param name="fileName">Budoucí cílový soubor na disku</param>
+            <param name="a_array">Pole Byte, které se mají zapsat.</param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.SignMsg(System.Byte[],System.Security.Cryptography.X509Certificates.X509Certificate2)">
+            <summary>
+            Funkce pro vytvoření externího podpisu souboru ve formátu PKCS7
+            </summary>
+            <param name="data">Pole BYTE, které se má podepsat</param>
+            <param name="certificate_from">Certifikát, kterým se má podepsat</param>
+            <returns>Pole BYTE obsahující podpis</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.MakeGdz">
+            <summary>
+            Podle zadání parametrů na obrazovce vytvoří na serveru GDZ soubor
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.dataGridView1_DragEnter(System.Object,System.Windows.Forms.DragEventArgs)">
+            <summary>
+            Označení akceptace drag drop souborů
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.dataGridView1_DragDrop(System.Object,System.Windows.Forms.DragEventArgs)">
+            <summary>
+            Udělá drag drop
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.AddFiles(System.Collections.Generic.List{System.String})">
+            <summary>
+            Do gridu přidá zadané soubory
+            </summary>
+            <param name="a_add_files"></param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.button5_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tlačítko pro přidání souborů
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.button7_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tlačítko pro načtení adresáře
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.ReadInfoForIxsGdt(System.String)">
+            <summary>
+            Načtení informací o GDT z databáze
+            </summary>
+            <param name="a_ixs_gdt"></param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.button6_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tlačítko pro odebrání souborů
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.button8_Click(System.Object,System.EventArgs)">
+            <summary>
+            Komplentí vygenerování 
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.ChangeState">
+            <summary>
+            Funkce pro ověření přípustnosti generovat soubor
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.IsValidPathCharacters(System.String)">
+            <summary>
+            Kontrola, že text může být jménem cesty
+            </summary>
+            <param name="filePath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.LaunchFolderView(System.String)">
+            <summary>
+            Launch the folder view
+            </summary>
+            <param name="p_Filename">The fully qualified path and filename of the target to open as highlighted by explorer</param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.ReadVarFromIni(System.String,System.String,System.String,System.String)">
+            <summary>
+            Funkce pro cteni konfiguracnich promennych s souboru ( typ cteni z INI souboru )
+            Jedna se o fyzicke cteni primo ze souboru na disku. Windows obcas cteni z INI cache-{uje) a pokud se na disku vymeni soubor, potom muze vracet falesne udaje
+            </summary>
+            <param name="a_file_name">Plné jméno INI souboru ( včetně plné cesty )</param>
+            <param name="a_section">Sekce ze které se má číst.</param>
+            <param name="a_value_name">Jméno proměnné, ze které se má číst.</param>
+            <param name="a_default_value">Výchozí hodnota která se vrátí v případě, že proměnná nebyla v INI souboru nalezena.</param>
+            <returns>Vrátí hodnotu proměnné. Pokud např. soubor neexistuje a nebo nelze otevřít pro čtení, potom vrátí null.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.WriteLabel(System.String)">
+            <summary>
+            Výpis popisu, co aplikace dělá
+            </summary>
+            <param name="a_label">Text, který se má vypsat</param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.WriteLabelAndStep(System.String)">
+            <summary>
+            Výpis popisu, co aplikace dělá + realizace kroku na progress baru
+            </summary>
+            <param name="a_label"></param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.NormalizeText(System.String,System.Int32)">
+            <summary>
+            Upravení textu tak, aby šel bez koliz zapsat to TST souboru jako hodnota položky
+            </summary>
+            <param name="a_text">Text, který se má upravit</param>
+            <param name="a_max_size">Maximální povolená délka výsledného textu</param>
+            <returns>Upravený text</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.SetGinsgdtAktivita(System.String,System.Int32)">
+            <summary>
+            Uvolnění balíčku do distribuce
+            </summary>
+            <param name="a_ixs_gdt"></param>
+            <param name="a_aktivita"></param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.ReadGindgdtList(System.String)">
+            <summary>
+             Načtení seznamu souborů zadaného balíčku
+            </summary>
+            <param name="a_ixs_gdt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.ReadGindgdt(System.String,System.String)">
+            <summary>
+            Načtení bitové podoby zadaného souboru
+            </summary>
+            <param name="a_ixs_gdt"></param>
+            <param name="a_soubor"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.button2_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tlařítko pro LOAD GDZ balíčku z centrální databáze
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.dataGridView1_CellDoubleClick(System.Object,System.Windows.Forms.DataGridViewCellEventArgs)">
+            <summary>
+            Dvouklik na řádku tabulky se soubory
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.buttonCopyLink_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tlačítko pro vložení linku do clipboardu
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.button8_Click_1(System.Object,System.EventArgs)">
+            <summary>
+            Otevření folderu v exploreru
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.btHelp_Click(System.Object,System.EventArgs)">
+            <summary>
+            Talčítko pro help
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="F:Gordic.GdtSupport.WinClient.Form1.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Form1.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:Gordic.GdtSupport.WinClient.FormConditions.vysledek">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.GdtSupport.WinClient.FormConditions.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.FormConditions.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.FormConditions.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.GIxsGdtInputForm">
+            <summary>
+            Okno pro zadání hondoty od uživatele.
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.GIxsGdtInputForm.Result">
+            <summary>
+            ID zadané na tomto okně
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.GIxsGdtInputForm.HomePath">
+            <summary>
+            Výstupní cesta zadaná na tomto okně
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.GIxsGdtInputForm.#ctor(System.String)">
+            <summary>
+            Konstruktor okna s možností předat výchozí adresář
+            </summary>
+            <param name="a_out_dir">Výchozí adresář</param>
+        </member>
+        <member name="F:Gordic.GdtSupport.WinClient.GIxsGdtInputForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.GIxsGdtInputForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.GIxsGdtInputForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.GAdtUtils">
+            <summary>
+            Pomocné, obecné funkce
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.GAdtUtils.DetectEncoding(System.IO.Stream)">
+            <summary>
+            UTF8    : EF BB BF
+            UTF16 BE: FE FF
+            UTF16 LE: FF FE
+            UTF32 BE: 00 00 FE FF
+            UTF32 LE: FF FE 00 00
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.GAdtUtils.DetectEncoding(System.String)">
+            <summary>
+            Zjistí kódování zadaného souboru - pokud soubor neexistuje, vrátí výchozí kódování OS
+            </summary>
+            <param name="a_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.GAdtUtils.IsValidPathCharacters(System.String)">
+            <summary>
+            Kontrola, že text může být jménem cesty
+            </summary>
+            <param name="filePath"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.GGdtSupport">
+            <summary>
+            Klient pro webové služby mail automatu
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.GGdtSupport.SendFile(Gordic.GdtSupport.Client.GdtSupportServiceReference.GdtSupportClient,System.String,System.String)">
+            <summary>
+            Odeslání jednoho SP souboru na mail automat
+            </summary>
+            
+            <param name="gdtSupportClient">gdtSupportClient</param>
+            <param name="a_ixs_gdt">ID balíčku</param>
+            <param name="a_file_name">Plná cesta na odesílaný soubor</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.GGdtSupport.SendFile(System.String,System.String)">
+            <summary>
+            Odeslání jednoho SP souboru na mail automat
+            </summary>
+            
+            <param name="a_ixs_gdt">ID balíčku</param>
+            <param name="a_file_name">Plná cesta na odesílaný soubor</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.GGdtSupport.EncryptFile(System.String,System.Security.Cryptography.X509Certificates.X509Certificate2)">
+            <summary>
+            Funkce pro zakódování obsahu souboru na disku podle veřejného klíče příjemce.
+            </summary>
+            <param name="a_in_file">Plná cesta k souboru, který se má zašifrovat.</param>
+            <param name="cert_to">Certifikát, pro který se to má kódovat</param>
+            <returns>Plná cesta na vzniklý, zašifrovaný soubor.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.GGdtSupport.EncryptFile(System.String,System.String)">
+            <summary>
+            Funkce pro zakódování obsahu souboru na disku podle veřejného klíče příjemce.
+            </summary>
+            <param name="a_in_file">Plná cesta k souboru, který se má zašifrovat.</param>
+            <param name="a_cert_file">Plná cesta k certifikátu, kterým se má zašifrovat.</param>
+            <returns>Plná cesta na vzniklý, zašifrovaný soubor.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.GGdtSupport.Sign(System.String,System.String,System.String)">
+            <summary>
+            Funkce pro vytvoření externího podpisu souboru ve formátu PKCS7
+            </summary>
+            <param name="a_in_file">Soubor, který se má podepsat</param>
+            <param name="a_cert_file">Soubor s privátním klíčem, kterým se má podepsat</param>
+            <param name="a_password">Heslo k privátnímu klíči</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.GGdtSupport.SignFile(System.String,System.String,System.String)">
+            <summary>
+            Funkce pro vytvoření externího podpisu souboru ve formátu PKCS7
+            </summary>
+            <param name="a_in_file">Soubor, který se má podepsat</param>
+            <param name="a_cert_file">Soubor s privátním klíčem, kterým se má podepsat</param>
+            <param name="a_password">Heslo k privátnímu klíči</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.GGdtSupport.FileToByteArray(System.String)">
+            <summary>
+            Načtení souboru do pole Byte
+            </summary>
+            <param name="fileName">Jméno vstupního souboru</param>
+            <returns>Naplněné pole Byte</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.GGdtSupport.ByteArrayToFile(System.String,System.Byte[])">
+            <summary>
+            Zapis pole Byte do zadaného souboru
+            </summary>
+            <param name="fileName">Budoucí cílový soubor na disku</param>
+            <param name="a_array">Pole Byte, které se mají zapsat.</param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.GGdtSupport.SignMsg(System.Byte[],System.Security.Cryptography.X509Certificates.X509Certificate2)">
+            <summary>
+            Funkce pro vytvoření externího podpisu souboru ve formátu PKCS7
+            </summary>
+            <param name="data">Pole BYTE, které se má podepsat</param>
+            <param name="certificate_from">Certifikát, kterým se má podepsat</param>
+            <returns>Pole BYTE obsahující podpis</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.GGdtSupport.EncryptMsg(System.Byte[],System.Security.Cryptography.X509Certificates.X509Certificate2)">
+            <summary>
+            Zakódování pole BYTE - zprávy - pro určeného držitele privátního klíče
+            </summary>
+            <param name="msg">Pole BYTE, které se má zašifrovat</param>
+            <param name="recipientCert">Veřejný klíč příjemce zprávy, pro kterého se má zpráva zašiforvat.</param>
+            <returns>Pole BYTE - zašifrovaná zpráva</returns>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.GListDataSet">
+             <summary>
+            Represents a strongly typed in-memory cache of data.
+            </summary>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.GListDataSet.ginctygDataTable">
+             <summary>
+            Represents the strongly named DataTable class.
+            </summary>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.GListDataSet.gincprgDataTable">
+             <summary>
+            Represents the strongly named DataTable class.
+            </summary>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.GListDataSet.gincaktDataTable">
+             <summary>
+            Represents the strongly named DataTable class.
+            </summary>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.GListDataSet.ginctygRow">
+             <summary>
+            Represents strongly named DataRow class.
+            </summary>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.GListDataSet.gincprgRow">
+             <summary>
+            Represents strongly named DataRow class.
+            </summary>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.GListDataSet.gincaktRow">
+             <summary>
+            Represents strongly named DataRow class.
+            </summary>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.GListDataSet.ginctygRowChangeEvent">
+             <summary>
+            Row event argument class
+            </summary>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.GListDataSet.gincprgRowChangeEvent">
+             <summary>
+            Row event argument class
+            </summary>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.GListDataSet.gincaktRowChangeEvent">
+             <summary>
+            Row event argument class
+            </summary>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.Program">
+            <summary>
+            Pomocný program pro vytváření GDZ balíčků
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.Program.Main(System.String[])">
+            <summary>
+            The main entry point for the application.
+            </summary>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.SpgConfig">
+            <summary>
+            Třída pro uchování konfiguračních parametrů překladače.
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.SpgConfig.SetHomeAdr(System.String)">
+            <summary>
+            Nastavení domovského adresáře do kterého se budou ukládat soubory s nastavenou konfigurací.
+            </summary>
+            <param name="a_home_adr">Adresář, do kterého se budou ukládat konfigurační soubory.</param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.SpgConfig.Clear">
+            <summary>
+            Funkce pro vymazani celeho obsahu konfiguracni sady
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.SpgConfig.SetConfig(System.String,System.String)">
+            <summary>
+            Nastaveni konfiguracni hodnoty do pameti prekladace
+            </summary>
+            <param name="a_config_name">Jmeno konfiguracni hodnoty</param>
+            <param name="a_config_value">Hodnota konfiguracni hodnoty</param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.SpgConfig.SetConfig(System.String,System.Boolean)">
+            <summary>
+            Nastaveni konfiguracni hodnoty typu bool.
+            </summary>
+            <param name="a_config_name"></param>
+            <param name="a_config_value"></param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.SpgConfig.GetConfig(System.String,System.String)">
+            <summary>
+            Ziskani hodnoty konfiguracniho parametru prekladace uchovavaneho aktualne v pameti.
+            </summary>
+            <param name="a_config_name">Jmeno konfiguracniho parametru.</param>
+            <param name="a_config_value">Vychozi hodnota paramtru pro pripad, ze parametr doposud nebyl nastaven.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.SpgConfig.GetConfig(System.String,System.Boolean)">
+            <summary>
+            Ziskani konfiguracniho parametru typu bool zz pameti prekladace.
+            </summary>
+            <param name="a_config_name"></param>
+            <param name="a_config_value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.SpgConfig.LoadValueFromRegistry(System.String,System.String,System.String)">
+            <summary>
+            Nacteni konfiguracni hodnoty z registrů
+            </summary>
+            <param name="a_profil">Jméno konfigurační sady</param>
+            <param name="a_valus_name">Jméno konfigurační parametru</param>
+            <param name="a_default_value">Výchozí hodnota konfiguračního parametru</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.SpgConfig.LoadValueFromRegistry(System.String,System.String,System.Boolean)">
+            <summary>
+            Načtení konfigurační hodnoty z registrů do paměti překladače.
+            </summary>
+            <param name="a_profil">Jméno konfiguračního parametru</param>
+            <param name="a_valus_name">Jméno konfiguračního parametru</param>
+            <param name="a_default_value">Výchozí hodnota konfiguračního parametru</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.SpgConfig.BoolToString(System.Boolean)">
+            <summary>
+            Převod hodnoty bool na datový typ string
+            </summary>
+            <param name="a_value">bool hodnota pro převod</param>
+            <returns>Výchozí stringová obdoba vstupní hodnoty</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.SpgConfig.StringToBool(System.String)">
+            <summary>
+            Funkce pro převod stringu na bool datový typ odpovidajici hodnoty
+            </summary>
+            <param name="a_value">Vstupní string pro převod na bool</param>
+            <returns>Výstupní hodnota odpovídající vstupnímu stringu</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.SpgConfig.SaveConfig(System.String)">
+            <summary>
+            Uložení všech konfiguračních hodnot do registrů pod zadným jménem
+            </summary>
+            <param name="a_config_name">Jméno konfiguračního profilu, pod kterým mají být hodnoty uloženy</param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.SpgConfig.SaveValueToRegistry(System.String,System.String,System.String)">
+            <summary>
+            Uložení jedné konfigurační hodnoty.
+            </summary>
+            <param name="a_profil">Jméno konfiguračního profilu</param>
+            <param name="a_valus_name">Jméno proměnné</param>
+            <param name="a_value_value">Hodnota proměnné</param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.SpgConfig.SaveConfigToRegString">
+            <summary>
+            Uloží aktuální nastavení konfiguračních přepinačů do stringu, který má stejný formát jako reg soubor
+            </summary>
+            <returns>String naformátovaný jako je REG soubor obsahující konfigurační hodnoty.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.SpgConfig.LoadConfigFromRegString(System.String)">
+            <summary>
+            Načtení všech konfiguračních parametrů ze stringu, který byl ve formátu REG souboru
+            </summary>
+            <param name="a_reg_string">Vstupní string, který obsahuje nastavení konfiguračních parametrů a to ve formátu REG souboru.</param>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.StrFce">
+            <summary>
+            Třída obsahující funkce pro manipulace se stringem. 
+            Funkce jsou odvozeny od PowerBuilder funkcí.
+            Hlavní rozdíl oproti funkcím DOT.NETu je indexování pozice řetězce od čísla 1.
+            Dále jiné chování k požadavkům na manipulace s řetězci mimo povolený rozsah indexu znaků. 
+            DOT.NET vzhlašuje v takovém případě chybu. Tyto funkce se zachovají podle pravidel PowerBuilderu a chybu nevyhlásí.
+            
+            Verze 2008.08.01.1
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.#ctor">
+            <summary>
+            Základní konstruktor.
+            </summary>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.StrFce.CaseSensitiveEnum">
+            <summary>
+            Přepinač zda operace je CaseInsensitive nebo CaseSensitive
+            </summary>
+        </member>
+        <member name="F:Gordic.GdtSupport.WinClient.StrFce.CaseSensitiveEnum.CI">
+            <summary>
+            Přepinač Case Insensitive
+            </summary>
+        </member>
+        <member name="F:Gordic.GdtSupport.WinClient.StrFce.CaseSensitiveEnum.CS">
+            <summary>
+             Přepinač Case Sensitive
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.Reverse(System.String)">
+            <summary>
+            Funkce otočí pořadí znaků v textu. První bude na konci a obráceně. Obdoba interní PB funkce Reverse()
+            </summary>
+            <param name="a_text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.String(System.Int32)">
+            <summary>
+            Převod čísla na string
+            </summary>
+            <param name="a_cislo"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.Lower(System.String)">
+            <summary>
+            Funkce pro převod textu na lower 
+            </summary>
+            <param name="a_text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.Upper(System.String)">
+            <summary>
+            Funkce převede zadaný řetězec na velká písmena.
+            </summary>
+            <param name="a_text">Převáděný řetězec.</param>
+            <returns>Řetězec převedený na velká písmena.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.CountExist(Gordic.GdtSupport.WinClient.StrFce.CaseSensitiveEnum,System.String,System.String)">
+            <summary>
+            Vrátí počet výskytů zadaného řetězce v zadaném textu
+            </summary>
+            <param name="a_case">Příznak, zda se při hledání výskytů má postupovat case sensitive.</param>
+            <param name="a_text">Text ve kterém se hledá</param>
+            <param name="a_find_text">Text který se hledá</param>
+            <returns>Počet nalezených výskytů.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.CountExist(System.String,System.String)">
+            <summary>
+            Vrátí počet výskytů zadaného řetězce v zadaném textu. Hledání je CASE SENSITIVE
+            </summary>
+            <param name="a_text">Text ve kterém se hledá</param>
+            <param name="a_find_text">Text který se hledá</param>
+            <returns>Počet nalezených výskytů.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.TestExist(Gordic.GdtSupport.WinClient.StrFce.CaseSensitiveEnum,System.String,System.String)">
+            <summary>
+            Test existence substringu v zadané textu
+            </summary>
+            <param name="a_case">Příznak, zda se při hledání výskytů má postupovat case sensitive.</param>
+            <param name="a_text">Text který se prohledává.</param>
+            <param name="a_find_text">Text který se hledá</param>
+            <returns>True pokud substring byl nalezen.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.TestExist(System.String,System.String)">
+            <summary>
+            Test existence substringu v zadané textu. Hledání je CASE SENSITIVE
+            </summary>
+            <param name="a_text">Text který se prohledává.</param>
+            <param name="a_find_text">Text který se hledá</param>
+            <returns>True pokud substring byl nalezen.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.TextExist(Gordic.GdtSupport.WinClient.StrFce.CaseSensitiveEnum,System.String,System.String)">
+            <summary>
+            Test existence substringu v zadané textu
+            </summary>
+            <param name="a_case">Příznak, zda se při hledání výskytů má postupovat case sensitive.</param>
+            <param name="a_text">Text který se prohledává.</param>
+            <param name="a_find_text">Text který se hledá</param>
+            <returns>True pokud substring byl nalezen.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.TextExist(System.String,System.String)">
+            <summary>
+            Test existence substringu v zadané textu. Hledání je CASE SENSITIVE
+            </summary>
+            <param name="a_text">Text který se prohledává.</param>
+            <param name="a_find_text">Text který se hledá</param>
+            <returns>True pokud substring byl nalezen.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.CutFrom(System.String,System.String,System.String)">
+            <summary>
+            Vyříznutí textu od prvního nalezeného výskytu zadaného hraničního textu. Vyříznutý text neobsahuje hraniční text.
+            Hledání hraničního textu je CASE SENSITIVE a to proti obsahu maskovacího textu.
+            </summary>
+            <param name="a_text">Originální text ze kterého se má vyřezává.</param>
+            <param name="a_text_vzor">Maskovací vzorový text, podle kterého se má vyhledávat hraniční text. 
+            V maskovacím textu se hledá výskyt hraničního textu a podle nalezené pozice se vyřízne text ze zadaného originálním textu.
+            Aby maskovací text šlo použít, musí pozice znaků v originálním a maskovacím textu sedět. 
+            Maskování lze použít např. na odstínění obsahu obsaženém uvnitř závorek. Vše co je uvnitř závorek se nejprve musí nahradit odpovídajícím počtem mezer a následně se takto upravený text použije jako maska pro funkci na vyřezávání textu.</param>
+            <param name="a_from_text">Hraniční text, od kterého se má vyřezávat.</param>
+            <returns>Výsledný text. Pokud maskovací text neobsahuje žádný výskyt hraničního textu, potom se vrátí prázdný string.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.CutFrom(System.String,System.String)">
+            <summary>
+            Vyříznutí textu od prvního nalezeného výskytu zadaného hraničního textu. Vyříznutý text neobsahuje hraniční text.
+            Hledání hraničního textu je CASE SENSITIVE
+            </summary>
+            <param name="a_text">Originální text ve kterém se hledá hraniční text a ze kterého se vyřízne text následující za hraničním.</param>
+            <param name="a_from_text">Hraniční text od kterého se vyřízne výsledný text.</param>
+            <returns>Vyříznutý text.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.CutTo(System.String,System.String,System.String)">
+            <summary>
+            Vyříznutí textu po první výskyt zadaného substringu
+            </summary>
+            <param name="a_text">Text ze kterého se vyřezává</param>
+            <param name="a_text_vzor">Maskovací text, který slouží jako základ pro hledání hraničního textu</param>
+            <param name="a_to_text">Hraniční substring, ke kterému se má text vyříznout</param>
+            <returns>Vyříznutý text od začátku zadaného a_text až po první výskyt hraničního textu nalezeného v maskovacím textu.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.CutTo(System.String,System.String)">
+            <summary>
+            Vyříznutí textu po první výskyt zadaného substringu
+            </summary>
+            <param name="a_text">Text ze kterého se vyřezává</param>
+            <param name="a_to_text">Hraniční substring, ke kterému se má text vyříznout</param>
+            <returns>Vyříznutý text od začátku zadaného a_text až po první výskyt hraničního textu nalezeného textu.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.CutFromTo(System.String,System.String,System.String)">
+            <summary>
+            Vyříznutí text ze stringu a to od prvního výskytu zadaného startovacího hraničního substringu 
+            po první další výskyt koncového hraničního substringu.
+            </summary>
+            <param name="a_text">Text ze kterého se má vyřezávat.</param>
+            <param name="a_cut_from">Startovací hraniční substring</param>
+            <param name="a_cu_to">Koncový hraniční substring.</param>
+            <returns>Vyřiznutý text a to bez hraničních substringů. Pokud vstupní text neobsahuje zadané hraniční znaky, 
+            potom se vrátí prázdný string.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.CutFromTo(System.String,System.String,System.String,System.String)">
+            <summary>
+            Vyříznutí od do podle masky
+            </summary>
+            <param name="a_text"></param>
+            <param name="a_text_vzor"></param>
+            <param name="a_from_text"></param>
+            <param name="a_to_text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.CutFromKey(System.Int32,System.String,System.String,System.String)">
+            <summary>
+            Vyříznutí textu ze skládaného klíče. 
+            </summary>
+            <param name="a_cislo">Číslo sekce ze které se má vyřezávat</param>
+            <param name="a_string">Text - skládaný klíč</param>
+            <param name="a_text_vzor">Maskovací text pro hledání sekcí</param>
+            <param name="a_separ_znak">Oddělovací string použitý pro oddělení jednotlivých sekcí.</param>
+            <returns>Obsah zadané sekce skládaného klíče</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.CutFromKey(System.Int32,System.String,System.String)">
+            <summary>
+            Vyříznutí textu ze skládaného klíče. 
+            </summary>
+            <param name="a_cislo">Číslo sekce ze které se má vyřezávat</param>
+            <param name="a_string">Text - skládaný klíč</param>
+            <param name="a_separ_znak">Oddělovací string použitý pro oddělení jednotlivých sekcí.</param>
+            <returns>Obsah zadané sekce skládaného klíče</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.CutFromKey(System.Int32,System.String)">
+            <summary>
+            Vyříznutí textu ze skládaného klíče. 
+            Jako oddělovací znak je použit znak '#'
+            </summary>
+            <param name="a_cislo">Číslo sekce ze které se má vyřezávat</param>
+            <param name="a_string">Text - skládaný klíč</param>
+            <returns>Obsah zadané sekce skládaného klíče</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.Pos(System.String,System.String,System.Int32)">
+            <summary>
+            Obdoba POS funkce z PowerBuilderu. 
+            Vrací první nalezenou pozici zadaného textu v jiném textu. Vrácená pozice je indexována ne od 0, ale podle PowerBuilder konvence od 1.
+            Tato fuknce slouží pro přepis PowerBuilder algoritmů stylem 1:1.
+            </summary>
+            <param name="a_text">Text který je prohledáván.</param>
+            <param name="a_find_text">Hledaný text.</param>
+            <param name="a_start_index">Pozice, od které se má zahájit hledání. Indexování pozice znaků podle PB, tedy první znak má index 1.</param>
+            <returns>Vrácená pozice prvního znaku zadaného hledaného textu.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.Pos(System.String,System.String)">
+            <summary>
+            Obdoba POS funkce z PowerBuilderu. 
+            Vrací první nalezenou pozici zadaného textu v jiném textu. Vrácená pozice je indexována ne od 0, ale podle PowerBuilder konvence od 1.
+            Tato fuknce slouží pro přepis PowerBuilder algoritmů stylem 1:1.
+            Hledá se vždy od prvního znaku.
+            </summary>
+            <param name="a_text">Text který je prohledáván.</param>
+            <param name="a_find_text">Hledaný text.</param>
+            <returns>Vrácená pozice prvního znaku zadaného hledaného textu.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.PosReverse(System.String,System.String,System.Int32)">
+            <summary>
+            Hledání pozice zadaného substringu v zadaném textu. Hledá se ale od zadu.
+            Pozor! Jedná se o typ hledání podle standardu Powerbuilder - tedy první pozice znaku má index 1.
+            </summary>
+            <param name="a_text">Prohledávaný text</param>
+            <param name="a_find_text">Hledaný text</param>
+            <param name="a_start_index">Startovací pozice, od které se hledání zahajuje.</param>
+            <returns>Index nalezeného textu</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.PosReverse(System.String,System.String)">
+            <summary>
+            Hledání pozice zadaného substringu v zadaném textu. Hledá se ale od zadu.
+            Pozor! Jedná se o typ hledání podle standardu Powerbuilder - tedy první pozice znaku má index 1.
+            </summary>
+            <param name="a_text">Prohledávaný text</param>
+            <param name="a_find_text">Hledaný text</param>
+            <returns>Index nalezeného textu</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.Mid(System.String,System.Int32,System.Int32)">
+            <summary>
+            Obdoba MID funkce z PowerBuilderu. 
+            Pozor! Pozice znaků v stringu je indexována ne od 0, ale podle PowerBuilder konvence od 1.
+            </summary>
+            <param name="a_text">Text ze kterého se vyřezává.</param>
+            <param name="a_start_pos">Pozice od které se vyřezává.</param>
+            <param name="a_len">Délka vyřezávaného textu.</param>
+            <returns>Vyříznuty text. Pokud je délka a nebo pozice mimo možný rozsah originálního textu, potom to nevyhlásí exception jako u klasické .NET funkce ale vrátí se kratší nebo prázdný string.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.Mid(System.String,System.Int32)">
+            <summary>
+            Obdoba MID funkce z PowerBuilderu. 
+            Pozor! Pozice znaků v stringu je indexována ne od 0, ale podle PowerBuilder konvence od 1.
+            </summary>
+            <param name="a_text">Text ze kterého se vyřezává.</param>
+            <param name="a_start_pos">Pozice od které se vyřezává.</param>
+            <returns>Vyříznuty text. Pokud je délka a nebo pozice mimo možný rozsah originálního textu, potom to nevyhlásí exception jako u klasické .NET funkce ale vrátí se kratší nebo prázdný string.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.Len(System.String)">
+            <summary>
+            Obdoba LEN funkce z PowerBuilderu. 
+            Pozor! Pozice znaků v stringu je indexována ne od 0, ale podle PowerBuilder konvence od 1.
+            </summary>
+            <param name="a_text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.Left(System.String,System.Int32)">
+            <summary>
+            Vyříznutí prvních n znaků podle konvence PowerBuilder
+            </summary>
+            <param name="a_text">Text ze kterého se má řezat</param>
+            <param name="a_delka">Počet znaků z leva, které se mají vrátit. Pokud je počet znaků větší jak délka celého stringu, potom to není považováno za chybu.</param>
+            <returns>Vrácených prvních x znaků.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.Right(System.String,System.Int32)">
+            <summary>
+            Vyříznutí posledních n znaků podle konvence PowerBuilder
+            </summary>
+            <param name="a_text">Text ze kterého se má řezat</param>
+            <param name="a_delka">Počet znaků z prava, které se mají vrátit. Pokud je počet znaků větší jak délka celého stringu, potom to není považováno za chybu.</param>
+            <returns>Vrácených prvních x znaků.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.Lower(System.String,System.String)">
+            <summary>
+            Převede znaky uvedené v maskovacím řetězci na malá písmena.
+            </summary>
+            <param name="a_text">Vstupní text</param>
+            <param name="a_maska">Maskovací řetězec obsahující mezery na místě znaků, které 
+            se nemají převádět na malá písmena.</param>
+            <returns>Upravený řetězec.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.Space(System.Int32)">
+            <summary>
+            Funkce vytvoří řetězec obsahující pouze zadaný počet mezer.
+            </summary>
+            <param name="a_pocet_znaku">Počet požadovaného počtu mezer.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.Replace(System.String,System.Int32,System.Int32,System.String)">
+            <summary>
+            Funkce pro přepis textu od zadané pozice v zadané délce novým textem
+            Pokud je pozice pro přepis mimo délku původního textu, potom se vrátí původní text.
+            Pozor! Pozice v textu je číslována od indexu 1.
+            </summary>
+            <param name="a_orig_text">Text který do kterého se má vpisovat.</param>
+            <param name="a_start_pos">Pozice od které má být v originálním textu přepisováno. 
+            Pokud je startovací pozice mimo délku originálního textu, potom funkce vrací pouze originální text.
+            Pozor. Pro indexování pozice v textu je platí pro znak 1 index 1.</param>
+            <param name="a_delka">Délka textu, která má být z originálního textu nahrazena novým textem</param>
+            <param name="a_new_text">Nový text který má být vepsán do originálního textu</param>
+            <returns>Upravený text.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.ReplaceText(System.String,System.String,System.String,System.String)">
+            <summary>
+            Funkce pro náhradu všech výskyků zadaného textu za nový zadaný text a to podle maskovacího textu.
+            </summary>
+            <param name="a_zdroj">Originální text ve kterém má být přepisováno.</param>
+            <param name="a_mask_zdroj">Maskovací text který je použit pro vzhledávání textu pro přepisování.
+            Délka a pozice jednotlivých znaků musí odpovídat originálnímu textu.
+            Texty které se mají vyřadit z prohledávání a přepisování se v maskovacím řetězci nahradí mezerami.</param>
+            <param name="a_orig_text">Řetězec který má být přepisován - nahrazován.</param>
+            <param name="a_new_text">Nový řetězec, který má nahrazovat přepisovaný text.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.ReplaceText(System.String,System.String,System.String)">
+            <summary>
+            Funkce pro přepis všech výskztů řetězce v textu za jiný řetězec. 
+            Tato funkce duplikuje DOT.NET funkci a je zde umístěna pouze pro snadnější přepis PB algoritmů. 
+            Časem by veškerá volání této funkce měla být nahrazena originál DOT.NET funkcí.
+            </summary>
+            <param name="a_zdroj">Originální text ve kterém se má přepisovat.</param>
+            <param name="a_old_text">Řetězec který se má přepisovat.</param>
+            <param name="a_new_text">Řetězec kterým se má přepisovet.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.UnEscape(System.String)">
+            <summary>
+              Prevede text obsahujici lomitka nasledovana zastupnymi znaku zpet na obecny text
+              napr. ze znaku ENTER vytrori \n a z lomitka udela dve
+              prevodni tabulka 
+              CHAR(13)		-		\n
+              CHAR(10)		-		\r
+              \				-		\\
+              #				-		\x23					- odpovidajici hexa kod
+            </summary>
+            <param name="a_text">Text</param>
+            <returns>Odkódovaný text</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.Hex1ToInt(System.String)">
+            <summary>
+            Převod jednoho hexa znaku na odpovídající číselnou hodnotu.
+            </summary>
+            <param name="a_znak">Znak od 0-9 a A-F</param>
+            <returns>DEC Číselná hodnota</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.HexToInt(System.String)">
+            <summary>
+             Prevede string na decimalni cislo, ktere odpovida hexidacimalnimu cislu zadanemu v stringu
+            </summary>
+            <param name="a_hex">Text který odpovídá HEX vyjádření čísla</param>
+            <returns>Odpovídající DEC hodnota</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.SubsSubstr(System.String)">
+             <summary>
+             Upravi obecny retezec tak, ze uvozene substringy nahradi mezerami.
+             napr.:
+             		Print "fsdfsdf' fsd fs" + 'dfs' Trim( 'df"""df s' )
+             prevede na 
+             		Print "               " + "   " Trim( "         " )
+            
+             Tento prevedeny "maskovaci" retezec lze dale pouzit na zpracovani (interpretaci) prikacu, nebot vse mezi uvozovkami 
+             jsou substringy a pri porovnani s originalnim stringem je lze z retezce vypreparovat
+             </summary>
+             <param name="a_text">Text, který se má vymaskovat</param>
+             <returns>Vymaskovaný text</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.SubsSubstr(System.String,System.Char)">
+             <summary>
+             Upravi obecny retezec tak, ze uvozene substringy nahradi mezerami.
+             napr.:
+             		Print "fsdfsdf' fsd fs" + 'dfs' Trim( 'df"""df s' )
+             prevede na 
+             		Print "               " + "   " Trim( "         " )
+            
+             Tento prevedeny "maskovaci" retezec lze dale pouzit na zpracovani (interpretaci) prikacu, nebot vse mezi uvozovkami 
+             jsou substringy a pri porovnani s originalnim stringem je lze z retezce vypreparovat
+             </summary>
+             <param name="a_text">Text, který se má vymaskovat</param>
+             <param name="a_mask_znak">Maskovací znak</param>
+             <returns>Vymaskovaný text</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.SubsSubstr(System.String,System.String,System.String)">
+            <summary>
+            Upravi obecny retezec tak, ze uvozene substringy nahradi mezerami.
+            Pritom uvozovaci znaky substringů jsou zadany v parametrech a_prvni_znak a a_druhy_znak
+            Tento prevedeny "maskovaci" retezec lze dale pouzit na zpracovani (interpretaci) prikacu, nebot vse mezi napr. zavorkami
+            jsou substringy a pri porovnani s originalnim stringem je lze z retezce takto vypreparovat
+            </summary>
+            <param name="a_text"></param>
+            <param name="a_prvni_znak"></param>
+            <param name="a_druhy_znak"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.RightTrim(System.String)">
+            <summary>
+            Ořezání mezer a tabelátorů z prava
+            </summary>
+            <param name="a_text">Text</param>
+            <returns>Ořezaný text</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.LeftTrim(System.String)">
+            <summary>
+            Ořezání mezer a tabelátorů z leva
+            </summary>
+            <param name="a_text">Text</param>
+            <returns>Ořezaný text</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.Trim(System.String)">
+            <summary>
+            Ořezání mezer a tabelátorů z obou stran
+            </summary>
+            <param name="a_text">Text</param>
+            <returns>Ořezaný text</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.TestZacatek(Gordic.GdtSupport.WinClient.StrFce.CaseSensitiveEnum,System.String,System.String)">
+            <summary>
+            Funkce slouzi pro porovnani zacatku retezce na shodu se zadanym retezcem. 
+            Velka a mala pismena se ignoruji
+            </summary>
+            <param name="a_case"></param>
+            <param name="a_text"></param>
+            <param name="a_test_text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.TestZacatek(System.String,System.String)">
+            <summary>
+            Test na shodu začátků zadaných textů.
+            </summary>
+            <param name="a_text">Delší text na porovnání</param>
+            <param name="a_test_text">Kratší text na porovnání</param>
+            <returns>Příznak shody</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.TestKonec(Gordic.GdtSupport.WinClient.StrFce.CaseSensitiveEnum,System.String,System.String)">
+            <summary>
+            Funkce slouží pro porovnání konce řetezce na shodu se zadaným řetězcem. 
+            </summary>
+            <param name="a_case">Příznak zda se při porovnání má brát ohled na velikost písmen.</param>
+            <param name="a_text">Prohledávaný text.</param>
+            <param name="a_test_text">Hledaný text</param>
+            <returns>Vrátí true, pokud se konec textu shoduje s hledaným řetězcem.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.TestKonec(System.String,System.String)">
+            <summary>
+            Funkce slouží pro porovnání konce řetezce na shodu se zadaným řetězcem. 
+            Při porovnání se nebere zřetel na velikost písmen.
+            </summary>
+            <param name="a_text">Prohledávaný text.</param>
+            <param name="a_test_text">Hledaný text</param>
+            <returns>Vrátí true, pokud se konec textu shoduje s hledaným řetězcem.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.NormalizeText(System.String)">
+            <summary>
+            Funkce přepíše speciální znaky jako CR,LF,TAB na mezery. Vícenásobné mezery jsou přepsány vždy na jednoduchou mezeru.
+            </summary>
+            <param name="a_text">Text který má být znormalizován.</param>
+            <returns>Upravený text.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.GetSectionFromTo(System.String,System.String,System.String[])">
+            <summary>
+            Funkce na vyříznutí textu podobná funkci CutFromTo.
+            Rozdíl je v tom, že koncový hraniční text může být zadán výcenásobně a výsledný text bude vyříznut ke konečnému hraničnámu textu, který je nejblíže výchozímu hraničnímu textu.
+            Jedná se o poněkud speciální funkci, která slouží především u rozboru SQL příkazů, kde je např. potřeba vyříznout část selectu a to sekci FROM a ta 
+            může začínat pouze klíčovým slovem FROM ale končit může několika klíčovými slovy. Proto koncový hraniční string lze zadat proměnný počet vstpních argumentů.
+            </summary>
+            <param name="a_text">Text ze kterého se vyřezává.</param>
+            <param name="a_from_key">Startovací hraniční string od kterého se vyřezává. Např. "FROM"</param>
+            <param name="a_to_key">Koncové hraniční stringy, ke kterým se má vyříznout. Např. "WHERE", "ORDER", "GROUP" </param>
+            <returns>Vyříznutý text.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.IsNumber(System.String)">
+            <summary>
+            Test zda string obsahuje obdobu celočíselného, případně záporného čísla.
+            </summary>
+            <param name="a_text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.IsDecimal(System.String)">
+            <summary>
+            Test zda string obsahuje obdobu i neceločíselného, případně i záporného čísla.
+            </summary>
+            <param name="a_text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.GetRowTextByLineNumber(System.String,System.Int32)">
+            <summary>
+            Ze zadaného textu, který obsahuje i znaky odřádkování, vrátí text z řádku podle zadaného čísla.
+            První řádek má index 0.
+            </summary>
+            <param name="a_text"></param>
+            <param name="a_line_number"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.VyhodKomentarRadek(System.String,System.String)">
+            <summary>
+            Funkce na odstranění komentáře ze zadaného textu - řádku.
+            Počáteční znaky komentáře lze zadat, např. -- pro SQL nebo // pro PowerBuilder.
+            </summary>
+            <param name="a_radek">Text ze kterého má být odstraněna zakomentovaná část.</param>
+            <param name="a_comment_begin">String, který označuje začátek komentáře.</param>
+            <returns>Text bez zakomentované části.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.VyhodKomentarRadek(System.String)">
+            <summary>
+            Vyhodí z konce řádku komentářovou část typu "-- " tedy SQL komentáře, které se podle konvence vývoje GINIS mají před distribucí SQL k zákazníkovi odstraňovat.
+            </summary>
+            <param name="a_radek">Vstupní řádek.</param>
+            <returns>Výstupní řádek s odstraněným komentářem.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.VyhodKomentarRadky(System.String)">
+            <summary>
+            Vyhodí z textu ze všech řádků komentář typů "-- ".
+            </summary>
+            <param name="a_text">Text obsahující řádky SQL kódu.</param>
+            <returns>Text obsahující řádky SQL kódu s odstraněnými komentáři typu "-- ".</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.TrimRadky(System.String)">
+            <summary>
+            Otrimování mezer a tabelátorů z leva i z prava a to u všech řádků obsažených v textu.
+            </summary>
+            <param name="a_text">Text s řádky, které se mají otrimovat.</param>
+            <returns>Ořezané řádky.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.Date_To_String1(System.DateTime)">
+            <summary>
+            Převod datumu a času na string, který obsahuje formátování YYYYMMDDHHMMSS
+            Už přesně nevím, k čemu tato funkce byla - možná něco s překladačem.
+            </summary>
+            <param name="a_datum">Datum a čas určený pro převod</param>
+            <returns>Text obsahující naformátovanou hodnotu datumu a času</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.BoolToString(System.Boolean)">
+            <summary>
+            Převod bool hodnoty na odpovídající hodnotu ve stringu
+            </summary>
+            <param name="a_value">Hodnota pro převod</param>
+            <returns>Převedená hodnota</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.StringToBool(System.String)">
+            <summary>
+            Převod textové hodnoty na odpovídající bool hodnotu
+            Pokud se nejedná o jednu ze známých hodnota pro ANO, potom se vždy vrátí false.
+            </summary>
+            <param name="a_value">Text který se má převést</param>
+            <returns>Odpovídající bool hodnota</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.DorovnaniLong(System.Int32,System.Int32)">
+            <summary>
+            Pomocná funkce pro výpočet mezer při převodu tabelátorů na mezery.
+            </summary>
+            <param name="a_in"></param>
+            <param name="a_tab_size"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.TabToSpace(System.String,System.Int32)">
+            <summary>
+            Funkce převede tabelátory v textu na mezery tak, aby i po převodu opticky texty souhlasily. 
+            Pro převod je nutné zadat, jak bylo v původním editoru nastaveno odsazení jednoho tabelátoru ( počet mezer na jeden tabelátor )
+            </summary>
+            <param name="a_text">Původní text, který může obsahovat tabelátory.</param>
+            <param name="a_tab_size">Původní velikost tabelátoru.</param>
+            <returns>Text s nahrazenými tabelátory mezerami.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.SpaceToTab(System.String,System.Int32)">
+            <summary>
+            Odstraní z textu mezery a nahradí je tabelátory ( přitom vynechá texty uvedené v substringu ( označený apostrofy nebo úvozovkami )
+            </summary>
+            <param name="a_text">Vstupní text, který obsahuje mezery.</param>
+            <param name="a_tab_size">Velikost tebelátoru urcena poctem znaku</param>
+            <returns>Vystupni text, u ktereho jsou mezery nahrazeny tabelatorem. Pokud to nevychazi na cely tabelator, potom se vysledny text zkracuje tak, aby to na cely tabelator vyslo.</returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.TabRight(System.String,System.Int32,System.Int32)">
+            <summary>
+            Doplní text napravo tabelátory tak, aby konce zařezávaly na zadanou požadovanou velikost
+            </summary>
+            <param name="a_text"></param>
+            <param name="a_target_tab_size"></param>
+            <param name="a_tab_size"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.StrFce.VyhodPrazdneRadky(System.String)">
+            <summary>
+            Vyhozeni prazdnych radku z textu.
+            </summary>
+            <param name="a_text">Text s řádky, které se mají redukovat - odstranit prazdne radky.</param>
+            <returns>Redukovane radky.</returns>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.FTextEditor">
+            <summary>
+            Summary description for TextEditor.
+            </summary>
+        </member>
+        <member name="F:Gordic.GdtSupport.WinClient.FTextEditor.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.FTextEditor.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.FTextEditor.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.FTextEditor.KeyPressEventHandler">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="args"></param>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.FTextEditor.MYMouseRButtonUpEventHandler">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="args"></param>
+        </member>
+        <member name="E:Gordic.GdtSupport.WinClient.FTextEditor.RMouseUpEvent">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.FTextEditor.ProcessDialogKey(System.Windows.Forms.Keys)">
+            <summary>
+            
+            </summary>
+            <param name="keyData"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.FTextEditor.RaiseKeyPressEvent(System.Windows.Forms.Keys)">
+            <summary>
+            
+            </summary>
+            <param name="keydata"></param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.FTextEditor.RaiseRMouseUpEvent">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.FTextEditor.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.FTextEditor.SelectionStart">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.FTextEditor.SelectedText">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.FTextEditor.CurrentWord">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.FTextEditor.GoToLine(System.Int32)">
+            <summary>
+            Přechod na zadané číslo řádku
+            </summary>
+            <param name="a_line">Číslo řádku na které se má umístit editační kurzor.</param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.FTextEditor.GetPositionFromCharIndex(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="position"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.FTextEditor.GetLineFromCharIndex(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="offSet"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.FTextEditor.GetCurrentWord">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.FTextEditor.Select(System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="startPos"></param>
+            <param name="length"></param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.FTextEditor.GetText(System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="startPos"></param>
+            <param name="length"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.FTextEditor.UndoAction">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.FTextEditor.SetPosition(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="pos"></param>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.FTextEditor.Paste">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.FTextEditor.Copy">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.GdtSupport.WinClient.FTextEditor.Cut">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:Gordic.GdtSupport.WinClient.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.GdtSupport.WinClient.Properties.Resources.OPEN__2_">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+    </members>
+</doc>

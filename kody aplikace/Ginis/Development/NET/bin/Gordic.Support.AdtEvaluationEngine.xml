@@ -1,0 +1,2383 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Support.AdtEvaluationEngine</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine">
+            <summary>
+            Prázdné dědění, které pouze zrealizuje tuto mezivrstvu a přidáná ADT specifické funkce
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine.#ctor(System.Boolean)">
+            <summary>
+            Vytvoření EvaluateEngine pro hlavní script - vytváří si vlastní pole pro globální proměnné
+            Bez zadání CancellationToken
+            </summary>
+            <param name="noDbSupport"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine.#ctor(System.Threading.CancellationToken,System.Boolean)">
+            <summary>
+            Vytvoření EvaluateEngine pro hlavní script - vytváří si vlastní pole pro globální proměnné
+            <param name="a_cancelation_token"> Token na zastavení běhu příkazu - hlavně u komplexních příkazů nutné.</param>
+            </summary>
+            <param name="noDbSupport"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine.#ctor(System.Threading.CancellationToken,System.String)">
+            <summary>
+            Vytvoření EvaluateEngine pro hlavní script - vytváří si vlastní pole pro globální proměnné 
+            Umožňuje nastavit jméno souboru vukonávaného scriptu
+            </summary>
+            <param name="a_cancelation_token"> Token na zastavení běhu příkazu - hlavně u komplexních příkazů nutné.</param>
+            <param name="a_script_name">Jméno scriptu, který se aktuálně vykonává</param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine.#ctor(System.Threading.CancellationToken,System.String,Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Boolean)">
+            <summary>
+            Vytvoření podřízeného EvalEngine - z rodiče si převezme pointer na pole globálních proměnných
+            </summary>
+            <param name="a_cancelation_token"> Token na zastavení běhu scriptu</param>
+            <param name="a_script_name">Jméno scriptu, který se aktuálně vykonává</param>
+            <param name="a_parent">Pointer na rodičovský EvalEngine</param>
+            <param name="a_is_macro">Příznak, že se mají sdílet společně lokální proměnné</param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine.CloneAdtEvaluationEngine">
+            <summary>
+            Vytvoří z aktuální instance klon ( pro multi task )
+            </summary>
+            <returns>Vytvořený nový ADT engine</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngine.CloneEvaluationEngine">
+            <summary>
+            Vytvoří z aktuální instance klon ( pro multi task )
+            </summary>
+            <returns>Vytvořený nový engine</returns>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.AdtFunctions.FastXmlRewriter">
+            <summary>
+            Testovací třída pro vyhledání specifických XML tagů obsahujících base64 obsah souborů a jejich uložení na disk a nahrazení jménem souboru, kam byl bin obsah uložen.
+            Jedná se pouze o experimentální kód pro ověření možností a funkce.
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.AdtFunctions.FastXmlRewriter.XmlModify(System.String,System.String)">
+            <summary>
+            Přeformátuje vstupní XML soubor do výstupního a to se záměnou některých XML elementů
+            </summary>
+            <param name="inFile">Vstupní soubor</param>
+            <param name="outFile">Výstupní soubor</param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.AdtFunctions.FastXmlRewriter.ReadToEnd(System.Xml.XmlReader)">
+            <summary>
+            Čtení a zápis elementu a všech jeho obsažených elementů
+            </summary>
+            <param name="reader"></param>
+        </member>
+        <member name="F:Gordic.Support.AdtEvaluationEngine.AdtFunctions.FastXmlRewriter.pocitadloSouboru">
+            <summary>
+            Pomocné počítadlo pro tvorbu unikátních jmen souborů
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.AdtFunctions.FastXmlRewriter.HandleElement(System.Xml.XmlReader,System.Xml.XmlWriter)">
+            <summary>
+            Funkce která může zasáhnout do dat XML elementu a do výstupu poslat něco jiného
+            </summary>
+            <param name="reader"></param>
+            <param name="writer"></param>
+            <returns>Příznak, že bylo do zpracování zasaženo.</returns>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction">
+            <summary>
+            Třídá, která obluhuje příkazy ADT pro Open XML soubory
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.Register(Gordic.Support.EvaluationEngine.GEvaluationEngine)">
+            <summary>
+            Registrace ADT funkcí pro oblast práce s  Open XML soubory
+            </summary>
+            <param name="ce"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.GetP7sContent(System.Byte[])">
+            <summary>
+            Vytažení obsahu z kontejneru podepsaných dat s podpisem
+            Ověřuje podpis a vyžaduje přesně jeden konkrétní podpis GDZ Sign
+            Pokud podpis nesouhlasí, vyhlásí chybu
+            </summary>
+            <param name="buff">Vstupní pole BYTE obsahující binární podobu p7s souboru</param>
+            <returns>Původně podepsaný obsah</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.File_Make_Sign(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            
+            </summary>
+            <param name="ce"></param>
+            <param name="p">Seznam vstupních argumentů</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.File_Make_Sign_Next(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Přidání dalšího podpisu k již existujícímu
+            </summary>
+            <param name="ce"></param>
+            <param name="p">Seznam vstupních argumentů</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.File_Verify_Sign(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Kontrola platnosti externího podpisu souboru
+            </summary>
+            <param name="ce"></param>
+            <param name="p">Seznam vstupních argumentů</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.File_Verify_Sign_Ext(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Kontrola platnosti externího podpisu souboru s případným vyvoláním exception
+            </summary>
+            <param name="ce"></param>
+            <param name="p">Seznam vstupních argumentů</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.File_Sign_Count(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Zjištění počtu podpisů
+            </summary>
+            <param name="ce"></param>
+            <param name="p">Seznam vstupních argumentů</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.Verify_File_Certificate(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Kontrola externího podpisu s vrácením požadované popisné položky certifikátu
+            </summary>
+            <param name="ce"></param>
+            <param name="p">Seznam vstupních argumentů</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.Verify_File_Certificate_Ext(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Kontrola externího podpisu s vrácením požadované popisné položky certifikátu
+            </summary>
+            <param name="ce"></param>
+            <param name="p">Seznam vstupních argumentů</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.Verify_Certificate(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Kontrola externího podpisu s vrácením požadované popisné položky certifikátu
+            </summary>
+            <param name="ce"></param>
+            <param name="p">Seznam vstupních argumentů</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.Check_File_Certificate_Thumbprint(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Kontrola existence externího podpisu zadaného otisku
+            </summary>
+            <param name="ce"></param>
+            <param name="p">Seznam vstupních argumentů</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.Check_Certificate_Thumbprint(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Kontrola existence externího podpisu zadaného otisku
+            </summary>
+            <param name="ce"></param>
+            <param name="p">Seznam vstupních argumentů</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.Check_File_Certificate_IssuerThumbprint(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Kontrola existence externího podpisu zadaného otisku vystavitele
+            </summary>
+            <param name="ce"></param>
+            <param name="p">Seznam vstupních argumentů</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.Check_Certificate_IssuerThumbprint(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Kontrola existence externího podpisu zadaného otisku vystavitele
+            </summary>
+            <param name="ce"></param>
+            <param name="p">Seznam vstupních argumentů</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.GetSignCount(System.String,System.String)">
+            <summary>
+            Pro externí podpis souboru vrátí požadovanou popisnou položku sertifikátu - Požadovaná položka je určena na základě stringového enum - ten je převzat ze staršího PowerBuilder a nebo z Gordic.Install.Tool.exe
+            </summary>
+            <param name="a_in_file">Podepsaný soubor</param>
+            <param name="a_sign_file">Soubor s externím podpisem</param>
+            <returns>Počet zjištěných podpisů</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.GetSignCount(System.Byte[],System.Byte[])">
+            <summary>
+            Pro externí podpis souboru vrátí počet zjištěných podpisů
+            </summary>
+            <param name="v_tst_content">Buffer s podepsaným souborem</param>
+            <param name="v_p7s_content">Buffer s externím podpisem</param>
+            <returns>Počet zjištěných podpisů</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.GetSignProperty(System.String,System.String,System.String,System.Int32)">
+            <summary>
+            Pro externí podpis souboru vrátí požadovanou popisnou položku sertifikátu - Požadovaná položka je určena na základě stringového enum - ten je převzat ze staršího PowerBuilder a nebo z Gordic.Install.Tool.exe
+            </summary>
+            <param name="a_in_file">Podepsaný soubor</param>
+            <param name="a_sign_file">Soubor s externím podpisem</param>
+            <param name="a_property_name">Jméno požadované položky</param>
+            <param name="a_sign_index">Index certifikátu číslováno od 0 - může jich být více</param>
+            <returns>Hodnota požadované položky - v případě neplatného podpisu vrací 'ERROR'</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.GetSignPropertyExt(System.String,System.String,System.String,System.Int32)">
+            <summary>
+            Pro externí podpis souboru vrátí požadovanou popisnou položku sertifikátu - Požadovaná položka je určena na základě stringového enum - ten je převzat ze staršího PowerBuilder a nebo z Gordic.Install.Tool.exe
+            </summary>
+            <param name="a_in_file">Podepsaný soubor</param>
+            <param name="a_sign_file">Soubor s externím podpisem</param>
+            <param name="a_property_name">Jméno požadované položky</param>
+            <param name="a_sign_index">Index certifikátu číslováno od 0 - může jich být více</param>
+            <returns>Hodnota požadované položky - v případě neplatného podpisu vrací 'ERROR'</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.GetSignProperty(System.Byte[],System.Byte[],System.String,System.Int32)">
+            <summary>
+            Pro externí podpis souboru vrátí požadovanou popisnou položku sertifikátu - Požadovaná položka je určena na základě stringového enum - ten je převzat ze staršího PowerBuilder a nebo z Gordic.Install.Tool.exe
+            </summary>
+            <param name="v_tst_content">Buffer s podepsaným souborem</param>
+            <param name="v_p7s_content">Buffer s externím podpisem</param>
+            <param name="a_property_name">Jméno požadované položky</param>
+            <param name="a_sign_index">Index certifikátu číslováno od 0 - může jich být více</param>
+            <returns>Hodnota požadované položky - v případě neplatného podpisu vrací 'ERROR'</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.GetSignPropertyExt(System.Byte[],System.Byte[],System.String,System.Int32)">
+            <summary>
+            Pro externí podpis souboru vrátí požadovanou popisnou položku sertifikátu - Požadovaná položka je určena na základě stringového enum - ten je převzat ze staršího PowerBuilder a nebo z Gordic.Install.Tool.exe
+            </summary>
+            <param name="v_tst_content">Buffer s podepsaným souborem</param>
+            <param name="v_p7s_content">Buffer s externím podpisem</param>
+            <param name="a_property_name">Jméno požadované položky</param>
+            <param name="a_sign_index">Index certifikátu číslováno od 0 - může jich být více</param>
+            <returns>Hodnota požadované položky - v případě neplatného podpisu vrací 'ERROR'</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.CheckSignThumbprint(System.String,System.String,System.String)">
+            <summary>
+            Pro externí podpis souboru vrátí požadovanou popisnou položku sertifikátu - Požadovaná položka je určena na základě stringového enum - ten je převzat ze staršího PowerBuilder a nebo z Gordic.Install.Tool.exe
+            </summary>
+            <param name="a_in_file">Podepsaný soubor</param>
+            <param name="a_sign_file">Soubor s externím podpisem</param>
+            <param name="a_Thumbprint">Otisk certifikátu, který se hledá</param>
+            <returns>true pokud existuje podpis s hledaným otiskem</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.CheckSignThumbprint(System.Byte[],System.Byte[],System.String)">
+            <summary>
+            Pro externí podpis souboru vrátí požadovanou popisnou položku sertifikátu - Požadovaná položka je určena na základě stringového enum - ten je převzat ze staršího PowerBuilder a nebo z Gordic.Install.Tool.exe
+            </summary>
+            <param name="v_tst_content">Buffer s podepsaným souborem</param>
+            <param name="v_p7s_content">Buffer s externím podpisem</param>
+            <param name="a_Thumbprint">Otisk certifikátu, který se hledá</param>
+            <returns>true pokud existuje podpis s hledaným otiskem</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.CheckSignIssuerThumbprint(System.String,System.String,System.String)">
+            <summary>
+            Pro externí podpis souboru vrátí požadovanou popisnou položku sertifikátu - Požadovaná položka je určena na základě stringového enum - ten je převzat ze staršího PowerBuilder a nebo z Gordic.Install.Tool.exe
+            </summary>
+            <param name="a_in_file">Podepsaný soubor</param>
+            <param name="a_sign_file">Soubor s externím podpisem</param>
+            <param name="a_Thumbprint">Otisk certifikátu, který se hledá</param>
+            <returns>true pokud existuje podpis s hledaným otiskem</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.CheckSignIssuerThumbprint(System.Byte[],System.Byte[],System.String)">
+            <summary>
+            Pro externí podpis souboru vrátí požadovanou popisnou položku sertifikátu - Požadovaná položka je určena na základě stringového enum - ten je převzat ze staršího PowerBuilder a nebo z Gordic.Install.Tool.exe
+            </summary>
+            <param name="v_tst_content">Buffer s podepsaným souborem</param>
+            <param name="v_p7s_content">Buffer s externím podpisem</param>
+            <param name="a_Thumbprint">Otisk certifikátu, který se hledá</param>
+            <returns>true pokud existuje podpis s hledaným otiskem</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.GetSignProperty(System.Security.Cryptography.X509Certificates.X509Certificate2,System.String)">
+            <summary>
+            Pro zadaný certifikát vrátí požadovanou informaci. Požadovaná položka je určena na základě stringového enum - ten je převzat ze staršího PowerBuilder a nebo z Gordic.Install.Tool.exe
+            </summary>
+            <param name="MSCert">Certifikát</param>
+            <param name="a_property_name">Jméno požadované položky</param>
+            <returns>Hodnota požadované položky</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.ExportCertInfoToFile(System.Security.Cryptography.X509Certificates.X509Certificate2@)">
+            <summary>
+            Funkce pro rozbor informací obsažených v CER souboru - zapíše je jako stringový enum do vystupniho dictionary
+            </summary>
+            <param name="a_cert">pointer na X509Certificate2</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.ParseDN(System.String,System.Collections.Hashtable@)">
+            <summary>
+            Funkce na rozbor DN stringu na jednotlivé položky
+            </summary>
+            <param name="dnString"></param>
+            <param name="a_dns_items">Tabulka obsahující rozebrané páry </param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.VerifySignFile(System.String,System.String)">
+            <summary>
+            Kontrola platnosti externího podpisu souboru
+            </summary>
+            <param name="a_in_file">Podepsaný soubor</param>
+            <param name="a_sign_file">Soubor s podpisem</param>
+            <returns>Příznak, že podpis je platný</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.VerifySignFileExt(System.String,System.String)">
+            <summary>
+            Kontrola platnosti externího podpisu souboru
+            </summary>
+            <param name="a_in_file">Podepsaný soubor</param>
+            <param name="a_sign_file">Soubor s podpisem</param>
+            <returns>Příznak, že podpis je platný</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.VerifySignFile(System.Byte[],System.Byte[])">
+            <summary>
+            Kontrola platnosti externího podpisu souboru
+            </summary>
+            <param name="v_tst_content">Podepsaný soubor</param>
+            <param name="v_p7s_content">Soubor s podpisem</param>
+            <returns>Příznak, že podpis je platný</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.VerifySignFileExt(System.Byte[],System.Byte[])">
+            <summary>
+            Kontrola platnosti externího podpisu souboru s vyvoláním exception
+            </summary>
+            <param name="v_tst_content">Podepsaný soubor</param>
+            <param name="v_p7s_content">Soubor s podpisem</param>
+            <returns>Příznak, že podpis je platný</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.SignFile(System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            Funkce pro vytvoření externího podpisu souboru ve formátu PKCS7
+            </summary>
+            <param name="a_in_file">Soubor, který se má podepsat</param>
+            <param name="a_cert_file">Soubor s privátním klíčem, kterým se má podepsat</param>
+            <param name="a_password">Heslo k privátnímu klíči</param>
+            <param name="a_detached">Heslo k privátnímu klíči</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.SignFile(System.String,System.Byte[],System.String,System.Boolean)">
+            <summary>
+            Funkce pro vytvoření externího podpisu souboru ve formátu PKCS7
+            </summary>
+            <param name="a_in_file">Soubor, který se má podepsat</param>
+            <param name="a_cert_file">Blob s privátním klíčem, kterým se má podepsat</param>
+            <param name="a_password">Heslo k privátnímu klíči</param>
+            <param name="a_detached">Heslo k privátnímu klíči</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.AddSignFile(System.String,System.String,System.String,System.String)">
+            <summary>
+            Funkce pro vytvoření externího podpisu souboru ve formátu PKCS7
+            </summary>
+            <param name="a_in_file">Soubor, který se má podepsat</param>
+            <param name="a_p7s_file">Soubor, p7s který se má doplnit o další podepis</param>
+            <param name="a_cert_file">Soubor s privátním klíčem, kterým se má podepsat</param>
+            <param name="a_password">Heslo k privátnímu klíči</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.AddSignFile(System.String,System.String,System.Byte[],System.String)">
+            <summary>
+            Funkce pro vytvoření externího podpisu souboru ve formátu PKCS7
+            </summary>
+            <param name="a_in_file">Soubor, který se má podepsat</param>
+            <param name="a_p7s_file">Soubor, p7s který se má doplnit o další podepis</param>
+            <param name="a_cert_file">Blob s privátním klíčem, kterým se má podepsat</param>
+            <param name="a_password">Heslo k privátnímu klíči</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.ByteArrayToFile(System.String,System.Byte[])">
+            <summary>
+            Zapis pole Byte do zadaného souboru
+            </summary>
+            <param name="fileName">Budoucí cílový soubor na disku</param>
+            <param name="a_array">Pole Byte, které se mají zapsat.</param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.SignMsg(System.Byte[],System.Security.Cryptography.X509Certificates.X509Certificate2,System.Boolean)">
+            <summary>
+            Funkce pro vytvoření externího podpisu souboru ve formátu PKCS7
+            </summary>
+            <param name="data">Pole BYTE, které se má podepsat</param>
+            <param name="certificate_from">Certifikát, kterým se má podepsat</param>
+            <param name="a_detached">Heslo k privátnímu klíči</param>
+            <returns>Pole BYTE obsahující podpis</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.AddSignMsg(System.Byte[],System.Byte[],System.Security.Cryptography.X509Certificates.X509Certificate2)">
+            <summary>
+            Funkce pro vytvoření externího podpisu souboru ve formátu PKCS7
+            </summary>
+            <param name="data">Pole BYTE, které se má podepsat</param>
+            <param name="p7s_content">Binární podoba P7S souboru s již existujícím podpisem</param>
+            <param name="certificate_from">Certifikát, kterým se má podepsat</param>
+            <returns>Pole BYTE obsahující podpis</returns>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.ParserState">
+            <summary>
+            Aktuální stav DB parseru
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtCertFunction.ParseDN(System.String,System.String)">
+            <summary>
+            Funkce na rozbor DN stringu na jednotlivé položky
+            </summary>
+            <param name="dnString"></param>
+            <param name="a_item_id">Označení hledané položky</param>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GAdtFileFunctions">
+            <summary>
+            Třídá, která obluhuje příkazy ADT pro práci s diskem a soubory
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtFileFunctions.Register(Gordic.Support.EvaluationEngine.GEvaluationEngine)">
+            <summary>
+            Registrace pointrů na funkce do pole pojmenovaných funkcí 
+            </summary>
+            <param name="ce"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtFileFunctions.FileRemoveCsComment(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            z CS kódu vyhodí komentáře a kód, který podle kompilačních podmínek nemá nastat
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtFileFunctions.ListFromFileKeepStringConstant(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            z CS kódu zachová pouze stringové konstanty
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtFileFunctions.ListFromFileKeepPowerBuilderStringConstant(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            z CS kódu zachová pouze stringové konstanty
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtFileFunctions.ListFromTextKeepWord(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            z textu udělá list kde každý řádek obsahuje samostatné slovo rozpoznané v zadaném textu
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtFileFunctions.FileKeepStringConstant(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            z CS kódu zachová pouze stringové konstanty
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtFileFunctions.File_Hash256(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Vypočítá SHA256 hash souboru
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+            <exception cref="T:Gordic.Support.EvaluationEngine.GAdtInvalidArgumentException"></exception>
+            <exception cref="T:Gordic.Support.EvaluationEngine.GAdtCommandException"></exception>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtFileFunctions.FileMakeTestTxtFile(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce: 
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtFileFunctions.Load_Xml(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce - Load_Xml
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtFileFunctions.WsDms_Connect(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce - WsDms_Connect
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtFileFunctions.WsDms_DownLoad(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce - WsDms_DownLoad
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtFileFunctions.WsDms_UpLoad(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce - WsDms_UpLoad
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtFileFunctions.WsDms_Delete(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce - WsDms_Delete
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtFileFunctions.WsDms_ListDirPrepare(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce - WsDms_ListDirPrepare
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtFileFunctions.UpdateServerMetadata(Gordic.WsDms.Client.GWsDmsClient,System.String,System.String,System.String,System.String)">
+            <summary>
+            Interní pomocná funkce pro WSDMS akce
+            </summary>
+            <param name="aClient"></param>
+            <param name="sLoacalFile"></param>
+            <param name="sServerPath"></param>
+            <param name="sServerFile"></param>
+            <param name="ArgLocalFileSHA1"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtFileFunctions.StreamToByteArray(System.IO.Stream)">
+            <summary>
+            Načtení obsahu stream do pole Byte
+            </summary>
+            <param name="stream">Vstupní stream</param>
+            <returns>Naplněné pole Byte</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtFileFunctions.DecryptMsg(System.Byte[])">
+            <summary>
+            GINIS - dekódování obsahu zašifrované zprávy PKCS7
+            </summary>
+            <param name="encodedEnvelopedCms">Vstupní pole BYTE obsahující zakódovanou zprávu</param>
+            <returns>Pole BYTE obsahující dekódovanou zprávu</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtFileFunctions.EncryptFile(System.String,System.Security.Cryptography.X509Certificates.X509Certificate2)">
+            <summary>
+            Funkce pro zakódování obsahu souboru na disku podle veřejného klíče příjemce.
+            </summary>
+            <param name="a_in_file">Plná cesta k souboru, který se má zašifrovat.</param>
+            <param name="cert_to">Certifikát, pro který se to má kódovat</param>
+            <returns>Plná cesta na vzniklý, zašifrovaný soubor.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtFileFunctions.EncryptFile(System.String,System.String)">
+            <summary>
+            Funkce pro zakódování obsahu souboru na disku podle veřejného klíče příjemce.
+            </summary>
+            <param name="a_in_file">Plná cesta k souboru, který se má zašifrovat.</param>
+            <param name="a_cert_file">Plná cesta k certifikátu, kterým se má zašifrovat.</param>
+            <returns>Plná cesta na vzniklý, zašifrovaný soubor.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtFileFunctions.EncryptMsg(System.Byte[],System.Security.Cryptography.X509Certificates.X509Certificate2)">
+            <summary>
+            Zakódování pole BYTE - zprávy - pro určeného držitele privátního klíče
+            </summary>
+            <param name="msg">Pole BYTE, které se má zašifrovat</param>
+            <param name="recipientCert">Veřejný klíč příjemce zprávy, pro kterého se má zpráva zašiforvat.</param>
+            <returns>Pole BYTE - zašifrovaná zpráva</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtFileFunctions.FileToByteArray(System.String)">
+            <summary>
+            Načtení souboru do pole Byte
+            </summary>
+            <param name="fileName">Jméno vstupního souboru</param>
+            <returns>Naplněné pole Byte</returns>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GAdtMailFunction">
+            <summary>
+            Třídá, která obluhuje mailové příkazy ADT
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtMailFunction.Register(Gordic.Support.EvaluationEngine.GEvaluationEngine)">
+            <summary>
+            Registrace ADT funkcí pro oblast práce s proměnnými ADT
+            </summary>
+            <param name="ce"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtMailFunction.WakeOnLan(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtMailFunction.SetSmtpConfig(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Nastavení parametrů pro SMTP odeslání mailů
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtMailFunction.SetPop3Config(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Nastavení parametrů pro Pop3 načítání mailů
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtMailFunction.SendSmtpMail(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce - "int Send_Smtp_Mail(string a_mail_from, string a_mail_to, string a_mail_subject, string a_mail_txt_body, string a_file_attach )"
+            
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtMailFunction.SendSmtpMailHtml(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce - "int Send_Smtp_Mail(string a_mail_from, string a_mail_to, string a_mail_subject, string a_mail_txt_body, string a_file_attach )"
+            
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GAdtOpenXmlFunction">
+            <summary>
+            Třídá, která obluhuje příkazy ADT pro Open XML soubory
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtOpenXmlFunction.Register(Gordic.Support.EvaluationEngine.GEvaluationEngine)">
+            <summary>
+            Registrace ADT funkcí pro oblast práce s  Open XML soubory
+            </summary>
+            <param name="ce"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtOpenXmlFunction.XlsxCreateFile(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Funkce slouží k nastavení hodnoty proměnné
+            Jedná se o jediný přístupový bod, kudy se nastavuje ADT proměnná
+            </summary>
+            <param name="ce"></param>
+            <param name="p">Seznam vstupních argumentů - první je pointer na proměnnou, která se má nasetovat, druhý je výraz, kterým se má naplnit.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtOpenXmlFunction.List_Load_From_Excel(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro načtení excel souboru do zadaného listu
+            1) jméno xml souboru na disku
+            2) jméno pracovního listu v excelu ( stránky )
+            3) jméno ADT listu do kterého se mají data načíst.
+            4] bool NoEmptyRow = false - příznak, že se mají vynechat zcela prázdné řádky
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtOpenXmlFunction.BuildFormatMappingsFromXlsx(System.String)">
+            <summary>
+            https://stackoverflow.com/questions/11781210/c-sharp-open-xml-2-0-numberformatid-range
+            </summary>
+            <param name="fileName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtOpenXmlFunction.GenerateStyleSheet">
+            <summary>
+            Vytvoření stylů pro buňky 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtOpenXmlFunction.SetCellValue(DocumentFormat.OpenXml.Spreadsheet.Cell,System.Object,System.String)">
+            <summary>
+            Slouží k nastavení hondoty XLS buňky - může být upřesněn formátovací předpis buňky
+            </summary>
+            <param name="cell">Objekt reprezentující již vytvořenou buňku excelu</param>
+            <param name="value">object - hodnota, která se má do buňky umístit</param>
+            <param name="type">Uživatelský formátovací předpis. Povolené jsou zatím hodnoty T,DT,T,I</param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtOpenXmlFunction.GetStyleIndex(System.String,System.UInt32)">
+            <summary>
+            Pro zadané písmeno typu vrátí odpovídající styl buňky
+            </summary>
+            <param name="a_type">Formátovací písmena zadané uživatelem</param>
+            <param name="a_vychozi">Výchozí styl pro případ, že písmeno není zadáno</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions">
+            <summary>
+            Třída, která obluhuje příkazy ADT
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions._Logger">
+            <summary>
+            Logování
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.Register(Gordic.Support.EvaluationEngine.GEvaluationEngine)">
+            <summary>
+            Registrování pole ADT funkcí
+            </summary>
+            <param name="ce"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.FormattableStringTest(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+             test
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.HttpGet(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro HTTP GET
+            </summary>
+            <param name="ce">
+            1 - URL
+            2 - api path
+            3 - login (volitelný)
+            4 - passwd (volitelný)
+            </param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.HttpPost(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro HTTP POST
+            </summary>
+            <param name="ce">
+            1 - URL
+            2 - api path
+            3 - body
+            4 - login (volitelný)
+            5 - passwd (volitelný)
+            </param>
+            <param name="p"></param>
+            <returns></returns>
+            <exception cref="T:Gordic.Support.EvaluationEngine.GAdtCommandException"></exception>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.HttpGetFileAsyn(System.String,System.String,System.String,System.String)">
+            <summary>
+            file:///O:/Users/ffiala/Downloads/ebin.pub_parallel-programming-with-c-and-net-core-developing-multithreaded-applications-using-c-and-net-core-31-from-scratch-english-edition-9389423325-9789389423327.pdf
+            </summary>
+            <param name="uri"></param>
+            <param name="fileName"></param>
+            <param name="login"></param>
+            <param name="passwd"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.SoapCall(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Volání SOAP web služby
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.SaveProfilAs(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.GetRunPriority(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Vrací prioritu běhu procesu
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.GetClipboard(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Vrací text obsažený v clipboardu
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.SetClipboard(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Vrací text obsažený v clipboardu
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.ClearClipboard(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Vrací text obsažený v clipboardu
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.TestXmlModify(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Testovací funkce pro ověření stream čtení z jednoho XML a zápis do jiného XML s úpravou obsahu jednotlivých tagů
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.TestGDbDataCursor(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.TestGDbDataCursor2(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.TestGDbDataCursorOld(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.TestGDbDataRecordReader(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Test GDbDataRecordReader
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.TestGDbDataRecordReaderOld(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Test GDbDataRecordReader
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.TestXmlLoad(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Testovací funkce pro ověření funkcionality XmlReader
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.CreatePerformanceCounter(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce String F_15( String a_tab_name ) - zakódování
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns>Zakódovaný text</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.F15(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce String F_15( String a_tab_name ) - zakódování
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns>Zakódovaný text</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.F51(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce String F_51( String a_tab_name ) - odkódování
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns>Zakódovaný text</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.GetPasswordSecret(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.GetPasswordSecret(System.String,System.String,System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="v_name"></param>
+            <param name="v_scope"></param>
+            <param name="v_file_name"></param>
+            <param name="additionalEntropyTxt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.SetPasswordSecret(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro uložení tajemství
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.SetPasswordSecret(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Uložení tajemství
+            </summary>
+            <param name="v_name"></param>
+            <param name="v_value"></param>
+            <param name="v_scope"></param>
+            <param name="v_file_name"></param>
+            <param name="additionalEntropyTxt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.GetHashKeyFromText(System.String)">
+            <summary>
+            Funkce vytvoří z textu klíč - odvozený z hash převedené na base64 ochuzené o závěrečné = 
+            </summary>
+            <param name="a_text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.GetEntropyFromText(System.String)">
+            <summary>
+            Vygeneruje pro text pole byte - pro zadaný text vždy stejné - entropy 
+            </summary>
+            <param name="a_text"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.CreateRandomEntropy">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.Get_Profile_String(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce Get_Profile_String
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.Set_Profile_String(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce Get_Profile_String
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.SetProfileString(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce SetProfileString
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.GetProfileString(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce Get_Profile_String
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.GetProfileInteger(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce Get_Profile_String
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.GetFullIxs(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce string Get_Full_Ixs( string a_ixs ) - vrátí kompletní IXS - tedy doplní poslední znak kontrolního součtu
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns>IXS doplněný o 12-tý znak kontrolního součtu</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.GetIxs(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce - vrátí IXS vygenerovaný jako další na řadě podle zadané r tabulky. string Get_Ixs( string a_r_tab_name, { bool a_close_tras=true } )
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns>IXS vygenerovaný podle zadaní R tabulky</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.Konv10to36(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce String string Konv_10to36( long a_cislo ) - vrátí string odpovídající zadanému číslu ale kódovanému v 36 soustavě.
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns>String odpovídající hodnotou zadanému číslu převedenému do kódování base 36 </returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.Konv36to10(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce int string Konv_36to10( string a_cislo ) - vrátí číslu odpovídající zadanému string kódovanému v 36 soustavě.
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns>Číslo odpovídající hodnotou zadanému stringu v kódování base 36</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.PrepareZipInstallation(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Pouze pro testování přípravy načítání distribučních ZIP souborů do databáze
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.IsFirstRun(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Test proti GINIS databázi, že tento balíček zatím nikdy neběžel
+            Tato funkce spoléhá na správné nastavení DataContext a současně musí být připojena databáze typu GINIS, jinak se vyhlásí chyba
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns>true, pokud GDZ balíček specifikovaný v DataContext objektu ještě na připojené GINIS databázi neběžel.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.IsFirstVersionRun(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Test proti GINIS databázi, že tento balíček zatím nikdy neběžel
+            Tato funkce spoléhá na správné nastavení DataContext a současně musí být připojena databáze typu GINIS, jinak se vyhlásí chyba
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns>true, pokud GDZ balíček specifikovaný v DataContext objektu ještě na připojené GINIS databázi neběžel.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.WasRunning(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Test proti GINIS databázi, že zadaný balíček byl již alespoň jednou spuštěn
+            Musí být připojena databáze typu GINIS, jinak se vyhlásí chyba
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns>true, pokud zadaný GDZ balíček byl do DB alespoň jednou spuštěn.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.WasVersionRunning(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Test proti GINIS databázi, že zadaná verze balíčku byl již alespoň jednou spuštěna
+            Pokud je zadán třetí argument, potom to znamená test, že byla spuštěna verze v rozmezí  OD až DO ( včetně hraničních hodnot )
+            Musí být připojena databáze typu GINIS, jinak se vyhlásí chyba
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns>true, pokud zadaná verze GDZ balíčku byla do DB alespoň jednou spuštěna.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.IsSubmodel(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Test proti GINIS databázi, že zadaný submodel je v DB založen
+            Pokud je zadán třetí argument, potom to znamená test, že byla spuštěna verze v rozmezí  OD až DO ( včetně hraničních hodnot )
+            Musí být připojena databáze typu GINIS, jinak se vyhlásí chyba
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns>true, pokud zadaná verze GDZ balíčku byla do DB alespoň jednou spuštěna.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.IsFaze(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Test proti GINIS databázi, že zadaná fáze je v DB aktivní
+            Pokud je zadán třetí argument, potom to znamená test, že byla spuštěna verze v rozmezí  OD až DO ( včetně hraničních hodnot )
+            Musí být připojena databáze typu GINIS, jinak se vyhlásí chyba
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns>true, pokud zadaná verze GDZ balíčku byla do DB alespoň jednou spuštěna.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.IsPol(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Musí být připojena databáze typu GINIS, jinak se vyhlásí chyba
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns>true, pokud zadaná verze GDZ balíčku byla do DB alespoň jednou spuštěna.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.IsPpol(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Musí být připojena databáze typu GINIS, jinak se vyhlásí chyba
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns>true, pokud zadaná verze GDZ balíčku byla do DB alespoň jednou spuštěna.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.IsRevize(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce IsRevize
+            Test, že zadaná text odpovídá revizi distribučního balíku GINIS.
+            Pokud je revize formálně v pořádku, potom vrátí OK
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.FazeFromRevize(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Z revize vypočítá fázi
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns>true, pokud zadaná verze GDZ balíčku byla do DB alespoň jednou spuštěna.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.DistribucniPodAdresarFromRevize(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce - Z revize vrátí distribuční podadresář pro umístění ZIP nebo MSI v rámci distribučních portálů
+            Speciální funkce pro automat a pro robot
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.NadFazeFromFaze(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Z fáze vypočítá nadřízenou fázi
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns>true, pokud zadaná verze GDZ balíčku byla do DB alespoň jednou spuštěna.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.TypFazeFromFaze(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Z fáze vypočítá písmeno charakterizující typ fáze
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns>true, pokud zadaná verze GDZ balíčku byla do DB alespoň jednou spuštěna.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.SaveAdl(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Uložení zadaného souboru jako bolb do databáze do tabulky ginladl
+            Tato funkce spoléhá na správné nastavení DataContext a současně musí být připojena databáze typu GINIS, jinak se vyhlásí chyba
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns>true, pokud GDZ balíček specifikovaný v DataContext objektu ještě na připojené GINIS databázi neběžel.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions._SaveAdl(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.String)">
+            <summary>
+            Uložení zadaného souboru jako bolb do databáze do tabulky ginladl
+            Tato funkce spoléhá na správné nastavení DataContext a současně musí být připojena databáze typu GINIS, jinak se vyhlásí chyba
+            </summary>
+            <param name="ce"></param>
+            <param name="v_file_name"></param>
+            <returns>true, pokud GDZ balíček specifikovaný v DataContext objektu ještě na připojené GINIS databázi neběžel.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.SendAdl(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Uložení zadaného souboru jako bolb do databáze do tabulky ginladl
+            Tato funkce spoléhá na správné nastavení DataContext a současně musí být připojena databáze typu GINIS, jinak se vyhlásí chyba
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns>true, pokud GDZ balíček specifikovaný v DataContext objektu ještě na připojené GINIS databázi neběžel.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions._SendAdl(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.String)">
+            <summary>
+            Uložení zadaného souboru jako bolb do databáze do tabulky ginladl
+            Tato funkce spoléhá na správné nastavení DataContext a současně musí být připojena databáze typu GINIS, jinak se vyhlásí chyba
+            </summary>
+            <param name="ce"></param>
+            <param name="v_file_name"></param>
+            <returns>true, pokud GDZ balíček specifikovaný v DataContext objektu ještě na připojené GINIS databázi neběžel.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.MakeAdlName(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Tato funkce spoléhá na správné nastavení DataContext a současně musí být připojena databáze typu GINIS, jinak se vyhlásí chyba
+            {adlNameSuffix} - jméno přívěšku jména ADL souboru - většinou to bude např. PID diagnostikovaného dokumentu
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns>true, pokud GDZ balíček specifikovaný v DataContext objektu ještě na připojené GINIS databázi neběžel.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions._MakeAdlName(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="ce"></param>
+            <param name="a_adlNameSuffix"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.MakeAdl(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Funkce podle zadané masky vytvoří ve standardním adresáři ADL soubor obsahující zadané soubory
+            {adlPath} - cesta, kde se má ADL soubor vyskládat - pokud je null nebo prázdno, vyskládá se na standardním místě
+            {adlNameSuffix} - jméno přívěšku jména ADL souboru - většinou to bude např. PID diagnostikovaného dokumentu
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions._MakeAdl(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.GetAdlPath(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce vrátí plnou cestu na ADL adresář.
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions._GetAdlPath">
+            <summary>
+            Funkce pro výpočet a vytvoření standardní cesty pro lokální uložení ADL souborů 
+            Časem možná přesměrovat do Environment.SpecialFolder.CommonDocuments
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.GetDbInfo(Gordic.Support.Database.GDatabase,System.String)">
+            <summary>
+            Načtení základních parametrů databáze
+            Dělá selecty přímo do databáze typu GINIS !!
+            </summary>
+            <param name="database">Připojená databáze typu GINIS</param>
+            <param name="a_revize">Připojená Revize aktuální aplikace. 
+            Informace o verzi a fázi aplikace se doplňují jako pomocný údaj do objektu GDbInfoDto - i když to s databází přímo nesouvisí.
+            </param>
+            <returns>DTO objekt se základními parametry GINIS databáze + základní parametry aktuálně použité aplikace.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.LoadXmlSchema(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Načtení zadaného XML schématu do databáze do GDE tabulek
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns>true, pokud XML bylo úspěšně načteno.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.LoadXmlSchemaInternal(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.String)">
+            <summary>
+            Načtení XML souboru do databáze - interní podoba
+            </summary>
+            <param name="ce"></param>
+            <param name="v_file_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.LoadXmlschemes(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro načtení všech XML schémat do databáze
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.TransferXmlTablePopis(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro načtení všech XML schémat s popisem metadat tabulek databáze a jejich uložení do UNL souboru
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.TransferXmlSloupecPopis(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro načtení všech XML schémat s popisem metadat tabulek databáze a jejich uložení do UNL souboru
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.ReadProjectInclude(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro načtení všech XML schémat s popisem metadat tabulek databáze a jejich uložení do UNL souboru
+            argument 1 - root cesta ke zdrojovým tvarům GINIS projektů
+            argument 2 - jméno projektu
+            argument 3 - nepovinný - písmeno zákazníka. Pokud není zadáno, potom se dosadí automaticky X
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.ReadDoporuceneFaze(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT testovací funkce - doporučené fáze pro licenci a verzi databáze
+            Obsahuje vše, co by mělo jít na CD
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.ReadPovoleneRevize(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT testovací funkce - licenčním certifikátem povolené fáze pro licenci a verzi databáze
+            Obsahuje přesně fáze, které jsou navázány na licenční certifikát - na CD se ale dává mnohem více fází - některé se připojují navíc vždy, některé jsou podřízené fáze k povoleným
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.ReadDoporuceneRevize(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro sestavení seznamu doporučených revizí pro zadanou licenci a verzi databáze
+            Tedy určuje obsah aktuální podoby instalačního CD
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.ReadPovolenePolozkyCeniku(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT testovací funkce pro načtení položek ceníku pro zadanou lic a verzi databáze
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.ReadLicenciBalik(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ReadLicenciBalik - Testovací GDT funkce pro načtení aktuálního obsahu licenčního balíku.
+            0) - ID balíku licencí - ixs_lip
+            1) - full file name - kam se má XML nebo P7S soubor uložit
+            2) - nepovinný - certifikát pro podpis buď zadáním jména souboru, nebo zadáním blobu s certifikátem
+            3) - nepovinný - heslo k certifikátu
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.ReadDbParamInfo(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Testovací funkce pro načtení parametrů DB parametru
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.WriteObject``1(``0)">
+            <summary>
+            Objekt DTO zapíše do XML souboru
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="objectDto"></param>
+            <returns>Pole BYTE obsahující podpi</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.WriteObjectToXml``1(``0)">
+            <summary>
+            Objekt DTO zapíše do XML souboru
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="objectDto"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.Write_Licenci_Balik(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro načtení licenčního certifikátu do připojené databáze
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.WriteLicenciBalik(Gordic.Support.Database.GDatabase,System.String,System.Nullable{System.Int32})">
+            <summary>
+            Uložení balíků licencí do databáze zákazníka
+            </summary>
+            <param name="database">Připojená databáze do které se má certifikát načíst.</param>
+            <param name="licFileName">licenčního certifikátu v podobě PDF souboru</param>
+            <param name="log_por_cislo">Kdo páchá změnu. Pokud je NULL, potom je to výchozí servisní uživatel GINIS - protože volajícího ho nezná</param>
+            <returns>IXS_LIP načteného licenčního certifikátu.</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.Save_Gdestab_Tags(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT testovací funkce pro načtení položek ceníku pro zadanou lic a verzi databáze
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.SaveGdestabTags(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.String,System.String)">
+            <summary>
+            Pomocná funkce pro občerstvení klíčových slov ve vazebnách tabulkách pro gdestab
+            </summary>
+            <param name="a_tabulka"></param>
+            <param name="v_engine"></param>
+            <param name="a_kl_slova">Seznam TAGů oddělených čárkou</param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.SaveWwflscauAsFromEu(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT testovací funkce pro načtení položek ceníku pro zadanou lic a verzi databáze
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions._SaveWwflscauAsFromEu(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.String,System.String,System.String)">
+            <summary>
+            Načtení zadaného CER souboru do DB jako certifikační autoritu staženou z EU-TLS
+            </summary>
+            <param name="ce"></param>
+            <param name="v_file_name"></param>
+            <param name="ServiceStatus"></param>
+            <param name="ServiceTypeIdentifier"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.LoadEuTlsList(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Načtení všech certifikátů EU do databáze - neuzavírá transakci
+            Vrací číslo - počet chyb
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.GdzDownload(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro download zadaného GDZ balíku z centrálního distribučního portálu
+            1) ID balíku ve formě IXS_GDT
+            2) Cílová složka, kam se má balík uložit
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns>Jméno souboru, kam se balík uloži</returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.SaveGdzToDb(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Funkce pro uložení celého GDZ balíku do databáze - např. pro následné spuštění v rámci úlohy ZUDu.
+            
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+            <exception cref="T:Gordic.Support.EvaluationEngine.GAdtInvalidArgumentException"></exception>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.DoporuceneRevizeProLicenci(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro stažení seznamu distribučního balíku z centrálního portálu GINIS distribucí
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.RevizeDownLoad(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro stažení distribučního balíku z centrálního portálu GINIS distribucí
+            1) revize, která se má stáhnou
+            2) cílový adresář, kam se má stáhnout
+            3) příznak přepisovat existující soubor
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.DownLoadFileFromWsdmsDistrPortal(System.String,System.String,System.String)">
+            <summary>
+            Pomocná funkce pro stažení obsahu distribučního balíku z centrálního distribučního portálu
+            </summary>
+            <param name="a_path"></param>
+            <param name="a_filename"></param>
+            <param name="a_target_full_file_name"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.GetFileFromWsdmsDistrPortal(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro download zadaného souboru
+            1) adresář na distribučním portálu ( 386\EXE ) 
+            2) jméno požadovaného souboru
+            3) cílový adresář, kam se má nakopírovat
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.GetListDirFromWsdmsDistrPortal(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce - WsDms_ListDirPrepare
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.DbExportParamSql(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Z data z databáze vygeneruje definiční SQL script zadaného DB parametru.
+            param1 - jméno DB parametru
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+            <exception cref="T:Gordic.Support.EvaluationEngine.GAdtInvalidArgumentException"></exception>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.DataTableToSql(System.Data.DataTable,System.String,System.String,System.String,System.String,System.String[])">
+            <summary>
+            
+            </summary>
+            <param name="v_tabulka"></param>
+            <param name="v_table_name"></param>
+            <param name="v_operace"></param>
+            <param name="pkColumns"></param>
+            <param name="databaseTypeTxt"></param>
+            <param name="ignoreColumn"></param>
+            <returns></returns>
+            <exception cref="T:Gordic.Support.EvaluationEngine.GAdtCommandException"></exception>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.ParserState">
+            <summary>
+            Aktuální stav DB parseru
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.ParseDN(System.String,System.Collections.Hashtable@)">
+            <summary>
+            Funkce na rozbor DN stringu na jednotlivé položky
+            </summary>
+            <param name="dnString"></param>
+            <param name="a_dns_items">Tabulka obsahující rozebrané páry </param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.ReadDir(System.String,System.Collections.ArrayList@)">
+            <summary>
+            Rekurzivní funkce pro nacteni vsech SQL souboru obsazenych ve vsech podadresarich v zadane ceste
+            </summary>
+            <param name="a_path">Cesta, kde se SQL soubory maji hledat</param>
+            <param name="a_array">Pole do ktereho se napleni plne reference na nalezene soubory.</param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.NactiKultury(Gordic.Support.Database.GDatabase,System.Collections.Generic.Dictionary{System.String,System.String}@)">
+            <summary>
+            Funkce nacte ze zadane DB seznam cilovych kultur, do kterych se ma klonovat
+            </summary>
+            <param name="database"></param>
+            <param name="a_kultura"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.NactiTexty(Gordic.Support.Database.GDatabase,System.String,System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String}@)">
+            <summary>
+            Funkce nacte z lokalizacni databaze jiz prelozene texty
+            </summary>
+            <param name="database">Připojená databáze</param>
+            <param name="a_verze_db">verze DB, pro kterou se maji texty lokalizavat.</param>
+            <param name="a_kultura">cilova kultura, pro kterou se texty maji vytahovat.</param>
+            <param name="a_object_name">Jmeno objektu, pro ktery se texty maji vytahovat.</param>
+            <param name="a_texty">HashTable obsahujici ID textu a lokalizavany text.</param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtGinisFunctions.KlonujSoubor(System.String,System.String,System.Collections.Generic.Dictionary{System.String,System.String}@,System.String,System.String)">
+            <summary>
+            Funkce na naklonovani souboru do vsech cilovych jazyku podle nactenych textu
+            </summary>
+            <param name="a_in_file">Vstupni soubor, ktery se ma klonovat.</param>
+            <param name="a_out_file">Vystupni soubor.</param>
+            <param name="a_texty">Pole textu, ktere byly zjisteny z lokalizacni databaze.</param>
+            <param name="a_kultura">Cilova kultura, do ktere se bude klonovat.</param>
+            <param name="a_object_name">>Jmeno objektu, pro ktery se má SP klonovat.</param>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions">
+            <summary>
+            Třídá, která obluhuje ADT příkazy pro oblast práce s databází
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.Register(Gordic.Support.EvaluationEngine.GEvaluationEngine)">
+            <summary>
+            Zaregistrování funkcí spojených s databází
+            </summary>
+            <param name="ce"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.DB_Connect(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Příkaz pro připojení se k DB
+            Pokud je pouze jeden argument, potom se jedná o připojení s pomocí windows účtu
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.DB_Connect_ext(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Příkaz pro připojení se k DB
+            Pokud je pouze jeden argument, potom se jedná o připojení s pomocí windows účtu
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.Try_DB_Connect(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Pokus o připojení se k DB - nevyvolává ADT chybu, pouze vrací FALSE
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.DB_DisConnect(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Příkaz pro odpojení od DB
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.DB_ReConnect(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Příkaz pro odpojení od DB
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.DB_Commit(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Příkaz pro commit
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.DB_RollBack(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Příkaz pro rollback
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.DB_SetCommandTimeout(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Realizuje ADT funkci Bool DB_SetCommandTimeout( Long a_second )
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.List_Sp_Arguments(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Funkce vytvoří list argumentů pro MS SQL storovanou proceduru 
+            
+            int List_Sp_Arguments( string a_list_name, string a_sp_owner, string a_sp_name )
+            
+            Vrací počet argumentů
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.List_Db_Tables(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro vytvo5ení listu DB tabulek
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.List_DbXml_Tables(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro vytvoření listu DB tabulek z XML DB schématu
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.List_Db_Columns(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro vytvo5ení listu DB tabulek
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.List_DbXml_Columns(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro vytvo5ení listu DB tabulek
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.List_DbXml_Indexes(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.List_Db_Indexes(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro vytvo5ení listu DB tabulek
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.List_Db_UIndexes(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro vytvo5ení listu DB tabulek
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.List_Db_FKeyColumns(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.List_Db_UIndexColumns(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.List_Db_IndexColumns(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions._List_DbXml_Indexes(System.Xml.XmlDocument,System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="xmlDoc"></param>
+            <param name="v_owner"></param>
+            <param name="v_tabName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.List_DbXml_UIndexes(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions._List_DbXml_UIndexes(System.Xml.XmlDocument,System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="xmlDoc"></param>
+            <param name="v_owner"></param>
+            <param name="v_tabName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.List_DbXml_Checks(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions._List_DbXml_Checks(System.Xml.XmlDocument,System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="xmlDoc"></param>
+            <param name="v_owner"></param>
+            <param name="v_tabName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.List_DbXml_FKeys(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions._List_DbXml_FKeys(System.Xml.XmlDocument,System.String,System.String,System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="xmlDoc"></param>
+            <param name="v_owner"></param>
+            <param name="v_tabName"></param>
+            <param name="v_primOwner"></param>
+            <param name="v_primTabName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.List_DbXml_IndexColumns(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions._List_DbXml_IndexColumns(System.Xml.XmlDocument,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="xmlDoc"></param>
+            <param name="v_idx_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.List_DbXml_UIndexColumns(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions._List_DbXml_UIndexColumns(System.Xml.XmlDocument,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="xmlDoc"></param>
+            <param name="v_idx_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.List_DbXml_FKeyColumns(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions._List_DbXml_FKeyColumns(System.Xml.XmlDocument,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="xmlDoc"></param>
+            <param name="v_idx_name"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions._List_DbXml_Columns(System.Xml.XmlDocument,System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="xmlDoc"></param>
+            <param name="v_owner"></param>
+            <param name="v_tabName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.List_DbXml_PkColumns(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro vytvoření listu sloupců PK zadané DB tabulky a to z XML
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.List_Db_PkColumns(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro vytvo5ení listu DB tabulek
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.List_Db_Procedures(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro vytvoření listu SP
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.List_Db_Functions(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro vytvoření listu DB funkci
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.DB_Load_sp_definition(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro vytvoření listu SP
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.DB_Load_fn_definition(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce pro vytvoření listu SP
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.DBCreateConnect(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Vytvoření databáze a její přidání do pole databází
+            Současně se nastaví jako aktuální DB konekt
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.DBCloneConnect(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Vytvoření databáze vyklonováním aktuálně nastavení databáze a její přidání do pole databází pod zadaným jménem
+            
+            Současně se nastaví jako aktuální DB konekt
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.DBGetConnect(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Vyzvednutí DB připojení z poolu
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.DBDisconnectAll(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Odpojení všech databází 
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.DBDestroyConnectAll(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Odpojení všech databází mimo SQLCA - a odstranění všch databází z pool
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.db_test_oracle_nls(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns>
+            1 - tesk OK
+            -1 - nějaká SQL chyba
+            -2 - poškozená čeština
+            -3 - jiný typ DB stroje
+            -4 - nebyl DB konekt
+            </returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.db_test_inf_table(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            Otestováno jak proti INF, tak proti MSS
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.Db_Command(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce - DB_Command( string a_sql_prikaz )
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.DB_Corect_sql(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.DB_Load_Blobs(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            DB_Load_Blob( string unl_file, string tabName, string pkColList, string blobColList ) - funkce načtení blobů podle UNL souboru");
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDbFunctions.DB_Export_Dual(Gordic.Support.EvaluationEngine.GEvaluationEngine,System.Collections.Generic.List{Gordic.Support.EvaluationEngine.Expression})">
+            <summary>
+            ADT funkce DB_Export_Dual( string export_file, string string a_first_db, string a_second_db ) - funkce vygeneruje ADT scipt pro dualní export shodnych dat ze dvou DB.");
+            </summary>
+            <param name="ce"></param>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GEvaluationEngineOnDataRow">
+            <summary>
+            Třída umožňující vykonávat výrazi nad DataRow
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtEvaluationEngine.GEvaluationEngineOnDataRow._table">
+            <summary>
+            Pointer na DataTable
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtEvaluationEngine.GEvaluationEngineOnDataRow._row_data">
+            <summary>
+            Pointer na DataRow, který bude obsahovat data jednoho řádku ( pojmenované hodnoty ) na které se následně může odkazovat vykonávaný výraz
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEvaluationEngine.GEvaluationEngineOnDataRow.row_data">
+            <summary>
+            Pointer na DataRow, který bude obsahovat data jednoho řádku ( pojmenované hodnoty ) na které se následně může odkazovat vykonávaný výraz
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GEvaluationEngineOnDataRow.#ctor(System.Data.DataTable)">
+            <summary>
+            
+            </summary>
+            <param name="a_data_table"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GEvaluationEngineOnDataRow.GetExternalObject(System.String,System.Object@)">
+            <summary>
+            Tudy dosazuji konkrétní hodnoty stringových konstant a zástupného symbolu null
+            
+            Gets an external object based on an identifier.
+            </summary>
+            <param name="identifier">Jméno požadované proměnné</param>
+            <param name="a_vysledek">vrácená hodnota</param>
+            <returns>Pokud je hodnota vrácena, potom vrací true. Pokud taková hodnota nebyla dohledána, potom vrací false</returns>
+            <remarks>
+            This method is useful when the engine needs to create objects dynamically.
+            For example, a spreadsheet calc engine would use this method to dynamically create cell
+            range objects based on identifiers that cannot be enumerated at design time 
+            (such as "AB12", "A1:AB12", etc.)
+            </remarks>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GAdtDataRowExternalObject">
+            <summary>
+            Objekt pro získání aktuálních hodnot aktuálního DataRow
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDataRowExternalObject.#ctor(Gordic.Support.AdtEvaluationEngine.GEvaluationEngineOnDataRow,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="a_engine"></param>
+            <param name="a_col_name"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDataRowExternalObject.GetValue">
+            <summary>
+            Funkce, která pro přednastavený sloupec vrací aktuální hodnotu aktuálního DataRow
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDataRowExternalObject.GetListVar(System.Collections.Generic.List{System.String}@)">
+            <summary>
+            
+            </summary>
+            <param name="list"></param>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngineOnDictionary">
+            <summary>
+            Třída umožňující vykonávat výrazi nad Distionary
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngineOnDictionary._row_data">
+            <summary>
+            Pointer na slovník, který bude obsahovat data jednoho řádku ( pojmenované hodnoty ) na které se následně může odkazovat vykonávaný výraz
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngineOnDictionary.row_data">
+            <summary>
+            Pointer na slovník, který bude obsahovat data jednoho řádku ( pojmenované hodnoty ) na které se následně může odkazovat vykonávaný výraz
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngineOnDictionary.#ctor">
+            <summary>
+            Výchozí konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngineOnDictionary.#ctor(System.Collections.Generic.Dictionary{System.String,System.Object})">
+            <summary>
+            Konstruktor se zadáním datového zdroje hodnot pro evaluationEngine
+            </summary>
+            <param name="a_row_data"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngineOnDictionary.GetExternalObject(System.String,System.Object@)">
+            <summary>
+            Tudy dosazuji konkrétní hodnoty stringových konstant a zástupného symbolu null
+            
+            Gets an external object based on an identifier.
+            </summary>
+            <param name="identifier">Jméno požadované proměnné</param>
+            <param name="a_vysledek">vrácená hodnota</param>
+            <returns>Pokud je hodnota vrácena, potom vrací true. Pokud taková hodnota nebyla dohledána, potom vrací false</returns>
+            <remarks>
+            This method is useful when the engine needs to create objects dynamically.
+            For example, a spreadsheet calc engine would use this method to dynamically create cell
+            range objects based on identifiers that cannot be enumerated at design time 
+            (such as "AB12", "A1:AB12", etc.)
+            </remarks>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GAdtDictionaryExternalObject">
+            <summary>
+            Objekt pro získání aktuálních hodnot aktuálního Dictionary
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDictionaryExternalObject.#ctor(Gordic.Support.AdtEvaluationEngine.GAdtEvaluationEngineOnDictionary,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="a_engine"></param>
+            <param name="a_col_name"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDictionaryExternalObject.GetValue">
+            <summary>
+            Funkce, která pro přednastavený sloupec vrací aktuální hodnotu aktuálního DataRow
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtDictionaryExternalObject.GetListVar(System.Collections.Generic.List{System.String}@)">
+            <summary>
+            
+            </summary>
+            <param name="list"></param>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GAdtWakeUp">
+            <summary>
+            https://www.codeproject.com/Articles/5315/Wake-On-Lan-sample-for-C
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtWakeUp.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtWakeUp.SetClientToBrodcastMode">
+            <summary>
+            this is needed to send broadcast packet
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GAdtWakeUp.WakeFunction(System.String)">
+            <summary>
+            now use this class
+            MAC_ADDRESS should  look like '013FA049'
+            </summary>
+            <param name="MAC_ADDRESS"></param>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GCmdLineProcessLauncher">
+            <summary>
+            Tato třída zapouzdřuje spouštění commandline aplikací
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEvaluationEngine.GCmdLineProcessLauncher.StdOut">
+            <summary>StdOut</summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEvaluationEngine.GCmdLineProcessLauncher.StdErr">
+            <summary>StdErr</summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEvaluationEngine.GCmdLineProcessLauncher.ShowWindow">
+            <summary>ShowWindow</summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GCmdLineProcessLauncher.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GCmdLineProcessLauncher.#ctor(System.Boolean)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="showWindow">zda se má zobrazit okno</param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GCmdLineProcessLauncher.StartStdOutThread(System.Diagnostics.Process)">
+            <summary>
+            Spustí thread, který čte z stdOut
+            </summary>
+            <param name="process"></param>
+        </member>
+        <member name="P:Gordic.Support.AdtEvaluationEngine.GCmdLineProcessLauncher.StdOutEncoding">
+            <summary>
+            Thread, který čte z stdOut - zajistí, že se nebudou navzájem blokovat čtení z std out a std err
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GCmdLineProcessLauncher.ReadStdOutThread">
+            <summary>
+            Thread, který čte z stdOut - zajistí, že se nebudou navzájem blokovat čtení z std out a std err
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GCmdLineProcessLauncher.Execute(System.String,System.String)">
+            <summary>
+            Spuštění nového procesu s commandline aplikací
+            </summary>
+            <param name="startupFileName">jméno spustitelného souboru commandline aplikace, který se provádět</param>
+            <param name="arguments">vstupní argumenty</param>
+            <returns>exit kód aplikace</returns>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GTlsLogCapturer">
+            <summary>
+            Pomocná třída pro zachycení log výstupů z třídy pro načítání EU-TLS
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GTlsLogCapturer.#ctor(Gordic.Support.EvaluationEngine.GEvaluationEngine)">
+            <summary>
+            
+            </summary>
+            <param name="a_ce"></param>
+        </member>
+        <member name="P:Gordic.Support.AdtEvaluationEngine.GTlsLogCapturer.LogText">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GTlsLogCapturer.WriteLog(System.String,Gordic.Install.Server.GLogEntryType)">
+            <summary>
+            Funkce pro napojení na delegáta aktualizačních tříd pro výpis mezivýsledků
+            </summary>
+            <param name="a_text">Text, který se má vypsat.</param>
+            <param name="a_type">Text, který se má vypsat.</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GWsdmsSupport">
+            <summary>
+            Podpora pro práci s WSDMS úložištěm
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GWsdmsSupport.DownloadStream(System.String,System.String,System.String,System.String,System.String,System.Net.NetworkCredential)">
+            <summary>
+            Stažení obsahu vzdáleného souboru do stream
+            </summary>
+            <param name="a_path">Cesta umístění na serveru</param>
+            <param name="a_filename">Jméno souboru na serveru</param>
+            <param name="a_u">URL serveru</param>
+            <param name="a_wl">login na server</param>
+            <param name="a_wp">heslo na server</param>
+            <param name="a_credentials">Síťovém ověření - může být null</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GWsdmsSupport.UploadFile(System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Net.NetworkCredential)">
+            <summary>
+            Upload souboru do WSDMS uložiště
+            </summary>
+            <param name="a_localfile">Lokální soubor</param>
+            <param name="a_remotepath">Serverový adresář</param>
+            <param name="a_remotefile">Jméno souboru na serveru</param>
+            <param name="a_u">URL serveru</param>
+            <param name="a_wl">login na server</param>
+            <param name="a_wp">heslo na server</param>
+            <param name="canOverWrite">Povolení přepsat existující soubor</param>
+            <param name="a_credentials">Síťovém ověření - může být null</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GGdtZakaznikDoporucenaGdzDataSet">
+             <summary>
+            Represents a strongly typed in-memory cache of data.
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GGdtZakaznikDoporucenaGdzDataSet.ZakaznikDoporucenaGdzDataTable">
+             <summary>
+            Represents the strongly named DataTable class.
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GGdtZakaznikDoporucenaGdzDataSet.ZakaznikDoporucenaGdzRow">
+             <summary>
+            Represents strongly named DataRow class.
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GGdtZakaznikDoporucenaGdzDataSet.ZakaznikDoporucenaGdzRowChangeEvent">
+             <summary>
+            Row event argument class
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GGdtZakaznikDoporucenaRevizeDataSet">
+             <summary>
+            Represents a strongly typed in-memory cache of data.
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GGdtZakaznikDoporucenaRevizeDataSet.ZakaznikDoporucenaRevizeDataTable">
+             <summary>
+            Represents the strongly named DataTable class.
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GGdtZakaznikDoporucenaRevizeDataSet.ZakaznikDoporucenaRevizeRow">
+             <summary>
+            Represents strongly named DataRow class.
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GGdtZakaznikDoporucenaRevizeDataSet.ZakaznikDoporucenaRevizeRowChangeEvent">
+             <summary>
+            Row event argument class
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.Gordic_Support_AdtEvaluationEngine">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEvaluationEngine.Gordic_Support_AdtEvaluationEngine.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEvaluationEngine.Gordic_Support_AdtEvaluationEngine.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEvaluationEngine.Gordic_Support_AdtEvaluationEngine._21367176">
+            <summary>
+              Looks up a localized string similar to Upozornění.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEvaluationEngine.Gordic_Support_AdtEvaluationEngine._21367182">
+            <summary>
+              Looks up a localized string similar to ADTFunkce [{0}] očekává datový typ [{1}].
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.GSvnSupport">
+            <summary>
+            Volání svn
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GSvnSupport.SvnCheckoutCmd(System.String,System.String,System.Boolean@)">
+            <summary>
+            Přidá nezaverzovaný projekt do SVN
+            </summary>
+            <param name="path">cesta</param>
+            <param name="url">url</param>
+            <param name="ok">zda dopadlo OK</param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GSvnSupport.SvnAddPathCmd(System.String)">
+            <summary>
+            Přidá nezaverzované soubory do SVN
+            </summary>
+            <param name="fileName"></param>
+        </member>
+        <member name="M:Gordic.Support.AdtEvaluationEngine.GSvnSupport.SvnCmdPassFileName(System.String)">
+            <summary>
+            
+            </summary>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="P:Gordic.Support.AdtEvaluationEngine.GSvnSupport.SvnExePath">
+            <summary>
+            Cesta k svn.exe
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.AdtEvaluationEngine.GSvnSupport.TortoisePath">
+            <summary>
+            Cesta k TortoiseProc.exe
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.ListDataSets.DatabaseTable">
+             <summary>
+            Represents a strongly typed in-memory cache of data.
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.ListDataSets.DatabaseTable.DbTablesDataTable">
+             <summary>
+            Represents the strongly named DataTable class.
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.ListDataSets.DatabaseTable.DbTablesRow">
+             <summary>
+            Represents strongly named DataRow class.
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.AdtEvaluationEngine.ListDataSets.DatabaseTable.DbTablesRowChangeEvent">
+             <summary>
+            Row event argument class
+            </summary>
+        </member>
+    </members>
+</doc>

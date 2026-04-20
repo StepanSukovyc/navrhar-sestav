@@ -1,0 +1,479 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Tool.RzpRssSpiViewer</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer">
+            <summary>
+            Okno pro vizualizaci XML dokumentů uložených v DB
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.#ctor">
+            <summary>
+            Konstruktor.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.LoadTable(System.Int32,System.Int32,System.String)">
+            <summary>
+            Načtení seznamu dávek na obrazovku
+            </summary>
+            <param name="a_od"></param>
+            <param name="a_do"></param>
+            <param name="a_id_nss">ID externího systému - nebo ALL nebo prázdno</param>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.SelectRowInDataGridView(System.Int32)">
+            <summary>
+            Zvýraznění řádku v tabulce
+            </summary>
+            <param name="a_rzp_por_cislo">Pořadové číslo dávky, jejíž řádek chci v tabulce zvýraznit.</param>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.LoadRzpPorCislo(System.Int32)">
+            <summary>
+            Funkce načte a zobrazí dávku RŽP zadaného čísla
+            </summary>
+            <param name="a_rzp_por_cislo">Číslo požadované dávky.</param>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.CopyDataTableRow(System.Data.DataTable,System.Data.DataTable)">
+            <summary>
+            Zkopíruje data z jedné tabulky do druhé
+            </summary>
+            <param name="inTable"></param>
+            <param name="outTable"></param>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.ReformatXmlText(System.Xml.XmlDocument,System.Boolean)">
+            <summary>
+            Přeformátuje XML zobrazený v rámci editoru tak, aby bylo stejné jako je při validaci
+            </summary>
+            <param name="v_xml_doc"></param>
+            <param name="newLineOnAttributes"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.LoadValueFromRegistry(System.String,System.String)">
+            <summary>
+            Nacteni konfiguracni hodnoty z registrů
+            </summary>
+            <param name="a_valus_name">Jméno konfigurační parametru</param>
+            <param name="a_default_value">Výchozí hodnota konfiguračního parametru</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.SaveValueToRegistry(System.String,System.String)">
+            <summary>
+            Uložení jedné konfigurační hodnoty.
+            </summary>
+            <param name="a_valus_name">Jméno proměnné</param>
+            <param name="a_value_value">Hodnota proměnné</param>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.button2_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tl. na validaci XML - současně naformátuje XML tak, aby to bylo stejné jako u validace
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.GetCurrentWord">
+            <summary>
+            Pomocná funkce pro práci s RTF editorem - vrátí aktuální slovo na pozici kurzoru.
+            </summary>
+            <returns>Nalezené slovo</returns>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.GetCharIndexFromLine(System.String,System.Int32)">
+            <summary>
+            Vrátí index znaku v RTF editoru podle zadaného čísla řádku
+            </summary>
+            <param name="a_text">Text obsažený v rtf editoru</param>
+            <param name="a_line">Číslo řádku, pro který se má vrátit pozice formou indexu znaku prvního znaku na řádku</param>
+            <returns>Index znaku, který je prvním na požadovaném řádku.</returns>
+        </member>
+        <member name="T:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.XmlFoldStart">
+            <summary>
+            Holds information about the start of a fold in an xml string.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.XmlFoldStart.#ctor(System.String,System.String,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Konstruktor třídy pro popis foldingu
+            </summary>
+            <param name="prefix">prefix</param>
+            <param name="name">name</param>
+            <param name="line">line</param>
+            <param name="col">col</param>
+            <param name="level">úroveň vnoření - root má 0</param>
+        </member>
+        <member name="P:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.XmlFoldStart.Line">
+            <summary>
+            The line where the fold should start.  Lines start from 0.
+            </summary>
+        </member>
+        <member name="P:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.XmlFoldStart.Column">
+            <summary>
+            The column where the fold should start.  Columns start from 0.
+            </summary>
+        </member>
+        <member name="P:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.XmlFoldStart.Name">
+            <summary>
+            The name of the xml item with its prefix if it has one.
+            </summary>
+        </member>
+        <member name="P:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.XmlFoldStart.FoldText">
+            <summary>
+            The text to be displayed when the item is folded.
+            </summary>
+        </member>
+        <member name="P:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.XmlFoldStart.Level">
+            <summary>
+            Úroveň vnoření tohoto elementu
+            </summary>
+        </member>
+        <member name="T:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.XmlFoldingStrategy">
+            <summary>
+            Determines folds for an xml string in the editor.
+            </summary>
+        </member>
+        <member name="F:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.XmlFoldingStrategy.showAttributesWhenFolded">
+            <summary>
+            Flag indicating whether attributes should be displayed on folded
+            elements.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.XmlFoldingStrategy.#ctor">
+            <summary>
+            Konstruktor třídy pro folding 
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.XmlFoldingStrategy.GenerateFoldMarkers(ICSharpCode.TextEditor.Document.IDocument,System.String,System.Object)">
+            <summary>
+            Adds folds to the text editor around each start-end element pair.
+            </summary>
+            <remarks>
+            <para>If the xml is not well formed then no folds are created.</para> 
+            <para>Note that the xml text reader lines and positions start 
+            from 1 and the SharpDevelop text editor line information starts
+            from 0.</para>
+            </remarks>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.XmlFoldingStrategy.CreateCommentFold(ICSharpCode.TextEditor.Document.IDocument,System.Collections.ArrayList,System.Xml.XmlTextReader)">
+            <summary>
+            Creates a comment fold if the comment spans more than one line.
+            </summary>
+            <remarks>The text displayed when the comment is folded is the first 
+            line of the comment.</remarks>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.XmlFoldingStrategy.CreateElementFoldStart(System.Xml.XmlTextReader,System.Int32)">
+            <summary>
+            Creates an XmlFoldStart for the start tag of an element.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.XmlFoldingStrategy.CreateElementFold(ICSharpCode.TextEditor.Document.IDocument,System.Collections.ArrayList,System.Xml.XmlTextReader,Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.XmlFoldStart)">
+            <summary>
+            Create an element fold if the start and end tag are on 
+            different lines.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.XmlFoldingStrategy.GetAttributeFoldText(System.Xml.XmlTextReader)">
+            <summary>
+            Gets the element's attributes as a string on one line that will
+            be displayed when the element is folded.
+            </summary>
+            <remarks>
+            Currently this puts all attributes from an element on the same
+            line of the start tag.  It does not cater for elements where attributes
+            are not on the same line as the start tag.
+            </remarks>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.XmlFoldingStrategy.XmlEncodeAttributeValue(System.String,System.Char)">
+            <summary>
+            Xml encode the attribute string since the string returned from
+            the XmlTextReader is the plain unencoded string and .NET
+            does not provide us with an xml encode method.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.button6_Click(System.Object,System.EventArgs)">
+            <summary>
+            Tlačítko SaveAs
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.ShowDialogSaveFile(System.String)">
+            <summary>
+            Pomocná funkce vyvolá zobrazení systémového dialogu pro výběr souboru pro uložení.
+            </summary>
+            <param name="a_default_file_name">Výchozí nastavení jména otevíraného souboru pro zápis. Z tohoto jména se přednastavuje adresář a přípona souboru.</param>
+            <returns>Plné jméno souboru do kterého se následně bude ukládat obsah editoru.</returns>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.Find(System.Text.RegularExpressions.Regex,System.Int32)">
+            <summary>
+            Pomocná funkce pro RTF editor - podle zadaného regulárního výrazu hledá první další výskyt - používá se z okna pro FIND ( F5 )
+            </summary>
+            <param name="regex">Regulární výraz, který popisuje hledaný text.</param>
+            <param name="startPos">Pozice od které se má začít hledat.</param>
+            <returns>Nalezená pozice nebo 0 v případě, že se nic nenajde.</returns>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.Replace(System.Text.RegularExpressions.Regex,System.Int32,System.String)">
+            <summary>
+            Pomocná funkce pro RTF editor - podle zadaného regulárního výrazu hledá text a přepíše jej zadaným novým textem 
+            </summary>
+            <param name="regex">Hledaný výraz</param>
+            <param name="startPos">Hledat od pozice</param>
+            <param name="replaceWith">Nový text, kterým se má původní hledaný text nahradit</param>
+            <returns>Výsledný tvar textu</returns>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.ReplaceAll(System.Text.RegularExpressions.Regex,System.String)">
+            <summary>
+            Pomocná funkce pro RTF editor - podle zadaného regulárního výrazu hledá texty a přepíše je zadaným novým textem - přepis všeho
+            </summary>
+            <param name="regex">Hledaný text</param>
+            <param name="replaceWith">Nový text, kterým se má původní zaměnit.</param>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.FindNext">
+            <summary>
+            Pomocná funkce pro RTF editor - hledání dalšího výskytu textu
+            </summary>
+            <returns>Pozice nalezeného textu</returns>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.GoToLine">
+            <summary>
+            Pomocná funkce pro RTF editor - přechod na zadaný řádek - nejprve se ale zeptá dialogem na zadané číslo řádku, na který se má skočit
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.GoToLine(System.Int32)">
+            <summary>
+            Pomocná funkce pro RTF editor - přechod na zadaný řádek
+            </summary>
+            <param name="line">Číslo požadovaného řádku</param>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.UpdateFolding">
+            <summary>
+            Funkce na překreslení foildingu
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.BeginUpdate">
+            <summary>
+            Funkce oznámí editoru, že se zahajují změny obsahu a že na toto nemá graficky reagovat.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.EndUpdate">
+            <summary>
+            Funkce oznámí editoru, že se ukončují změny obsahu a že má svůj obsah překreslit.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.Select(System.Int32,System.Int32)">
+            <summary>
+            Pomocná funkce pro RTF editor - výběr textu podle zadaných parametrů
+            </summary>
+            <param name="startPos">od pozice</param>
+            <param name="length">v délce</param>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.Normalize(System.String)">
+            <summary>odstranění diakritiky z textu</summary>
+            <param name="text">původní text</param>
+            <returns>výsledný text</returns>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.NormalizeAsIcz(System.String)">
+            <summary>
+            2016-07-29 Odstanění znaků stejným postupem, jako to dělá ICZ
+            </summary>
+            <param name="text">Vstupní text - jméno souboru</param>
+            <returns>Výstupní text - jméno souboru ve formě stejné, jako v ICZ</returns>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.RefreshGrid">
+            <summary>
+            Občerstvení seznamu podle změněných parametrů
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.button16_Click(System.Object,System.EventArgs)">
+            <summary>
+            Save CFG tlačítko
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.cbExportAll_Click(System.Object,System.EventArgs)">
+            <summary>
+            Export všech zobrazených dávek
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.ShowDialogChangeDir">
+            <summary>
+            Funkce vyvolá zobrazení systémového dialogu pro výběr adresáře.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.btZablokovane_Click(System.Object,System.EventArgs)">
+            <summary>
+            tl. Pro zobrazení zablokovaných dokumentů
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="F:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer.richTextBox1">
+            <summary>
+            RTF editor je public, protože do něj přímo hrabu z dalších oken a to přes pointer na okno.
+            </summary>
+        </member>
+        <member name="T:Gordic.Tool.RzpRssSpiViewer.FrmGotoLine">
+            <summary>
+            Summary description for FrmGotoLine.
+            </summary>
+        </member>
+        <member name="F:Gordic.Tool.RzpRssSpiViewer.FrmGotoLine.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FrmGotoLine.#ctor(Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer,System.Int32,System.Int32)">
+            <summary>
+            Formulář pro zadání čísla řádku, na který se má v rámci RTF editoru skočit.
+            </summary>
+            <param name="frmQuery">Pointer na rodičovské okno</param>
+            <param name="currentPosition">číslo aktuální pozice v rámci RTF editoru</param>
+            <param name="lastPosition">Poslední číslo řádku v RTF editoru</param>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FrmGotoLine.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FrmGotoLine.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Tool.RzpRssSpiViewer.FrmSearch">
+            <summary>
+            Summary description for FrmSearch.
+            </summary>
+        </member>
+        <member name="F:Gordic.Tool.RzpRssSpiViewer.FrmSearch.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FrmSearch.#ctor(Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer)">
+            <summary>
+            Okno pro realizaci uživatelské funkce FIND nad RTF editorem
+            </summary>
+            <param name="a_FormDbToXmlViewer"></param>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FrmSearch.#ctor(Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer,System.Boolean)">
+            <summary>
+            Konstruktor, který umožní předat pointer na rodičovské okno a tím je umožněno do něho zasahovat
+            </summary>
+            <param name="a_FormDbToXmlViewer">Pointer na rodičovské okno.</param>
+            <param name="replace">Nepoužito - toto je pozůstatek něčeho starého</param>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FrmSearch.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FrmSearch.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Tool.RzpRssSpiViewer.FrmZablokovane">
+            <summary>
+            Pomocné okno pro zobrazení zablokovaných dokumentů
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FrmZablokovane.#ctor(Gordic.Tool.RzpRssSpiViewer.FormDbToXmlViewer,System.String,System.String)">
+            <summary>
+            
+            </summary>
+            <param name="mainFrm">Pointer na hlavní okno</param>
+            <param name="TypXml">Id verze rozhraní </param>
+            <param name="id_nss">Interní ID externího systému</param>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FrmZablokovane.ReadData">
+            <summary>
+            Načtení/defresh dat - seznam zablokovaných dokumentů
+            </summary>
+        </member>
+        <member name="F:Gordic.Tool.RzpRssSpiViewer.FrmZablokovane.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FrmZablokovane.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.FrmZablokovane.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:Gordic.Tool.RzpRssSpiViewer.GExampleApplication">
+            <summary>vzorová aplikace typu tlustý klient</summary>    
+        </member>
+        <member name="M:Gordic.Tool.RzpRssSpiViewer.GExampleApplication.Main">
+            <summary>hlavní smyčka aplikace</summary>
+        </member>
+        <member name="T:Gordic.Tool.RzpRssSpiViewer.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Tool.RzpRssSpiViewer.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Tool.RzpRssSpiViewer.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Tool.RzpRssSpiViewer.Properties.Resources.in_db">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Tool.RzpRssSpiViewer.Properties.Resources.in_out_db">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Tool.RzpRssSpiViewer.Properties.Resources.out_db">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Tool.RzpRssSpiViewer.Properties.Resources.out_in_db">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+        <member name="P:Gordic.Tool.RzpRssSpiViewer.Properties.Resources.servis">
+            <summary>
+              Looks up a localized resource of type System.Drawing.Bitmap.
+            </summary>
+        </member>
+    </members>
+</doc>

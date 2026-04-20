@@ -1,0 +1,714 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Pdm.Server</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Pdm.Server.GZaklad">
+            <summary>
+            Serverová část AL sdílené v Pdm
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.Gordic#Pdm#Interface#IGZaklad#SetEkoGlobalDbParameters(System.String,System.String,System.String,System.Int32,System.Int32,System.String,System.String)">
+            <summary>Nastavení globálních parametrů - ekonomických</summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.SetEkoGlobalDbParameters(System.String,System.String,System.String,System.Int32,System.Int32,System.String,System.String,System.Boolean)">
+            <summary>Nastavení globálních parametrů - ekonomických</summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.GetDatabaseParameter(System.String)">
+            <summary>Získá databázový parametr ze serverového kontextu.</summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.Trans_Commit_SetEkoGlobalDbParameters(System.String,System.String,System.String,System.Int32,System.Int32,System.String,System.String)">
+            <summary>
+            Nastavení globálních parametrů - ekonomických
+            </summary>    
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.BlokovaneObdobi(Gordic.General.GInt32)">
+            <summary>Určí, zda je období blokované</summary>
+            <param name="obdobi">Období (složenina rok+mesic*12-1)</param>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.BlokovaneObdobi">
+            <summary>Určí, zda je aktuální období blokované</summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.PosledniBlokovaneObdobi">
+            <summary>Vrátí poslední blokované období. Pokud není žádné období blokované vrátí databázový null.</summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.SeznamBlokovanychObdobi">
+            <summary>Vrátí seznam blokovaných období. Pokud není žádné období blokované vrátí prázdné pole.</summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.NactiTabulku(System.String,System.String[])">
+            <summary>
+            Načte tabulku zadaného jména.
+            </summary>
+            <param name="jmenoTabulky">Jméno tabulky GINISu.</param>
+            <param name="sloupceTabulky">Sloupce tabulky, které se mají načíst. Nebude-li uveden
+            žádný sloupec, načte se celá tabulka.</param>
+            <returns>Vrací požadovanou tabulku.</returns>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.NactiTabulku(System.String,System.Int32,System.String[])">
+            <summary>
+            Načte tabulku zadaného jména.
+            </summary>
+            <param name="jmenoTabulky">Jméno tabulky GINISu.</param>
+            <param name="orderIndex">Index sloupce(od 1), podle kterého se má řadit tabulka.</param>
+            <param name="sloupceTabulky">Sloupce tabulky, které se mají načíst. Nebude-li uveden
+            žádný sloupec, načte se celá tabulka.</param>
+            <returns>Vrací požadovanou tabulku.</returns>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.HodinNaDenZFondu(Gordic.General.GInt16)">
+            <summary>
+            Fond pracovní doby pro pracovní poměr
+            </summary>
+            <param name="fondPracovniDoby">Identifikátor fondu pracovní doby</param>
+            <returns>Fond pracovní doby připadající na jeden pracovní den</returns>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.ZiskejUcetniJednotku">
+            <summary>Získá učetní jednotku. Je závislé na aktuálním
+            období, Ičo, Ucs, Uus, Nks.</summary>
+            <returns>Hodnota ixs_vaj.</returns>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.SeznamStatnichSvatku(Gordic.General.GDate,Gordic.General.GDate)">
+            <summary>
+            Vrací seznam státních svátků v zadaném rozsahu.
+            </summary>
+            <param name="datumOd">Počáteční datum rozsahu.</param>
+            <param name="datumDo">Koncové datum rozsahu.</param>
+            <returns>Tabulka se seznamem svátků.</returns>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.GetPamNazevFromIxsEsu(System.String)">
+            <summary>Získá název (jméno) osoby z tabulky pro PAM (pamsesu)</summary>
+            <param name="ixsEsu">Identifikátor ext. subjektu</param>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.GetEsuNazevFromIxsEsu(System.String)">
+            <summary>Získá název (jméno) osoby z tabulky ext. subjektů.</summary>
+            <param name="ixsEsu">Identifikátor ext. subjektu</param>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.GetEsuNazevFromOC(System.String)">
+            <summary>Získá název (jméno) osoby  dle osobního čísla.</summary>
+            <param name="oc">Osobní číslo</param>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.GetNazevFromGinsEsu(System.String)">
+            <summary>
+            Získání jména osoby z ginsesu
+            </summary>
+            <param name="ixs_esu"> IXS_ESU</param>
+            <returns> text se jménem osoby </returns>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.ZiskejPracoviste(System.String)">
+            <summary>
+            Získá pracoviště příslušné k zadanému pracovnímu poměru.
+            Bere v úvahu aktuální rok a měsíc.
+            </summary>
+            <param name="ixsPpv">Identifikátor pracovního poměru</param>
+            <returns>Pracoviště příslušné pracovnímu poměru</returns>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.ZiskejIxsTks(System.String)">
+            <summary>
+            Získá IxsTks příslušné k zadanému pracovišti.
+            </summary>
+            <param name="ixsPra">Identifikátor pracoviště</param>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.NastavAktivituPracovnihoPomeru(Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>
+            Nastaví aktivitu zadanému pracovnímu poměru.
+            </summary>
+            <param name="ixsPpv">Identifikátor pracovního poměru</param>
+            <param name="aktivita">Aktivita pracovního poměru</param>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.GetIxsEsuFromIxsPpv(System.String)">
+            <summary>Získá identifikátor pracovníka na základě pracovního poměru</summary>
+            <param name="ixsPpv">Identifikátor pracovního poměru</param>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.PridejDoplnujiciUdajePSMNoCommit(System.String,System.String,System.String,System.Int32,System.Int32,System.String)">
+            <summary>
+            Přidání doplňujících údajů o měsíčních změně
+            </summary>
+            <param name="ico"> ico </param>
+            <param name="ucs"> ucs </param>
+            <param name="ixs_ppv">ixs_ppv</param>
+            <param name="poradi">poradi</param>
+            <param name="slozka_mzdy">číslo složky mzdy</param>
+            <param name="ixs_spz">ixs_spz</param>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.GetStavValidaceMz(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Zjištěn stavu validace jednotlivé měsíční změny
+            </summary>
+            <param name="ip_ixs_spz">  PID soupisky</param>
+            <param name="ip_ixs_ppv">  identifikátor pracovního poměru</param>
+            <param name="ip_rok">      rok zadaní mzdy </param>
+            <param name="ip_obd_mzdy"> období mzdy </param>
+            <param name="ip_poradi">   pořadí na soupisce</param>
+            <returns>                  stav validace </returns>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.ZiskejNazevKnihy(System.String)">
+            <summary>
+            Získá název knihy na základě jejího identifikátoru
+            </summary>
+            <param name="ixpDen">Identifikátor knihy</param>
+            <returns>Název knihy</returns>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.SablonaPpv(System.String)">
+            <summary>
+            Zjistí, zda má pracovní poměr šablonu (pro tento rok a měsíc)
+            </summary>
+            <returns>Identifikace šablony prac. poměru (null - bez šablony)</returns>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GZaklad.MaFunkceOmezeneSlozky">
+            <summary>
+            Zjistí, zda má aktuální(přihlášená) funce omezení na složky.
+            </summary>
+            <returns>true pokud je fukce omezená</returns>
+        </member>
+        <member name="T:Gordic.Pdm.Server.GPamsvyp">
+            <summary>
+            Serverová část AL - Výplatní místa
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GPamsvyp.GetVyplatniMista">
+            <summary>Získá přístup k logice pro práci s výplatními místy</summary>
+        </member>
+        <member name="T:Gordic.Pdm.Server.GPamspra">
+            <summary>
+            Serverová část AL - Pracoviště
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.Server.GPracPomery">
+            <summary>
+            Serverová část AL - Pracovní poměry zaměstnanců
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GPracPomery.UpdateWhere(Gordic.General.ApplicationServer.GWhereBuilder)">
+            <summary>
+            Upraví where příkaz
+            </summary>
+            <param name="where">Where</param>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GPracPomery.GetZiskejInfoOPresunu">
+            <summary>
+            Určuje, zda se má zjišťovat informace o přesunu pracovních poměrů na jiné pracoviště
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.Server.GVyplatniMista">
+            <summary>
+            Serverová část AL pro práci s výplatními místy
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GVyplatniMista.OnGetSeznamVyplatnichMistProFunkciWhere(System.Int32,System.Int32)">
+            <summary>
+            Vrací část WHERE selectu na seznam výplatních míst pro zadané období
+            </summary>
+            <param name="rok">Rok období</param>
+            <param name="mesic">Měsíc období</param>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GVyplatniMista.OnGetSeznamVyplatnichMistWhere(System.Int32,System.Int32)">
+            <summary>
+            Vrací část WHERE selectu na seznam výplatních míst pro zadané období (BEZ vazby na funkci)
+            </summary>
+            <param name="rok">Rok období</param>
+            <param name="mesic">Měsíc období</param>
+        </member>
+        <member name="T:Gordic.Pdm.Server.GKalendare">
+            <summary>
+            Serverová část AL pro práci s kalendáři
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GKalendare.GetAdditionalKalendareOsobWhere">
+            <summary>Vrátí další doplňkový filtr</summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Pdm.Server.GOsoby">
+            <summary>
+            Serverová část AL pro práci s osobami
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GOsoby.GetPracoviste">
+            <summary>
+            Vrátí virtuálně instanci logiky pro <see cref="T:Gordic.Pam.Server.GPracoviste"/>
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.Server.GPracoviste">
+            <summary>
+            Serverová část AL pro práci s předběžnými kontrolami
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GPracoviste.OnGetSeznamPracovistProFunkciWhere(System.Int32,System.Int32)">
+            <summary>
+            Vrací část WHERE selectu na seznam pracovišť pro zadané období
+            </summary>
+            <param name="rok">Rok období</param>
+            <param name="mesic">Měsíc období</param>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GPracoviste.OnGetSeznamPracovistFrom">
+            <summary>
+            Vrací část FROM selectu na seznam pracovišť pro zadané období (BEZ vazby na funkci)
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GPracoviste.OnGetSeznamPracovistWhere">
+            <summary>
+            Vrací část WHERE selectu na seznam pracovišť pro zadané období (BEZ vazby na funkci)
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.Server.GSoupisky">
+            <summary>
+            Serverová část AL pro práci se soupiskami
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GSoupisky.GetPracoviste">
+            <summary>
+            Vrátí virtuálně instanci logiky pro <see cref="T:Gordic.Pam.Server.GPracoviste"/>
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GSoupisky.Trans_SeznamSoupisekDoklad(Gordic.General.GInt16,Gordic.General.GInt16)">
+            <summary>Seznam soupisek z dokladů pro zadané období</summary>
+            <param name="rok">Rok zadání soupisky</param>
+            <param name="mesic">Měsíc zadání soupisky</param>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GSoupisky.Trans_SeznamSoupisekDoklad(Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString)">
+            <summary>Seznam soupisek z dokladů pro zadané období</summary>
+            <param name="rok">Rok zadání soupisky</param>
+            <param name="mesic">Měsíc zadání soupisky</param>
+            <param name="ixp">Jen detail jednoho dokladu - pokud je GString.null tak všechny</param>
+        </member>
+        <member name="T:Gordic.Pdm.Server.GDavky">
+            <summary>
+            Serverová část AL pro práci s dávkami
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GDavky.SoupiskaMZImport(Gordic.Pdm.Interface.SoupiskaMZDataSet,System.Collections.Generic.List{System.String}@)">
+            <summary>
+            Naimportuje dávku se soupiskou měsíčních změn
+            </summary>
+            <param name="soupiskaMZDataSet">Data soupisky včetně jejích měsíčních změn.</param>
+            <param name="outErrList">seznam chyb při importu</param>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GDavky.CleanRow(Gordic.Pam.Interface.MesicniZmenyDataSet.MesicniZmenyRow)">
+            <summary>
+            Odstraní z řádku pouze hodnoty týkající se parametrů mz. 
+            Údaje o osobě, období a účetní profil ponechá.
+            </summary>
+            <param name="row"></param>
+        </member>
+        <member name="T:Gordic.Pdm.Server.GOfflineDavky">
+            <summary>
+            Serverová část AL pro práci s dávkami
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GOfflineDavky.NactiDavky(Gordic.General.GFilter{Gordic.Pdm.Interface.FilterDavky}[])">
+            <summary>Načte dávky pro export a import</summary>
+            <param name="filters">Filtrační kritéria</param>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GOfflineDavky.MaxPoradiDavky(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Získá nejvyšší číslo pořadí uložené dávky</summary>
+            <param name="licAdr">Licence adresáta</param>
+            <param name="licOdes">Licence odesílatele</param>
+            <param name="typDavky">Typ dávky</param>
+            <returns>Nejvyšší pořadí dávky</returns>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GOfflineDavky.VytvorDavku(Gordic.Pdm.Interface.DavkyDataSet.DavkyRow)">
+            <summary>Vytvoří zadanou dávku</summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GOfflineDavky.UpravDavku(Gordic.Pdm.Interface.DavkyDataSet.DavkyRow)">
+            <summary>Upraví existující dávku</summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GOfflineDavky.SoupMzExport(Gordic.General.GString)">
+            <summary>
+            Vyexportuje dávku 'SoupMZ' ve formátu typového datasetu.
+            </summary>
+            <param name="ixp">Identifikátor soupisky</param>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GOfflineDavky.SoupMzImport(Gordic.Pdm.Interface.SoupMzDataSet)">
+            <summary>
+            Naimportuje dávku 'SoupMZ' ve formátu typového datasetu.
+            </summary>
+            <param name="soupMzDataSet">Data soupisky včetně jejích měsíčních změn.</param>
+            <returns>Identifikátor nové soupisky.</returns>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GOfflineDavky.UdOsobExport(Gordic.General.GString[])">
+            <summary>
+            Vyexportuje dávku 'UdOsob' ve formátu typového datasetu.
+            </summary>
+            <param name="ixsEsuList">Identifikátory osob</param>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GOfflineDavky.UdOsobImport(Gordic.Pdm.Interface.UdOsobDataSet)">
+            <summary>
+            Naimportuje dávku 'UdOsob' ve formátu typového datasetu.
+            </summary>
+            <param name="udOsobDataSet">Údaje osob včetně jejich pracovních poměrů</param>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GOfflineDavky.ObcerstviPpm(Gordic.General.GString,Gordic.General.GInt32,System.Boolean)">
+            <summary>
+            Provede občerstvení měsíčních vlastností pracovního poměru.
+            </summary>
+            <param name="ixsPpv">Identifikátor pracovního poměru</param>
+            <param name="rokObdobi">Období pro které bude probíhat občerstvení.</param>
+            <param name="finishTransaction">Určuje, zda se provede commit a odpojení databáze.</param>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GOfflineDavky.VytvorFiltry(Gordic.General.GFilter{Gordic.Pdm.Interface.FilterDavky}[])">
+            <summary>
+            Nastavení jmen sloupců pro jednotlivé filtry
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.Server.GPdmParam">
+            <summary>
+            Serverová část AL pro práci s parametry Pdm
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdm.Server.GPdmParam.m_csGinGenIxp">
+            <summary>GIN - Automatické generování identifikátoru</summary>
+        </member>
+        <member name="F:Gordic.Pdm.Server.GPdmParam.m_csPamRadCidonem">
+            <summary>Parametr říká, jakým způsobem vytvářet čísla dokladů nemocenských dávek.</summary>
+            <remarks>0 zadávat ručně 1 generovat 2 vytvářet z primárního klíče (v případě, že nejste dostatečně kompetentní k naadministrování číselné řady modulem ADE a použití hodnoty 'generovat')</remarks>
+        </member>
+        <member name="F:Gordic.Pdm.Server.GPdmParam.m_csPamRadZpzpins">
+            <summary>Parametr určuje zda PDM umožní zpětné zpracování</summary>
+        </member>
+        <member name="F:Gordic.Pdm.Server.GPdmParam.m_csPamRadFrmzadn">
+            <summary>Parametr řídí zpřístupnění počtu dnů pro editaci u těch měsíčních změn, u kterých je formulář mzdové složky nastaven na hodnotu 150 (Časový se zakrývaným počtem dní).</summary>
+        </member>
+        <member name="F:Gordic.Pdm.Server.GPdmParam.m_csPdmRadDoklad">
+            <summary>Parametr určuje zda PDM bude ukládat do dokladů</summary>
+        </member>
+        <member name="F:Gordic.Pdm.Server.GPdmParam.m_csPdmRadUkonppv">
+            <summary>Hodnota parametru > 0 : udává maximální počet měsíců zpětně od ukončení PPV, kdy je v aplikaci povoleno na ukončený pracovní poměr zadat měsíční změnu. Hodnota parametru = 0 : není možno zadávat měsíční změny na ukončené PPV.</summary>
+        </member>
+        <member name="F:Gordic.Pdm.Server.GPdmParam.m_csPdmRadGenplpr">
+            <summary>Určuje, zda se má při zadání složky mzdy představující příplatek za přesčas automaticky vygenerovat složka mzdy 41 - Plat za práci přesčas.</summary>
+        </member>
+        <member name="F:Gordic.Pdm.Server.GPdmParam.m_csPdmRadMzEdit">
+            <summary>Určuje, zda může uživatel aplikace zadávat na soupisku speciální záznamy, které po přijetí ve mzdách vyvolají modifikaci existující měsíční změny.</summary>
+        </member>
+        <member name="F:Gordic.Pdm.Server.GPdmParam.m_csPdmRadMzRus">
+            <summary>Určuje, zda může uživatel aplikace zadávat na soupisku speciální záznamy, které po přijetí ve mzdách vyvolají zrušení existující měsíční změny.</summary>
+        </member>
+        <member name="F:Gordic.Pdm.Server.GPdmParam.m_csPdmRadMise">
+            <summary>Zapíná offline režim aplikace Pdm. V tomto režimu pracuje Pdm s určitými omezeními a s možností exportovat data určená pro zpracování na centrále.</summary>
+        </member>
+        <member name="F:Gordic.Pdm.Server.GPdmParam.m_csPdmRadMiseZpr">
+            <summary>V tomto režimu pracuje Pdm tak, že je možné v něm zpracovávat data z mise.</summary>
+        </member>
+        <member name="F:Gordic.Pdm.Server.GPdmParam.m_csPdmRadZAkOsob">
+            <summary>Určuje, zda bude možné odstraňovat a obnovovat osoby prostřednictvím aplikace Pdm.</summary>
+        </member>
+        <member name="F:Gordic.Pdm.Server.GPdmParam.m_csPdmRadLicCDb">
+            <summary>Určuje licenci centrální databáze. Tato licence slouží jako identifikace cíle dávky pro Offline Pdm na misi.</summary>
+        </member>
+        <member name="F:Gordic.Pdm.Server.GPdmParam.m_csPdmRadAdrDav">
+            <summary>Určuje úplnou cestu k adresáři kam se budou ukládat importované i exportované dávky.</summary>
+        </member>
+        <member name="F:Gordic.Pdm.Server.GPdmParam.m_csPdmRadUpoTrSl">
+            <summary>Určuje, zda při pokusu o zadání měsíční změny, která je trvalou složkou, zobrazit uživateli varující dialog.</summary>
+        </member>
+        <member name="F:Gordic.Pdm.Server.GPdmParam.m_csGinEsuRcZobr">
+            <summary>GIN ESU - zobrazovat RČ</summary>
+        </member>
+        <member name="F:Gordic.Pdm.Server.GPdmParam.m_csPdmRadZpOtev">
+            <summary>Parametr určuje, zda bude v Pdm povoleno zadat měsíční změnu zpětně i do otevřených období. Pokud bude mít parametr hodnotu \x22Ne\x22, bude možné zadávat zpětně pouze do uzavřených období.</summary>
+        </member>
+        <member name="F:Gordic.Pdm.Server.GPdmParam.m_csPdmRadKonBlPr">
+            <summary>Parametr určuje, zda před předáním soupisky do mezd bude provedena kontrola na blokaci pracoviště soupisky.</summary>
+        </member>
+        <member name="F:Gordic.Pdm.Server.GPdmParam.m_csPdmRadCelHPri">
+            <summary>Parametr určuje, zda na formuláři pro příplatky bude možné zadat hodiny pouze jako celé číslo bez desetinných míst.</summary>
+        </member>
+        <member name="F:Gordic.Pdm.Server.GPdmParam.m_csPdmRadZapMz">
+            <summary>Určuje, zda uživatel může na formulářích s měsíčními změnami zadávat záporné hodnoty.</summary>
+        </member>
+        <member name="F:Gordic.Pdm.Server.GPdmParam.m_csPdmRadOverMz">
+            <summary>zadání měsíční změny přes měsíc.</summary>
+        </member>
+        <member name="F:Gordic.Pdm.Server.GPdmParam.m_csPdmRadEditNks">
+            <summary>Parametr určuje, zda bude uživatel aplikace moci pořizovat/měnit nákladové středisko u účetního profilu.</summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.Ico">
+            <summary>
+            IČO
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.Ucs">
+            <summary>
+            UCS
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.Nks">
+            <summary>
+            NKS
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.Uus">
+            <summary>
+            UUS
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.Rok">
+            <summary>
+            Rok
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.Mesic">
+            <summary>
+            Měsíc
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.RokObdobi">
+            <summary>
+            Složenina Rok+Období
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.ReadOnlyObdobi">
+            <summary>
+            Určuje, zda je aktuální období přístupné pouze ke čtení
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.BlokovaneObdobi">
+            <summary>
+            Určuje, zda je aktuální období blokované
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.OtevreneObdobi">
+            <summary>
+            Určuje, zda je aktuální období otevřené
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.PrvniOtevreneObdobi">
+            <summary>
+            První otevřené období v komprimovaném formátu (-1 v situaci, že nedošlo k uzávěrce)
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.IxpDen">
+            <summary>
+            Deník
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.IxsVaj">
+            <summary>
+            Účetní jednotka
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.DevatyParametrTisku">
+            <summary>
+            Devátý parametr tisku pro tisk sestav
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.GinGenIxp">
+            <summary>
+            Hodnota parametru: GIN - Automatické generování identifikátoru
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.PamRadCidonem">
+            <summary>
+            Hodnota parametru PAM - ŘP RV čísla dokladů nemocenských dávek
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.PamRadZpzpins">
+            <summary>
+            Hodnota parametru: PAM - ŘP RV Zpětné zpracování
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.PamRadFrmzadn">
+            <summary>
+            Hodnota parametru: PAM - ŘP RV Zakrytí počtu dnů na časovém formuláři měsíční změny
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.PdmRadDoklad">
+            <summary>
+            Hodnota parametru: PDM - ŘP RV Ukládat do dokladů
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.PdmRadUkonppv">
+            <summary>
+            Hodnota parametru: PDM - ŘP zadávání měsíčních změn na ukončené PPV
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.PdmRadGenplpr">
+            <summary>
+            Hodnota parametru: PDM - ŘP generovat plat za práci přesčas
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.PdmRadMzEdit">
+            <summary>
+            Hodnota parametru: PDM - ŘP editace měsíční změny z mezd
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.PdmRadMzRus">
+            <summary>
+            Hodnota parametru: PDM - ŘP rušení měsíční změny z mezd
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.PdmRadMise">
+            <summary>
+            Hodnota parametru: PDM - ŘP mise
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.PdmRadMiseZpr">
+            <summary>
+            Hodnota parametru: PDM - ŘP zpracování dat mise
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.PdmRadZAkOsob">
+            <summary>
+            Hodnota parametru: PDM - ŘP změna aktivity osob
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.PdmRadLicCDb">
+            <summary>
+            Hodnota parametru: PDM - ŘP licence centrální databáze
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.PdmRadAdrDav">
+            <summary>
+            Hodnota parametru: PDM - ŘP adresář pro ukládání dávek
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.PdmRadUpoTrSl">
+            <summary>
+            Hodnota parametru: PDM - ŘP upozornit na pokus o zadání trvalé složky
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.GinEsuRcZobr">
+            <summary>
+            Hodnota parametru: GIN ESU - zobrazovat RČ
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.PdmRadZpOtev">
+            <summary>
+            Hodnota parametru: PDM - ŘP zpětné zadávání do otevřených období
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.PdmRadKonBlPr">
+            <summary>
+            Hodnota parametru: PDM - ŘP kontrola blokace soupisky při předání
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.PdmRadCelHPri">
+            <summary>
+            Hodnota parametru: PDM - ŘP zadávání pouze celých hodin u příplatků
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.PdmRadZapMz">
+            <summary>
+            Hodnota parametru: PDM - ŘP zadávání záporných hodnot u měsíčních změn
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.PdmRadOverMz">
+            <summary>
+            Hodnota parametru: PDM - ŘP zadání měsíční změny přes měsíc
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.GPdmParam.PdmRadEditNks">
+            <summary>
+            Hodnota parametru: PDM - ŘP oprávnění pořizovat NKS u účetního profilu
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GPdmParam.#ctor">
+            <summary>
+            Konstruktor třídy
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GPdmParam.ClearCache">
+            <summary>
+            Vymaže všechny cache
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdm.Server.GPdmServerException">
+            <summary>Výjimka aplikační logiky Pdm</summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GPdmServerException.#ctor(System.Int32,System.Int32,System.Object[])">
+            <summary>
+            Konstruktor výjimky
+            </summary>
+            <param name="code">Kód výjimky</param>
+            <param name="resourceCode">Kód textu výjimky v souboru se zdroji</param>
+            <param name="parameters">Parametry pro formátovaný text výjimky</param>
+        </member>
+        <member name="M:Gordic.Pdm.Server.GPdmServerException.#ctor(System.Int32,System.Int32,System.Exception,System.Object[])">
+            <summary>
+            Konstruktor výjimky
+            </summary>
+            <param name="code">Kód výjimky</param>
+            <param name="resourceCode">Kód textu výjimky v souboru se zdroji</param>
+            <param name="innerException">Vnitřní výjimka</param>
+            <param name="parameters">Parametry pro formátovaný text výjimky</param>
+        </member>
+        <member name="T:Gordic.Pdm.Server.gspg_pamv_davka_0">
+            <summary>
+            Package   : 
+            Procedure : spg_pamv_davka_0
+            Version   : 376.74
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.gspg_pamv_davka_0.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.gspg_pamv_davka_0.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.gspg_pamv_davka_0.ip_log_por_cislo">
+            <summary>ip_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.gspg_pamv_davka_0.ip_com_mode">
+            <summary>ip_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.gspg_pamv_davka_0.ip_oc">
+            <summary>ip_oc - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.gspg_pamv_davka_0.ip_rok_obd_mzdy">
+            <summary>ip_rok_obd_mzdy - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.gspg_pamv_davka_0.ip_slozka_mzdy">
+            <summary>ip_slozka_mzdy - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.gspg_pamv_davka_0.ip_dat_od">
+            <summary>ip_dat_od - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.gspg_pamv_davka_0.ip_dat_do">
+            <summary>ip_dat_do - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.gspg_pamv_davka_0.ip_poc_dni">
+            <summary>ip_poc_dni - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.gspg_pamv_davka_0.ip_poc_hodin">
+            <summary>ip_poc_hodin - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.gspg_pamv_davka_0.ip_cis_dokl">
+            <summary>ip_cis_dokl - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.gspg_pamv_davka_0.ip_flags">
+            <summary>ip_flags - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.gspg_pamv_davka_0.op_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.gspg_pamv_davka_0.op_err_sql">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.gspg_pamv_davka_0.op_err_isam">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.gspg_pamv_davka_0.op_err_txt">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.gspg_pamv_davka_0.op_err_lok">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.gspg_pamv_davka_0.op_poc_dni">
+            <summary>op_poc_dni - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.gspg_pamv_davka_0.op_poc_hodin">
+            <summary>op_poc_hodin - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Pdm.Server.gspg_pamv_davka_0.op_priz_zv">
+            <summary>op_priz_zv - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.gspg_pamv_davka_0.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GDecimal,Gordic.General.GDecimal,Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.gspg_pamv_davka_0.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Pdm.Server.gspg_pamv_davka_0.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+    </members>
+</doc>

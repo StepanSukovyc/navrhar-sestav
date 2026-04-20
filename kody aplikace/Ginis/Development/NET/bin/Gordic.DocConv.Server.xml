@@ -1,0 +1,549 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.DocConv.Server</name>
+    </assembly>
+    <members>
+        <member name="M:Gordic.DocConv.Server.CesypCallbackController.ReturnSignedDocument(Gordic.Security.Service.ResultDTO,System.Guid)">
+            <summary>
+            Vrátí výsledek pečetění
+            </summary>
+            <param name="x_Message_Id">Identifikace požadavku systému, který zaslal požadavek do systému CESYP</param>
+            <returns>OK</returns>
+        </member>
+        <member name="T:Gordic.DocConv.Server.Common">
+            <summary>
+            Společné funkce
+            </summary>
+        </member>
+        <member name="M:Gordic.DocConv.Server.Common.ConvertFile(System.String,System.String,System.String,System.String,System.Int32,System.Boolean,System.Byte[]@,System.String@)">
+            <summary>
+            Konverze souboru
+            </summary>
+            <param name="file">cesta k souboru</param>
+            <param name="ext">koncovka</param>
+            <param name="outPuid">výsledný typ souboru</param>
+            <param name="template">šablona</param>
+            <param name="timeout">timeout</param>
+            <param name="doOcr">zda provádět OCR</param>
+            <param name="outData">výsledná data</param>
+            <param name="ID">výsledná data</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.DocConv.Server.Common.PrepareTempFileName(System.String,System.String@,System.String@)">
+            <summary>
+            Vytvoření názvu temp souboru
+            </summary>
+        </member>
+        <member name="T:Gordic.DocConv.Server.DownloadHandler">
+            <summary>
+            Handler pro stažení souboru
+            </summary>
+        </member>
+        <member name="M:Gordic.DocConv.Server.DownloadHandler.ProcessRequest(System.Web.HttpContext)">
+            <summary>
+            provedení requestu
+            </summary>
+            <param name="context">context</param>
+        </member>
+        <member name="P:Gordic.DocConv.Server.DownloadHandler.IsReusable">
+            <summary>
+            IsReusable
+            </summary>
+        </member>
+        <member name="M:Gordic.DocConv.Server.IGCesypSignTestController.GetPublicKeyAsync(System.Guid,System.String,System.String,System.Byte[],Gordic.DocConv.Server.CertificateId,System.String,System.Nullable{System.Boolean})">
+            <summary>
+            Požadavek na public key certifikátu
+            </summary>
+            <param name="system">Identifikace systému, který zaslal požadavek do systému CESYP</param>
+            <param name="userLogin">Přidělené uživatelské jméno původce dat</param>
+            <param name="hashMessage">Heslo uživatelského účtu podepsané (zašifrované) jeho privátním klíčem</param>
+            <param name="certificateId">1 = Pečeť z HSM, 2 = Pečeť z RemoteSealing</param>
+            <param name="user">Uživatelský účet (jméno původce dat), jehož certifikátem se má pečetit</param>
+            <param name="synchronous">Identifikátor, zda se čeká na synchronní výsledek operace pečetění, nebo zda je výsledek odeslán pomocí callback funkce.</param>
+            <returns>Obsah opečetěné komponenty</returns>
+        </member>
+        <member name="M:Gordic.DocConv.Server.IGCesypSignTestController.SignDocumentAsync(Gordic.Security.Service.DataForSigningDTO,System.Guid,System.String,System.String,System.Byte[])">
+            <summary>
+            Požadavek na pečetění
+            </summary>
+            <param name="system">Identifikace systému, který zaslal požadavek do systému CESYP</param>
+            <param name="userLogin">Přidělené uživatelské jméno původce dat</param>
+            <param name="hashMessage">Heslo uživatelského účtu podepsané (zašifrované) jeho privátním klíčem</param>
+            <returns>Vytvořen podepsaný kontent. Synchronní proces</returns>
+        </member>
+        <member name="M:Gordic.DocConv.Server.IGCesypSignTestController.GetSignedDocumentAsync(System.String,System.Nullable{System.Boolean},System.Guid,System.String,System.String,System.Byte[])">
+            <summary>
+            Získání obsahu komponenty, která byla opečetěna
+            </summary>
+            <param name="documentId">ID uložené komponenty pro její následné stažení</param>
+            <param name="synchronous">Identifikátor, zda se čeká na synchronní výsledek operace pečetění, nebo zda je výsledek odeslán pomocí callback funkce.</param>
+            <param name="system">Identifikace systému, který zaslal požadavek do systému CESYP</param>
+            <param name="userLogin">Přidělené uživatelské jméno původce dat</param>
+            <param name="hashMessage">Heslo uživatelského účtu podepsané (zašifrované) jeho privátním klíčem</param>
+            <returns>Obsah opečetěné komponenty</returns>
+        </member>
+        <member name="M:Gordic.DocConv.Server.IGCesypSignTestController.ProbeAsync(System.Guid)">
+            <summary>
+            Ověření dostupnosti služeb
+            </summary>
+            <returns>Služba i backend jsou aktivní</returns>
+        </member>
+        <member name="M:Gordic.DocConv.Server.GCesypSignTestController.key(System.Guid,System.String,System.String,System.Byte[],Gordic.DocConv.Server.CertificateId,System.String,System.Nullable{System.Boolean})">
+            <summary>
+            Požadavek na public key certifikátu
+            </summary>
+            <param name="system">Identifikace systému, který zaslal požadavek do systému CESYP</param>
+            <param name="userLogin">Přidělené uživatelské jméno původce dat</param>
+            <param name="hashMessage">Heslo uživatelského účtu podepsané (zašifrované) jeho privátním klíčem</param>
+            <param name="certificateId">1 = Pečeť z HSM, 2 = Pečeť z RemoteSealing</param>
+            <param name="user">Uživatelský účet (jméno původce dat), jehož certifikátem se má pečetit</param>
+            <param name="synchronous">Identifikátor, zda se čeká na synchronní výsledek operace pečetění, nebo zda je výsledek odeslán pomocí callback funkce.</param>
+            <returns>Obsah opečetěné komponenty</returns>
+        </member>
+        <member name="M:Gordic.DocConv.Server.GCesypSignTestController.Probe(System.Guid)">
+            <summary>
+            Ověření dostupnosti služeb
+            </summary>
+            <returns>Služba i backend jsou aktivní</returns>
+        </member>
+        <member name="M:Gordic.DocConv.Server.GCesypSignTestController.SignDocument(Gordic.Security.Service.DataForSigningDTO,System.Guid,System.String,System.String,System.Byte[])">
+            <summary>
+            Požadavek na pečetění
+            </summary>
+            <param name="system">Identifikace systému, který zaslal požadavek do systému CESYP</param>
+            <param name="userLogin">Přidělené uživatelské jméno původce dat</param>
+            <param name="hashMessage">Heslo uživatelského účtu podepsané (zašifrované) jeho privátním klíčem</param>
+            <returns>Vytvořen podepsaný kontent. Synchronní proces</returns>
+        </member>
+        <member name="M:Gordic.DocConv.Server.GCesypSignTestController.GetSignedDocument(System.String,System.Nullable{System.Boolean},System.Guid,System.String,System.String,System.Byte[])">
+            <summary>
+            Získání obsahu komponenty, která byla opečetěna
+            </summary>
+            <param name="documentId">ID uložené komponenty pro její následné stažení</param>
+            <param name="synchronous">Identifikátor, zda se čeká na synchronní výsledek operace pečetění, nebo zda je výsledek odeslán pomocí callback funkce.</param>
+            <param name="system">Identifikace systému, který zaslal požadavek do systému CESYP</param>
+            <param name="userLogin">Přidělené uživatelské jméno původce dat</param>
+            <param name="hashMessage">Heslo uživatelského účtu podepsané (zašifrované) jeho privátním klíčem</param>
+            <returns>Obsah opečetěné komponenty</returns>
+        </member>
+        <member name="P:Gordic.DocConv.Server.ResultCertificateDTO.Content">
+            <summary>
+            Vyžádaný certifikát ve formátu X.509 kódovaný v BASE64
+            </summary>
+        </member>
+        <member name="T:Gordic.DocConv.Server.CertificateId">
+            <summary>
+            1 = Pečeť z HSM, 2 = Pečeť z RemoteSealing
+            </summary>
+        </member>
+        <member name="T:Gordic.DocConv.Server.Global">
+            <summary>
+            Global settings
+            </summary>
+        </member>
+        <member name="M:Gordic.DocConv.Server.Global.Application_Start(System.Object,System.EventArgs)">
+            <summary>
+            
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+        <member name="T:Gordic.DocConv.Server.Gordic_DocConv_Server">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.DocConv.Server.Gordic_DocConv_Server.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.DocConv.Server.Gordic_DocConv_Server.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:Gordic.DocConv.Server.Gordic_DocConv_Server_Exceptions">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.DocConv.Server.Gordic_DocConv_Server_Exceptions.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.DocConv.Server.Gordic_DocConv_Server_Exceptions.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:Gordic.DocConv.Server.GProcessingService">
+            <summary>
+            Processing service
+            </summary>
+        </member>
+        <member name="M:Gordic.DocConv.Server.GProcessingService.ProcessFile(Gordic.DocConv.Common.GDksProcessFileRequest)">
+            <summary>
+            Process file
+            </summary>
+            <param name="req"></param>
+        </member>
+        <member name="M:Gordic.DocConv.Server.GProcessingService.GetInfo">
+            <summary>
+            Ping
+            </summary>
+            <returns>infotext</returns>
+        </member>
+        <member name="M:Gordic.DocConv.Server.GProcessingService.GetLog(System.String)">
+            <summary>
+            Get log for request
+            </summary>
+            <param name="reqId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.DocConv.Server.GTestNotifyHandler">
+            <summary>
+            Summary description for GTestNotifyHandler
+            </summary>
+        </member>
+        <member name="M:Gordic.DocConv.Server.GTestNotifyHandler.ProcessRequest(System.Web.HttpContext)">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.DocConv.Server.GTestNotifyHandler.IsReusable">
+            <summary></summary>
+        </member>
+        <member name="T:Gordic.DocConv.Server.GWSDocConv">
+            <summary>
+            Web service for DKS
+            </summary>
+        </member>
+        <member name="M:Gordic.DocConv.Server.GWSDocConv.WSPing(System.String@,System.Boolean@,System.Boolean@,System.Boolean@)">
+            <summary>
+            Ping
+            </summary>
+            <returns>infotext</returns>
+        </member>
+        <member name="M:Gordic.DocConv.Server.GWSDocConv.WSCanConvertExtension(System.String,System.String)">
+            <summary>
+            Test jestli lze konvertovat 
+            </summary>
+            <param name="extIn"></param>
+            <param name="extOut"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.DocConv.Server.GWSDocConv.WSCanConvertPuid(System.String,System.String)">
+            <summary>
+            Test jestli lze konvertovat 
+            </summary>
+            <param name="puidIn"></param>
+            <param name="puidOut"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.DocConv.Server.GWSDocConv.GetAvailableCertificates(System.String)">
+            <summary>
+            Test jestli lze konvertovat 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.DocConv.Server.GWSDocConv.GetCertificates(Gordic.Security.Service.GGetAvailableCertificatesRequestDTO)">
+            <summary>
+            Get available certificates
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.DocConv.Server.GWSDocConv.WSUploadDoc(System.Byte[],System.String,System.String@,System.String@)">
+            <summary>
+            WSUploadDoc
+            </summary>
+            <param name="InputData"></param>
+            <param name="CommandParamsStr"></param>
+            <param name="ID"></param>
+            <param name="ErrText"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.DocConv.Server.GWSDocConv.WSUploadDocPart(System.Byte[],System.String,System.String,System.Boolean,System.String@,System.String@)">
+            <summary>
+            WSUploadDocPart
+            </summary>
+        </member>
+        <member name="M:Gordic.DocConv.Server.GWSDocConv.WsIsProcessed(System.String,System.String@,System.String@)">
+            <summary>
+            WSConvertedStatus
+            </summary>
+        </member>
+        <member name="M:Gordic.DocConv.Server.GWSDocConv.WSProcessFile(System.Byte[],System.String,System.Byte[]@,System.String@,System.String@)">
+            <summary>
+            WSConvertedStatus
+            </summary>
+        </member>
+        <member name="M:Gordic.DocConv.Server.GWSDocConv.WSConvertedStatus(System.String,System.Int32@,System.String@,System.Boolean@,System.String@)">
+            <summary>
+            WSConvertedStatus
+            </summary>
+        </member>
+        <member name="M:Gordic.DocConv.Server.GWSDocConv.WSDownloadDoc(System.String,System.Byte[]@,System.String@,System.Boolean@,System.String@)">
+            <summary>
+            WSDownloadDoc
+            </summary>
+        </member>
+        <member name="M:Gordic.DocConv.Server.GWSDocConv.WSDownloadDocPart(System.String,System.Int32,System.Int32,System.Byte[]@,System.String@,System.Boolean@,System.String@)">
+            <summary>
+            WSDownloadDocPart
+            </summary>
+        </member>
+        <member name="M:Gordic.DocConv.Server.GWSDocConv.WSReleaseDoc(System.String)">
+            <summary>
+            WSReleaseDoc
+            </summary>
+            <param name="ID"></param>
+        </member>
+        <member name="M:Gordic.DocConv.Server.GWSDocConv.WSValidatedStatus(System.String,System.Int32@,System.String@,System.Boolean@,System.String@)">
+            <summary>
+            Získání statusu validatece
+            </summary>
+        </member>
+        <member name="T:Gordic.DocConv.Server.IGProcessingService">
+            <summary>
+            Service interface
+            </summary>
+        </member>
+        <member name="M:Gordic.DocConv.Server.IGProcessingService.ProcessFile(Gordic.DocConv.Common.GDksProcessFileRequest)">
+            <summary>
+            Process file
+            </summary>
+            <param name="req"></param>
+        </member>
+        <member name="M:Gordic.DocConv.Server.IGProcessingService.GetInfo">
+            <summary>
+            Get info
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.DocConv.Server.IGProcessingService.GetLog(System.String)">
+            <summary>
+            Get log of request
+            </summary>
+            <param name="reqId">request ID</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.DocConv.Server.TestPage">
+            <summary> </summary>
+        </member>
+        <member name="M:Gordic.DocConv.Server.TestPage.Page_Load(System.Object,System.EventArgs)">
+            <summary> </summary>
+        </member>
+        <member name="M:Gordic.DocConv.Server.TestPage.Button1_Click(System.Object,System.EventArgs)">
+            <summary> </summary>
+        </member>
+        <member name="F:Gordic.DocConv.Server.TestPage.form1">
+            <summary>
+            form1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Gordic.DocConv.Server.TestPage.Image2">
+            <summary>
+            Image2 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Gordic.DocConv.Server.TestPage.LabelVersion">
+            <summary>
+            LabelVersion control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Gordic.DocConv.Server.TestPage.FileUploadControl">
+            <summary>
+            FileUploadControl control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Gordic.DocConv.Server.TestPage.TextBoxCustomTemplate">
+            <summary>
+            TextBoxCustomTemplate control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Gordic.DocConv.Server.TestPage.DropDownListTemplate">
+            <summary>
+            DropDownListTemplate control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Gordic.DocConv.Server.TestPage.TextBoxTimeout">
+            <summary>
+            TextBoxTimeout control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Gordic.DocConv.Server.TestPage.ButtonStart">
+            <summary>
+            ButtonStart control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Gordic.DocConv.Server.TestPage.TextAreaInfo">
+            <summary>
+            TextAreaInfo control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="T:Gordic.DocConv.Server.WebConverter">
+            <summary>
+            Webová aplikace pro konverzi
+            </summary>
+        </member>
+        <member name="M:Gordic.DocConv.Server.WebConverter.Page_Load(System.Object,System.EventArgs)">
+            <summary>
+            Načtení stránky
+            </summary>
+        </member>
+        <member name="M:Gordic.DocConv.Server.WebConverter.btnConvert_Click(System.Object,System.EventArgs)">
+            <summary>
+            Konverze
+            </summary>
+        </member>
+        <member name="F:Gordic.DocConv.Server.WebConverter.form1">
+            <summary>
+            form1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Gordic.DocConv.Server.WebConverter.Label1">
+            <summary>
+            Label1 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Gordic.DocConv.Server.WebConverter.fileUpload">
+            <summary>
+            fileUpload control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Gordic.DocConv.Server.WebConverter.Label2">
+            <summary>
+            Label2 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Gordic.DocConv.Server.WebConverter.cmbResultType">
+            <summary>
+            cmbResultType control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Gordic.DocConv.Server.WebConverter.chkOcr">
+            <summary>
+            chkOcr control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Gordic.DocConv.Server.WebConverter.lblOcr">
+            <summary>
+            lblOcr control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Gordic.DocConv.Server.WebConverter.Label3">
+            <summary>
+            Label3 control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Gordic.DocConv.Server.WebConverter.btnConvert">
+            <summary>
+            btnConvert control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Gordic.DocConv.Server.WebConverter.lblWait">
+            <summary>
+            lblWait control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="F:Gordic.DocConv.Server.WebConverter.downloadLink">
+            <summary>
+            downloadLink control.
+            </summary>
+            <remarks>
+            Auto-generated field.
+            To modify move field declaration from designer file to code-behind file.
+            </remarks>
+        </member>
+        <member name="T:WebApiController">
+            <summary>
+            Web API controller
+            </summary>
+        </member>
+        <member name="M:WebApiController.UploadFileAndConfig">
+            <summary>
+            Upload file and configuration parameters
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

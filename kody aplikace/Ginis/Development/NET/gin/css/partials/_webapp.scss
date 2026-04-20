@@ -1,0 +1,638 @@
+﻿@import "base";
+
+html {
+    font-size: 16px;
+}
+
+body, html {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    overflow: auto;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit; /* aby se box-sizing defaultne dedil z rootu komponent na jejich podrizene prvky */
+}
+
+body.gwebapp {
+    font-family: $font;
+    font-size: $font-size-base;
+    font-weight: $font-weight-normal;
+    color: $base-color-text;
+    box-sizing: border-box;
+    min-height: 480px;
+    overflow: hidden;    
+}
+.gtasklist, .gmenu { font-family: inherit; }
+
+#main {
+    height: 100%;
+    background-color: $base-color-content;
+}
+
+.main-topbar {
+    display: flex;
+    width: 100%;
+    min-height: 3rem;
+    border-bottom: 1px solid $base-color-shadow;
+}
+
+.main-topbar > div {
+    //display: table-cell;
+}
+
+.main-logo {
+    width: 16.25rem;
+    min-width: 16.25rem;
+    vertical-align: middle;
+    padding: 0 0.5rem;
+    white-space: nowrap;
+
+    .main.mobile & {
+        display: none;
+    }
+    #smalllogo {
+        color: $base-color-primary;
+        margin-top: 0.3125rem;
+        text-align: center;
+
+        .main:not(.main--collapsed) & {
+            display: none;
+        }
+    }
+
+    #largelogo {
+        vertical-align: middle;
+        width: 100%;
+        height: 2.75rem;
+
+        .main--collapsed & {
+            display: none;
+        }
+    }
+
+    .main--collapsed & {
+        width: 3.25rem;
+        min-width: 3.25rem;
+        padding: 0;
+    }
+
+    &:focus {
+        background-image: $btn-focus-image;
+        //Visible in Windows high-contrast themes, see: https://stackoverflow.com/questions/52589391/css-box-shadow-vs-outline
+        outline-color: transparent;
+        outline-width: 2px;
+        outline-style: dotted;
+    }
+}
+
+
+.ginfobar__item {
+    font-size: $font-size-header;
+    font-weight: $font-weight-bold;
+    line-height: 1rem;
+
+    h3 {
+        font-size: $font-size-mini;
+        color: $shadow-text-default;
+        text-transform: uppercase;
+    }
+
+    &--activable {
+        text-align: left;
+
+        &:hover,
+        &:focus {
+            h3 {
+                color: $light-text-default;
+            }
+        }
+    }
+}
+
+//Vyjimka kvuli GActionMenu (napr. pro zobrazeni v ve vysledcich vyhledavani, zabaleni v menu nakonci gbuttonpanelu, apod.)
+.gactionmenu__item.active .ginfobar__item {
+    h3 {
+        color: $light-text-default;
+    }
+}
+
+.main-commandbar { flex-grow: 2; width: 1px; }
+.main-logo { 
+  cursor: pointer; 
+  text-align: center;
+  min-width: 3.25rem;
+  &:hover {
+    background-color: $base-color-tool; 
+  }
+}
+.main-logo, .main-tasklist-command { 
+  border-right: 1px solid $base-color-shadow; 
+}
+div.logout-timer {
+  position: relative; 
+  width: 4rem;
+  .ui-progress { 
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.5rem;
+  }
+}
+
+.main-commandbar, .main-tasklist-command {
+    white-space: nowrap;
+    background: transparent;
+
+    .g-button, .g-static {
+        &:not(:hover,:focus,.g-button--mb-activated,g-button--activated) {
+            background: transparent;
+            border-color: transparent;
+        }
+
+        font-size: $font-size-header;
+        height: calc(3rem - 1px); /* border */
+        min-width: 3rem;
+        &.g-button--activator { min-width: 0; }
+
+        &.main-more-menuitem {
+            min-width: 0;
+
+            .g-button__icon--activator {
+                display: none
+            }
+        }
+
+        .g-button__text { 
+            padding: 0;
+        }
+    }
+
+    .g-badge {
+        font-size: 0.5rem;
+    }
+
+    //Bohous: Na poz. TSkaly, aby ikony v commandBaru byly vetsi. Nemuzu tento styl zrusit vsude, protoze velikost ikon nemuze byt
+    //        stejne velka jako text - na spouste mist ikony pak vypadaji rozplizle, humus.
+    .g-button__icon {
+        font-size: inherit;
+    }
+
+    .g-button__icon {
+        &.fa-stack {
+            font-size: 0.625rem;
+        }
+    }
+}
+
+.main-notificationcenter__wrapper {
+    height: calc(100% - 2rem);
+    box-shadow: unset;
+    z-index: 110; // tohle tu byt nema, ale tasklist ma na sobe nejake osklive ui-front, ktere zacina na 100
+}
+
+.main-notificationcenter {
+    width: 25rem;
+    height: 100%;
+    background-color: #f3f4f9; //Barva od grafika
+    padding: 0.5rem;
+}
+
+.g-notification.g-notification-toast {
+    background-color: #f3f4f9; //Barva od grafika
+    //background-color: $base-color-tool;
+    //background-color: mix($base-color-active, $base-color-content, 15%); // lighten($base-color-active, lightness($base-color-active));
+}
+
+.main-tasklist {
+    /*width:250px;*/
+    height: calc(100% - 3rem);
+    float: left;
+    .mobile & {
+      position:absolute; 
+      z-index: 1; 
+      &.g-task-list-collapsed { 
+        display: none; 
+      }
+    }
+}
+
+.main-breadcrumbs {
+    border-bottom: 1px solid $base-color-shadow;
+    padding: 0 0.5rem 0 0;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 100%;
+    max-height: calc(1.5rem + 1px);
+    display: flex;
+
+    & .main-breadcrumbs-wrapper {
+        display: inline-block;
+        flex: 0 1 auto;
+        overflow: hidden;
+    }
+
+    & > *:not(.main-breadcrumbs-wrapper) {
+        flex: 0 0 auto;
+        overflow: hidden;
+    }
+
+
+    & .breadcrumb-close {
+        line-height: 1.5rem;
+
+        .g-link {
+            color: $base-color-text;
+            vertical-align: middle;
+        }
+    }
+
+    & .breadcrumb-close:hover {
+        .g-link {
+            color: $base-color-error;
+        }
+    }
+
+    & > .breadcrumb-back {
+        align-self: center;
+        border-right: 1px solid $base-color-shadow;
+
+        .g-link {
+            margin: 0;
+            padding: 0.25rem 0.5rem;
+        }
+    }
+
+    & > .breadcrumb-back:hover {
+        background-color: $base-color-primary;
+        border-right: 1px solid $base-color-primary;
+
+        .g-link {
+            color: $base-color-light;
+        }
+    }
+}
+
+.main-breadcrumbs-list {
+    overflow: hidden;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+
+    & > li {
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        flex: 0 auto;
+        flex-shrink: 1000;
+        position: relative;
+        transition: transform ease-in-out .3s;
+        font-size: $font-size-base;
+        display: inline-block;
+        white-space: nowrap;
+        margin: 0;
+
+        & > * {
+            display: inline;
+        }
+
+        & > *:nth-child(2):not(.g-link) {
+            padding-left: 0.25rem
+        }
+
+        .sep:before {
+            content: ">";
+            color: $base-color-shadow;
+            padding: 0 0.25rem 0 0;
+            transition: all 300ms;
+        }
+
+        &:hover {
+            flex: 1 0 auto;
+
+            .sep:before {
+                padding: 0 0.0625rem 0 0.1875rem;
+            }
+        }
+
+        &:hover:not(:last-of-type) {
+            opacity: 1;
+
+            ~ li {
+                transition: transform ease-in-out .4s;
+                opacity: .2;
+            }
+        }
+        //First Breadcrumb
+        &:first-child {
+            flex: 0 0 auto;
+            flex-shrink: 10;
+            padding-left: 0.25rem;
+
+            &:hover {
+                flex-shrink: 0;
+            }
+
+            .sep {
+                display: none;
+            }
+        }
+        //Last Breadcrumb
+        &:last-child {
+            flex: 1 0 auto !important;
+
+            &:hover {
+                flex: 1 0 auto !important;
+            }
+        }
+        //Before Last Breadcrumb
+        &:nth-last-child(2) {
+            flex: 0 0 auto;
+            flex-shrink: 50;
+
+            &:hover {
+                flex-shrink: 0;
+            }
+        }
+        // Spacing
+        &:not(:last-of-type) {
+            padding-right: 0.25rem;
+        }
+
+        &:last-of-type {
+            font-weight: $font-weight-bold;
+        }
+    }
+}
+
+.main-breadcrumbs.main-breadcrumbs--empty {
+    border-bottom-width: 0;
+    & > *{
+        display: none;
+    }
+}
+
+.activity-dialog.ui-dialog-docked {
+    border: none;
+    @include shadow(none);
+    z-index: 0; /* bylo zakomentovano, ale bez tohoto se menu skryva pod panely */
+    /*position: relative !important;*/
+    display: none !important;
+
+    &:last-of-type {
+        display: inline-block !important;
+    }
+
+    .ui-dialog-toolbar,
+    .menubar {
+        //g-toolbar__item
+        .g-toolbar__wrapper > .g-button,
+        .g-buttonpanel__item > .g-button {
+            height: 3rem;
+
+            &:not(.g-button--activator) {
+                min-width: 3rem;
+            }
+
+            //Vyska tlacitek v toolbaru ve favorites
+            .g-button__icon:not(.fa-stack):not(.gi-stack) {
+                font-size: $font-size-bigicon;
+                //vertical-align: -2px; //BM: Pouzije-li se flex na buttonu, tak je tohle k zbytecnost
+            }
+
+            .g-button__icon.gi-stack, .g-button__icon.fa-stack {
+                font-size: $font-size-bigicon;
+            }
+
+            .g-button__icon.gi-stack {
+                width: $font-size-bigicon;
+            }
+        }
+    }
+}
+
+.main-logout-menuitem.ui-state-focus, .main-logout-menuitem:hover {
+    background-color: $base-color-important !important;
+}
+
+.main-user {
+    &.main-user--pict.g-button { 
+        border-left: 1px solid lightslategray;
+        margin-left: 0.5rem;
+        padding-left: 0; 
+    }
+    .ginfobar__item {
+        text-align: right;
+    }
+    &.main-user--pict .ginfobar__item { 
+        display: flex; 
+        align-items: center; 
+    }
+
+    .user-pict { 
+        height: 2.5rem; 
+        width: 2.5rem;
+        margin-right: 0.25rem; 
+    }
+    .user-wrap { 
+        display: inline-block;
+    }
+    .user-name {
+        display: block;
+        width: 100%;
+    }
+
+    .user-function {
+        font-size: 0.625rem; //10px
+        display: block;
+    }
+
+    .gactionmenu & {
+        padding: 0.25rem 0.25rem 0 0.25rem;
+        line-height: normal;
+
+        .ginfobar__item {
+            text-align: left;
+        }
+        
+        .user-wrap { 
+            margin-top: 0.25rem;
+        }
+
+        .user-name, .user-function {
+            font-size: 0.75rem; //12px
+        }
+
+        .user-function {
+            font-weight: normal;
+        }
+
+        .item__left {
+            display: none;
+        }
+
+        .item__caption {
+            overflow: auto;
+            white-space: initial;
+        }
+    }
+}
+
+.userpanel-infos {
+    padding: 0.5rem;
+    background-color: $base-color-light;
+    border: 0.25rem solid $base-color-dark;
+    color: $base-color-text;
+
+    .minifoto {
+        font-size: 2.75rem;
+    }
+
+    .user {
+        font-size: $font-size-header;
+    }
+
+    .session {
+        color: $base-color-dark
+    }
+
+    table {
+        width: 100%;
+
+        td {
+            font-weight: $font-weight-bold;
+        }
+
+        td:first-of-type {
+            font-weight: $font-weight-normal;
+        }
+    }
+}
+
+.g-app-launcher {
+    padding: 0.75rem;
+    max-height: 320px;
+
+    &--no-apps {
+        text-align: center;
+        padding-right: 0.75rem;
+        padding-bottom: 0.75rem;
+    }
+
+    &__item {
+        position: relative;
+        text-align: center;
+        font-weight: $font-weight-bold;
+        display: inline-block;
+        vertical-align: top;
+
+        & .g-button {
+            display: block;
+            height: auto;
+            width: 100%;
+            word-break: break-word;
+            white-space: normal;
+            line-height: 1rem;
+            overflow: hidden;
+
+            & .g-button__text {
+                display: block;
+                font-weight: bold;
+                padding: 0;
+            }
+        }
+
+        & .g-button:first-child {
+            padding: 0.75rem;
+            background: transparent;
+        }
+
+        & .g-button:nth-child(2) {
+            height: auto;
+            line-height: 1rem;
+            display: none;
+        }
+
+
+        & .g-button, &--current .g-button:first-child {
+            border: 1px solid $base-color-shadow;
+        }
+
+        &:not(&--current) .g-button:first-child {
+            border: 1px solid transparent;
+        }
+
+        &:not(&--current) .g-button:first-child:focus {
+            border: 1px solid $base-color-tool;
+        }
+
+        & img {
+            max-width: 48px;
+            max-height: 48px;
+            min-width: 48px;
+            min-height: 48px;
+        }
+
+        & .g-button__icon:not(.g-unic-icon) {
+            font-size: inherit;
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        &:hover .g-button, & .g-button:first-child.g-button--mb-activated {
+            background-color: $base-color-tool;
+        }
+
+
+        &:not(&--current):hover .g-button:first-child {
+            border: 1px solid $base-color-tool;
+        }
+
+        &:hover .g-button:nth-child(1), & .g-button:nth-child(1).g-button--activated {
+            display: block;
+        }
+    }
+}
+
+.g-app-launcher__item.g-app-launcher__item--with-menu {
+    margin-bottom: 0;
+}
+
+.g-app-launcher { 
+  width: 10rem; 
+}
+
+.analysis-highlight {
+  background: lightyellow!important; 
+  > * { opacity: 0.5; }
+}
+
+
+/*****************************************************
+ * PLACEHOLDERY
+ *****************************************************/
+// placeholdery nelze sdruzovat do jednoho selectoru
+::webkit-input-placeholder {
+    font-style: italic;
+    color: silver;
+}
+
+::-moz-placeholder {
+    font-style: italic;
+    color: silver;
+}
+
+:-ms-input-placeholder {
+    font-style: italic;
+    color: silver;
+}

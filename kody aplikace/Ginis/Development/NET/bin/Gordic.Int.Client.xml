@@ -1,0 +1,975 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Int.Client</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Int.Client.GAbok">
+            <summary>klientská logika pro internetové bankovnictví ČNB</summary>
+        </member>
+        <member name="F:Gordic.Int.Client.GAbok.m_oAbok">
+            <summary>rozhraní aplikační logiky pro internetové bankovnictví ČNB</summary>
+        </member>
+        <member name="P:Gordic.Int.Client.GAbok.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="P:Gordic.Int.Client.GAbok.Abok">
+            <summary>rozhraní aplikační logiky pro internetové bankovnictví ČNB</summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GAbok.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>veřejný konstruktor</summary>
+            <param name="userProcess">uživatelský proces aplikace</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GAbok.GetProtokol(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.DateTime,System.Int32,System.String,System.String,System.String@,System.Int32@)">
+            <summary>stažení protokolu k zadané dávce</summary>>
+            <param name="url">url adresa webové služby</param>
+            <param name="certHash">hash klientského certifikátu</param>
+            <param name="aibUrl">url adresa AIB</param>
+            <param name="aibDomain">doména pro autentizaci k AIB</param>
+            <param name="aibUser">uživatel pro autentizaci k AIB</param>
+            <param name="aibPassword">heslo pro autentizaci k AIB</param>
+            <param name="debugDir">cesta k adresáři pro trasovací soubory</param>
+            <param name="idKlienta">identifikátor klienta ČNB</param>
+            <param name="datum">datum dávky</param>
+            <param name="cislo">číslo dávky</param>
+            <param name="txtPath">cesta pro uložení txt protokolu</param>
+            <param name="csvPath">cesta pro uložení csv protokolu</param>
+            <param name="stavDavky">stav dávky</param>
+            <param name="pocetChyb">počet chyb</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GAbok.GetVypis(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.DateTime,System.String,System.String,System.String)">
+            <summary>stažení dávky výpisů pro požadovaný účetní den</summary>
+            <param name="url">url adresa webové služby</param>
+            <param name="certHash">hash klientského certifikátu</param>
+            <param name="aibUrl">url adresa AIB</param>
+            <param name="aibDomain">doména pro autentizaci k AIB</param>
+            <param name="aibUser">uživatel pro autentizaci k AIB</param>
+            <param name="aibPassword">heslo pro autentizaci k AIB</param>
+            <param name="debugDir">cesta k adresáři pro trasovací soubory</param>
+            <param name="idKlienta">identifikátor klienta ČNB</param>
+            <param name="datum">datum výpisu</param>
+            <param name="rezim">režim (B nebo D)</param>
+            <param name="vypisPath">cesta pro uložení výpisu</param>
+            <param name="znackaPath">cesta pro uložení značky</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GAbok.LoadDavka(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.DateTime,System.Int32,System.String,System.String,System.String,System.String@)">
+            <summary>registrace a předání dávky platebních příkazů</summary>
+            <param name="url">url adresa webové služby</param>
+            <param name="certHash">hash klientského certifikátu</param>
+            <param name="aibUrl">url adresa AIB</param>
+            <param name="aibDomain">doména pro autentizaci k AIB</param>
+            <param name="aibUser">uživatel pro autentizaci k AIB</param>
+            <param name="aibPassword">heslo pro autentizaci k AIB</param>
+            <param name="debugDir">cesta k adresáři pro trasovací soubory</param>
+            <param name="idKlienta">identifikátor klienta ČNB</param>
+            <param name="datum">datum dávky</param>
+            <param name="cislo">číslo dávky</param>
+            <param name="davkaPath">cesta k souboru s dávkou</param>
+            <param name="podpis1Path">cesta k 1. souboru s podpisem</param>
+            <param name="podpis2Path">cesta k 2. souboru s podpisem</param>
+            <param name="result">výsledek předání dávky</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GAbok.InvokeAbokWebServiceAIB(System.String,System.String,Gordic.Security.Service.GCertificate,System.Xml.XmlElement,System.Net.SecurityProtocolType,Gordic.Security.Service.GHTTPProxy)">
+            <summary>spuštění webové služby prostřednictvím AIB</summary>
+            <param name="url">url adresa webové služby</param>
+            <param name="certHash">hash klientského certifikátu</param>
+            <param name="certificate">instance klientského certifikátu</param>
+            <param name="xml">vstupní data</param>
+            <param name="protocol">typ zabezpečení transportního protokolu</param>
+            <param name="httpProxy">proxy pro HTTP požadavky</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="T:Gordic.Int.Client.GAbokUserProcess">
+            <summary>uživatelský proces pro internetové bankovnictví ČNB</summary>
+        </member>
+        <member name="F:Gordic.Int.Client.GAbokUserProcess.m_coClientLogic">
+            <summary>klientská logika</summary>
+        </member>
+        <member name="P:Gordic.Int.Client.GAbokUserProcess.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="P:Gordic.Int.Client.GAbokUserProcess.ClientLogic">
+            <summary>klientská logika</summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GAbokUserProcess.GetProtokol(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String,System.String,System.String@,System.Int32@)">
+            <summary>stažení protokolu k zadané dávce</summary>
+            <param name="url">url adresa webové služby</param>
+            <param name="certHash">hash klientského certifikátu</param>
+            <param name="aibUrl">url adresa AIB</param>
+            <param name="aibDomain">doména pro autentizaci k AIB</param>
+            <param name="aibUser">uživatel pro autentizaci k AIB</param>
+            <param name="aibPassword">heslo pro autentizaci k AIB</param>
+            <param name="debugDir">cesta k adresáři pro trasovací soubory</param>
+            <param name="idKlienta">identifikátor klienta ČNB</param>
+            <param name="datum">datum dávky</param>
+            <param name="cislo">číslo dávky</param>
+            <param name="txtPath">cesta pro uložení txt protokolu</param>
+            <param name="csvPath">cesta pro uložení csv protokolu</param>
+            <param name="stavDavky">stav dávky</param>
+            <param name="pocetChyb">počet chyb</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GAbokUserProcess.GetVypis(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>stažení dávky výpisů pro požadovaný účetní den</summary>
+            <param name="url">url adresa webové služby</param>
+            <param name="certHash">hash klientského certifikátu</param>
+            <param name="aibUrl">url adresa AIB</param>
+            <param name="aibDomain">doména pro autentizaci k AIB</param>
+            <param name="aibUser">uživatel pro autentizaci k AIB</param>
+            <param name="aibPassword">heslo pro autentizaci k AIB</param>
+            <param name="debugDir">cesta k adresáři pro trasovací soubory</param>
+            <param name="idKlienta">identifikátor klienta ČNB</param>
+            <param name="datum">datum výpisu</param>
+            <param name="rezim">režim (B nebo D)</param>
+            <param name="vypisPath">cesta pro uložení výpisu</param>
+            <param name="znackaPath">cesta pro uložení značky</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GAbokUserProcess.LoadDavka(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String@)">
+            <summary>registrace a předání dávky platebních příkazů</summary>
+            <param name="url">url adresa webové služby</param>
+            <param name="certHash">hash klientského certifikátu</param>
+            <param name="aibUrl">url adresa AIB</param>
+            <param name="aibDomain">doména pro autentizaci k AIB</param>
+            <param name="aibUser">uživatel pro autentizaci k AIB</param>
+            <param name="aibPassword">heslo pro autentizaci k AIB</param>
+            <param name="debugDir">cesta k adresáři pro trasovací soubory</param>
+            <param name="idKlienta">identifikátor klienta ČNB</param>
+            <param name="datum">datum dávky</param>
+            <param name="cislo">číslo dávky</param>
+            <param name="davkaPath">cesta k souboru s dávkou</param>
+            <param name="podpis1Path">cesta k 1. souboru s podpisem</param>
+            <param name="podpis2Path">cesta k 2. souboru s podpisem</param>
+            <param name="result">výsledek předání dávky</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GAbokUserProcess.GetProtokol2(System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String,System.String,System.String@,System.Int32@)">
+            <summary>stažení protokolu k zadané dávce</summary>
+            <param name="faze">fáze aplikace</param>
+            <param name="user">login uživatele</param>
+            <param name="licence">licence databáze</param>
+            <param name="logPorCislo">identifikátor autorizované relace</param>
+            <param name="datumPrihlaseni">datum přihlášení</param>
+            <param name="profile">název databázového profilu</param>
+            <param name="loginDb">login DBA uživatele</param>
+            <param name="passwordDb">heslo DBA uživatele</param>
+            <param name="url">url adresa webové služby</param>
+            <param name="certHash">hash klientského certifikátu</param>
+            <param name="aibUrl">url adresa AIB</param>
+            <param name="aibDomain">doména pro autentizaci k AIB</param>
+            <param name="aibUser">uživatel pro autentizaci k AIB</param>
+            <param name="aibPassword">heslo pro autentizaci k AIB</param>
+            <param name="debugDir">cesta k adresáři pro trasovací soubory</param>
+            <param name="idKlienta">identifikátor klienta ČNB</param>
+            <param name="datum">datum dávky</param>
+            <param name="cislo">číslo dávky</param>
+            <param name="txtPath">cesta pro uložení txt protokolu</param>
+            <param name="csvPath">cesta pro uložení csv protokolu</param>
+            <param name="stavDavky">stav dávky</param>
+            <param name="pocetChyb">počet chyb</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GAbokUserProcess.GetVypis2(System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>stažení dávky výpisů pro požadovaný účetní den</summary>
+            <param name="faze">fáze aplikace</param>
+            <param name="user">login uživatele</param>
+            <param name="licence">licence databáze</param>
+            <param name="logPorCislo">identifikátor autorizované relace</param>
+            <param name="datumPrihlaseni">datum přihlášení</param>
+            <param name="profile">název databázového profilu</param>
+            <param name="loginDb">login DBA uživatele</param>
+            <param name="passwordDb">heslo DBA uživatele</param>
+            <param name="url">url adresa webové služby</param>
+            <param name="certHash">hash klientského certifikátu</param>
+            <param name="aibUrl">url adresa AIB</param>
+            <param name="aibDomain">doména pro autentizaci k AIB</param>
+            <param name="aibUser">uživatel pro autentizaci k AIB</param>
+            <param name="aibPassword">heslo pro autentizaci k AIB</param>
+            <param name="debugDir">cesta k adresáři pro trasovací soubory</param>
+            <param name="idKlienta">identifikátor klienta ČNB</param>
+            <param name="datum">datum výpisu</param>
+            <param name="rezim">režim (B nebo D)</param>
+            <param name="vypisPath">cesta pro uložení výpisu</param>
+            <param name="znackaPath">cesta pro uložení značky</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GAbokUserProcess.LoadDavka2(System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String@)">
+            <summary>registrace a předání dávky platebních příkazů</summary>
+            <param name="faze">fáze aplikace</param>
+            <param name="user">login uživatele</param>
+            <param name="licence">licence databáze</param>
+            <param name="logPorCislo">identifikátor autorizované relace</param>
+            <param name="datumPrihlaseni">datum přihlášení</param>
+            <param name="profile">název databázového profilu</param>
+            <param name="loginDb">login DBA uživatele</param>
+            <param name="passwordDb">heslo DBA uživatele</param>
+            <param name="url">url adresa webové služby</param>
+            <param name="certHash">hash klientského certifikátu</param>
+            <param name="aibUrl">url adresa AIB</param>
+            <param name="aibDomain">doména pro autentizaci k AIB</param>
+            <param name="aibUser">uživatel pro autentizaci k AIB</param>
+            <param name="aibPassword">heslo pro autentizaci k AIB</param>
+            <param name="debugDir">cesta k adresáři pro trasovací soubory</param>
+            <param name="idKlienta">identifikátor klienta ČNB</param>
+            <param name="datum">datum dávky</param>
+            <param name="cislo">číslo dávky</param>
+            <param name="davkaPath">cesta k souboru s dávkou</param>
+            <param name="podpis1Path">cesta k 1. souboru s podpisem</param>
+            <param name="podpis2Path">cesta k 2. souboru s podpisem</param>
+            <param name="result">výsledek předání dávky</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GAbokUserProcess.Initialize(System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String)">
+            <summary>inicializace uživatelského procesu</summary>
+            <param name="faze">fáze aplikace</param>
+            <param name="user">login uživatele</param>
+            <param name="licence">licence databáze</param>
+            <param name="logPorCislo">identifikátor autorizované relace</param>
+            <param name="datumPrihlaseni">datum přihlášení</param>
+            <param name="profile">název databázového profilu</param>
+            <param name="loginDb">login DBA uživatele</param>
+            <param name="passwordDb">heslo DBA uživatele</param>
+            <returns>uživatelský proces</returns>
+        </member>
+        <member name="T:Gordic.Int.Client.GAutSupport">
+            <summary>podpora volání webové autorizační služby</summary>
+        </member>
+        <member name="P:Gordic.Int.Client.GAutSupport.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GAutSupport.CallWs(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String)">
+            <summary>volání webové autorizační služby</summary>
+            <param name="url">URL adresa</param>
+            <param name="in1">fáze aplikace</param>
+            <param name="in2">verze aplikace</param>
+            <param name="in3">subverze aplikace</param>
+            <param name="in4">revize aplikace</param>
+            <param name="in5">revize společných komponent</param>
+            <param name="in6">revize sestav</param>
+            <param name="in7">režim přihlášení</param>
+            <param name="in8">uživatel systému</param>
+            <param name="in9">název počítače</param>
+            <param name="in10">login uživatele</param>
+            <param name="in11">identifikátor instance</param>
+            <param name="in12">identifikátor původce změny</param>
+            <param name="in13">datum a čas požadavku</param>
+            <param name="timeout">časový limit pro dokončení volání webové služby v sekundách (hodnota menší než 1 = bez časového limitu)</param>
+            <param name="securityProtocol">protokol pro zabezpečení komunikace (možné hodnoty jsou Ssl3, Tls, Tls11, Tls12 nebo Tls13)</param>
+            <returns>parametry pro přihlášení do systému</returns>
+        </member>
+        <member name="T:Gordic.Int.Client.GBankGateway">
+            <summary>klientská logika pro napojení na BankGateway</summary>
+        </member>
+        <member name="F:Gordic.Int.Client.GBankGateway.m_oBankGateway">
+            <summary>rozhraní aplikační logiky pro napojení na BankGateway</summary>
+        </member>
+        <member name="P:Gordic.Int.Client.GBankGateway.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="P:Gordic.Int.Client.GBankGateway.BankGateway">
+            <summary>rozhraní aplikační logiky pro napojení na BankGateway</summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GBankGateway.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>veřejný konstruktor</summary>
+            <param name="userProcess">uživatelský proces aplikace</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GBankGateway.GetAccountStatements(System.String,System.String,System.String,System.String)">
+            <summary>stažení bankovních výpisů</summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GBankGateway.GetAccountBalance(System.String,System.String,System.String,System.String)">
+            <summary>
+            Načtení zůstatků účtu.
+            </summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GBankGateway.CreatePayBatch(System.String,System.String,System.String,System.String)">
+            <summary>
+            Vytvoření dávky plateb.
+            </summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GBankGateway.AuthorizePayBatch(System.String,System.String,System.String,System.String,System.Uri,System.String@)">
+            <summary>
+            Autorizace dávky plateb.
+            <br/>Přesměruje uživatele na autorizační stránku banky.
+            </summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GBankGateway.StatusPayBatch(System.String,System.String,System.String,System.String)">
+            <summary>
+            Načtení stavů plateb v dávce.
+            </summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GBankGateway.PayCapabilities(System.String,System.String,System.String,System.String)">
+            <summary>
+            Načtení schopností plateb.
+            </summary>
+        </member>
+        <member name="T:Gordic.Int.Client.GBankGatewayUserProcess">
+            <summary>uživatelský proces pro napojení na BankGateway</summary>
+        </member>
+        <member name="F:Gordic.Int.Client.GBankGatewayUserProcess.m_coClientLogic">
+            <summary>klientská logika</summary>
+        </member>
+        <member name="P:Gordic.Int.Client.GBankGatewayUserProcess.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="P:Gordic.Int.Client.GBankGatewayUserProcess.ClientLogic">
+            <summary>klientská logika</summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GBankGatewayUserProcess.GetAccountStatements(System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>stažení bankovních výpisů</summary>
+            <param name="faze">fáze aplikace</param>
+            <param name="user">login uživatele</param>
+            <param name="licence">licence databáze</param>
+            <param name="logPorCislo">identifikátor autorizované relace</param>
+            <param name="datumPrihlaseni">datum přihlášení</param>
+            <param name="profile">název databázového profilu</param>
+            <param name="loginDb">login DBA uživatele</param>
+            <param name="passwordDb">heslo DBA uživatele</param>
+            <param name="ixsOap">profil zabezpečení spojení</param>
+            <param name="inputPath">vstupní adresář</param>
+            <param name="debugDir">cesta k adresáři pro trasovací soubory</param>
+            <param name="outputPath">výstupní adresář</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GBankGatewayUserProcess.GetAccountBalance(System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Načtení zůstatků účtu.
+            </summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GBankGatewayUserProcess.CreatePayBatch(System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Vytvoření dávky plateb.
+            </summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GBankGatewayUserProcess.AuthorizePayBatch(System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Autorizace dávky plateb.
+            <br/>Přesměruje uživatele na autorizační stránku banky.
+            </summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GBankGatewayUserProcess.StatusPayBatch(System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Načtení stavů plateb v dávce.
+            </summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GBankGatewayUserProcess.PayCapabilities(System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Načtení schopností plateb.
+            </summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GBankGatewayUserProcess.Initialize(System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String)">
+            <summary>inicializace uživatelského procesu</summary>
+            <param name="faze">fáze aplikace</param>
+            <param name="user">login uživatele</param>
+            <param name="licence">licence databáze</param>
+            <param name="logPorCislo">identifikátor autorizované relace</param>
+            <param name="datumPrihlaseni">datum přihlášení</param>
+            <param name="profile">název databázového profilu</param>
+            <param name="loginDb">login DBA uživatele</param>
+            <param name="passwordDb">heslo DBA uživatele</param>
+            <returns>uživatelský proces</returns>
+        </member>
+        <member name="T:Gordic.Int.Client.GDatabankingUserProcess">
+            <summary>uživatelský proces pro Databanking České spořitelny</summary>
+        </member>
+        <member name="F:Gordic.Int.Client.GDatabankingUserProcess.m_coClientLogic">
+            <summary>klientská logika</summary>
+        </member>
+        <member name="P:Gordic.Int.Client.GDatabankingUserProcess.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="P:Gordic.Int.Client.GDatabankingUserProcess.ClientLogic">
+            <summary>klientská logika</summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GDatabankingUserProcess.GetAccountStatements(System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.String,System.String)">
+            <summary>stažení bankovních výpisů</summary>
+            <param name="faze">fáze aplikace</param>
+            <param name="user">login uživatele</param>
+            <param name="licence">licence databáze</param>
+            <param name="logPorCislo">identifikátor autorizované relace</param>
+            <param name="datumPrihlaseni">datum přihlášení</param>
+            <param name="profile">název databázového profilu</param>
+            <param name="loginDb">login DBA uživatele</param>
+            <param name="passwordDb">heslo DBA uživatele</param>
+            <param name="rok">rok</param>
+            <param name="ico">ičo</param>
+            <param name="ucs">účetní středisko</param>
+            <param name="uus">účtárna</param>
+            <param name="buVl">číslo účtu</param>
+            <param name="skVl">směrový kód banky</param>
+            <param name="datOd">datum od</param>
+            <param name="datDo">datum do</param>
+            <param name="onlyNew">příznak stažení pouze nových výpisů</param>
+            <param name="url">url adresa webové služby</param>
+            <param name="debugDir">cesta k adresáři pro trasovací soubory</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GDatabankingUserProcess.GetAccountBalances(System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>stažení zůstatků bankovních účtů</summary>
+            <param name="faze">fáze aplikace</param>
+            <param name="user">login uživatele</param>
+            <param name="licence">licence databáze</param>
+            <param name="logPorCislo">identifikátor autorizované relace</param>
+            <param name="datumPrihlaseni">datum přihlášení</param>
+            <param name="profile">název databázového profilu</param>
+            <param name="loginDb">login DBA uživatele</param>
+            <param name="passwordDb">heslo DBA uživatele</param>
+            <param name="rc">rodné číslo</param>
+            <param name="ico">ičo</param>
+            <param name="url">url adresa webové služby</param>
+            <param name="debugDir">cesta k adresáři pro trasovací soubory</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GDatabankingUserProcess.CreateDomesticPaymentOrders(System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.String,System.String)">
+            <summary>odeslání domácích příkazů do banky</summary>
+            <param name="faze">fáze aplikace</param>
+            <param name="user">login uživatele</param>
+            <param name="licence">licence databáze</param>
+            <param name="logPorCislo">identifikátor autorizované relace</param>
+            <param name="datumPrihlaseni">datum přihlášení</param>
+            <param name="profile">název databázového profilu</param>
+            <param name="loginDb">login DBA uživatele</param>
+            <param name="passwordDb">heslo DBA uživatele</param>
+            <param name="rok">rok</param>
+            <param name="ico">ičo</param>
+            <param name="ucs">účetní středisko</param>
+            <param name="uus">účtárna</param>
+            <param name="skVl">směrový kód banky</param>
+            <param name="maxOrders">maximální počet příkazů odesílaných do banky najednou</param>
+            <param name="url">url adresa webové služby</param>
+            <param name="debugDir">cesta k adresáři pro trasovací soubory</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GDatabankingUserProcess.CreateCleanPaymentOrders(System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.String,System.String)">
+            <summary>odeslání zahraničních příkazů do banky</summary>
+            <param name="faze">fáze aplikace</param>
+            <param name="user">login uživatele</param>
+            <param name="licence">licence databáze</param>
+            <param name="logPorCislo">identifikátor autorizované relace</param>
+            <param name="datumPrihlaseni">datum přihlášení</param>
+            <param name="profile">název databázového profilu</param>
+            <param name="loginDb">login DBA uživatele</param>
+            <param name="passwordDb">heslo DBA uživatele</param>
+            <param name="rok">rok</param>
+            <param name="ico">ičo</param>
+            <param name="ucs">účetní středisko</param>
+            <param name="uus">účtárna</param>
+            <param name="skVl">směrový kód banky</param>
+            <param name="maxOrders">maximální počet příkazů odesílaných do banky najednou</param>
+            <param name="url">url adresa webové služby</param>
+            <param name="debugDir">cesta k adresáři pro trasovací soubory</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GDatabankingUserProcess.GetRequestStatus(System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.String@,System.String@,System.Int32@,System.String@)">
+            <summary>získání stavu zpracování provedených transakcí</summary>
+            <param name="faze">fáze aplikace</param>
+            <param name="user">login uživatele</param>
+            <param name="licence">licence databáze</param>
+            <param name="logPorCislo">identifikátor autorizované relace</param>
+            <param name="datumPrihlaseni">datum přihlášení</param>
+            <param name="profile">název databázového profilu</param>
+            <param name="loginDb">login DBA uživatele</param>
+            <param name="passwordDb">heslo DBA uživatele</param>
+            <param name="requestId">jednoznačný identifikátor transakce</param>
+            <param name="rc">rodné číslo</param>
+            <param name="ico">ičo</param>
+            <param name="url">url adresa webové služby</param>
+            <param name="debugDir">cesta k adresáři pro trasovací soubory</param>
+            <param name="timestamp">časová značka transakce</param>
+            <param name="status">stav zpracování transakce</param>
+            <param name="errorCode">kód chyby</param>
+            <param name="errorMsg">text chyby</param>
+        </member>
+        <member name="T:Gordic.Int.Client.GDatabanking">
+            <summary>klientská logika pro Databanking České spořitelny</summary>
+        </member>
+        <member name="F:Gordic.Int.Client.GDatabanking.m_oDatabanking">
+            <summary>rozhraní aplikační logiky pro Databanking České spořitelny</summary>
+        </member>
+        <member name="P:Gordic.Int.Client.GDatabanking.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="P:Gordic.Int.Client.GDatabanking.Databanking">
+            <summary>rozhraní aplikační logiky pro Databanking České spořitelny</summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GDatabanking.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>veřejný konstruktor</summary>
+            <param name="userProcess">uživatelský proces aplikace</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GDatabanking.GetAccountStatements(System.Int32,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.String,System.String)">
+            <summary>stažení bankovních výpisů</summary>
+            <param name="rok">rok</param>
+            <param name="ico">ičo</param>
+            <param name="ucs">účetní středisko</param>
+            <param name="uus">účtárna</param>
+            <param name="buVl">číslo účtu</param>
+            <param name="skVl">směrový kód banky</param>
+            <param name="datOd">datum od</param>
+            <param name="datDo">datum do</param>
+            <param name="onlyNew">příznak stažení pouze nových výpisů</param>
+            <param name="url">url adresa webové služby</param>
+            <param name="debugDir">cesta k adresáři pro trasovací soubory</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GDatabanking.GetAccountBalances(System.String,System.String,System.String,System.String)">
+            <summary>stažení zůstatků bankovních účtů</summary>
+            <param name="rc">rodné číslo</param>
+            <param name="ico">ičo</param>
+            <param name="url">url adresa webové služby</param>
+            <param name="debugDir">cesta k adresáři pro trasovací soubory</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GDatabanking.CreateDomesticPaymentOrders(System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.String,System.String)">
+            <summary>odeslání domácích příkazů do banky</summary>
+            <param name="rok">rok</param>
+            <param name="ico">ičo</param>
+            <param name="ucs">účetní středisko</param>
+            <param name="uus">účtárna</param>
+            <param name="skVl">směrový kód banky</param>
+            <param name="maxOrders">maximální počet příkazů odesílaných do banky najednou</param>
+            <param name="url">url adresa webové služby</param>
+            <param name="debugDir">cesta k adresáři pro trasovací soubory</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GDatabanking.CreateCleanPaymentOrders(System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.String,System.String)">
+            <summary>odeslání zahraničních příkazů do banky</summary>
+            <param name="rok">rok</param>
+            <param name="ico">ičo</param>
+            <param name="ucs">účetní středisko</param>
+            <param name="uus">účtárna</param>
+            <param name="skVl">směrový kód banky</param>
+            <param name="maxOrders">maximální počet příkazů odesílaných do banky najednou</param>
+            <param name="url">url adresa webové služby</param>
+            <param name="debugDir">cesta k adresáři pro trasovací soubory</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GDatabanking.GetRequestStatus(System.Int32,System.String,System.String,System.String,System.String,System.String@,System.String@,System.Int32@,System.String@)">
+            <summary>získání stavu zpracování provedených transakcí</summary>
+            <param name="requestId">jednoznačný identifikátor transakce</param>
+            <param name="rc">rodné číslo</param>
+            <param name="ico">ičo</param>
+            <param name="url">url adresa webové služby</param>
+            <param name="debugDir">cesta k adresáři pro trasovací soubory</param>
+            <param name="timestamp">časová značka transakce</param>
+            <param name="status">stav zpracování transakce</param>
+            <param name="errorCode">kód chyby</param>
+            <param name="errorMsg">text chyby</param>
+        </member>
+        <member name="T:Gordic.Int.Client.GInventarizuj">
+            <summary>klientská logika pro napojení na Inventarizuj.cz</summary>
+        </member>
+        <member name="F:Gordic.Int.Client.GInventarizuj.m_oInventarizuj">
+            <summary>rozhraní aplikační logiky pro napojení na Inventarizuj.cz</summary>
+        </member>
+        <member name="P:Gordic.Int.Client.GInventarizuj.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="P:Gordic.Int.Client.GInventarizuj.Inventarizuj">
+            <summary>rozhraní aplikační logiky pro napojení na Inventarizuj.cz</summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GInventarizuj.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>veřejný konstruktor</summary>
+            <param name="userProcess">uživatelský proces aplikace</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GInventarizuj.Export(System.String,System.String)">
+            <summary>export dat na rozhraní Inventarizuj.cz</summary>
+            <param name="inputPath">vstupní soubor</param>
+            <param name="outputPath">výstupní soubor</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GInventarizuj.Import(System.String,System.String)">
+            <summary>import dat z rozhraní Inventarizuj.cz</summary>
+            <param name="inputPath">vstupní soubor</param>
+            <param name="outputPath">výstupní soubor</param>
+        </member>
+        <member name="T:Gordic.Int.Client.GInventarizujUserProcess">
+            <summary>uživatelský proces pro napojení na Inventarizuj.cz</summary>
+        </member>
+        <member name="F:Gordic.Int.Client.GInventarizujUserProcess.m_coClientLogic">
+            <summary>klientská logika</summary>
+        </member>
+        <member name="P:Gordic.Int.Client.GInventarizujUserProcess.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="P:Gordic.Int.Client.GInventarizujUserProcess.ClientLogic">
+            <summary>klientská logika</summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GInventarizujUserProcess.Export(System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>export dat na rozhraní Inventarizuj.cz</summary>
+            <param name="faze">fáze aplikace</param>
+            <param name="user">login uživatele</param>
+            <param name="licence">licence databáze</param>
+            <param name="logPorCislo">identifikátor autorizované relace</param>
+            <param name="datumPrihlaseni">datum přihlášení</param>
+            <param name="profile">název databázového profilu</param>
+            <param name="loginDb">login DBA uživatele</param>
+            <param name="passwordDb">heslo DBA uživatele</param>
+            <param name="inputPath">vstupní soubor</param>
+            <param name="outputPath">výstupní soubor</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GInventarizujUserProcess.Import(System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.String,System.String)">
+            <summary>import dat z rozhraní Inventarizuj.cz</summary>
+            <param name="faze">fáze aplikace</param>
+            <param name="user">login uživatele</param>
+            <param name="licence">licence databáze</param>
+            <param name="logPorCislo">identifikátor autorizované relace</param>
+            <param name="datumPrihlaseni">datum přihlášení</param>
+            <param name="profile">název databázového profilu</param>
+            <param name="loginDb">login DBA uživatele</param>
+            <param name="passwordDb">heslo DBA uživatele</param>
+            <param name="inputPath">vstupní soubor</param>
+            <param name="outputPath">výstupní soubor</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GInventarizujUserProcess.Initialize(System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String)">
+            <summary>inicializace uživatelského procesu</summary>
+            <param name="faze">fáze aplikace</param>
+            <param name="user">login uživatele</param>
+            <param name="licence">licence databáze</param>
+            <param name="logPorCislo">identifikátor autorizované relace</param>
+            <param name="datumPrihlaseni">datum přihlášení</param>
+            <param name="profile">název databázového profilu</param>
+            <param name="loginDb">login DBA uživatele</param>
+            <param name="passwordDb">heslo DBA uživatele</param>
+            <returns>uživatelský proces</returns>
+        </member>
+        <member name="T:Gordic.Int.Client.GWsMpdClient">
+            <summary>klient pro volání webových služeb modulu MPD</summary>
+        </member>
+        <member name="F:Gordic.Int.Client.GWsMpdClient.m_csUlozeniDavky">
+            <summary>název webové metody pro uložení dávky na server</summary>
+        </member>
+        <member name="F:Gordic.Int.Client.GWsMpdClient.m_csStazeniDavky">
+            <summary>název webové metody pro stažení dávky ze serveru</summary>
+        </member>
+        <member name="F:Gordic.Int.Client.GWsMpdClient.m_csSeznamDavek">
+            <summary>název webové metody pro získání seznamu dávek uložených na serveru</summary>
+        </member>
+        <member name="F:Gordic.Int.Client.GWsMpdClient.m_csVymazaniDavky">
+            <summary>název webové metody pro vymazání dávky uložené na serveru</summary>
+        </member>
+        <member name="F:Gordic.Int.Client.GWsMpdClient.m_csWsInfo">
+            <summary>název webové metody pro otestování nastavení parametrů webové služby</summary> 
+        </member>
+        <member name="P:Gordic.Int.Client.GWsMpdClient.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GWsMpdClient.UlozeniDavky(System.String,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String)">
+            <summary>uložení dávky na server</summary>
+            <param name="url">adresa webové služby</param>
+            <param name="user">uživatelské jméno</param>
+            <param name="password">heslo</param>
+            <param name="passwordSecurity">styl zabezpečení hesla v odesílaných datech</param>
+            <param name="certificateFile">cesta k souboru s přihlašovacím certifikátem</param>
+            <param name="certificateThumbprint">miniatura přihlašovacího certifikátu</param>
+            <param name="timeout">časový limit pro dokončení volání webové služby v sekundách</param>
+            <param name="proxy">adresa proxy serveru</param>
+            <param name="remotePath">cesta na serveru</param>
+            <param name="fileName">název souboru</param>
+            <param name="localPath">lokální cesta</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GWsMpdClient.StazeniDavky(System.String,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String)">
+            <summary>stažení dávky ze serveru</summary>
+            <param name="url">adresa webové služby</param>
+            <param name="user">uživatelské jméno</param>
+            <param name="password">heslo</param>
+            <param name="passwordSecurity">styl zabezpečení hesla v odesílaných datech</param>
+            <param name="certificateFile">cesta k souboru s přihlašovacím certifikátem</param>
+            <param name="certificateThumbprint">miniatura přihlašovacího certifikátu</param>
+            <param name="timeout">časový limit pro dokončení volání webové služby v sekundách</param>
+            <param name="proxy">adresa proxy serveru</param>
+            <param name="remotePath">cesta na serveru</param>
+            <param name="fileName">název souboru</param>
+            <param name="localPath">lokální cesta</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GWsMpdClient.SeznamDavek(System.String,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.Boolean)">
+            <summary>získání seznamu dávek uložených na serveru</summary>
+            <param name="url">adresa webové služby</param>
+            <param name="user">uživatelské jméno</param>
+            <param name="password">heslo</param>
+            <param name="passwordSecurity">styl zabezpečení hesla v odesílaných datech</param>
+            <param name="certificateFile">cesta k souboru s přihlašovacím certifikátem</param>
+            <param name="certificateThumbprint">miniatura přihlašovacího certifikátu</param>
+            <param name="timeout">časový limit pro dokončení volání webové služby v sekundách</param>
+            <param name="proxy">adresa proxy serveru</param>
+            <param name="remotePath">cesta na serveru</param>
+            <param name="lic">lokální licence databáze</param>
+            <param name="universalLic">příznak zahrnutí sdílených dávek do výstupního seznamu</param>
+            <returns>seznamu dávek uložených na serveru (jednotlivé názvy dávek v seznamu jsou odděleny středníkem)</returns>
+        </member>
+        <member name="M:Gordic.Int.Client.GWsMpdClient.VymazaniDavky(System.String,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String,System.String,System.String)">
+            <summary>vymazání dávky uložené na serveru</summary>
+            <param name="url">adresa webové služby</param>
+            <param name="user">uživatelské jméno</param>
+            <param name="password">heslo</param>
+            <param name="passwordSecurity">styl zabezpečení hesla v odesílaných datech</param>
+            <param name="certificateFile">cesta k souboru s přihlašovacím certifikátem</param>
+            <param name="certificateThumbprint">miniatura přihlašovacího certifikátu</param>
+            <param name="timeout">časový limit pro dokončení volání webové služby v sekundách</param>
+            <param name="proxy">adresa proxy serveru</param>
+            <param name="remotePath">cesta na serveru</param>
+            <param name="fileName">název souboru</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GWsMpdClient.TestNastaveni(System.String,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String)">
+            <summary>otestování nastavení parametrů webové služby</summary> 
+            <param name="url">adresa webové služby</param>
+            <param name="user">uživatelské jméno</param>
+            <param name="password">heslo</param>
+            <param name="passwordSecurity">styl zabezpečení hesla v odesílaných datech</param>
+            <param name="certificateFile">cesta k souboru s přihlašovacím certifikátem</param>
+            <param name="certificateThumbprint">miniatura přihlašovacího certifikátu</param>
+            <param name="timeout">časový limit pro dokončení volání webové služby v sekundách</param>
+            <param name="proxy">adresa proxy serveru</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GWsMpdClient.CallWebMethod(System.String,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String,System.String,System.Xml.XmlNode)">
+            <summary>vyvolání webové metody</summary>
+            <param name="url">adresa webové služby</param>
+            <param name="user">uživatelské jméno</param>
+            <param name="password">heslo</param>
+            <param name="passwordSecurity">styl zabezpečení hesla v odesílaných datech</param>
+            <param name="certificateFile">cesta k souboru s přihlašovacím certifikátem</param>
+            <param name="certificateThumbprint">miniatura přihlašovacího certifikátu</param>
+            <param name="timeout">časový limit pro dokončení volání webové služby v sekundách</param>
+            <param name="proxy">adresa proxy serveru</param>
+            <param name="methodName">název webové metody</param>
+            <param name="request">vstupní data</param>
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Int.Client.GWsMpdClient.GetNamespaceManager(System.String)">
+            <summary>získání instance objektu pro správu jmenných prostorů</summary>
+            <param name="namespaceUri">jmenný prostor</param>
+            <returns>instance objektu pro správu jmenných prostorů</returns>
+        </member>
+        <member name="M:Gordic.Int.Client.GWsMpdClient.GetBase64String(System.String)">
+            <summary>získání Base64 řetězce reprezentujícího datový soubor</summary>
+            <param name="filePath">cesta k souboru s daty</param>
+            <returns>Base64 řetězc reprezentující datový soubor</returns>
+        </member>
+        <member name="M:Gordic.Int.Client.GWsMpdClient.SaveBase64ToFile(System.Xml.XmlNode,System.String)">
+            <summary>uložení dat z xml položky do souboru</summary>
+            <param name="data">xml položka</param>
+            <param name="path">cesta k výstupnímu souboru</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GWsMpdClient.GetUlozeniDavkyRequest(System.String,System.String,System.String)">
+            <summary>získání vstupních dat pro webovou metodu UlozeniDavky</summary>
+            <param name="remotePath">cesta na serveru</param>
+            <param name="fileName">název souboru</param>
+            <param name="localPath">lokální cesta</param>
+            <returns>vstupní data pro webovou metodu</returns>
+        </member>
+        <member name="M:Gordic.Int.Client.GWsMpdClient.GetStazeniDavkyRequest(System.String,System.String)">
+            <summary>získání vstupních dat pro webovou metodu StazeniDavky</summary>
+            <param name="remotePath">cesta na serveru</param>
+            <param name="fileName">název souboru</param>
+            <returns>vstupní data pro webovou metodu</returns>
+        </member>
+        <member name="M:Gordic.Int.Client.GWsMpdClient.ProcessStazeniDavkyResponse(System.Xml.XmlNode,System.String,System.String)">
+            <summary>zpracování výstupních dat webové metody StazeniDavky</summary>
+            <param name="response">výstupní data webové metody</param>
+            <param name="fileName">název souboru</param>
+            <param name="localPath">lokální cesta</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GWsMpdClient.GetSeznamDavekRequest(System.String,System.String,System.Boolean)">
+            <summary>získání vstupních dat pro webovou metodu SeznamDavek</summary>
+            <param name="remotePath">cesta na serveru</param>
+            <param name="lic">lokální licence databáze</param>
+            <param name="universalLic">příznak zahrnutí sdílených dávek do výstupního seznamu</param>
+            <returns>vstupní data pro webovou metodu</returns>
+        </member>
+        <member name="M:Gordic.Int.Client.GWsMpdClient.ProcessSeznamDavekResponse(System.Xml.XmlNode)">
+            <summary>zpracování výstupních dat webové metody SeznamDavek</summary>
+            <param name="response">výstupní data webové metody</param>
+            <returns>seznamu dávek uložených na serveru (jednotlivé názvy dávek v seznamu jsou odděleny středníkem)</returns>
+        </member>
+        <member name="M:Gordic.Int.Client.GWsMpdClient.GetVymazaniDavkyRequest(System.String,System.String)">
+            <summary>získání vstupních dat pro webovou metodu VymazaniDavky</summary>
+            <param name="remotePath">cesta na serveru</param>
+            <param name="fileName">název souboru</param>
+            <returns>vstupní data pro webovou metodu</returns>
+        </member>
+        <member name="M:Gordic.Int.Client.GWsMpdClient.GetTestNastaveniRequest">
+            <summary>získání vstupních dat pro webovou metodu WsInfo</summary>
+            <returns>vstupní data pro webovou metodu</returns>
+        </member>
+        <member name="T:Gordic.Int.Client.GIntddav">
+            <summary>Práce s vazbou externí a interní identifikace</summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GIntddav.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GIntddav.IntGetVazba(Gordic.General.GString,System.Boolean,Gordic.Int.Interface.SegmentEnum,Gordic.General.GString)">
+            <summary>Je-li identifikace externí, je nalezena odpovídající interní identifikace, jinak se vrací klon na vstup předané interní identifikace.</summary>
+            <param name="idSubjektu">interní či externí identifikace subjektu</param>
+            <param name="externiId">zda je vstupní id interní či externí identifikací</param>
+            <param name="idSegmentu">Identifikace typu subjektu - v INTu je to ID segmentu</param>
+            <param name="ixsExt">Identifikace externího systému. Je-li null, či IsNullOrEmpty, pracuje se nad aktuálním externím systémem (platí pro moduly, které v externím systému stojí).</param>
+            <returns>interní identifikaci</returns>
+        </member>
+        <member name="M:Gordic.Int.Client.GIntddav.IntGetVazba(Gordic.General.GString,System.Boolean,System.String,Gordic.General.GString)">
+            <summary>Je-li identifikace externí, je nalezena odpovídající interní identifikace, jinak se vrací klon na vstup předané interní identifikace.</summary>
+            <param name="idSubjektu">interní či externí identifikace subjektu</param>
+            <param name="externiId">zda je vstupní id interní či externí identifikací</param>
+            <param name="idSegmentu">Identifikace typu subjektu - v INTu je to ID segmentu</param>
+            <param name="ixsExt">Identifikace externího systému. Je-li null, či IsNullOrEmpty, pracuje se nad aktuálním externím systémem (platí pro moduly, které v externím systému stojí).</param>
+            <returns>interní identifikaci</returns>
+        </member>
+        <member name="M:Gordic.Int.Client.GIntddav.IntGetVazba(Gordic.General.GString,Gordic.Int.Interface.SegmentEnum,Gordic.General.GString)">
+            <summary>Pro zadanou externí identifikaci v zadaném segmentu se pokusí najít interní identifikaci přes intddav. Nepodaří-li se, vypadne výjimka.</summary>
+            <param name="idExterni">Cizi identifikace subjektu</param>
+            <param name="idSegmentu">Identifikace typu subjektu - v INTu je to ID segmentu</param>
+            <param name="ixsExt">Identifikace externího systému. Je-li null, či IsNullOrEmpty, pracuje se nad aktuálním externím systémem (platí pro moduly, které v externím systému stojí).</param>
+            <returns>interní identifikaci</returns>
+        </member>
+        <member name="M:Gordic.Int.Client.GIntddav.IntGetVazba(Gordic.General.GString,System.String,Gordic.General.GString)">
+            <summary>Pro zadanou externí identifikaci v zadaném segmentu se pokusí najít interní identifikaci přes intddav. Nepodaří-li se, vypadne výjimka.</summary>
+            <param name="idExterni">Cizi identifikace subjektu</param>
+            <param name="idSegmentu">Identifikace typu subjektu - v INTu je to ID segmentu</param>
+            <param name="ixsExt">Identifikace externího systému. Je-li null, či IsNullOrEmpty, pracuje se nad aktuálním externím systémem (platí pro moduly, které v externím systému stojí).</param>
+            <returns>interní identifikaci</returns>
+        </member>
+        <member name="M:Gordic.Int.Client.GIntddav.IntTryGetVazba(Gordic.General.GString,System.Boolean,Gordic.Int.Interface.SegmentEnum,Gordic.General.GString)">
+            <summary>Pokusí se získat interní identifikaci z zadané externí v danném segmentu. Pokud se to z jakéhokoliv důvodu nepodaří, vrací .IsNull</summary>
+            <param name="idSubjektu">interní či externí identifikace subjektu</param>
+            <param name="externiId">zda je vstupní id interní či externí identifikací</param>
+            <param name="idSegmentu">Identifikace typu subjektu - v INTu je to ID segmentu</param>
+            <param name="ixsExt">Identifikace externího systému. Je-li null, či IsNullOrEmpty, pracuje se nad aktuálním externím systémem (platí pro moduly, které v externím systému stojí).</param>
+            <returns>interní identifikace. Nepodařil-li se převod, vrací .IsNull</returns>
+        </member>
+        <member name="M:Gordic.Int.Client.GIntddav.IntTryGetVazba(Gordic.General.GString,System.Boolean,System.String,Gordic.General.GString)">
+            <summary>Pokusí se získat interní identifikaci z zadané externí v danném segmentu. Pokud se to z jakéhokoliv důvodu nepodaří, vrací .IsNull</summary>
+            <param name="idSubjektu">interní či externí identifikace subjektu</param>
+            <param name="externiId">zda je vstupní id interní či externí identifikací</param>
+            <param name="idSegmentu">Identifikace typu subjektu - v INTu je to ID segmentu</param>
+            <param name="ixsExt">Identifikace externího systému. Je-li null, či IsNullOrEmpty, pracuje se nad aktuálním externím systémem (platí pro moduly, které v externím systému stojí).</param>
+            <returns>interní identifikace. Nepodařil-li se převod, vrací .IsNull</returns>
+        </member>
+        <member name="M:Gordic.Int.Client.GIntddav.IntTryGetVazba(Gordic.General.GString,Gordic.Int.Interface.SegmentEnum,Gordic.General.GString)">
+            <summary>Pokusí se získat interní identifikaci z zadané externí v danném segmentu. Pokud se to z jakéhokoliv důvodu nepodaří, vrací .IsNull</summary>
+            <param name="idExterni">Cizi identifikace subjektu</param>
+            <param name="idSegmentu">Identifikace typu subjektu - v INTu je to ID segmentu</param>
+            <param name="ixsExt">Identifikace externího systému. Je-li null, či IsNullOrEmpty, pracuje se nad aktuálním externím systémem (platí pro moduly, které v externím systému stojí).</param>
+            <returns>interní identifikace. Nepodařil-li se převod, vrací .IsNull</returns>
+        </member>
+        <member name="M:Gordic.Int.Client.GIntddav.IntTryGetVazba(Gordic.General.GString,System.String,Gordic.General.GString)">
+            <summary>Pokusí se získat interní identifikaci z zadané externí v danném segmentu. Pokud se to z jakéhokoliv důvodu nepodaří, vrací .IsNull</summary>
+            <param name="idExterni">Cizi identifikace subjektu</param>
+            <param name="idSegmentu">Identifikace typu subjektu - v INTu je to ID segmentu</param>
+            <param name="ixsExt">Identifikace externího systému. Je-li null, či IsNullOrEmpty, pracuje se nad aktuálním externím systémem (platí pro moduly, které v externím systému stojí).</param>
+            <returns>interní identifikace. Nepodařil-li se převod, vrací .IsNull</returns>
+        </member>
+        <member name="M:Gordic.Int.Client.GIntddav.IntGetVazba(Gordic.General.GString,System.String,Gordic.General.GString,Gordic.General.GString@)">
+            <summary>Pokusí se převést zadaný externí identifikátor na interní přes intddav, výsledek operace a identifikátor jsou na výstupu</summary>
+            <param name="idExterni">Cizi identifikace subjektu</param>
+            <param name="idSegmentu">identifikace typu subjektu - v INTu je to ID segmentu</param>
+            <param name="ixsExt">Identifikace externího systému. Je-li null, či IsNullOrEmpty, pracuje se nad aktuálním externím systémem (platí pro moduly, které v externím systému stojí).</param>
+            <param name="idInterni">výstup - interní (naše) identifikace</param>
+            <returns>výsledek operace</returns>
+        </member>
+        <member name="M:Gordic.Int.Client.GIntddav.IntNewVazba(Gordic.General.GString,Gordic.General.GString,Gordic.Int.Interface.SegmentEnum,Gordic.General.GString)">
+            <summary>Podle zadaneho externiho identifikatoru pisemnosti a identifikace externiho subjektu zapise do prevodni tabulky interni identifikator</summary>
+            <param name="idInterni">Interni identifikace subjektu</param>
+            <param name="idExterni">Cizi identifikace subjektu</param>
+            <param name="idSegmentu">Identifikace typu subjektu - v INTu je to ID segmentu</param>
+            <param name="ixsExt">Identifikace externího systému. Je-li null, či IsNullOrEmpty, pracuje se nad aktuálním externím systémem (platí pro moduly, které v externím systému stojí).</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GIntddav.IntUpdateVazba(Gordic.General.GString,Gordic.General.GString,Gordic.Int.Interface.SegmentEnum,Gordic.General.GString)">
+            <summary>Podle zadaneho externiho identifikatoru pisemnosti a identifikace externiho subjektu zapise do prevodni tabulky interni identifikator</summary>
+            <param name="idInterni">Interni identifikace subjektu</param>
+            <param name="idExterni">Cizi identifikace subjektu</param>
+            <param name="idSegmentu">Identifikace typu subjektu - v INTu je to ID segmentu</param>
+            <param name="ixsExt">Identifikace externího systému. Je-li null, či IsNullOrEmpty, pracuje se nad aktuálním externím systémem (platí pro moduly, které v externím systému stojí).</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GIntddav.IntNewVazba(Gordic.General.GString,Gordic.General.GString,System.String,Gordic.General.GString)">
+            <summary>Podle zadaneho externiho identifikatoru pisemnosti a identifikace externiho subjektu zapise do prevodni tabulky interni identifikator</summary>
+            <param name="idInterni">Interni identifikace subjektu</param>
+            <param name="idExterni">Cizi identifikace subjektu</param>
+            <param name="idSegmentu">Identifikace typu subjektu - v INTu je to ID segmentu</param>
+            <param name="ixsExt">Identifikace externího systému. Je-li null, či IsNullOrEmpty, pracuje se nad aktuálním externím systémem (platí pro moduly, které v externím systému stojí).</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GIntddav.IntUpdateVazba(Gordic.General.GString,Gordic.General.GString,System.String,Gordic.General.GString)">
+            <summary>Podle zadaneho externiho identifikatoru pisemnosti a identifikace externiho subjektu zapise do prevodni tabulky interni identifikator</summary>
+            <param name="idInterni">Interni identifikace subjektu</param>
+            <param name="idExterni">Cizi identifikace subjektu</param>
+            <param name="idSegmentu">Identifikace typu subjektu - v INTu je to ID segmentu</param>
+            <param name="ixsExt">Identifikace externího systému. Je-li null, či IsNullOrEmpty, pracuje se nad aktuálním externím systémem (platí pro moduly, které v externím systému stojí).</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GIntddav.IntSaveVazba(Gordic.General.GString,Gordic.General.GString,System.String,Gordic.General.GString,System.Boolean,System.Boolean)">
+            <summary>Podle zadaneho externiho identifikatoru pisemnosti a identifikace externiho subjektu zapise do prevodni tabulky interni identifikator</summary>
+            <param name="idInterni">Interni identifikace subjektu</param>
+            <param name="idExterni">Cizi identifikace subjektu</param>
+            <param name="idSegmentu">Identifikace typu subjektu - v INTu je to ID segmentu</param>
+            <param name="ixsExt">Identifikace externího systému. Je-li null, či IsNullOrEmpty, pracuje se nad aktuálním externím systémem (platí pro moduly, které v externím systému stojí).</param>
+            <param name="newRecord">zda se má dělat nový záznam</param>
+            <param name="update">zda se má dělat update</param>
+        </member>
+        <member name="T:Gordic.Int.Client.GIntInit">
+            <summary>Třída pro inicializaci INTu</summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GIntInit.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GIntInit.IntInitval">
+            <summary>Inicializace externího systému do globálních proměných DB</summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GIntInit.IntInitval(Gordic.General.GString)">
+            <summary>Inicializace externího systému do globálních proměných DB</summary>
+            <param name="ixsExt">identifikace externího systému</param>
+        </member>
+        <member name="T:Gordic.Int.Client.GIntsext">
+            <summary>Třída pro práci s externími systémy</summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GIntsext.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GIntsext.ExistujeExterniSystem(Gordic.General.GString,System.Boolean)">
+            <summary>Zda existuje externí systém</summary>
+            <param name="ixp">identifikátor dokumentu</param>
+            <param name="aktivni">zda se mají hledat pouze aktivní externí systémy</param>
+            <returns>true, pokud záznam existuje</returns>
+        </member>
+        <member name="T:Gordic.Int.Client.GWsRssClient">
+            <summary>klientská logika pro získání ČJ z externí spisové služby.</summary>
+        </member>
+        <member name="F:Gordic.Int.Client.GWsRssClient.m_oGIczRssGetCjCaller">
+            <summary>rozhraní aplikační logiky pro Databanking České spořitelny</summary>
+        </member>
+        <member name="P:Gordic.Int.Client.GWsRssClient.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="P:Gordic.Int.Client.GWsRssClient.GIczRssGetCjCaller">
+            <summary>rozhraní aplikační logiky pro Databanking České spořitelny</summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GWsRssClient.#ctor(Gordic.Int.Client.GWsRssClientUserProcess)">
+            <summary>veřejný konstruktor</summary>
+            <param name="userProcess">uživatelský proces aplikace</param>
+        </member>
+        <member name="M:Gordic.Int.Client.GWsRssClient.GetCjForIxp(System.String,System.String,Gordic.General.GInt32@,Gordic.General.GInt32@,Gordic.General.GInt32@,Gordic.General.GString@)">
+            <summary>
+            Funkce pro přidělenení ČJ zadanému dokumentu.
+            Dokument je specifikován s pomocí IXP a musí již existovat v tabulkách WFLSPID atd..
+            ČJ se nejprve vyzvedne z externí spisové služby a následně se založí do lokální spisové služby ( do wflsdcj )
+            POkud vše dopadne dobře, tak v externí spisové službě vznikne záznam o tomto dokumentu vedeném u nás a je mu tam přiděleno ČJ. 
+            Spoučasně je u našeho dokumentu připsáno přidělené ČJ.
+            Tato metoda začíná a končí v jedné databázové transakci - uzavírá transakci. 
+            Vzhledem k tomu, že se v této metodě volají externí WS, může trvat i v řádu sekund.
+            </summary>
+            <param name="a_ixp">PID dokumentu, pro který se má ČJ získta - generovat.</param>
+            <param name="a_log_path">Cesta k logovacímu souboru aplikace. Může být nastaveno prázdno, potom se neloguje.</param>
+            <param name="a_rssNumber">OUT - Číslo dávky RSS pod kterým je požadavkové XML uloženo v databázi - tabulka RSSSRSP</param>
+            <param name="a_cj_por_cislo">OUT - přidělené pořadové číslo ČJ. Pouze informativní hodnota - stejná hodnota lze následně získat z DB</param>
+            <param name="a_cj_rok">OUT - rok přiděleného ČJ. Pouze informativní hodnota - stejná hodnota lze následně získat z DB</param>
+            <param name="a_cj_den">OUT - deník přiděleného ČJ. Pouze informativní hodnota - stejná hodnota lze následně získat z DB</param>
+        </member>
+        <member name="T:Gordic.Int.Client.GWsRssClientUserProcess">
+            <summary>uživatelský proces pro Databanking České spořitelny</summary>
+        </member>
+        <member name="F:Gordic.Int.Client.GWsRssClientUserProcess.m_coClientLogic">
+            <summary>klientská logika</summary>
+        </member>
+        <member name="P:Gordic.Int.Client.GWsRssClientUserProcess.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="P:Gordic.Int.Client.GWsRssClientUserProcess.ClientLogic">
+            <summary>klientská logika</summary>
+        </member>
+        <member name="M:Gordic.Int.Client.GWsRssClientUserProcess.GetCjForIxp(System.String,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.String,System.String,System.Int32@,System.Int32@,System.Int32@,System.String@)">
+            <summary>stažení bankovních výpisů</summary>
+            <param name="faze">fáze aplikace</param>
+            <param name="user">login uživatele</param>
+            <param name="licence">licence databáze</param>
+            <param name="logPorCislo">identifikátor autorizované relace</param>
+            <param name="datumPrihlaseni">datum přihlášení</param>
+            <param name="profile">název databázového profilu</param>
+            <param name="loginDb">login DBA uživatele</param>
+            <param name="passwordDb">heslo DBA uživatele</param>
+            <param name="a_ixp">PID dokumentu, pro který se má ČJ získta - generovat.</param>
+            <param name="a_log_path">Cesta k logovacímu souboru aplikace. Může být nastaveno prázdno, potom se neloguje.</param>
+            <param name="a_rssNumber">OUT - Číslo dávky RSS pod kterým je požadavkové XML uloženo v databázi - tabulka RSSSRSP</param>
+            <param name="a_cj_por_cislo">OUT - přidělené pořadové číslo ČJ. Pouze informativní hodnota - stejná hodnota lze následně získat z DB</param>
+            <param name="a_cj_rok">OUT - rok přiděleného ČJ. Pouze informativní hodnota - stejná hodnota lze následně získat z DB</param>
+            <param name="a_cj_den">OUT - deník přiděleného ČJ. Pouze informativní hodnota - stejná hodnota lze následně získat z DB</param>
+        </member>
+    </members>
+</doc>

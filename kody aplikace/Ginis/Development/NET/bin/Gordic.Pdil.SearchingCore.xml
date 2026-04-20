@@ -1,0 +1,159 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Pdil.SearchingCore</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Pdil.SearchingCore.IStringSearchAlgorithm">
+            <summary>
+            Interface containing all methods to be implemented
+            by string search algorithm
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdil.SearchingCore.IStringSearchAlgorithm.AddKeywords(System.String[],Gordic.Pdil.SearchingCore.ResultType)">
+            <summary>
+            Adds keywords to the set of searched patterns, depending on the type of the keywords
+            and whether it is to be searched for, or just "shadowed" to avoid false positives
+            </summary>
+            <param name="keywords">list of keywords to search</param>
+            <param name="type">type of keywords</param>
+        </member>
+        <member name="M:Gordic.Pdil.SearchingCore.IStringSearchAlgorithm.FindAll(System.String)">
+            <summary>
+            Searches passed text and returns all occurrences of any keyword
+            </summary>
+            <param name="text">Text to search</param>
+            <returns>Array of occurrences</returns>
+        </member>
+        <member name="T:Gordic.Pdil.SearchingCore.StringSearchResult">
+            <summary>
+            Structure containing results of search 
+            (keyword and position in original text)
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdil.SearchingCore.StringSearchResult.#ctor(System.Int32,System.String,Gordic.Pdil.SearchingCore.ResultType)">
+            <summary>
+            Initialize string search result
+            </summary>
+            <param name="index">Index in text</param>
+            <param name="keyword">Found keyword</param>
+            <param name="restype">Type of found keyword</param>
+        </member>
+        <member name="P:Gordic.Pdil.SearchingCore.StringSearchResult.Index">
+            <summary>
+            Returns index of found keyword in original text
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdil.SearchingCore.StringSearchResult.Keyword">
+            <summary>
+            Returns keyword found by this result
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdil.SearchingCore.TreeNode">
+            <summary>
+            Tree node representing character and its 
+            transition and failure function
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdil.SearchingCore.TreeNode.#ctor(Gordic.Pdil.SearchingCore.TreeNode,System.Char,System.Int32)">
+            <summary>
+            Initialize tree node with specified character
+            </summary>
+            <param name="parent">Parent node</param>
+            <param name="c">Character</param>
+            <param name="d">Depth</param>
+        </member>
+        <member name="M:Gordic.Pdil.SearchingCore.TreeNode.AddResult(System.String,Gordic.Pdil.SearchingCore.ResultType)">
+            <summary>
+            Adds pattern ending in this node
+            </summary>
+            <param name="result">Pattern</param>
+            <param name="t">Result type</param>
+        </member>
+        <member name="M:Gordic.Pdil.SearchingCore.TreeNode.AddChild(Gordic.Pdil.SearchingCore.TreeNode)">
+            <summary>
+            Binds a child to the current node
+            </summary>
+            <param name="node">Node</param>
+        </member>
+        <member name="M:Gordic.Pdil.SearchingCore.TreeNode.GetChild(System.Char)">
+            <summary>
+            Returns transition to specified character (if exists)
+            </summary>
+            <param name="c">Character</param>
+            <returns>Returns TreeNode or null</returns>
+        </member>
+        <member name="M:Gordic.Pdil.SearchingCore.TreeNode.HasChild(System.Char)">
+            <summary>
+            Returns true if node has child with specified character
+            </summary>
+            <param name="c">Character</param>
+            <returns>True if such child exists</returns>
+        </member>
+        <member name="P:Gordic.Pdil.SearchingCore.TreeNode.Char">
+            <summary>
+            Character
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdil.SearchingCore.TreeNode.Parent">
+            <summary>
+            Parent tree node
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdil.SearchingCore.TreeNode.Failure">
+            <summary>
+            Failure function - descendant node
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdil.SearchingCore.TreeNode.Childs">
+            <summary>
+            Transition function - list of descendant nodes
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdil.SearchingCore.TreeNode.Result">
+            <summary>
+            Returns the pattern ending in this node
+            </summary>
+        </member>
+        <member name="P:Gordic.Pdil.SearchingCore.TreeNode.NodeResults">
+            <summary>
+            Returns all result types ending in this node
+            </summary>
+        </member>
+        <member name="T:Gordic.Pdil.SearchingCore.StringSearch">
+            <summary>
+            Class for searching string for one or multiple 
+            keywords using efficient Aho-Corasick search algorithm
+            </summary>
+        </member>
+        <member name="F:Gordic.Pdil.SearchingCore.StringSearch._root">
+            <summary>
+            Root of keyword tree
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdil.SearchingCore.StringSearch.#ctor(Gordic.Pdil.SearchingCore.StringSearch)">
+            <summary>
+            Initialize search algorithm with no keywords, just the root
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdil.SearchingCore.StringSearch.BuildTree(System.String[],Gordic.Pdil.SearchingCore.ResultType)">
+            <summary>
+            Build tree from specified keywords
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdil.SearchingCore.StringSearch.AddKeywords(System.String[],Gordic.Pdil.SearchingCore.ResultType)">
+            <summary>
+            Adds a new class of keywords to the search tree (such that each
+            terminal node has its own classification of "what it means" and
+            "if the search result is valid or not")
+            </summary>
+        </member>
+        <member name="M:Gordic.Pdil.SearchingCore.StringSearch.FindAll(System.String)">
+            <summary>
+            Searches passed text and returns all occurrences of any keyword
+            </summary>
+            <param name="text">Text to search</param>
+            <returns>Array of occurrences</returns>
+        </member>
+    </members>
+</doc>

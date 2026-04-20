@@ -1,0 +1,1749 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Iissp.Client</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Iissp.Client.GIisspClient`1">
+            <summary>
+            Základní generická třída pro web metody určené pro volání z GINIS
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspClient`1.Vysledek">
+            <summary>
+            Výsledek volání
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspClient`1.VysledekSspcsvy">
+            <summary>
+            Výsledek podle sspcsvy
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspClient`1.VysledneZpravy">
+            <summary>
+            Položky hlášení
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspClient`1.IdVolani">
+            <summary>
+            Jednoznacny identifikator volani IISSP
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspClient`1.LogickaChyba">
+            <summary>
+            Informace o chybě - podařilo se spojit s IISSP, ale přišel chybný výsledek, nastala chyba bezpečnostní, syntaktická nebo sémantická
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspClient`1.Vyjimka">
+            <summary>
+            Informace o chybě - když při volání IISSP došlo k exception
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspClient`1.AppLogic">
+            <summary>
+            Přístup k aplikační logice
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspClient`1.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspClient`1.GetConfig">
+            <summary>
+            Vrátí object s konfigurací volání IISSP naplněný podle GINIS parametrů
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspClient`1.SetConfig(Gordic.Iissp.Interface.WsConfiguration)">
+            <summary>
+            Nastavení parametrů
+            </summary>
+            <param name="wsConfig"></param>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspClient`1.TestVysledek">
+            <summary>
+            Možnost simulace volání WS s definováním výsledku
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspClient`1.TestSouborOdpoved">
+            <summary>
+            Možnost simulace volání WS s definováním odpovědi (v kombinaci s TestVysledek = VysledekVolaniTest.Test_PouzijSoubor)
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspClient`1.TestSpEkisRopDokladStatus">
+            <summary>
+            Jaký vrátit DokladStatus u metody B_SP_EKIS_ROP - default je "2" - Návrh ROP
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspClient`1.VstupniXml">
+            <summary>
+            Vstupní XML, které je posláno do IISSP
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspClient`1.VystupniXml">
+            <summary>
+            Výstupní XML, návrat z IISSP
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspClient`1.CteniHistorie">
+            <summary>
+            Příznak, že se nevolá WS, pouze se čte info z historie (pro dané ID, nebo daný IXP)
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspClient`1.IxpDokladu">
+            <summary>
+            Doklad, nad kterým se pracuje
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspClient`1.GetPersonId(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Podle ixs dokumentu dohledá ico a ucs (přes tabulku s primárním dokladem) a pro ně pak dohledá IC nejdříve pomocí ekosucs a pak ekosico
+            </summary>
+            <param name="ixsRef"></param>
+            <param name="ixpDokladu"></param>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspClient`1.ExecuteOnAib(Gordic.Iissp.Interface.EnvelopeType@)">
+            <summary>
+            Zavolání IISSP web metody - určeno pouze pro volání na AIB
+            </summary>
+            <param name="envelope">objekt se vstupními a po zavolání výstupními daty</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Iissp.Client.GCEdsExtension">
+            <summary>
+            Nadstavba nad tabulkama EDS/SMVS, voláno převážně z DNP resp. win. clienta
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsExtension.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsExtension.PozadavekDetail(Gordic.General.GInt32)">
+            <summary>
+            Vrátí detail požadavku
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsExtension.PozadavekDotazy(Gordic.General.GInt32)">
+            <summary>
+            Vrátí dotazy, které vrátily info k požadavku
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsExtension.PozadavekRequestResponse(Gordic.General.GInt32)">
+            <summary>
+            Vrátí request a response požadavku
+            </summary>
+            <param name="id_eds_exp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsExtension.OdpovedRequestResponse(Gordic.General.GInt32)">
+            <summary>
+            Vrátí request a response odpovědi na požadavek
+            </summary>
+            <param name="id_eds_exd"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsExtension.PozadavekZpravaId(Gordic.General.GInt32)">
+            <summary>
+            Vrátí hodnotu ZpravaId u požadavku - pro zvýraznění v XML
+            </summary>
+            <param name="id_eds_exp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsExtension.Dotaz(Gordic.General.GInt32)">
+            <summary>
+            Informace o dotazu
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsExtension.DotazPozadavky(Gordic.General.GInt32)">
+            <summary>
+            Vrátí požadavky, které byly zpracovány danou odpovědí
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsExtension.Pozadavky(System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Vrátí požadavky
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsExtension.Dotazy(System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Vrátí dotazy
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsExtension.Projekty(System.Boolean,Gordic.General.GInt32)">
+            <summary>
+            Projekty požadavku/dotazu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsExtension.Chyby(System.Boolean,Gordic.General.GInt32)">
+            <summary>
+            Projekty požadavku/dotazu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsExtension.NactiTextChyby(Gordic.Iissp.Interface.GEdssexeDataSet.SeznamRow)">
+            <summary>
+            Načte celý text chyby
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsExtension.ExportPromazani(Gordic.General.GInt32)">
+            <summary>
+            Smaže požadavky / dotazy starší jak daný počet dní, vrátí počet smazaných požadavků a dotazů
+            </summary>
+            <param name="dny"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsExtension.StornoPozadavku(Gordic.General.GInt32)">
+            <summary>
+            Provede storno požadavku
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.Client.GCEdsSmvs">
+            <summary>
+            Obsluha EdsSmvs
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GCEdsSmvs.IdVolaniEds">
+            <summary>
+            Id volání podle edssope.id_volani_eds. Při chybě, pokud se nevygeneruje ani Id volání, tak vrátí 0.
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GCEdsSmvs.VyslEds">
+            <summary>
+            Výsledek volání podle edscvys
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GCEdsSmvs.AktualniVerzeEdsSmvsDnp">
+            <summary>
+            aktuální verze EDS/SMVS DNP
+            číslo verze na začátku DNP stringu musí odpovídat tomuto číslu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsSmvs.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsSmvs.EdsCallME10(System.String,System.String,System.Int32)">
+            <summary>
+            ME10
+            </summary>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="zpravaCisloPosledni"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsSmvs.EdsCallME11(System.String,System.String,System.Int32)">
+            <summary>
+            ME11
+            </summary>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="zpravaCisloPosledni"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsSmvs.EdsCallME12(System.String,System.String,System.Int32)">
+            <summary>
+            ME12
+            </summary>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="zpravaCisloPosledni"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsSmvs.EdsCallMA12(System.String,System.String,System.Int16,System.String,System.String[])">
+            <summary>
+            MA12
+            </summary>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="rok"></param>
+            <param name="finMisto">null nebo fin misto (zadejte buď fin místo, nebo akceSeznam)</param>
+            <param name="akcePole">null nebo seznam akcí v poli (zadejte buď fin místo, nebo akceSeznam)</param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsSmvs.EdsCallME13(System.String,System.String,System.Int32)">
+            <summary>
+            ME13
+            </summary>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="zpravaCisloPosledni"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsSmvs.EdsCallME20(System.String,System.String,System.Int32)">
+            <summary>
+            ME20
+            </summary>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="zpravaCisloPosledni"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsSmvs.EdsCallMA20(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Int16,System.DateTime,System.String)">
+            <summary>
+            MA20
+            </summary>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="cis_eds"></param>
+            <param name="cis_ekis"></param>
+            <param name="cis_isp"></param>
+            <param name="cj"></param>
+            <param name="typ_rop"></param>
+            <param name="priz_schval"></param>
+            <param name="dat_sch_zam"></param>
+            <param name="duvod_zam"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsSmvs.EdsCallME60(System.String,System.String,System.Int32)">
+            <summary>
+            ME60
+            </summary>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="zpravaCisloPosledni"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsSmvs.EdsCallEisExportPozadavek(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            EdsCallEisExportPozadavek
+            </summary>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="zdroj">kdo o zavolání metody žádá (PPF, ZUD, ...)</param>
+            <param name="dnpParam1">DNP param1 služby 4520</param>
+            <param name="exportDb">EDSRezortni/EDSPracovni</param>
+            <param name="kapitola"></param>
+            <param name="titul"></param>
+            <param name="subTitul"></param>
+            <param name="podSubTitul"></param>
+            <param name="cisloEds"></param>
+            <param name="projektDokumentace"></param>
+            <param name="projektBilance"></param>
+            <param name="ridiciDokumentace"></param>
+            <param name="projektCerpani"></param>
+            <param name="limitPrikaz"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsSmvs.EdsCallEisExport(System.String,System.String,System.String,System.String,System.String,System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            EdsCallEisExport
+            </summary>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="zdroj"></param>
+            <param name="dnpParam1"></param>
+            <param name="cesta"></param>
+            <param name="zpravaCisloPosledni">pro EisExport</param>
+            <param name="zpravaCisloPosledni2">pro EisImportExportOdpoved</param>
+            <param name="vynutitVolani">volání se provádí jen v případě, že existuje požadavek ve stavu 10 – Odesláno nebo 30 – Částečně přijato (default), tímto parametrem je možno volání vynutit</param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsSmvs.EdsCallMExx(System.String,System.String,System.Int32)">
+            <summary>
+            Zavolá všechny MExx
+            </summary>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="zpravaCisloPosledni"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsSmvs.EdsCallByDnp(System.String)">
+            <summary>
+            Zavolání EdsSmvsMetody z DNP, obsluha Service4520
+            </summary>
+            <param name="param1"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsSmvs.ZavolejEdsCallME(Gordic.Iissp.Client.GCEdsSmvs.EdsCallME,System.String,System.String,System.String,System.String[])">
+            <summary>
+            V rámci DNP zavolá příslušnou ME metodu pomocí delegáta
+            </summary>
+            <param name="metoda"></param>
+            <param name="param1"></param>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="parts"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsSmvs.ZavolejEdsCallMA20(System.String,System.String,System.String,System.String[])">
+            <summary>
+            V rámci DNP zavolá MA20
+            </summary>
+            <param name="param1"></param>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="parts"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsSmvs.ZavolejEdsCallEisExportPozadavek(System.String,System.String,System.String,System.String[])">
+            <summary>
+            V rámci DNP zavolá EisExportPozadavek
+            </summary>
+            <param name="param1"></param>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="parts"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsSmvs.ZavolejEdsCallEisExport(System.String,System.String,System.String,System.String[])">
+            <summary>
+            0     1         2   3   4     5      6
+            Verze#EisExport#Ico#Ucs#Zdroj#Cesta[#ZpravaCisloPosledni]
+            </summary>
+            <param name="param1"></param>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="parts"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsSmvs.ZavolejEdsCallMExx(System.String)">
+            <summary>
+            V rámci DNP zavolá všechny ME metody 
+            </summary>
+            <param name="param1"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsSmvs.ZavolejWsAib(System.String,System.String,System.String,Gordic.Iissp.Interface.GEdsWsConfiguration)">
+            <summary>
+            Určena pro volání EDS/SMVS z AIB
+            </summary>
+            <param name="metoda">název metody, např. ME10</param>
+            <param name="ico_ext">ICO zadané jako atribut v AIB pro dohledání hash certifikátu</param>
+            <param name="vstupniXML">serializovaný objekt obalky EDS/SMVS</param>
+            <param name="config">konfigurace</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCEdsSmvs.GetEdsRequestResponse(Gordic.General.GInt32)">
+            <summary>
+            Vrátí request a response XML z databáze pro dané id_volani_eds
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.Client.GInboxClient">
+            <summary>
+            Práce s INBOX
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GInboxClient.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GInboxClient.IdInboxSsp">
+            <summary>
+            id_inbox_ssp
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GInboxClient.KeepRows">
+            <summary>
+            Tyto řádky dále ukazovat v GRIDu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GInboxClient.InboxStornoDavky(Gordic.General.GInt32)">
+            <summary>
+            Označí inbox dávku za Stornovanou
+            </summary>
+            <param name="id_inbox_ssp"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GInboxClient.StskPohybyTab(Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GInt32)">
+            <summary>
+            Pohyby
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GInboxClient.InboxSelectMainTab(System.Object[])">
+            <summary>
+            Vrácení obsahu inboxu
+            </summary>
+            <param name="vstup"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GInboxClient.InboxZpravy(Gordic.General.GInt32,Gordic.Iissp.Interface.GInboxZpravyColumns)">
+            <summary>
+            Vrátí zprávy v Inbox pro dané id
+            </summary>
+            <param name="id_inbox_ssp"></param>
+            <param name="sloupce"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GInboxClient.NactiZpravu(Gordic.General.GInt32,Gordic.General.GString,System.Int32)">
+            <summary>
+            Stáhne konkrétní zprávu
+            </summary>
+            <param name="id_inbox_ssp"></param>
+            <param name="zprava_id"></param>
+            <param name="i">poradi zpravy</param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GInboxClient.InboxUpdateVyzvednuto(Gordic.General.GInt32)">
+            <summary>
+            Označí inbox dávku za zpracovanou – vyzvedli jsme všechny zprávy
+            </summary>
+            <param name="id_inbox_ssp"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GInboxClient.InboxStav(Gordic.General.GInt32)">
+            <summary>
+            Zavolá SP_EKIS_DSTAV a vrátí počet zpráv
+            </summary>
+            <param name="id_inbox_ssp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GInboxClient.InboxVstup(Gordic.General.GInt32)">
+            <summary>
+            Odeslana davka INBOX
+            </summary>
+            <param name="id_inbox_ssp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GInboxClient.InboxVystup(Gordic.General.GInt32,System.Char@)">
+            <summary>
+            Poslední odpověď na INBOX metodu, když ještě není nic staženo
+            </summary>
+            <param name="id_inbox_ssp"></param>
+            <param name="status">stav (I,W,E), kde E jsou chyby jakékoli (i GINIS a komunikační)</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GInboxClient.ZpravaVystup(Gordic.General.GString,System.Char@)">
+            <summary>
+            Obsah přijaté zprávy
+            </summary>
+            <param name="zprava_id"></param>
+            <param name="status">stav (I,W,E), kde E jsou chyby jakékoli (i GINIS a komunikační)</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GInboxClient.IdVolaniVstup(Gordic.General.GInt32)">
+            <summary>
+            Vstupní XML
+            </summary>
+            <param name="id_volani_ssp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GInboxClient.IdVolaniVystup(Gordic.General.GInt32,System.Char@)">
+            <summary>
+            Výstupní XML
+            </summary>
+            <param name="id_volani_ssp"></param>
+            <param name="status">stav (I,W,E), kde E jsou chyby jakékoli (i GINIS a komunikační)</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GInboxClient.InboxCeroStroDavka(Gordic.General.GString,Gordic.General.GString,Gordic.Uct.Interface.GUctaspsDataSet.SeznamRow,Gordic.Uct.Interface.GUctaspsDataSet.SeznamRow,Gordic.General.GDate,Gordic.General.GDate,System.Boolean,System.Boolean)">
+            <summary>
+            Zavolá dávku čerpání rozpočtu a/nebo stavu rozpočtu
+            </summary>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="ik"></param>
+            <param name="ik_do"></param>
+            <param name="stavDatumOd">jen pro cero</param>
+            <param name="stavDatum"></param>
+            <param name="cero"></param>
+            <param name="stro"></param>
+            <returns>id inbox of ginis</returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GInboxClient.InboxVykazDavka(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16)">
+            <summary>
+            Zavolá dávku pro vygenerování výkazu
+            </summary>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="fim">finanční místo</param>
+            <param name="vykaz_typ">Dle číselníku hodnot: RV01/RV02/RV03/RV04</param>
+            <param name="rok">Rok, za který je požadováno sestavit výkaz.</param>
+            <param name="mesic_do">Číslo měsíce (1-12), do konce kterého je požadováno sestavit výkaz.</param>
+            <returns>id_inbox_ssp</returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GInboxClient.InboxStskDavkaRez(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GDate)">
+            <summary>
+            Zavolá dávku stav skutečnosti (B_SP_EKIS_STSK) přes součty Rez případně detail Rez (když není vyplněno id_hdr_ris_do)
+            </summary>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="fim">finanční místo</param>
+            <param name="id_hdr_ris"></param>
+            <param name="id_hdr_ris_do"></param>
+            <param name="stavDatumOd"></param>
+            <param name="stavDatum"></param>
+            <returns>id inbox of ginis</returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GInboxClient.InboxStskDavkaIK(Gordic.General.GString,Gordic.General.GString,Gordic.Uct.Interface.GUctaspsDataSet.SeznamRow,Gordic.Uct.Interface.GUctaspsDataSet.SeznamRow,Gordic.General.GDate,Gordic.General.GDate)">
+            <summary>
+            Zavolá dávku stav skutečnosti (B_SP_EKIS_STSK) přes součty IK případně detail Par,Pol (když není nic jiného vyplněno)
+            </summary>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="ik"></param>
+            <param name="ik_do"></param>
+            <param name="stavDatumOd"></param>
+            <param name="stavDatum"></param>
+            <returns>id inbox of ginis</returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GInboxClient.InboxHistorySelect(Gordic.General.GInt32)">
+            <summary>
+            Historie volání IISSP v rámci dané inbox dávky
+            </summary>
+            <param name="id_inbox_ssp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GInboxClient.UlozVysledekPorovnani(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GInt32)">
+            <summary>
+            Uloží výsledek porovnání výkazů
+            </summary>
+            <param name="id_inbox_ssp"></param>
+            <param name="stav_porovnani"></param>
+            <param name="pocet_rozdilu"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GInboxClient.InboxUpdateStatusPredAPoSestave(Gordic.General.GInt32,System.Boolean)">
+            <summary>
+            Chyba sestavy
+            </summary>
+            <param name="id_inbox_ssp"></param>
+            <param name="pred"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GInboxClient.InboxSelectStatus(Gordic.General.GInt32)">
+            <summary>
+            Zjistí stav inboxu před voláním sestavy, bude-li stav inboxu "ve frontě", tak zkusí zavolat sestavu, jinak jen LoadData
+            </summary>
+            <param name="id_inbox_ssp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GInboxClient.FimIisspDefinovanoProIcoNeboUcs(Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Zjistí na jaké úrovni je definováno FIM
+            </summary>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GInboxClient.NactiVysledekPorovnaniVykazu(Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,System.Int32@)">
+            <summary>
+            Načte výkaz
+            </summary>
+            <param name="vykaz_typ_iissp"></param>
+            <param name="rok"></param>
+            <param name="mesic_do"></param>
+            <param name="isp_fim"></param>
+            <param name="rozdilu"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GInboxClient.KontrolaIdInboxSspVsRokMesic(Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString)">
+            <summary>
+            Kontrola id_inbox_ssp (že porovnávám shodně vygenerované výkazy)
+            </summary>
+            <param name="id_inbox_ssp"></param>
+            <param name="vykaz_typ_iissp"></param>
+            <param name="rok"></param>
+            <param name="mesic_do"></param>
+            <param name="isp_fim"></param>
+            <returns>0=OK,10=...,20=...,30=...</returns>
+        </member>
+        <member name="T:Gordic.Iissp.Client.GCOffline">
+            <summary>
+            Stará se o offline dávky
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCOffline.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCOffline.KeZpracovaniSouhrnRop">
+            <summary>
+            Počet dokladů ke zpracování - ROP
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCOffline.KeZpracovaniSouhrn">
+            <summary>
+            Počet dokladů ke zpracování - REZ
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCOffline.SeznamDavekRop">
+            <summary>
+            Seznam dávek - ROP
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCOffline.SeznamDavek">
+            <summary>
+            Seznam dávek - REZ
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GCOffline.Davka">
+            <summary>
+            Obsah dávky
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GCOffline.Soubor">
+            <summary>
+            Cesta a název souboru
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GCOffline.IdDavky">
+            <summary>
+            ID právě vytvořené dávky
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GCOffline.IdDavkyExt">
+            <summary>
+            Ext ID právě vytvořené dávky
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCOffline.RopDavka">
+            <summary>
+            Vytvoření dávky ROP
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCOffline.RezZpracujDavkaVysledek(Gordic.Iissp.Interface.GSspsdavNextDavkaDataSet.SeznamRow,System.String)">
+            <summary>
+            Zpracování dávky rezervace / rezervace změna
+            </summary>
+            <param name="nextDavkaInfo"></param>
+            <param name="xml">dávka</param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCOffline.RopZpracujDavkaVysledek(Gordic.Iissp.Interface.GSspsdavNextDavkaDataSet.SeznamRow,System.String)">
+            <summary>
+            Zpracování dávky ROP
+            </summary>
+            <param name="nextDavkaInfo"></param>
+            <param name="xml">dávka</param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCOffline.RopNextDavkaToLoad">
+            <summary>
+            DavkaId další dávky k přijetí
+            </summary>
+            <returns>Pokud další dávka není, tak Row.Count = 0</returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCOffline.RezNextDavkaToLoad">
+            <summary>
+            DavkaId další dávky k přijetí
+            </summary>
+            <returns>Pokud další dávka není, tak Row.Count = 0</returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCOffline.VratObsahDavkyOdesilaneRop(Gordic.General.GInt32)">
+            <summary>
+            Podle id_davky_ssp vrátí obsah dávky odesílané do IISSP - ROP
+            </summary>
+            <param name="id_davky_ssp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCOffline.VratObsahDavkyOdesilane(Gordic.General.GInt32)">
+            <summary>
+            Podle id_davky_ssp vrátí obsah dávky odesílané do IISSP
+            </summary>
+            <param name="id_davky_ssp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCOffline.VratObsahDavkyPrijateRop(Gordic.General.GInt32)">
+            <summary>
+            Podle id_davky_ssp vrátí obsah dávky přijaté z IISSP - ROP
+            </summary>
+            <param name="id_davky_ssp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCOffline.VratObsahDavkyPrijate(Gordic.General.GInt32)">
+            <summary>
+            Podle id_davky_ssp vrátí obsah dávky přijaté z IISSP
+            </summary>
+            <param name="id_davky_ssp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCOffline.UpdateUmisteniSouboru(Gordic.General.GInt32,System.String,System.Boolean)">
+            <summary>
+            Uloží nové info o uložení souboru - provádí commit
+            </summary>
+            <param name="id_davky_ssp"></param>
+            <param name="fileName"></param>
+            <param name="isRop"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCOffline.DeleteUmisteniSouboru(Gordic.General.GInt32)">
+            <summary>
+            Nastaví cestu a file na N/A - provádí commit
+            </summary>
+            <param name="id_davky_ssp"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCOffline.DetailVolani(Gordic.General.GInt32)">
+            <summary>
+            Vrátí detail o offline volání
+            </summary>
+            <param name="id_volani_ssp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCOffline.DetailVolaniRop(Gordic.General.GInt32)">
+            <summary>
+            Vrátí detail o offline volání - ROP
+            </summary>
+            <param name="id_volani_ssp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GCOffline.RezAllNextDavka">
+            <summary>
+            Vrátí postupně všechny dávky pro Rezervace a pak pro RezervaceZmena
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Iissp.Client.GIisspVyvoj">
+            <summary>
+            Slouží pouze pro vývoj
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspVyvoj.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspVyvoj.PripravKRezervaci(Gordic.General.GString)">
+            <summary>
+            Nastavení příznaku s_vyriz_rezsp u všech dokladů případu na nulu
+            </summary>
+            <param name="ixs_hpr">identifikátor případu sspshpr.ixs_hpr</param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspVyvoj.PripravKRezervaciShodPriznakAktualizace(Gordic.General.GString)">
+            <summary>
+            Nastavení příznaku s_vyriz_rezsp u všech dokladů případu na nulu a shození id_hdr_ris (bude se znovu provádět Rezervace ne RezervaceZmena)
+            </summary>
+            <param name="ixs_hpr">identifikátor případu sspshpr.ixs_hpr</param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspVyvoj.LoadEdsToDb(System.String)">
+            <summary>
+            Naplní INT tabulky XML exportem EDS
+            </summary>
+            <param name="path">cesta s XML soubory</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspVyvoj.AnyTest(System.Object)">
+            <summary>
+            Jakýkoli test
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.Client.GIisspExtension">
+            <summary>
+            Nadstavba nad metodami IISSP, pracuje s tabulkami GINIS, voláno převážně z DNP
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspExtension.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspExtension.Rezervace(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.Iissp.Interface.VysledekVolaniTest,System.Collections.Generic.List{Gordic.Iissp.Interface.GZpracovaniHlaseniZaDoklad}@,Gordic.General.GString,System.String@,System.Boolean)">
+            <summary>
+            Rezervace celého případu
+            </summary>
+            <param name="ixs_hpr">identifikátor případu sspshpr.ixs_hpr</param>
+            <param name="ixs_ref">pod kým se chystáme to odeslat</param>
+            <param name="ico">IČO</param>
+            <param name="ucs">UCS</param>
+            <param name="rok">ROK</param>
+            <param name="vyslVolaniTest">volat WS nebo simulovat nějakou odpověď?</param>
+            <param name="dokErrorPolozky">všechny položky typu 'E' napříč všema dokladama</param>
+            <param name="pid_rd">PID aktualizačního dokladu ROZ</param>
+            <param name="cislaRezervaci">čísla zpracovaných rezervací</param>
+            <param name="hromRez">zda se jedná o hromadnou rezervaci</param>
+            <returns>výsledek nejhoršího výsledku za všechny doklady</returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspExtension.VynulujInfoDokladStavVolani(Gordic.General.GString)">
+            <summary>
+            Vynuluje informaci o stavu volání všech dokladů případu
+            </summary>
+            <param name="ixs_hpr"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspExtension.RezervaceHistorie(Gordic.General.GString,Gordic.General.GInt32)">
+            <summary>
+            Vrátí historii volání Státní pokladny pro daný případ
+            </summary>
+            <param name="ixs_hpr">případ</param>
+            <param name="id_volani_ssp">id_volani_ssp</param>
+            <returns>datatable</returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspExtension.TypKomunikaceIissp(Gordic.General.GInt16,Gordic.General.GString)">
+            <summary>
+            Způsob komunikace se Státní pokladnou
+            SELECT * FROM vas.ekoctii
+            typ_kom_iissp|typ_kom_iissp_txt|k_v|k_s|
+            ========================================
+            1|Simulace online komunikace s IISSP přes WS (testovací)|0| |
+            2|Online komunikace s IISSP přes WS (provozní)|0| |
+            4|Offline komunikace s IISSP pomocí dávky XML (provozní)|0| |
+            </summary>
+            <param name="rok">ekon. par. Rok</param>
+            <param name="ico">ico dokladu</param>
+            <returns>typ_kom_iissp</returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspExtension.TestBlokaceUcs(Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Otestuje blokaci volání IISSP pro ucs, pokud je blokováno, tak vyhodí výjimku.
+            </summary>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspExtension.GetIcoUcsRok(Gordic.General.GString,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GInt16@)">
+            <summary>
+            Pro ixp dokladu ROP zjistí z rozspid ico, ucs a rok.
+            </summary>
+            <param name="ixp"></param>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="rok"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspExtension.GetDetailVolani(Gordic.General.GInt32)">
+            <summary>
+            Detail volání
+            </summary>
+            <param name="id_volani_ssp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspExtension.GetCerpano">
+            <summary>
+            Informace o položkách odeslaných do IISSP a částkách
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspExtension.GetStavRezervacePodleJejichId(Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Zavolá WS rez. dotaz – pro číslo rezervace
+            </summary>
+            <param name="ixs_hpr"></param>
+            <param name="id_hdr"></param>
+            <param name="id_hdr_ris"></param>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspExtension.GetStavRezervacePodleNasehoIdDokladu(Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Zavolá WS rez. dotaz – pro doklad
+            </summary>
+            <param name="ixs_hpr"></param>
+            <param name="id_hdr"></param>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspExtension.GetStavRezervacePodleNasehoIdPripadu(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Zavolá WS rez. dotaz – pro případ – dotáhne se aktuální ixs_ref
+            </summary>
+            <param name="ixs_hpr"></param>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspExtension.GetStavRezervacePodleNasehoIdPripadu(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Zavolá WS rez. dotaz – pro případ – pro DNP, tj. na vstupu je zadáno ixs_ref
+            </summary>
+            <param name="ixs_hpr"></param>
+            <param name="ixs_ref"></param>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspExtension.GetSeznamRezervaciPripadu(Gordic.General.GString)">
+            <summary>
+            Vrátí seznam rezervací případu
+            </summary>
+            <param name="ixs_hpr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspExtension.GetHlavickaRezervace(Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString)">
+            <summary>
+            Vrátí stav hlavičky rezervace uložený v sspshdp
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspExtension.GetPolozkyRezervace(Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString)">
+            <summary>
+            Vrátí stav položek rezervace uložený v sspdppp
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspExtension.GetPolozkyRezervaceExt(Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString)">
+            <summary>
+            Vrátí stav položek rezervace uložený v sspdppp + ext
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspExtension.OtevriRezervaci(Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Otevření rezervace
+            </summary>
+            <param name="ixs_hpr"></param>
+            <param name="id_hdr"></param>
+            <param name="id_hdr_ris"></param>
+            <param name="ico"></param>
+            <param name="ucs"></param>
+            <param name="ixs_ref"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspExtension.UzavriRezervaci(Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.Boolean)">
+            <summary>
+            Uzavření rezervace - ixs_ref akceptuje null
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspExtension.GetHistStavuRezervace(Gordic.General.GString)">
+            <summary>
+            Vrátí historii stavu položek rezervace
+            </summary>
+            <param name="ixs_hpr"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspExtension.LzeUvolnit(Gordic.General.GString)">
+            <summary>
+            Zda lze uvolnit rezervaci (pro SML)
+            </summary>
+            <param name="ixs_hpr"></param>
+            <returns>"true", pokud lze uvolnit; jinak text, proč to nejde</returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspExtension.LzeUzavrit(Gordic.General.GString)">
+            <summary>
+            Zda lze případ uzavřít
+            </summary>
+            <param name="ixs_hpr"></param>
+            <returns>"true", pokud lze uvolnit; jinak text, proč to nejde</returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspExtension.OznacPripadZaUzavreny(Gordic.General.GString)">
+            <summary>
+            Jen nastaví sspshpr.s_rezsp = 1
+            </summary>
+            <param name="ixs_hpr"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspExtension.GetStavPodleRspgetstate(Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>
+            Zjištění stavu ala spg_rspgetstate
+            </summary>
+            <param name="ixs_hpr"></param>
+            <param name="rok"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Iissp.Client.GIisspXmlDownload">
+            <summary>
+            Klientská část aplikační logiky pro IISP
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspXmlDownload.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspXmlDownload.CiselnikyWeb(System.String,Gordic.General.GString)">
+            <summary>
+            Vrátí Seznam číselníku na webu
+            </summary>
+            <param name="url"></param>
+            <param name="ico"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspXmlDownload.NactiCiselnik(System.String)">
+            <summary>
+            Nacte ciselnik
+            </summary>
+            <param name="url"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspXmlDownload.CiselnikyWebOnAIB(System.String,System.String,Gordic.General.GProxyType,System.String,System.String,System.String)">
+            <summary>
+            Stahne ciselniky - pro AIB
+            </summary>
+            <param name="url"></param>
+            <param name="kapitola"></param>
+            <param name="proxyAuthType"></param>
+            <param name="proxyUserName"></param>
+            <param name="proxyPassword"></param>
+            <param name="proxyUrl"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspXmlDownload.NactiCiselnikOnAIB(System.String,Gordic.General.GProxyType,System.String,System.String,System.String)">
+            <summary>
+             Nacte ciselnik - pro AIB
+            </summary>
+            <param name="url"></param>
+            <param name="proxyAuthType"></param>
+            <param name="proxyUserName"></param>
+            <param name="proxyPassword"></param>
+            <param name="proxyUrl"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Iissp.Client.GIisspNapocetCiselniku">
+            <summary>
+            Klientská část aplikační logiky pro IISP
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspNapocetCiselniku.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspNapocetCiselniku.VratPosledniCiselnikyVDb">
+            <summary>
+            Nact seznam nejaktualnejsich ciselniku v DB
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspNapocetCiselniku.VratVsechnyVerzeCiselniku(Gordic.General.GString)">
+            <summary>
+            Nacte seznam vsech ciselniku v DB pro dany nazev
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspNapocetCiselniku.NactiCiselnik(System.String)">
+            <summary>
+            Nacti ciselnik
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspNapocetCiselniku.CompareVersions(Gordic.General.GInt32,Gordic.General.GInt32,System.String,Gordic.Iissp.Interface.TypZmenCiselnikuIISSP)">
+            <summary>
+            Select pro porovnani dvou verzi ciselniku
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspNapocetCiselniku.NactiMaily(Gordic.Iissp.Interface.GSspsdacDataSet.SeznamRow)">
+            <summary>
+            vrati tabulku mailovych adres pro konkretni
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspNapocetCiselniku.UlozMaily(Gordic.Iissp.Interface.GSspsaviDataSet.SeznamDataTable)">
+            <summary>
+            Ulozi seznam mailu do tabulky
+            </summary>
+            <param name="dt"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspNapocetCiselniku.LoadCiselniky(System.String)">
+            <summary>
+            Napocet cislenku
+            </summary>
+            <param name="url"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspNapocetCiselniku.VratUpdateEnabled(Gordic.Iissp.Interface.GSspsdacDataSet.SeznamRow)">
+            <summary>
+            Jestli se jedna o radek, ktery se bude napocitavat
+            </summary>
+            <param name="row"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspNapocetCiselniku.NactiCiselnik(Gordic.Iissp.Interface.GSspsdacDataSet.SeznamRow)">
+            <summary>
+            Nacte ciselnik
+            </summary>
+            <param name="r"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspNapocetCiselniku.ImportVse(Gordic.Iissp.Interface.ShowWaitFormDelegate,Gordic.Iissp.Interface.VoidDelegate0,Gordic.Iissp.Interface.VoidDelegate0)">
+            <summary>
+            metoda pro nápočet všech číselníků státní pokladny
+            </summary>
+            <param name="showWaitFormDelegate"></param>
+            <param name="hideWaitFormDelegate"></param>
+            <param name="refreshIconDelegate"></param>
+        </member>
+        <member name="T:Gordic.Iissp.Client.GPpfBankClient">
+            <summary>
+            Napojení na PPF Banka API
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GPpfBankClient.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GPpfBankClient.CallPpfService(Gordic.Iissp.Interface.GPpfServiceParam)">
+            <summary>
+             Zavolání služby / skupiny služeb z DNP nebo modulu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GPpfBankClient.CallPpfService(Gordic.Iissp.Interface.GPpfWsConfig,Gordic.Iissp.Interface.GPpfApiInput)">
+            <summary>
+            Zavolání služby z AIB
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GPpfBankClient.CallPpfServiceUniversal(System.String,Gordic.Iissp.Interface.GPpfWsConfig,System.String)">
+            <summary>
+            Zavolání služby z AIB – obecné
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GPpfBankClient.GetPpfPaymentJson(Gordic.General.GString,Gordic.General.GInt32,System.String@,System.String@)">
+            <summary>
+            Request a response JSON (případně chybná response, což by bylo jakési HTML)
+            Dojde-li k chybě tak outParam1="CHYBA" a outParam2=text chyby
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.Client.GIisspBEkisSpSbuv">
+            <summary>
+            Klient pro volání web služby B_EKIS_SP_SBUV z GINIS
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBEkisSpSbuv.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="T:Gordic.Iissp.Client.GIisspBSpEkisVykaz">
+            <summary>
+            Klient pro volání web služby B_SP_EKIS_VYKAZ
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBSpEkisVykaz.VykazPozadavek">
+            <summary>
+            Vstup volání web služby - element VykazPozadavek
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBSpEkisVykaz.DavkaOdpoved">
+            <summary>
+            Výsledek volání web služby - element DavkaOdpoved
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBSpEkisVykaz.IdInboxSsp">
+            <summary>
+            ID inbox volání (sspsinb.id_inbox_ssp)
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBSpEkisVykaz.KeepRows">
+            <summary>
+            Tyto řádky dále ukazovat v GRIDu
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBSpEkisVykaz.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBSpEkisVykaz.Execute(Gordic.Iissp.Interface.VykazPozadavekType,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+             Zavolání web metody B_SP_EKIS_VYKAZ
+            </summary>
+            <param name="vykaz">objekt se vstupními daty</param>
+            <param name="ico">ico</param>
+            <param name="ucs">ucs</param>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBSpEkisVykaz.IdInboxExt">
+            <summary>
+            GINIS jednoznačný identifikátor dávky
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.Client.GIisspBSpEkisStsk">
+            <summary>
+            Klient pro volání web služby B_SP_EKIS_STSK
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBSpEkisStsk.SkutecnostStavPozadavek">
+            <summary>
+            Vstup volání web služby - element SkutecnostStavPozadavek
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBSpEkisStsk.DavkaOdpoved">
+            <summary>
+            Výsledek volání web služby - element DavkaOdpoved
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBSpEkisStsk.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBSpEkisStsk.Execute(Gordic.Iissp.Interface.SkutecnostStavPozadavekType,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+             Zavolání web metody B_SP_EKIS_STSK
+            </summary>
+            <param name="cero">objekt se vstupními daty</param>
+            <param name="ico">ico</param>
+            <param name="ucs">ucs</param>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBSpEkisStsk.IdInboxExt">
+            <summary>
+            GINIS jednoznačný identifikátor dávky
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.Client.GIisspBSpEkisCero">
+            <summary>
+            Klient pro volání web služby B_SP_EKIS_CERO
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBSpEkisCero.RozpocetCerpaniStavPozadavek">
+            <summary>
+            Vstup volání web služby - element RozpocetCerpaniStavPozadavek
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBSpEkisCero.DavkaOdpoved">
+            <summary>
+            Výsledek volání web služby - element DavkaOdpoved
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBSpEkisCero.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBSpEkisCero.Execute(Gordic.Iissp.Interface.RozpocetCerpaniStavPozadavekType,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+             Zavolání web metody B_SP_EKIS_CERO
+            </summary>
+            <param name="cero">objekt se vstupními daty</param>
+            <param name="ico">ico</param>
+            <param name="ucs">ucs</param>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBSpEkisCero.IdInboxExt">
+            <summary>
+            GINIS jednoznačný identifikátor dávky
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.Client.GIisspBSpEkisInbox">
+            <summary>
+            Klient pro volání web služby B_SP_EKIS_INBOX
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBSpEkisInbox.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBSpEkisInbox.Execute(Gordic.General.GInt32,Gordic.General.GString,System.Int32)">
+            <summary>
+            Zavolání web metody B_SP_EKIS_INBOX
+            </summary>
+            <param name="id_inbox_ssp">sspsinb.id_inbox_ssp</param>
+            <param name="zpravaId">sspsoin.zprava_id</param>
+            <param name="i">poradi zpravy</param>
+        </member>
+        <member name="T:Gordic.Iissp.Client.GIisspBSpEkisDstav">
+            <summary>
+            Klient pro volání web služby B_SP_EKIS_DSTAV
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBSpEkisDstav.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBSpEkisDstav.Execute(Gordic.General.GInt32)">
+            <summary>
+            Zavolání web metody B_SP_EKIS_DSTAV
+            </summary>
+            <param name="id_inbox_ssp"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Iissp.Client.GIisspBSpEkisStro">
+            <summary>
+            Klient pro volání web služby B_SP_EKIS_STRO z GINIS
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBSpEkisStro.RozpocetStavPozadavek">
+            <summary>
+            Vstup volání web služby - element PreuctovaniSkutecnostiType
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBSpEkisStro.DavkaOdpoved">
+            <summary>
+            Výsledek volání web služby - element PreuctovaniSkutecnostiOdpovedType
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBSpEkisStro.IdInboxExt">
+            <summary>
+            GINIS jednoznačný identifikátor dávky
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBSpEkisStro.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBSpEkisStro.Execute(Gordic.Iissp.Interface.RozpocetStavPozadavekType,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+             Zavolání web metody B_SP_EKIS_STRO
+            </summary>
+            <param name="stro">objekt se vstupními daty</param>
+            <param name="ico">ico</param>
+            <param name="ucs">ucs</param>
+        </member>
+        <member name="T:Gordic.Iissp.Client.GIisspBEkisSpPsk">
+            <summary>
+            Klient pro volání web služby B_EKIS_SP_REZ z GINIS
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBEkisSpPsk.Psk">
+            <summary>
+            Vstup volání web služby - element PreuctovaniSkutecnostiType
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBEkisSpPsk.PskOdpoved">
+            <summary>
+            Výsledek volání web služby - element PreuctovaniSkutecnostiOdpovedType
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBEkisSpPsk.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBEkisSpPsk.Execute(Gordic.Iissp.Interface.PreuctovaniSkutecnostiType,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+             Zavolání web metody B_EKIS_SP_PSK
+            </summary>
+            <param name="psk">objekt se vstupními daty</param>
+            <param name="senderPersonId">PersonId dosazený do struktury Sender</param>
+            <param name="ico">ico</param>
+            <param name="ucs">ucs</param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBEkisSpPsk.Execute(System.Xml.XmlNode,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+             Zavolání web metody B_EKIS_SP_PSK
+            </summary>
+            <param name="psk">vstupní data ve formě XmlNode</param>
+            <param name="senderPersonId">PersonId dosazený do struktury Sender</param>
+            <param name="ico">ico</param>
+            <param name="ucs">ucs</param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBEkisSpPsk.GetHistory(Gordic.General.GInt32)">
+            <summary>
+            Vrátí vstup a výstup volání pro dané id_volani
+            </summary>
+            <param name="idVolani">id volání</param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBEkisSpPsk.GetHistorySez(Gordic.General.GInt32,Gordic.General.GString)">
+            <summary>
+            Vrátí výsledky volání IISSP
+            </summary>
+            <param name="id_volani_ssp"></param>
+            <param name="id_ext"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Iissp.Client.GIisspBSpEkisRez">
+            <summary>
+            Klient pro volání web služby B_EKIS_SP_REZ z GINIS
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBSpEkisRez.RezervaceDotaz">
+            <summary>
+            Vstup volání web služby - element RezervaceType
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBSpEkisRez.RezervaceVypis">
+            <summary>
+            Výsledek volání web služby - element RezervaceOdpovedType
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBSpEkisRez.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBSpEkisRez.Execute(Gordic.Iissp.Interface.RezervaceDotazType,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+             Zavolání web metody B_EKIS_SP_REZ
+            </summary>
+            <param name="rez">objekt se vstupními daty</param>
+            <param name="ixsPripadu">ixs případu (sspshdr.ixs_hpr)</param>
+            <param name="idDokladu">id dokladu (sspshdr.id_hdr)</param>
+            <param name="senderPersonId">PersonId dosazený do struktury Sender</param>
+            <param name="ico">ico</param>
+            <param name="ucs">ucs</param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBSpEkisRez.GetHistory(Gordic.General.GInt32)">
+            <summary>
+            Vrátí vstup a výstup volání pro dané id_volani (nastaví RezervacePozadavek i RezervaceOdpoved)
+            </summary>
+            <param name="idVolani">id volání</param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBSpEkisRez.GetHistory(Gordic.General.GString)">
+            <summary>
+            Vrátí výsledky volání IISSP (všechno možné, v denormalizované formě) pro ixp_sml_pri v tabulce vas.smlapid
+            </summary>
+            <param name="ixp"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Iissp.Client.GIisspBEkisSpTestws">
+            <summary>
+            Klient pro volání web služby B_EKIS_SP_Testws z GINIS
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBEkisSpTestws.DataTestovaci">
+            <summary>
+            Vstup volání web služby - element RozpoctoveOpatreniType
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBEkisSpTestws.DataTestovaciOdpoved">
+            <summary>
+            Výsledek volání web služby - element RozpoctoveOpatreniOdpoved
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBEkisSpTestws.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBEkisSpTestws.Execute(Gordic.Iissp.Interface.Test.DataTestovaciType,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+             Zavolání web metody B_EKIS_SP_TESTWS
+            </summary>
+            <param name="data">objekt se vstupními daty</param>
+            <param name="ico">IČO EKIS</param>
+            <param name="senderPersonId">PersonId dosazený do struktury Sender</param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBEkisSpTestws.ExecuteOnAib(Gordic.Iissp.Interface.Test.EnvelopeType@)">
+            <summary>
+            Zavolání IISSP web metody - určeno pouze pro volání na AIB
+            </summary>
+            <param name="envelope">objekt se vstupními a po zavolání výstupními daty</param>
+            <returns></returns>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBEkisSpTestws.IdVolani">
+            <summary>
+            Jednoznacny identifikator volani IISSP
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBEkisSpTestws.VstupniXml">
+            <summary>
+            Vstupní XML, které je posláno do IISSP
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBEkisSpTestws.VystupniXml">
+            <summary>
+            Výstupní XML, návrat z IISSP
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBEkisSpTestws.SetConfig(Gordic.Iissp.Interface.WsConfiguration)">
+            <summary>
+            Nastavení parametrů
+            </summary>
+            <param name="wsConfig"></param>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBEkisSpTestws.ElPodepsat">
+            <summary>
+            Zda zprávu el. podepsat – default je false
+            </summary>
+        </member>
+        <member name="T:Gordic.Iissp.Client.GIisspBEkisSpRezAkt">
+            <summary>
+            Klient pro volání web služby B_EKIS_SP_REZ z GINIS
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBEkisSpRezAkt.RezervaceZmena">
+            <summary>
+            Vstup volání web služby - element RezervaceZmenaType
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBEkisSpRezAkt.RezervaceZmenaOdpoved">
+            <summary>
+            Výsledek volání web služby - element RezervaceZmenaOdpovedType
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBEkisSpRezAkt.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBEkisSpRezAkt.Execute(Gordic.Iissp.Interface.RezervaceZmenaType,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+             Zavolání web metody B_EKIS_SP_REZ_AKT
+            </summary>
+            <param name="rez">objekt se vstupními daty</param>
+            <param name="ixsPripadu">ixs případu (sspshdr.ixs_hpr)</param>
+            <param name="idDokladu">id dokladu (sspshdr.id_hdr)</param>
+            <param name="senderPersonId">PersonId dosazený do struktury Sender</param>
+            <param name="ico">ico</param>
+            <param name="ucs">ucs</param>
+            <param name="rezervaceCislo">pokladní číslo rezervace</param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBEkisSpRezAkt.GetHistory(Gordic.General.GInt32)">
+            <summary>
+            Vrátí vstup a výstup volání pro dané id_volani (nastaví RezervaceZmena i RezervaceZmenaOdpoved)
+            </summary>
+            <param name="idVolani">id volání</param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBEkisSpRezAkt.GetHistory(Gordic.General.GString)">
+            <summary>
+            Vrátí výsledky volání IISSP (všechno možné, v denormalizované formě) pro ixp_sml_pri v tabulce vas.smlapid
+            </summary>
+            <param name="ixp"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Iissp.Client.GIisspBEkisSpRez">
+            <summary>
+            Klient pro volání web služby B_EKIS_SP_REZ z GINIS
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBEkisSpRez.Rezervace">
+            <summary>
+            Vstup volání web služby - element RezervaceType
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBEkisSpRez.RezervaceOdpoved">
+            <summary>
+            Výsledek volání web služby - element RezervaceOdpovedType
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBEkisSpRez.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBEkisSpRez.Execute(Gordic.Iissp.Interface.RezervaceType,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+             Zavolání web metody B_EKIS_SP_REZ
+            </summary>
+            <param name="rez">objekt se vstupními daty</param>
+            <param name="ixsPripadu">ixs případu (sspshdr.ixs_hpr)</param>
+            <param name="idDokladu">id dokladu (sspshdr.id_hdr)</param>
+            <param name="senderPersonId">PersonId dosazený do struktury Sender</param>
+            <param name="ico">ico</param>
+            <param name="ucs">ucs</param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBEkisSpRez.GetHistory(Gordic.General.GInt32)">
+            <summary>
+            Vrátí vstup a výstup volání pro dané id_volani (nastaví RezervacePozadavek i RezervaceOdpoved)
+            </summary>
+            <param name="idVolani">id volání</param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBEkisSpRez.GetHistory(Gordic.General.GString)">
+            <summary>
+            Vrátí výsledky volání IISSP (všechno možné, v denormalizované formě) pro ixp_sml_pri v tabulce vas.smlapid
+            </summary>
+            <param name="ixp"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Iissp.Client.GIisspBSpEkisRop">
+            <summary>
+            Klient pro volání web služby B_SP_EKIS_ROP z GINIS
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBSpEkisRop.RozpoctoveOpatreniIdentifikace">
+            <summary>
+            Vstup volání web služby - element RozpoctoveOpatreniIdentifikace
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBSpEkisRop.RozpoctoveOpatreniVypis">
+            <summary>
+            Výsledek volání web služby - element RozpoctoveOpatreniVypis
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBSpEkisRop.DokladStatus">
+            <summary>
+            Status dokladu v IISSP
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBSpEkisRop.RozpoctoveOpatreniCislo">
+            <summary>
+            Číslo dokladu rozpočtového opatření v IISSP RISRE
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBSpEkisRop.RozpoctoveOpatreniCisloKapitola">
+            <summary>
+            IISSP RISRE přidělí každému dokladu ROP (včetně návrhů ROP) unikátní číslo za danou kapitolu a rok (JVACHA: dle testu může být null)
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBSpEkisRop.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBSpEkisRop.Execute(Gordic.Iissp.Interface.RozpoctoveOpatreniIdentifikaceType,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.String)">
+            <summary>
+            Zavolání web metody B_SP_EKIS_ROP
+            </summary>
+            <param name="ropIdent">objekt se vstupními daty</param>
+            <param name="ixpDokladu">ixp dokladu</param>
+            <param name="senderPersonId">PersonId dosazený do struktury Sender</param>
+            <param name="ico">ico dokladu</param>
+            <param name="ucs">ucs dokladu</param>
+            <param name="simulaceDokladStatus">jaký doklad status vrátit přisimulaci</param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBSpEkisRop.GetHistory(Gordic.General.GInt32)">
+            <summary>
+            Vrátí vstup a výstup volání pro dané id_volani (nastaví RozpoctoveOpatreniIdentifikace i RozpoctoveOpatreniVypis)
+            </summary>
+            <param name="idVolani">id volání</param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBSpEkisRop.GetHistory(Gordic.General.GString,Gordic.General.GInt32)">
+            <summary>
+            Vrátí výsledky volání IISSP (všechno možné, v denormalizované formě) pro ixp_dokl
+            </summary>
+            <param name="ixp"></param>
+            <param name="id_volani_ssp"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Iissp.Client.GIisspBEkisSpRop">
+            <summary>
+            Klient pro volání web služby B_EKIS_SP_ROP z GINIS
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBEkisSpRop.RozpoctoveOpatreniPozadavek">
+            <summary>
+            Vstup volání web služby - element RozpoctoveOpatreniType
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBEkisSpRop.RozpoctoveOpatreniOdpoved">
+            <summary>
+            Výsledek volání web služby - element RozpoctoveOpatreniOdpoved
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBEkisSpRop.DokladStatus">
+            <summary>
+            Status dokladu v IISSP
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBEkisSpRop.RozpoctoveOpatreniCislo">
+            <summary>
+            Číslo dokladu rozpočtového opatření v IISSP RISRE
+            </summary>
+        </member>
+        <member name="P:Gordic.Iissp.Client.GIisspBEkisSpRop.RozpoctoveOpatreniCisloKapitola">
+            <summary>
+            IISSP RISRE přidělí každému dokladu ROP (včetně návrhů ROP) unikátní číslo za danou kapitolu a rok (JVACHA: dle testu může být null)
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBEkisSpRop.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBEkisSpRop.Execute(Gordic.Iissp.Interface.RozpoctoveOpatreniType,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.String)">
+            <summary>
+             Zavolání web metody B_EKIS_SP_ROP
+            </summary>
+            <param name="rop">objekt se vstupními daty</param>
+            <param name="ixpDokladu">ixp dokladu</param>
+            <param name="senderPersonId">PersonId dosazený do objektu Sender</param>
+            <param name="ico">ico dokladu</param>
+            <param name="ucs">ucs dokladu</param>
+            <param name="simulaceDokladStatus">jaký doklad status vrátit přisimulaci</param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBEkisSpRop.GetHistory(Gordic.General.GInt32)">
+            <summary>
+            Vrátí vstup a výstup volání pro dané id_volani (nastaví RozpoctoveOpatreniPozadavek i RozpoctoveOpatreniOdpoved)
+            </summary>
+            <param name="idVolani">id volání</param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBEkisSpRop.GetHistory(Gordic.General.GString,Gordic.General.GInt32)">
+            <summary>
+            Vrátí výsledky volání IISSP (všechno možné, v denormalizované formě) pro ixp v tabulce vas.rozlisp
+            </summary>
+            <param name="ixp"></param>
+            <param name="id_volani_ssp"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Iissp.Client.GIisspBEkisSpSbuvExtension">
+            <summary>
+            Nadstavba nad metodami IISSP, pracuje s tabulkami GINIS, voláno převážně z DNP
+            </summary>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBEkisSpSbuvExtension.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="userProcess"></param>
+        </member>
+        <member name="M:Gordic.Iissp.Client.GIisspBEkisSpSbuvExtension.Execute(Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt32,Gordic.Iissp.Interface.VysledekVolaniTest,System.Text.StringBuilder@,System.Collections.Generic.List{System.String}@,System.Collections.Generic.List{System.String}@)">
+            <summary>
+            Zavolání web metody B_EKIS_SP_SBUV
+            </summary>
+        </member>
+    </members>
+</doc>

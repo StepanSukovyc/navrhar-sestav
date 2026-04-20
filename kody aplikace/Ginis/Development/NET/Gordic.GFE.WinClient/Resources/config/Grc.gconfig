@@ -1,0 +1,98 @@
+﻿<AddIn name        = "Grc Formation"
+       author      = "Mgr. Stepan Sukovyč"
+       description = "gres:29450982"
+       addInManagerHidden = "preinstalled"
+       version="4.82.0.2">
+
+  <Manifest>
+    <Identity name = "Gordic.Report.GrcEditor" />
+    <Dependency addin = "Gordic.Report.GrcEditor" requirePreload = "true"/>
+  </Manifest>
+
+  <Runtime>
+    <!-- pokud se modul nachází v jiné složce než aplikace, pak 'assembly' by mělo obsahovat úplnou cestu k modulu
+    ve tvaru "$úplný název s obráceným lomítkem /"
+    např.: assembly="$C:/Program Files (x86)/GORDIC/GINIS/GIN/Gordic.Report.GrcEditor.exe"
+    -->
+    <Condition name = "AssemblyNotExists" assembly=":Gordic.Report.GrcEditor" >
+      <DisableAddIn message = "gres:29450983"/>
+    </Condition>
+    <Import assembly=":Gordic.Report.GrcEditor"/>
+  </Runtime>
+
+  <!-- typy souborů pro otevření -->
+  <Path name = "/ReportDesigner/Desktop/OpenFileFilter">
+    <FileFilter id         = "GRS"
+                insertafter="ALF"
+		            name       = "Grs (*.grs)"
+		            extensions = "*.grs"/>
+    <FileFilter id         = "CSharp"
+		            name       = "gres:29450984"
+                insertafter="GRS"
+		            extensions = "*.cs"/>
+  </Path>
+  <!-- KONEC typy souborů pro otevření -->
+
+  <!-- Data analyzátory -->
+  <Path name = "/Workspace/Parser">
+    <Parser id = "GrcFoldingParser"
+		        supportedextensions  = ".grs;"
+		        class = "Gordic.Report.GrcEditor.Parser"/>
+  </Path>
+  <!-- konec Data analyzátory -->
+
+  <!-- editor -->
+  <Path name = "/Desktop/DisplayBindings">
+    <DisplayBinding id = "GrcBinding"
+		                fileNamePattern="\.grs"
+		                title = "gres:29450985"
+		                class = "Gordic.Report.GrcEditor.DisplayBinding"/>
+  </Path>
+  <!-- konec editor -->
+
+  <!-- události textového editoru -->
+  <Path name = "/AddIns/GrcEditor/EditActions">
+    <!--<EditAction id = "CompletionPopup" class = "Gordic.GFE.WinClient.DefaultEditor.CodeCompletionPopup"  keys = "Control|Space"/>-->
+  </Path>
+  <!-- konec události textového editoru -->
+  <!-- Kontextové menu -->
+  <Path name = "/ReportDesigner/ViewContent/GrcEditor/ContextMenu">
+    <MenuItem id="Compile"
+      label="gres:29450580"
+      icon="Icons__Gin__akce"
+      type="Item"
+      loadclasslazy="false"
+      class="Gordic.Report.GrcEditor.Commands.Compile"/>
+  </Path>
+  <!-- KONEC Kontextové menu -->
+
+  <!-- GRC menu -->
+  <Path name = "/ReportDesigner/MainMenu">
+    <Condition name = "WindowActive" activewindow="Gordic.Report.GrcEditor.GrcView">
+      <MenuItem id = "MmGRC" insertafter="View" insertbefore="Tools" label="gres:29450962" type = "Menu">
+        <MenuItem id="Compile"
+          label="gres:29450580"
+          icon="Icons__Gin__akce"
+          type="Item"
+          loadclasslazy="false"
+          class="Gordic.Report.GrcEditor.Commands.Compile"/>
+      </MenuItem>
+    </Condition>
+  </Path>
+  <!-- konec GRC menu -->
+  
+  <!-- Nástrojové líšty -->
+  <Path name="/ReportDesigner/ToolBarMenu/Standard">
+    <Condition name = "WindowActive" activewindow="Gordic.Report.GrcEditor.GrcView">
+      <ToolbarItem id = "GRCSeparator1"
+                   type = "Separator"  
+                   insertafter="ChooseLayout"/>
+      <ToolbarItem id      = "TBCompile"
+        icon    = "Icons__Gin__akce"
+        tooltip = "gres:29450580"
+        loadclasslazy = "false"
+        class   = "Gordic.Report.GrcEditor.Commands.Compile"/>
+    </Condition>
+  </Path>
+  <!-- KONEC Nástrojové líšty -->
+</AddIn>

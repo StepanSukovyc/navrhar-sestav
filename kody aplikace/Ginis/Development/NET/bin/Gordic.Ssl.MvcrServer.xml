@@ -1,0 +1,503 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Ssl.MvcrServer</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Ssl.MvcrServer.GImportEsu">
+            <summary>
+            Proxy ISDS-SSL pro MV ČR - import dat do ESU
+            </summary>    
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GImportEsu.Import(Gordic.Ids2.Interface.Mvcr.tApprovedRequest)">
+            <summary>
+            Import záznamů ESU
+            </summary>
+            <param name="request"> jeden řádek hromadné žádosti </param>
+            <returns> IXS_ESU </returns>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GImportEsu.GetMinUrPri(Gordic.Esu.Server.GDetGinsesu)">
+            <summary>
+            Nalezení minimálního UR_PRI v seznamu čísel oddělených čárkou
+            </summary>
+            <param name="ginsesu"> instance ginsesu </param>
+            <returns> Minimální UR_PRI </returns>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GImportEsu.NajdiTypOrganizaceProTypEsu(Gordic.General.GInt16)">
+            <summary>
+            Vrátí první typ organizace pro typ externího subjektu
+            </summary>
+            <param name="typEsu">typ esu</param>
+            <returns>číselníková hodnota typu plátce DPH</returns>
+        </member>
+        <member name="T:Gordic.Ssl.MvcrServer.GLog">
+            <summary>
+            Třída provádí logování servisní aplikace RRO
+            </summary>
+        </member>
+        <member name="P:Gordic.Ssl.MvcrServer.GLog.XmlLogPath">
+            <summary>
+            Cesta k logu - XML souboru.
+            </summary>
+        </member>
+        <member name="P:Gordic.Ssl.MvcrServer.GLog.LogIsActive">
+            <summary>
+            Soubor logu byl vytvořen a je připraven k použití.
+            </summary>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GLog.#ctor(System.String,System.String,System.Int32)">
+            <summary>
+            Konstruktor objektu pro zápis XML logu servisní aplikace RRO.Tools.
+            </summary>
+            <param name="xmlLogFilePath">Cesta a jméno XML-log souboru.</param>
+            <param name="userName"> Jméno uživatele </param>
+            <param name="logPorCislo"> Parametr LOG_PRO_CISLO </param>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GLog.Dispose">
+            <summary>
+            Implementace IDisposable
+            </summary>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GLog.Write(System.String,Gordic.General.ApplicationInterface.LogLevel)">
+            <summary>
+            Provádí zápis textu do XML logu servisní aplikace RRO.Tools.
+            </summary>
+            <param name="textToWrite"> text k zápisu </param>
+            <param name="logLevel"> úroveň logování </param>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GLog.WriteError(System.String,System.Exception)">
+            <summary>
+            Provádí zápis textu do XML logu servisní aplikace RRO.Tools.
+            </summary>
+            <param name="textToWrite"> text k zápisu </param>
+            <param name="exc"> instance výjímky </param>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GLog.FlushToFile">
+            <summary>
+            Provádí zápis obsahu XML logu na disk.
+            </summary>
+        </member>
+        <member name="T:Gordic.Ssl.MvcrServer.GMvCrProxy">
+            <summary>
+            Proxy ISDS-SSL pro MV ČR
+            </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GMvCrProxy.m_sCookieContainer">
+            <summary>
+            Úschovna cookie
+            </summary>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GMvCrProxy.CookieDelegate(System.String)">
+            <summary>
+            Delegát pro předání cookie
+            </summary>
+            <param name="serializedCookie"> cookie </param>
+            <returns></returns>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GMvCrProxy.m_oLog">
+            <summary>Instance XML logu</summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GMvCrProxy.m_nCountAll">
+            <summary>
+            Celkoový počet záznamů dávky
+            </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GMvCrProxy.m_nCountImported">
+            <summary>
+            Počet úspěšných vět
+            </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GMvCrProxy.m_nCountGinisRejected">
+            <summary>
+            Počet neúspěšných vět (celkem - úspěšné)
+            </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GMvCrProxy.m_nDoneEsu">
+            <summary>
+            Počet zpracovaných ESU
+            </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GMvCrProxy.m_nDoneDocs">
+            <summary>
+            Počet podaných žádostí
+            </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GMvCrProxy.m_nDoneInsSpis">
+            <summary>
+            Počet dok. vložených do spisu
+            </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GMvCrProxy.m_dtStartDate">
+            <summary>
+            Datum od kterého se mají načítat dávky
+            </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GMvCrProxy.m_dtEndDate">
+            <summary>
+            Datum do kterého se mají načítat dávky
+            </summary>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GMvCrProxy.GetApprovedRequests(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.DateTime,System.DateTime)">
+            <summary>
+            Získání seznamu žádostí
+            </summary>
+            <param name="serviceUrl"> URL služby </param>
+            <param name="serviceLogin"> login do služby </param>
+            <param name="servicePwd"> heslo do služby </param>
+            <param name="proxyUrl"></param>
+            <param name="proxyLogin"> účet k proxy </param>
+            <param name="proxyPwd"> heslo k proxy </param>
+            <param name="proxyType"> typ proxy (none, basic, anonymous, ntlm) </param>
+            <param name="certHash"> hash certifikátu </param>
+            <param name="datumOd"> Od data </param>
+            <param name="datumDo"> Do data </param>
+            <returns> pole seznamů žádostí </returns>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GMvCrProxy.HromadneSchvaleni(System.String,Gordic.General.GString,Gordic.General.GString,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.DateTime,System.DateTime,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.Object[])">
+            <summary>
+            Hromadné načtení předschválených žádostí
+            </summary>
+            <param name="serviceUrl"> URL služby, která vrátí seznam předschválených žádostí </param>
+            <param name="ixsTyp"> Typ dokumentu SSL </param>
+            <param name="ixsFunCil"> identifikátor funkce podání do SSL </param>
+            <param name="serviceLogin"> login ke službě </param>
+            <param name="servicePwd"> heslo ke službě </param>
+            <param name="proxyUrl"> nepovinné URL proxy serveru </param>
+            <param name="proxyLogin"> nepovinný účet k proxy </param>
+            <param name="proxyPwd"> nepovinné heslo k proxy </param>
+            <param name="proxyType">nepovinný typ proxy (none, basic, anonymous, ntlm) </param>
+            <param name="certHash">nepovinný hash certifikátu</param>
+            <param name="workDir"> pracovní složka </param>
+            <param name="startDate"> STARTovní den zpracování </param>
+            <param name="endDate"> nepovinný konečný den zpracování </param>
+            <param name="zpusobVyrizeni"> nepovinný způsob vyřízení </param>
+            <param name="ixsFunCilSpis"> nepovinný ident. funkce, které se předá spis žádostí </param>
+            <param name="spisovyZnak"> spisový znak spisu žádostí </param>
+            <param name="spisovyPlan"> spisový plán spisu žádostí </param>
+            <param name="extendedParams"> další případné parametry </param>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GMvCrProxy.ZpracujDavku(Gordic.General.GString,Gordic.General.GString,Gordic.Ids2.Interface.Mvcr.tApprovedReqeustsArray,System.DateTime,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Dávkové zpracování žádostí
+            </summary>
+            <param name="ixsTyp"> IXS_TYP žádosti </param>
+            <param name="ixsFunCil"> IXS_FUN zpracovatele </param>
+            <param name="poleDavky"> dávka </param>
+            <param name="datumZadosti"> Aktuálně zpracovávaný datum žádostí </param>
+            <param name="zpusobVyrizeni"> nepovinný způsob vyřízení </param>
+            <param name="ixsFunCilSpis"> nepovinné id. funkce, které se spis žádostí má předat </param>
+            <param name="spisovyZnak"> spisový znak spisu žádostí </param>
+            <param name="spisovyPlan"> spisový plán spisu žádostí </param>
+            <returns> Počet úspěšných importů </returns>
+        </member>
+        <member name="T:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider">
+            <summary>import dávky s předschválenými žádostmi ISDS</summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_csUrl">
+            <summary>název parametru pro URL adresu služby</summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_csIxsTyp">
+            <summary>název parametru pro identifikátor typu dokumentu</summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_csParams">
+            <summary>název parametru pro předpřipravený parametr</summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_csIxsFun">
+            <summary>název parametru pro identifikátor funkce</summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_csLogin">
+            <summary>název parametru pro přihlašovací jméno služby</summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_csHeslo">
+            <summary>název parametru pro heslo služby</summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_csCertHash">
+            <summary>název parametru pro hash certifikátu </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_csEndDate">
+            <summary>název parametru pro poslední den intervalu zpracování </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_csLogPath">
+            <summary>název parametru pro cestu k logu </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_csProxyLogin">
+            <summary>název parametru pro účet proxy </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_csProxyPwd">
+            <summary>název parametru pro heslo k proxy </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_csProxyType">
+            <summary>název parametru pro typ proxy </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_csProxyUrl">
+            <summary>název parametru pro URL proxy </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_csStartDate">
+            <summary>název parametru pro první den intervalu zpracování </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_csIxsFunCilSpis">
+            <summary>název parametru pro IXS_FUN na které se má spis žádostí předat </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_csZpVyrizeni">
+            <summary>název parametru pro způsob vyřízení spisu </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_csSpisZnak">
+            <summary> název parametru pro spisový znak </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_csSpisPlan">
+            <summary> název parametru pro spisový plán </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_sUrl">
+            <summary>URL adresa služby</summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_gsIxsTyp">
+            <summary>identifikátor typu dokumentu</summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_gsIxsFun">
+            <summary>identifikátor funkce</summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_sLogin">
+            <summary>přihlašovací jméno služby</summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_sHeslo">
+            <summary>heslo služby</summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_sParams">
+            <summary>předpřipravený parametr</summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_sCertHash">
+            <summary> hash certifikátu pro připojení ke službám ISDS </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_StartDate">
+            <summary> Datum počátečního dne intervalu dní ke zpracování </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_EndDate">
+            <summary> Datum posledního dne v intervalu dní ke zpracování </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_sLogPath">
+            <summary> Cesta k logu </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_sProxyType">
+            <summary> typ proxy (none, basic, anonymous, ntlm) </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_sProxyLogin">
+            <summary> účet proxy  </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_sProxyPwd">
+            <summary> heslo k proxy  </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_sProxyUrl">
+            <summary> URL proxy serveru  </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_sZpVyrizeni">
+            <summary> způsob vyřízení  </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_sIxsFunSpisCil">
+            <summary> IXS_FUN na kterou se má spis žádostí předat </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_sSpisZnak">
+            <summary> spisový znak spisu žádostí </summary>
+        </member>
+        <member name="F:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.m_sSpisPlan">
+            <summary> spisový plán spisu žádostí </summary>
+        </member>
+        <member name="P:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.#ctor(System.Int32,System.String,System.DateTime,System.Collections.Hashtable,System.String,System.Collections.Hashtable,Gordic.Services.EventProcessorInterface.IGProcessorOrder)">
+            <summary>veřejný konstruktor</summary>
+            <param name="eventId">jednoznačný identifikátor události v systému Ginis</param>
+            <param name="eventTypeId">identifikátor typu události</param>
+            <param name="eventArised">datum a čas vzniku události</param>
+            <param name="eventParameters">parametry události</param>
+            <param name="actionTypeId">identifikátor typu obslužné akce</param>
+            <param name="actionParameters">výchozí parametry obslužné akce</param>
+            <param name="processorOrder">rozhraní pro objednávku na zpracování prováděné výkonným jádrem zpracování událostí</param>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.Run">
+            <summary>hlavní smyčka obslužné akce</summary>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.ObtainParameters">
+            <summary>analýza povinných parametrů</summary>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GIsdsImportRequestsBatchProvider.ImportRequestsBatch">
+            <summary>stažení a import dávky</summary>
+        </member>
+        <member name="T:Gordic.Ssl.MvcrServer.GSslInit">
+            <summary>inicializace vrstvy SSL</summary>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GSslInit.Initialize">
+            <summary>inicializace spisové služby</summary>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GSslInit.RunInitProcedure">
+            <summary>Nastavení databázových globálních proměnných pro aktuální přihlášení. 
+            Slouží výhradně pro přihlášení do GINIS-SSL prostřednictvím web služeb.</summary>
+        </member>
+        <member name="T:Gordic.Ssl.MvcrServer.gspg_sslinitvalws04">
+            <summary>
+            Package   : 
+            Procedure : spg_sslinitvalws04
+            Version   : 354.02.
+            </summary>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.gspg_sslinitvalws04.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.gspg_sslinitvalws04.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Ssl.MvcrServer.gspg_sslinitvalws04.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Ssl.MvcrServer.gspg_sslinitvalws04.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Ssl.MvcrServer.gspg_sslinitvalws04.v_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Ssl.MvcrServer.gspg_sslinitvalws04.v_sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Ssl.MvcrServer.gspg_sslinitvalws04.v_isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Ssl.MvcrServer.gspg_sslinitvalws04.v_err_txt">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Ssl.MvcrServer.gspg_sslinitvalws04.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Ssl.MvcrServer.gspg_sslinitvalws04.o_sslden_cj">
+            <summary>o_sslden_cj - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Ssl.MvcrServer.gspg_sslinitvalws04.o_rok_cj">
+            <summary>o_rok_cj - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Ssl.MvcrServer.gspg_sslinitvalws04.o_sslden_spz">
+            <summary>o_sslden_spz - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Ssl.MvcrServer.gspg_sslinitvalws04.o_rok_spz">
+            <summary>o_rok_spz - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Ssl.MvcrServer.gspg_sslinitvalws04.o_spis_pl">
+            <summary>o_spis_pl - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Ssl.MvcrServer.gspg_sslinitvalws04.o_spis_graf">
+            <summary>o_spis_graf - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Ssl.MvcrServer.gspg_sslinitvalws04.g_vyp_graf">
+            <summary>g_vyp_graf - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Ssl.MvcrServer.gspg_sslinitvalws04.o_ixs_ext">
+            <summary>o_ixs_ext - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.gspg_sslinitvalws04.SetInParams">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.gspg_sslinitvalws04.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.gspg_sslinitvalws04.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.gspg_sslinitvalws04.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Ssl.MvcrServer.GImportSsl">
+            <summary>
+            Proxy ISDS-SSL pro MV ČR - import dat do SSL
+            </summary>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GImportSsl.VytvorSpis(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Vytvoření spisu
+            </summary>
+            <param name="ixsTyp"> Id. typu dokumentu </param>
+            <param name="vec"> Věc spisu </param>
+            <param name="mistoVzniku"> Popis místa vzniku </param>
+            <param name="spisZnak"> Spisový znak </param>
+            <param name="spisPlan"> Spisový plán </param>
+            <returns> IXP spisu </returns>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GImportSsl.VlozDoSpisu(Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Vložení dokumentu do spisu
+            </summary>
+            <param name="ixpSpis"> IXP spisu </param>
+            <param name="ixp"> IXP dokumentu </param>        
+            <returns> Datum posl. změny písemnosti </returns>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GImportSsl.PodaniCiziPisemnosti(Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.Ids2.Interface.Mvcr.tApprovedRequest,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Podání písemnosti
+            </summary>
+            <param name="ixsTyp"> IXS_TYP </param>
+            <param name="stat"> Kód státu z ESU, nebo NULL</param>
+            <param name="ixsEsu"> IXS_ESU </param>        
+            <param name="ixsFunCil"> IXS_FUN cílového zpracovatele žádosti - od 9.7.2009 NULL </param>
+            <param name="ixsSuCil"> id. spis. uzlu cílového zpracovatele žádosti - od 9.7.2009 NULL </param>
+            <param name="request"> Třída předschválené žádosti </param>
+            <param name="spisPl"> Spisový plán </param>
+            <param name="spisZnak"> Spisový znak </param>
+            <returns> IXP písemnosti </returns>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GImportSsl.PridejPrilohu(Gordic.General.GString,Gordic.Ids2.Interface.Mvcr.tApprovedRequest)">
+            <summary>
+            Přidání žádosti jako přílohu
+            </summary>
+            <param name="ixp"> PID </param>
+            <param name="requestObj"> objekt žádosti </param>
+            <returns> IXB </returns>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GImportSsl.ExistZpVyriz(Gordic.General.GString)">
+            <summary>
+            Test existence způsobu vyřízení spisu v tabulce SSLSZVS
+            </summary>
+            <param name="zpVyrizeni"> způsob vyřízení ze SSLSZVS </param>
+            <returns> TRUE, je-li způsob vyřízení v DB  </returns>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GImportSsl.VyridUzavriSpis(Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Vyřízení a uzavření spisu
+            </summary>
+            <param name="ixp"> PID </param>
+            <param name="zpusob"> způsob vyřízení </param>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GImportSsl.ExistFun(Gordic.General.GString)">
+            <summary>
+            Test zda existuje identifikator funkce v databazi
+            </summary>
+            <param name="ixsFun">identifikace funkce</param>
+            <returns>zda funkce v databázi existuje</returns>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GImportSsl.ExistujeIxsTyp(Gordic.General.GString)">
+            <summary>
+            Test zda existuje identifikator zpusobu vyrizeni v databazi
+            </summary>
+            <param name="ixsTyp"> Id. typu dokumentu </param>
+            <returns> TRUE, existuje-li v DB. </returns>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GImportSsl.ReadSpisZnak(Gordic.General.GString)">
+            <summary>
+            Načte spisový znak podle typu písemnosti
+            </summary>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GImportSsl.ReadSpisPl(Gordic.General.GString)">
+            <summary>
+            Načte spisový plán podle typu písemnosti
+            </summary>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GImportSsl.UpdateWflspioDatPrijPod(Gordic.General.GDateTime,Gordic.General.GString)">
+            <summary>
+            Uložení datum přijetí podání v tabulce wflspio
+            </summary>
+        </member>
+        <member name="M:Gordic.Ssl.MvcrServer.GImportSsl.SpisovyUzelFunkce(Gordic.General.GString)">
+            <summary>
+            Dotažení uzlu vlastníka
+            </summary>
+            <param name="ixsFun"> IXS_FUN </param>
+            <returns> IXS_SU </returns>
+        </member>
+    </members>
+</doc>

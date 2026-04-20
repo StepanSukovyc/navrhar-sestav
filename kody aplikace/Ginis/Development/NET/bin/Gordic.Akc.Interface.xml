@@ -1,0 +1,2040 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Akc.Interface</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Akc.Interface.IGDatabaseLocksIsl">
+            <summary>
+            Rozhraní pro ISL GDatabaseLocks
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.IGDatabaseLocksIsl.List(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.FilterLocks})">
+            <summary>
+            Metoda pro výpis error logů
+            </summary>
+            <param name="rq"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Interface.IGDatabaseLocksIsl.StopProcess(Gordic.Akc.Interface.DTOs.GAkcDBLockDto)">
+            <summary>
+            Zastavení procesu
+            </summary>
+            <param name="akcLock"></param>
+        </member>
+        <member name="T:Gordic.Akc.Interface.IGDatabaseLocksLogicWithUsers">
+            <summary>
+            Logic for retrieval of database locks.
+            </summary>
+            <seealso cref="T:Gordic.General.ApplicationInterface.IGAppLogic" />
+        </member>
+        <member name="M:Gordic.Akc.Interface.IGDatabaseLocksLogicWithUsers.LoadDatabaseLocks(Gordic.General.GFilter{Gordic.Akc.Interface.FilterLocks}[])">
+            <summary>
+            Gets locks in current database, with information about user who owns them and tableName, where lock is placed.
+            </summary>
+            <example>
+            var locks = new GDatabaseLocksLogic(UserProcess).LoadDatabaseLocks();
+            foreach(var lck in locks){
+                if (lck.user?.log_por_cislo === my_log_por_cislo){
+                    ...
+                }
+                
+                if(lck.table_name.toLower() === "ginsfun"){
+                    ...
+                }
+                
+                ...
+            }
+            </example>
+            <returns>List of DTOs with tablename, user info (if found) and detailed DBLock info (always only one is filled, depends on database)</returns>
+        </member>
+        <member name="T:Gordic.Akc.Interface.FilterLocks">
+            <summary>
+            Columns
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.FilterLocks.table_name">
+            <summary>
+            The table name
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.FilterLocks.user_sessid">
+            <summary>
+            The column name
+            </summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.IGDatabaseSanitizingIsl">
+            <summary>
+            Isl pro sanitizaci textů z databáze
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.IGDatabaseSanitizingIsl.ListAllColumns(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.FilterColumns})">
+            <summary>
+            Výpis všech sloupců z databáze
+            </summary>
+            <param name="rq"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Interface.IGDatabaseSanitizingIsl.ListSanitizingTexts(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.FilterColumns})">
+            <summary>
+            Výpis všech záznamů z tabulke a sloupců
+            </summary>
+            <param name="rq"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Akc.Interface.IGDatabaseSanitizingLogic">
+            <summary>
+            Logic for retrieval of database locks.
+            </summary>
+            <seealso cref="T:Gordic.General.ApplicationInterface.IGAppLogic" />
+        </member>
+        <member name="M:Gordic.Akc.Interface.IGDatabaseSanitizingLogic.SanitizeDatabase">
+            <summary>
+            Sanitizes the database.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Interface.IGDatabaseSanitizingLogic.SanitizeTable(System.String)">
+            <summary>
+            Sanitizes the table.
+            </summary>
+            <param name="tableName">Name of the table.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Interface.IGDatabaseSanitizingLogic.SanitizeColumns(Gordic.Akc.Interface.DTOs.GDBStringColumnDto[])">
+            <summary>
+            Sanitizes values in given columns.
+            </summary>
+            <example>
+            </example>
+            <returns>Count of sanitized values</returns>
+        </member>
+        <member name="M:Gordic.Akc.Interface.IGDatabaseSanitizingLogic.SanitizeColumnsInTable(System.String,Gordic.Akc.Interface.DTOs.GDBStringColumnDto[])">
+            <summary>
+            Sanitizes the columns for given table.
+            </summary>
+            <param name="tableName">Name of the table.</param>
+            <param name="columns">The columns from given table.</param>
+            <returns>Count of sanitized values</returns>
+        </member>
+        <member name="M:Gordic.Akc.Interface.IGDatabaseSanitizingLogic.LoadStringColumns(Gordic.General.GFilter{Gordic.Akc.Interface.FilterColumns}[])">
+            <summary>
+            Loads all potentially dangerous string columns.
+            </summary>
+            <returns>List of dto with table_name - column info</returns>
+        </member>
+        <member name="T:Gordic.Akc.Interface.FilterColumns">
+            <summary>
+            Columns
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.FilterColumns.table_name">
+            <summary>
+            The table name
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.FilterColumns.column_name">
+            <summary>
+            The column name
+            </summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.IGDbZamkyUzivatele">
+            <summary>
+            Rozhraní pro databázové zámky uživatelů
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.IGDbZamkyUzivatele.List(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.GDbZamkyUzivateleFilter})">
+            <summary>
+            Metoda pro výpis zámků uživatelů 
+            </summary>
+            <param name="rq"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Akc.Interface.GDbZamkyUzivateleFilter">
+            <summary>
+            Filter pro zámky uživatelů
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamkyUzivateleFilter.locksThisDb">
+            <summary>
+            lockThisDb - zámky pouze pro tuto db (INFORMIX)
+            </summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.GErrorLogDataSet">
+             <summary>
+            Represents a strongly typed in-memory cache of data.
+            </summary>
+             <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.tableErrorLog">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLog">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet._schemaSerializationMode">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.SchemaSerializationMode">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.#ctor">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.InitializeDerivedDataSet">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.Clone">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ShouldSerializeTables">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ShouldSerializeRelations">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ReadXmlSerializable(System.Xml.XmlReader)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.GetSchemaSerializable">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.InitVars">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.InitVars(System.Boolean)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.InitClass">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ShouldSerializeErrorLog">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.SchemaChanged(System.Object,System.ComponentModel.CollectionChangeEventArgs)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.GetTypedDataSetSchema(System.Xml.Schema.XmlSchemaSet)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.Tables">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.Relations">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRowChangeEventHandler">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable">
+             <summary>
+            Represents the strongly named DataTable class.
+            </summary>
+             <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.columnfaze">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.columnser_cis_err">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.columngor_err">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.columndb_err">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.columndat_err">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.columntxt_err_orig">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.columntxt_err">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.columnlok_err">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.columnlog_por_cislo">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.columnlic">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.columnaktivita">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.columnproces_id">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.columnproces_txt">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.columnisam_err">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.columniud_por">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.columnseverity_txt">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.columnseverity_popis">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.columnstanice">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.columnos">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.columnrevize">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.columndb_verze">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.columndb_type">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.columndb_client">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.columndb_provider">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.columndb_profil">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.fazeColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.ser_cis_errColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.gor_errColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.db_errColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.dat_errColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.txt_err_origColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.txt_errColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.lok_errColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.log_por_cisloColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.licColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.aktivitaColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.proces_idColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.proces_txtColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.isam_errColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.iud_porColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.severity_txtColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.severity_popisColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.staniceColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.osColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.revizeColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.db_verzeColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.db_typeColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.db_clientColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.db_providerColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.db_profilColumn">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.Count">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.Item(System.Int32)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="E:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.ErrorLogRowChanging">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="E:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.ErrorLogRowChanged">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="E:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.ErrorLogRowDeleting">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="E:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.ErrorLogRowDeleted">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.#ctor">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.#ctor(System.Data.DataTable)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.AddErrorLogRow(Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.System#Collections#IEnumerable#GetEnumerator">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.Clone">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.CreateInstance">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.InitVars">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.InitClass">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.NewErrorLogRow">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.NewRowFromBuilder(System.Data.DataRowBuilder)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.OnRowChanged(System.Data.DataRowChangeEventArgs)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.OnRowChanging(System.Data.DataRowChangeEventArgs)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.OnRowDeleted(System.Data.DataRowChangeEventArgs)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.OnRowDeleting(System.Data.DataRowChangeEventArgs)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.RemoveErrorLogRow(Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.GetTypedTableSchema(System.Xml.Schema.XmlSchemaSet)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.Rows">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.AddErrorLogRow(Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GDateTime,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.AddErrorLogRow">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable.GetEnumerator">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow">
+             <summary>
+            Represents strongly named DataRow class.
+            </summary>
+             <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.tableErrorLog">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.#ctor(System.Data.DataRowBuilder)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.faze">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.ser_cis_err">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.gor_err">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.db_err">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.dat_err">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.txt_err_orig">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.txt_err">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.lok_err">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.log_por_cislo">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.lic">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.aktivita">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.proces_id">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.proces_txt">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.isam_err">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.iud_por">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.severity_txt">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.severity_popis">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.stanice">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.os">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.revize">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.db_verze">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.db_type">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.db_client">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.db_provider">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow.db_profil">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRowChangeEvent">
+             <summary>
+            Row event argument class
+            </summary>
+             <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRowChangeEvent.eventRow">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRowChangeEvent.eventAction">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRowChangeEvent.#ctor(Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow,System.Data.DataRowAction)">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRowChangeEvent.Row">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRowChangeEvent.Action">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog.faze">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog.ser_cis_err">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog.gor_err">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog.db_err">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog.dat_err">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog.txt_err_orig">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog.txt_err">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog.lok_err">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog.log_por_cislo">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog.lic">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog.aktivita">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog.proces_id">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog.proces_txt">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog.isam_err">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog.iud_por">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog.severity_txt">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog.severity_popis">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog.stanice">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog.os">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog.revize">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog.db_verze">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog.db_type">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog.db_client">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog.db_provider">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogDataSet.ColErrorLog.db_profil">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.GErrorLogsDto">
+            <summary>DBTABLE:ErrorLog</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogsDto.faze">
+            <summary>DBCOLUMN:ErrorLog.faze</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogsDto.ser_cis_err">
+            <summary>DBCOLUMN:ErrorLog.ser_cis_err</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogsDto.gor_err">
+            <summary>DBCOLUMN:ErrorLog.gor_err</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogsDto.db_err">
+            <summary>DBCOLUMN:ErrorLog.db_err</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogsDto.dat_err">
+            <summary>DBCOLUMN:ErrorLog.dat_err</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogsDto.txt_err_orig">
+            <summary>DBCOLUMN:ErrorLog.txt_err_orig</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogsDto.txt_err">
+            <summary>DBCOLUMN:ErrorLog.txt_err</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogsDto.lok_err">
+            <summary>DBCOLUMN:ErrorLog.lok_err</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogsDto.log_por_cislo">
+            <summary>DBCOLUMN:ErrorLog.log_por_cislo</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogsDto.lic">
+            <summary>DBCOLUMN:ErrorLog.lic</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogsDto.aktivita">
+            <summary>DBCOLUMN:ErrorLog.aktivita</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogsDto.proces_id">
+            <summary>DBCOLUMN:ErrorLog.proces_id</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogsDto.proces_txt">
+            <summary>DBCOLUMN:ErrorLog.proces_txt</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogsDto.isam_err">
+            <summary>DBCOLUMN:ErrorLog.isam_err</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogsDto.iud_por">
+            <summary>DBCOLUMN:ErrorLog.iud_por</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogsDto.severity_txt">
+            <summary>DBCOLUMN:ErrorLog.severity_txt</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogsDto.severity_popis">
+            <summary>DBCOLUMN:ErrorLog.severity_popis</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogsDto.stanice">
+            <summary>DBCOLUMN:ErrorLog.stanice</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogsDto.os">
+            <summary>DBCOLUMN:ErrorLog.os</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogsDto.revize">
+            <summary>DBCOLUMN:ErrorLog.revize</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogsDto.db_verze">
+            <summary>DBCOLUMN:ErrorLog.db_verze</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogsDto.db_type">
+            <summary>DBCOLUMN:ErrorLog.db_type</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogsDto.db_client">
+            <summary>DBCOLUMN:ErrorLog.db_client</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogsDto.db_provider">
+            <summary>DBCOLUMN:ErrorLog.db_provider</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogsDto.db_profil">
+            <summary>DBCOLUMN:ErrorLog.db_profil</summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.DTOs.GActiveUserLoginInformixDto">
+            <summary>
+            Pr8v2 p5ihl83en9 u6ivatel0 Informix
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginInformixDto.hostname">
+            <summary>
+            Hostname
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginInformixDto.conn_dt">
+            <summary>
+            Konekt vytvořen
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginInformixDto.feprogram">
+            <summary>
+            Feprogram
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginInformixDto.username">
+            <summary>
+            Uživatelské jméno
+            </summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.DTOs.GActiveUserLoginMsSqlDto">
+            <summary>
+            Aktivn9 u6ivatel0 pro MSSql
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginMsSqlDto.open_tran">
+            <summary>
+            Počet otevřených transakcí
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginMsSqlDto.cmd">
+            <summary>
+            Poslední příkaz
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginMsSqlDto.blocked">
+            <summary>
+            Blokováno
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginMsSqlDto.net_library">
+            <summary>
+            Blokováno
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginMsSqlDto.last_batch">
+            <summary>
+            Poslední dávka
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginMsSqlDto.cpu">
+            <summary>
+            Využití CPU
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginMsSqlDto.physical_io">
+            <summary>
+            Využití IO
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginMsSqlDto.memusage">
+            <summary>
+            Využití IO
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginMsSqlDto.status">
+            <summary>
+            Status
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginMsSqlDto.typ_pripojeni">
+            <summary>
+            Typ připojení
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginMsSqlDto.program_name">
+            <summary>
+            Název programu
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginMsSqlDto.login_name">
+            <summary>
+            Login name
+            </summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.DTOs.GActiveUserLoginOracleDto">
+            <summary>
+            Aktivni uzivatele - Oracle
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginOracleDto.status">
+            <summary>
+            status
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginOracleDto.client_identifier">
+            <summary>
+            client identifier
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginOracleDto.os_user">
+            <summary>
+            uzivatel os
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginOracleDto.machine">
+            <summary>
+            machine
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginOracleDto.terminal">
+            <summary>
+            terminal
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginOracleDto.module">
+            <summary>
+            Modul
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginOracleDto.action">
+            <summary>
+            Akce
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginOracleDto.client_info">
+            <summary>
+            Client info
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginOracleDto.event_name">
+            <summary>
+            Session status
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginOracleDto.session_status">
+            <summary>
+            Session status
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginOracleDto.state">
+            <summary>
+            Session status
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginOracleDto.conn_dt">
+            <summary>
+            Datum připojení connectu
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginOracleDto.typ_pripojeni">
+            <summary>
+            Typ připojení
+            </summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.DTOs.GAkcDBLockDto">
+            <summary>
+            Dto for database lock
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GAkcDBLockDto.table_name">
+            <summary>
+            The table name
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GAkcDBLockDto.type">
+            <summary>
+            The type
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GAkcDBLockDto.user">
+            <summary>
+            The user
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GAkcDBLockDto.msLock">
+            <summary>
+            The ms lock info 
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GAkcDBLockDto.oracleLock">
+            <summary>
+            The oracle lock info
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GAkcDBLockDto.informixLock">
+            <summary>
+            The informix lock info
+            </summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.DTOs.GDBSanitizedStringValueDto">
+            <summary>
+            Dto with original value, sanitized value, and column info.
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.DTOs.GDBSanitizedStringValueDto.#ctor">
+            <summary>
+            Kostructor
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GDBSanitizedStringValueDto.column">
+            <summary>
+            The column
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GDBSanitizedStringValueDto.original_value">
+            <summary>
+            The original value
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GDBSanitizedStringValueDto.sanitized_value">
+            <summary>
+            The sanitized value
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GDBSanitizedStringValueDto.reasons">
+            <summary>
+            The reasons
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.DTOs.GDBSanitizedStringValueDto.ToFormattedString">
+            <summary>
+            Vytvoří formátovaný string
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Akc.Interface.DTOs.GDBStringColumnValueDto">
+            <summary>
+            Value in column in 1 row
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GDBStringColumnValueDto.value">
+            <summary>
+            The value
+            </summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.DTOs.GDBStringColumnDto">
+            <summary>
+            Dto for column and name of his table.
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.DTOs.GDBStringColumnDto.#ctor">
+            <summary>
+            Kostruktor
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GDBStringColumnDto.table_name">
+            <summary>
+            The table name
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GDBStringColumnDto.column_name">
+            <summary>
+            The column name
+            </summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.DTOs.GConcurrentUserLoginDto">
+            <summary>DBTABLE:ginllog</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GConcurrentUserLoginDto.faze">
+            <summary>DBCOLUMN:ginllog.faze</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GConcurrentUserLoginDto.login_uziv">
+            <summary>DBCOLUMN:ginllog.login_uziv</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GConcurrentUserLoginDto.dat_login">
+            <summary>DBCOLUMN:ginllog.dat_login</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GConcurrentUserLoginDto.dat_logout">
+            <summary>DBCOLUMN:ginllog.dat_logout</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GConcurrentUserLoginDto.ip_adr">
+            <summary>DBCOLUMN:ginllog.ip_adr</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GConcurrentUserLoginDto.sessid">
+            <summary>DBCOLUMN:ginllog.sessid</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GConcurrentUserLoginDto.nazev_rf_a">
+            <summary>DBCOLUMN:ginszmp.nazev_rf</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GConcurrentUserLoginDto.nazev_rf_b">
+            <summary>DBCOLUMN:ginszmp.nazev_rf</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GConcurrentUserLoginDto.dat_login_b">
+            <summary>DBCOLUMN:ginllog.dat_login</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GConcurrentUserLoginDto.dat_logout_b">
+            <summary>DBCOLUMN:ginllog.dat_logout</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GConcurrentUserLoginDto.ip_adr_b">
+            <summary>DBCOLUMN:ginllog.ip_adr</summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.DTOs.GActiveUserLoginDto">
+            <summary>DBTABLE:ginllog</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginDto.log_por_cislo">
+            <summary>DBCOLUMN:ginllog.log_por_cislo</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginDto.faze">
+            <summary>DBCOLUMN:ginllog.faze</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginDto.faze_nazev">
+            <summary>
+            DBCOLUMN:gincfaz.faze_txt
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginDto.verze">
+            <summary>DBCOLUMN:ginllog.verze</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginDto.sub_verze">
+            <summary>DBCOLUMN:ginllog.sub_verze</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginDto.revize">
+            <summary>
+            DBCOLUMN:ginllog.revize
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginDto.dat_login">
+            <summary>DBCOLUMN:ginllog.dat_login</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginDto.dat_ping">
+            <summary>DBCOLUMN:ginllog.dat_ping</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginDto.dat_logout">
+            <summary>DBCOLUMN:ginllog.dat_logout</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginDto.ixs_ref">
+            <summary>DBCOLUMN:ginllog.ixs_ref</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginDto.ip_adr">
+            <summary>DBCOLUMN:ginllog.ip_adr</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginDto.ixs_fun">
+            <summary>DBCOLUMN:ginllog.ixs_fun</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginDto.rezim">
+            <summary>DBCOLUMN:gintgpr.rezim</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginDto.ixs_ins">
+            <summary>DBCOLUMN:ginllog.ixs_ins</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginDto.login_uziv">
+            <summary>DBCOLUMN:ginllog.login_uziv</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginDto.login_usr">
+            <summary>DBCOLUMN:ginllog.login_usr</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginDto.sessid">
+            <summary>DBCOLUMN:ginllog.sessid</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginDto.nazev_ref">
+            <summary>DBCOLUMN:ginsref.nazev</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginDto.nazev_fun">
+            <summary>DBCOLUMN:ginsfun.nazev</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginDto.login_win">
+            <summary>DBCOLUMN:ginllog.login_win</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginDto.comp_name">
+            <summary>DBCOLUMN:ginllog.comp_name</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginDto.ixs_ins_txt">
+            <summary>
+            instance
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.DTOs.GActiveUserLoginDto.session_id">
+            <summary>
+            session id
+            </summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.GDbZamekUzivatelBaseDto">
+            <summary>
+            GDbZamekUzivatelBaseDto
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelBaseDto.ixs_ref">
+            <summary>
+            Ixs_ref
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelBaseDto.ixs_fun">
+            <summary>
+            Ixs_ref
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelBaseDto.ixs_ins">
+            <summary>
+            Ixs_ref
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelBaseDto.log_por_cislo">
+            <summary>
+            Log por_cislo
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelBaseDto.verze">
+            <summary>
+            Verze
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelBaseDto.sub_verze">
+            <summary>
+            Sub_verze
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelBaseDto.login_win">
+            <summary>
+            Login win
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelBaseDto.login_uziv">
+            <summary>
+            Login win
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelBaseDto.stanice">
+            <summary>
+            Stanice
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelBaseDto.aplikace">
+            <summary>
+            Aplikace
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelBaseDto.nazev_ref">
+            <summary>
+            Osoba
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelBaseDto.nazev_fun">
+            <summary>
+            Funkční místo
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelBaseDto.pc">
+            <summary>
+            PC
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelBaseDto.dat_login">
+            <summary>
+            Datum a čas přihlášení
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelBaseDto.lock_start">
+            <summary>
+            Zjištěný začátek zámku
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelBaseDto.revize">
+            <summary>
+            revize
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelBaseDto.session_id">
+            <summary>
+            ID session
+            </summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.GDbZamekUzivatelInfDto">
+            <summary>
+            Zámek uživatele pro informix
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelInfDto.username">
+            <summary>
+            Uživatelské jméno
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelInfDto.hostname">
+            <summary>
+            hostname
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelInfDto.tty">
+            <summary>
+            tty
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelInfDto.dbsname">
+            <summary>
+            databáze
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelInfDto.tabname">
+            <summary>
+            Tabulka
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelInfDto.type">
+            <summary>
+            Typ
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelInfDto.owner">
+            <summary>
+            owner
+            </summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.GDbZamekUzivatelMsSqlDto">
+            <summary>
+            Dto zámků pro uživatele
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelMsSqlDto.resource_associated_entity_id">
+            <summary>
+            [resource_associated_entity_id]
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelMsSqlDto.indid">
+            <summary>
+            [indid]
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelMsSqlDto.resource_type">
+            <summary>
+            [resource type]
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelMsSqlDto.request_mode">
+            <summary>
+            [request_mode]
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelMsSqlDto.object_name">
+            <summary>
+            ID objektu
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelMsSqlDto.schema_name">
+            <summary>
+            [schema_name]
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelMsSqlDto.index_name">
+            <summary>
+            ID indexu
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelMsSqlDto.request_status">
+            <summary>
+            [request_status]
+            </summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.GDbZamekUzivatelOraDto">
+            <summary>
+            Zámek pro oracle
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelOraDto.oracle_username">
+            <summary>
+            Uživatelské jméno
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelOraDto.os_user_name">
+            <summary>
+            Uživatelské jméno os
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelOraDto.locked_mode">
+            <summary>
+            Locked mode
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelOraDto.object_id">
+            <summary>
+            Id objektu
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelOraDto.audsid">
+            <summary>
+            Id procesu
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelOraDto.object_name">
+            <summary>
+            Název objektu
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelOraDto.object_type">
+            <summary>
+            Název objektu
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GDbZamekUzivatelOraDto.owner">
+            <summary>
+            Vlastník
+            </summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.GErrorLogEmailDto">
+            <summary>
+            Třída pro práci s 05 aplikacemi (zjednodušení GErrorLogEmail)
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogEmailDto.#ctor">
+            <summary>
+            GErrorLogEmailDto
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogEmailDto.#ctor(Gordic.Akc.Interface.GErrorLogEmail)">
+            <summary>
+            GErrorLogEmailDto
+            </summary>
+            <param name="email"></param>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogEmailDto.recipients">
+            <summary>
+            Seznam autorů
+            </summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogEmailDto.attachment">
+            <summary>
+            Název přílohy bez zip
+            </summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogEmailDto.errorLogs">
+            <summary>
+            Chyby, které si autor přeje odeslat
+            </summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogEmailDto.subject">
+            <summary>
+            Předmět
+            </summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogEmailDto.text">
+            <summary>
+            Text
+            </summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.GErrorLogSendEmailFromFilesRequestDto">
+            <summary>
+            Hroamdné odeslání emailů podle několika souborů
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogSendEmailFromFilesRequestDto.files">
+            <summary>
+            Pole guidů uploadovaných souborů.
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogSendEmailFromFilesRequestDto.authorMatching">
+            <summary>
+            Výběr způsobu odeslání, 0 = podle fází, 1= podle autorů, null= jeden email
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GErrorLogSendEmailFromFilesRequestDto.emailConfiguration">
+            <summary>
+            konfigurace emailu pro případ authorMatching = null
+            </summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.Email.GErrorLogSettingParams">
+            <summary>
+            Paramtry pro nastavení funkcí použití v ISL
+            </summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.Email.GErrorLogSettingParams.Automatic">
+            <summary>
+            true - bere se od posledního data zpracování, false - bere se interval v datumu
+            </summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.Email.GErrorLogSettingParams.FileName">
+            <summary>
+            soubor kam se ukládá
+            </summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.Email.GErrorLogSettingParams.SourceFile">
+            <summary>
+            zdrojový soubor (prázdný řetězec = DB)
+            </summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.Email.GErrorLogSettingParams.SendingMethod">
+            <summary>
+            metoda poslání mailu
+            </summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.Email.GErrorLogServiceRequest`1">
+            <summary>
+            GErrorLogServiceRequest
+            </summary>
+            <typeparam name="FilterErrorLogs"></typeparam>
+        </member>
+        <member name="P:Gordic.Akc.Interface.Email.GErrorLogServiceRequest`1.InputData">
+            <summary>
+            Pridana data
+            </summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.Email.IGErrorLogLogic">
+            <summary>
+            Interface část pro AL AKC
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.Email.IGErrorLogLogic.ErrorLogListFromDB(Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}[])">
+            <summary>Seznam chyb z databáze</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.Email.IGErrorLogLogic.ErrorLogListWithDetailFromDB(Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}[])">
+            <summary>Seznam chyb z databáze</summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.Email.IGErrorLogLogic.ErrorLogListFromFile(System.String,Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}[])">
+            <summary>
+            Seznam chyb ze souboru.
+            </summary>
+            <param name="fileName">Název souboru k načtení</param>
+            <param name="filters">Seznam filtrů pro aplikaci na řádky v souboru.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Interface.Email.IGErrorLogLogic.ErrorLogListToFileFromDB(System.String,System.Boolean,Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}[])">
+            <summary>
+            Uloží vybrané řádky z databázte do souboru.
+            </summary>
+            <param name="fileName">Soubor k uložení.</param>
+            <param name="automatic">Automatické odeslání - nastaví filtr na datum od posledně(pokud již neni jiné) a datum do na dnes</param>
+            <param name="filters">Filtry pro načtení chyb z databáze</param>
+        </member>
+        <member name="M:Gordic.Akc.Interface.Email.IGErrorLogLogic.ErrorLogListToFileFromFile(System.String,System.String,System.Boolean,Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}[])">
+            <summary>
+            Uloží vybrané řádky ze souboru do souboru.
+            </summary>
+            <param name="fileName">Soubor k uložení.</param>
+            <param name="sourceFileName">Soubor k načtení.</param>
+            <param name="automatic">Automatické odeslání - nastaví filtr na datum od posledně(pokud již neni jiné) a datum do na dnes</param>
+            <param name="filters">Filtry pro načtení chyb ze souboru</param>
+        </member>
+        <member name="M:Gordic.Akc.Interface.Email.IGErrorLogLogic.SendEmailsFromFile(Gordic.Akc.Interface.Email.AuthorMatching,System.String,System.Boolean,Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}[])">
+            <summary>
+            Odešle chyby z datatable příslušným autorům
+            </summary>
+            <param name="authorMatching">Chyby přiřadí autorům podle fáze nebo podle číselníku ginlerr</param>
+            <param name="fileName">Název souboru k načtení</param>
+            <param name="automatic">Automatické odeslání - nastaví filtr na datum od posledně(pokud již neni jiné) a datum do na dnes</param>
+            <param name="filters">filtry pro vybrání chyb k odeslání.</param>
+            <returns>Počet odeslaných emailů</returns>
+        </member>
+        <member name="M:Gordic.Akc.Interface.Email.IGErrorLogLogic.SendEmailsFromDB(Gordic.Akc.Interface.Email.AuthorMatching,System.Boolean,Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}[])">
+            <summary>
+            Odešle chyby z datatable příslušným autorům
+            </summary>
+            <param name="authorMatching">Chyby přiřadí autorům podle fáze nebo podle číselníku ginlerr</param>
+            <param name="automatic">Automatické odeslání - nastaví filtr na datum od posledně(pokud již neni jiné) a datum do na dnes</param>
+            <param name="filters">filtry pro vybrání chyb k odeslání.</param>
+            <returns>Počet odeslaných emailů</returns>
+        </member>
+        <member name="M:Gordic.Akc.Interface.Email.IGErrorLogLogic.SendEmail(Gordic.Akc.Interface.GErrorLogEmail)">
+            <summary>
+            Odešle chyby z datatable příslušným autorům
+            </summary>
+            <param name="email">Email k odeslání</param>
+        </member>
+        <member name="M:Gordic.Akc.Interface.Email.IGErrorLogLogic.BuildEmailFromDB(System.Boolean,Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}[])">
+            <summary>
+            Připraví email z chyb z databáze
+            </summary>
+            <param name="automatic">automatické vytvoření od posledního data</param>
+            <param name="filters">filtry pro vybrání chyb</param>
+            <returns>email naplněný chybama</returns>
+        </member>
+        <member name="M:Gordic.Akc.Interface.Email.IGErrorLogLogic.BuildEmailFromFile(System.Boolean,System.String,Gordic.General.GFilter{Gordic.Akc.Interface.Email.FilterErrorLog}[])">
+            <summary>
+            Připraví email z chyb ze souboru
+            </summary>
+            <param name="automatic">automatické vytvoření od posledního data</param>
+            <param name="fileName">název zdrojového souboru</param>
+            <param name="filters">filtry pro vybrání chyb</param>
+            <returns>email naplněný chybama</returns>
+        </member>
+        <member name="M:Gordic.Akc.Interface.Email.IGErrorLogLogic.GetLastAutomaticDateTime">
+            <summary>
+            Získání data poslední automatické operace
+            </summary>
+            <returns>Datum a čas poslední automatické operace</returns>
+        </member>
+        <member name="M:Gordic.Akc.Interface.Email.IGErrorLogLogic.SetLastAutomaticDateTime(System.DateTime)">
+            <summary>
+            Nastavení data poslední automatické operace
+            </summary>
+            <param name="lastAutomaticTime">Datum a čas poslední automatické operace</param>
+        </member>
+        <member name="T:Gordic.Akc.Interface.Email.FilterErrorLog">
+            <summary>Filtry pro seznam chyb</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.Email.FilterErrorLog.dat_err_od">
+            <summary>Začátek intervalu vzniku chyby</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.Email.FilterErrorLog.dat_err_do">
+            <summary>Konec intervalu vzniku chyby</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.Email.FilterErrorLog.ser_cis_err">
+            <summary>Číslo chyby</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.Email.FilterErrorLog.gor_err">
+            <summary>Identifikace chyby a autora</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.Email.FilterErrorLog.skip_unimportant">
+            <summary>Přeskočit nedůležité chyby - začínající # a oznámení o spuštění servisního režimu.</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.Email.FilterErrorLog.txt_err">
+            <summary>
+            Like / NotLike - funguje jako Contains - texty uzavřené do "" , oddělené čárkou (OR) 
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.Email.FilterErrorLog.limit">
+            <summary>Omezení na max počet řádek.</summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.Email.AuthorMatching">
+            <summary>
+            Způsob jakým přiřazovat chyby autorům
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.Email.AuthorMatching.Code">
+            <summary>
+            Přiřazovat chyby podle číselníku vyjímek
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.Email.AuthorMatching.Faze">
+            <summary>
+            Přiřazovat chyby podle fáze
+            </summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.GErrorLogEmail">
+            <summary>
+            Třída reprezentující email.
+            </summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogEmail.Subject">
+            <summary>
+            Předmět emailu
+            </summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogEmail.Text">
+            <summary>
+            Text emailu
+            </summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogEmail.AttachmentName">
+            <summary>
+            Název přílohy
+            </summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogEmail.TimeStamp">
+            <summary>
+            Datum a čas vytvoření emailu
+            </summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogEmail.AllReceivers">
+            <summary>
+            Všichni příjemci.
+            </summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogEmail.AuthorCodesToParse">
+            <summary>
+            Kódy autorů, kterým se má email poslat - může být dvoj/troj-číselné nebo celý kód chyby
+            </summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogEmail.FazesToParse">
+            <summary>
+            Fáze autorů, kterým se má email poslat
+            </summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogEmail.ErrorsCount">
+            <summary>
+            Počet záznamů v emailu
+            </summary>
+        </member>
+        <member name="P:Gordic.Akc.Interface.GErrorLogEmail.RowsAsDataTable">
+            <summary>
+            Chyby jako datatable
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogEmail.#ctor">
+            <summary>
+            Konstruktor emailu pro chyby.
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogEmail.#ctor(Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogDataTable)">
+            <summary>
+            Konstruktor emailu pro chyby
+            </summary>
+            <param name="dataTable">Datatable s chybami</param>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogEmail.#ctor(System.String,System.String,Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow[])">
+            <summary>
+            Konstruktor emailu pro chyby.
+            </summary>
+            <param name="subject">Předmět emailu</param>
+            <param name="text">Text emailu</param>
+            <param name="rows">Chyby pro vložení do emailu</param>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogEmail.#ctor(System.String,System.String,System.String,Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow[])">
+            <summary>
+            Konstruktor emailu pro chyby.
+            </summary>
+            <param name="subject">Předmět emailu</param>
+            <param name="text">Text emailu</param>
+            <param name="authorEmail">Cílový autor</param>
+            <param name="rows">Chyby pro vložení do emailu</param>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogEmail.#ctor(System.String,System.String,System.Collections.Generic.IEnumerable{System.String},Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow[])">
+            <summary>
+            Konstruktor emailu pro chyby.
+            </summary>
+            <param name="subject">Předmět emailu</param>
+            <param name="text">Text emailu</param>
+            <param name="authorEmails">Cílový autoři</param>
+            <param name="rows">Chyby pro vložení do emailu</param>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogEmail.#ctor(Gordic.Akc.Interface.GErrorLogEmail)">
+            <summary>
+            Copy konstruktor
+            </summary>
+            <param name="email">Předloha k zkopírování</param>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogEmail.AddCombinedEmails(System.String)">
+            <summary>
+            Přidat emailové adresy, čísla chyb, čísla autorů, fáze - string je rozparsován a místo čísel a fází jsou přidáni adekvátní autoři.
+            </summary>
+            <param name="emailsString"></param>
+            <returns>true - pokud bylo úspěšně rozparsováno a přidáno, false pokud nebylo přidáno a rozparsováno</returns>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogEmail.AddAuthor(System.String)">
+            <summary>
+            Přidat autora do emailu (buď jeho email nebo jeho fázi)
+            </summary>
+            <param name="authorEmail"></param>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogEmail.AddAuthor(System.Int32)">
+            <summary>
+            přidat autora podle jeho kódu nebo podle kódu chyby která mu patří
+            </summary>
+            <param name="code"></param>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogEmail.AddRow(Gordic.Akc.Interface.GErrorLogDataSet.ErrorLogRow)">
+            <summary>
+            Přidat chybu do emailu
+            </summary>
+            <param name="row">řádek chyby k přidání</param>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogEmail.AddOtherEmails(System.String)">
+            <summary>
+            Přidat jiné emailové adresy než jsou autoři
+            </summary>
+            <param name="emails">Emailové adresy</param>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogEmail.ClearReceivers">
+            <summary>
+            Vymaže všechny příjemce
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GErrorLogEmail.GetZippedFile(System.String)">
+            <summary>
+            Vrátí zazipované chyby jako stream
+            </summary>
+            <param name="innerFileName">název souboru uvnitř zipu</param>
+            <returns>Stream obsahující zazipované chyby</returns>
+        </member>
+        <member name="T:Gordic.Akc.Interface.IGErrorLogIsl">
+            <summary>
+            Rozhraní pro ISL ErrorLogu
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.IGErrorLogIsl.List(Gordic.Akc.Interface.Email.GErrorLogServiceRequest{Gordic.Akc.Interface.Email.FilterErrorLog})">
+            <summary>
+            Interface pro zjednodušený výpis Error Logů
+            </summary>
+            <param name="rq"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Interface.IGErrorLogIsl.ListCompleted(Gordic.Akc.Interface.Email.GErrorLogServiceRequest{Gordic.Akc.Interface.Email.FilterErrorLog})">
+            <summary>
+            Interface pro kompletní výpis ErrorLogů (použití pro detail) - pouze pro databázi v souboru je to dáno automaticky
+            </summary>
+            <param name="rq"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Interface.IGErrorLogIsl.GetEmailDetail(Gordic.Akc.Interface.Email.GErrorLogServiceRequest{Gordic.Akc.Interface.Email.FilterErrorLog})">
+            <summary>
+            Získání výpisu podrobností k emailu
+            </summary>
+            <param name="rq"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Interface.IGErrorLogIsl.ExportToZipFile(Gordic.Akc.Interface.Email.GErrorLogServiceRequest{Gordic.Akc.Interface.Email.FilterErrorLog})">
+            <summary>
+            Funkce pro export zip file to path
+            </summary>
+            /// <param name="rq"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Interface.IGErrorLogIsl.SendEmailAutomatic(Gordic.Akc.Interface.Email.GErrorLogServiceRequest{Gordic.Akc.Interface.Email.FilterErrorLog})">
+            <summary>
+            Odeslání emailu podle fáze
+            </summary>
+            <param name="rq"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Interface.IGErrorLogIsl.SendEmail(Gordic.Akc.Interface.GErrorLogEmailDto)">
+            <summary>
+            Odeslání mailu
+            </summary>
+            <param name="emailDto"></param>
+        </member>
+        <member name="M:Gordic.Akc.Interface.IGErrorLogIsl.GetLastAutomaticDateTime">
+            <summary>
+            Získání data posledního zpracování
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Interface.IGErrorLogIsl.SetNewAutomaticDateTime(System.DateTime)">
+            <summary>
+            Nastavení nového automatického data a času
+            </summary>
+            <param name="newDateTime"></param>
+        </member>
+        <member name="M:Gordic.Akc.Interface.IGErrorLogIsl.SendEmailFromFile(Gordic.General.ApplicationInterface.GServiceActionRequest{Gordic.Akc.Interface.GErrorLogSendEmailFromFilesRequestDto})">
+            <summary>
+            Vezme několik souborů, sestaví zprávy a rozešle email/emaily.
+            Pokud není nastaven authorMatching a je vyplněn emailConfiguration, dojde k odeslání v jednom emailu. 
+            Jinak dojde k odeslání více emailů podle authorMatching.
+            /// </summary>
+            <param name="rq"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Akc.Interface.GUnauthorizedAttemptDto">
+            <summary>DBTABLE:ginlhac</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GUnauthorizedAttemptDto.dat_login">
+            <summary>DBCOLUMN:ginlhac.dat_login</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GUnauthorizedAttemptDto.faze">
+            <summary>DBCOLUMN:ginlhac.faze</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GUnauthorizedAttemptDto.faze_nazev">
+            <summary>DBCOLUMN:ginlhac.faze</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GUnauthorizedAttemptDto.verze">
+            <summary>DBCOLUMN:ginlhac.verze</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GUnauthorizedAttemptDto.sub_verze">
+            <summary>DBCOLUMN:ginlhac.sub_verze</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GUnauthorizedAttemptDto.revize">
+            <summary>DBCOLUMN:ginlhac.revize</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GUnauthorizedAttemptDto.ip_adr">
+            <summary>DBCOLUMN:ginlhac.ip_adr</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GUnauthorizedAttemptDto.login_name">
+            <summary>DBCOLUMN:ginlhac.login_name</summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GUnauthorizedAttemptDto.gor_err">
+            <summary>DBCOLUMN:ginlhac.gor_err</summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.GSoubeznePracujiciUzivatele">
+            <summary>DBTABLE:gincfaz
+             Programová fáze
+             </summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.GSoubeznePracujiciUzivatele.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GSoubeznePracujiciUzivatele.faze">
+            <summary>
+             Programová fáze
+             Interní označení programové fáze aplikace systému GINIS. 
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GSoubeznePracujiciUzivatele.faze_txt">
+            <summary>
+             Programová fáze
+             Lidský název programové fáze
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GSoubeznePracujiciUzivatele.cas">
+            <summary>
+            Datum a čas loginu
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GSoubeznePracujiciUzivatele.pocet">
+            <summary>
+            Po4et sou4asn2 p5ihl83en7ch u6ivatel;
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GSoubeznePracujiciUzivatele.isWebApp">
+            <summary>
+            Jestli je to webová aplikace
+            </summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.Users.IGActiveUsersIsl">
+            <summary>
+            Isl pro výpis aktuálně přihlášených uživatelů
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.Users.IGActiveUsersIsl.ListActiveDatabaseConnects(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.FilterUser})">
+            <summary>
+            List
+            </summary>
+            <param name="rq"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Interface.Users.IGActiveUsersIsl.ListActiveUsers(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.FilterUser})">
+            <summary>
+            ListActiveUsers
+            </summary>
+            <param name="rq"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Interface.Users.IGActiveUsersIsl.IsAzure">
+            <summary>
+            Test zda je aplikace Azure
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Interface.Users.IGActiveUsersIsl.ZadostUkonceniPrace(Gordic.General.GString[])">
+            <summary>
+            Žádost o ukončení práce jednoho uživatele
+            </summary>
+            <param name="idPrihlaseni">Identifikátory přihlášení</param>
+        </member>
+        <member name="M:Gordic.Akc.Interface.Users.IGActiveUsersIsl.ZadostUkonceniPraceAll">
+            <summary>
+            Žádost o ukončení práce všech uživatelů
+            </summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.Users.IGUnauthorizedAttempts">
+            <summary>
+            Isl pro neoprávněné pokusy
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.Users.IGUnauthorizedAttempts.List(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.Users.FilterUnauthorizedAttempts})">
+            <summary>
+            Výpis neoprávněných pokusů
+            </summary>
+            <param name="rq"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Akc.Interface.Users.FilterUnauthorizedAttempts">
+            <summary>
+            Filtr pro neoprávněné pokusy
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.Users.FilterUnauthorizedAttempts.dat_login">
+            <summary>
+            Datum neoprávněného pokusu
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.Users.FilterUnauthorizedAttempts.faze">
+            <summary>
+            Fáze
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.Users.FilterUnauthorizedAttempts.verze">
+            <summary>
+            Verze
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.Users.FilterUnauthorizedAttempts.revize">
+            <summary>
+            Revize
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.Users.FilterUnauthorizedAttempts.login_name">
+            <summary>
+            Login
+            </summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.Users.IGUsersLoginHistory">
+            <summary>
+            Iterface pro zobrazení uživatelské historie
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.Users.IGUsersLoginHistory.List(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.FilterUser})">
+            <summary>
+            Výpis historie uživatelů
+            </summary>
+            <param name="rq"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Akc.Interface.IGConcurrentUsersIsl">
+            <summary>
+            Souběžně přihlášení uživatelé
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.IGConcurrentUsersIsl.List(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.FilterUser})">
+            <summary>
+            Výpis uživatelů
+            </summary>
+            <param name="rq"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Akc.Interface.IGUsersLoginsLogic">
+            <summary>
+            Application login for getting info about users.
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.IGUsersLoginsLogic.LoadActiveUsers(Gordic.General.GFilter{Gordic.Akc.Interface.FilterUser}[])">
+            <summary>
+            Vrátí aktuálně přihlášené uživatele
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Akc.Interface.IGUsersLoginsLogic.LoadConcurrentUsers(Gordic.General.GFilter{Gordic.Akc.Interface.FilterUser}[])">
+            <summary>
+            Vrátí souběžně přihlášené uživatele
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Akc.Interface.FilterUser">
+            <summary>
+            Filter on user
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.FilterUser.sessid">
+            <summary>
+            The sessid
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.FilterUser.dat_login">
+            <summary>
+            The dat login
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.FilterUser.limit">
+            <summary>
+            The limit of rows
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.FilterUser.log_por_cislo">
+            <summary>
+            The log por cislo
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.FilterUser.ixs_fun">
+            <summary>
+            The ixs fun
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.FilterUser.ixs_ref">
+            <summary>
+            The ixs reference
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.FilterUser.login_win">
+            <summary>
+            The login win
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.FilterUser.comp_name">
+            <summary>
+            The comp name
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.FilterUser.faze">
+            <summary>
+            Faze
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.FilterUser.activeUsersThisDb">
+            <summary>
+            activeUsersThisDb - aktivní uživatelé pouze pro tuto db (INFORMIX)
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.FilterUser.typ_pripojeni">
+            <summary>
+            Typ připojení
+            </summary>
+        </member>
+        <member name="T:Gordic.Akc.Interface.IGSoucasnePracujiciUzivatele">
+            <summary>
+            Třída pro zjištění současně pracujících uživatelů
+            </summary>
+        </member>
+        <member name="M:Gordic.Akc.Interface.IGSoucasnePracujiciUzivatele.ListFaze(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Akc.Interface.GSoucasnePracujiciUzivateleFilter})">
+            <summary>
+            Vypíše fáze za období
+            </summary>
+            <param name="rq"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Akc.Interface.GSoucasnePracujiciUzivateleFilter">
+            <summary>
+            Filter SoucasnePracujiciUzivatele
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GSoucasnePracujiciUzivateleFilter.datum_od">
+            <summary>
+            Datum OD
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GSoucasnePracujiciUzivateleFilter.datum_do">
+            <summary>
+            Datum DO
+            </summary>
+        </member>
+        <member name="F:Gordic.Akc.Interface.GSoucasnePracujiciUzivateleFilter.faze">
+            <summary>
+            Vybrané fáze
+            </summary>
+        </member>
+    </members>
+</doc>

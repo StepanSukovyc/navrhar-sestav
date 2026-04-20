@@ -1,0 +1,927 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Vep.Client</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Vep.Client.GVepClient`1">
+            <summary> Předek všech klientských tříd aplikační logiky pro VEP
+            </summary>
+        </member>
+        <member name="P:Gordic.Vep.Client.GVepClient`1.AppLogic">
+            <summary> Aplikacni logika
+            </summary>
+        </member>
+        <member name="P:Gordic.Vep.Client.GVepClient`1.Globals">
+            <summary> Globalni instance nastaveni 
+            </summary>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVepClient`1.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary> Konstruktor </summary>
+            <param name="oUserProcess">UserProcess</param>
+        </member>
+        <member name="T:Gordic.Vep.Client.GRozpoctovaDokumentace">
+            <summary> Klientska cast pro praci s Vypoctovym listem 
+            </summary>
+        </member>
+        <member name="M:Gordic.Vep.Client.GRozpoctovaDokumentace.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary> Konstruktor </summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GRozpoctovaDokumentace.SeznamDokumentace(Gordic.General.GString)">
+            <summary>Vrati uplnou rozpoctovou dokumentaci k elementu VP (vcetne historie)</summary>
+            <param name="ixsEvp">identifikator elementu VP</param>
+            <returns>seznam vsech rozpoctovych dokumentu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GRozpoctovaDokumentace.PodaniDoWfl(Gordic.General.GString)">
+            <summary>Zalozi nove ixp rozpoctove dokumentace</summary>
+            <param name="ixsEvp">identifikator VP</param>
+            <returns>ixp</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GRozpoctovaDokumentace.StavDokumentace(Gordic.General.GString)">
+            <summary>Vrati stav dokumentace cile</summary>
+            <param name="ixsEvp">identifikator cile</param>
+            <returns>informace o stavu rozpoctove dokumentace</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GRozpoctovaDokumentace.StornoDokumentaceHromadneList(Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Vrati seznam vsech rozpoctovych dokumentaci urcenych k hromadnemu Stornu pro predany element a vsechny jeho podrizene, ktere maji platnost_do stejnou nebo starsi nez predany rok (neprovadi zadnou aktivni operaci!)</summary>
+            <param name="ixsEvpRoot">identifikator parent elementu/stromu</param>
+            <param name="maxRok">omezeni zhora.. budou smazany vsechny dokumentace, kterym byla platnost_do ukoncena pred danym rokem (vcetne)</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GRozpoctovaDokumentace.StornoDokumentaceHromadne(Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Stronuje vsechny rozpoctove dokumentace (navrhy i schvalene) pro predany element a vsechny jeho podrizene, ktere maji platnost_do stejnou nebo starsi nez predany rok</summary>
+            <param name="ixsEvpRoot">identifikator parent elementu/stromu</param>
+            <param name="maxRok">omezeni zhora.. budou smazany vsechny dokumentace, kterym byla platnost_do ukoncena pred danym rokem (vcetne)</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Vep.Client.GExternals">
+            <summary> Klient pro praci s daty modulu z externich agend
+            </summary>
+        </member>
+        <member name="M:Gordic.Vep.Client.GExternals.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary> Konstruktor </summary>
+            <param name="oUserProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GExternals.SeznamCiluMCDP(Gordic.General.GDateTime,System.Boolean)">
+            <summary>Export cilů do XML pro MCDP</summary>
+            <param name="zmenaOd"></param>
+            <param name="generovatPopis"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Vep.Client.GRozCile">
+            <summary> Interface pro praci s nastavenim Stromu Vecneho Planovani 
+            </summary>
+        </member>
+        <member name="M:Gordic.Vep.Client.GRozCile.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary> Konstruktor </summary>
+            <param name="oUserProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GRozCile.GetCileFromEkoFun(Gordic.General.GString)">
+            <summary>Vrati seznam cilu kde je ekonomickym organem predane ixsFunEko</summary>
+            <param name="ixsFunEko">identifikator funkcniho mista ekonomickeho organu</param>
+            <returns>seznam cilu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GRozCile.GetCileToRootFromCil(Gordic.General.GString)">
+            <summary>Vraci seznam cilu od predaneho cile (vcetne) az k rootu</summary>
+            <param name="ixsEvp">identifikator elementu VP</param>
+            <returns>seznam cilu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GRozCile.GetCileRecursive(Gordic.General.GString,System.Boolean)">
+            <summary>Seznam podrizenych cilu (vcetne predaneho)</summary>
+            <param name="ixsEvp">identifikator elementu elementu</param>
+            <param name="leafsOnly">vracet pouze listy stromu (=true) nebo vsechny elementy (=false)</param>
+            <returns>seznam cilu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GRozCile.GetCilDetail(Gordic.General.GString)">
+            <summary>Vrati detail jednoho cile</summary>
+            <param name="ixsEvp">identifikator elementu VP</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GRozCile.GetCilePosuzujicichVEkoKompetentu(Gordic.General.GString,System.Collections.Generic.List{Gordic.General.GString})">
+            <summary>Vrati podrizene cile predanemu cili, ktere maji kompetenci posuzovat zmenu rozpoctu na predanych slovech UKO</summary>
+            <param name="ixsEvpUzluRMC">identifikator nadrizeneho cile - manazera</param>
+            <param name="seznamUko">slov UKO</param>
+            <returns>cile o jednu uroven nizsi nez ixsEvpUzluRMC, pokud maji zadaneho manazera a pokud pod ne spada nektery predany UKO</returns>
+        </member>
+        <member name="T:Gordic.Vep.Client.GVypoctovyList">
+            <summary> Klientska cast pro praci s Vypoctovym listem 
+            </summary>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVypoctovyList.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary> Konstruktor </summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVypoctovyList.DetailVypoctovyList(Gordic.General.GString)">
+            <summary>Načte výpočtový list. PRIVATE protoze od 8.10.2014 je nutne v kontextu MultiDetailElementu jeste zakazat editaci limitu prvni n roku. Melo by byt docasne, nez se roky budou uzamykat systemove pomoci PKR modelu</summary>
+            <param name="ixsEvp">identifikátor elementu VP</param>
+            <returns>seznam řádků výpočtového listu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVypoctovyList.DetailPredlimity(Gordic.General.GString)">
+            <summary>Naplni tabulku predlimitu ziskanou z nadrizenych a podrizenych elementu</summary>
+            <param name="ixsEvp">identifikátor elementu VP</param>
+            <returns>tabulka s nastavenymi limity a jejich cerpani podrizenymi</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVypoctovyList.EnsureLoad(Gordic.Vep.Interface.GMultiDetailElementu,Gordic.General.GInt16)">
+            <summary></summary>
+            <param name="detail"></param>
+            <param name="rok">pretizeni roku zobrazeni (ridi, ktere roky budou nacteny)</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVypoctovyList.UlozVypoctovyList(Gordic.Vep.Interface.GMultiDetailElementu)">
+            <summary>Ulozi vypoctovy list. POZOR! meni instance Vypoctoveho listu (dela reload) a Predlimitu</summary>
+            <param name="detail">element VP - data k ulozeni</param>
+            <returns>vrati stav predbezne kontroly vypoctoveho listu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVypoctovyList.DetailLimitu(Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Načte výpočtový list z DB (nova verze od 2015)</summary>
+            <param name="ixsEvp">identifikátor elementu VP</param>
+            <param name="rok">pretizeni roku zobrazeni (ridi, ktere roky budou nacteny)</param>
+            <returns>seznam řádků výpočtového listu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVypoctovyList.SouhrnLimitu(Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Naplni souhrn limitu ziskanou z nadrizenych a podrizenych elementu (nova verze od 2015)</summary>
+            <param name="ixsEvp">identifikátor elementu VP</param>
+            <param name="rok">pretizeni roku zobrazeni (ridi, ktere roky budou nacteny)</param>
+            <returns>tabulka s nastavenymi limity a jejich cerpani podrizenymi</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVypoctovyList.UlozLimity(Gordic.Vep.Interface.GMultiDetailElementu)">
+            <summary>Ulozi vypoctovy list. POZOR! meni instance Limity (dela reload) </summary>
+            <param name="detail">element VP - data k ulozeni</param>
+            <returns>vrati stav predbezne kontroly vypoctoveho listu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVypoctovyList.SouhrnUkazatelu(Gordic.General.GString,System.Boolean,Gordic.General.GInt16)">
+            <summary>Vrati souhrnou tabulku ukazatelu z jinych agend</summary>
+            <param name="ixsEvp">identifikator elementu VP</param>
+            <param name="masky">zda se maji vytvorit radky podle masek ukazatelu (true) ci za cely rok (false)</param>
+            <param name="rok">pretizeni roku zobrazeni (ridi, ktere roky budou nacteny)</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVypoctovyList.VysouctovatLimity(Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16)">
+            <summary>Pouzije limity definovane na poslednich urovnich (dle konfigurace + elementy bez podrizenych elementy) 
+            k vytvoreni sum az k rootovemu elementu.
+            POZOR!!! Nahrazuje vsechny ostatni limity zapsane uzivatelem</summary>
+            <param name="ixsEvpRoot">identifikator struktury</param>
+            <param name="rok">rok pro ktery se dela prepocet</param>
+            <param name="idOblasti">oblast vydaju, pro kterou se dela prepocet</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVypoctovyList.UpdateSouhrnuUkazatelu(Gordic.Vep.Interface.GMultiDetailSouhrnu,System.String,Gordic.Vep.Interface.GCacheLoadStrategy)">
+            <summary>Naplni data souhrnu dle specifikace</summary>
+            <param name="souhrn">MultiDetailSouhrnu</param>
+            <param name="ID">identifikator agendy, jejiz souhrny se maji doplnit</param>
+            <param name="cacheLoadStrategy">zpusob nacteni dat</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVypoctovyList.OperaceLimitu(Gordic.Vep.Interface.GVypoctovyListDataset.LimityRow,GVypoctovyListOperace,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDecimal,System.Boolean)">
+            <summary>operace nad tabulkou limitu</summary>
+            <param name="row">vybrany (vychozi) radek</param>
+            <param name="op">enum pozadovane operace</param>
+            <param name="ico">nove ico</param>
+            <param name="nks">nove nks</param>
+            <param name="limit">novy limit</param>
+            <param name="presRoky"></param>
+        </member>
+        <member name="T:Gordic.Vep.Client.GStavy">
+            <summary> Interface pro praci s nastavenim Stromu Vecneho Planovani 
+            </summary>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStavy.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary> Konstruktor </summary>
+            <param name="oUserProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStavy.GetPosibleTransitions(Gordic.General.GString)">
+            <summary>metoda vracejici seznam moznych prechodu stavu</summary>
+            <param name="ixsEvp">identifikator elementu, u ktereho zjistujeme prechod</param>
+            <returns>seznam moznych prechodu, ktere je mozne provest</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStavy.GetPosibleTransitions(Gordic.General.GString,Gordic.General.GString,System.Int16)">
+            <summary>metoda vracejici seznam moznych prechodu stavu - optimalizace</summary>
+            <param name="ixsVts">identifikator typu struktury</param>
+            <param name="ixsEvp">identifikator elementu, u ktereho zjistujeme prechod</param>
+            <param name="state">soucasny stav elementu (optimalizace)</param>
+            <returns>seznam moznych prechodu, ktere je mozne provest</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStavy.GetPossibleTransitions(System.Data.DataRow)">
+            <summary>metoda vracejici seznam moznych prechodu stavu - optimalizace</summary>
+            <param name="row">radek ze seznamu elementu, pro ktery vratime seznam moznych prechodu</param>
+            <returns>seznam moznych prechodu, ktere je mozne provest</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStavy.ChangeState(Gordic.General.GString,Gordic.Vep.Interface.GWorkflowTransition,Gordic.Vep.Interface.GUserFormData)">
+            <summary>Prepne stav elementu</summary>
+            <param name="ixsEvp">identifikator elementu VP</param>
+            <param name="transition">prechod stavu</param>
+            <param name="ufd">UserFormData ke zmene stavu</param>
+            <returns>pokud vyzaduje dalsi informace z klienta, vrati nakonfigurovany UFD objekt, pokud vrati NULL pokracuje se ke zmene stavu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStavy.GetEvpEditablePropertyStateGroups(Gordic.General.GString)">
+            <summary>Metoda vrati seznam stavovych skupin vlastnosti, ktere mohou byt editovatelne na danem elementu</summary>
+            <param name="ixsEvp">identifikator elementu VP (pripadne ixsVts pokud je element bez stavu - napr.neni v DB)</param>
+            <returns>seznam stavovych skupin vlastnosti</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStavy.SkupinyVlastnosti(Gordic.General.GFilter{Gordic.Vep.Interface.FiltrSkupinyVlastnosti}[])">
+            <summary>Seznam moznych stavovych skupin vlastnosti pro dany typ struktury</summary>
+            <param name="filters">filtry</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStavy.GetBaseStates(Gordic.General.GString)">
+            <summary>Vrati seznam stavu, ktere mohou slouzit jako Zakladni stavy (tzn. ze je mozne do nich prejit bez podpory workflow)</summary>
+            <param name="ixsVts">identifikator typu struktury</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Vep.Client.GMasky">
+            <summary>Klientská část logiky pro práci s maskami elementů</summary>
+        </member>
+        <member name="M:Gordic.Vep.Client.GMasky.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary> Konstruktor </summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GMasky.DetailMasky(Gordic.General.GString)">
+            <summary>Získá detail masky, která je nastavená na vybraném elementu</summary>
+            <param name="ixsEvp">Identifikátor elementu</param>
+            <returns>Načtená maska</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GMasky.NovaMaska">
+            <summary>Vytvoří nový multidetail masky</summary>
+            <returns>Nová maska</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GMasky.UlozMasku(Gordic.General.GString,Gordic.Vep.Interface.GMultiDetailMasky)">
+            <summary>Uloží zadanou masku</summary>
+            <param name="ixsEvp">Identifikátor elementu</param>
+            <param name="detailMasky">Maska, která bude uložena</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GMasky.SmazMasku(Gordic.General.GString)">
+            <summary>Smaže masku</summary>
+            <param name="ixsEvp">Identifikátor elementu</param>
+        </member>
+        <member name="T:Gordic.Vep.Client.GExternalPkr">
+            <summary> Interface pro praci s daty modulu PKR (vyjimecne zde) 
+            </summary>
+        </member>
+        <member name="M:Gordic.Vep.Client.GExternalPkr.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary> Konstruktor </summary>
+            <param name="oUserProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GExternalPkr.NactiLimityCiluPkr(Gordic.Vep.Interface.GMultiDetailElementu,Gordic.General.GString)">
+            <summary>nacte limity PKR pro aktualni element VEP</summary>
+            <param name="element"></param>
+            <param name="ixsVvp"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GExternalPkr.UlozLimityCiluPkr(Gordic.Vep.Interface.GMultiDetailElementu,Gordic.General.GString,Gordic.Vep.Interface.GMultiDetailLimituPkr)">
+            <summary>ulozi limity PKR pro aktualni element VEP</summary>
+            <param name="element"></param>
+            <param name="ixsVvp"></param>
+            <param name="data">data limitu k ulozeni</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GExternalPkr.SynchronizaceCiluSPkr(Gordic.General.GString,Gordic.General.GString,System.Boolean)">
+            <summary>Synchronizuje cile elementu COSR s agendou PKR</summary>
+            <param name="ixsEvp"></param>
+            <param name="ixsVvp"></param>
+            <param name="continueIfError"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GExternalPkr.NajdiEvpKNKS(Gordic.General.GString,Gordic.General.GString)">
+            <summary>Vrati element vecneho planovani k predanemu NKS 6.urovne.</summary>
+            <param name="ico">nks</param>
+            <param name="nks">nks</param>
+            <returns>identifikator elementu VP (ixs_evp)</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GExternalPkr.NajdiEvpKUKO(Gordic.General.GString)">
+            <summary>Vrati element vecneho planovani k predanemu UKO</summary>
+            <param name="uko">cislo cile</param>
+            <returns>identifikator elementu VP (ixs_evp)</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GExternalPkr.NaplnLimityVEP(Gordic.General.GInt16)">
+            <summary>Export aktualnich limitu do veptse4</summary>
+            <param name="rok"></param>
+        </member>
+        <member name="T:Gordic.Vep.Client.GPrava">
+            <summary> Interface pro praci s nastavenim Stromu Vecneho Planovani 
+            </summary>
+        </member>
+        <member name="M:Gordic.Vep.Client.GPrava.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary> Konstruktor </summary>
+            <param name="oUserProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GPrava.SeznamPrav(Gordic.General.GString)">
+            <summary>Ziska seznam nastavenych funkci k danemu objektu ve stromu</summary>
+            <param name="ixs">identifikator objektu ci elementu</param>
+            <returns>seznam funkcnich mist a prirazenych rolich (resp. pravech)</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GPrava.SeznamPravHromadne(Gordic.General.GString)">
+            <summary>Pripravi hromadnou strukturu prav (konfiguraci) k objektu</summary>
+            <param name="ixs">identifikator objektu, ke kteremu nacitame prava</param>
+            <returns>multistruktura prav k objektu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GPrava.NovySeznamPravHromadne">
+            <summary>Pripravi novou hromadnou strukturu prav (konfiguraci)</summary>
+            <returns>multistruktura prav k objektu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GPrava.DetailPrav(Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nacte detailni informace o nastavene roli a pretizenych prav daneho uzivatel pro dany objekt</summary>
+            <param name="ixs">identifikator objektu s nastavenymi pravy</param>
+            <param name="ixsSubj">identifikator funkcniho mista</param>
+            <returns>objekt detailniho nastaveni prav</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GPrava.NovyDetailPrav(Gordic.General.GString,Gordic.General.GString)">
+            <summary>Vytvori novy multidetail prav</summary>
+            <param name="ix">typ objektu pro ktery vytvarime detail prav</param>
+            <param name="ixsVts">pokud je typ objektu EVP, je treba zadat typ stromu</param>
+            <returns>objekt detailniho nastaveni prav</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GPrava.UlozPrava(Gordic.General.GString,Gordic.General.GString,Gordic.Vep.Interface.GMultiDetailPrav)">
+            <summary>Uloz nastaveni prav k objektu a funkci</summary>
+            <param name="ixs">identifikator objektu s pravy</param>
+            <param name="ixsSubj">identifikator funkcniho mista</param>
+            <param name="aData">data k ulozeni</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GPrava.UlozPravaHromadne(Gordic.General.GString,Gordic.Vep.Interface.GVepSeznamPrav)">
+            <summary>Ulozi nastaveni prav k objektu a funkcim. Pracuje v hromadnem modu.</summary>
+            <param name="ixs">identifikator objektu s pravy</param>
+            <param name="seznamPrav">struktura modifikaci prav k vice v funkcim</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GPrava.SmazPrava(Gordic.General.GString,Gordic.General.GString)">
+            <summary>Smaze nastaveni prav funkce na objektu</summary>
+            <param name="ixs">identifikator objektu s pravy</param>
+            <param name="ixsSubj">identifikator funkcniho mista</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GPrava.VyslednaSadaPrav(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.Boolean)">
+            <summary>Vrati vyslednou sadu prav pro danou funkci na danem objektu</summary>
+            <param name="ixsFun">identifikator funkcniho mista</param>
+            <param name="ixsEvp">identifikator vetve stromu (NULL pokud se jedna o objekt mimo strom)</param>
+            <param name="ixs">identifikator objektu (NULL pokud zjistujeme prava k pouze k vetvi stromu)</param>
+            <param name="fast">TRUE zrychlene nacitani - nacitaji se pouze hodnoty a ixs; FALSE - dotahuji se i nazvy elementu a funkci</param>
+            <returns>seznam nastavenych hodnot prav</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GPrava.RegeneratePreview(Gordic.General.GString)">
+            <summary>Regenerace nahledu prav</summary>
+            <param name="ixs">identifikator elementu stromu nebo objektu</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GPrava.PredatEvp(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Preda element VP. Predane elementy se predanemu nabidnou k prevzeti</summary>
+            <param name="ixsEvp">identifikator elementu vecneho planovani</param>
+            <param name="ixsSubj">identifikator subjektu prav (funkcni misto, ...)</param>
+            <param name="komentar">uzivatelsky komentar</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GPrava.PreveletEvp(Gordic.General.GString)">
+            <summary>Preda element VP. subjektu o jednu uroven bliz cilovemu subjektu v organizacni strukture</summary>
+            <param name="ixsEvp">identifikator elementu vecneho planovani</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GPrava.PrevzitEvp(Gordic.General.GString)">
+            <summary>Preveti elementu VP. Predane elementy je nejprve nutno prevzit (dat na vedomi predani) a pote rozhodnout o prijmuti ci odmitnuti</summary>
+            <param name="ixsEvp">identifikator elementu vecneho planovani</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GPrava.PrijmoutEvp(Gordic.General.GString)">
+            <summary>Prijmuti elementu VP. Predane elementy je nutne prijmout a tim dokoncit proces ukolovani</summary>
+            <param name="ixsEvp">identifikator elementu vecneho planovani</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GPrava.OdmitnoutEvp(Gordic.General.GString,Gordic.General.GString)">
+            <summary>Odmitnuti elementu VP je alternativa k prijeti. Element se vrati puvodnimu spravci (ve strukturovanem ukolovani se element vraci predchozimu subjektu v Chain of Command)</summary>
+            <param name="ixsEvp">identifikator elementu vecneho planovani</param>
+            <param name="komentar">uzivatelsky komentar</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GPrava.OdvolatEvp(Gordic.General.GString,Gordic.General.GString)">
+            <summary>Odvolani elementu VP. Zaukolovane nebo ukolujici subjekty lze touto akci odebrat. Element ztraci vsechny ukolovane subjekty a pristup zustava pouze nadrizenym elementum. Pravidla a podminky pro uspesne odvolani jsou implementovany uvnitr</summary>
+            <param name="ixsEvp">identifikator elementu vecneho planovani</param>
+            <param name="komentar">uzivatelsky komentar</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GPrava.AkceptovatOdmitnutiEvp(Gordic.General.GString)">
+            <summary>Potvrzeni odmitnuti narizujicim subjektem</summary>
+            <param name="ixsEvp">identifikator elementu vecneho planovani</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GPrava.ZjistiVelitelskouCestuUkolovani(Gordic.General.GString)">
+            <summary>Vrati aktualni Chain of Command pro dany element - ma smysl volat pouze pro elementy s nekym zaukolovanym</summary>
+            <param name="ixsEvp">identifikator elementu CP</param>
+            <returns>seznam IxsEvp organizacni struktury mezi prvnim ukolujicim a cilovym ukolovanym</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GPrava.PreukolovatCilMO(Gordic.General.GString,Gordic.General.GString)">
+            <summary>Preukoluje cil na nove NS. NS musi existovat v aktualni strukture COSR</summary>
+            <param name="ixsEvp">identifikator elementu VP</param>
+            <param name="nks">nove NS</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GPrava.CisRoli(Gordic.General.GString,Gordic.General.GString,Gordic.General.GFilter{Gordic.Vep.Interface.FiltrRoli}[])">
+            <summary>Vrati seznam povolenych roli pro dany typ objektu</summary>
+            <param name="ix">typ objektu</param>
+            <param name="ixsVts">pokud je typ objektu EVP, pak je nutne uvest typ stromu</param>
+            <param name="filters"></param>
+            <returns>seznam povolenych roli pro dany objekt</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GPrava.CisHodnotPrav(Gordic.General.GString,Gordic.General.GFilter{Gordic.Vep.Interface.FiltrHodnotPrav}[])">
+            <summary>Vrati povolene hodnoty konkretniho prava</summary>
+            <param name="pr">identifikator prava</param>
+            <param name="filters"></param>
+            <returns>seznam povolenych hodnot</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GPrava.PravaRole(System.String)">
+            <summary>Vrati nastaveni hodnot prav k roli (pouze vyplnene hodnoty)</summary>
+            <param name="ixsRvp">identifikator role prav VP</param>
+            <returns>seznam prav a hodnot prav</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GPrava.DetailSubjektu(Gordic.General.GString)">
+            <summary>Nacte detail (nazev) subjektu</summary>
+            <param name="ixsSubj">identifikator subjektu</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Vep.Client.GVlastnosti">
+            <summary> Interface pro praci s popisnymi vlastnostmi Vecneho Planovani 
+            </summary>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVlastnosti.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary> Konstruktor </summary>
+            <param name="oUserProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVlastnosti.NactiKonfiguraciVlastnosti(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Collections.Generic.List{System.Int16})">
+            <summary>Nacte strukturu vlastnosti s konfiguracemi </summary>
+            <param name="ixsEvp">identifikator elementu stromu pro hiearchickou dedicnost vlastnosti</param>
+            <param name="ixs">identifikator objektu, pro ktery chceme vlastnosti nacist. Objekt je na stejne urovni jako ixsEvp</param>
+            <param name="ix">filtr konfigurace jen na specificky typ IX</param>
+            <param name="newObj">zda hledame vlastnosti elementu z nadrizeneho elementu (pokud je true, pridava se +1 efektivni uroven)</param>
+            <param name="rtConfig">zda mame pravo na objektu konfigurovat prava (ovlivnuje READONLY priznak)</param>
+            <param name="rtNotOrdered">pravo nastavovat narizene vlastnosti (ovlivnuje READONLY priznak)</param>
+            <param name="rtOrdered">pravo nastavovat nenarizene vlastnosti (ovlivnuje READONLY priznak)</param>
+            <param name="editableStateGroups">vyplnujte pouze pokud je ixsEvp=NULL ale nacitaji se vlastnosti v kontextu elementu</param>
+            <returns>struktura vlastnosti</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVlastnosti.NactiKonfiguraciVlastnosti(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.Boolean)">
+            <summary>Nacte strukturu vlastnosti s konfiguracemi </summary>
+            <param name="ixsEvp">identifikator elementu stromu pro hiearchickou dedicnost vlastnosti</param>
+            <param name="ixs">identifikator objektu, pro ktery chceme vlastnosti nacist. Objekt je na stejne urovni jako ixsEvp</param>
+            <param name="ix">filtr konfigurace jen na specificky typ IX</param>
+            <param name="newObj">zda hledame vlastnosti elementu z nadrizeneho elementu (pokud je true, pridava se +1 efektivni uroven)</param>
+            <returns>struktura vlastnosti</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVlastnosti.NactiKonfiguraciVlastnosti(Gordic.Vep.Interface.GMultiDetailElementu,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.Boolean)">
+            <summary>Nacte strukturu vlastnosti s konfiguracemi </summary>
+            <param name="ixsEvp">identifikator elementu stromu pro hiearchickou dedicnost vlastnosti</param>
+            <param name="ixs">identifikator objektu, pro ktery chceme vlastnosti nacist. Objekt je na stejne urovni jako ixsEvp</param>
+            <param name="ix">filtr konfigurace jen na specificky typ IX</param>
+            <param name="newObj">zda hledame vlastnosti elementu z nadrizeneho elementu (pokud je true, pridava se +1 efektivni uroven)</param>
+            <param name="elemData">informace o elementu pro ktery nacitame data (slouzi predevsim pro ziskani prav)</param> 
+            <returns>struktura vlastnosti</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVlastnosti.NactiHodnotyVlastnosti(Gordic.Vep.Interface.GVepPropertyCategory,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString[])">
+            <summary>Doplni hodnoty vlastnosti obsazenych v katalogu</summary>
+            <param name="cat">zdrojovy katalog vlastnosti</param>
+            <param name="ixs">identifikator objektu, ke kteremu se nacitaji hodnoty</param>
+            <param name="ixsVvpList">seznam variant, ktere se maji nacist</param>
+            <param name="destContext">cilovy kontext hodnot vlastnosti, do ktereho se hodnoty ukladaji</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVlastnosti.NactiHodnotyVlastnosti(Gordic.Vep.Interface.GMultiDetailElementu,Gordic.Vep.Interface.GVepPropertyCategory,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString[])">
+            <summary>Doplni hodnoty vlastnosti obsazenych v katalogu</summary>
+            <param name="cat">zdrojovy katalog vlastnosti</param>
+            <param name="ixs">identifikator objektu, ke kteremu se nacitaji hodnoty</param>
+            <param name="ixsVvpList">seznam variant, ktere se maji nacist</param>
+            <param name="destContext">cilovy kontext hodnot vlastnosti, do ktereho se hodnoty ukladaji</param>
+            <param name="elemData">informace o elementu pro ktery nacitame data (slouzi predevsim pro ziskani prav)</param> 
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVlastnosti.DoplnPrazdneHodnotyVlastnosti(Gordic.Vep.Interface.GVepPropertyCategory,Gordic.General.GString,Gordic.General.GString[])">
+            <summary>Doplni prazdne hodnoty do daneho kontextu hodnot pro vsechny vlastnosti, ktere maji spravnou uroven</summary>
+            <param name="cat">zdrojovy katalog vlastnosti</param>
+            <param name="ix">typ objektu pro ktery vyplnujeme hodnoty</param>
+            <param name="ixsVvpList">seznam variant, ktere se maji nacist</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVlastnosti.DoplnPrazdneHodnotyVlastnosti(Gordic.Vep.Interface.GMultiDetailElementu,Gordic.Vep.Interface.GVepPropertyCategory,Gordic.General.GString,Gordic.General.GString[])">
+            <summary>Doplni prazdne hodnoty do daneho kontextu hodnot pro vsechny vlastnosti, ktere maji spravnou uroven</summary>
+            <param name="cat">zdrojovy katalog vlastnosti</param>
+            <param name="ix">typ objektu pro ktery vyplnujeme hodnoty</param>
+            <param name="ixsVvpList">seznam variant, ktere se maji nacist</param>
+            <param name="elemData">informace o elementu pro ktery nacitame data (slouzi predevsim pro ziskani prav)</param> 
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVlastnosti.NactiKonfiguraciAHodnotyVlastnosti(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.Boolean,System.Boolean,System.Boolean,System.Collections.Generic.List{System.Int16})">
+            <summary>Nacte strukturu vlastnosti (hodnoty) pro element/objekt</summary>
+            <param name="ixsEvp">identifikator elementu VP</param>
+            <param name="ixs">identifikator konkretniho objektu</param>
+            <param name="ix">filtr na typ objektu</param>
+            <param name="rtConfig">zda mame pravo na objektu konfigurovat prava (ovlivnuje READONLY priznak)</param>
+            <param name="rtNotOrdered">pravo nastavovat narizene vlastnosti (ovlivnuje READONLY priznak)</param>
+            <param name="rtOrdered">pravo nastavovat nenarizene vlastnosti (ovlivnuje READONLY priznak)</param>
+            <param name="editableStateGroups">vyplnujte pouze pokud je ixsEvp=NULL ale nacitaji se vlastnosti v kontextu elementu</param>
+            <returns>strukturu vlastnosti (hodnoty + konfigurace)</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVlastnosti.NactiKonfiguraciAHodnotyVlastnosti(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nacte strukturu vlastnosti (hodnoty) pro element/objekt</summary>
+            <param name="ixsEvp">identifikator elementu VP</param>
+            <param name="ixs">identifikator konkretniho objektu</param>
+            <param name="ix">filtr na typ objektu</param>
+            <returns>strukturu vlastnosti (hodnoty + konfigurace)</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVlastnosti.NactiKonfiguraciAHodnotyVlastnosti(Gordic.Vep.Interface.GMultiDetailElementu,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nacte strukturu vlastnosti (hodnoty) pro element/objekt</summary>
+            <param name="ixsEvp">identifikator elementu VP</param>
+            <param name="ixs">identifikator konkretniho objektu</param>
+            <param name="ix">filtr na typ objektu</param>
+            <param name="elemData">informace o elementu pro ktery nacitame data (slouzi predevsim pro ziskani prav)</param> 
+            <returns>strukturu vlastnosti (hodnoty + konfigurace)</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVlastnosti.NactiKonfiguraciAPrazdneHodnotyVlastnostiNE(Gordic.General.GString,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>Nacte strukturu vlastnosti (hodnoty) pro prave zakladany neexistujici element</summary>
+            <param name="ixsEvpNad">identifikator elementu VP</param>
+            <param name="rtConfig">zda mame pravo na objektu konfigurovat prava (ovlivnuje READONLY priznak)</param>
+            <param name="rtNotOrdered">pravo nastavovat narizene vlastnosti (ovlivnuje READONLY priznak)</param>
+            <param name="rtOrdered">pravo nastavovat nenarizene vlastnosti (ovlivnuje READONLY priznak)</param>
+            <returns>strukturu vlastnosti (hodnoty + konfigurace)</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVlastnosti.NactiKonfiguraciAPrazdneHodnotyVlastnostiNE(Gordic.General.GString)">
+            <summary>Nacte strukturu vlastnosti (hodnoty) pro prave zakladany neexistujici element</summary>
+            <param name="ixsEvpNad">identifikator elementu VP</param>
+            <returns>strukturu vlastnosti (hodnoty + konfigurace)</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVlastnosti.NactiKonfiguraciAPrazdneHodnotyVlastnostiNE(Gordic.Vep.Interface.GMultiDetailElementu,Gordic.General.GString)">
+            <summary>Nacte strukturu vlastnosti (hodnoty) pro prave zakladany neexistujici element</summary>
+            <param name="ixsEvpNad">identifikator elementu VP</param>
+            <param name="elemData">informace o elementu pro ktery nacitame data (slouzi predevsim pro ziskani prav)</param> 
+            <returns>strukturu vlastnosti (hodnoty + konfigurace)</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVlastnosti.UlozHodnotyVlastnosti(Gordic.General.GString,Gordic.Vep.Interface.GVepPropertyCategory,Gordic.General.GString)">
+            <summary>Ulozi hodnoty vlastnosti pro element/objekt</summary>
+            <param name="ixs">identifikator objektu, ke kteremu se hodnoty vlastnosti ukladaji</param>
+            <param name="properties">seznam vlastnosti s hodnotami k ulozeni</param>
+            <param name="kontextHodnot">kontextHodnot, ktery chceme z vlastnosti ulozit k danemu ixs</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVlastnosti.NactiVlastnost(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Vrati vlastnost pro danou ulohu a dany objekt</summary>
+            <param name="ixsEvp">identifikator elementu (NULL pro object-only)</param>
+            <param name="ixs">identifikator objektu ve stromu (NULL pro element-only)</param>
+            <param name="ixsPvl">identifikator vlastnosti</param>
+            <returns>hodnota vlastnosti ulohy pro dany element/objekt</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVlastnosti.NactiVlastnostProUlohu(System.Int32,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Vrati vlastnost pro danou ulohu a dany objekt</summary>
+            <param name="ulohaVP">uloha identifikujici vlastnost</param>
+            <param name="ixsEvp">identifikator elementu (NULL pro object-only)</param>
+            <param name="ixs">identifikator objektu ve stromu (NULL pro element-only)</param>
+            <returns>hodnota vlastnosti ulohy pro dany element/objekt</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVlastnosti.NactiVlastnostProZnacku(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Vrati vlastnost pro danou ulohu a dany objekt</summary>
+            <param name="znacka">vyznamova znacka vlastnosti</param>
+            <param name="ixsEvp">identifikator elementu (NULL pro object-only)</param>
+            <param name="ixs">identifikator objektu ve stromu (NULL pro element-only)</param>
+            <returns>hodnota vlastnosti ulohy pro dany element/objekt</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVlastnosti.NajdiElementyUlohy(System.Int32,Gordic.General.IGDbType)">
+            <summary>Najde aktivni elementy VP v danem strome, ktere </summary>
+            <param name="ulohaVP">navazana UlohaVP</param>
+            <param name="valueToFind">hodnota k nalezeni</param>
+            <returns>Seznam elementu (ixs_evp), u kterych byla nalezena zadana hodnota </returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVlastnosti.NajdiElementyUlohy(System.Int32,Gordic.General.GString,Gordic.General.IGDbType)">
+            <summary>Najde aktivni elementy VP v danem strome, ktere </summary>
+            <param name="ulohaVP">navazana UlohaVP, obsahujici root stromu</param>
+            <param name="znacka">vyznamovy identifikator vlastnosti</param>
+            <param name="valueToFind">hodnota k nalezeni</param>
+            <returns>Seznam elementu (ixs_evp), u kterych byla nalezena zadana hodnota </returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVlastnosti.PrenesVlastnost(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Prenese vlastnost z jednoho elementu na jiny element se sdilenym identifikatorem, ale ruznou vazanou konfiguraci (nastaveni samotne vlastnosti zustava stejne)</summary>
+            <param name="ixsPvl">identifikator vlastnosti k prenosu</param>
+            <param name="fromEvp">zdrojovy element konfigurace</param>
+            <param name="toEvp">cilovy element</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVlastnosti.RegeneratePreview(Gordic.General.GString,Gordic.General.GString)">
+            <summary>Regenerace nahledu hodnot vlastnosti</summary>
+            <param name="ixsEvp">identifikator elementu stromu</param>
+            <param name="ixs">identifikator objektu (v nebo mimo strom)</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVlastnosti.PreviewColumnUpdate(Gordic.Vep.Interface.GVepPropertyValueReference,Gordic.General.GString)">
+            <summary>Doplni nahledy vlastnosti prenesenych ze zdroje</summary>
+            <param name="value"></param>
+            <param name="ixs"></param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GVlastnosti.VytvorDataTableProKonfiguraci(Gordic.Vep.Interface.GVepProperties)">
+            <summary>Vytvoreni datatable s vlastnostmi pro zobrazeni na klientech</summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Vep.Client.GCiselniky">
+            <summary> Interface pro praci s ciselniky Vecneho Planovani 
+            </summary>
+        </member>
+        <member name="M:Gordic.Vep.Client.GCiselniky.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary> Konstruktor </summary>
+            <param name="oUserProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GCiselniky.CisTypuStromu(Gordic.General.GFilter{Gordic.Vep.Interface.FiltrTypuStromu}[])">
+            <summary>Ciselnik typu stromu</summary>
+            <param name="filters">filtry</param>
+            <returns>seznam typu stromu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GCiselniky.CisTypuVlastnosti(Gordic.General.GFilter{Gordic.Vep.Interface.FiltrTypuVlastnosti}[])">
+            <summary>Ciselnik typu vlastnosti</summary>
+            <param name="filters">filtry</param>
+            <returns>seznam typu vlastnosti</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GCiselniky.CisPartialNotationParams(Gordic.General.GFilter{Gordic.Vep.Interface.FiltrPartialNotationParams}[])">
+            <summary>Ciselnik parametru popisne vlastnosti typu PartialNotation</summary>
+            <param name="filters">filtry</param>
+            <returns>seznam parametru</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GCiselniky.CisUlohVP(Gordic.General.GFilter{Gordic.Vep.Interface.FiltrUlohyVP}[])">
+            <summary>Ciselnik uloh Vecneho Planovani</summary>
+            <param name="filters">filtry</param>
+            <returns>seznam uloh</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GCiselniky.CisDruhVydaje(Gordic.General.GFilter{Gordic.Vep.Interface.FiltrDruhuVydaje}[])">
+            <summary>Ciselnik druhu vydaje</summary>
+            <param name="filters">filtry</param>
+            <returns>seznam</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GCiselniky.CisVlastnostiStruktury(Gordic.General.GFilter{Gordic.Vep.Interface.FiltrVlastnostiStruktury}[])">
+            <summary>Ciselnik nakonfigurovanych vlastnosti na strukture</summary>
+            <param name="filters">filtry</param>
+            <returns>seznam</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GCiselniky.CisVydajoveOblasti(Gordic.General.GFilter{Gordic.Vep.Interface.FiltrVydajoveOblasti}[])">
+            <summary>Ciselnik vydajovych oblasti PKR</summary>
+            <param name="filters">filtry</param>
+            <returns>seznam</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GCiselniky.CisVydajoveOblastiV(Gordic.General.GFilter{Gordic.Vep.Interface.FiltrVydajoveOblastiV}[])">
+            <summary>Ciselnik konfigurace vydajovych oblasti PKR</summary>
+            <param name="filters">filtry</param>
+            <returns>seznam</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GCiselniky.CisVydajoveOblastiVEdit(Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt16)">
+            <summary>Editace pristupu VEP pro vydajove oblasti PKR</summary>
+            <param name="idObl">identifikator vydajove oblasti PKR</param>
+            <param name="rok">rok</param>
+            <param name="rezimVep">rezim VEP - 0=editace; 1=zakaz</param>
+        </member>
+        <member name="T:Gordic.Vep.Client.GUlohyVP">
+            <summary> Interface pro praci s ulohami Vecneho Planovani 
+            </summary>
+        </member>
+        <member name="M:Gordic.Vep.Client.GUlohyVP.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary> Konstruktor </summary>
+            <param name="oUserProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GUlohyVP.VratTypyStromuUlohy(System.Int32)">
+            <summary>Vrati seznam typu stromu, ktere uloha akceptuje</summary>
+            <param name="ulohaVP">uloha VP</param>
+            <returns>seznam typu stromu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GUlohyVP.SeznamUlohVP">
+            <summary>Vrati seznam uloh VP pro tento rok</summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GUlohyVP.DetailUlohyVP(System.Int32,System.Boolean)">
+            <summary>Vrati detail ulohy a jeji konfigurace. Vraci prazdne hodnoty, pokud uloha nema zadny prirazeny strom.</summary>
+            <param name="ulohaVP">pozadovana uloha VP</param>
+            <param name="check">zda se ma provadet kontrola spravnosti zadani. True v pripade, ze konfiguraci ctete kvuli hodnotam. False v pripade, ze se konfigurace cte napriklad pro editor</param>
+            <returns>identifikator stromu VP + identifikator vlastnosti VP</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GUlohyVP.UlozUlohuVP(Gordic.Vep.Interface.GCiselnikyVPDataset.CisUlohaVPDetailRow)">
+            <summary>ulozi nastaveni ulohy VP</summary>
+            <param name="data">nastaveni ulohy</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GUlohyVP.DetailUlohyVP(Gordic.Vep.Interface.GUlohaVP)">
+            <summary>Vrati konkretni strom a vlastnosti pro danou ulohu. Vraci prazdne hodnoty, pokud uloha nema zadny prirazeny strom.</summary>
+            <param name="ulohaVP">pozadovana uloha VP</param>
+            <returns>identifikator stromu VP + identifikator vlastnosti VP</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GUlohyVP.UlozUlohuVP(Gordic.Vep.Interface.GUlohaVP,Gordic.Vep.Interface.GUlohaVPInfo)">
+            <summary></summary>
+            <param name="a"></param>
+            <param name="b"></param>
+        </member>
+        <member name="T:Gordic.Vep.Client.GNastaveniStromu">
+            <summary> Interface pro praci s nastavenim Stromu Vecneho Planovani 
+            </summary>
+        </member>
+        <member name="M:Gordic.Vep.Client.GNastaveniStromu.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary> Konstruktor </summary>
+            <param name="oUserProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GNastaveniStromu.NovyStrom(Gordic.General.GString)">
+            <summary>Vrati predplnenou strukturu pro vytvoreni noveho strom</summary>
+            <param name="ixsVts">typ stromu</param>
+            <returns>detail nastaveni stromu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GNastaveniStromu.ZalozNovyStrom(Gordic.Vep.Interface.GMultiDetailNastaveniStromu,Gordic.General.GString)">
+            <summary>Zalozi novy strom</summary>
+            <param name="aData">data rootu noveho stromu VP</param>
+            <param name="spravceStromu">prvni spravce stromu, ktery bude mit pravo menit dalsi nastaveni. Null, pokud nejsou pouzivana prava</param>
+            <returns>identifikator rootu stromu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GNastaveniStromu.ZalozNovyStrom(Gordic.Vep.Interface.GMultiDetailNastaveniStromu)">
+            <summary>Zalozi novy strom</summary>
+            <param name="aData">data rootu noveho stromu VP</param>
+            <returns>identifikator rootu stromu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GNastaveniStromu.UlozNastaveniStromu(Gordic.Vep.Interface.GMultiDetailNastaveniStromu)">
+            <summary>Ulozi novou konfiguraci stromu VP</summary>
+            <param name="aData">data stromu k ulozeni</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GNastaveniStromu.DetailNastaveniStromu(Gordic.General.GString)">
+            <summary>Nacte detail konfigurace stromu VP</summary>
+            <param name="ixsEvpRoot">identifikator stromu VP</param>
+            <returns>detailni informace o globalnim nastaveni stromu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GNastaveniStromu.SmazStrom(Gordic.General.GString)">
+            <summary>Smaze cely (nepouzivany) strom VP</summary>
+            <param name="ixsEvpRoot">identifikator stromu VP</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GNastaveniStromu.StrukturaDoPripravy(Gordic.General.GString)">
+            <summary>Zmeni stav struktury (-> Schvaleno/Pripraveno)</summary>
+            <param name="ixsEvpRoot">identifikator struktury vecneho planovani</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GNastaveniStromu.StrukturaDoNavrhu(Gordic.General.GString)">
+            <summary>Zmeni stav struktury (-> Navrh)</summary>
+            <param name="ixsEvpRoot">identifikator struktury vecneho planovani</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GNastaveniStromu.StrukturaUzavrit(Gordic.General.GString)">
+            <summary>Zmeni stav struktury (-> Uzavreno)</summary>
+            <param name="ixsEvpRoot">identifikator struktury vecneho planovani</param>
+        </member>
+        <member name="T:Gordic.Vep.Client.GStromy">
+            <summary> Klient pro praci se Stromy a elementy Vecneho Planovani 
+            </summary>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary> Konstruktor </summary>
+            <param name="oUserProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.SeznamStromu(Gordic.General.GFilter{Gordic.Vep.Interface.FiltrStromu}[])">
+            <summary>Seznam stromu (rootu)</summary>
+            <param name="filters">filtry</param>
+            <returns>seznam stromu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.SeznamStromu(System.Int32)">
+            <summary>Seznam stromu (rootu)</summary>
+            <param name="uloha">uloha VP</param>
+            <returns>seznam stromu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.KopieStruktury(Gordic.General.GString,Gordic.General.GString,System.Boolean,System.Int16,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Kopie struktury</summary>
+            <param name="ixsEvpRootOrig">identifikator puvodni struktury, ktera se ma kopirovat</param>
+            <param name="newName">novy nazev pro strukturu</param>
+            <param name="newState">stav, do ktereho prijdou vsechny nove elementy</param>
+            <param name="createNewState">zda se ma k elementum pouzit preddefinovany stav (false = kopie stavu)</param>
+            <param name="newRokmesDo">nova platnost pro vsechny nove elementy (NULL pro ponechani)</param>
+            <param name="newRokmesOd">nova platnost pro vsechny nove elementy (NULL pro ponechani)</param>
+            <returns>identifikator nove vznikleho elementu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.SeznamElementuBasic(Gordic.General.GFilter{Gordic.Vep.Interface.FiltrElementu}[])">
+            <summary>Vrátí jednoduchy seznam bez zadnych doplnujicich sloupcu</summary>
+            <param name="filters">filtry seznamu</param>
+            <returns>tabulka elementu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.SeznamElementu(System.Boolean,Gordic.General.GFilter{Gordic.Vep.Interface.FiltrElementu}[])">
+            <summary>Vrátí seznam podrizenych elementu v konkretnim elementu</summary>
+            <param name="filters">filtry seznamu</param>
+            <param name="loadPreview">zda se maji nacitat nahledy</param>
+            <returns>tabulka elementu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.SeznamElementu(Gordic.General.GFilter{Gordic.Vep.Interface.FiltrElementu}[])">
+            <summary>Vrátí seznam podrizenych elementu v konkretnim elementu</summary>
+            <param name="filters">filtry seznamu</param>
+            <returns>tabulka elementu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.SeznamElementu(Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GFilter{Gordic.Vep.Interface.FiltrElementu}[])">
+            <summary>Vrátí seznam podrizenych elementu v konkretnim elementu</summary>
+            <param name="ixsEvpNad">identifikator nadrizeneho elementu VP</param>
+            <param name="filters">filtry seznamu</param>
+            <param name="rok">filtr na platnost dle roku (NULL/GInt16.Null pro nefiltrovany seznam)</param>
+            <returns>tabulka elementu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.SeznamElementuRecursive(Gordic.General.GString[])">
+            <summary>Vrátí seznam podrizenych elementu v konkretnim elementu</summary>
+            <param name="ixsEvpNad">identifikator nadrizeneho elementu VP</param>
+            <returns>tabulka elementu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.SeznamElementuRecursive(Gordic.General.GString[],Gordic.General.GInt16)">
+            <summary>Vrátí seznam podrizenych elementu v konkretnim elementu</summary>
+            <param name="ixsEvpNad">identifikator nadrizeneho elementu VP</param>
+            <param name="rok">filtr na konkretni rok platnost (NULL pro cteni vseho)</param>
+            <returns>tabulka elementu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.SeznamRootElementu(System.Boolean,Gordic.General.GString)">
+            <summary>Vrátí seznam elementu konkretniho stromu, na ktera ma aktualne prihlasena funkce prava Zobrazit jako ROOT</summary>
+            <param name="ixsEvpRoot">identifikator rootu stromu</param>
+            <param name="loadPreview">zda se maji nacitat nahledy</param>
+            <returns>tabulka elementu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.SeznamRootElementu(Gordic.General.GString)">
+            <summary>Vrátí seznam elementu konkretniho stromu, na ktera ma aktualne prihlasena funkce prava Zobrazit jako ROOT</summary>
+            <param name="ixsEvpRoot">identifikator rootu stromu</param>
+            <returns>tabulka elementu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.SeznamRootElementuRecursive(System.Boolean,Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Vrátí seznam elementu konkretniho stromu, na ktera ma aktualne prihlasena funkce prava Zobrazit jako ROOT + vsechny podrizene elementy</summary>
+            <param name="ixsEvpRoot">identifikator rootu stromu</param>
+            <param name="loadPreview">zda se maji nacitat nahledy</param>
+            <param name="rok">filtr na konkretni rok platnost (NULL pro cteni vseho)</param>
+            <returns>tabulka elementu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.SeznamRootElementuRecursive(Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Vrátí seznam elementu konkretniho stromu, na ktera ma aktualne prihlasena funkce prava Zobrazit jako ROOT + vsechny podrizene elementy</summary>
+            <param name="ixsEvpRoot">identifikator rootu stromu</param>
+            <param name="rok">filtr na konkretni rok platnost (NULL pro cteni vseho)</param>
+            <returns>tabulka elementu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.UlozElement(Gordic.Vep.Interface.GMultiDetailElementu)">
+            <summary>Ulozi element stromu</summary>
+            <param name="aData">data elementu</param>
+            <returns>ixs_evp ulozeneho zaznamu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.ZrusitEditaci(Gordic.Vep.Interface.GMultiDetailElementu)">
+            <summary>Zrusi editaci elementu</summary>
+            <param name="aData">data elementu</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.SmazElement(Gordic.General.GString)">
+            <summary>Zneaktivni element stromu</summary>
+            <param name="ixsEvp">identifikator elementu VP</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.AktivujElement(Gordic.General.GString)">
+            <summary>Obnovi element stromu</summary>
+            <param name="ixsEvp">identifikator elementu VP</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.DeaktivujElement(Gordic.General.GString)">
+            <summary>Oznaci element stromu jako neaktivni (ne zruseny)</summary>
+            <param name="ixsEvp">identifikator elementu VP</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.OdemkniElement(Gordic.General.GString)">
+            <summary>Odemkne element VEP</summary>
+            <param name="ixsEvp"></param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.NovyElement(Gordic.General.GString)">
+            <summary>Vrati novy multidetail pro element</summary>
+            <param name="ixsEvpNad">identifikator nadrizeneho elementu</param>
+            <returns>data noveho prazdneho elementu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.DetailElementu(Gordic.General.GString)">
+            <summary>Vrati detail jednoho elementu stromu</summary>
+            <param name="ixsEvp">identifikator elementu stromu VP</param>
+            <returns>data elementu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.SeznamVazby(Gordic.General.GString)">
+            <summary>Seznam vazeb na jine elementy VP</summary>
+            <param name="ixsEvp">identifikator elementu, ke kteremu se vazby zjistuji</param>
+            <returns>seznam vazeb na jine elementy</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.PathInfo(Gordic.General.GString)">
+            <summary>Vrati pozicni informace o elementu ve stromu</summary>
+            <param name="ixsEvp">identifikator elementu VP</param>
+            <returns>informace o typu stromu, urovni a ceste od rootu az k elementu</returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.PresunElementu(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,System.Boolean)">
+            <summary>Presune element do jine vetve</summary>
+            <param name="ixsEvp">identifikator presouvaneho elementu</param>
+            <param name="newIxsEvpNad">identifikator noveho nadrizeneho elementu (pokud je NULL, pokusi se nadrizeny element nalezt z noveho klice)</param>
+            <param name="newKey">novy klic presouvaneho elementu</param>
+            <param name="rokmesOd">nove datum od</param>
+            <param name="rokmesDo">nove datum do</param>
+            <param name="kopie">provadi se kopie (=true) nebo presun (=false)</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.SeznamZmen(Gordic.General.GFilter{Gordic.Vep.Interface.FiltrHistEvp}[])">
+            <summary>Seznam zmen/historie elementu VP</summary>
+            <param name="filters">filtry seznamu zmen</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Vep.Client.GStromy.PridejUzivatelskyKomentar(Gordic.General.GString,Gordic.General.GString)">
+            <summary>Zaloguje novou udalost do historie zmen k elementu VP</summary>
+            <param name="ixsEvp">identifikator elementu VP</param>
+            <param name="text">uzivatelsky komentar</param>
+        </member>
+        <member name="T:Gordic.Vep.Client.GInit">
+            <summary> Klient pro inicializaci nastaveni modulu VEP
+            </summary>
+        </member>
+        <member name="M:Gordic.Vep.Client.GInit.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary> Konstruktor </summary>
+            <param name="oUserProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GInit.GlobalsInstance(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary> Instance
+            </summary>
+        </member>
+        <member name="M:Gordic.Vep.Client.GInit.Initialize(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary> Inicializace </summary>
+            <param name="up"></param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GInit.Initialize(Gordic.General.ApplicationClient.GUserProcess,Gordic.General.GString)">
+            <summary> Inicializace </summary>
+            <param name="up"></param>
+            <param name="whoAmI"></param>
+        </member>
+        <member name="M:Gordic.Vep.Client.GInit.Initialize(Gordic.General.GString)">
+            <summary>Inicializace AL</summary>
+            
+        </member>
+        <member name="M:Gordic.Vep.Client.GInit.WsEkoInit(Gordic.General.GInt16)">
+            <summary>Ekoinicializace z Ws</summary>
+            <param name="rok"></param>
+        </member>
+        <member name="T:GVypoctovyListOperace">
+            <summary> 
+            </summary>
+        </member>
+        <member name="F:GVypoctovyListOperace.vloPridat">
+            <summary></summary>
+        </member>
+        <member name="F:GVypoctovyListOperace.vloVymenit">
+            <summary></summary>
+        </member>
+    </members>
+</doc>

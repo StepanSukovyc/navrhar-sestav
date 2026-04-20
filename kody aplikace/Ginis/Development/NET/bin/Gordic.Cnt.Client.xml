@@ -1,0 +1,1851 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Cnt.Client</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Cnt.Client.GCntClient`1">
+            <summary> Předek všech klientských tříd aplikační logiky pro VEP
+            </summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GCntClient`1.AppLogic">
+            <summary> Aplikacni logika
+            </summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GCntClient`1.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary> Konstruktor </summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GCntClient`1.InitializeUcr">
+            <summary>
+            Inicializace UCR
+            </summary>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GDenik">
+            <summary>Klientská logika - Controllingový deník</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDenik.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor třídy</summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDenik.SeznamRadku(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterDenik}[])">
+            <summary>Načte řádky deníku</summary>
+            <param name="filters">Filtry na řádky deníku</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDenik.SeznamRadku(Gordic.Cnt.Interface.GMaskaDataSet.SeznamDataTable,Gordic.General.GFilter{Gordic.Cnt.Interface.FilterDenik}[])">
+            <summary>Načte řádky deníku</summary>
+            <param name="maska">Volitelný filtr ve formě víceelementové masky</param>
+            <param name="filters">Filtry na řádky deníku</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDenik.SeznamRadkuKumulace(Gordic.Cnt.Interface.GColumnsInfo,Gordic.General.GFilter{Gordic.Cnt.Interface.FilterDenik}[])">
+            <summary>Získá zkumulované řádky controllingového deníku</summary>
+            <param name="kumColumns">Sloupce, podle kterých kumulace proběhne</param>
+            <param name="filters">Filtry na řádky deníku</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDenik.SeznamRadkuKumulace(Gordic.Cnt.Interface.GColumnsInfo,Gordic.Cnt.Interface.GMaskaDataSet.SeznamDataTable,Gordic.General.GFilter{Gordic.Cnt.Interface.FilterDenik}[])">
+            <summary>Získá zkumulované řádky controllingového deníku</summary>
+            <param name="kumColumns">Sloupce, podle kterých kumulace proběhne</param>
+            <param name="maska">Volitelný filtr ve formě víceelementové masky</param>
+            <param name="filters">Filtry na řádky deníku</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDenik.SeznamRadkuPocet(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterDenik}[])">
+            <summary>Počet řádků controllingového deníku</summary>
+            <param name="filters">Filtry na řádky deníku</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDenik.SeznamRadkuPocet(Gordic.Cnt.Interface.GMaskaDataSet.SeznamDataTable,Gordic.General.GFilter{Gordic.Cnt.Interface.FilterDenik}[])">
+            <summary>Počet řádků controllingového deníku</summary>
+            <param name="maska">Volitelný filtr ve formě víceelementové masky</param>
+            <param name="filters">Filtry na řádky deníku</param>        
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDenik.SeznamRadkuWhere(Gordic.Cnt.Interface.GMaskaDataSet.SeznamDataTable,Gordic.General.GFilter{Gordic.Cnt.Interface.FilterDenik}[],System.Boolean)">
+            <summary>
+            Vrátí Where pro řádky deníku
+            </summary>
+            <param name="maska">Volitelný filtr ve formě víceelementové masky</param>
+            <param name="filters">Filtry na řádky deníku</param>
+            <param name="compColumns">Určuje, zda do výsledného selectu budou zahrnuty také sloupce vypočítané (kni_zkratka, stav_zpr_zap_txt, stav_roz_txt, stav_uzl_txt, faz_txt_aux)</param>
+            <returns>Výsledný where</returns>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDenik.UlozZaznamy(Gordic.Cnt.Interface.GDenikDataSet.SeznamDataTable,System.Collections.Generic.List{Gordic.Cnt.Interface.GCntId},Gordic.Cnt.Interface.TypOperace)">
+            <summary>
+            Provede uložení nových/změněných a smazaných záznamů do deníku
+            </summary>
+            <param name="table">Tabulka se záznamy, které se mají uložit</param>
+            <param name="cntIdDeleteList">Identifikátory záznamů deníku, které mají být vymazány (volitelný parametr)</param>
+            <param name="typOperace">Typ prováděné operace</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDenik.VymazatDenik(System.Boolean)">
+            <summary>
+            Provede vymazání všech záznamů v deníku
+            </summary>
+            <param name="pouzeVlastni">Vymazány budou pouze záznamy, ke kterým má uživatel oprávnění (jinak celý deník)</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDenik.VymazatZaznam(System.Boolean,Gordic.Cnt.Interface.GCntId,Gordic.Cnt.Interface.GCntId)">
+            <summary>
+            Vymazat záznam v deníku (pokud má záznam bratrské záznamy, vymažou se také)
+            </summary>
+            <param name="runTest">Určuje, zda nejprve provést test, zda je možné výmaz provést.</param>
+            <param name="cntId">Identifikátor záznamu v deníku, který bude vymazán</param>
+            <param name="parentCntId">Identifikátor rodiče záznamu, který bude vymazán (null v případě, že záznam nemá rodiče)</param>
+            <returns>Vrátí, zda se povedlo provést výmaz</returns>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDenik.VymazatZaznamy(System.Boolean,System.Collections.Generic.List{Gordic.Cnt.Interface.GCntId},System.Collections.Generic.List{Gordic.Cnt.Interface.GCntId})">
+            <summary>
+            Vymazat záznamy v deníku (pokud mají sourozence, vymažou se také)
+            </summary>
+            <param name="runTest">Určuje, zda nejprve provést test, zda je možné výmaz provést.</param>
+            <param name="cntIdList">Identifikátory záznamů v deníku, které budou vymazány</param>
+            <param name="parentCntIdList">Identifikátory rodičů záznamů, které budou vymazány (null v případě, že záznam nemá rodiče)</param>
+            <returns>Vrátí, zda se povedlo provést výmaz</returns>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDenik.VratitOperaci(Gordic.General.GString,Gordic.Cnt.Interface.GCntId,Gordic.Cnt.Interface.GCntId,Gordic.General.GInt16,Gordic.General.GInt32)">
+            <summary>
+            Odstranění celé operace v určitém určeném rozsahu řádků
+            </summary>
+            <param name="ixsOpe">identifikátor odstraňované operace</param>
+            <param name="cntIdMin">licence + číslo řádku minima, který se u operace vybere jako omezení (jedna operace může být spuštěna vícekrát - výběr jen podmnožiny - např.jednoho spuštění operace)</param>
+            <param name="cntIdMax">licence + číslo řádku maxima, který se u operace vybere jako omezení (jedna operace může být spuštěna vícekrát - výběr jen podmnožiny - např.jednoho spuštění operace)</param>
+            <param name="temp">Kam bude směřován výstupu - do deníku (0) / do tempu (1)</param>
+            <param name="poradiSez">Identifikátor záznamu v historii, při úspěšném vrácení bude záznam označen jako vrácený</param>
+            <returns>Vrátí výsledek výmazu</returns>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDenik.RucneNovy">
+            <summary>
+            Při ručním pořízení záznamu v deníku předpřipraví výstupní data s prázdnými řádky
+            </summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDenik.RucneUpravit(Gordic.Cnt.Interface.GDenikDataSet.SeznamDataTable)">
+            <summary>
+            Při ruční úpravě v deníku předpřipraví výstupní data jako kopii dat vstupních + mínusové řádky
+            </summary>
+            <param name="inputTable">Tabulka s původními řádky deníku</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDenik.RucneOdstranit(Gordic.Cnt.Interface.GDenikDataSet.SeznamDataTable)">
+            <summary>
+            Při ručním odstranění v deníku předpřipraví výstupní data s mínusovými řádky
+            </summary>
+            <param name="inputTable">Tabulka s původními řádky deníku</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDenik.ZmenStavZpracovaniZaznamu(System.Collections.Generic.List{Gordic.Cnt.Interface.GCntId},Gordic.General.GInt16)">
+            <summary>
+            Provede hromadnou změnu stavu zpracování záznamů deníku
+            </summary>
+            <param name="cntIdList">Identifikátory záznamů deníku</param>
+            <param name="stavZprZap">Nový stav zpracování</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDenik.ValidSumMdDal(Gordic.Cnt.Interface.GDenikDataSet.SeznamDataTable)">
+            <summary>Zkontroluje, zda suma částek MD/Dal u cílových řádků včetně minus řádků je vyrovnaná (= 0)</summary>
+            <param name="table">Seznam řádků deníku, které se budou kontrolovat (včetně minus řádků)</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDenik.KontrolaPumpy(Gordic.General.GInt16)">
+            <summary>Načte počty řádků v účetním deníku a controllingovém deníku pro kontrolu funkce pumpy.
+            Tyto řádky jsou seskupené po měsících a dle SU a AU.</summary>
+            <param name="mesic">Měsíc, pro který se budou počty zjišťovat</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDenik.SeznamSloupcu(Gordic.General.GInt16)">
+            <summary>?Volají sestavy - Zjistí všechny používané sloupce v deníku</summary>
+            <param name="rok">Rok, pro který se pro sloupce zjišťuje seznam</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDenik.SeznamSloupcu(Gordic.General.GInt16,System.Boolean)">
+            <summary>!Volají sestavy - Zjistí všechny používané sloupce v deníku</summary>
+            <param name="rok">Volitelný parametr - rok, pro který se sloupce zjišťuje seznam (ignoruje se)</param>
+            <param name="useEditColumns">Určuje, zda se má editovatelnost výsledných sloupců řídit parametrem RON - ŘP Editovatelné sloupce v rozpisu a deníku</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDenik.SeznamSloupcu(Gordic.General.GInt16,System.Boolean,System.Boolean)">
+            <summary>Zjistí všechny používané sloupce v deníku</summary>
+            <param name="rok">Volitelný parametr - rok, pro který se sloupce zjišťuje seznam (ignoruje se)</param>
+            <param name="useEditColumns">Určuje, zda se má editovatelnost výsledných sloupců řídit parametrem RON - ŘP Editovatelné sloupce v rozpisu a deníku</param>
+            <param name="useEditNzColumns">Určuje, zda se má editovatelnost výsledných sloupců řídit parametrem RON - ŘP Editovatelné sloupce v položkách registru nákladů NZ</param>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GSeznamyRadku">
+            <summary>Klientská logika - různé seznamy řádků (např. výběrů) v controllingovém deníku</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GSeznamyRadku.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor třídy</summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GSeznamyRadku.SeznamRadku(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterSeznamyRadku}[])">
+            <summary>Načte seznam řádků odpovídající filtrům</summary>
+            <param name="filters">Filtry na seznam řádků</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GSeznamyRadku.SeznamRadku(Gordic.Cnt.Interface.IdSeznamu,Gordic.General.GFilter{Gordic.Cnt.Interface.FilterSeznamyRadku}[])">
+            <summary>Načte seznam řádků podle zadaného identifikátoru a filtrů</summary>
+            <param name="idSeznamu">Identifikátor seznamu řádků</param>
+            <param name="filters">Filtry na seznam řádků</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GSeznamyRadku.UlozitRadky(Gordic.Cnt.Interface.GSeznamyRadkuDataSet.SeznamDataTable)">
+            <summary>Uloží do seznamu řádků nové záznamy</summary>
+            <param name="radkyTable">Záznamy, které budou uloženy do seznamu řádků</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GSeznamyRadku.UlozitRadky(Gordic.Cnt.Interface.IdSeznamu,System.Collections.Generic.List{Gordic.Cnt.Interface.GCntId})">
+            <summary>Uloží do seznamu řádků nové záznamy</summary>
+            <param name="idSeznamu">Identifikátor seznamu řádků</param>
+            <param name="cntIdList">Identifikátory záznamů v deníku, které budou uloženy mezi řádky</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GSeznamyRadku.OdstranitRadky(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterSeznamyRadku}[])">
+            <summary>Odstraní řádky ze seznamu, které odpovídají filtrům</summary>
+            <param name="filters">Filtry na seznam řádků</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GSeznamyRadku.OdstranitRadky(Gordic.Cnt.Interface.IdSeznamu,Gordic.General.GFilter{Gordic.Cnt.Interface.FilterSeznamyRadku}[])">
+            <summary>Odstraní řádky ze seznamu, které odpovídají identifikátoru a filtrům</summary>
+            <param name="idSeznamu">Identifikátor seznamu řádků</param>
+            <param name="filters">Filtry na seznam řádků</param>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GReaderStavyDl">
+            <summary>
+            Klientská část AL - Stavy dodacích listů
+            </summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderStavyDl.Reader">
+            <summary>Interface pro Reader</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderStavyDl.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GReaderStavyDl.Dto">
+            <summary>Dto</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderStavyDl.Dto.stav_dl">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderStavyDl.Dto.stav_dl_txt">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderStavyDl.Dto.k_v">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderStavyDl.Data">
+            <summary>Dto</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderStavyDl.GetDto">
+            <summary>Dto</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderStavyDl.StavDl">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderStavyDl.StavDlTxt">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderStavyDl.KV">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderStavyDl.InternalClear">
+            <summary>Vymaže hodnoty</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderStavyDl.FilterStavDl">
+            <summary>Filtr na stav_dl</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderStavyDl.FilterStavDlTxt">
+            <summary>Filtr na stav_dl_txt</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderStavyDl.FilterKV">
+            <summary>Filtr na k_v</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderStavyDl.GetFilters">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderStavyDl.CreateRequest">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderStavyDl.ReadDbData">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderStavyDl.ReadData(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterStavyDl}[])">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderStavyDl.ReadData(Gordic.General.ApplicationInterface.IGAppLogicDataRequest)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderStavyDl.ReadData(Gordic.General.ApplicationInterface.GAppLogicDataRequest{Gordic.General.GFilter{Gordic.Cnt.Interface.FilterStavyDl}})">
+            <summary>čtení celé tabulky (podle zvolených filtrů)</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderStavyDl.InternalSetData(System.Data.DataRow)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderStavyDl.InternalSetData(Gordic.General.IGDto)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderStavyDl.CopyFrom(Gordic.Cnt.Client.GReaderStavyDl)">
+            <summary>Kopíruje data z jiné instance tohoto objektu</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderStavyDl.SetValidData(Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Nastaví validní data bez přístupu k DB</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderStavyDl.SetValidData(Gordic.General.GInt16)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderStavyDl.SetValidDataFromKeys(System.String[])">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderStavyDl.Verify(System.Object)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderStavyDl.Verify(Gordic.Cnt.Client.GReaderStavyDl.Dto)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderStavyDl.ReadDbDataFiltered(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterStavyDl}[])">
+            <exclude/>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GImport">
+            <summary>Klientská logika - fáze</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GImport.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor třídy</summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GImport.ImportDepozit(System.IO.Stream,System.Collections.Generic.List{Gordic.Cnt.Interface.GDtoDepozit})">
+            <summary>
+            Provede import seznamu depozitu odpisů na základě .xlxs souboru
+            </summary>
+            <param name="stream">Data souboru</param>
+            <param name="depozitList">Tabulka, kam budou vkládány řádky depozitu odpisů</param>
+            <returns>Výsledek importu (null, pokud uživatel nevybere žádný soubor)</returns>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GImport.ImportRozpisu(System.IO.Stream,Gordic.Cnt.Interface.GRozpisDataSet.SeznamDataTable)">
+            <summary>
+            Provede import rozpisu na základě .xlxs souboru
+            </summary>
+            <param name="stream">Data souboru</param>
+            <param name="rozpisTable">Tabulka, kam budou vkládány řádky rozpisu</param>
+            <returns>Výsledek importu (null, pokud uživatel nevybere žádný soubor)</returns>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GImport.ImportRozpisu(System.IO.Stream,System.Boolean,System.Collections.Generic.HashSet{System.String})">
+            <summary>
+            Provede import rozpisu na základě .xlxs souboru
+            </summary>
+            <param name="stream">Data souboru</param>
+            <param name="dodak">Určuje, zda se jedná o dodací list (nákladový záznam)</param>
+            <param name="visibleRozpisColumns">Seznam zobrazených viditelných sloupců rozpisu</param>
+            <returns>Dvojice výsledná tabulka rozpisu a výsledek importu</returns>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GImport.ImportHromTransformace(Gordic.Support.Excel.GImportResult,System.IO.Stream)">
+            <summary>
+            Provede import hromadné transformace na základě .xlxs souboru
+            </summary>
+            <param name="impResult">Výsledek importu</param>
+            <param name="stream">Data souboru</param>
+            <returns>Výsledek importu (null, pokud uživatel nevybere žádný soubor)</returns>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GImport.ImportHromTransformace(System.IO.Stream,System.Boolean,System.Collections.Generic.HashSet{System.String},System.Collections.Generic.HashSet{System.String})">
+            <summary>
+            Provede import hromadné transformace na základě .xlxs souboru
+            </summary>
+            <param name="stream">Data souboru</param>
+            <param name="dodak">Určuje, zda se jedná o dodací list (nákladový záznam)</param>
+            <param name="visibleMaskaColumns">Seznam zobrazených viditelných sloupců masky</param>
+            <param name="visibleRozpisColumns">Seznam zobrazených viditelných sloupců rozpisu</param>
+            <returns>Dvojice data importu hromadné transformace, výsledek importu</returns>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GFaze">
+            <summary>Klientská logika - fáze</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GFaze.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor třídy</summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GFaze.Seznam(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterFaze}[])">
+            <summary>Načte seznam fází</summary>
+            <param name="filters">Filtry</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GFaze.Detail(Gordic.General.GInt16)">
+            <summary>Načte detail fáze</summary>
+            <param name="faz">Číslo fáze</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GFaze.Novy">
+            <summary>Vrátí novou fázi</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GFaze.Odstranit(Gordic.General.GInt16)">
+            <summary>Odstraní fázi</summary>
+            <param name="faz">Číslo fáze</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GFaze.Ulozit(Gordic.Cnt.Interface.GFazeDataSet.SeznamRow)">
+            <summary>Uloží fázi</summary>
+            <param name="row">Data fáze</param>
+            <returns>Identifikátor uloženého záznamu (číslo fáze)</returns>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GReaderFaze">
+            <summary>
+            Klientská část AL - Fáze
+            </summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderFaze.ReadDbDataFiltered(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterFaze}[])">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderFaze.Reader">
+            <summary>Interface pro Reader</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderFaze.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GReaderFaze.Dto">
+            <summary>Dto</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderFaze.Dto.faz">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderFaze.Dto.faz_txt">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderFaze.Dto.rok_od">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderFaze.Dto.rok_do">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderFaze.Dto.k_v">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderFaze.Dto.aktivita">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderFaze.Dto.dat_zmena">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderFaze.Dto.zmenu_prov">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderFaze.Data">
+            <summary>Dto</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderFaze.GetDto">
+            <summary>Dto</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderFaze.Faz">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderFaze.FazTxt">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderFaze.RokOd">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderFaze.RokDo">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderFaze.KV">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderFaze.Aktivita">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderFaze.DatZmena">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderFaze.ZmenuProv">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderFaze.InternalClear">
+            <summary>Vymaže hodnoty</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderFaze.FilterFaz">
+            <summary>Filtr na faz</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderFaze.FilterFazTxt">
+            <summary>Filtr na faz_txt</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderFaze.FilterRokOd">
+            <summary>Filtr na rok_od</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderFaze.FilterRokDo">
+            <summary>Filtr na rok_do</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderFaze.FilterKV">
+            <summary>Filtr na k_v</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderFaze.FilterAktivita">
+            <summary>Filtr na aktivita</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderFaze.FilterDatZmena">
+            <summary>Filtr na dat_zmena</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderFaze.FilterZmenuProv">
+            <summary>Filtr na zmenu_prov</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderFaze.GetFilters">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderFaze.CreateRequest">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderFaze.ReadDbData">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderFaze.ReadData(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterFaze}[])">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderFaze.ReadData(Gordic.General.ApplicationInterface.IGAppLogicDataRequest)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderFaze.ReadData(Gordic.General.ApplicationInterface.GAppLogicDataRequest{Gordic.General.GFilter{Gordic.Cnt.Interface.FilterFaze}})">
+            <summary>čtení celé tabulky (podle zvolených filtrů)</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderFaze.InternalSetData(System.Data.DataRow)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderFaze.InternalSetData(Gordic.General.IGDto)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderFaze.CopyFrom(Gordic.Cnt.Client.GReaderFaze)">
+            <summary>Kopíruje data z jiné instance tohoto objektu</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderFaze.SetValidData(Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GString)">
+            <summary>Nastaví validní data bez přístupu k DB</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderFaze.SetValidData(Gordic.General.GInt16)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderFaze.SetValidDataFromKeys(System.String[])">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderFaze.Verify(System.Object)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderFaze.Verify(Gordic.Cnt.Client.GReaderFaze.Dto)">
+            <exclude/>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GKnihy">
+            <summary>Klientská logika - knihy</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GKnihy.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor třídy</summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GKnihy.SeznamKnih(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterKnihy}[])">
+            <summary>Načte seznam knih</summary>
+            <param name="filters">Filtry na knihy</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GKnihy.DetailKnihy(Gordic.General.GString)">
+            <summary>Načte detail knihy</summary>
+            <param name="ixsKni">Identifikátor knihy</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GKnihy.NovaKniha">
+            <summary>Vrátí novou knihu</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GKnihy.OdstranitKnihu(Gordic.General.GString)">
+            <summary>Odstraní knihu</summary>
+            <param name="ixsKni">Identifikátor knihy</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GKnihy.UlozitKnihu(Gordic.Cnt.Interface.GDetailKnihy)">
+            <summary>Uloží knihu</summary>
+            <param name="detailKnihy">Data detailu knihy</param>
+            <returns>Identifikátor uložené knihy (ixs_kni)</returns>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GKnihy.SeznamKnihCache">
+            <summary>
+            Načte seznam všech knih (z cache)
+            </summary>
+            <returns>Seznam přístupných knih ve formě dvojic ixs_kni, zkratka knihy</returns>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GKnihy.CleanCache">
+            <summary>
+            Vyčistí paměť cache
+            </summary>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GCiselniky">
+            <summary> Interface pro praci s ciselniky Vecneho Planovani 
+            </summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GCiselniky.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary> Konstruktor </summary>
+            <param name="oUserProcess">UserProcess</param>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GInit">
+            <summary> Klient pro inicializaci nastaveni modulu VEP
+            </summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GInit.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary> Konstruktor </summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GMasky">
+            <summary>Klientská logika - masky</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GMasky.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor třídy</summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GMasky.SeznamMasek(System.Boolean,Gordic.General.GFilter{Gordic.Cnt.Interface.FilterMasky}[])">
+            <summary>Načte seznam masek</summary>
+            <param name="filters">Filtry na masky</param>
+            <param name="fullResult">Zda naplní úplně všechny sloupce daty (časově náročnější)</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GMasky.DetailMasky(Gordic.General.GString)">
+            <summary>Načte detail masky</summary>
+            <param name="ixsMsk">Identifikátor masky</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GMasky.NovaMaska(Gordic.General.GInt16,System.Boolean)">
+            <summary>Vrátí novou masku</summary>
+            <param name="typMasky">Typ masky</param>
+            <param name="vidVerejny">Viditelnost záznamu - zda bude záznam viditelný (nebo interní)</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GMasky.OdstranitMasku(Gordic.General.GString)">
+            <summary>Odstraní masku</summary>
+            <param name="ixsMsk">Identifikátor masky</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GMasky.UlozitMasku(Gordic.Cnt.Interface.GDetailMasky)">
+            <summary>Uloží masku</summary>
+            <param name="detailMasky">Data detailu masky</param>
+            <returns>Identifikátor uložené masky (ixs_msk)</returns>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GDodaciListy">
+            <summary>Klientská logika - DodaciListy</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDodaciListy.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor třídy</summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDodaciListy.VazebneMaskovySeznam(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterVazebneMaskovy}[])">
+            <summary>Načte seznam dodacích listů rozšířený o řádky masky</summary>
+            <param name="filters">Filtry na dodací listy s maskami</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDodaciListy.ZiskejNavazanyIxp(Gordic.General.GString)">
+            <summary>
+            Získá identifikátor (ixp) navázaného dokladu pro nákladový záznam
+            </summary>
+            <param name="ixsOpe">Identifikátor nákladového záznamu</param>
+            <returns>Identifikátor (ixp) navázaného dokladu</returns>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDodaciListy.UlozitVazbu(Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32)">
+            <summary>
+            Provede uložení vazby (formou nového nebo úpravou stávajícího záznamu)
+            </summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDodaciListy.OdstranitVazbu(Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32)">
+            <summary>
+            Provede odstranění vazby
+            </summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDodaciListy.ZmenStavDodaku(System.Collections.Generic.List{Gordic.General.GString},Gordic.General.GInt16)">
+            <summary>
+            Provede hromadnou změnu stavů dodacích listů
+            </summary>
+            <param name="ixsOpeList">Identifikátory dodadích listů</param>
+            <param name="stavDl">Požadovaný stav dodacího listu</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDodaciListy.OdpojitVse(Gordic.General.GString)">
+            <summary>
+            Odpojí všechny vazby od nákladového záznamu
+            </summary>
+            <param name="ixsOpe">Identifikátor nákladového záznamu</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GDodaciListy.YearCollisionWarning">
+            <summary>
+            Určuje, zda uživateli zobrazit varování, že je přihlášený v jiném roce, než je aktuální datum
+            </summary>
+            <returns>Text varování (nebo null v případě, kdy se varování zobrazovat nemá)</returns>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GEkoDodaciListy">
+            <summary>Klientská logika - DodaciListy</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GEkoDodaciListy.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor třídy</summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GEkoDodaciListy.SeznamDodacichListu(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterEkoDodaciListy}[])">
+            <summary>Načte seznam dodacíh listů</summary>
+            <param name="filters">Filtry na dodací listy</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GEkoDodaciListy.DetailDodacihoListu(Gordic.General.GString)">
+            <summary>Načte detail dodacího listu</summary>
+            <param name="ixp">Identifikátor dodacího listu</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GEkoDodaciListy.UlozitDodaciList(Gordic.Cnt.Interface.GEkoDodaciListyDataSet.SeznamRow)">
+            <summary>Uloží nový nebo existující dodací list</summary>
+            <param name="dodRow">Řádek dodacího listu</param>
+            <returns>Identifikátor uloženého dodacího listu (ixp)</returns>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GEkoDodaciListy.NovyDodaciList">
+            <summary>Vrátí nový dodací list</summary>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GObdobi">
+            <summary>Klientská logika - Obdobi</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GObdobi.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor třídy</summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GObdobi.OtevreneUct">
+            <summary>
+            Příznak, zda je aktuální období (EkoParams.Rok) v účetnictví otevřené
+            </summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GObdobi.OtevreneCnt">
+            <summary>
+            Příznak, zda je aktuální období (EkoParams.Rok) v controllingovém deníku otevřené
+            </summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GObdobi.CleanCache">
+            <summary>
+            Vyčistí paměť cache
+            </summary>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GOdpisy">
+            <summary>Klientská logika - odpisy DDM</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOdpisy.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor třídy</summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GLogOperace">
+            <summary>Klientská logika - logování operace</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GLogOperace.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor třídy</summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GLogOperace.SeznamLogu(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterLogOperace}[])">
+            <summary>Načte seznam logů</summary>
+            <param name="filters">Filtry na logy operací</param>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GZamekDeniku">
+            <summary>Klientská logika - Zámek deníku hlavně pro operace</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GZamekDeniku.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor třídy</summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GZamekDeniku.TryEnable(Gordic.General.GString,Gordic.General.GDateTime)">
+            <summary>
+            Pokusí se nastavit zámek pro operaci (při úspěchu vrací null, při neúspěchu vrací textový popis aktuálního zámku)
+            nový connect
+            </summary>        
+            <param name="ixsOpe">Identifikátor operace nastavovaného zámku</param>
+            <param name="timeOut">Volitelný datum a čas, kdy zámek přestane platit (je-li nastaveno na null/Null, je nastaven automaticky výchozí timeout)</param>
+            <returns>chybový text (nebo null v případě bezchyného průběhu)</returns>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GZamekDeniku.TryDisable">
+            <summary>
+            Pokusí se zrušit zámek 
+            </summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GZamekDeniku.TryChangeTypZamku(System.Int16,Gordic.General.GString)">
+            <param name="typZamku">0 Celý deník (probíhá operace) / 10 Pouze uživatelé bez centrálního přístupu</param>
+            <param name="popis">Důvod zamknutí deníku - má smysl zadávat pouze pro typZamku = 10 Pouze uživatelé bez centrálního přístupu</param>
+            <returns>chybový text (nebo null v případě bezchyného průběhu)</returns>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GZamekDeniku.StateTypZamku">
+            <summary>
+            Zjistí aktuální stav typu zámku a popis
+            </summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GZamekDeniku.StateInfo">
+            <summary>
+            Podrobná informace o aktuálním zámku
+            </summary>
+            <returns>Textová informace o zámku a podrobné informace (null bez zámku)</returns>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GZamek">
+            <summary>Klientská logika - Zámek pro operace</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GZamek.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor třídy</summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GZamek.Stav">
+            <summary>Načte stav zámku pro operace</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GZamek.Zapnout(Gordic.General.GString)">
+            <summary>
+            Uloží nový stav zámku pro operace podle předaného parametru
+            </summary>
+            <param name="ixsOpe">Nový stav zámku (může být i null)</param>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GOperace">
+            <summary>Klientská logika - masky</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor třídy</summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.SeznamOperaci(System.Boolean,Gordic.General.GFilter{Gordic.Cnt.Interface.FilterOperace}[])">
+            <summary>Načte seznam operací</summary>
+            <param name="fullResult">Zda naplní úplně všechny sloupce daty (časově náročnější)</param>
+            <param name="filters">Filtry na operace</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.SeznamOperaciDodak(System.Boolean,Gordic.General.GFilter{Gordic.Cnt.Interface.FilterOperace}[])">
+            <summary>Načte seznam operací typu dodací list</summary>
+            <param name="fullResult">Zda naplní úplně všechny sloupce daty (časově náročnější)</param>
+            <param name="filters">Filtry na operace</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.PravaTxt(System.Collections.Generic.List{System.String})">
+            <summary>
+            Načte seznam práv pro jednotlivé operace ve formě seznamu odděleného čárkami
+            </summary>
+            <param name="ixsObjList">Vstupní seznam, kde se budou zjišťovat práva</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.DetailOperace(Gordic.General.GString)">
+            <summary>Načte detail operace</summary>
+            <param name="ixsOpe">Identifikátor operace</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.NovaOperace(Gordic.General.GInt16)">
+            <summary>Vrátí novou operaci</summary>
+            <param name="druhOperace">Druh operace</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.NovaOperaceDodaciList">
+            <summary>Vrátí novou operaci dodací list</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.NovaOperaceDodaciList(Gordic.General.GString)">
+            <summary>Vrátí novou operaci dodací list ve stavu po uložení dodacího listu</summary>
+            <param name="ixpDod">Identifikátor dodacího listu</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.DetailOperaceDodaciList(Gordic.General.GString)">
+            <summary>Načte detail operace dodací list</summary>
+            <param name="ixsOpe">Identifikátor operace</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.UlozitOperaciDodaciList(Gordic.Cnt.Interface.GDetailOperaceDodaciList)">
+            <summary>Uloží operaci</summary>
+            <param name="detailOperace">Data detailu operace dodací list</param>
+            <returns>Identifikátor uložené operace (ixs_ope)</returns>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.KumulaceDefaultColumns">
+            <summary>
+            Vrátí seznam sloupců ve výchozím nastavení pro kumulace
+            </summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.KumulaceGeneratorHTDefaultColumns">
+            <summary>
+            Vrátí seznam sloupců ve výchozím nastavení pro kumulace v generátoru HT
+            </summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.GeneratorHTMaskaColumns">
+            <summary>
+            Vrátí seznam sloupců, které je možné použít v generátoru HT v části Maska
+            </summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.GeneratorHTRozpisColumns">
+            <summary>
+            Vrátí seznam sloupců, které je možné použít v generátoru HT v části Rozpis
+            </summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.GeneratorHTHefMaskaColumns">
+            <summary>
+            Vrátí seznam sloupců, které je možné použít v generátoru HT HEF v části Maska
+            </summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.GeneratorHTHefRozpisColumns">
+            <summary>
+            Vrátí seznam sloupců, které je možné použít v generátoru HT HEF v části Rozpis
+            </summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.OdstranitOperaci(Gordic.General.GString)">
+            <summary>Odstraní operaci</summary>
+            <param name="ixsOpe">Identifikátor operace</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.UlozitOperaci(Gordic.Cnt.Interface.GDetailOperace)">
+            <summary>Uloží operaci</summary>
+            <param name="detailOperace">Data detailu operace</param>
+            <returns>Identifikátor uložené operace (ixs_ope)</returns>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.ProvedOperaci(Gordic.General.GString)">
+            <summary>Provede operaci</summary>
+            <param name="ixsOpe">Identifikátor operace</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.ProvedPumpu(Gordic.General.GString)">
+            <summary>Provede napumpování dat do controllingového deníku</summary>
+            <param name="ixsOpe">Identifikátor operace - pumpy</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.ProvedPumpuRoz(Gordic.General.GString)">
+            <summary>Provede napumpování dat rozpočtu do controllingového deníku</summary>
+            <param name="ixsOpe">Identifikátor operace - pumpy</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.ProvedPumpuDdm(Gordic.General.GString)">
+            <summary>Provede napumpování dat DDM do controllingového deníku</summary>
+            <param name="ixsOpe">Identifikátor operace - pumpy</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.ProvedPumpuPrima(Gordic.General.GString)">
+            <summary>Provede napumpování přímých záznamů do controllingového deníku</summary>
+            <param name="ixsOpe">Identifikátor operace - pumpy</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.ProvedPredani(Gordic.General.GString)">
+            <summary>Provede předání záznamů do jiné knihy</summary>
+            <param name="ixsOpe">Identifikátor operace - předání</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.ProvedTransformaci(Gordic.General.GString,Gordic.General.GInt16,System.Int32,Gordic.General.GInt16)">
+            <summary>Provede transformaci v controllingovém deníku</summary>
+            <param name="ixsOpe">Identifikátor operace - transformace</param>
+            <param name="temp">Kam bude směřován výstupu - do deníku (0) / do tempu (1)</param>
+            <param name="limitInRows">Maximální počet řádků (&lt;= 0 - bez omezení)</param>
+            <param name="outFaz">Ručně dodaná výstupní fáze (volitelná)</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.ProvedHromTransformaci(Gordic.General.GString,Gordic.General.GInt16,System.Int32,Gordic.General.GInt16)">
+            <summary>Provede hromadnou transformaci v controllingovém deníku</summary>
+            <param name="ixsOpe">Identifikátor operace - hromadná transformace</param>
+            <param name="temp">Kam bude směřován výstupu - do deníku (0) / do tempu (1)</param>
+            <param name="limitInRows">Maximální počet řádků (&lt;= 0 - bez omezení)</param>
+            <param name="outFaz">Ručně dodaná výstupní fáze (volitelná)</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.ProvedRozuctovaniCL(Gordic.General.GString)">
+            <summary>Provede rozúčtování dle contollingové likvidace</summary>
+            <param name="ixsOpe">Identifikátor operace - rozúčtování CL</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.ProvedKumulaci(Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Provede kumulaci záznamů</summary>
+            <param name="ixsOpe">Identifikátor operace - kumulace</param>
+            <param name="outFaz">Ručně dodaná výstupní fáze (volitelná)</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.VystupTransformace(Gordic.General.GString,System.Int32,Gordic.General.GInt16)">
+            <summary>Získá výstup transformace aniž by byla transformace provedena</summary>
+            <param name="ixsOpe">Identifikátor operace - transformace</param>
+            <param name="limitInRows">Maximální počet řádků (&lt;= 0 - bez omezení)</param>
+            <param name="outFaz">Ručně dodaná výstupní fáze (volitelná)</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.VystupHromTransformace(Gordic.General.GString,System.Int32,Gordic.General.GInt16)">
+            <summary>Získá výstup hromadné transformace, aniž by byla transformace provedena</summary>
+            <param name="ixsOpe">Identifikátor operace - transformace</param>
+            <param name="limitInRows">Maximální počet řádků (&lt;= 0 - bez omezení)</param>
+            <param name="outFaz">Ručně dodaná výstupní fáze (volitelná)</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.VystupPredani(Gordic.General.GInt16,Gordic.General.GString,Gordic.Cnt.Interface.GDenikDataSet.SeznamDataTable)">
+            <summary>
+            Získá výstup předání
+            </summary>
+            <param name="vyberKnihy">Výběr knihy</param>
+            <param name="ixsKni">Identifikátor knihy</param>
+            <param name="inputTable">Tabulka s řádky pro předání</param>
+            <returns>Výstup předání</returns>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.VystupKumulace(Gordic.General.GString,System.Int32,Gordic.General.GInt16)">
+            <summary>Získá výstup kumulace aniž by byla kumulace provedena</summary>
+            <param name="ixsOpe">Identifikátor operace - kumulace</param>
+            <param name="limitInRows">Maximální počet řádků (&lt;= 0 - bez omezení)</param>
+            <param name="outFaz">Ručně dodaná výstupní fáze (volitelná)</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.SeznamTypuOperaci(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterTypOperace}[])">
+            <summary>Číselník seznam typů operací</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.SeznamDruhuOperaci(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterDruhOperace}[])">
+            <summary>Číselník seznam druhů operací</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.SeznamVyberuKnihy(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterVybKnihy}[])">
+            <summary>Číselník seznam způsobů výběru knihy</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.KopieDodacihoListu(Gordic.General.GString)">
+            <summary>
+            Vrátí kopii dodacího listu na základě předaného originálu
+            </summary>
+            <param name="ixsOpeOrig">Vzor prováděné kopie</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.KopieDodacihoListu(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>
+            Vrátí kopii dodacího listu na základě předaného originálu včetně nového NS
+            </summary>
+            <param name="ixsOpeOrig">Vzor prováděné kopie</param>
+            <param name="ico">ičo explicitně zadané NS nového NZ</param>
+            <param name="nks">explicitně zadané NS nového NZ</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.RokyOperaciLimit">
+            <summary>Zjistí minimální a maximální rok, který je možné použít při ukládání operací</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.RokyOperaciLimitCache">
+            <summary>Zjistí minimální a maximální rok, který je možné použít při ukládání operací (z cache)</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.RokyOperaciLimitValidate(System.Int16)">
+            <summary>Otestuje, zda je zadaný rok v rozsahu povolených roků</summary>
+            <param name="rok">Testovaný rok</param>
+            <returns>null - test bez chyby, text chyby - při validaci došlo k chybě</returns>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOperace.CleanCache">
+            <summary>
+            Vyčistí paměť cache
+            </summary>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GReaderOperace">
+            <summary>
+            Klientská část AL - Operace
+            </summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderOperace.ReadDbDataFiltered(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterOperace}[])">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderOperace.Reader">
+            <summary>Interface pro Reader</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderOperace.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GReaderOperace.Dto">
+            <summary>Dto</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderOperace.Dto.ixs_ope">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderOperace.Dto.nazev">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderOperace.Dto.poznamka">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderOperace.Dto.druh_oper">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderOperace.Dto.druh_oper_txt">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderOperace.Dto.aktivita">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderOperace.Dto.dat_zmena">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderOperace.Dto.zmenu_prov">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderOperace.Data">
+            <summary>Dto</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderOperace.GetDto">
+            <summary>Dto</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderOperace.IxsOpe">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderOperace.Nazev">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderOperace.Poznamka">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderOperace.DruhOper">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderOperace.DruhOperTxt">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderOperace.Aktivita">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderOperace.DatZmena">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderOperace.ZmenuProv">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderOperace.InternalClear">
+            <summary>Vymaže hodnoty</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderOperace.FilterIxsOpe">
+            <summary>Filtr na ixs_ope</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderOperace.FilterNazev">
+            <summary>Filtr na nazev</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderOperace.FilterPoznamka">
+            <summary>Filtr na poznamka</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderOperace.FilterDruhOper">
+            <summary>Filtr na druh_oper</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderOperace.FilterDatZmena">
+            <summary>Filtr na dat_zmena</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderOperace.FilterZmenuProv">
+            <summary>Filtr na zmenu_prov</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderOperace.GetFilters">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderOperace.CreateRequest">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderOperace.ReadDbData">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderOperace.ReadData(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterOperace}[])">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderOperace.ReadData(Gordic.General.ApplicationInterface.IGAppLogicDataRequest)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderOperace.ReadData(Gordic.General.ApplicationInterface.GAppLogicDataRequest{Gordic.General.GFilter{Gordic.Cnt.Interface.FilterOperace}})">
+            <summary>čtení celé tabulky (podle zvolených filtrů)</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderOperace.InternalSetData(System.Data.DataRow)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderOperace.InternalSetData(Gordic.General.IGDto)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderOperace.CopyFrom(Gordic.Cnt.Client.GReaderOperace)">
+            <summary>Kopíruje data z jiné instance tohoto objektu</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderOperace.SetValidData(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GString)">
+            <summary>Nastaví validní data bez přístupu k DB</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderOperace.SetValidData(Gordic.General.GString)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderOperace.SetValidDataFromKeys(System.String[])">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderOperace.Verify(System.Object)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderOperace.Verify(Gordic.Cnt.Client.GReaderOperace.Dto)">
+            <exclude/>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GPlany">
+            <summary>Klientská logika - plány</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GPlany.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor třídy</summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GPlany.SeznamPlanu(System.Boolean,Gordic.General.GFilter{Gordic.Cnt.Interface.FilterPlany}[])">
+            <summary>Načte seznam plánů</summary>
+            <param name="fullResult">Zda naplní úplně všechny sloupce daty (časově náročnější)</param>
+            <param name="filters">Filtry na plány</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GPlany.DetailPlanu(Gordic.General.GString)">
+            <summary>Načte detail plánu</summary>
+            <param name="ixsPlc">Identifikátor plánu</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GPlany.NovyPlan">
+            <summary>Vrátí nový plán</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GPlany.OdstranitPlan(Gordic.General.GString)">
+            <summary>Odstraní plán</summary>
+            <param name="ixsPlc">Identifikátor plánu</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GPlany.UlozitPlan(Gordic.Cnt.Interface.GDetailPlanu)">
+            <summary>Uloží plán</summary>
+            <param name="detailPlanu">Data detailu plánu</param>
+            <returns>Identifikátor uloženého plánu (ixs_plc)</returns>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GPlany.ProvedKrokPlanu(Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Provede krok plánu</summary>
+            <param name="ixsPlc">Identifikátor plánu</param>
+            <param name="radekPlc">Řádek v plánu definující prováděný krok</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GPlany.ProvedPlan(Gordic.General.GString,Gordic.General.GString)">
+            <summary>Provede plán na základě zadaného identifikátoru nebo na základě zadaného názvu plánu</summary>
+            <param name="ixsPlc">Identifikátor plánu</param>
+            <param name="nazev">Název plánu</param>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GPrava">
+            <summary>Klientská logika - práva</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GPrava.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor třídy</summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GPrava.SeznamPrav(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterPrava}[])">
+            <summary>Načte seznam práv</summary>
+            <param name="filters">Filtry na práva</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GPrava.SeznamPrav(Gordic.General.GString,Gordic.General.GFilter{Gordic.Cnt.Interface.FilterPrava}[])">
+            <summary>Načte seznam práv</summary>
+            <param name="ixs">Identifikátor objektu, u kterého zjišťujeme práva</param>
+            <param name="filters">Filtry na práva</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GPrava.NovaPrava(Gordic.General.GString,Gordic.General.GString,Gordic.Cnt.Interface.SadaPrav)">
+            <summary>Vrátí tabulku s definicí nových práv</summary>
+            <param name="ixsFunAkt">Identifikátor funkce vlastníka objektu</param>
+            <param name="ixsFunAktRf">Název referenta(funkce) příslušný k ixsFunAkt</param>
+            <param name="sadaPrav">Konfigurace použitých práv</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GPrava.UlozitPrava(Gordic.General.GString,Gordic.General.GString,Gordic.Cnt.Interface.GDetailPrav)">
+            <summary>Uloží práva objektu</summary>
+            <param name="ixsFunAkt">Identifikátor funkce vlastníka objektu</param>
+            <param name="ixsObj">Identifikátor objektu, jehož práva ukládáme</param>
+            <param name="detailPrav">Tabulka se seznamem přístupových práv</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GPrava.SeznamPristupnychKnihCache">
+            <summary>
+            Načte seznam knih přístupných pro aktuální funkci a NKS (z cache)
+            </summary>
+            <returns>Seznam přístupných knih ve formě dvojic ixs_kni, zkratka knihy</returns>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GPrava.CleanCache">
+            <summary>
+            Vyčistí paměť cache
+            </summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GPrava.SadaPravList(Gordic.Cnt.Interface.SadaPrav)">
+            <summary>
+            Seznam práv pro zadanou konfigurační sadu
+            </summary>
+            <param name="sadaPrav">Konfigurace použitých práv</param>
+            <returns>Seznam práv</returns>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GPrava.DetailVyberuPrava(Gordic.Cnt.Interface.TypVyberuPrava)">
+            <summary>
+            Nastavení výběru práva pro jeden výběr práva
+            </summary>
+            <param name="typVyberuPrava">Typ výběru práva</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GPrava.NastavVychoziHodnoty(Gordic.Cnt.Interface.SadaPrav,Gordic.Cnt.Interface.GPravaDataSet.SeznamRow,System.Boolean)">
+            <summary>
+            Nastaví výchozí hodnoty u řádku s právy
+            </summary>
+            <param name="sadaPrav">Konfigurace použitých práv</param>
+            <param name="pravaRow">Řádek s hodnotami práv</param>
+            <param name="vlastnik">Určuje, zda zadaný řádek práv představuje vlastníka záznamu</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GPrava.Vysledna(Gordic.General.GString,Gordic.General.GString,Gordic.Cnt.Interface.GDetailPrav)">
+            <summary>
+            Získá výsledná práva z detailu práv
+            </summary>
+            <param name="ixsFunAkt">Identifikátor funkce vlastníka objektu</param>
+            <param name="ixsObj">Identifikátor objektu, jehož práva zjišťujeme</param>
+            <param name="detailPrav">detail práv</param>
+            <returns>Řádek s nastavením výsledných práv</returns>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GPrava.SeznamVybPrava(Gordic.Cnt.Interface.TypVyberuPrava,Gordic.General.GFilter{Gordic.Cnt.Interface.FilterVybPrava}[])">
+            <summary>Číselník pro výběr práva</summary>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GReaderVybPrava">
+            <summary>
+            Klientská část AL - číselník Výběr práva
+            </summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderVybPrava.TypVyberuPrava">
+            <summary>
+            Určuje typ výběru práva
+            </summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybPrava.ReadDbDataFiltered(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterVybPrava}[])">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVybPrava.Reader">
+            <summary>Interface pro Reader</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybPrava.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GReaderVybPrava.Dto">
+            <summary>Dto</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderVybPrava.Dto.px">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderVybPrava.Dto.px_txt">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderVybPrava.Data">
+            <summary>Dto</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybPrava.GetDto">
+            <summary>Dto</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVybPrava.Px">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVybPrava.PxTxt">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybPrava.InternalClear">
+            <summary>Vymaže hodnoty</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVybPrava.FilterPx">
+            <summary>Filtr na px</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVybPrava.FilterPxTxt">
+            <summary>Filtr na px_txt</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybPrava.GetFilters">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybPrava.CreateRequest">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybPrava.ReadDbData">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybPrava.ReadData(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterVybPrava}[])">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybPrava.ReadData(Gordic.General.ApplicationInterface.IGAppLogicDataRequest)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybPrava.ReadData(Gordic.General.ApplicationInterface.GAppLogicDataRequest{Gordic.General.GFilter{Gordic.Cnt.Interface.FilterVybPrava}})">
+            <summary>čtení celé tabulky (podle zvolených filtrů)</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybPrava.InternalSetData(System.Data.DataRow)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybPrava.InternalSetData(Gordic.General.IGDto)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybPrava.CopyFrom(Gordic.Cnt.Client.GReaderVybPrava)">
+            <summary>Kopíruje data z jiné instance tohoto objektu</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybPrava.SetValidData(Gordic.General.GInt16,Gordic.General.GString)">
+            <summary>Nastaví validní data bez přístupu k DB</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybPrava.SetValidData(Gordic.General.GInt16)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybPrava.SetValidDataFromKeys(System.String[])">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybPrava.Verify(System.Object)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybPrava.Verify(Gordic.Cnt.Client.GReaderVybPrava.Dto)">
+            <exclude/>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GReaderVarianty">
+            <summary>
+            Klientská část AL - Varianty
+            </summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVarianty.ReadDbDataFiltered(Gordic.General.GFilter{Gordic.Cnt.Interface.GCntVariantaFilter}[])">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVarianty.Reader">
+            <summary>Interface pro Reader</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVarianty.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GReaderVarianty.Dto">
+            <summary>Dto</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderVarianty.Dto.ixs_var">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderVarianty.Dto.nazev">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderVarianty.Dto.zkratka">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderVarianty.Dto.rok">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderVarianty.Dto.k_v">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderVarianty.Dto.aktivita">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderVarianty.Dto.dat_zmena">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderVarianty.Dto.zmenu_prov">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderVarianty.Data">
+            <summary>Dto</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVarianty.GetDto">
+            <summary>Dto</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVarianty.IxsVar">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVarianty.Nazev">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVarianty.Zkratka">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVarianty.Rok">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVarianty.KV">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVarianty.Aktivita">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVarianty.DatZmena">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVarianty.ZmenuProv">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVarianty.InternalClear">
+            <summary>Vymaže hodnoty</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVarianty.FilterIxsVar">
+            <summary>Filtr na ixs_var</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVarianty.FilterNazev">
+            <summary>Filtr na nazev</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVarianty.FilterZkratka">
+            <summary>Filtr na zkratka</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVarianty.FilterRok">
+            <summary>Filtr na rok</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVarianty.FilterKV">
+            <summary>Filtr na k_v</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVarianty.FilterAktivita">
+            <summary>Filtr na aktivita</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVarianty.FilterDatZmena">
+            <summary>Filtr na dat_zmena</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVarianty.FilterZmenuProv">
+            <summary>Filtr na zmenu_prov</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVarianty.GetFilters">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVarianty.CreateRequest">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVarianty.ReadDbData">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVarianty.ReadData(Gordic.General.GFilter{Gordic.Cnt.Interface.GCntVariantaFilter}[])">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVarianty.ReadData(Gordic.General.ApplicationInterface.IGAppLogicDataRequest)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVarianty.ReadData(Gordic.General.ApplicationInterface.GAppLogicDataRequest{Gordic.General.GFilter{Gordic.Cnt.Interface.GCntVariantaFilter}})">
+            <summary>čtení celé tabulky (podle zvolených filtrů)</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVarianty.InternalSetData(System.Data.DataRow)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVarianty.InternalSetData(Gordic.General.IGDto)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVarianty.CopyFrom(Gordic.Cnt.Client.GReaderVarianty)">
+            <summary>Kopíruje data z jiné instance tohoto objektu</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVarianty.SetValidData(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDateTime,Gordic.General.GString)">
+            <summary>Nastaví validní data bez přístupu k DB</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVarianty.SetValidData(Gordic.General.GString)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVarianty.SetValidDataFromKeys(System.String[])">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVarianty.Verify(System.Object)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVarianty.Verify(Gordic.Cnt.Client.GReaderVarianty.Dto)">
+            <exclude/>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GReaderKnihy">
+            <summary>
+            Klientská část AL - Knihy
+            </summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderKnihy.ReadDbDataFiltered(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterKnihy}[])">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderKnihy.Reader">
+            <summary>Interface pro Reader</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderKnihy.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GReaderKnihy.Dto">
+            <summary>Dto</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderKnihy.Dto.ixs_kni">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderKnihy.Dto.nazev">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderKnihy.Dto.znacka">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderKnihy.Dto.zkratka">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderKnihy.Dto.poznamka">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderKnihy.Dto.aktivita">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderKnihy.Data">
+            <summary>Dto</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderKnihy.GetDto">
+            <summary>Dto</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderKnihy.IxsKni">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderKnihy.Nazev">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderKnihy.Znacka">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderKnihy.Zkratka">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderKnihy.Poznamka">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderKnihy.Aktivita">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderKnihy.InternalClear">
+            <summary>Vymaže hodnoty</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderKnihy.FilterIxsKni">
+            <summary>Filtr na ixs_kni</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderKnihy.FilterNazev">
+            <summary>Filtr na nazev</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderKnihy.FilterZnacka">
+            <summary>Filtr na znacka</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderKnihy.FilterZkratka">
+            <summary>Filtr na zkratka</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderKnihy.FilterPoznamka">
+            <summary>Filtr na poznamka</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderKnihy.FilterAktivita">
+            <summary>Filtr na aktivita</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderKnihy.FilterIgnoreRights">
+            <summary>Zda zobrazovat knihy všechny bez ohledu na práva</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderKnihy.GetFilters">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderKnihy.CreateRequest">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderKnihy.ReadDbData">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderKnihy.ReadData(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterKnihy}[])">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderKnihy.ReadData(Gordic.General.ApplicationInterface.IGAppLogicDataRequest)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderKnihy.ReadData(Gordic.General.ApplicationInterface.GAppLogicDataRequest{Gordic.General.GFilter{Gordic.Cnt.Interface.FilterKnihy}})">
+            <summary>čtení celé tabulky (podle zvolených filtrů)</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderKnihy.InternalSetData(System.Data.DataRow)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderKnihy.InternalSetData(Gordic.General.IGDto)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderKnihy.CopyFrom(Gordic.Cnt.Client.GReaderKnihy)">
+            <summary>Kopíruje data z jiné instance tohoto objektu</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderKnihy.SetValidData(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Nastaví validní data bez přístupu k DB</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderKnihy.SetValidData(Gordic.General.GString)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderKnihy.SetValidDataFromKeys(System.String[])">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderKnihy.Verify(System.Object)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderKnihy.Verify(Gordic.Cnt.Client.GReaderKnihy.Dto)">
+            <exclude/>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GReaderVybKnihy">
+            <summary>
+            Klientská část AL - číselník Způsob výběru knihy
+            </summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybKnihy.ReadDbDataFiltered(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterVybKnihy}[])">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVybKnihy.Reader">
+            <summary>Interface pro Reader</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybKnihy.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GReaderVybKnihy.Dto">
+            <summary>Dto</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderVybKnihy.Dto.vyber_knihy">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderVybKnihy.Dto.vyber_knihy_txt">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderVybKnihy.Dto.aktivita">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderVybKnihy.Data">
+            <summary>Dto</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybKnihy.GetDto">
+            <summary>Dto</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVybKnihy.VyberKnihy">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVybKnihy.VyberKnihyTxt">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVybKnihy.Aktivita">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybKnihy.InternalClear">
+            <summary>Vymaže hodnoty</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVybKnihy.FilterVyberKnihy">
+            <summary>Filtr na vyber_knihy</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVybKnihy.FilterVyberKnihyTxt">
+            <summary>Filtr na vyber_knihy_txt</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderVybKnihy.FilterAktivita">
+            <summary>Filtr na aktivita</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybKnihy.GetFilters">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybKnihy.CreateRequest">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybKnihy.ReadDbData">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybKnihy.ReadData(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterVybKnihy}[])">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybKnihy.ReadData(Gordic.General.ApplicationInterface.IGAppLogicDataRequest)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybKnihy.ReadData(Gordic.General.ApplicationInterface.GAppLogicDataRequest{Gordic.General.GFilter{Gordic.Cnt.Interface.FilterVybKnihy}})">
+            <summary>čtení celé tabulky (podle zvolených filtrů)</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybKnihy.InternalSetData(System.Data.DataRow)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybKnihy.InternalSetData(Gordic.General.IGDto)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybKnihy.CopyFrom(Gordic.Cnt.Client.GReaderVybKnihy)">
+            <summary>Kopíruje data z jiné instance tohoto objektu</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybKnihy.SetValidData(Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Nastaví validní data bez přístupu k DB</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybKnihy.SetValidData(Gordic.General.GInt16)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybKnihy.SetValidDataFromKeys(System.String[])">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybKnihy.Verify(System.Object)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderVybKnihy.Verify(Gordic.Cnt.Client.GReaderVybKnihy.Dto)">
+            <exclude/>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GRozpisy">
+            <summary>Klientská logika - rozpisy</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GRozpisy.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor třídy</summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GRozpisy.SeznamRozpisu(System.Boolean,Gordic.General.GFilter{Gordic.Cnt.Interface.FilterRozpisy}[])">
+            <summary>Načte seznam rozpisů</summary>
+            <param name="fullResult">Zda naplní úplně všechny sloupce daty (časově náročnější)</param>
+            <param name="filters">Filtry na rozpisy</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GRozpisy.DetailRozpisu(Gordic.General.GString)">
+            <summary>Načte detail rozpisu</summary>
+            <param name="ixsRps">Identifikátor rozpisu</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GRozpisy.NovyRozpis(System.Boolean)">
+            <summary>Vrátí nový rozpis</summary>
+            <param name="vidVerejny">Viditelnost záznamu - zda bude záznam viditelný (nebo interní)</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GRozpisy.NovyRozpisOpt">
+            <summary>Vrátí nový optimalizovaný rozpis</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GRozpisy.OdstranitRozpis(Gordic.General.GString)">
+            <summary>Odstraní rozpis</summary>
+            <param name="ixsRps">Identifikátor rozpisu</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GRozpisy.UlozitRozpis(Gordic.Cnt.Interface.GDetailRozpisu)">
+            <summary>Uloží rozpis</summary>
+            <param name="detailRozpisu">Data detailu rozpisu</param>
+            <returns>Identifikátor uloženého rozpisu (ixs_rps)</returns>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GRozpisy.VystupRozpisu(Gordic.Cnt.Interface.GDenikDataSet.SeznamDataTable,Gordic.General.GString)">
+            <summary>Získá výstup rozpisu</summary>
+            <param name="inputTable">Tabulka s řádky pro rozepsání</param>
+            <param name="ixsRps">Identifikátor rozpisu</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GRozpisy.VystupRozpisu(Gordic.Cnt.Interface.GDenikDataSet.SeznamDataTable,Gordic.Cnt.Interface.GRozpisDataSet.SeznamDataTable,Gordic.General.GString)">
+            <summary>Získá výstup rozpisu</summary>
+            <param name="inputTable">Tabulka s řádky pro rozepsání</param>
+            <param name="rozpisTable">Tabulka, podle které se rozpis provádí</param>
+            <param name="nazevRozpisu">Textový název rozpisu (nebo jiný text identifikující rozpis)</param>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GReaderTypyDeniku">
+            <summary>
+            Klientská část AL - číselník Typy deníků
+            </summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderTypyDeniku.ReadDbDataFiltered(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterTypyDeniku}[])">
+            <exclude/>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderTypyDeniku.Reader">
+            <summary>Interface pro Reader</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderTypyDeniku.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GReaderTypyDeniku.Dto">
+            <summary>Dto</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderTypyDeniku.Dto.typ_dnk">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderTypyDeniku.Dto.typ_dnk_txt">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderTypyDeniku.Dto.aktivita">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="F:Gordic.Cnt.Client.GReaderTypyDeniku.Data">
+            <summary>Dto</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderTypyDeniku.GetDto">
+            <summary>Dto</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderTypyDeniku.TypDnk">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderTypyDeniku.TypDnkTxt">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderTypyDeniku.Aktivita">
+            <summary>Autogenerated.</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderTypyDeniku.InternalClear">
+            <summary>Vymaže hodnoty</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderTypyDeniku.FilterTypDnk">
+            <summary>Filtr na typ_dnk</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderTypyDeniku.FilterTypDnkTxt">
+            <summary>Filtr na typ_dnk_txt</summary>
+        </member>
+        <member name="P:Gordic.Cnt.Client.GReaderTypyDeniku.FilterAktivita">
+            <summary>Filtr na aktivita</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderTypyDeniku.GetFilters">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderTypyDeniku.CreateRequest">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderTypyDeniku.ReadDbData">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderTypyDeniku.ReadData(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterTypyDeniku}[])">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderTypyDeniku.ReadData(Gordic.General.ApplicationInterface.IGAppLogicDataRequest)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderTypyDeniku.ReadData(Gordic.General.ApplicationInterface.GAppLogicDataRequest{Gordic.General.GFilter{Gordic.Cnt.Interface.FilterTypyDeniku}})">
+            <summary>čtení celé tabulky (podle zvolených filtrů)</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderTypyDeniku.InternalSetData(System.Data.DataRow)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderTypyDeniku.InternalSetData(Gordic.General.IGDto)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderTypyDeniku.CopyFrom(Gordic.Cnt.Client.GReaderTypyDeniku)">
+            <summary>Kopíruje data z jiné instance tohoto objektu</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderTypyDeniku.SetValidData(Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Nastaví validní data bez přístupu k DB</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderTypyDeniku.SetValidData(Gordic.General.GInt16)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderTypyDeniku.SetValidDataFromKeys(System.String[])">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderTypyDeniku.Verify(System.Object)">
+            <exclude/>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GReaderTypyDeniku.Verify(Gordic.Cnt.Client.GReaderTypyDeniku.Dto)">
+            <exclude/>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GRozvrhyRoku">
+            <summary>Klientská logika - vazba rozvrhu na roky</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GRozvrhyRoku.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor třídy</summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GRozvrhyRoku.Seznam(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterRozvrhyRoku}[])">
+            <summary>Načte seznam vazeb rozvrhů na roky</summary>
+            <param name="filters">Filtry</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GRozvrhyRoku.Detail(Gordic.General.GInt16,Gordic.General.GInt16)">
+            <summary>Načte detail vazby rozvrhu na rok</summary>
+            <param name="rok">Rok</param>
+            <param name="typDnk">Typ deníku</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GRozvrhyRoku.Novy">
+            <summary>Vrátí novou vazbu rozvrhu na rok</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GRozvrhyRoku.Odstranit(Gordic.General.GInt16,Gordic.General.GInt16)">
+            <summary>Odstraní vazbu rozvrhu na rok</summary>
+            <param name="rok">Rok</param>
+            <param name="typDnk">Typ deníku</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GRozvrhyRoku.Ulozit(Gordic.Cnt.Interface.GRozvrhyRokuDataSet.SeznamRow)">
+            <summary>Uloží vazbu rozvrhu na rok</summary>
+            <param name="row">Data vazby rozvrhu na rok</param>
+            <returns>Identifikátor uloženého záznamu v pořadí (rok, typ_dnk)</returns>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GOpravneDoklady">
+            <summary>Klientská logika - rozpisy</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOpravneDoklady.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor třídy</summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GOpravneDoklady.Seznam(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterOpravneDoklady}[])">
+            <summary>Načte seznam opravných dokladů</summary>
+            <param name="filters">Filtry na opravné doklady</param>
+        </member>
+        <member name="T:Gordic.Cnt.Client.GSloupExtension">
+            <summary>Klientská logika - Rozšiřující sloupce pro Controlling</summary>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GSloupExtension.#ctor(Gordic.General.ApplicationClient.GUserProcess)">
+            <summary>Konstruktor třídy</summary>
+            <param name="userProcess">UserProcess</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GSloupExtension.Seznam(Gordic.General.GInt16,Gordic.General.GFilter{Gordic.Cnt.Interface.FilterSloupExtension}[])">
+            <summary>Načte seznam rozšiřujících sloupců s platností v zadaném roce</summary>
+            <param name="rok">rok, ve kterém se seznam zjišťuje</param>
+            <param name="filters">Filtry</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GSloupExtension.Seznam(Gordic.General.GFilter{Gordic.Cnt.Interface.FilterSloupExtension}[])">
+            <summary>Načte seznam rozšiřujících sloupců</summary>
+            <param name="filters">Filtry</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GSloupExtension.Detail(Gordic.General.GString)">
+            <summary>Načte detail rozšiřujícího sloupce s platností v aktuálním roce</summary>
+            <param name="sloupecCnt">Sloupec Controllingu</param>
+        </member>
+        <member name="M:Gordic.Cnt.Client.GSloupExtension.Detail(Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Načte detail rozšiřujícího sloupce </summary>
+            <param name="sloupecCnt">Sloupec Controllingu</param>
+            <param name="rok_od">Rok platnosti od</param>
+        </member>
+    </members>
+</doc>

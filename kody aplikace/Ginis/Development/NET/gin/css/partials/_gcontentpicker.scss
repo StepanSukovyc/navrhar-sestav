@@ -1,0 +1,196 @@
+﻿.gcontentpicker {
+    
+    //Scroollbar
+    height: 100%;
+    overflow:hidden scroll; //toto pusobuje bug v momente, kdy se zobrazi scrollbar - na to zareaguje resize a zacne
+
+    //Firefox (standard)
+    scrollbar-width: thin;
+    scrollbar-color: $base-color-dark;
+    margin-right: 0.125rem;
+
+    //Chrome/Edge only
+    &::-webkit-scrollbar-thumb {
+        background-color: $base-color-light;
+        border-radius: 6px;
+        border: 3px solid $base-color-dark;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: $base-color-light;
+    }
+
+    &::-webkit-scrollbar {
+        width: 0.3215rem;
+    }
+
+    //Scrollbar end
+
+    &__wrapper {
+        width: 100%;
+        //height: 100%; //toto prida scrollbary do menu pro kazdy frame. Chceme je?
+        min-height: 100%;
+        display: flex;
+        flex-wrap: nowrap;
+        padding: 0.5rem 0;
+        justify-items: stretch;
+    }
+
+    &__menu {
+        flex: 0 0 auto;
+    }
+
+    &__content {
+        flex: 1 1 auto; //toto trochu zlobi na IE, ale ostatni fcajk. Kdyby to byl problem, mohlo by staticnasledujici:
+        //flex: 0 1 auto;
+        padding: 0.5rem 2rem;
+        position: relative;
+        //background-color: #f9f9e1; //debug
+    }
+    //NOTE: Na poz. OHvezdy sirsi paddingy pro vetsi monitory
+    @media screen and (min-width: 1601px) {
+        &__content {
+            padding: 0.5rem 4rem;
+        }
+    }
+    //Toto uskoci linku o 2px :-(
+    &__menu:not(.hidden) + &__content {
+        border-left: 2px dotted $base-color-tool;
+    }
+
+    &__menu-opener {
+        cursor: pointer;
+    }
+
+    .menu-opener__back {
+        padding: 0.5rem;
+        width: 2rem;
+
+        &:hover {
+            background-color: $base-color-tool;
+        }
+    }
+    /* --- menu override --- */
+    .gactionmenu__frame-wrapper {
+        border-right: 2px dotted $base-color-tool;
+    }
+
+    .gactionmenu__frame-wrapper:last-child {
+        border-right: 2px dotted transparent; //musi mit border, jinak obsah jednotlivych item uskoci
+    }
+
+    .gactionmenu__items {
+        flex-grow: 1; //fix scrollbaru pro IE
+        padding: 0.5rem;
+    }
+
+    .gactionmenu__item {
+        line-height: normal;
+        align-items: center;
+        //padding: 0.5rem;  //nelze pouzit - nevola se akce, pokud se neklikne na .item__left nebo .item__center
+        color: $base-color-text;
+
+        &.active,
+        &.selected {
+            color: #000; //poz. OHvezda, nejblize mame $base-color-dark
+            background-color: initial;
+            opacity: 1;
+
+            &::after {
+                top: 0;
+                width: 0.125rem;
+            }
+        }
+
+        &.activable:hover {
+            background-color: $base-color-tool; //#e7eaf2; //poz. OHvezda
+        }
+
+        &.active {
+            background-color: lighten($base-color-tool, 3%); //#f1f2f7; //poz. OHvezda - tato v zakladnich tematech neni
+        }
+
+        &.selected {
+            background-color: $base-color-shadow; //#c6cde0; //poz. OHvezda
+        }
+
+        .item__left:not(.item--back) {
+            width: auto; //NOTE: Zde je problem, musi se v danem frame pouzit vzdy stejna sada ikon?? vyresi pridani stylu fa-fw pri vytvareni polozek menu
+            .item__icon {
+                font-size: 1.5rem;
+                /* Kopirovani stylu fa-fw */
+                width: 1.28571429em;
+                text-align: center;
+            }
+        }
+
+        .item__center {
+            align-items: center;
+        }
+
+        .item__caption {
+            white-space: normal;
+            overflow: auto;
+        }
+    }
+    /* Tento hnus zde musi byt :-( padding mi sice posle udalost 'actionrun', ale akce se nespusti, pokud se nekline na .item__icon nebo .item__center */
+    .gactionmenu__item > * {
+        padding: 0.5rem 0.25rem;
+    }
+
+    .gactionmenu__item > *:first-child,
+    .gactionmenu__item.gactionmenu__item--iconless > .item__center {
+        padding-left: 0.75rem;
+    }
+
+    .gactionmenu__item > *:last-child {
+        padding-right: 0.5rem;
+    }
+
+    .gactionmenu__header {
+        border: none;
+        position: relative;
+        padding-bottom: 0.875rem; //14px
+        &:after {
+            content: " ";
+            position: absolute;
+            height: 1px;
+            background-color: $base-color-tool;
+            left: 0.5rem;
+            right: 0.5rem;
+            bottom: 0;
+        }
+
+        .gactionmenu__item {
+            line-height: 1.75rem;
+
+            .item--back {
+                top: -0.125rem; //fix pro IE
+                left: 0.5rem;
+                padding: 0.5rem;
+                line-height: 1rem;
+            }
+
+            .item__center {
+                padding: 0 3.25rem 0 1.75rem; //na poz OHvezdy k vycentrovani ikony + caption v zahlavi
+            }
+        }
+    }
+
+    .gactionmenu--headers-hidden {
+        .gactionmenu__header {
+            display: none;
+        }
+    }
+    /* --- menu override end --- */
+    /* Overrides pro mcustomscrollbar (bude-li mozne jej pouzit) */
+    //Resi problem s resizem obsahu v pripadech, kdy se z niceho nic objevi standardni scrollbar.
+    .mCustomScrollBox {
+        min-height: 100%;
+
+        .mCSB_container {
+            display: flex;
+            min-height: 100%;
+        }
+    }
+}

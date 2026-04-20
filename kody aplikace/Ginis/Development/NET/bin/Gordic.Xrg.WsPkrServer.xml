@@ -1,0 +1,310 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Xrg.WsPkrServer</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Xrg.WsPkrServer.GWsPkrCommon">
+            <summary>
+            Společné funkce kontrol a čtení číselníků pro Pkr
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.GWsPkrCommon.VyjimkaIfNullOrEmpty(Gordic.General.GDbType,System.String)">
+            <summary>
+            Pokud je hodnota položky Null (u String položek NullOrEmpty), tak vrátí výjimku
+            </summary>
+            <param name="hodnota"></param>
+            <param name="xmlNazev"></param>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.GWsPkrCommon.VratBase64(System.IO.Stream)">
+            Vrátí pole bytů 
+            <param name="stream">stream</param>
+            <returns>pole bytů</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.GWsPkrCommon.CheckPole(System.Object)">
+            <summary>
+            Vrací hodnotu pole
+            </summary>
+            <param name="hodnota"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.GWsPkrCommon.Substring(System.String,System.Int32,System.Int32,System.String)">
+            <summary>
+            Funkce pro substring podle stroje, při začátku na 1. pozici se použije LIKE
+            </summary>
+            <param name="column"></param>
+            <param name="length"></param>
+            <param name="startIdx"></param>
+            <param name="hodnota"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsPkrServer.GPkrWebService">
+            <summary>Server webových služeb Pkr</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsPkrServer.GPkrWebService.m_csPkrVlozPodkladyKalkulaceRequestNamespace">
+            <summary>jmenný prostor vstupních dat  webové služby</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.GPkrWebService.GetRequestSchemaFileName(System.String,System.String)">
+            <summary>získání názvu souboru obsahujícího XML schéma pro validaci vstupních dat webové služby</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <returns>název souboru s XML schématem ( tj. *.xsd ), v případě vrácení hodnoty null nebo prázdného řetězce nebude kontrola vstupních dat webové služby provedena</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.GPkrWebService.GetRequestDataset(System.String,System.String)">
+            <summary>získání prázdného typového datasetu pro načtení vstupních dat</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <returns>prázdná instance typového datasetu určená pro načtení vstupních dat nebo hodnota null v případě, že aplikační logika webové služby vstupní data neočekává</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.GPkrWebService.ProcessRequest(System.String,System.String,System.Data.DataSet)">
+            <summary>zpracování vstupních dat webové služby</summary>
+            <param name="messageName">deklarovaný název webové služby</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat webové služby</param>
+            <param name="requestDataSet">instance typového datasetu naplněná vstupními daty webové služby</param>
+            <returns>dataset s výstupními daty webové služby, nebo null v případě, že webová služba nevrací žádná data</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsPkrServer.GXrgPkrServiceLogic">
+            <summary>XRG - aplikační logika služby PKR</summary>
+        </member>
+        <member name="F:Gordic.Xrg.WsPkrServer.GXrgPkrServiceLogic.m_oOriginalServiceLogic">
+            <summary>aplikační logika původní služby</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.GXrgPkrServiceLogic.OriginalServiceLogic">
+            <summary>aplikační logika původní služby</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.GXrgPkrServiceLogic.ThisAssembly">
+            <summary>lokální assembly</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.GXrgPkrServiceLogic.GetRequestDataset(System.String,System.String)">
+            <summary>získání prázdného datasetu pro vstupní data</summary>
+            <param name="methodName">název metody</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat</param>
+            <returns>prázdná instance datasetu pro vstupní data, v případě vrácení hodnoty null nebudou načítána žádná vstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.GXrgPkrServiceLogic.ProcessRequest(System.String,System.String,Gordic.General.GDataSet)">
+            <summary>zpracování vstupních dat</summary>
+            <param name="methodName">název metody</param>
+            <param name="requestNamespace">jmenný prostor vstupních dat</param>
+            <param name="requestDataSet">dataset se vstupními daty</param>
+            <returns>dataset s výstupními daty nebo null v případě, že nemají být vrácena žádná výstupní data</returns>
+        </member>
+        <member name="T:Gordic.Xrg.WsPkrServer.gspg_xkrwaaimp">
+            <summary>
+            Package   : 
+            Procedure : spg_xkrwaaimp
+            Version   : 374.01.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.gspg_xkrwaaimp.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.gspg_xkrwaaimp.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaaimp.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaaimp.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaaimp.ixs_wpp_p">
+            <summary>radek akvizicniho planu</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaaimp.priz_cll_p">
+            <summary>priznak volani - zatim vzdy 1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaaimp.err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaaimp.sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaaimp.isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaaimp.txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaaimp.lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.gspg_xkrwaaimp.SetInParams(Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.gspg_xkrwaaimp.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.gspg_xkrwaaimp.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.gspg_xkrwaaimp.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsPkrServer.gspg_xkrwaeimp">
+            <summary>
+            Package   : 
+            Procedure : spg_xkrwaeimp
+            Version   : 374.01.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.gspg_xkrwaeimp.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.gspg_xkrwaeimp.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaeimp.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaeimp.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaeimp.rok_sber_p">
+            <summary>rok sberu</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaeimp.priz_cll_p">
+            <summary>priznak volani 1 uzavrit 2 zrusit</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaeimp.err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaeimp.sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaeimp.isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaeimp.txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaeimp.lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.gspg_xkrwaeimp.SetInParams(Gordic.General.GInt16,Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.gspg_xkrwaeimp.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.gspg_xkrwaeimp.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.gspg_xkrwaeimp.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsPkrServer.gspg_xkrwaximp">
+            <summary>
+            Package   : 
+            Procedure : spg_xkrwaximp
+            Version   : 374.01.
+            </summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.gspg_xkrwaximp.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.gspg_xkrwaximp.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaximp.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaximp.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaximp.cislo_pp_p">
+            <summary>cislo-polozky-planu</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaximp.priz_cll_p">
+            <summary>priznak volani - zatim vzdy 1</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaximp.err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaximp.sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaximp.isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaximp.txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Xrg.WsPkrServer.gspg_xkrwaximp.lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.gspg_xkrwaximp.SetInParams(Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.gspg_xkrwaximp.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.gspg_xkrwaximp.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.gspg_xkrwaximp.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Xrg.WsPkrServer.GWmPkrPodkladyKalkulaceEnd">
+            <summary>Ukončení vkládání podkladů kalkulace</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.GWmPkrPodkladyKalkulaceEnd.Execute(Gordic.Xrg.WsPkrInterface.PodkladyKalkulaceEndRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.GWmPkrPodkladyKalkulaceEnd.ExecuteWebMethod(Gordic.Xrg.WsPkrInterface.PodkladyKalkulaceEndRequestDataSet)">
+            <summary>získání informací o platbě</summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.GWmPkrPodkladyKalkulaceEnd.ZpracujVstupniDataSet(Gordic.Xrg.WsPkrInterface.PodkladyKalkulaceEndRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.GWmPkrPodkladyKalkulaceEnd.NaformatujVystupniDataset(Gordic.Xrg.WsPkrInterface.PodkladyKalkulaceEndResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="T:Gordic.Xrg.WsPkrServer.GWmPkrVlozPodkladyKalkulace">
+            <summary>Vložení podkladů kalkulace</summary>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.GWmPkrVlozPodkladyKalkulace.Execute(Gordic.Xrg.WsPkrInterface.VlozPodkladyKalkulaceRequestDataSet)">
+            <summary>
+            Provedení webové metody
+            </summary>
+            <param name="request">Vstupní dataset</param>
+            <returns>výstupní dataset</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.GWmPkrVlozPodkladyKalkulace.ExecuteWebMethod(Gordic.Xrg.WsPkrInterface.VlozPodkladyKalkulaceRequestDataSet)">
+            <summary></summary>
+            <param name="inputDataSet">vstupní data</param>        
+            <returns>výstupní data</returns>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.GWmPkrVlozPodkladyKalkulace.ZpracujVstupniDataSet(Gordic.Xrg.WsPkrInterface.VlozPodkladyKalkulaceRequestDataSet)">
+            <summary>
+            Provede zpracování vstupních dat - převody, ověření existence dat, ...
+            </summary>
+            <param name="inputDataSet">vstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.GWmPkrVlozPodkladyKalkulace.NaformatujVystupniDataset(Gordic.Xrg.WsPkrInterface.VlozPodkladyKalkulaceResponseDataSet)">
+            <summary>
+            Naformátuje výstupní dataset
+            </summary>
+            <param name="outputDataSet">výstupní dataset</param>
+        </member>
+        <member name="M:Gordic.Xrg.WsPkrServer.GWmPkrVlozPodkladyKalkulace.GenerujIxs(System.String,System.Int32)">
+            <summary>
+            Generuje identifikátory agregací
+            </summary>
+            <param name="pocet">počet ID který má být vygenerován</param>
+            <param name="tabulka">tabulka</param>
+            <returns>identifikátory agregací</returns>
+        </member>
+    </members>
+</doc>

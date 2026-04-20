@@ -1,0 +1,10 @@
+[program]
+revize=40SAH0152420X01
+sub_verze_db_min=1
+rev_db_min=17
+
+[REQUIRED]
+MODULES=GINGIN01,GINGRR01,GMSGINS1,GSASAHH1,GSASAHD1 
+GMSGINS1_mandatory=FALSE
+GSASAHH1_mandatory=FALSE
+GSASAHD1_mandatory=FALSE

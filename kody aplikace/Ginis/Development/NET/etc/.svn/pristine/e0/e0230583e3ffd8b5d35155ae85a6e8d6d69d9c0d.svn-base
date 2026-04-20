@@ -1,0 +1,74 @@
+<Project>
+ <PropertyGroup>
+    <SignAssembly Condition=" '$(SignAssembly)' == '' ">True</SignAssembly>
+	<AssemblyOriginatorKeyFile Condition=" '$(AssemblyOriginatorKeyFile)' == '' ">..\etc\Gordic.snk</AssemblyOriginatorKeyFile>
+    <DelaySign Condition=" '$(DelaySign)' == '' ">true</DelaySign>	
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		
+    <UseArtifactsOutput>false</UseArtifactsOutput> <!-- novinka .NET 8.0, mohla by byt zajimava, ale zatim nepouzivame -->
+	<AppendPlatformToOutputPath>false</AppendPlatformToOutputPath>
+	<AppendRuntimeIdentifierToOutputPath>true</AppendRuntimeIdentifierToOutputPath>
+	<AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
+	<GenerateProjectSpecificOutputFolder>false</GenerateProjectSpecificOutputFolder>
+
+    <!--ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally-->
+
+    <DefaultItemExcludes>$(DefaultItemExcludes);bin\**;**/*.prj.config</DefaultItemExcludes>
+	
+    <G_TargetF>net48</G_TargetF>
+    <G_TargetC>net8.0</G_TargetC>
+    <G_TypeScriptVersion>Latest</G_TypeScriptVersion>
+<!-- 
+<LastChangeNumber>12345</LastChangeNumber>
+<CCNetLabel>7</CCNetLabel>
+<GVersionLabel>Development</GVersionLabel>
+-->
+
+    <SourceRevisionId>$(LastChangeNumber)</SourceRevisionId>
+    <SourceRevisionId Condition=" '$(SourceRevisionId)' == '' ">LOCAL</SourceRevisionId>
+	<GBuildNumber>$(CCNetLabel)</GBuildNumber>
+    <SourceControlInformationFeatureSupported>true</SourceControlInformationFeatureSupported>
+
+    <!--GenerateAssemblyInfo>false</GenerateAssemblyInfo-->
+	<Version>1.0.0+automaticky-cislovane</Version>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo> 	
+	<Authors>GORDIC spol. s r. o.</Authors>  <!--DefaultAssemblyInfo nastavi do Company  -->
+	<Product>GINIS</Product>
+	<Copyright>&#169; GORDIC spol. s r. o. 1993 - $([System.DateTime]::Now.Year)</Copyright>
+	<GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute> <!--Description>nutno uvest v AssemblyInfo.cs</Description-->
+    <GenerateRepositoryUrlAttribute>false</GenerateRepositoryUrlAttribute>
+	<NeutralLanguage>cs-CZ</NeutralLanguage>
+	<!--InternalsVisibleTo-->
+	<!--AssemblyMetadata-->
+	<!--RequiresPreviewFeaturesAttribute-->
+	<!--TargetPlatformAttribute-->
+	<!--SupportedOSPlatformAttribute-->
+	
+	<!--AssemblyTitle></AssemblyTitle    DefaultAssemblyInfo nastavi na AssemblyName  -->
+	<!--AssemblyVersion></AssemblyVersion    nastaveno podle Version, ktere se cte v .targets z etc/VERSION  -->
+	<!--FileVersion>$(AssemblyVersion)</FileVersion nastaveno v G_GetAssemblyVersion-->
+	<!--InformationalVersion>$(Version)</InformationalVersion   nastaveno v G_GetAssemblyVersion-->
+	
+    <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+	<GenerateDependencyFile>False</GenerateDependencyFile>
+	<!--GenerateRuntimeConfigurationFiles>False</GenerateRuntimeConfigurationFiles-->
+
+	<AssemblySearchPath_UseCandidateAssemblyFiles>false</AssemblySearchPath_UseCandidateAssemblyFiles>
+ </PropertyGroup>
+ <PropertyGroup Condition=" '$(OutputPath)' != '' ">
+    <BaseOutputPath>$(OutputPath)</BaseOutputPath>
+    <G_OutputPath>$(OutputPath)</G_OutputPath>
+	<G_SetOutputPath>true</G_SetOutputPath>
+ </PropertyGroup>
+ <PropertyGroup Condition=" '$(OutputPath)' == '' ">
+    <BaseOutputPath>..\bin\</BaseOutputPath>	
+    <G_OutputPath>$(BaseOutputPath)</G_OutputPath>
+ </PropertyGroup>
+ 
+ <!-- v tomto souboru nelze delat podminky na TargetFramework ci jine veci specifikovane v csproj! -->
+ 
+
+ 
+  <!--Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" /-->
+ 
+</Project>

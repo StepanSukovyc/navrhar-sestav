@@ -1,0 +1,130 @@
+<Project>
+  <PropertyGroup>
+	<WarningsAsErrors>$(WarningsAsErrors),1702</WarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == '$(G_TargetF)' ">
+	<G_ReferencePath>$(ReferencePath);$(G_OutputPath)</G_ReferencePath>
+    <OutputPath Condition=" '$(G_SetOutputPath)' != 'true' ">$(BaseOutputPath)</OutputPath>	
+    <OutDir>$(OutputPath)</OutDir>
+	<G_BeforeBuildMakaraJson Condition="Exists('$(MSBuildProjectDirectory)\makara.json')">$(MSBuildProjectDirectory)\makara.json</G_BeforeBuildMakaraJson>
+	<G_AfterBuildMakaraJson Condition="Exists('$(MSBuildProjectDirectory)\makara.json')">$(MSBuildProjectDirectory)\makara.json</G_AfterBuildMakaraJson>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' == '$(G_TargetC)' ">
+	<G_ReferencePath>$(ReferencePath.Replace('references','referencescore'));$(G_OutputPath.Replace('bin','bincore'))</G_ReferencePath>
+    <BaseOutputPath Condition=" '$(BaseOutputPath)' == '..\bin\' ">..\bincore\</BaseOutputPath>	
+    <OutputPath Condition=" '$(G_SetOutputPath)' != 'true' ">$(BaseOutputPath)</OutputPath>	
+    <OutDir Condition=" '$(G_SetOutputPath)' == 'true' ">$(OutputPath.Replace('bin','bincore'))</OutDir>	
+    <OutDir Condition=" '$(G_SetOutputPath)' != 'true' ">$(OutputPath)</OutDir>	
+	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies> 	
+  </PropertyGroup> 
+  <PropertyGroup>
+	<TargetDir>$([MSBuild]::Escape($([System.IO.Path]::GetFullPath(`$([System.IO.Path]::Combine(`$(MSBuildProjectDirectory)`, `$(OutDir)`))`))))</TargetDir>
+	<TargetPath>$(TargetDir)$(TargetFileName)</TargetPath>
+    <DocumentationFile>$(OutputPath)$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DocumentationFile>$(TargetDir)$(AssemblyName).xml</DocumentationFile>
+    <NoWarn>$(NoWarn)</NoWarn>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DocumentationFile>$(TargetDir)$(AssemblyName).xml</DocumentationFile>
+    <NoWarn>SYSLIB0011;$(NoWarn)</NoWarn>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+
+	<Target Name="G_GetAssemblyVersion" BeforeTargets="GenerateAssemblyInfo;GetAssemblyVersion">
+    <ItemGroup>
+      <G_VERSION Include="..\etc\VERSION" />
+    </ItemGroup>
+    <ReadLinesFromFile File="@(G_VERSION)">
+      <Output TaskParameter="Lines" PropertyName="_G_Version" />
+    </ReadLinesFromFile>
+	<PropertyGroup>
+      <Version Condition=" '$(G_ExtraVersion)' != 'true' ">$(_G_Version.SubString(0,3)).$(_G_Version.SubString(3))</Version>
+	  <FileVersion>$(Version)</FileVersion>
+	  <G_BuildNumber>$(GBuildNumber)</G_BuildNumber>
+	  <G_BuildNumber Condition="$(GBuildNumber)==''">0</G_BuildNumber>
+	  <FileVersion>$(FileVersion).$(G_BuildNumber)</FileVersion>
+	  <G_SourceRevisionId>$(SourceRevisionId)</G_SourceRevisionId>
+	  <G_SourceRevisionId Condition="$(SourceRevisionId)=='LOCAL' or $(SourceRevisionId)==''">0</G_SourceRevisionId>
+	  <FileVersion>$(FileVersion).$(G_SourceRevisionId)</FileVersion>
+	  <InformationalVersion>$(Version)</InformationalVersion>
+	  <InformationalVersion Condition="$(GVersionLabel) != ''">$(InformationalVersion)-$(GVersionLabel)</InformationalVersion>
+	</PropertyGroup>		
+    <ItemGroup>
+	  <AssemblyMetadata Include="BuildDate" Value="$([System.DateTime]::UtcNow.ToString('s'))" />
+      <!--AssemblyAttribute Include="System.Reflection.AssemblyTrademarkAttribute">
+        <_Parameter1>Pokus123</_Parameter1>
+      </AssemblyAttribute-->
+    </ItemGroup>
+	<!--Message Text="VER=$(Version)/$(FileVersion)." Importance="high"/-->
+  </Target>
+
+  <Target Name="G_AddDefineConstants" DependsOnTargets="AddImplicitDefineConstants" BeforeTargets="CoreCompile">
+    <ItemGroup>
+      <G_DEFINES Include="..\etc\DEFINES" />
+    </ItemGroup>
+    <ReadLinesFromFile File="@(G_DEFINES)">
+      <Output TaskParameter="Lines" ItemName="_G_Defines" />
+    </ReadLinesFromFile>
+    <PropertyGroup>
+      <DefineConstants>$(DefineConstants);@(_G_Defines)</DefineConstants>	  
+    </PropertyGroup>
+	<!--Message Text="Defines=$(DefineConstants)." Importance="high"/-->
+  </Target>
+
+	<Target Name="G_DefineNowarn" BeforeTargets="CoreCompile">
+		<ItemGroup>
+			<G_NOWARN Include="..\etc\NOWARN" />
+		</ItemGroup>
+		<ReadLinesFromFile File="@(G_NOWARN)">
+			<Output TaskParameter="Lines" ItemName="_G_Nowarn" />
+		</ReadLinesFromFile>
+		<PropertyGroup>
+			<NoWarn>$(NoWarn);@(_G_Nowarn)</NoWarn>
+		</PropertyGroup>
+	</Target>
+
+  <Target Name="G_AssemblySearchPaths" AfterTargets="GetReferenceAssemblyPaths">
+	  <PropertyGroup>
+		  <AssemblySearchPaths>$(G_ReferencePath);$(ExtraRefencePath);$(AssemblySearchPaths)</AssemblySearchPaths>
+	  </PropertyGroup>
+
+	  <Message
+	       Importance="low"
+           Text="G_AssemblySearchPaths: $(AssemblySearchPaths) $(G_ReferencePath) $(BaseOutputPath) $(OutputPath) $(OutDir) $(TargetDir) $(VisualStudioVersion)"
+            />
+			
+	  <!--Error
+	       Code="GGB0002"
+           Text="G_AssemblySearchPaths: $(AssemblySearchPaths) : $(G_ReferencePath)  $(G_SetOutputPath) $(G_OutputPath)"
+            /-->
+			
+  </Target>
+ 
+
+  <Target
+      Name="G_CheckForInvalidConfigurationAndPlatform"
+      BeforeTargets="_CheckForInvalidConfigurationAndPlatform;Build;Rebuild;Clean">
+
+    <!-- Although we try to ensure a trailing slash, it's possible to circumvent this if the property is set on the command line -->
+    <!-- Error Condition="'$(OutDir)' != '' and !HasTrailingSlash('$(OutDir)')" Text="The OutDir property must end with a trailing slash." /-->
+
+	  <!-- Error
+	       Code="GGB0001"
+           Text="G_CheckForInvalidConfigurationAndPlatform: $(_InitialBaseIntermediateOutputPath) $(BaseIntermediateOutputPath)"
+            /-->
+
+
+  </Target>
+
+
+ 
+ 
+  <!--Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))" /-->
+ 
+</Project>

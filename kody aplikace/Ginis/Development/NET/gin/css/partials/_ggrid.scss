@@ -1,0 +1,581 @@
+﻿@import "base";
+
+$grid-structure-levels: 20; 
+$grid-structure-indent: 0.75rem;
+
+.ggrid {
+    position: relative;
+    border-bottom: none; // kdyz se da grid na zalozku, ta ma ramecek, vznika zdvojeny
+    box-sizing: border-box;
+    z-index: 0; // protoze selection pouziva zindex:-1 aby neprekryval text, muze se stat ze se nezobrazi protoze bude behind div s vlastnim backgroundem (login problem)
+
+    & + & {
+        margin-top: 0.5rem;
+    }
+
+    &.border {
+        border: 1px solid $base-color-shadow;
+    }
+
+    .top-panel {
+    }
+
+    .info-panel:not(:empty) {
+        border-top: 1px solid $base-color-tool;
+    }
+
+    .grouping-info {
+        display: flex;
+        //font-weight: $font-weight-bold;
+        background-color: rgba($base-color-info, 0.2);
+
+        > span, > a {
+            padding: 0.125rem 0.25rem 0;
+            border-bottom: none;
+        }
+
+        > .gfield {
+            flex-grow: 1;
+        }
+
+        .gselectbox-item {
+            background-color: $base-color-fields;
+        }
+    }
+
+    .check-counter {
+        padding: 0 0.25rem;
+    }
+
+    .search-box {
+        width: 13rem;
+    }
+
+    .profile-box {
+        width: 12rem;
+    }
+
+    .field-box {
+        /*    position: relative;
+    top: -2px;
+    margin: 0;
+    padding: 0;
+    line-height: 1rem;*/
+        vertical-align: top;
+        font-weight: $font-weight-normal;
+
+        input {
+            min-height: 0;
+        }
+
+        .gfield-table {
+            border-color: transparent;
+            height: 1rem;
+        }
+
+        .gcontrolbox-button, .gcontrolbox-state {
+            padding: 0;
+            border: none;
+            min-width: 1rem;
+            max-height: 1.125rem;
+        }
+
+        .gselectbox-itemc, .gselectbox-item {
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+    }
+
+    .field-box-parent {
+        border-left: 1px solid $base-color-tool;
+        border-right: 1px solid $base-color-tool;
+    }
+
+    .header {
+        position: relative;
+        overflow: hidden;
+        border-top: 1px solid $base-color-tool;
+        border-bottom: 3px solid $base-color-tool;
+
+        .row {
+            position: relative;
+            min-height: 1.5rem;
+            background-color: rgba($base-color-tool, 0.0);
+        }
+
+        .cell {
+            display: flex;
+        }
+
+        .highlight {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+    }
+
+    .sort-indicator, .menu-activator, .resize-holder {
+        flex-shrink: 0;
+    }
+
+    .resizer {
+        width: 2px;
+        z-index: 1;
+        position: absolute;
+        height: 100%;
+        background-color: rgba($base-color-dark, 0.4);
+    }
+
+    .caption {
+        font-weight: $font-weight-bold;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding-right: 0.25rem;
+        flex-grow: 1;
+    }
+
+    .caption--light {
+        text-overflow: clip;
+        font-size: 1rem;
+    }
+
+    .sort-indicator {
+        font-size: 1rem;
+        line-height: 1.5rem;
+        color: $base-color-shadow;
+        padding: 0 0.125rem;
+    }
+
+    .menu-activator {
+        background-color: transparent;
+        height: 100%;
+        line-height: inherit;
+        padding: 0;
+
+        &:hover, &:focus {
+            background-color: $base-color-tool;
+        }
+
+        .g-button__text {
+            display: none
+        }
+
+        .g-button__icon {
+            margin-left: -2px;
+        }
+    }
+
+    .resize-holder {
+        cursor: col-resize;
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        width: 0.25rem;
+        z-index: 1;
+    }
+
+    .viewport {
+        @include prefix(transition, all 0.10s ease-in-out);
+        overflow: auto;
+        position: relative;
+        border-bottom: 1px solid $base-color-tool;
+        outline: none;
+
+        &:focus {
+            // box-shadow: 0 0 5px $base-color-active; //rgba(81, 203, 238, 1);
+            // box-shadow: inset 0 0 2px dimgray; //rgba(81, 203, 238, 1);
+            outline: 1px dotted $base-color-shadow;
+        }
+    }
+
+    .container {
+        position: relative;
+    }
+
+    .container > i {
+        display: inline-block;
+        padding: 0.25rem;
+    }
+
+    div.row { /* div zvysuje specificitu na 0021, pak lze pouzivat g-state-transbackground, ktery meni border-color se specificitou 0020 */
+        cursor: pointer;
+        position: absolute;
+        border-bottom: 1px solid $base-color-tool;
+    }
+
+    .cell {
+        position: absolute;
+        height: 100%;
+        //    mix-blend-mode: color-burn; // vypada mnohem lepe na chrome, nefunguje na IE, ale FF to z neznameho duvodu zprasi
+        border-right: 1px solid $base-color-tool;
+        outline: none; // odstraneni systemovych hidden focusu
+        padding: 0 0.25rem;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    div.row-delimeter {
+        border-bottom-color: darken($base-color-shadow, 10%);
+    }
+
+    .no-ellipsis {
+        text-overflow: clip;
+    }
+
+    .no-border, .no-render {
+        border-right: none;
+    }
+
+    .no-render {
+        z-index: -1;
+    }
+
+    .editing {
+        overflow: visible;
+    }
+
+    .bottom-panel {
+        display: flex;
+        border-bottom: 1px solid $base-color-tool;
+        min-height: 1.5rem;
+    }
+
+    .status-panel {
+        display: inline-block;
+        line-height: 1.5rem;
+        flex-grow: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .status-widget {
+        float: right;
+        line-height: 1.5rem;
+        display: inline-block;
+        padding: 0 0.5rem;
+        white-space: nowrap;
+        border-left: 1px solid $base-color-tool;
+    }
+
+    .status-errors {
+        display: inline-block;
+        white-space: nowrap;
+    }
+
+    .status-errors:not(:empty) {
+        border-right: 1px solid $base-color-tool;
+    }
+
+    .ui-hover:not(.editing,.dragged)::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.05;
+        background-color: $base-color-active;
+        z-index: -1;
+    }
+
+    .ui-disabled {
+        color: $shadow-text-default;
+    }
+
+    .ui-disabled:not(.editing,.dragged)::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba($base-color-fields-disabled, 0.6);
+        z-index: -1;
+    }
+
+    .ui-disabled .ui-disabled:not(.ui-selected)::before { // disabled bunka na radku
+        display: none;
+    }
+
+    .ui-selected:not(.editing,.dragged)::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.3;
+        background-color: $base-color-active;
+        z-index: -1;
+    }
+
+    .structure-lead > i:first-of-type {
+        text-align: right;
+        padding-right: 0.25rem;
+        width: 0.75rem;
+        display: inline-block;
+        font-size: 1rem;
+        vertical-align: bottom;
+
+        &:hover {
+            color: $base-color-primary;
+        }
+    }
+
+    @for $i from 1 to $grid-structure-levels {
+        .l#{$i} .structure-lead {
+            > i:first-of-type {
+                width: 0.75rem + $i * $grid-structure-indent;
+            }
+
+            &.ui-selected::before, &.ui-hover::before {
+                left: $i * $grid-structure-indent;
+            }
+        }
+    }
+
+    .structure-lead-inactive {
+        opacity: 0.35
+    }
+
+    .row.group {
+        background-color: rgba(0, 0, 0, 0.2);
+    }
+    //.group.l0 { background-color: rgba(0, 0, 0, 0.20); }
+    //.group.l1 { background-color: rgba(0, 0, 0, 0.17); }
+    .row.editing::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: $base-color-content;
+        z-index: -1;
+    }
+
+    .row.editing {
+        box-shadow: 0 0 15px 3px $base-color-active;
+        transition: box-shadow 0.20s ease-in-out;
+        z-index: 1;
+
+        &.flash {
+            box-shadow: none;
+        }
+    }
+
+    .row.dragged {
+        z-index: 1;
+        background-color: $base-color-tool;
+    }
+
+    .confirm-panel {
+        position: absolute;
+        box-shadow: 0px 0px 10px 0px gray;
+        background: $base-color-content;
+    }
+
+    .fieldcell {
+        text-overflow: clip;
+        padding: 0;
+
+        :not(.ui-state-disabled) .gfield-table {
+            background: transparent;
+        }
+
+        .gfield-table {
+            height: 1.5rem;
+        }
+
+        .gselectbox-itemc {
+            padding: 1px;
+        }
+
+        .gselectbox-item {
+            padding-top: 0px;
+            padding-bottom: 1px;
+        }
+
+        input, textarea {
+            min-height: 1.38rem;
+        }
+
+        input[type=checkbox], input[type=radio] {
+            min-height: 0;
+        }
+    }
+    //.cell.editing .gfield-table { background: $base-color-content; }
+    .gfield {
+        height: 100%;
+        line-height: normal;
+    }
+
+    .gcheck {
+        display: flex;
+        align-items: center;
+        padding: 0 0.125rem; 
+        // label { margin: auto; }   // horiz.zarovnani
+    }
+
+    .scroll-helper {
+        position: absolute;
+        background: #ffffb3; //$base-color-tool;
+        border: 1px solid $base-color-shadow;
+        @include prefix(transform, translateY(-50%), (ms, webkit));
+        //z-index: 1;
+        right: 25px;
+        padding: 0.25rem;
+    }
+
+    .drag-helper {
+        position: absolute;
+        opacity: 0.85;
+        padding: 0 0.125rem;
+        background-color: rgba(0, 0, 0, 0.3);
+    }
+
+    .warning {
+        background-color: rgba($base-color-warning, 0.3);
+    }
+
+    .error {
+        background-color: rgba($base-color-error, 0.3);
+    }
+
+    .marked {
+        background-color: #ffffb3;
+        z-index: 2;
+    }
+
+    .group-header-count {
+        font-size: 0.8em;
+        padding: 0 0.25rem;
+    }
+
+    // resizable grid se spodním roztahovátkem
+    .ui-resizable-s {
+        bottom: -5px;
+        height: 7px;
+    }
+
+    &.ui-resizable{
+        margin-bottom: 5px;
+    }
+}
+
+.ggrid.fixed-resize-mode {
+  .row {
+    width: 9999px; // hack proti autoscrollu pri zmensovani sloupcu
+  }
+
+  .viewport {
+    overflow-x: hidden !important; // nova sirka zpusobi zmenu scrollbaru a pusobi rusive
+  }
+}
+
+label.ggrid-error-report {
+  cursor: pointer;
+  margin: 0; 
+  align-items: center; 
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.mouse-overlay {
+  position: absolute;
+  z-index: 50; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%; 
+  overflow:hidden;
+  white-space: nowrap;
+}
+
+.drag-handle-v {
+  cursor: move;
+
+  span {
+    display: inline-block;
+    width: 8px;
+    height: 16px;
+    vertical-align: middle;
+    margin-top: -2px;
+
+    &, ::before {
+      background-image: radial-gradient($shadow-text-default 40%, transparent 40%);
+      background-size: 4px 4px;
+      background-repeat: repeat;
+    }
+
+    ::before {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 33%;
+    }
+  }
+}
+
+.grid-cell-icon { 
+  font-size: 1rem;
+  &.gi-stack {
+    line-height: 1.25rem;
+    width: 1.3rem;
+  }
+  &.fa-stack {
+    font-size: 0.75rem;
+  }
+}
+
+.profile-box-menu { 
+  background-color: $base-color-dark; 
+  color: $light-text-default;
+}
+
+.filter-header {
+
+    &.filter-header--link > span, &.filter-header--link .gloadlink__caption {
+        margin-left: 0.75rem;
+    }
+
+    &.filter-header--link {
+        margin-top: 0.75rem;
+    }
+
+    .filter-header--linkpanel{
+        display: inline;
+    }
+
+    .gloadlink__caption {
+        display: inline-block;
+    }
+}
+
+.ggridfiltervariant{
+    margin-top: 0.5rem;
+}
+
+.ggridfilterfield--empty .gselectbox-item {
+    display: inline;
+    color: $base-color-shadow;
+}
+
+.ui-selected .ggridfilterfield--empty .gselectbox-item {
+    color: $base-color-text;
+}
+
+.ggridfilterfield{
+    background-color: $base-color-fields;
+}
+
+.ui-disabled .ggridfilterfield{
+    background-color: $base-color-fields-disabled;
+}
+
+.ui-selected .ggridfilterfield {
+    background-color: transparent;
+}

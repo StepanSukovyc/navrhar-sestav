@@ -1,0 +1,375 @@
+﻿@import "base";
+
+$rail-width: 2.5rem;
+$footer-border-color: #efefef; //barva zkopirovana z ui-widget-content
+
+.g-contentwrapper {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: 100%;
+    //------General layout -------//
+
+    &__top {
+        .menubar {
+            background-color: $base-color-tool;
+        }
+
+        .statusbar {
+            min-height: unset;
+            //zkopirovano z dialogu
+            border-bottom: 1px solid $base-color-shadow;
+            padding: 0 0.25rem;
+
+            &:empty {
+                border-width: 0;
+            }
+        }
+    }
+
+    &__middle {
+        overflow: hidden;
+        display: flex;
+        align-items: stretch;
+        flex-grow: 2;
+        position: relative;
+    }
+
+    &__bottom-bm {
+    }
+
+    &__top,
+    .g-cwpanel,
+    .bm--bottom {
+        flex-shrink: 0;
+        flex-grow: 0;
+    }
+    //------General layout end -------//
+    //------ Middle -----------//
+
+    &__middle {
+        height: 100%;
+
+        .bm {
+            width: $rail-width;
+            min-width: $rail-width; //IE Fix
+
+            padding: 0.25rem 0;
+
+            .glink {
+                position: relative;
+            }
+
+            .g-link {
+                display: flex;
+                justify-content: center;
+                padding: 0.25rem 0;
+            }
+
+            .g-link__icon {
+                font-size: 1.5rem;
+                color: $dark-text-default;
+
+                &.gi-stack {
+                    width: 1rem;
+                    height: 1.5rem;
+                    line-height: 1.5rem;
+                    left: -0.25rem;
+                }
+            }
+
+            .g-link__text {
+                font-size: 0.75rem;
+            }
+
+            .g-badge {
+                position: absolute;
+                top: 0;
+                left: 0.25rem;
+                font-size: 0.5rem;
+            }
+
+            &.bm--left .g-link__text {
+                border-left: 0.125rem solid transparent;
+                border-bottom: 1px solid transparent;
+
+                &:hover {
+                    border-left: 0.125rem solid $base-color-active;
+                }
+            }
+
+            &.bm--right .g-link__text {
+                border-right: 0.125rem solid transparent;
+                border-bottom: 1px solid transparent;
+
+                &:hover {
+                    border-right: 0.125rem solid $base-color-active;
+                }
+            }
+        }
+
+        .g-cwpanel:not(.g-cwpanel--maximized) {
+            width: 200px;
+            min-width: 200px;
+        }
+
+        .cwcenter {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 2;
+
+            .cwcontent {
+                flex-grow: 2;
+                flex-shrink: 2;
+                overflow: auto;
+                //padding: 0.25rem;
+            }
+
+            .cwcommandbar {
+                flex-grow: 0;
+                flex-shrink: 0;
+                /* Z ui-dialog-buttonpane */
+                font-size: 0.8125rem;
+                background: transparent;
+                padding: .5rem;
+                line-height: normal;
+
+                .g-buttonpanel__item,
+                .g-static {
+                    margin-right: 0.25rem;
+                }
+                //NOTE: Proc jsem mel zakomentovane?? Pokud to tam neni, pak je videt
+                //      prazdny commandbar (jeho border)
+                &:empty {
+                    border-width: 0;
+                    padding: 0;
+                }
+            }
+        }
+    }
+    //------ Middle end -------//
+
+    .bm {
+        background-color: $base-color-tool;
+        overflow: hidden;
+
+        &--temporarily_hidden {
+            display: none;
+        }
+    }
+
+    .bm--left {
+        border-right: 1px solid $base-color-shadow;
+
+        .bm--selected::before {
+            left: 0;
+            top: 0;
+            bottom: 0;
+            right: 2.25rem;
+        }
+    }
+
+    .bm--right {
+        border-left: 1px solid $base-color-shadow;
+
+        .bm--selected::before {
+            left: 2.25rem;
+            top: 0;
+            bottom: 0;
+            right: 0;
+        }
+    }
+    //Scrollbary (experimental) pro bookmarks. Aktualne podporuji vsichni, krome IE a Firefox android.
+    //Dle: https://css-tricks.com/almanac/properties/s/scrollbar-color/
+
+    .bm {
+        //Firefox (standard)
+        scrollbar-width: thin;
+        scrollbar-color: $base-color-tool;
+        //Chrome/Edge only
+        &::-webkit-scrollbar-thumb {
+            background-color: $base-color-shadow;
+            border-radius: 6px;
+            border: 3px solid $base-color-tool;
+        }
+
+        &::-webkit-scrollbar-track {
+            background-color: $base-color-tool;
+        }
+    }
+
+    .bm--left,
+    .bm--right {
+        overflow-y: auto;
+        //Chrome/Edge only
+        &::-webkit-scrollbar {
+            width: 0.5rem;
+        }
+    }
+
+    .bm--bottom {
+        overflow-x: auto;
+        //Chrome/Edge only
+        &::-webkit-scrollbar {
+            height: 0.5rem;
+        }
+    }
+    //Scrollbary (experimental) - END
+
+    .bm--bottom {
+        border-top: 1px solid $base-color-shadow;
+        display: flex;
+
+        .bm--selected {
+            position: relative;
+
+            a.g-link::before {
+                content: "";
+                position: absolute;
+                background-color: $base-color-active;
+                top: 2rem;
+                left: 0;
+                right: 0;
+                bottom: 0;
+            }
+
+            .g-link__text {
+                border-color: transparent;
+            }
+        }
+
+        .g-link {
+            padding: 0.5rem 0.25rem;
+        }
+    }
+
+    .bm--selected::before {
+        content: "";
+        position: absolute;
+        background-color: $base-color-active;
+    }
+
+    .bm__item-wrapper {
+        position: relative;
+    }
+
+    .ui-widget-content {
+        border: none;
+        border-bottom: 1px solid $footer-border-color;
+    }
+
+    &--on-window {
+        height: calc(100% - 27px); //TODO: Tento styl dat do pekel, nahradit vypoctem zda jsou viditelne bottom bookmarks
+    }
+
+    &__detached-subcontent {
+        display: none;
+    }
+
+    .g-cwpanel--maximized {
+        width: calc(100% - $rail-width);
+
+        &.g-cwpanel--bottom {
+            width: 100%;
+            height: calc(100% - 2.25rem);
+        }
+    }
+}
+
+.g-cwpanel {
+    display: flex;
+    position: relative; //pro gcover
+    overflow: hidden;
+    flex-direction: column;
+    isolation:isolate; //vytvoří vlastní stacking context -> aby hlavní gcover vyhrál nad gcoverem v sidepanelu
+
+    .cwheader {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+
+        &__title {
+            padding: 0.25rem 0.25rem;
+            background-color: $base-color-primary;
+            color: $light-text-default;
+            min-height: 1rem;
+        }
+
+        &__titlebar {
+            flex-grow: 2;
+            background-color: $base-color-primary;
+            color: $light-text-default;
+            display: flex;
+            align-items: center;
+
+            & .g-link {
+                color: $light-text-default;
+            }
+        }
+
+        &__menubar,
+        &__flashbar,
+        &__statusbar {
+            width: 100%;
+        }
+
+        &__menubar {
+            background-color: $base-color-tool;
+        }
+
+        &__statusbar {
+            min-height: unset;
+        }
+    }
+
+
+
+    .cwfooter {
+        width: 100%;
+        border-top: 1px solid $footer-border-color;
+
+        &__commandbar {
+            margin: 0.25rem;
+
+            .g-buttonpanel__item {
+                margin: 0.25rem 0.25rem 0.25rem 0;
+            }
+
+            &:empty {
+                margin: 0;
+            }
+        }
+    }
+
+    .cwcontent {
+        flex-shrink: 2;
+        flex-grow: 2;
+        overflow: auto;
+        padding: 0.25rem;
+    }
+
+    .cwheader,
+    .cwfooter {
+        flex-shrink: 0;
+        flex-grow: 0;
+    }
+
+    &--left {
+        border-right: 1px solid $base-color-shadow;
+    }
+
+    &--right {
+        border-left: 1px solid $base-color-shadow;
+    }
+
+    &--maximized {
+        width: 100%;
+    }
+}
+
+.g-cwpanel--active.g-cwpanel {
+    .cwheader__titlebar,
+    .cwheader__title {
+        background-color: $base-color-text; // $base-color-active;
+    }
+}

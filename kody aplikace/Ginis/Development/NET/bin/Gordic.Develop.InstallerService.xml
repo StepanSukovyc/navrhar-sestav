@@ -1,0 +1,777 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Develop.InstallerService</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Develop.InstallerCommon.GGDEVClient">
+            <summary> Client ESL pro GDEV sluzby  
+            </summary>
+        </member>
+        <member name="T:Gordic.Develop.InstallerCommon.GGDEVClient.AplRevizeListResponse">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerCommon.GGDEVClient.AplRevizeListResponse.revize">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerCommon.GGDEVClient.AplRevizeListResponse.stav_revize">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerCommon.GGDEVClient.AplRevizeListResponse.dat_mpd">
+            <summary></summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerCommon.GGDEVClient.AplRevizeListResponse.dat_zmena">
+            <summary></summary>
+        </member>
+        <member name="P:Gordic.Develop.InstallerCommon.GGDEVClient.Instance">
+            <summary> Staticka instance
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.InstallerCommon.GGDEVClient.ServiceUrl">
+            <summary> Url na sluzbu
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.InstallerCommon.GGDEVClient.ApiKey">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerCommon.GGDEVClient.#ctor(System.Uri,System.String)">
+            <summary></summary>
+            <param name="serviceUrl"></param>
+            <param name="apiKey"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerCommon.GGDEVClient.AplRevizeCreate(Gordic.Adt.Interface.GGdesrevDto)">
+            <summary>Zalozeni nove revize</summary>
+            <param name="data"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerCommon.GGDEVClient.AplRevizeUpsert(Gordic.Adt.Interface.GGdesrevDto)">
+            <summary>Zalozeni nove revize</summary>
+            <param name="data"></param>
+        </member>
+        <member name="T:Gordic.Develop.InstallerService.GPackageList">
+            <summary> Databaze baliku
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GPackageList.#ctor(System.IO.DirectoryInfo,System.Func{Gordic.Develop.InstallerCommon.GRevision,Gordic.Develop.InstallerCommon.GMetadataDto,System.Collections.Generic.List{Gordic.Develop.InstallerCommon.GPackageDto.AllowedActions}})">
+            <summary></summary>
+            <param name="baseRepoDir">Root repositare. Baliky budou mit generovany identifikator relativni vuci teto ceste</param>
+            <param name="allowedActions">delegat pro seznam povolenych akci s konkretnim balikem</param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GPackageList.Update(System.IO.DirectoryInfo)">
+            <summary>Updatne seznam ze vsech baliku v adresari (rekurzivne)</summary>
+            <param name="root"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GPackageList.UpdatePackage(System.IO.DirectoryInfo,System.Action{Gordic.Develop.InstallerCommon.GMetadataDto})">
+            <summary>Nacteni/Update informaci o baliku z disku, vcetne pripadneho updatu metadat</summary>
+            <param name="root"></param>
+            <param name="updateMeta"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GPackageList.GetNextPackageRevision(System.String,System.Boolean)">
+            <summary>Vrati dalsi volnou revizi pro danou kombinaci vstupnich udaju</summary>
+            <param name="oldRevision"></param>
+            <param name="convertToTest"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Develop.InstallerService.GUtils">
+            <summary> Pomocne metody
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GUtils.GetBuildsList">
+            <summary>
+            Returns cached content of builds file. Physical read occurs at most every 5 seconds.
+            Reading uses FileShare.ReadWrite|Delete to avoid locking writer (best-effort; short-lived handle).
+            On read failure (IO) the previous cache is kept.
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GUtils.GetLatestBuilds(System.String)">
+            <summary>Vrati seznam vsech dostupnych buildu z BS</summary>
+            <param name="branch">filtr na nazev buildu (default: "R*")</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GUtils.GetBuildForRequest(System.String,System.Int32,System.String)">
+            <summary> Vrati informace o buildu pro danou vetev a pozadovanou svn revizi (resi CURRENT/MY/HEAD)</summary>
+            <param name="branch"></param>
+            <param name="svnRevRequest"></param>
+            <param name="author"></param>
+            <returns></returns>
+            <exception cref="T:Gordic.General.GException"></exception>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GUtils.LastRevisionOfBranch(System.String)">
+            <summary>Zjisteni posledni revize v dane vetvi</summary>
+            <param name="svnUrl"></param>
+            <returns>cislo revize</returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GUtils.LastRevisionForAuthor(System.String,System.String,System.Int32)">
+            <summary></summary>
+            <param name="svnUrl"></param>
+            <param name="author"></param>
+            <param name="latestBuildRevision"></param>
+            <returns></returns>
+            <exception cref="T:Gordic.Develop.InstallerCommon.GInstallerServiceException"></exception>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GUtils.DistinctBy``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">
+            <summary>Vylepseny distinct</summary>
+            <typeparam name="TSource"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <param name="source"></param>
+            <param name="keySelector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GUtils.FillWith``1(``0,Gordic.Develop.InstallerCommon.GBuildLocation)">
+            <summary></summary>
+            <typeparam name="T"></typeparam>
+            <param name="dto"></param>
+            <param name="build"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Develop.InstallerService.GInstallerProcess">
+            <summary> Proces instalační služby
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallerProcess.Queue">
+            <summary> Fronta požadavků a future pozadavku
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallerProcess.Packages">
+            <summary>
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallerProcess.InitializationPhase">
+            <summary>
+            Faze inicializace
+            0..ready
+            1..start
+            2..inicializace PackageRepository
+            3..obnova GDEV zaznamu
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.ProcessQueue">
+            <summary> Zpracování fronty požadavků
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.PokeQueue">
+            <summary> predzpracovani fronty pozadavku
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.PokeGDEVStates">
+            <summary> predzpracovani fronty pozadavku
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.NewRequest(Gordic.Develop.InstallerService.RequestInfo)">
+            <summary>Metoda zaregistruje nový požadavek na vytvoření msi balíku.</summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.RemoveRequest(System.String,System.String,System.String)">
+            <summary></summary>
+            <param name="id"></param>
+            <param name="user"></param>
+            <param name="reason"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.PriorityRequest(System.String,System.String,System.String)">
+            <summary></summary>
+            <param name="id"></param>
+            <param name="user"></param>
+            <param name="reason"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.ProcessRequest(Gordic.Develop.InstallerService.GInstallerRequest)">
+            <summary> Zpracuje požadavek na vytvoření instalačního balíku
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.CreatePackage(Gordic.Develop.InstallerService.GInstallerRequest,System.Boolean)">
+            <summary>Vytvoří instalační balík - buď MSI nebo ZIP pro setup32 nebo holý zip...</summary>
+            <param name="request"></param>
+            <param name="forceZip"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.SendMail(System.Collections.Generic.IEnumerable{System.String},Gordic.Develop.InstallerService.GInstallerRequest,System.String,System.Exception,System.Text.StringBuilder)">
+            <summary> Provede odeslání mailu o výsledku vytváření .MSI </summary>
+            <param name="toAdr">cílová adresa</param>
+            <param name="req"></param>
+            <param name="packageId"></param>
+            <param name="l_oLastException">poslední výjimka nejvyšší úrovně</param>
+            <param name="warnings"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.ModifyTstFile(System.String,Gordic.Develop.InstallerService.GInstallerRequest)">
+            <summary>Modifikuje/vytvori TST soubor v cilovem baliku</summary>
+            <param name="tstFile">cesta k TST souboru</param>
+            <param name="request">pozadavek na vytvoreni baliku</param>
+            <returns>kontextove info nutne k obnoveni TST souboru</returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.CheckTstDuplicity(System.String)">
+            <summary>kontrola duplicitnich tst souboru, vyhodi vyjimku pokud je pritomen vice nez jeden (podobna "crude" kontrola je na automatu)</summary>
+            <param name="path"></param>
+            <exception cref="T:Gordic.Develop.InstallerCommon.GInstallerServiceException"></exception>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.LongExceptionMessage(System.Exception)">
+            <summary> Vytvoří řetězec z řetězce výjimek </summary>
+            <param name="e">nejvyšší výjimka</param>
+            <returns>text všech výjimek</returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.ClearWorkingDirectory(System.IO.DirectoryInfo,Gordic.Develop.InstallerService.GInstallerRequest)">
+            <summary>Vyčištění working directory</summary>
+            <param name="l_oWorkDir">cesta k pracovnímu adresáři</param>
+            <param name="request">pro ktery request pripravujeme adresar (abychom si ho nemazali pod rukou)</param>
+            <returns>zda byl obsah složky smazán</returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.ClearWorkingDirectory(System.IO.DirectoryInfo,Gordic.Develop.InstallerService.GInstallerRequest,System.Boolean)">
+            <summary>Vyčištění working directory + starších revizí</summary>
+            <param name="workDir">cesta k pracovnímu adresáři</param>
+            <param name="deleteLog">příznak zda se má smazat i log soubor, který je v pracovním adresáři</param>
+            <param name="request">pro ktery request pripravujeme adresar (abychom si ho nemazali pod rukou)</param>
+            <returns>zda byl obsah složky smazán</returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.ClearOldestRevisions(System.IO.DirectoryInfo,Gordic.Develop.InstallerService.GInstallerRequest)">
+            <summary>Vyčištění working directory</summary>
+            <param name="srcBinDir">cesta k adresáři Bin, Src</param>
+            <param name="request"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.SourcesPath(Gordic.Develop.InstallerService.GInstallerRequest)">
+            <summary>Generuje cestu k docasnemu ulozisti requestu</summary>
+            <param name="request">požadavek</param>
+            <returns>cestu ke slozce requestu</returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.BinPath(Gordic.Develop.InstallerService.GInstallerRequest)">
+            <summary>Generuje cestu k BINu požadované revize</summary>
+            <param name="request">požadavek</param>
+            <returns>cestu k BINu požadované revize</returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.SrcPath(Gordic.Develop.InstallerService.GInstallerRequest)">
+            <summary> Generuje cestu k BINu požadované revize </summary>
+            <param name="request">požadavek</param>
+            <returns>cestu k BINu požadované revize</returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.DownloadBinary(Gordic.Develop.InstallerService.GInstallerRequest)">
+            <summary> Stažení dll a src z uloziste BuildServeru </summary>
+            <param name="request">právě prováděný požadavek</param>
+            <returns>zda byly binárky staženy (true), nebo byly nalezeny v Cache</returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.CreateLocalizedResources(Gordic.Develop.InstallerService.GInstallerRequest,System.Collections.Generic.List{System.String})">
+            <summary> Vytvoří lokalizované resources, z lokalizační databáze a umístí je do pracovní složky
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.AnalyzePrjConfigs(Gordic.Develop.InstallerService.GInstallerRequest)">
+            <summary>Vytvoření wxs souboru</summary>
+            <param name="request">právě prováděný požadavek</param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.MakeMSIHeat2(Gordic.Develop.InstallerService.GInstallerRequest,System.String,System.String,System.String)">
+            <summary>ZAvolání heat.exe</summary>
+            <param name="request">právě prováděný požadavek</param>   
+            <param name="imageDir">adresar s pripravenymi soubory balicku</param>
+            <param name="culture">zkratka názvu jazyka</param>
+            <param name="title">titulek pro webovou sluzbu</param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.MakeMSICandle2(Gordic.Develop.InstallerService.GInstallerRequest,System.String,System.String,System.String)">
+            <summary>ZAvolání candle.exe</summary>
+            <param name="request">právě prováděný požadavek</param>
+            <param name="wxsFileName">cesta k souboru wixobj</param>
+            <param name="imageDir">cesta k adresari se soubory</param>
+            <param name="title"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.MakeMSILight2(Gordic.Develop.InstallerService.GInstallerRequest,System.String,System.String)">
+            <summary> Spuštění Light.exe pro nový Wix</summary>		
+            <param name="request">právě prováděný požadavek</param>
+            <param name="wxsFileName">cesta k souboru wixobj</param>
+            <param name="culture">zkratka jazyka</param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.CreateLocalizedMSI(Gordic.Develop.InstallerService.GInstallerRequest,System.Collections.Generic.List{Gordic.Develop.SetupGenerator.GPackageCreatorLocalizationInfo})">
+            <summary>
+            zapouzdří vytvořené MSI balíky (pro každý jazyk) do jednoho lokalizovaného MSI
+            </summary>
+            <param name="request"></param>        
+            <param name="culturesList"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.CreateSettingsWxs(Gordic.Develop.InstallerService.GInstallerRequest,System.String,System.String)">
+            <summary>
+            vytvoření souboru pro nastavení proměnných týkajících se vlastností instalované aplikace
+            </summary>
+            <param name="request"></param>
+            <param name="fileName"></param>
+            <param name="title"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.CreateMediaSettings(Gordic.Develop.InstallerService.GInstallerRequest,System.String)">
+            <summary>
+            vytvoření CAB souboru pro napojení v hlavním Wxs
+            </summary>
+            <param name="request"></param>
+            <param name="fileName"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.CreateLocalizationSettings(Gordic.Develop.InstallerService.GInstallerRequest,System.String,System.String)">
+            <summary>
+            vytvoření souboru pro lokalizaci aplikace
+            </summary>
+            <param name="request"></param>
+            <param name="fileName"></param>
+            <param name="culture"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.CopySettingsFiles(System.String,System.String)">
+            <summary>
+            nakopíruje soubory z vybrané složk do cílové
+            </summary>
+            <param name="sourceDirName"></param>
+            <param name="destinationDirName"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.CopyFilesRecursively(System.IO.DirectoryInfo,System.IO.DirectoryInfo)">
+            <summary> nakopíruje soubory z vybrané složk do cílové </summary>
+            <param name="source"></param>
+            <param name="target"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.SignMSI(Gordic.Develop.InstallerService.GInstallerRequest,System.String)">
+            <summary> Podepsání MSI </summary>
+            <param name="request">request</param>
+            <param name="file">cesta k souboru, který má být podepsán</param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.StoreBackup(Gordic.Develop.InstallerService.GInstallerRequest)">
+            <summary>Uložení výsledku do úložiště</summary>
+            <param name="request">právě prováděný požadavek</param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.PublishWorking(Gordic.Develop.InstallerService.GInstallerRequest)">
+            <summary>vypublikovani modulu na automat</summary>
+            <param name="request"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.GetBackupPath(Gordic.Develop.InstallerService.GInstallerRequest)">
+            <summary> Vrátí cestu na kterou se má zálohovat MSI </summary>
+            <param name="request">právě prováděný požadavek</param>
+        </member>
+        <member name="P:Gordic.Develop.InstallerService.GInstallerProcess.Terminated">
+            <summary> Příznak zda je proces ukončen
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.InstallerService.GInstallerProcess.Paused">
+            <summary> Priznak pozastaveneho zpracovani 
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.GetCurrentQueue">
+            <summary> Vrátí seznam fronty požadavků </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.CreateSrcZip(Gordic.Develop.InstallerService.GInstallerRequest)">
+            <summary> Vytvoří balíček SrcXXXXX.zip. Pracuje nad naplněným SetupGenerátorem, musí se volat po vytvoření WXS </summary>
+            <param name="request">požadavek</param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.CreateImages(Gordic.Develop.InstallerService.GInstallerRequest)">
+            <summary>Vytvoreni obrazu balicku na disku</summary>
+            <param name="request">konkretni pozadavek</param>
+            <returns>cesta k adresari s nakopirovanymi soubory</returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.CreateMaketstxZip(Gordic.Develop.InstallerService.GInstallerRequest)">
+            <summary> Vytvoří ZIP balíček standardniho modulu. Pracuje nad naplněným SetupGenerátorem, musí se volat po vytvoření WXS </summary>
+            <param name="request">požadavek</param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.CreateMaketstxG32(Gordic.Develop.InstallerService.GInstallerRequest)">
+            <summary> Vytvoří ZIP balíček DNP modulu. Pracuje nad naplněným SetupGenerátorem</summary>
+            <param name="request">požadavek</param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.CreateZip(Gordic.Develop.InstallerService.GInstallerRequest)">
+            <summary>Vytvoří balíček ZIP. Pracuje nad naplněným SetupGenerátorem</summary>
+            <param name="request">požadavek</param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.CreateInstallConfig(Gordic.Develop.InstallerService.GInstallerRequest,System.String)">
+            <summary> Vytvoří konfigurační soubor pro instalaci webových služeb, webových aplikací a systémových služeb </summary>
+            <param name="request"></param>
+            <param name="zipDir"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.SendToInbox(Gordic.Develop.InstallerService.GInstallServerRepositoryContent[])">
+            <summary>Odešle do inboxu automatu</summary>
+            <param name="pckgs"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.UpdateGdevRecord(Gordic.Develop.InstallerCommon.GRevision,Gordic.Develop.InstallerCommon.GMetadataDto,Gordic.Develop.InstallerCommon.GBuildId,System.Nullable{System.Int16},System.Nullable{System.DateTime})">
+            <summary>Vytvoreni/Update zaznamu v GDEV</summary>
+            <param name="revision"></param>
+            <param name="data"></param>
+            <param name="build"></param>
+            <param name="newState"></param>
+            <param name="datCreated"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerProcess.SendMailWithNotice(Gordic.Develop.InstallerService.NoticeInfo,System.Collections.ArrayList,System.Collections.Generic.List{System.String})">
+            <summary> Metoda pro odeslání mailu s textem osobám, zadaným při vyatváření balíku. </summary>
+            <param name="noticeInfo"> Data požadavku na přidání poznámky</param>
+            <param name="listOfMail"> Kolekce dat pro email </param>
+            <param name="adresati"> Seznam adresatu </param>
+        </member>
+        <member name="T:Gordic.Develop.InstallerService.GInstallerQueue">
+            <summary> Fronta požadavků
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerQueue.NewRequest(Gordic.Develop.InstallerService.RequestInfo)">
+            <summary>Metoda zaregistruje nový požadavek na vytvoření msi balíku.</summary>
+            <param name="requestInfo">data pro request</param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerQueue.RemoveRequest(System.Predicate{Gordic.Develop.InstallerService.GInstallerRequest})">
+            <summary></summary>
+            <param name="predicate"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerQueue.IsEmpty">
+            <summary>Zda je fronta prázdná</summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerQueue.GetNextReadyRequest">
+            <summary>Vrátí prvni požadavek z fronty ke zpracovani</summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerQueue.AlignQueue">
+            <summary>srovna required buildy na nejvyssi spolecnou uroven (brani opakovanemu stahovani SVN zdroju v pripade ze autori ignoruji z jakeho buildu vlastne delaji balik; za cenu ze neni mozne si vedome balik urcit)</summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerQueue.GetRequests">
+            <summary> Vrati thread safe kopii fronty</summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerQueue.PokeFutureRequests">
+            <summary>prehodnoti stavy future requestu, zda-li jiz nejsou urcene ke zpracovani</summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerQueue.LoadQueue">
+            <summary>Obnovi frontu požadavků ze souboru
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerQueue.SaveQueue">
+            <summary>Uložení fronty požadavků do souboru
+            </summary>
+        </member>
+        <member name="T:Gordic.Develop.InstallerService.InstallStatus">
+            <summary>
+            Enum. stavu požadavků
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.InstallStatus.Waiting">
+            <summary> Čeká na zpracovani</summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.InstallStatus.Preparing">
+            <summary> Balik ze zacal zpracovavat, ceka se na zahajeni prace </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.InstallStatus.WaitingForFutureBuild">
+            <summary> Ceka na vytvoreni spravneho buildu</summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.InstallStatus.ClearingWorkingDir">
+            <summary> Čistí pracovní složku </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.InstallStatus.DownloadingSource">
+            <summary> Stahuje zdrojáky </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.InstallStatus.DownloadingBinary">
+            <summary> Stahuje binárky </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.InstallStatus.CreatingInstallConfig">
+            <summary> Vytváří Install config </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.InstallStatus.CreatingImage">
+            <summary> Připravuje adresář se soubory k instalaci </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.InstallStatus.CreatingMSI">
+            <summary> Vytváří MSI </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.InstallStatus.CreatingZip">
+            <summary> Vytváří balíček ZIP</summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.InstallStatus.SigningExe">
+            <summary> Podepisovani spoustecich souboru</summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.InstallStatus.Signing">
+            <summary> Podepisovani baliku</summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.InstallStatus.Backuping">
+            <summary> Vytváření zálohy výsledku </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.InstallStatus.Publishing">
+            <summary> Vystavovani baliku na automat </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.InstallStatus.Finishing">
+            <summary> Zaverecne post-operace (maily, ulozeni logu, refresh uloziste) </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.InstallStatus.Done">
+            <summary> Hotovo </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.InstallStatus.Failed">
+            <summary> Selhalo </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.InstallStatus.CreatingSrcZip">
+            <summary> Vytváří balíček src.zip</summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.InstallStatus.CreatingLocalizedResources">
+            <summary> Vytváří lokalizované resources</summary>
+        </member>
+        <member name="T:Gordic.Develop.InstallerService.GInstallerRequest">
+            <summary>
+            Požadavek
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerRequest.#ctor(Gordic.Develop.InstallerService.RequestInfo)">
+            <summary>Úschova proměných</summary>
+            <param name="requestInfo">objekt s informacemi o pozadavku</param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerRequest.ToString">
+            <summary>ToString</summary>
+            <returns></returns>
+        </member>
+        <member name="P:Gordic.Develop.InstallerService.GInstallerRequest.Aborted">
+            <summary> Priznak preruseni requestu
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerRequest.Abort">
+            <summary> Metoda pro preruseni requestu
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerRequest.CheckAborted">
+            <summary>Metoda pro kontrolu Aborted stavu (vyhazuje GInstallerServiceAbortedException)</summary>
+            <exception cref="T:Gordic.Develop.InstallerCommon.GInstallerServiceAbortedException"></exception>
+        </member>
+        <member name="P:Gordic.Develop.InstallerService.GInstallerRequest.Log">
+            <summary> Log requestu
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerRequest.InitializeLog(System.String)">
+            <summary></summary>
+            <param name="filePath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerRequest.CloseLog">
+            <summary></summary>
+            <returns></returns>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallerRequest._requestInfo">
+            <summary> pro potreby serializace/deserializace
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.InstallerService.GInstallerRequest.Id">
+            <summary> Instancni identifikator requestu 
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.InstallerService.GInstallerRequest.Build">
+            <summary> Interni informace o buildu, ze ktereho se balik dela
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerRequest.Align(Gordic.Develop.InstallerCommon.GBuildId)">
+            <summary>Zarovnani pozadovaneho buildu na "lepsi"</summary>
+            <param name="newBuild"></param>
+        </member>
+        <member name="P:Gordic.Develop.InstallerService.GInstallerRequest.TargetModule">
+            <summary> jméno targetu / modulu (41USU01)</summary>
+        </member>
+        <member name="P:Gordic.Develop.InstallerService.GInstallerRequest.TargetName">
+            <summary> GInstallTargets.WINCLIENT, GInstallTargets.SYSSERVICE, ...
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.InstallerService.GInstallerRequest.IsCore">
+            <summary> Zda se jedna o request pro NET Core balik
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.InstallerService.GInstallerRequest.MailText">
+            <summary>MailText</summary>
+        </member>
+        <member name="P:Gordic.Develop.InstallerService.GInstallerRequest.Publish">
+            <summary>automaticke odeslani na automat, pokud balik dopadl dobre</summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallerRequest.PriorityPackage">
+            <summary> Prioritizovany request 
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.InstallerService.GInstallerRequest.Data">
+            <summary> Metadata k vytvarenemu baliku, budou ulozena v PackageStorage u baliku </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallerRequest.StartTime">
+            <summary>Datum zacatku zpracovani baliku</summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GInstallerRequest.FinishTime">
+            <summary>Datum dokonceni baliku</summary>
+        </member>
+        <member name="P:Gordic.Develop.InstallerService.GInstallerRequest.IsFutureRequest">
+            <summary>Priznak, ze se jedna o FutureRequest build</summary>
+        </member>
+        <member name="P:Gordic.Develop.InstallerService.GInstallerRequest.IsReady">
+            <summary>Priznak, ze request je pripraven k vytvoreni</summary>
+        </member>
+        <member name="P:Gordic.Develop.InstallerService.GInstallerRequest.IsWaiting">
+            <summary> Priznak, ze request je ve fronte (Balik vzdy musi byt v jednom ze stavu IsWaiting | IsRunning | IsFinished)
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.InstallerService.GInstallerRequest.IsRunning">
+            <summary> Priznak, ze request se zpracovava (Balik vzdy musi byt v jednom ze stavu IsWaiting | IsRunning | IsFinished)
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.InstallerService.GInstallerRequest.IsFinished">
+            <summary> Priznak, ze balik byl dokoncen (Balik vzdy musi byt v jednom ze stavu IsWaiting | IsRunning | IsFinished)
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.InstallerService.GInstallerRequest.SetupGenerator">
+            <summary> SetupGenerator zodpovedny za obslouzeni requestu
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.InstallerService.GInstallerRequest.StorageFiles">
+            <summary> Soubory k ulozeni
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerRequest.PokeFutureRequest">
+            <summary>vyhodnoti future request s ohledem na nove buildy. Pripadne ho zaradi mezi requesty k udelani se spravnou revizi</summary>
+        </member>
+        <member name="P:Gordic.Develop.InstallerService.GInstallerRequest.InstallStatus">
+            <summary> Stav požadavku </summary>
+        </member>
+        <member name="P:Gordic.Develop.InstallerService.GInstallerRequest.SubStatus">
+            <summary> podrobnejsi vypis statusu
+            </summary>
+        </member>
+        <member name="P:Gordic.Develop.InstallerService.GInstallerRequest.ModuleRevision">
+            <summary>Revize modulu</summary>
+        </member>
+        <member name="P:Gordic.Develop.InstallerService.GInstallerRequest.Status">
+            <summary>Převede stav požadavku na řetězec</summary>
+        </member>
+        <member name="T:Gordic.Develop.InstallerService.GInstallerService">
+            <summary> Install služba
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerService.#ctor">
+            <summary> Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerService.Main">
+            <summary> Main
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerService.InitializeComponent">
+            <summary> Inicializace komponent
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerService.Dispose(System.Boolean)">
+            <summary> Odstranění service z paměti </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerService.OnStart(System.String[])">
+            <summary> Při startu </summary>
+            <param name="args"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerService.OnStop">
+            <summary> Při zastavení
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerService.StartServiceRemoting">
+            <summary> Start remouting
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerService.StopServiceRemoting">
+            <summary> Stop service remoting
+            </summary>
+        </member>
+        <member name="T:Gordic.Develop.InstallerService.GInstallerServiceImpl">
+            <summary> Implementace installer service
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerServiceImpl.GetConstants">
+            <summary>Metoda vrati vybrane konstanty serveru</summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerServiceImpl.IsPrivilegedUser(System.String)">
+            <summary>Dotaz na pristup k rozsirenym uloham</summary>
+            <param name="userName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerServiceImpl.PauseServer(System.Boolean,System.String)">
+            <summary>Prikaz k pause/unpause IS</summary>
+            <param name="newState"></param>
+            <param name="userName"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerServiceImpl.GetPackageList(System.String)">
+            <summary>Vrati seznam baliku se vsemi verejnymi detaily o balicich</summary>
+            <param name="etag">informace o poslednich stazenych datech a trigger, ze chci jen novejsi zmeny</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerServiceImpl.GetPackageListJSON(System.String)">
+            <summary>Vrati seznam baliku se vsemi verejnymi detaily o balicich v optimalizovanem JSON formatu (pro protazeni binaryserializerem, ktery ma problem se strukturovanym DTO)</summary>
+            <param name="etag">informace o poslednich stazenych datech a trigger, ze chci jen novejsi zmeny</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerServiceImpl.GetPackageContent(Gordic.Develop.InstallerCommon.GPackageDto,System.String)">
+            <summary>Vrati obsah daneho souboru</summary>
+            <param name="pckg">balik</param>
+            <param name="fileId">typ souboru baliku</param>
+            <returns>obsah souboru; null..pokud soubor neexistuje</returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerServiceImpl.GetPackageContent(System.String,System.String)">
+            <summary>Vrati obsah daneho souboru</summary>
+            <param name="packageId">identifikator baliku</param>
+            <param name="fileId">typ souboru baliku</param>
+            <returns>obsah souboru; null..pokud soubor neexistuje</returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerServiceImpl.PublishPackage(System.String)">
+            <summary>vypublikovani modulu na automat</summary>
+            <param name="packageId">identifikator baliku</param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerServiceImpl.GetAutomatWaitingList">
+            <summary>Vrati naplnenou DataTable s uplnym obsahem uloziste</summary>
+            <returns>seznam baliku v ulozisti k odeslani na automat</returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerServiceImpl.GetBranches">
+            <summary>Vrací seznam dostupných velkých verzí, tedy vlastně seznam větví ze svn.</summary>
+            <remarks>
+            Jde vlastně o seznam větví ze svn. Není zaručeno že se budou jmenovat číselně, např. 452-2, nebo něco podobného.
+            Metoda funguje tak, že se podívá do adresáře builds a vylistuje ho.
+            </remarks>
+            <returns>Seznam dostupných velkých verzí (větví svn), např. {452,453,454,...}</returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerServiceImpl.GetKnownModules">
+            <summary> Vrátí pole modulu, pro ktere existuje alespon jeden vytvoreny balik (vytvoren nejpozdeji v minule verzi. Pro 480 se prohledava >=477)</summary>
+            <returns>pole známých modulů</returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerServiceImpl.PredictRevision(System.String,System.String,System.String)">
+            <summary>Vrati informace o nove vznikle revizi, ktera by mela vzniknout pro request</summary>
+            <param name="branch"></param>
+            <param name="targetModule"></param>
+            <param name="customer"></param>
+            <returns>41USU0552311T14</returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerServiceImpl.NewRequest(Gordic.Develop.InstallerService.RequestInfo)">
+            <summary>Metoda zaregistruje nový požadavek na vytvoření msi balíku.</summary>
+            <param name="requestInfo">data pro request</param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerServiceImpl.GetQueue">
+            <summary>
+            Vrací frontu požadavků jaká byla v čas volání této metody.
+            </summary>
+            <returns>Fronta registrovaných požadavků. Setříděno od nejstaršího k nejnovějšímu. Jde o frontu. např. 
+            {40GIN0145202X01, 41AUT0145201X01, ...}</returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerServiceImpl.RemoveRequest(System.String,System.String,System.String)">
+            <summary>pokusi se odstranit balik z fronty</summary>
+            <param name="idRequest"></param>
+            <param name="user"></param>
+            <param name="reason"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerServiceImpl.PriorityRequest(System.String,System.String,System.String)">
+            <summary>posune balik v poradi priorit vyse</summary>
+            <param name="idRequest"></param>
+            <param name="user"></param>
+            <param name="reason"></param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerServiceImpl.GetStatus">
+            <summary> Vrací informace popisující stav služby. </summary>
+            <returns>DTO popisující aktuální stav služby</returns>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GInstallerServiceImpl.GetStatusJSON">
+            <summary> Vrací informace popisující stav služby (optimalizovana verze obchazejici remoting+binarySerializer). </summary>
+            <returns>DTO popisující aktuální stav služby</returns>
+        </member>
+        <member name="T:Gordic.Develop.InstallerService.GProjectInstaller">
+            <summary> 
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GProjectInstaller.#ctor">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:Gordic.Develop.InstallerService.GProjectInstaller.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GProjectInstaller.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:Gordic.Develop.InstallerService.GProjectInstaller.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+    </members>
+</doc>

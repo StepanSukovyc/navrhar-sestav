@@ -1,0 +1,1764 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Evc.Server</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Evc.Server.GPamsvyp">
+            <summary>
+            Serverová část AL - Pracoviště
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.GPamsvyp.GetVyplatniMista">
+            <summary>Získá přístup k logice pro práci s výplatními místy</summary>
+        </member>
+        <member name="T:Gordic.Evc.Server.GPamstpr">
+            <summary>
+            Serverová část AL - Šablony pracovních poměrů
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.Server.GPamspra">
+            <summary>
+            Serverová část AL - Pracoviště
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.GPamspra.GetPracoviste">
+            <summary>Získá přístup k logice pro práci s pracovišti</summary>
+        </member>
+        <member name="T:Gordic.Evc.Server.GPracPomery">
+            <summary>
+            Serverová část AL - Pracovní poměry zaměstnanců
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.GPracPomery.UpdateWhere(Gordic.General.ApplicationServer.GWhereBuilder)">
+            <summary>
+            Upraví where příkaz
+            </summary>
+            <param name="where">Where</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GPracPomery.GetPouzijPpvNaKonciMesice">
+            <summary>
+            Určuje, zda se má používat přiřazení pracovních poměrů k pracovištím tak, 
+            že pracovní poměr patří pro určitý měsíc na jediné pracoviště podle.
+            Změna poměru se vybírá ta, která je poslední platná na konci měsíce (jako modul PAM)
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.Server.GEvcServerException">
+            <summary>Výjimka aplikační logiky Pdm</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.GEvcServerException.#ctor(System.Int32,System.Int32,System.Object[])">
+            <summary>
+            Konstruktor výjimky
+            </summary>
+            <param name="code">Kód výjimky</param>
+            <param name="resourceCode">Kód textu výjimky v souboru se zdroji</param>
+            <param name="parameters">Parametry pro formátovaný text výjimky</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GEvcServerException.#ctor(System.Int32,System.Int32,System.Exception,System.Object[])">
+            <summary>
+            Konstruktor výjimky
+            </summary>
+            <param name="code">Kód výjimky</param>
+            <param name="resourceCode">Kód textu výjimky v souboru se zdroji</param>
+            <param name="innerException">Vnitřní výjimka</param>
+            <param name="parameters">Parametry pro formátovaný text výjimky</param>
+        </member>
+        <member name="T:Gordic.Evc.Server.GEvcServer">
+            <summary>
+            Předek všech serverových tříd aplikační logiky pro Evc
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.Ico">
+            <summary>
+            IČO
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.Ucs">
+            <summary>
+            UCS
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.Nks">
+            <summary>
+            NKS
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.Uus">
+            <summary>
+            UUS
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.Rok">
+            <summary>
+            Rok
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.Mesic">
+            <summary>
+            Měsíc
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.RokObdobi">
+            <summary>
+            Složenina Rok+Měsíc
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.IxpDen">
+            <summary>
+            Kniha
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.OtevreneObdobi">
+            <summary>
+            Určuje, zda je aktuální období otevřené
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.PrvniOtevreneObdobi">
+            <summary>
+            První otevřené období (null v situaci, že nedošlo k uzávěrce)
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.ParametrEvcNksZdroj">
+            <summary>
+            Hodnota parametru: EVC - ŘP Nákladové středisko pro pořizování dat
+            Hodnota parametru udává číslo nákladového střediska, kde dochází k pořizování dat(typicky NKS VUZP: 631700).
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.ParametrEvcRadTprEvid">
+            <summary>
+            Hodnota parametru: EVC - Šablona evidenčního pracovního poměru
+            Evidenční pracovní poměr se zakládá ve mzdách při převzetí dokladu z EVC podle této šablony. Volba této šablony určuje např. pracoviště, na které bude evid. pracovní poměr zařazen.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.ParametrEvcRadAutPrij">
+            <summary>
+            Hodnota parametru: EVC - Automatický příjem dokladu po jeho předání
+            Určuje, zda se při uložení dokladu (záznam o provedení předběžné kontroly) provede jeho automatický příjem do mezd.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.ParametrEvcRadZpSoPre">
+            <summary>
+            Hodnota parametru: EVC - Zpracování soupisky po předání do mezd
+            Určuje, jakým způsobem bude soupiska měsíčních změn po předání do mezd dále zpracována.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.ParametrEvcRadOmSoDat">
+            <summary>
+            Hodnota parametru: EVC - Omezit modifikaci dat podle aktuálního datumu
+            Zapíná kontrolu na modifikaci obsahu soupisky nebo její předání podle aktuálního datumu. Se soupiskou lze nakládat pouze do posledního dne měsíce, ve kterém byla pořízena.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.ParametrEvcRadEdOsEpp">
+            <summary>
+            Hodnota parametru: EVC - ŘP Právo editovat osobu s evidenčním pracovním poměrem 
+            Parametr určuje, zda má uživatel právo editovat osobu s evidenčním pracovním poměrem 
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.ParametrEvcRadObOsEpp">
+            <summary>
+            Hodnota parametru: EVC - ŘP Právo obnovit osobu s evidenčním pracovním poměrem 
+            Parametr určuje, zda má uživatel právo obnovit stornovanou osobu s evidenčním pracovním poměrem 
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.ParametrEvcRadPrOsEpp">
+            <summary>
+            Hodnota parametru: EVC - ŘP Právo předat osobu s evidenčním pracovním poměrem 
+            Parametr určuje, zda má uživatel právo předat doklad s osobou s evidenčním pracovním poměrem pro jeho založení ve mzdách 
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.ParametrEvcRadStOsEpp">
+            <summary>
+            Hodnota parametru: EVC - ŘP Právo stornovat osobu s evidenčním pracovním poměrem 
+            Parametr určuje, zda má uživatel právo stornovat osobu s evidenčním pracovním poměrem 
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.ParametrEvcRadVyOsEpp">
+            <summary>
+            Hodnota parametru: EVC - ŘP Právo vytvořit osobu s evidenčním pracovním poměrem 
+            Parametr určuje, zda má uživatel právo vytvořit osobu s evidenčním pracovním poměrem 
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.ParametrEvcRadAPDZdPo">
+            <summary>
+            Hodnota parametru: EVC - Automatický příjem dokladu zdravotní pojišťovna osoby
+            Určuje, zda se při předání dokladu (zdravotní pojišťovna osoby) provede jeho automatický příjem do mezd.
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.ParametrEvcRadEdDZdPo">
+            <summary>
+            Hodnota parametru: EVC - ŘP Právo editovat doklad se zdravotní pojišťovnou osoby
+            Parametr určuje, zda má uživatel právo editovat doklad se zdravotní pojišťovnou osoby
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.ParametrEvcRadObDZdPo">
+            <summary>
+            Hodnota parametru: EVC - ŘP Právo obnovit doklad se zdravotní pojišťovnou osoby
+            Parametr určuje, zda má uživatel právo obnovit stornovaný doklad se zdravotní pojišťovnou osoby
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.ParametrEvcRadPrDZdPo">
+            <summary>
+            Hodnota parametru: EVC - ŘP Právo předat doklad se zdravotní pojišťovnou osoby
+            Parametr určuje, zda má uživatel právo předat doklad se zdravotní pojišťovnou osoby pro jeho založení ve mzdách
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.ParametrEvcRadStDZdPo">
+            <summary>
+            Hodnota parametru: EVC - ŘP Právo stornovat doklad se zdravotní pojišťovnou osoby
+            Parametr určuje, zda má uživatel právo stornovat doklad se zdravotní pojišťovnou osoby
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.ParametrEvcRadVyDZdPo">
+            <summary>
+            Hodnota parametru: EVC - ŘP Právo vytvořit doklad se zdravotní pojišťovnou osoby
+            Parametr určuje, zda má uživatel právo vytvořit doklad se zdravotní pojišťovnou osoby
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.ParametrEvcRadVyVypSl">
+            <summary>
+            Hodnota parametru: EVC - ŘP Právo vyplatit vypočtenou složku
+            Parametr určuje, zda má uživatel právo vyplatit vypočtenou složku 
+            </summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.GEvcServer.ParametrEvcRadUlPriSl">
+            <summary>
+            Hodnota parametru: EVC - ŘP Právo pracovat s přiznanými složkami
+            Parametr určuje, zda má uživatel právo pracovat s přiznanými složkami (určuje, zda bude mezi úlohami úloha Přiznané složky)
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.GEvcServer.SetEkoGlobalDbParameters(System.String,System.String,System.String,System.Int32,System.String,System.String)">
+            <summary>
+            Nastavení globálních parametrů - ekonomických
+            </summary>    
+        </member>
+        <member name="M:Gordic.Evc.Server.GEvcServer.NastavSdileneParametry(System.Boolean,Gordic.General.GInt32)">
+            <summary>
+            Nastaví společné základní parametry modulu
+            </summary>
+            <param name="otevreneObdobi">Zda je období otevřené</param>
+            <param name="prvniOtevreneObdobi">První otevřené období</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GEvcServer.NactiTabulku(System.String,System.String[])">
+            <summary>
+            Načte tabulku zadaného jména.
+            </summary>
+            <param name="jmenoTabulky">Jméno tabulky GINISu.</param>
+            <param name="sloupceTabulky">Sloupce tabulky, které se mají načíst. Nebude-li uveden
+            žádný sloupec, načte se celá tabulka.</param>
+            <returns>Vrací požadovanou tabulku.</returns>
+        </member>
+        <member name="M:Gordic.Evc.Server.GEvcServer.NactiTabulku(System.String,System.Int32,System.String[])">
+            <summary>
+            Načte tabulku zadaného jména.
+            </summary>
+            <param name="jmenoTabulky">Jméno tabulky GINISu.</param>
+            <param name="orderIndex">Index sloupce(od 1), podle kterého se má řadit tabulka.</param>
+            <param name="sloupceTabulky">Sloupce tabulky, které se mají načíst. Nebude-li uveden
+            žádný sloupec, načte se celá tabulka.</param>
+            <returns>Vrací požadovanou tabulku.</returns>
+        </member>
+        <member name="M:Gordic.Evc.Server.GEvcServer.ZiskejUcetniJednotku">
+            <summary>Získá učetní jednotku. Je závislé na aktuálním
+            období, Ičo, Ucs, Uus, Nks.</summary>
+            <returns>Hodnota ixs_vaj.</returns>
+        </member>
+        <member name="M:Gordic.Evc.Server.GEvcServer.ZiskejNazevKnihy(System.String)">
+            <summary>
+            Získá název knihy na základě jejího identifikátoru
+            </summary>
+            <param name="ixpDen">Identifikátor knihy</param>
+            <returns>Název knihy</returns>
+        </member>
+        <member name="M:Gordic.Evc.Server.GEvcServer.ZiskejCiselnik(System.String)">
+            <summary>
+            Načte libovolný číselník
+            </summary>
+            <param name="tableName">název tabulky</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GEvcServer.ClearCache">
+            <summary>
+            Vymaže všechny cache
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.GEvcServer.ZiskejRok(Gordic.General.GInt32)">
+            <summary>
+            Vypočítá rok ze složeniny rok+období
+            </summary>
+            <param name="obdobi">Složenina rok+období</param>
+            <returns>Vypočítaný rok</returns>
+        </member>
+        <member name="M:Gordic.Evc.Server.GEvcServer.ZiskejMesic(Gordic.General.GInt32)">
+            <summary>
+            Vypočítá měsíc ze složeniny rok+období
+            </summary>
+            <param name="obdobi">Složenina rok+období</param>
+            <returns>Vypočítaný měsíc</returns>
+        </member>
+        <member name="M:Gordic.Evc.Server.GEvcServer.ZiskejTextRokObdobi(Gordic.General.GInt32)">
+            <summary>
+            Získá text rok-období ve formátu rrrr-mm.
+            </summary>
+            <param name="obdobi">Složenina rok+období</param>
+            <returns>Text rok-období</returns>
+        </member>
+        <member name="M:Gordic.Evc.Server.GEvcServer.ZiskejRokObdobi(Gordic.General.GInt16,Gordic.General.GInt16)">
+            <summary>
+            Vypočítá složeninu rok+období ze zadaného roku a měsíce
+            </summary>
+            <param name="rok">Zadaný rok</param>
+            <param name="mesic">Zadaný měsíc</param>
+            <returns>Složenina rok+období</returns>
+        </member>
+        <member name="T:Gordic.Evc.Server.GOsoby">
+            <summary>
+            Serverová část AL pro práci s osobami
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.GOsoby.Gordic#Evc#Interface#IGOsoby#ZkontrolujExistenciOsobyVPam(Gordic.Evc.Interface.UdajeOsobDataSet.SeznamRow)">
+            <summary>podle vstupních parametrů ověří, zda již existuje ESU</summary>
+            <param name="esurow"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Evc.Server.GOsoby.ZkontrolujExistenciOsobyVPam(Gordic.Evc.Interface.UdajeOsobDataSet.SeznamRow,System.Boolean)">
+            <summary>podle vstupních parametrů ověří, zda již existuje ESU</summary>
+            <param name="esurow"></param>
+            <returns></returns>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GOsoby.GetPracoviste">
+            <summary>
+            Vrátí virtuálně instanci logiky pro <see cref="T:Gordic.Pam.Server.GPracoviste"/>
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.GOsoby.GetSeznamPracovnikuAdditionalFilters">
+            <summary>
+            Získá přídavné filtry, které budou aplikovány na seznam pracovníků
+            </summary>
+            <returns>Pole filtrů na pracovní poměry (nebo null)</returns>
+        </member>
+        <member name="M:Gordic.Evc.Server.GOsoby.GetSeznamPracovnichPomeruAdditionalFilters">
+            <summary>
+            Získá přídavné filtry, které budou aplikovány na seznam pracovních poměrů
+            </summary>
+            <returns>Pole filtrů na pracovní poměry (nebo null)</returns>
+        </member>
+        <member name="M:Gordic.Evc.Server.GOsoby.GetPouzijPpvNaKonciMesice">
+            <summary>
+            Určuje, zda se má používat přiřazení pracovních poměrů k pracovištím tak, 
+            že pracovní poměr patří pro určitý měsíc na jediné pracoviště podle.
+            Změna poměru se vybírá ta, která je poslední platná na konci měsíce (jako modul PAM)
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.GOsoby.Trans_ZkontrolujExistenciOsobyVPam(Gordic.Evc.Interface.UdajeOsobDataSet.SeznamRow)">
+            <summary>
+            podle vstupních parametrů ověří, zda již existuje ESU 
+            </summary>
+            <param name="esurow"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Evc.Server.GPriznaneSlozky">
+            <summary>
+            Serverová část AL pro práci s přiznanými složkami
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.GPriznaneSlozky.GetPracoviste">
+            <summary>
+            Vrátí virtuálně instanci logiky pro <see cref="T:Gordic.Pam.Server.GPracoviste"/>
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.Server.GVyplatniMista">
+            <summary>
+            Serverová část AL pro práci s výplatními místy
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.GVyplatniMista.OnGetSeznamVyplatnichMistProFunkciWhere(System.Int32,System.Int32)">
+            <summary>
+            Vrací část WHERE selectu na seznam výplatních míst pro zadané období
+            </summary>
+            <param name="rok">Rok období</param>
+            <param name="mesic">Měsíc období</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GVyplatniMista.OnGetSeznamVyplatnichMistWhere(System.Int32,System.Int32)">
+            <summary>
+            Vrací část WHERE selectu na seznam výplatních míst pro zadané období (BEZ vazby na funkci)
+            </summary>
+            <param name="rok">Rok období</param>
+            <param name="mesic">Měsíc období</param>
+        </member>
+        <member name="T:Gordic.Evc.Server.GSoupisky">
+            <summary>
+            Serverová část AL pro práci se soupiskami
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.GSoupisky.GetPracoviste">
+            <summary>
+            Vrátí virtuálně instanci logiky pro <see cref="T:Gordic.Pam.Server.GPracoviste"/>
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.GSoupisky.GetMinStavZpracColumn">
+            <summary>
+            Sloupec, který vrací minimální stav zpracování (stav_zprac) osob na soupisce
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.Server.GPracoviste">
+            <summary>
+            Serverová část AL pro práci s předběžnými kontrolami
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.GPracoviste.OnGetSeznamPracovistProFunkciWhere(System.Int32,System.Int32)">
+            <summary>
+            Vrací část WHERE selectu na seznam pracovišť pro zadané období
+            </summary>
+            <param name="rok">Rok období</param>
+            <param name="mesic">Měsíc období</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GPracoviste.OnGetSeznamPracovistWhere">
+            <summary>
+            Vrací část WHERE selectu na seznam pracovišť pro zadané období (BEZ vazby na funkci)
+            </summary>
+        </member>
+        <member name="T:Gordic.Evc.Server.GDuchodyCrs">
+            <summary>
+            ISL - 
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.GDuchodyCrs.Trans_Read(Gordic.General.ApplicationInterface.GServiceReadRequest{Gordic.Evc.Interface.GDuchodyCrsDto})">
+            <summary>Detail .</summary>
+            <param name="rq">DTO  (stačí klíčové atributy dle DTO).</param>
+            <returns>Odpověď s DTO .</returns>
+        </member>
+        <member name="M:Gordic.Evc.Server.GDuchodyCrs.Trans_List(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Evc.Interface.GDuchodyCrsFilter})">
+            <summary>Seznam .</summary>
+            <param name="rq">Filtr .</param>
+            <returns>Odpověď se seznamem DTO .</returns>
+        </member>
+        <member name="M:Gordic.Evc.Server.GDuchodyCrs.Trans_List(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Evc.Interface.GDuchodyCrsFilter},System.Boolean)">
+            <summary>Seznam .</summary>
+            <param name="rq">Filtr .</param>
+            <param name="vratJenPocty">Příznak zda vrátit pouze počty (true/false).</param>
+            <returns>Odpověď se seznamem DTO .</returns>
+        </member>
+        <member name="M:Gordic.Evc.Server.GDuchodyCrs.Trans_ListCount(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Evc.Interface.GDuchodyCrsFilter})">
+            <summary>Počet .</summary>
+            <param name="rq">Filtr .</param>
+            <returns>Počet záznamů.</returns>
+        </member>
+        <member name="M:Gordic.Evc.Server.GDuchodyCrs.Trans_Commit_UlozVystupZCrs(Gordic.General.GString,System.Collections.Generic.List{Gordic.Tools.CRS.DuchodPodrobnyType})">
+            <summary>
+            Zpracování přijaté dávky z CRSs důchody
+            </summary>
+            <param name="ixsEsu"></param>
+            <param name="seznamDchCrs"></param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GDuchodyCrs.Trans_Commit_Create(Gordic.General.ApplicationInterface.GServiceSaveRequest{Gordic.Evc.Interface.GDuchodyCrsDto})">
+            <summary>Založení .</summary>
+            <param name="rq">DTO .</param>
+            <returns>Odpověď s DTO .</returns>
+        </member>
+        <member name="M:Gordic.Evc.Server.GDuchodyCrs.Gordic#Evc#Interface#IGDuchodyCrs#Read(Gordic.General.ApplicationInterface.GServiceReadRequest{Gordic.Evc.Interface.GDuchodyCrsDto})">
+            <summary>Detail .</summary>
+            <param name="rq">DTO  (stačí klíčové atributy dle DTO).</param>
+            <returns>Odpověď s DTO .</returns>
+        </member>
+        <member name="M:Gordic.Evc.Server.GDuchodyCrs.Read(Gordic.General.ApplicationInterface.GServiceReadRequest{Gordic.Evc.Interface.GDuchodyCrsDto},System.Boolean)">
+            <summary>Detail .</summary>
+            <param name="rq">DTO  (stačí klíčové atributy dle DTO).</param>
+            <returns>Odpověď s DTO .</returns>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GDuchodyCrs.Gordic#Evc#Interface#IGDuchodyCrs#List(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Evc.Interface.GDuchodyCrsFilter})">
+            <summary>Seznam .</summary>
+            <param name="rq">Filtr .</param>
+            <returns>Odpověď se seznamem DTO .</returns>
+        </member>
+        <member name="M:Gordic.Evc.Server.GDuchodyCrs.List(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Evc.Interface.GDuchodyCrsFilter},System.Boolean)">
+            <summary>Seznam .</summary>
+            <param name="rq">Filtr .</param>
+            <returns>Odpověď se seznamem DTO .</returns>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GDuchodyCrs.List(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Evc.Interface.GDuchodyCrsFilter},System.Boolean,System.Boolean)">
+            <summary>Seznam .</summary>
+            <param name="rq">Filtr .</param>
+            <param name="vratJenPocty">Příznak zda vrátit pouze počty (true/false).</param>
+            <returns>Odpověď se seznamem DTO .</returns>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GDuchodyCrs.ListCount(Gordic.General.ApplicationInterface.GServiceListRequest{Gordic.Evc.Interface.GDuchodyCrsFilter},System.Boolean)">
+            <summary>Počet .</summary>
+            <param name="rq">Filtr .</param>
+            <returns>Počet záznamů.</returns>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GDuchodyCrs.Gordic#Evc#Interface#IGDuchodyCrs#UlozVystupZCrs(Gordic.General.GString,System.Collections.Generic.List{Gordic.Tools.CRS.DuchodPodrobnyType})">
+            <summary>Zpracování přijaté dávky z CRSs důchody</summary>
+            <param name="ixsEsu"></param>
+            <param name="seznamDchCrs"></param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GDuchodyCrs.UlozVystupZCrs(Gordic.General.GString,System.Collections.Generic.List{Gordic.Tools.CRS.DuchodPodrobnyType},System.Boolean)">
+            <summary>Zpracování přijaté dávky z CRSs důchody</summary>
+            <param name="ixsEsu"></param>
+            <param name="seznamDchCrs"></param>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GDuchodyCrs.Gordic#Evc#Interface#IGDuchodyCrs#Create(Gordic.General.ApplicationInterface.GServiceSaveRequest{Gordic.Evc.Interface.GDuchodyCrsDto})">
+            <summary>Založení .</summary>
+            <param name="rq">DTO .</param>
+            <returns>Odpověď s DTO .</returns>
+        </member>
+        <member name="M:Gordic.Evc.Server.GDuchodyCrs.Create(Gordic.General.ApplicationInterface.GServiceSaveRequest{Gordic.Evc.Interface.GDuchodyCrsDto},System.Boolean)">
+            <summary>Založení .</summary>
+            <param name="rq">DTO .</param>
+            <returns>Odpověď s DTO .</returns>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="T:Gordic.Evc.Server.GPoznamkyDokladu">
+            <summary>
+            Serverová část AL pro poznámky k dokladům
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.GPoznamkyDokladu.Seznam(Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GFilter{Gordic.Evc.Interface.FilPoznamkyDokladu}[])">
+            <summary>Seznam poznámek rozšířeného objektu</summary>
+            <param name="sxs">Identifikátor rozšířeného objektu</param>
+            <param name="typObj">Identifikátor rozšířeného typu objektu</param>
+            <param name="filters">Filtrační kritéria</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GPoznamkyDokladu.VytvorNeboUprav(Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16)">
+            <summary>Vytvoří novou nebo upraví stávající poznámku k dokladu</summary>
+            <param name="sxs">Identifikátor rozšířeného objektu</param>
+            <param name="typObj">Identifikátor rozšířeného typu objektu</param>
+            <param name="porCislo">Pořadové číslo poznámky</param>
+            <param name="verejna">Veřejná poznámka - Soukromá/Veřejná/Skrytá</param>
+            <param name="poznamka">Text poznámky</param>
+            <param name="aktivita">Aktivita záznamu</param>
+            <param name="tiskova">Tisknout poznámku - Netisknout/Tisknout</param>
+            <returns>Pořadové číslo poznámky</returns>
+        </member>
+        <member name="M:Gordic.Evc.Server.GPoznamkyDokladu.VytvorNeboUprav(Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,System.Boolean)">
+            <summary>Vytvoří novou nebo upraví stávající poznámku k dokladu</summary>
+            <param name="sxs">Identifikátor rozšířeného objektu</param>
+            <param name="typObj">Identifikátor rozšířeného typu objektu</param>
+            <param name="porCislo">Pořadové číslo poznámky</param>
+            <param name="verejna">Veřejná poznámka - Soukromá/Veřejná/Skrytá</param>
+            <param name="poznamka">Text poznámky</param>
+            <param name="aktivita">Aktivita záznamu</param>
+            <param name="tiskova">Tisknout poznámku - Netisknout/Tisknout</param>
+            <param name="newTransaction">Zda se mají provádět: připojení k databázi, odpojení a commit</param>
+            <returns>Pořadové číslo poznámky</returns>
+        </member>
+        <member name="M:Gordic.Evc.Server.GPoznamkyDokladu.HromadneVytvorNeboUprav(Gordic.Evc.Interface.PoznamkyDokladuDataSet.SeznamDataTable,System.Boolean)">
+            <summary>Hromadně vytvoří nové nebo upraví stávající poznámky k dokladu</summary>
+            <param name="poznamkyDokladuSeznamTable">Seznam poznámek k dokladu</param>
+            <param name="newTransaction">Zda se mají provádět: připojení k databázi, odpojení a commit</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GPoznamkyDokladu.VytvorFiltry(Gordic.General.ApplicationServer.GWhereBuilder,Gordic.General.GFilter{Gordic.Evc.Interface.FilPoznamkyDokladu}[])">
+            <summary>
+            Pojmenuje filtry
+            </summary>
+            <param name="whereBuilder">část where, která bude vložena na začátek</param>
+            <param name="filters">filtry</param>
+        </member>
+        <member name="T:Gordic.Evc.Server.GPredbezneKontroly">
+            <summary>
+            Serverová část AL pro práci s předběžnými kontrolami
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.GPredbezneKontroly.Gordic#Evc#Interface#IGPredbezneKontroly#VytvorNeboUpravEppVysluh(Gordic.Evc.Interface.PredbezneKontrolyDataSet.SeznamRow,Gordic.Evc.Interface.UdajeOsobDataSet.SeznamRow,Gordic.Evc.Interface.PoznamkyDokladuDataSet.SeznamDataTable)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Evc.Server.GPredbezneKontroly.VytvorNeboUpravEppVysluh(Gordic.Evc.Interface.PredbezneKontrolyDataSet.SeznamRow,Gordic.Evc.Interface.UdajeOsobDataSet.SeznamRow,Gordic.Evc.Interface.PoznamkyDokladuDataSet.SeznamDataTable,System.Boolean)">
+            <summary/>
+        </member>
+        <member name="M:Gordic.Evc.Server.GPredbezneKontroly.Seznam(Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GFilter{Gordic.Evc.Interface.FilPredbezneKontroly}[])">
+            <summary>Seznam předběžných kontrol</summary>
+            <param name="obdobiOd">Omezení na záznamy platné pouze v období od</param>
+            <param name="obdobiDo">Omezení na záznamy platné pouze v období do</param>
+            <param name="filters">Filtrační kritéria</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GPredbezneKontroly.VytvorNeboUprav(Gordic.Evc.Interface.PredbezneKontrolyDataSet.SeznamRow,Gordic.Evc.Interface.UdajeOsobDataSet.SeznamRow,Gordic.Evc.Interface.PoznamkyDokladuDataSet.SeznamDataTable)">
+            <summary>Vytvoří nový nebo upraví stávající doklad předběžné kontroly</summary>
+            <param name="predbezneKontrolySeznamRow">Informace z dokladu předběžné kontroly</param>
+            <param name="udajeOsobSeznamRow">Údaje o osobě</param>
+            <param name="poznamkyDokladuSeznamTable">Seznam poznámek k dokladu</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GPredbezneKontroly.Trans_Commit_VytvorNeboUpravEppVysluh(Gordic.Evc.Interface.PredbezneKontrolyDataSet.SeznamRow,Gordic.Evc.Interface.UdajeOsobDataSet.SeznamRow,Gordic.Evc.Interface.PoznamkyDokladuDataSet.SeznamDataTable)">
+            <summary>
+            
+            </summary>
+            <param name="predbezneKontrolySeznamRow"></param>
+            <param name="udajeOsobSeznamRow"></param>
+            <param name="poznamkyDokladuSeznamTable"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Evc.Server.GPredbezneKontroly.VytvorNeboUprav(Gordic.Evc.Interface.PredbezneKontrolyDataSet.SeznamRow,Gordic.Evc.Interface.UdajeOsobDataSet.SeznamRow,Gordic.Evc.Interface.PoznamkyDokladuDataSet.SeznamDataTable,System.Boolean)">
+            <summary>Vytvoří nový nebo upraví stávající doklad předběžné kontroly</summary>
+            <param name="predbezneKontrolySeznamRow">Informace z dokladu předběžné kontroly</param>
+            <param name="udajeOsobSeznamRow">Údaje o osobě</param>
+            <param name="poznamkyDokladuSeznamTable">Seznam poznámek k dokladu</param>
+            <param name="newTransaction">Zda se mají provádět: připojení k databázi, odpojení a commit</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GPredbezneKontroly.ZiskejUcetniJednotkyPracovisteZeSablony(Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString@)">
+            <summary>Získá účetní jednotku pro pracoviště na základě šablony a období</summary>
+            <param name="ixsTpr">Identifikátor šablony</param>
+            <param name="rokObdobiMzdy">Období, pro něž se bude účetní jednotka zjišťovat</param>
+            <param name="ico">IČO</param>
+            <param name="ucs">UCS</param>
+            <param name="nks">NKS</param>
+            <param name="uus">UUS</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GPredbezneKontroly.ZiskejUcetniJednotkyPracovisteZeSablony(Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString@,Gordic.General.GString@,System.Boolean)">
+            <summary>Získá účetní jednotku pro pracoviště na základě šablony a období</summary>
+            <param name="ixsTpr">Identifikátor šablony</param>
+            <param name="rokObdobiMzdy">Období, pro něž se bude účetní jednotka zjišťovat</param>
+            <param name="ico">IČO</param>
+            <param name="ucs">UCS</param>
+            <param name="nks">NKS</param>
+            <param name="uus">UUS</param>
+            <param name="newTransaction">Zda se mají provádět: připojení k databázi, odpojení a commit</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GPredbezneKontroly.VytvorFiltry(Gordic.General.ApplicationServer.GWhereBuilder,Gordic.General.GFilter{Gordic.Evc.Interface.FilPredbezneKontroly}[])">
+            <summary>
+            Pojmenuje filtry
+            </summary>
+            <param name="whereBuilder">část where, která bude vložena na začátek</param>
+            <param name="filters">filtry</param>
+        </member>
+        <member name="T:Gordic.Evc.Server.GUdajeOsob">
+            <summary>
+            Serverová část AL pro práci s údaji osob
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.GUdajeOsob.Trans_GetEsuTypAg(Gordic.General.GString)">
+            <summary>
+            vrati ginsesu.typ_ag dle ixs_esu
+            </summary>
+            <param name="ixs_esu"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Evc.Server.GUdajeOsob.Trans_Detail(Gordic.General.GString)">
+            <summary>Získá podrobné údaje o zaměstnanci</summary>
+            <param name="ixsEsu">Identifikátor zaměstnance (pamsesu)</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GUdajeOsob.Trans_DetailZDokladu(Gordic.General.GString,Gordic.General.GString)">
+            <summary>Získá podrobné údaje o osobě z přidružených informacích dokladu (pamddes)</summary>
+            <param name="ixp">Identifikátor dokladu</param>
+            <param name="ixsEsu">Identifikátor osoby</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GUdajeOsob.Gordic#Evc#Interface#IGUdajeOsob#GetEsuTypAg(Gordic.General.GString)">
+            <summary>vrati ginsesu.typ_ag dle ixs_esu</summary>
+            <param name="ixs_esu"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Evc.Server.GUdajeOsob.GetEsuTypAg(Gordic.General.GString,System.Boolean)">
+            <summary>vrati ginsesu.typ_ag dle ixs_esu</summary>
+            <param name="ixs_esu"></param>
+            <returns></returns>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GUdajeOsob.Gordic#Evc#Interface#IGUdajeOsob#Detail(Gordic.General.GString)">
+            <summary>Získá podrobné údaje o zaměstnanci</summary>
+            <param name="ixsEsu">Identifikátor zaměstnance (pamsesu)</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GUdajeOsob.Detail(Gordic.General.GString,System.Boolean)">
+            <summary>Získá podrobné údaje o zaměstnanci</summary>
+            <param name="ixsEsu">Identifikátor zaměstnance (pamsesu)</param>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GUdajeOsob.Gordic#Evc#Interface#IGUdajeOsob#DetailZDokladu(Gordic.General.GString,Gordic.General.GString)">
+            <summary>Získá podrobné údaje o osobě z přidružených informacích dokladu (pamddes)</summary>
+            <param name="ixp">Identifikátor dokladu</param>
+            <param name="ixsEsu">Identifikátor osoby</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GUdajeOsob.DetailZDokladu(Gordic.General.GString,Gordic.General.GString,System.Boolean)">
+            <summary>Získá podrobné údaje o osobě z přidružených informacích dokladu (pamddes)</summary>
+            <param name="ixp">Identifikátor dokladu</param>
+            <param name="ixsEsu">Identifikátor osoby</param>
+            <param name="newTransaction">řízení transakcí</param>
+        </member>
+        <member name="T:Gordic.Evc.Server.GDokladyZmenaZarazeni">
+            <summary>
+            Serverová část AL pro práci s doklady měnící zařazení PPV
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.GDokladyZmenaZarazeni.VytvorNeboUprav(Gordic.Evc.Interface.DokladyZmenaZarazeniDataSet.SeznamRow)">
+            <summary>Vytvoří nový nebo upraví stávající doklad změny zařazení PPV</summary>
+            <param name="zmenaZarazeniSeznamRow">Informace z dokladu změny zařazení PPV</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GDokladyZmenaZarazeni.VytvorNeboUprav(Gordic.Evc.Interface.DokladyZmenaZarazeniDataSet.SeznamRow,System.Boolean)">
+            <summary>Vytvoří nový nebo upraví stávající doklad změny zařazení PPV</summary>
+            <param name="zmenaZarazeniSeznamRow">Informace z dokladu změny zařazení PPV</param>
+            <param name="newTransaction">Zda se mají provádět: připojení k databázi, odpojení a commit</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GDokladyZmenaZarazeni.VytvorFiltry(Gordic.General.ApplicationServer.GWhereBuilder,Gordic.General.GFilter{Gordic.Evc.Interface.FilterDokladyZmenaZarazeni}[])">
+            <summary>
+            Pojmenuje filtry
+            </summary>
+            <param name="whereBuilder">část where, která bude vložena na začátek</param>
+            <param name="filters">filtry</param>
+        </member>
+        <member name="T:Gordic.Evc.Server.GDokladyZdravotniPojistovny">
+            <summary>
+            Serverová část AL pro práci s doklady zdravotních pojišťoven
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.GDokladyZdravotniPojistovny.Seznam(Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GFilter{Gordic.Evc.Interface.FilterDokladyZdravotniPojistovny}[])">
+            <summary>Seznam dokladů zdravotncíh pojišťoven</summary>
+            <param name="obdobiOd">Omezení na záznamy platné pouze v období od</param>
+            <param name="obdobiDo">Omezení na záznamy platné pouze v období do</param>
+            <param name="filters">Filtrační kritéria</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GDokladyZdravotniPojistovny.VytvorNeboUprav(Gordic.Evc.Interface.DokladyZdravotniPojistovnyDataSet.SeznamRow)">
+            <summary>Vytvoří nový nebo upraví stávající doklad zdravotní pojišťovny</summary>
+            <param name="zdravotniPojistovnySeznamRow">Informace z dokladu zdravotní pojišťovny</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GDokladyZdravotniPojistovny.VytvorNeboUprav(Gordic.Evc.Interface.DokladyZdravotniPojistovnyDataSet.SeznamRow,System.Boolean)">
+            <summary>Vytvoří nový nebo upraví stávající doklad zdravotní pojišťovny</summary>
+            <param name="zdravotniPojistovnySeznamRow">Informace z dokladu zdravotní pojišťovny</param>
+            <param name="newTransaction">Zda se mají provádět: připojení k databázi, odpojení a commit</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GDokladyZdravotniPojistovny.VytvorFiltry(Gordic.General.ApplicationServer.GWhereBuilder,Gordic.General.GFilter{Gordic.Evc.Interface.FilterDokladyZdravotniPojistovny}[])">
+            <summary>
+            Pojmenuje filtry
+            </summary>
+            <param name="whereBuilder">část where, která bude vložena na začátek</param>
+            <param name="filters">filtry</param>
+        </member>
+        <member name="T:Gordic.Evc.Server.gspg_ekoinitval83">
+            <summary>
+            Package   : 
+            Procedure : spg_ekoinitval83
+            Version   : 384.1
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_ekoinitval83.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_ekoinitval83.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_ekoinitval83.a_log_por_cislo">
+            <summary>a_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_ekoinitval83.a_com_mode">
+            <summary>a_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_ekoinitval83.a_ico">
+            <summary>a_ico - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_ekoinitval83.a_ucs">
+            <summary>a_ucs - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_ekoinitval83.a_nks">
+            <summary>a_nks - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_ekoinitval83.a_my_nks">
+            <summary>a_my_nks - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_ekoinitval83.a_ixp_den">
+            <summary>a_ixp_den - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_ekoinitval83.a_rok_obd">
+            <summary>a_rok_obd - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_ekoinitval83.a_cfu">
+            <summary>339EKO</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_ekoinitval83.a_uus">
+            <summary>354.3</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_ekoinitval83.o_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_ekoinitval83.o_sql_err">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_ekoinitval83.o_isam_err">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_ekoinitval83.o_txt_err">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_ekoinitval83.o_lok_err">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_ekoinitval83.SetInParams(Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_ekoinitval83.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_ekoinitval83.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_ekoinitval83.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Evc.Server.gspg_gindpoz_akt">
+            <summary>
+            Package   : PKG_PAM
+            Procedure : spg_gindpoz_akt
+            Version   : 369.01
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_gindpoz_akt.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_gindpoz_akt.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_akt.ip_log_por_cislo">
+            <summary>ip_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_akt.ip_com_mode">
+            <summary>ip_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_akt.ip_sxs">
+            <summary>ip_sxs - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_akt.ip_typ_obj">
+            <summary>ip_typ_obj - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_akt.ip_por_cislo">
+            <summary>ip_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_akt.ip_aktivita">
+            <summary>ip_aktivita - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_akt.op_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_akt.op_err_sql">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_akt.op_err_isam">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_akt.op_err_txt">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_akt.op_err_lok">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_gindpoz_akt.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt32,Gordic.General.GInt16)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_gindpoz_akt.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_gindpoz_akt.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Evc.Server.gspg_gindpoz_edit_3">
+            <summary>
+            Package   : 
+            Procedure : spg_gindpoz_edit_3
+            Version   : 374.01
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_gindpoz_edit_3.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_gindpoz_edit_3.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_edit_3.ip_log_por_cislo">
+            <summary>ip_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_edit_3.ip_com_mode">
+            <summary>ip_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_edit_3.ip_flags">
+            <summary>ip_flags - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_edit_3.ip_ixp">
+            <summary>ip_ixp - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_edit_3.ip_duv_zmena">
+            <summary>ip_duv_zmena - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_edit_3.ip_sxs">
+            <summary>ip_sxs - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_edit_3.ip_typ_obj">
+            <summary>ip_typ_obj - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_edit_3.ip_por_cislo">
+            <summary>ip_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_edit_3.ip_verejna">
+            <summary>ip_verejna - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_edit_3.ip_poznamka">
+            <summary>ip_poznamka - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_edit_3.ip_aktivita">
+            <summary>ip_aktivita - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_edit_3.ip_tiskova">
+            <summary>ip_tiskova - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_edit_3.ip_dat_plat_do">
+            <summary>ip_dat_plat_do - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_edit_3.ip_typ_ag">
+            <summary>ip_typ_ag - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_edit_3.ip_ixs_fun">
+            <summary>ip_ixs_fun - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_edit_3.ip_ixs_lpc">
+            <summary>ip_ixs_lpc - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_edit_3.ip_nazev">
+            <summary>ip_nazev - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_edit_3.op_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_edit_3.op_err_sql">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_edit_3.op_err_isam">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_edit_3.op_err_txt">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_edit_3.op_err_lok">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_edit_3.op_flags">
+            <summary>op_flags - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_gindpoz_edit_3.op_por_cislo">
+            <summary>op_por_cislo - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_gindpoz_edit_3.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDate,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_gindpoz_edit_3.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_gindpoz_edit_3.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Evc.Server.gspg_pamdkevcedit_6">
+            <summary>
+            Package   : 
+            Procedure : spg_pamdkevcedit_6
+            Version   : 384.01
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_pamdkevcedit_6.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_pamdkevcedit_6.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_log_por_cislo">
+            <summary>ip_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_com_mode">
+            <summary>ip_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_flags">
+            <summary>ip_flags - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_ixp">
+            <summary>ip_ixp - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_duv_zmena">
+            <summary>ip_duv_zmena - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_ixs_esu">
+            <summary>ip_ixs_esu - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_ixs_ppv">
+            <summary>ip_ixs_ppv - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_rok_obd_mzdy">
+            <summary>ip_rok_obd_mzdy - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_rok_obd_zad">
+            <summary>ip_rok_obd_zad - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_lic">
+            <summary>ip_lic - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_ixp_den">
+            <summary>ip_ixp_den - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_ac">
+            <summary>ip_ac - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_ico">
+            <summary>ip_ico - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_ucs">
+            <summary>ip_ucs - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_uus">
+            <summary>ip_uus - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_nks">
+            <summary>ip_nks - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_popis">
+            <summary>ip_popis - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_ktg_typ">
+            <summary>ip_ktg_typ - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_ixs_typ">
+            <summary>ip_ixs_typ - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_ixs_fun_akt">
+            <summary>ip_ixs_fun_akt - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_priz_view">
+            <summary>ip_priz_view - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_ac_ag">
+            <summary>ip_ac_ag - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_dat_evid">
+            <summary>ip_dat_evid - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_cj">
+            <summary>ip_cj - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_dat_real">
+            <summary>ip_dat_real - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_stav_dokladu">
+            <summary>ip_stav_dokladu - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_typ_ag">
+            <summary>ip_typ_ag - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_ixp_dok">
+            <summary>ip_ixp_dok - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_poznamka">
+            <summary>ip_poznamka - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_aktivita">
+            <summary>ip_aktivita - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_typ_esu">
+            <summary>ip_typ_esu - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_nazev">
+            <summary>ip_nazev - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_zkratka">
+            <summary>ip_zkratka - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_stupen_ver">
+            <summary>ip_stupen_ver - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_stat">
+            <summary>ip_stat - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_psc">
+            <summary>ip_psc - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_obec">
+            <summary>ip_obec - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_cast_obce">
+            <summary>ip_cast_obce - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_ulice">
+            <summary>ip_ulice - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_cor">
+            <summary>ip_cor - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_cpop">
+            <summary>ip_cpop - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_adresa_kod">
+            <summary>ip_adresa_kod - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_pobox">
+            <summary>ip_pobox - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_tel">
+            <summary>ip_tel - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_mail">
+            <summary>ip_mail - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_fax">
+            <summary>ip_fax - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_kon_stat">
+            <summary>ip_kon_stat - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_kon_psc">
+            <summary>ip_kon_psc - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_kon_obec">
+            <summary>ip_kon_obec - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_kon_cast_obce">
+            <summary>ip_kon_cast_obce - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_kon_ulice">
+            <summary>ip_kon_ulice - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_kon_cor">
+            <summary>ip_kon_cor - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_kon_cpop">
+            <summary>ip_kon_cpop - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_kon_adresa_kod">
+            <summary>ip_kon_adresa_kod - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_ob_jmeno">
+            <summary>ip_ob_jmeno - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_typ_org">
+            <summary>ip_typ_org - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_ico_esu">
+            <summary>ip_ico_esu - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_dic_esu">
+            <summary>ip_dic_esu - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_rc">
+            <summary>ip_rc - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_jmeno">
+            <summary>ip_jmeno - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_prijmeni">
+            <summary>ip_prijmeni - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_tit_pred">
+            <summary>ip_tit_pred - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_tit_za">
+            <summary>ip_tit_za - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_hodnost">
+            <summary>ip_hodnost - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_rod_prijmeni">
+            <summary>ip_rod_prijmeni - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_misto_nar">
+            <summary>ip_misto_nar - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_stat_nar">
+            <summary>ip_stat_nar - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_stat_prisl">
+            <summary>ip_stat_prisl - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_druh_duch">
+            <summary>ip_druh_duch - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_duch_pob_od">
+            <summary>ip_duch_pob_od - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_platce_duch">
+            <summary>ip_platce_duch - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_ixs_tpr">
+            <summary>ip_ixs_tpr - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_dat_od">
+            <summary>ip_dat_od - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_dat_do">
+            <summary>ip_dat_do - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_ixs_pra">
+            <summary>ip_ixs_pra - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_ixs_vyp">
+            <summary>ip_ixs_vyp - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_zp_vyp_sop">
+            <summary>ip_zp_vyp_sop - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_zp_vyp_zdp">
+            <summary>ip_zp_vyp_zdp - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_dat_zac_sp">
+            <summary>ip_dat_zac_sp - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.ip_dat_nar_duch">
+            <summary>ip_dat_nar_duch - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.op_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.op_err_sql">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.op_err_isam">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.op_err_txt">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.op_err_lok">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.op_flags">
+            <summary>op_flags - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.op_ixp">
+            <summary>op_ixp - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.op_ixs_esu">
+            <summary>op_ixs_esu - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.op_ixs_ppv">
+            <summary>op_ixs_ppv - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevcedit_6.op_ktg_typ">
+            <summary>op_ktg_typ - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_pamdkevcedit_6.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GDate,Gordic.General.GDate)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_pamdkevcedit_6.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_pamdkevcedit_6.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Evc.Server.gspg_pamdkevczar_1">
+            <summary>
+            Package   : 
+            Procedure : spg_pamdkevczar_1
+            Version   : 374.01
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_pamdkevczar_1.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_pamdkevczar_1.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_log_por_cislo">
+            <summary>ip_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_com_mode">
+            <summary>ip_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_flags">
+            <summary>ip_flags - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_ixp">
+            <summary>ip_ixp - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_ixs_ppv">
+            <summary>ip_ixs_ppv - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_rok_obd_mzdy">
+            <summary>ip_rok_obd_mzdy - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_rok_obd_zad">
+            <summary>ip_rok_obd_zad - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_lic">
+            <summary>ip_lic - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_ixp_den">
+            <summary>ip_ixp_den - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_ac">
+            <summary>ip_ac - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_ico">
+            <summary>ip_ico - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_ucs">
+            <summary>ip_ucs - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_uus">
+            <summary>ip_uus - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_nks">
+            <summary>ip_nks - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_popis">
+            <summary>ip_popis - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_ktg_typ">
+            <summary>ip_ktg_typ - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_ixs_typ">
+            <summary>ip_ixs_typ - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_ixs_fun_akt">
+            <summary>ip_ixs_fun_akt - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_priz_view">
+            <summary>ip_priz_view - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_ac_ag">
+            <summary>ip_ac_ag - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_dat_evid">
+            <summary>ip_dat_evid - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_cj">
+            <summary>ip_cj - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_dat_real">
+            <summary>ip_dat_real - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_stav_dokladu">
+            <summary>ip_stav_dokladu - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_typ_ag">
+            <summary>ip_typ_ag - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_rc">
+            <summary>ip_rc - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_nazev">
+            <summary>ip_nazev - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_poznamka">
+            <summary>ip_poznamka - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_ixs_pra">
+            <summary>ip_ixs_pra - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_ixs_vyp">
+            <summary>ip_ixs_vyp - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_datum">
+            <summary>ip_datum - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.ip_aktivita">
+            <summary>ip_aktivita - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.op_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.op_err_sql">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.op_err_isam">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.op_err_txt">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.op_err_lok">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczar_1.op_ixp">
+            <summary>op_ixp - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_pamdkevczar_1.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GInt16,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GInt32)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_pamdkevczar_1.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_pamdkevczar_1.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Evc.Server.GZadaneSlozky">
+            <summary>
+            Serverová část AL pro práci se zadanými složkami
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.GZadaneSlozky.Seznam(Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GFilter{Gordic.Evc.Interface.FilZadaneSlozky}[])">
+            <summary>Seznam vypočtených složek</summary>
+            <param name="obdobiOd">Omezení na složky platné pouze v období od</param>
+            <param name="obdobiDo">Omezení na složky platné pouze v období do</param>
+            <param name="filters">Filtrační kritéria</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GZadaneSlozky.OdvedAZauctujSlozku(Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GInt32)">
+            <summary>Provede odvod a vyúčtování vypočtené složky mzdy</summary>
+            <param name="ixsPpv">Identifikátor pracovního poměru</param>
+            <param name="rokObdobiMzdy">Období mzdy</param>
+            <param name="poradi">Pořadové číslo vypočtené složky mzdy</param>
+            <param name="flags">Pomocné příznaky</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GZadaneSlozky.OdvedAZauctujSlozku(Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GInt32,System.Boolean)">
+            <summary>Provede odvod a vyúčtování vypočtené složky mzdy</summary>
+            <param name="ixsPpv">Identifikátor pracovního poměru</param>
+            <param name="rokObdobiMzdy">Období mzdy</param>
+            <param name="poradi">Pořadové číslo vypočtené složky mzdy</param>
+            <param name="flags">Pomocné příznaky</param>
+            <param name="newTransaction">Zda se mají provádět: připojení k databázi, odpojení a commit</param>
+        </member>
+        <member name="M:Gordic.Evc.Server.GZadaneSlozky.VytvorFiltry(Gordic.General.ApplicationServer.GWhereBuilder,Gordic.General.GFilter{Gordic.Evc.Interface.FilZadaneSlozky}[])">
+            <summary>
+            Pojmenuje filtry
+            </summary>
+            <param name="whereBuilder">část where, která bude vložena na začátek</param>
+            <param name="filters">filtry</param>
+        </member>
+        <member name="T:Gordic.Evc.Server.gspg_pamdkevczpr_1">
+            <summary>
+            Package   : 
+            Procedure : spg_pamdkevczpr_1
+            Version   : 380.02
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_pamdkevczpr_1.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_pamdkevczpr_1.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_log_por_cislo">
+            <summary>ip_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_com_mode">
+            <summary>ip_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_flags">
+            <summary>ip_flags - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_ixp">
+            <summary>ip_ixp - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_duv_zmena">
+            <summary>ip_duv_zmena - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_ixs_esu">
+            <summary>ip_ixs_esu - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_rok_obd_mzdy">
+            <summary>ip_rok_obd_mzdy - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_rok_obd_zad">
+            <summary>ip_rok_obd_zad - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_lic">
+            <summary>ip_lic - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_ixp_den">
+            <summary>ip_ixp_den - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_ac">
+            <summary>ip_ac - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_ico">
+            <summary>ip_ico - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_ucs">
+            <summary>ip_ucs - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_uus">
+            <summary>ip_uus - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_nks">
+            <summary>ip_nks - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_popis">
+            <summary>ip_popis - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_ktg_typ">
+            <summary>ip_ktg_typ - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_ixs_typ">
+            <summary>ip_ixs_typ - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_ixs_fun_akt">
+            <summary>ip_ixs_fun_akt - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_priz_view">
+            <summary>ip_priz_view - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_ac_ag">
+            <summary>ip_ac_ag - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_dat_evid">
+            <summary>ip_dat_evid - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_cj">
+            <summary>ip_cj - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_dat_real">
+            <summary>ip_dat_real - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_stav_dokladu">
+            <summary>ip_stav_dokladu - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_typ_ag">
+            <summary>ip_typ_ag - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_rc">
+            <summary>ip_rc - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_nazev">
+            <summary>ip_nazev - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_poznamka">
+            <summary>ip_poznamka - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_kod_zdrav_poj">
+            <summary>ip_kod_zdrav_poj - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_dat_od">
+            <summary>ip_dat_od - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_dat_do">
+            <summary>ip_dat_do - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.ip_aktivita">
+            <summary>ip_aktivita - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.op_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.op_err_sql">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.op_err_isam">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.op_err_txt">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.op_err_lok">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.op_flags">
+            <summary>op_flags - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamdkevczpr_1.op_ixp">
+            <summary>op_ixp - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_pamdkevczpr_1.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GString,Gordic.General.GDateTime,Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GDate,Gordic.General.GDate,Gordic.General.GInt32)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_pamdkevczpr_1.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_pamdkevczpr_1.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Evc.Server.gspg_pamgetsluesu_1">
+            <summary>
+            Package   : 
+            Procedure : spg_pamgetsluesu_1
+            Version   : 376.01
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_pamgetsluesu_1.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_pamgetsluesu_1.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_log_por_cislo">
+            <summary>ip_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_com_mode">
+            <summary>ip_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_flags">
+            <summary>ip_flags - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_ixp">
+            <summary>ip_ixp - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_duv_zmena">
+            <summary>ip_duv_zmena - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_typ_ag">
+            <summary>ip_typ_ag - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_ixs_esu">
+            <summary>ip_ixs_esu - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_ico">
+            <summary>ip_ico - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_ucs">
+            <summary>ip_ucs - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_uus">
+            <summary>ip_uus - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_nks">
+            <summary>ip_nks - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_typ_esu">
+            <summary>ip_typ_esu - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_rc">
+            <summary>ip_rc - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_jmeno">
+            <summary>ip_jmeno - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_prijmeni">
+            <summary>ip_prijmeni - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_tit_pred">
+            <summary>ip_tit_pred - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_tit_za">
+            <summary>ip_tit_za - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_nazev">
+            <summary>ip_nazev - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_zkratka">
+            <summary>ip_zkratka - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_ob_jmeno">
+            <summary>ip_ob_jmeno - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_typ_org">
+            <summary>ip_typ_org - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_stupen_ver">
+            <summary>ip_stupen_ver - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_stat">
+            <summary>ip_stat - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_psc">
+            <summary>ip_psc - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_obec">
+            <summary>ip_obec - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_cast_obce">
+            <summary>ip_cast_obce - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_ulice">
+            <summary>ip_ulice - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_cor">
+            <summary>ip_cor - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_cpop">
+            <summary>ip_cpop - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_adresa_kod">
+            <summary>ip_adresa_kod - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_pobox">
+            <summary>ip_pobox - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_tel">
+            <summary>ip_tel - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_mail">
+            <summary>ip_mail - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_fax">
+            <summary>ip_fax - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_ico_esu">
+            <summary>ip_ico_esu - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.ip_dic_esu">
+            <summary>ip_dic_esu - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.op_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.op_err_sql">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.op_err_isam">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.op_err_txt">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.op_err_lok">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.op_ixs_esu">
+            <summary>op_ixs_esu - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pamgetsluesu_1.op_flags">
+            <summary>op_flags - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_pamgetsluesu_1.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_pamgetsluesu_1.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_pamgetsluesu_1.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+        <member name="T:Gordic.Evc.Server.gspg_pam_evc_copy_0">
+            <summary>
+            Package   : 
+            Procedure : spg_pam_evc_copy_0
+            Version   : 386.01
+            </summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_pam_evc_copy_0.#ctor(Gordic.Support.Database.GDatabase)">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_pam_evc_copy_0.#ctor">
+            <summary>Konstruktor</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pam_evc_copy_0.ip_log_por_cislo">
+            <summary>ip_log_por_cislo - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pam_evc_copy_0.ip_com_mode">
+            <summary>ip_com_mode - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pam_evc_copy_0.ip_flags">
+            <summary>ip_flags - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pam_evc_copy_0.ip_duv_zmena">
+            <summary>ip_duv_zmena - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pam_evc_copy_0.ip_ixs_esu">
+            <summary>ip_ixs_esu - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pam_evc_copy_0.ip_ixs_pra">
+            <summary>ip_ixs_pra - vstupní parametr</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pam_evc_copy_0.op_err_code">
+            <summary>1.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pam_evc_copy_0.op_err_sql">
+            <summary>2.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pam_evc_copy_0.op_err_isam">
+            <summary>3.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pam_evc_copy_0.op_err_txt">
+            <summary>4.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pam_evc_copy_0.op_err_lok">
+            <summary>5.parametr standartu GIN SPG</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pam_evc_copy_0.op_ixp">
+            <summary>op_ixp - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pam_evc_copy_0.op_ixs_esu">
+            <summary>op_ixs_esu - výstupní parameter</summary>
+        </member>
+        <member name="P:Gordic.Evc.Server.gspg_pam_evc_copy_0.op_ixs_ppv">
+            <summary>op_ixs_ppv - výstupní parameter</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_pam_evc_copy_0.SetInParams(Gordic.General.GInt32,Gordic.General.GInt16,Gordic.General.GInt32,Gordic.General.GString,Gordic.General.GString,Gordic.General.GString)">
+            <summary>Nastavení hodnot vstupních parametrů</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_pam_evc_copy_0.Execute">
+            <summary>Vykonání procedury</summary>
+        </member>
+        <member name="M:Gordic.Evc.Server.gspg_pam_evc_copy_0.ExecuteGin(System.Boolean,System.Boolean,System.Int32)">
+            <summary>Vykonání procedury systému GINIS</summary>
+        </member>
+    </members>
+</doc>

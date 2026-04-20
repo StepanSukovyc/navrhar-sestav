@@ -1,0 +1,1929 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gordic.Support.Antivirus</name>
+    </assembly>
+    <members>
+        <member name="T:Gordic.Support.Antivirus.GAntivirusCommon">
+            <summary>
+            Obecné metody
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.Antivirus.GAntivirusCommon.Is64bitOS">
+            <summary>
+            Zda běží na 64 bitovém systému
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GAntivirusCommon.ExecuteCommand(System.String,System.String,System.Boolean,System.Int32,System.Collections.Generic.List{System.String}@)">
+            <summary>
+            Spuštení procesu
+            </summary>
+            <param name="cmd">příkaz</param>
+            <param name="cmdParams">argumenty</param>
+            <param name="useCmd">use command line 'cmd.exe'</param>
+            <param name="timeout">timeout</param>
+            <param name="output">standardní výstup v řádcích</param>
+            <returns>exit code</returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GAntivirusCommon.GetAntivirusTypeFromParam(System.String)">
+            <summary>
+            Získání typu antiviru podle hodnoty parametru 'gin_antivir'
+            </summary>
+            <param name="paramValue">hodnota parametru</param>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.GAntivirusLog">
+            <summary>
+            Třída pro logování
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GAntivirusLog.#ctor(System.String)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="prefix">prefix</param>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GAntivirusLog.WriteLn(System.String)">
+            <summary>
+            Zapsání řádku do logu
+            </summary>
+            <param name="sDebugText">text</param>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GAntivirusLog.WriteLn(System.String,System.Boolean)">
+            <summary>
+            Zapsání řádku do logu
+            </summary>
+            <param name="sDebugText">text</param>
+            <param name="error">zda se jedná o výpis chyby</param>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.AMSIException">
+            <summary>
+            This exception is thrown if an unhandled error is encountered whilst calling the AMSI interface in Windows.
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.AMSIException.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.AMSIException.#ctor(System.String)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.AMSIException.#ctor(System.String,System.Exception)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="message"></param>
+            <param name="innerException"></param>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.AmsiScanner">
+            <summary>
+            Provides a wrapper for the AMSI interface on Windows 10+ and Windows Server 2016+
+            <exception cref="T:Gordic.Support.Antivirus.AMSIException">May throw an AMSIException if any call to the AMSI interface fails unexpectedly.</exception>
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.AmsiScanner.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Gordic.Support.Antivirus.AmsiScanner"/> class. 
+            The instance will keep a reference to the OS malware scanning service, i.e.
+            AmsiInitialize (https://msdn.microsoft.com/en-us/library/windows/desktop/dn889862(v=vs.85).aspx),
+            which will be released on dispose or destruction.
+            If malware is found, the application name 'MalwareScanner.AMSI' may appear in the system logs.
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.AmsiScanner.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Gordic.Support.Antivirus.AmsiScanner"/> class. 
+            The instance will keep a reference to the OS malware scanning service, i.e.
+            AmsiInitialize (https://msdn.microsoft.com/en-us/library/windows/desktop/dn889862(v=vs.85).aspx),
+            which will be release on dispose or destruction.
+            </summary>
+            <param name="applicationName">
+            If specified, this application name is passed to Windows when scanning. Defaults to 'MalwareScanner.AMSI'.
+            It may show up in logs, so if you pass in an application name, make sure it is clear that this is the deliberately 
+            scanning part of your application to avoid the logs looking it is your application that is at fault.
+            // For example 'MyApplications virus scanner'
+            </param>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.AmsiScanner.TestIfItIsWorking">
+            <summary>
+            This will test an EICAR file to see if the virus is picked up.
+            AMSI is only supported on Windows 10+ and on Server 2016 and you need to ensure a malware scanner that
+            supports AMSI (such as windows defender) is installed and working.
+            Don't call this function more often than you have to as the virus scan will be logged.
+            For example, you may want to call it once on application startup 
+            </summary>
+            <returns>The IsItWorking property on the result will be True if malware scanning is working</returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.AmsiScanner.HasVirus(System.IO.Stream,System.String)">
+            <summary>
+            Scans a stream for virus
+            </summary>
+            <param name="stream">
+            If the stream supports seeking, such as, say, a MemoryStream or FileStream then this will work fine.
+            The scanner will go back to the start and read to the end and reset the position back to wherever you had it.
+            However, if you want to scan, say, the input stream in a web app then it may not be possible to rewind the stream,
+            meaning you can't then access the stream content yourself after the scanner has read it.
+            Similarly, the scanner can only read the stream from the point where it is when when you pass it in. 
+            There are scenarios where that is fine, but usually you'd want to first copy the forward-only stream to a memory stream, 
+            and then scan the memory stream. Don't forget to set the position to 0 before you start reading it yourself as the stream copy
+            will leave it at the end of the stream.
+            </param>
+            <param name="filename">The name of the file. It is passed on to the virus scanner and *may* be used in determining scanning algorithms or it may be ignored - the AMSI documentation is not extensive.</param>
+            <returns>true if the scanned content contains malware and should be blocked. Otherwise, false</returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.AmsiScanner.HasVirus(System.Byte[],System.String)">
+            <summary>
+            Will scann the byte array for a virus.
+            </summary>
+            <param name="bytearray">A byte array with content you want scanned, usually the contents of a file.</param>
+            <param name="filename">The name of the file. It is passed on to the virus scanner and *may* be used in determining scanning algorithms or it may be ignored - the AMSI documentation is not extensive.</param>
+            <returns>True if a virus was detected, false in all other cases.</returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.AmsiScanner.CopyToByteArray(System.IO.Stream)">
+            <summary>
+            Courtesy of https://stackoverflow.com/questions/1080442/how-to-convert-an-stream-into-a-byte-in-c
+            </summary>
+            <param name="stream">An input stream</param>
+            <returns>A byte array</returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.AmsiScanner.HasMalware(System.Int32)">
+            <summary>
+            This partially replicates the AmsiResultIsMalware which we can't seem to access (I suspect it just exist in the amsi.h file)
+            and partially adds some specific handling for admin blocks.
+            The scanresult is a risk rating and there may be some future requirement for looking at the number in more detail
+            It probably should be refactored into a class so it can have some proper unit tests
+            </summary>
+            <param name="scanResult">The result of a scan</param>
+            <returns>True if malware was detected</returns>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.AmsiWrapper">
+            <summary>
+            Amsi Win32 wrapper
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.GAMSI_2">
+            <summary>
+            Antimalware Scan Interface support - backup variant of code 
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GAMSI_2.GetAntivirusInfo">
+            <summary>
+            Get antivirus info
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GAMSI_2.Scan(System.String)">
+            <summary>
+            Scan
+            </summary>
+            <param name="path">path</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.MalwareScanTestResult">
+            <summary>
+            Malware scan result
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.Antivirus.MalwareScanTestResult.IsItWorking">
+            <summary>
+            Is AMSI working
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.Antivirus.MalwareScanTestResult.ErrorMessage">
+            <summary>
+            Error message
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.Antivirus.MalwareScanTestResult.Exception">
+            <summary>
+            Exception
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.AmsiContext">
+            <summary>
+            AMSI context
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.AmsiContext.Create(System.String)">
+            <summary>
+            Create context
+            </summary>
+            <param name="applicationName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.AmsiContext.CreateSession">
+            <summary>
+            Create session
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.AmsiContext.Dispose">
+            <summary>
+            Dispose
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.AmsiContextSafeHandle">
+            <summary>
+            AMSI context handle
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.AmsiContextSafeHandle.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.AmsiContextSafeHandle.ReleaseHandle">
+            <summary>
+            Release handle
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.AmsiResult">
+            <summary>
+            AMSI result
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.AmsiSession">
+            <summary>
+            AMSI session
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.AmsiSession.IsMalware(System.String,System.String)">
+            <summary>
+            Is malware
+            </summary>
+            <param name="payload"></param>
+            <param name="contentName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.AmsiSession.IsMalware(System.Byte[],System.String)">
+            <summary>
+            Is malware
+            </summary>
+            <param name="payload"></param>
+            <param name="contentName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.AmsiSession.Dispose">
+            <summary>
+            Dispose
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.AmsiSessionSafeHandle">
+            <summary>
+            AMSI session handle
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.Antivirus.AmsiSessionSafeHandle.Context">
+            <summary>
+            Context
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.AmsiSessionSafeHandle.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.Antivirus.AmsiSessionSafeHandle.IsInvalid">
+            <summary>
+            Is invalid
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.AmsiSessionSafeHandle.ReleaseHandle">
+            <summary>
+            Release handle
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.GAMSI">
+            <summary>
+            Antimalware Scan Interface support
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GAMSI.GetAntivirusInfo">
+            <summary>
+            Get antivirus info
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GAMSI.Scan(System.String)">
+            <summary>
+            Scan
+            </summary>
+            <param name="path">path</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.ESDK_AV_STATUS">
+            <summary>
+            ESDK AV STATUS
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.ESDK_AV_STATUS.ESDK_AV_STATUS_UNKNOWN">
+            <summary>
+            Unknown status.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.ESDK_AV_STATUS.ESDK_AV_STATUS_CLEAN_UNSPEC">
+            <summary>
+            Object is clean. No further information is available. 
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.ESDK_AV_STATUS.ESDK_AV_STATUS_CLEAN_CLEANED">
+            <summary>
+            Object is clean. Object was found as infected and was cleaned, i.e. at least one part of the object may still contain useful data.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.ESDK_AV_STATUS.ESDK_AV_STATUS_CLEAN_DELETED">
+            <summary>
+            Object is deleted.Object was found as infected and was cleaned by deletion, i.e. is already deleted or does not contain useful data. 
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.ESDK_AV_STATUS.ESDK_AV_STATUS_INFECTED_UNSPEC">
+            <summary>
+            Object is infected.No further information is available.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.ESDK_AV_STATUS.ESDK_AV_STATUS_NOT_SCANNED_UNSPEC">
+            <summary>
+            Object could not be scanned. No further information is available.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.ESDK_AV_STATUS.ESDK_AV_STATUS_NOT_SCANNED_SCAN_ERROR">
+            <summary>
+            Object could not be scanned. A scanner error occured. 
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.ESDK_AV_STATUS.ESDK_AV_STATUS_NOT_SCANNED_PASSWORD">
+            <summary>
+            Object could not be scanned. It is protected by password.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.ESDK_AV_STATUS.ESDK_AV_STATUS_NOT_SCANNED_DAMAGED">
+            <summary>
+            Object could not be scanned.It is damaged.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.ESDK_AV_STATUS.ESDK_AV_STATUS_NOT_SCANNED_UNPACK_ERROR">
+            <summary>
+            Object could not be scanned. An error occured within object unpacking algorithm.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.ESDK_AV_STATUS.ESDK_AV_STATUS_NOT_SCANNED_OBJECT_NOT_FOUND">
+            <summary>
+            Object could not be scanned. The object was not found. 
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.EsetErrorCodes">
+            <summary>
+            ESET SDK Error codes
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_SUCCESS">
+            <summary>
+            Success
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_ERROR">
+            <summary>
+            Unspecified error.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_MEMORY">
+            <summary>
+            Memory allocation error.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_READ">
+            <summary>
+            Read error
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_WRITE">
+            <summary>
+            Write error
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_LASTERROR_NOT_SUPOPRTED">
+            <summary>
+            Current OS doesn't support last_error
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_EOF">
+            <summary>
+            End Of File
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_FILE_CORRUPTED">
+            <summary>
+            File corrupted
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_INSUFFICIENT_BUFFER">
+            <summary>
+            Specified buffer too small.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_NOTHING_TO_DO">
+            <summary>
+            Current status fine, nothing to do
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_INVALID_PARAMETER">
+            <summary>
+            Wrong input parameter.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_FILE_NOT_FOUND">
+            <summary>
+            File not found.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_PATH_NOT_FOUND">
+            <summary>
+            Path not found.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_ACCESS_DENIED">
+            <summary>
+            Access denied.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_SHARING_VIOLATION">
+            <summary>
+            Sharing violation.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_TIMEOUT">
+            <summary>
+            Timeout.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_WOULDBLOCK">
+            <summary>
+            No data available on the socket (nonblocking sockets)
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_INTR">
+            <summary>
+            Signal received during call (call retry possible)
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_NOMODMAPDIR">
+            <summary>
+            Directory for modules mapping not found
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_LOCK_VIOLATION">
+            <summary>
+            Lock violation
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_FILE_EXISTS">
+            <summary>
+            File exists
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_STREAM_NOT_READY">
+            <summary>
+            Stream is not ready
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_FILE_TOO_BIG">
+            <summary>
+            File is too big
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_CONNREFUSED">
+            <summary>
+            Connection refused
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_CANNOT_OPEN_DLL">
+            <summary>
+            Can't open dynamic-link library
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_PIPE">
+            <summary>
+            Broken pipe
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_NOTCONN">
+            <summary>
+            Socket is not connected
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_CONNRESET">
+            <summary>
+            Connection reset by peer
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_CONN_CLOSED">
+            <summary>
+            Connection closed
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_PERM">
+            <summary>
+            Operation not permitted
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_SRCH">
+            <summary>
+            No such process
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_NXIO">
+            <summary>
+            No such device or address
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_2BIG">
+            <summary>
+            Argument list too long
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_NOEXEC">
+            <summary>
+            Exec format error
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_BADF">
+            <summary>
+            Bad file descriptor
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_CHILD">
+            <summary>
+            No child processes
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_NOTBLK">
+            <summary>
+            Block device required
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_BUSY">
+            <summary>
+            Device or resource busy
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_EXIST">
+            <summary>
+            File exists
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_XDEV">
+            <summary>
+            Invalid cross-device link
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_NODEV">
+            <summary>
+            No such device
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_ISDIR">
+            <summary>
+            Is a directory
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_NFILE">
+            <summary>
+            Too many open files in system
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_MFILE">
+            <summary>
+            Too many open files
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_NOTTY">
+            <summary>
+            Inappropriate ioctl for device
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_TXTBSY">
+            <summary>
+            Text file busy
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_FBIG">
+            <summary>
+            File too large
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_NOSPC">
+            <summary>
+            No space left on device
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_SPIPE">
+            <summary>
+            Illegal seek
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_ROFS">
+            <summary>
+            Read-only file system
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_MLINK">
+            <summary>
+            Too many links
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_NOSYS">
+            <summary>
+            Function not implemented
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_NOTEMPTY">
+            <summary>
+            Directory not empty
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_LOOP">
+            <summary>
+            Too many levels of symbolic links
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_NOMSG">
+            <summary>
+            No message of desired type
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_NODATA">
+            <summary>
+            No data available
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_TIME">
+            <summary>
+            Timer expired
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_NONET">
+            <summary>
+            Machine is not on the network
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_PROTO">
+            <summary>
+            Protocol error
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_BADMSG">
+            <summary>
+            Bad message
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_OVERFLOW">
+            <summary>
+            Value too large for definedESDKta type
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_BADFD">
+            <summary>
+            File descriptor in bad state
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_USERS">
+            <summary>
+            Too many users
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_NOTSOCK">
+            <summary>
+            Socket operation on non-socket
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_DESTADDRREQ">
+            <summary>
+            Destination address required
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_MSGSIZE">
+            <summary>
+            Message too long
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_PROTOTYPE">
+            <summary>
+            Protocol wrong type for socket
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_NOPROTOOPT">
+            <summary>
+            Protocol not available
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_PROTONOSUPPORT">
+            <summary>
+            Protocol not supported
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_SOCKTNOSUPPORT">
+            <summary>
+            Socket type not supported
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_PFNOSUPPORT">
+            <summary>
+            Protocol family not supported
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_AFNOSUPPORT">
+            <summary>
+            Address family not supported by protocol
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_ADDRINUSE">
+            <summary>
+            Address already in use
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_ADDRNOTAVAIL">
+            <summary>
+            Cannot assign requested address
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_NETDOWN">
+            <summary>
+            Network is down
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_NETUNREACH">
+            <summary>
+            Network is unreachable
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_NETRESET">
+            <summary>
+            Network dropped connection on reset
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_CONNABORTED">
+            <summary>
+            Software caused connection abort
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_NOBUFS">
+            <summary>
+            No buffer space available
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_HOSTDOWN">
+            <summary>
+            Host is down
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_HOSTUNREACH">
+            <summary>
+            No route to host
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_ALREADY">
+            <summary>
+            Operation already in progress
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_REMOTEIO">
+            <summary>
+            Remote I/O error
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_DQUOT">
+            <summary>
+            Disk quota exceeded
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_NOMEDIUM">
+            <summary>
+            No medium found
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_CANCELED">
+            <summary>
+            Operation canceled
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_FILE_OPEN">
+            <summary>
+            Cannot open file
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_FILE_READ">
+            <summary>
+            Cannot read from file
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_FILE_WRITE">
+            <summary>
+            Cannot write to file
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_FILE_SEEK">
+            <summary>
+            Cannot seek in file
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_INVALID_SIGNATURE">
+            <summary>
+            Invalid signature
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_NOT_INITIALIZED">
+            <summary>
+            Not initialized
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_NOT_FOUND">
+            <summary>
+            Not found
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_FULL_DISK">
+            <summary>
+            Full disk error
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_DELETE_PENDING">
+            <summary>
+            The file cannot be opened because it is in the process of being deleted
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_LIC">
+            <summary>
+            Unspecified error
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_LIC_ASSOCIATION_FAIL">
+            <summary>
+            Association process couldnt be completed due to server error
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_LIC_ACTIVATION_FAIL">
+            <summary>
+            Activation process couldnt be completed due to server error
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_LIC_INVALID_LICENSE">
+            <summary>
+            Input license not valid
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_LIC_FILE_CORRUPTED">
+            <summary>
+            File with license corrupted
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_LIC_SERVER_BUSY">
+            <summary>
+            Activation server busy, retry again later
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_SCANNER">
+            <summary>
+            Unspecified scanner error.
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_SCANNER_NOT_INITIALIZED">
+            <summary>
+            Scanner or its part not initialized
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_SCANNER_CALL">
+            <summary>
+            Scanner call failed
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.EsetErrorCodes.ESDK_E_SCANNER_NOT_FOUND">
+            <summary>
+            Scanner not found
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.GEsdkw">
+            <summary>
+            Import of ESDK functions from C++ library
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_global_setup_create(System.IntPtr@)">
+            <summary>
+            Creates ESDK global settings object. Created object is not initialized and needs to be set up before using. Several settings must be set, see below.
+            </summary>
+            <param name="globalSetup">Handle to a newly created p_esdk_global_setup object</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_global_setup_set_license_dir(System.IntPtr,System.IntPtr)">
+            <summary>
+            Sets directory for ESDK license data. Sets directory, where ESDK will store persistent data about license.
+            </summary>
+            <param name="globalSetup">Valid handle created by esdk_global_setup_create</param>
+            <param name="licenseDir">Path to already created directory.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_global_setup_set_data_dir(System.IntPtr,System.IntPtr)">
+            <summary>
+            Sets directory for ESDK data. Sets directory, where ESDK will store it's persistent data.
+            </summary>
+            <param name="globalSetup">Valid handle created by esdk_global_setup_create</param>
+            <param name="dataDir">Path to already created directory.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_global_setup_set_modules_dir(System.IntPtr,System.IntPtr)">
+            <summary>
+            Sets directory for ESDK modules. Sets directory, where ESDK will store it's persistent modules.
+            </summary>
+            <param name="globalSetup">Valid handle created by esdk_global_setup_create</param>
+            <param name="modulesDir">Path to already created directory.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_global_setup_set_quarantine_dir(System.IntPtr,System.IntPtr)">
+            <summary>
+            Sets directory for ESDK scanner quarantine.Sets directory, where ESDK will store quarantined files.
+            </summary>
+            <param name="globalSetup">Valid handle created by esdk_global_setup_create</param>
+            <param name="quarantineDir">Path to already created directory.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_init(System.IntPtr)">
+            <summary>
+            Initializes internal structure of ESDK. Needs to be called before any other calls to SDK, with except of setting up p_esdk_global_setup structure.
+            </summary>
+            <param name="globalSetup">Handle to global settings created by esdk_global_setup_create() and initialized</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_global_setup_delete(System.IntPtr)">
+            <summary>
+            Deletes ESDK global settings object.
+            </summary>
+            <param name="globalSetup">Handle to p_esdk_global_setup created with esdk_global_setup_create()</param>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_license_activate_key(System.IntPtr)">
+            <summary>
+            Activate ESDK using license key.
+            </summary>
+            <param name="key">Activation key, which will be sent to server for verification.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_modules_reload">
+            <summary>
+            Reloads ESDK modules. Loads or reloads already loaded ESDK modules.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_setup_packet_create(System.IntPtr@)">
+            <summary>
+            Creates scan settings packet.
+            </summary>
+            <param name="setupPacket">Handle to a newly created p_esdk_setup_packet object</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_setup_packet_compile(System.IntPtr)">
+            <summary>
+            Compiles scan settings. Scan settings must be initialized and compiled before using in esdk_scan_packet_create().
+            It is not possible to change properties of setup_packet after compilation. However, you can use the same p_esdk_setup_packet for several p_esdk_scan_packets even in multiple threads.
+            </summary>
+            <param name="setupPacket"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_setup_packet_delete(System.IntPtr)">
+            <summary>
+            Deletes scan settings packet.
+            </summary>
+            <param name="setupPacket">Handle to p_esdk_setup_packet created with esdk_setup_packet_create</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_deinit">
+            <summary>
+            Destroys internal structure of ESDK. Needs to be called after last call to SDK.
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_scan_packet_create(System.IntPtr,System.IntPtr@)">
+            <summary>
+            Creates settings object for scan. Created object is not initialized, exactly one of stream (esdk_scan_packet_set_stream()), memory (esdk_scan_packet_set_memory()) or disks (esdk_scan_packet_set_disks()) setting needs to be set.
+            </summary>
+            <param name="setupPacket"></param>
+            <param name="scanPacket"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_stream_create(System.IntPtr@)">
+            <summary>
+            Creates virtual stream object.
+            </summary>
+            <param name="stream">Handle to newly created stream</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_scan_packet_delete(System.IntPtr)">
+            <summary>
+            Deletes scan packet object.
+            </summary>
+            <param name="scanPacket">Current valid scan packet handle</param>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_stream_set_file(System.IntPtr,System.IntPtr,System.IntPtr,System.Boolean)">
+            <summary>
+            Initializes virtual stream with a file. 
+            Sets all virtual stream methods to work with provided file.
+            </summary>
+            <param name="stream">Stream to associate file with</param>
+            <param name="filePath">Path to file </param>
+            <param name="fileAlias">Textual alias of file, e.g. to show in logs</param>
+            <param name="preserveAccessTime">Whether operations on file should not modify access time </param>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_scan_packet_set_stream(System.IntPtr,System.IntPtr,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Associate stream with scan_packet.
+            Set stream to be scanned when scan is executed with scan_packet. Stream must be set up with either file (esdk_stream_set_file()) or custom implementation (esdk_stream_set_virtual()).
+            </summary>
+            <param name="scanPacket">Current valid scan packet handle </param>
+            <param name="stream">Stream to be scanned </param>
+            <param name="readOnly">Boolean, whether scanner can only read from stream </param>
+            <param name="quarantine">Boolean, whether to use quarantine during scan </param>
+            <param name="filePart">Boolean, whether object represented by stream is partial (e.g. part of http communication) </param>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_scan_execute(System.IntPtr,System.IntPtr@)">
+            <summary>
+            Executes scan, creates scan_packet_result object. 
+            </summary>
+            <param name="scanPacket">Initialized scan packet with either virtual stream, memory or disk </param>
+            <param name="scanResult">Handle of newly created scan packet result</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_stream_delete(System.IntPtr)">
+            <summary>
+            Deletes stream object. Explicitly calls close on custom virtual stream.
+            </summary>
+            <param name="stream">Current valid stream handle </param>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_scan_packet_result_delete(System.IntPtr)">
+            <summary>
+            Deletes scan result object. 
+            </summary>
+            <param name="scanPacketResult">Current valid scan packet result handle</param>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_scan_packet_result_get_av_status(System.IntPtr,Gordic.Support.Antivirus.ESDK_AV_STATUS@)">
+            <summary>
+            Get antivirus scan status from scan result. 
+            </summary>
+            <param name="scanPacketResult">Current valid scan packet result handle</param>
+            <param name="status">One of enum ESDK_AV_STATUS</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_scan_packet_result_get_statistic_total(System.IntPtr,System.Int32@)">
+            <summary>
+            Get number of cleaned and infected files from scan result. 
+            </summary>
+            <param name="scanPacketResult">Current valid scan packet result handle</param>
+            <param name="total">Number of cleaned and infected files found during scan</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_scan_packet_result_get_statistic_infected(System.IntPtr,System.Int32@)">
+            <summary>
+            Get number of cleaned and infected files from scan result. 
+            </summary>
+            <param name="scanPacketResult">Current valid scan packet result handle</param>
+            <param name="infected">Number of cleaned and infected files found during scan</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_scan_packet_result_get_statistic_cleaned(System.IntPtr,System.Int32@)">
+            <summary>
+            Get number of cleaned files from scan result. 
+            </summary>
+            <param name="scanPacketResult">Current valid scan packet result handle</param>
+            <param name="cleaned">Number of files that were cleaned during scan</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_scan_packet_result_get_statistic_active(System.IntPtr,System.Int32@)">
+            <summary>
+            Get number of active scanned files from scan result. 
+            </summary>
+            <param name="scanPacketResult">Current valid scan packet result handle</param>
+            <param name="active">Number of infected files that are still infected after cleaning</param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.GEsdkw.LicenseChangeCallback">
+            <summary>
+            License change callback
+            </summary>
+            <param name="licenseHandle"></param>
+            <param name="context"></param>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.GEsdkw.ProxyServerCallback">
+            <summary>
+            Proxy server callback
+            </summary>
+            <param name="proxySetup"></param>
+            <param name="context"></param>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.GEsdkw.UpdateStartCallback">
+            <summary>
+            Callback for updating start of download of a package
+            </summary>
+            <param name="packageSize"></param>
+            <param name="type"></param>
+            <param name="context"></param>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.GEsdkw.UpdateDownloadedSizeCallback">
+            <summary>
+            Callback for updating downloaded size
+            </summary>
+            <param name="filename"></param>
+            <param name="size"></param>
+            <param name="context"></param>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.GEsdkw.UpdateEngineDownloadServerCallback">
+            <summary>
+            Update engine download from server callback
+            </summary>
+            <param name="serverName"></param>
+            <param name="context"></param>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.GEsdkw.ScanResultLogCallback">
+            <summary>
+            
+            </summary>
+            <param name="entry"></param>
+            <param name="context"></param>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_scan_packet_result_get_logs(System.IntPtr,Gordic.Support.Antivirus.GEsdkw.ScanResultLogCallback,System.IntPtr@)">
+            <summary>
+            Extract log entries from scan result. 
+            </summary>
+            <param name="scanPacketResult">Current valid scan packet result handle </param>
+            <param name="callback">Function to process each log entry </param>
+            <param name="context">User data to pass to callback</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_update_setup_set_callbacks(System.IntPtr,Gordic.Support.Antivirus.GEsdkw.UpdateStartCallback,Gordic.Support.Antivirus.GEsdkw.UpdateDownloadedSizeCallback,Gordic.Support.Antivirus.GEsdkw.UpdateEngineDownloadServerCallback,System.IntPtr@)">
+            <summary>
+            Sets callbacks to inform about various events during update of ESDK modules.
+            </summary>
+            <param name="update_setup">Current valid update handle</param>
+            <param name="start">Will be called on start of downloading or compilation of modules</param>
+            <param name="downloaded_size">Informs about download or compilation progress</param>
+            <param name="engine_downloaded_server">Informs about server from which modules are downloaded</param>
+            <param name="context">User data to pass to update callbacks</param>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_global_setup_set_license_change_callback(System.IntPtr,Gordic.Support.Antivirus.GEsdkw.LicenseChangeCallback,System.IntPtr)">
+            <summary>
+            Sets callback to inform about changes in loaded license.
+            </summary>
+            <param name="globalSetup">Valid handle created by esdk_global_setup_create</param>
+            <param name="func">Callback function that fills proxy server parameters</param>
+            <param name="ptr">User data to pass to callback</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_global_setup_set_proxy_server_callback(System.IntPtr,Gordic.Support.Antivirus.GEsdkw.ProxyServerCallback,System.IntPtr)">
+            <summary>
+            Sets callback to set proxy server.
+            </summary>
+            <param name="globalSetup">Valid handle created by esdk_global_setup_create</param>
+            <param name="func">Callback function that fills proxy server parameters</param>
+            <param name="ptr">User data to pass to callback</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_license_activate_offline_file(System.IntPtr,System.IntPtr)">
+            <summary>
+            Activate ESDK using offline license file.
+            </summary>
+            <param name="data">Data buffer start of loaded license file</param>
+            <param name="size">Data buffer size of loaded license file</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_update_setup_create(System.IntPtr@)">
+            <summary>
+            Creates update settings object. Created object is not initialized and needs to be set before using. Only mandatory setting is esdk_update_setup_set_server(), others are optional.
+            </summary>
+            <param name="setup">Handle to newly created update settings.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_get_last_error">
+            <summary>
+            Get last error code.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_update_setup_set_server(System.IntPtr,System.IntPtr)">
+            <summary>
+            Sets server from which ESDK should download updates.
+            </summary>
+            <param name="update_setup">Current valid update handle</param>
+            <param name="url">Url of server or NULL, in which case server will be autoselected</param>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_update_execute(System.IntPtr,System.IntPtr@)">
+            <summary>
+            Executes update of ESDK modules.
+            </summary>
+            <param name="update_setup">Current valid update handle</param>
+            <param name="need_to_reload">Url of server or NULL, in which case server will be autoselected</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_update_setup_delete(System.IntPtr)">
+            <summary>
+            Deletes update settings object.
+            </summary>
+            <param name="update_setup">Current valid update handle</param>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_scan_log_entry_get_object_name(System.IntPtr,System.Text.StringBuilder,System.Int32@)">
+            <summary>
+            Get object name from scan log entry.
+            </summary>
+            <param name="entry">Current valid log entry handle</param>
+            <param name="buffer">Buffer to store string</param>
+            <param name="buffer_size">Size of buffer in chars, on success it is set to length of string in buffer (with terminating NULL). When function fails with last error ESDK_E_INSUFFICIENT_BUFFER current buffer is too small, needs to be at least *buffer_size.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_scan_log_entry_get_virus_name(System.IntPtr,System.Text.StringBuilder,System.Int32@)">
+            <summary>
+            Get object virus name from scan log entry.
+            </summary>
+            <param name="entry">Current valid log entry handle</param>
+            <param name="buffer">Buffer to store string</param>
+            <param name="buffer_size">Size of buffer in chars, on success it is set to length of string in buffer (with terminating NULL). When function fails with last error ESDK_E_INSUFFICIENT_BUFFER current buffer is too small, needs to be at least *buffer_size.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_scan_log_entry_get_action(System.IntPtr,System.Text.StringBuilder,System.Int32@)">
+            <summary>
+            Get action taken by scanner from scan log entry.
+            </summary>
+            <param name="entry">Current valid log entry handle</param>
+            <param name="buffer">Buffer to store string</param>
+            <param name="buffer_size">Size of buffer in chars, on success it is set to length of string in buffer (with terminating NULL). When function fails with last error ESDK_E_INSUFFICIENT_BUFFER current buffer is too small, needs to be at least *buffer_size.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_scan_log_entry_get_information(System.IntPtr,System.Text.StringBuilder,System.Int32@)">
+            <summary>
+            Get short report on the scanning event from scan log entry.
+            </summary>
+            <param name="entry">Current valid log entry handle</param>
+            <param name="buffer">Buffer to store string</param>
+            <param name="buffer_size">Size of buffer in chars, on success it is set to length of string in buffer (with terminating NULL). When function fails with last error ESDK_E_INSUFFICIENT_BUFFER current buffer is too small, needs to be at least *buffer_size.</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_scan_log_entry_get_severity(System.IntPtr,System.IntPtr@)">
+            <summary>
+            Get severity from scan log entry.
+            </summary>
+            <param name="entry">Current valid log entry handle</param>
+            <param name="severity">One of enum ESDK_SCAN_LOG_SEVERITY</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_setup_packet_set_archives(System.IntPtr,System.Boolean)">
+            <summary>
+            Enable scan of archives. 
+            </summary>
+            <param name="setup_packet">Current valid setup packet handle</param>
+            <param name="value">false - disable (default), true - enable</param>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_setup_packet_set_boot_sectors(System.IntPtr,System.Boolean)">
+            <summary>
+            Enable scan of boot sectors. 
+            </summary>
+            <param name="setup_packet">Current valid setup packet handle </param>
+            <param name="value">false - disable (default), true - enable.</param>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_setup_packet_set_sfx(System.IntPtr,System.Boolean)">
+            <summary>
+            Enable scan of self extracting archives. 
+            </summary>
+            <param name="setup_packet">Current valid setup packet handle </param>
+            <param name="value">false - disable (default), true - enable.</param>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_setup_packet_set_rtp(System.IntPtr,System.Boolean)">
+            <summary>
+            Enable scan of runtime packers. 
+            </summary>
+            <param name="setup_packet">Current valid setup packet handle </param>
+            <param name="value">false - disable (default), true - enable.</param>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_setup_packet_set_mime(System.IntPtr,System.Boolean)">
+            <summary>
+            Enable scan of mime objects. 
+            </summary>
+            <param name="setup_packet">Current valid setup packet handle </param>
+            <param name="value">false - disable (default), true - enable.</param>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_setup_packet_set_log_all_files(System.IntPtr,System.Boolean)">
+            <summary>
+            Log also clean files in archives. 
+            </summary>
+            <param name="setup_packet">Current valid setup packet handle </param>
+            <param name="value">false - disable (default), true - enable.</param>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsdkw.esdk_version_string">
+            <summary>
+            Gets ESDK version in format: MAJOR.MINOR.RELEASE.BUILD
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.GEsetManagedWrapper">
+            <summary>
+            ESET support
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GEsetManagedWrapper.WorkingDirectory">
+            <summary>
+            Working directory to by used by antivirus. ESET uses it to store main SDK data (libraries, virus database etc.)
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsetManagedWrapper.SetLicenseKey(System.String)">
+            <summary>
+            Set license key
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsetManagedWrapper.Scan(System.String)">
+            <summary>
+            Kontrola na zadané cestě
+            </summary>
+            <param name="path">cesta</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsetManagedWrapper.GetAntivirusInfo">
+            <summary>
+            Získání informací o antiviru
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsetManagedWrapper.Dispose">
+            <summary>
+            Dispose
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GEsetManagedWrapper.InitIntervalMinutes">
+            <summary>
+            Interval for SDK reinitialization
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsetManagedWrapper.Init(System.String,System.Boolean)">
+            <summary>
+            Initialize SDK
+            </summary>
+            <param name="initDir">folder for initialization</param>
+            <param name="performUpdate">perform update</param>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsetManagedWrapper.ScanFile(System.String)">
+            <summary>
+            Scan file
+            </summary>
+            <param name="filePath"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.GAntivirusProviderBase">
+            <summary>
+            Antivirus provider base class
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.Antivirus.GAntivirusProviderBase.Logger">
+            <summary>
+            Logger
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.GWindowsDefenderCmdProvider">
+            <summary>
+            Provider pro Windows Defender
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GWindowsDefenderCmdProvider.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.Antivirus.GWindowsDefenderCmdProvider.InstallationDirPath">
+            <summary>
+            Installation path
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.GEsetCmdProvider">
+            <summary>
+            Provider pro ESET
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GEsetCmdProvider.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.GBitdefenderCmdProvider">
+            <summary>
+            Provider pro Bitdefender
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GBitdefenderCmdProvider.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.GCmdAntivirusProvider">
+            <summary>
+            Provider pro antiviry obsluhované z příkazové řádky
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GCmdAntivirusProvider.Info">
+            <summary>
+            Typ antiviru
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.Antivirus.GCmdAntivirusProvider.Logger">
+            <summary>
+            Logger
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GCmdAntivirusProvider.HKLMSoftwareRegistryPath">
+            <summary>
+            Cesta ke klíči antiviru v registrech
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GCmdAntivirusProvider.RegistryValueWithExePath">
+            <summary>
+            Název hodnoty v registrech, kde je zapsaný instalační adresář antiviru
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GCmdAntivirusProvider.CommandLineString">
+            <summary>
+            Argumenty příkazové řádky
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GCmdAntivirusProvider.ExeFileName">
+            <summary>
+            Název spouštěcího souboru
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GCmdAntivirusProvider.RunViaCmdExe">
+            <summary>
+            Run using cmd.exe
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GCmdAntivirusProvider.ProductInfoCommand">
+            <summary>
+            Info command
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GCmdAntivirusProvider.VirusBaseInfoCommand">
+            <summary>
+            Virus base info command
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GCmdAntivirusProvider.AllowScanDirectory">
+            <summary>
+            Allow scan directory
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.Antivirus.GCmdAntivirusProvider.InstallationDirPath">
+            <summary>
+            Cesta k instalačnímu adresáři antiviru
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GCmdAntivirusProvider.m_oScanParseDelegate">
+            <summary>
+            Delegát pro rozparsování výstupu
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GCmdAntivirusProvider.#ctor(Gordic.Support.Antivirus.GAntivirusInfo,System.String,System.String,System.String,System.String,Gordic.Support.Antivirus.ScanParse)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="type">Typ antiviru</param>
+            <param name="hKLMRegistryPath">Cesta ke klíči antiviru v registrech</param>
+            <param name="registryValueWithExePath">Název hodnoty v registrech, kde je zapsaný instalační adresář antiviru</param>
+            <param name="commandLineString">Argumenty příkazové řádky</param>
+            <param name="exeFileName">Název spouštěcího souboru</param>
+            <param name="parseDelegate">delegát pro rozparsování standartního výstupu</param>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GCmdAntivirusProvider.Scan(System.String)">
+            <summary>
+            Provede antivirovou kontrolu
+            </summary>
+            <param name="path">cesta pro kontrolu</param>
+            <returns>GScanInfo</returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GCmdAntivirusProvider.GetAntivirusInfo">
+            <summary>
+            Získání informací o antiviru
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GCmdAntivirusProvider.ParseOutput(System.Collections.Generic.List{System.String},System.String,Gordic.Support.Antivirus.GAntivirusInfo@,Gordic.DocConv.Common.GDocConvLog)">
+            <summary>
+            Rozparsování standartního výstupu
+            </summary>
+            <param name="output">hodnota výstupu</param>
+            <param name="testedPath">testovana cesta</param>
+            <param name="info">info o antiviru</param>
+            <param name="logger">logger</param>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.GAvast8CmdProvider">
+            <summary>
+            Provider pro AVAST 8 Pro
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GAvast8CmdProvider.#ctor">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.GAvg2018CmdProvider">
+            <summary>
+            Provider pro AVG obsluhované z příkazové řádky
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.GAvg2012CmdProvider">
+            <summary>
+            Provider pro AVG obsluhované z příkazové řádky
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.GAntivirusWorker">
+            <summary>
+            Práce s antiviry
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.Antivirus.GAntivirusWorker.Logger">
+            <summary>
+            Logger
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.Antivirus.GAntivirusWorker.LastScanInfo">
+            <summary>
+            Info o poslední kontrole
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.Antivirus.GAntivirusWorker.Type">
+            <summary>
+            Typ použitého antiviru
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.Antivirus.GAntivirusWorker.WorkingDirectory">
+            <summary>
+            Working directory to by used by antivirus. ESET uses it to store main SDK data (libraries, virus database etc.)
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GAntivirusWorker.SetLicenseKey(System.String)">
+            <summary>
+            Set license key
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GAntivirusWorker.#ctor(Gordic.Support.Antivirus.AntivirusType)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="type">typ antiviru</param>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GAntivirusWorker.Scan(System.String)">
+            <summary>
+            Otestování souboru na přítomnost viru
+            </summary>
+            <param name="testedPath">cesta pro otestování</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GAntivirusWorker.GetAntivirusInfo">
+            <summary>
+            Získání informací o antiviru - nejlépe volat po kontrole 
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GAntivirusWorker.CreateProvider(Gordic.Support.Antivirus.AntivirusType)">
+            <summary>
+            Create instance of antivirus provider
+            </summary>
+            <param name="type">antivirus type</param>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.G323GavrAntivirus">
+            <summary>
+            Práce s antivirem
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.G323GavrAntivirus.#ctor(System.String)">
+            <summary>
+            Konstruktor
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.G323GavrAntivirus.GetAntivirusInfo">
+            <summary>
+            Info o antivirovém systému
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.G323GavrAntivirus.Scan(System.String)">
+            <summary>
+            Zkontrolování vybraných souborů antivirem  
+            </summary>
+            <param name="path">cesta pro test</param>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.G323GavrAntivirus.Scan(System.String,System.String)">
+            <summary>
+            Zkontrolování vybraných souborů antivirem  
+            </summary>
+            <param name="path">cesta pro test</param>
+            <param name="paramGinAntivir">hodnota parametru gin_antivir</param>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.G323GavrAntivirCom">
+            <summary>
+            Práce s knihovnou antiviru
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.G323GavrAntivirCom.GICreateParameterList">
+            <summary>
+            Založ param list
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.G323GavrAntivirCom.GIDuplicateParameterList(System.Int32)">
+            <summary>
+            Duplicate param list
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.G323GavrAntivirCom.GICopyParameterList(System.Int32,System.Int32)">
+            <summary>
+            Copy param list
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.G323GavrAntivirCom.GIDestroyParameterList(System.Int32)">
+            <summary>
+            Zruš param list
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.G323GavrAntivirCom.GIPutParameterDataString(System.Int32,System.String,System.String)">
+            <summary>
+            Nastav parametr String
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.G323GavrAntivirCom.GIGetParameterDataString(System.Int32,System.String,System.Text.StringBuilder,System.UInt32)">
+            <summary>
+            Vrať parametr String
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.G323GavrAntivirCom.GIPutParameterDataNumber(System.Int32,System.String,System.Int32)">
+            <summary>
+            Nastav parametr Number
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.G323GavrAntivirCom.GIGetParameterDataNumber(System.Int32,System.String,System.Int32@)">
+            <summary>
+            Vrať parametr Number
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.G323GavrAntivirCom.GAVRInit">
+            <summary>
+            INIT GAVR
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.G323GavrAntivirCom.GAVRCleanup">
+            <summary>
+            GAVR vyčištění
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.G323GavrAntivirCom.GAVRProviderOpen(System.String,System.Int32)">
+            <summary>
+            Propojení s providerem
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.G323GavrAntivirCom.GAVRProviderClose(System.Int32)">
+            <summary>
+            Ukončení propojení s providerem
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.G323GavrAntivirCom.GAVRCheck(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Ověření
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.GScanInfo">
+            <summary>
+            Výsledek antivirové kontroly
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GScanInfo.ScannedPath">
+            <summary>
+            Cesta pro kontrolu
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GScanInfo.ScanTime">
+            <summary>
+            Čas kontroly
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GScanInfo.AntivirusVersion">
+            <summary>
+            Verze antiviru
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GScanInfo.AntivirusEngine">
+            <summary>
+            Verze antivirového enginu
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GScanInfo.VirusBaseVersion">
+            <summary>
+            Verze virové databáze
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GScanInfo.VirusesFound">
+            <summary>
+            Nalezené viry - seznam soubor-virus
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GScanInfo.AdditionalInfo">
+            <summary>
+            Dodatečné informace
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.Antivirus.GScanInfo.Result">
+            <summary>
+            Výsledek testu - TRUE = nenalezena infekce
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.Antivirus.GScanInfo.ResultText">
+            <summary>
+            Výsledek testu v textové podobě
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.GAntivirusInfo">
+            <summary>
+            Info o antiviru
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GAntivirusInfo.AVType">
+            <summary>
+            Typ antiviru
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GAntivirusInfo.Name">
+            <summary>
+            Název antiviru
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GAntivirusInfo.Version">
+            <summary>
+            Verze
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GAntivirusInfo.VersionDate">
+            <summary>
+            Datum verze
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GAntivirusInfo.Provider">
+            <summary>
+            Název providera
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GAntivirusInfo.VirusBase">
+            <summary>
+            Verze virové báze
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GAntivirusInfo.VirusBaseDate">
+            <summary>
+            Datum verze virové báze
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GAntivirusInfo.IsCapableOfScanningDirectory">
+            <summary>
+            Zda umí kontrolovat celé adresáře
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.GAntivirusInfo.IsFunctional">
+            <summary>
+            Zda je funkční
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GAntivirusInfo.#ctor(Gordic.Support.Antivirus.AntivirusType,System.String,System.String,System.Boolean)">
+            <summary>
+            Konstruktor
+            </summary>
+            <param name="type">Typ antiviru</param>
+            <param name="name">Název antiviru</param>
+            <param name="provider">Název providera</param>
+            <param name="capableOfDirScan">Zda umožnuje testovat celé adresáře</param>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.GAntivirusInfo.ToString">
+            <summary>
+            Přetížení ToString - vrátí název antiviru
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.AntivirusType">
+            <summary>
+            Výčet podporovaných antivirových kontrol
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.AntivirusType.Rucni">
+            <summary>
+            Rucni
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.AntivirusType.Zadna">
+            <summary>
+            Zadna
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.AntivirusType.Avast_do_verze_5">
+            <summary>
+            Avast do verze 5
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.AntivirusType.AVG_do_verze_12">
+            <summary>
+            AVG do verze 12
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.AntivirusType.AVG_od_verze_2011">
+            <summary>
+            AVG od verze 2011
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.AntivirusType.AVG_od_verze_2018">
+            <summary>
+            AVG od verze 2018
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.AntivirusType.Avast_od_verze_8">
+            <summary>
+            Avast od verze8
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.AntivirusType.Norton_Antivirus">
+            <summary>
+            Norton antivirus
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.AntivirusType.AMSI">
+            <summary>
+            Antimalware Scan Interface (obecné rozhraní Windows)
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.AntivirusType.AMSI_2">
+            <summary>
+            Antimalware Scan Interface (obecné rozhraní Windows) - záložní varianta
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.AntivirusType.ESET_API">
+            <summary>
+            ESET API
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.AntivirusType.ESET_CMD">
+            <summary>
+            ESET command line
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.AntivirusType.Bitdefender">
+            <summary>
+            BitDefender
+            </summary>
+        </member>
+        <member name="F:Gordic.Support.Antivirus.AntivirusType.WindowsDefender">
+            <summary>
+            Windows defender
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.Gordic_Support_Antivirus_Exceptions">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.Antivirus.Gordic_Support_Antivirus_Exceptions.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Gordic.Support.Antivirus.Gordic_Support_Antivirus_Exceptions.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.IGAntivirusProvider">
+            <summary>
+            Rozhraní pro antivirové providery
+            </summary>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.IGAntivirusProvider.Scan(System.String)">
+            <summary>
+            Kontrola na zadané cestě
+            </summary>
+            <param name="path">cesta</param>
+            <returns></returns>
+        </member>
+        <member name="M:Gordic.Support.Antivirus.IGAntivirusProvider.GetAntivirusInfo">
+            <summary>
+            Získání informací o antiviru
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Gordic.Support.Antivirus.IGAntivirusProvider.Logger">
+            <summary>
+            Logger
+            </summary>
+        </member>
+        <member name="T:Gordic.Support.Antivirus.ScanParse">
+            <summary>
+            delegát pro rozparsování standartního výstupu
+            </summary>
+            <param name="scanOutput">hodnota výstupu</param>
+            <param name="testedPath">testovaná cesta</param>
+            <param name="info">info o antiviru pro doplnění</param>
+            <param name="logger">logger</param>
+        </member>
+    </members>
+</doc>
