@@ -287,11 +287,48 @@ namespace Gordic.GFE.WinClient.Editor
         {
             StringBuilder sb = new StringBuilder();
 
-            foreach (string line in list)
-                sb.AppendLine(line);
+            int indentLevel = 0;
+            foreach (string line in SplitXmlLines(list))
+            {
+                string trimmedLine = line.Trim();
+                if (trimmedLine.Length == 0)
+                    continue;
+
+                if (trimmedLine.StartsWith("</"))
+                    indentLevel = Math.Max(0, indentLevel - 1);
+
+                sb.Append('\t', indentLevel);
+                sb.AppendLine(trimmedLine);
+
+                if (ShouldIncreaseIndent(trimmedLine))
+                    indentLevel++;
+            }
 
             return sb;
         }
+
+        static IEnumerable<string> SplitXmlLines(IEnumerable<string> list)
+        {
+            if (list == null)
+                yield break;
+
+            foreach (string item in list)
+            {
+                if (string.IsNullOrEmpty(item))
+                    continue;
+
+                foreach (string line in item.Replace("\r", string.Empty).Split('\n'))
+                    yield return line;
+            }
+        }
+
+        static bool ShouldIncreaseIndent(string line) =>
+            line.StartsWith("<")
+            && !line.StartsWith("</")
+            && !line.EndsWith("/>")
+            && !line.StartsWith("<?")
+            && !line.StartsWith("<!");
+
         void XMLCheckHeadSection(StackObject currentStackObject, ref StackProps stack, ref List<string> xMLtext)
         {
             if (stack.CurrentStack.Count > 0)

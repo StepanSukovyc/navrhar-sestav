@@ -431,6 +431,41 @@ namespace Gordic.GFE.WinClient.Editor._office
         /// <returns></returns>
         internal override bool IsEmpty() => Scripts.IsEmpty && FilterOut.IsNullOrEmpty() && FilterIn.IsNullOrEmpty();
 
+        string GetSimpleRegionName(List<string> currentStack)
+        {
+            if (Name == null)
+                return null;
+
+            if (!Name.Contains("."))
+                return Name;
+
+            if (currentStack == null || currentStack.Count == 0)
+            {
+                string[] rootNames = Name.Split('.');
+                return rootNames.Length > 0 ? rootNames.Last() : Name;
+            }
+
+            string currentPath = string.Join(".", currentStack);
+            List<string> regionParts = new List<string>(Name.Split('.'));
+            string result = regionParts.Last();
+            regionParts.RemoveAt(regionParts.Count - 1);
+
+            while (regionParts.Count > 0)
+            {
+                string regionPath = string.Join(".", regionParts);
+                if (regionPath == currentPath || currentPath.EndsWith("." + regionPath))
+                    return result;
+
+                result = regionParts.Last() + "." + result;
+                regionParts.RemoveAt(regionParts.Count - 1);
+
+                if (result.Count(c => c == '.') >= 1)
+                    return result;
+            }
+
+            return result;
+        }
+
         public OfficeAtomRegionItem()
         {
             AttrList = new GFEAttrList(UndoRedoService.Manager);
@@ -475,12 +510,13 @@ namespace Gordic.GFE.WinClient.Editor._office
         {
             bool needGuid = false;
             string result = "<region";
+            string regionName = GetSimpleRegionName(stackProps.RegionNames) ?? Name;
 
-            if (!string.IsNullOrEmpty(Name))
+            if (!string.IsNullOrEmpty(regionName))
             {
-                result += String.Format(" name=\"{0}\"", Name);
-                stackProps.RegionNames.Add(Name);
-                stackProps.CurrentStack.Add(new StackObject { Type = "region", Name = Name });
+                result += String.Format(" name=\"{0}\"", regionName);
+                stackProps.RegionNames.Add(regionName);
+                stackProps.CurrentStack.Add(new StackObject { Type = "region", Name = regionName });
             }
             if (sheet != 1)
                 result += String.Format(" sheet=\"{0}\"", sheet);
@@ -590,7 +626,7 @@ namespace Gordic.GFE.WinClient.Editor._office
                 {
                     if (lData.IsWellFormedXML(out string outMessage))
                     {
-                        XmlSerializer xmlSerializer = new XmlSerializer(typeof(OfficeAtomItem));
+                        XmlSerializer xmlSerializer = new XmlSerializer(typeof(OfficeAtomRegionItem));
                         using (StringReader textReader = new StringReader(lData))
                             result = (OfficeAtomRegionItem)xmlSerializer.Deserialize(textReader);
                     }
@@ -600,7 +636,15 @@ namespace Gordic.GFE.WinClient.Editor._office
                 }
 
                 if (result == null)
-                    result = (JsonConvert.DeserializeObject<OfficeAtomRegionItem>(lData));
+                {
+                    try
+                    {
+                        result = JsonConvert.DeserializeObject<OfficeAtomRegionItem>(lData);
+                    }
+                    catch
+                    {
+                    }
+                }
             }
             else
             {
@@ -702,7 +746,7 @@ namespace Gordic.GFE.WinClient.Editor._office
                 {
                     if (lData.IsWellFormedXML(out string outMessage))
                     {
-                        XmlSerializer xmlSerializer = new XmlSerializer(typeof(OfficeAtomItem));
+                        XmlSerializer xmlSerializer = new XmlSerializer(typeof(OfficeAtomGroupItem));
                         using (StringReader textReader = new StringReader(lData))
                             result = (OfficeAtomGroupItem)xmlSerializer.Deserialize(textReader);
                     }
@@ -711,7 +755,15 @@ namespace Gordic.GFE.WinClient.Editor._office
                 {
                 }
                 if (result == null)
-                    result = (JsonConvert.DeserializeObject<OfficeAtomGroupItem>(lData));
+                {
+                    try
+                    {
+                        result = JsonConvert.DeserializeObject<OfficeAtomGroupItem>(lData);
+                    }
+                    catch
+                    {
+                    }
+                }
             }
             else
             {
@@ -723,7 +775,6 @@ namespace Gordic.GFE.WinClient.Editor._office
                 result.ExcellComment?.Text(OfficeService.GetUpdatedCommentData(result.ExcellComment.Shape.AlternativeText, result.ToSerializeText()), CommonService.MISSVALUE, CommonService.MISSVALUE);
             };
             return result;
-
         }
 
         internal override void SetAttributes(XmlElement xmlElement, XmlDocument xmlDoc, string namespaceUri, bool withGuid)
@@ -795,23 +846,22 @@ namespace Gordic.GFE.WinClient.Editor._office
         {
             if (dyn is GFEFormatRegion reg)
             {
-                if (reg.Name != "ROOT")
-                {
-                    // nastavíme objekt
-                    Item = new OfficeAtomRegionItem()
-                    {
-                        Parent = this
-                    };
-                    Item.Init(Attributes, Variables);
-                    // přidáme objekt regionu/skupiny/položky
-                    dynamics.Add(Item);
-                }
-
                 if (reg.Attributes.Count > 0)
                     LoadAttributes(reg.Attributes);
 
                 if (reg.Variables.Count > 0)
                     LoadVariables(reg.Variables);
+
+                if (reg.Name != "ROOT")
+                {
+                    // nastavíme objekt až po načtení atributů, aby se neztratil name/guid/cell
+                    Item = new OfficeAtomRegionItem()
+                    {
+                        Parent = this
+                    };
+                    Item.Init(Attributes, Variables);
+                    dynamics.Add(Item);
+                }
 
                 // do regionu teď přidáme skupiny pokud existuji
                 // a zároveň získáme poslední skupinu, 
@@ -828,15 +878,6 @@ namespace Gordic.GFE.WinClient.Editor._office
             }
             else if (dyn is GFEFormatGroup grp)
             {
-                // nastavíme objekt
-                Item = new OfficeAtomGroupItem()
-                {
-                    Parent = this
-                };
-                Item.Init(Attributes, Variables);
-                // přidáme objekt regionu/skupiny/položky
-                dynamics.Add(Item);
-
                 atomType = "group";
                 if (!grp.Name.IsNullOrEmpty())
                     Attributes.Add("name", grp.Name);
@@ -851,24 +892,29 @@ namespace Gordic.GFE.WinClient.Editor._office
                     if (!string.IsNullOrEmpty(guid))
                         Attributes.Add("guid", guid);
                 }
-            }
-            else if (dyn is GFEFormatTag tag)
-            {
-                // nastavíme objekt
-                Item = new OfficeAtomItem()
+
+                Item = new OfficeAtomGroupItem()
                 {
                     Parent = this
                 };
                 Item.Init(Attributes, Variables);
-                // přidáme objekt regionu/skupiny/položky
                 dynamics.Add(Item);
-
+            }
+            else if (dyn is GFEFormatTag tag)
+            {
                 if (tag.Attributes.Count > 0)
                     LoadAttributes(tag.Attributes);
                 if (tag.Children.Count > 0)
                     LoadChildren(tag.Children, dynamics);
                 if ("value-of".Equals(tag.TagName))
                     atomType = "value-of";
+
+                Item = new OfficeAtomItem()
+                {
+                    Parent = this
+                };
+                Item.Init(Attributes, Variables);
+                dynamics.Add(Item);
             }
         }
 
@@ -1172,6 +1218,7 @@ namespace Gordic.GFE.WinClient.Editor._office
         string Sync(OfficeAtom activeAtom, string text, int id, string cellRef)
         {
             Guid guid = OfficeService.GetGuid(text);
+            string name = OfficeService.GetName(text);
 
             // pokud aktivní atom není, pak se jedná o objekt šablony bez objektu struktury
             if (activeAtom == null)
@@ -1230,16 +1277,17 @@ namespace Gordic.GFE.WinClient.Editor._office
                         activeAtom.Item.Guid = Convert.ToString(guid);
                         CommonService.AddParametr("guid", activeAtom.Item.Guid, activeAtom.Attributes);
 
-                        if (activeAtom.Item.Name.IsNullOrEmpty())
-                        {
-                            activeAtom.Item.Name = OfficeService.GetName(text);
-                            CommonService.AddParametr("name", activeAtom.Item.Name, activeAtom.Attributes);
-                        }
                     }
                     else
                         // jinak aktualizujeme GUID šablony dle objektu
                         text = text.Replace(Convert.ToString(guid), lGuid);
                 }
+            }
+
+            if (activeAtom.Item != null && activeAtom.Item.Name.IsNullOrEmpty() && !name.IsNullOrEmpty())
+            {
+                activeAtom.Item.Name = name;
+                CommonService.AddParametr("name", activeAtom.Item.Name, activeAtom.Attributes);
             }
 
             if (activeAtom.ID == 0)

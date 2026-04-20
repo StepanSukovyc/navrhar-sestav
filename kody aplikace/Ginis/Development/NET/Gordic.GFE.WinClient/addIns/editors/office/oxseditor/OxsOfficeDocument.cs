@@ -404,12 +404,16 @@ namespace Gordic.GFE.WinClient.Editor
                         {
                             // pokud se nejedná o vnořenou skupinu
                             bool logToBreak = !(text.Contains(CommonService.MSE_BEGIN_SECTION_BODY) && item is OfficeAtomGroupItem);
+                            bool matchesByName = !string.IsNullOrEmpty(name)
+                                && !string.IsNullOrEmpty(item.Name)
+                                && (item.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase)
+                                    || item.Name.EndsWith(string.Format(".{0}", name), StringComparison.InvariantCultureIgnoreCase));
 
                             if (
                                 // pokud buňky jsou stejné - jedná se nejspíše o value-of
                                 item.CellRef == cellAddress
-                                // nebo sedí jména - jedná se o úplná jména
-                                || item.Name.Equals(name)
+                                // nebo sedí jména včetně zkráceného názvu komentáře
+                                || matchesByName
                                 // nebo se jedná o skupinu
                                 || isGroup
                                 )
@@ -485,11 +489,16 @@ namespace Gordic.GFE.WinClient.Editor
                 }
                 else
                 {
-                    Dictionary<string, string> a = (item.Item.Attributes as Dictionary<string, string>).FindAllByKey(x => x == "name" || x == "cell");
+                    Dictionary<string, string> a = (item.Item.Attributes as Dictionary<string, string>).FindAllByKey(x => x == "name" || x == "cell" || x == "guid");
                     if (a.Count > 0)
                     {
                         string itemFullName = GetFullName(item.Item);
-                        a = a.FindAllByValue(x => x == name || x == cellAddress || ("region".Equals(item.Item.TagName) && name.EndsWith(itemFullName)));
+                        bool nameMatches = !string.IsNullOrEmpty(name)
+                            && (!string.IsNullOrEmpty(itemFullName)
+                                && (itemFullName.Equals(name, StringComparison.InvariantCultureIgnoreCase)
+                                    || itemFullName.EndsWith(string.Format(".{0}", name), StringComparison.InvariantCultureIgnoreCase)));
+
+                        a = a.FindAllByValue(x => x == guid || x == name || x == cellAddress || nameMatches);
                         if (a.Count > 0)
                         {
                             if (item.Item.GetType().Name == "GFEFormatRTFItem")
