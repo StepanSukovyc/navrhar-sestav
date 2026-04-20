@@ -17,6 +17,7 @@ using Gordic.GFE.WinClient.Gui;
 using Gordic.GFE.WinClient.InfoSectionView;
 using System;
 using System.Drawing;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Gordic.GFE.WinClient.Editor
@@ -123,12 +124,6 @@ namespace Gordic.GFE.WinClient.Editor
         public IViewContent Content { get => view; }
         #endregion
 
-        readonly System.Windows.Forms.Timer _resizeDebounceTimer = new System.Windows.Forms.Timer { Interval = 60 };
-        readonly System.Windows.Forms.Timer _showRetryTimer = new System.Windows.Forms.Timer { Interval = 80 };
-        DateTime _showStartedAt;
-        bool _isDisposed;
-        const int ShowRetryTimeoutMs = 4000;
-
         /// <summary>
         /// 
         /// </summary>
@@ -149,68 +144,15 @@ namespace Gordic.GFE.WinClient.Editor
         private MseContainerControl()
         {
             InitializeComponent();
-
-            // Debounce resize
-            _resizeDebounceTimer.Tick += (s, e) =>
-            {
-                _resizeDebounceTimer.Stop();
-                ResizeEmbeddedWindow();
-            };
-
-            // Retry ShowDocument dokud nevznikne OfficeWnd
-            _showRetryTimer.Tick += (s, e) =>
-            {
-                if (document == null || _isDisposed)
-                {
-                    _showRetryTimer.Stop();
-                    return;
-                }
-
-                // Timeout ochrana
-                if ((DateTime.Now - _showStartedAt).TotalMilliseconds > ShowRetryTimeoutMs)
-                {
-                    _showRetryTimer.Stop();
-                    ShowErrorMessage("Nepodařilo se inicializovat okno Office v časovém limitu.");
-                    return;
-                }
-
-                // Je okno už k dispozici?
-                if (document.OfficeWnd != IntPtr.Zero && IsHandleCreated)
-                    try
-                    {
-                        SafeAttachAndLayout();
-
-                        _showRetryTimer.Stop();
-                    }
-                    catch (Exception ex)
-                    {
-                        _showRetryTimer.Stop();
-                        ShowErrorMessage("Chyba při vkládání okna Office do kontejneru: " + ex.Message);
-                    }
-            };
         }
 
-        readonly IViewContent view;
+        IViewContent view;
         /// <summary>
         /// Vytvoření nové instance třídy
         /// </summary>
         public MseContainerControl(IViewContent pView) : this()
         {
             this.view = pView;
-        }
-
-        protected override void OnHandleCreated(EventArgs e)
-        {
-            base.OnHandleCreated(e);
-
-            // Pokud už existuje načtený dokument (LoadXml mohl proběhnout dříve), zajistíme zobrazení nyní.
-            if (!errorVisible && document != null)
-                BeginInvoke(new Action(ShowDocumentSafe));
-        }
-
-        protected override void OnHandleDestroyed(EventArgs e)
-        {
-            base.OnHandleDestroyed(e);
         }
 
         /// <summary>
@@ -231,109 +173,34 @@ namespace Gordic.GFE.WinClient.Editor
 
             document.Load(CompilationService.Units[primaryFile].FileContent.Content);
 
-            if (IsHandleCreated)
-                ShowDocumentSafe();
-        }
-
-        void ShowDocumentSafe()
-        {
-            if (_isDisposed || errorVisible || document == null)
-                return;
-
-            if (InvokeRequired)
-            {
-                BeginInvoke(new Action(ShowDocumentSafe));
-                return;
-            }
-
-            try
-            {
-                DocumentAppPointer = document.ShowDocument(this.Handle, this.Bounds);
-                _showStartedAt = DateTime.Now;
-
-                if (document.OfficeWnd != IntPtr.Zero)                
-                    SafeAttachAndLayout();
-                else
-                {
-                    _showRetryTimer.Stop();
-                    _showRetryTimer.Start();
-                }
-            }
-            catch (Exception ex)
-            {
-                ShowErrorMessage("Nepodařilo se zobrazit dokument: " + ex.Message);
-            }
-        }
-
-        void SafeAttachAndLayout()
-        {
-            if (document == null || document.OfficeWnd == IntPtr.Zero || !IsHandleCreated)
-                return;
-
-            NativeMethods.SetParent(document.OfficeWnd, this.Handle);
-            // WS_CHILD (0x40000000), WS_VISIBLE (0x10000000)
-            const int GWL_STYLE = -16;
-            const int WS_CHILD = unchecked((int)0x40000000);
-            const int WS_VISIBLE = 0x10000000;
-
-            int style = NativeMethods.GetWindowLong(document.OfficeWnd, GWL_STYLE);
-            style |= WS_CHILD | WS_VISIBLE;
-            NativeMethods.SetWindowLong(document.OfficeWnd, GWL_STYLE, style);
-
-            ResizeEmbeddedWindow();
-        }
-
-        void ResizeEmbeddedWindow()
-        {
-            if (document == null || document.OfficeWnd == IntPtr.Zero || !IsHandleCreated)
-                return;
-
-            var rc = this.ClientRectangle;
-            const int SWP_NOZORDER = 0x0004;
-            const int SWP_NOACTIVATE = 0x0010;
-            NativeMethods.SetWindowPos(document.OfficeWnd, IntPtr.Zero, 0, 0, rc.Width, rc.Height, SWP_NOZORDER | SWP_NOACTIVATE);
+            ShowDocument();
         }
 
         /// <exclude/>
         protected override void OnResize(EventArgs e)
         {
-            base.OnResize(e);
+            if (document == null)
+                return;
 
-            if (document == null) return;
-
-            _resizeDebounceTimer.Stop();
-            _resizeDebounceTimer.Start();
+            if (document.OfficeWnd != IntPtr.Zero)
+                NativeMethods.MoveWindow(document.OfficeWnd, 0, 0, Bounds.Width, Bounds.Height, true);
+            // počkáme, až se OFFICE vypořádá s dokumentem
+            Thread.Sleep(ReportDesignerProperties.Instance.RtfThreadSleep);
         }
 
         /// <exclude/>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && !_isDisposed)
+            if (disposing)
             {
-                _isDisposed = true;
-
-                try
-                {
-                    _resizeDebounceTimer.Stop();
-                    _resizeDebounceTimer.Dispose();
-                    _showRetryTimer.Stop();
-                    _showRetryTimer.Dispose();
-                }
-                catch { }
-
-                try
-                {
-                    if (PrimaryFile != null && document != null)
-                        document.CloseDocument(PrimaryFile);
-                }
-                catch { }
+                if (PrimaryFile != null && document != null)
+                    document.CloseDocument(PrimaryFile);
 
                 PropertyPad.PropertyValueChanged -= PvChanged;
                 InfoSectionViewPad.TreeChanged -= IsTreeChanged;
                 if (SimpleDesktop.Desktop != null)
                     SimpleDesktop.Desktop.ActiveViewContentChanged -= this.SavcChangedHandler;
 
-                errMessTextBox?.Dispose();
                 DocumentAppPointer = IntPtr.Zero;
             }
             base.Dispose(disposing);

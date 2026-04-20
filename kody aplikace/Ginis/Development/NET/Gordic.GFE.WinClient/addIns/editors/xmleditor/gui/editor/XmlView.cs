@@ -94,12 +94,6 @@ namespace Gordic.GFE.WinClient.XmlEditor.Gui.Editor
         protected XmlTreeView lXmlTreeView;
 
         /// <summary>
-        /// Indikuje, že pro tento soubor má být použito XML highlighting (dle obsahu)
-        /// </summary>
-        bool useXmlHighlighting = false;
-
-
-        /// <summary>
         /// Vytvoření nové instance třídy
         /// </summary>
         public XmlView() { }
@@ -696,11 +690,8 @@ namespace Gordic.GFE.WinClient.XmlEditor.Gui.Editor
                     stream.Position = position;
 
                     if (ParserService.IsWellFormedXML(content, out string _))
-                    {
                         // Použij .xml příponu pro LoadFile → automaticky nastaví XML highlighting
                         loadFileName = Path.ChangeExtension(file.ContentFileName, ".xml");
-                        useXmlHighlighting = true;
-                    }
                 }
             }
 

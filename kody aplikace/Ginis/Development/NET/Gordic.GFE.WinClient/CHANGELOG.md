@@ -2,6 +2,12 @@
 
 ## 2026-04-20
 
+### 18:48:32 Oprava MSE embedu Excelu
+
+- Zjednodusen `MseContainerControl`, aby pri otevreni MSE sestavy pouzival standardni zobrazeni dokumentu bez vlastni retry a reattach logiky.
+- Odebrano dodatecne preparentovavani a odlozene prekreslovani Excel okna, ktere zpusobovalo nekorektni prvni zobrazeni MSE editoru.
+- Chovani MSE embed kontejneru bylo sjednoceno s funkcnim pristupem pouzivanym v OXS editoru, aby prvni otevreni Excelu nabehlo korektne.
+
 ### Opravy OXS editoru a generovani ALF
 
 - Opraveno rozpadani posledniho regionu po prepnuti OXS sestavy z Navrhu zpet do kodu pri zmene samotneho formatovani bunky.

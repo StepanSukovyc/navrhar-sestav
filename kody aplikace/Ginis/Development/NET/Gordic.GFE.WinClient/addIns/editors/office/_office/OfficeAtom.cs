@@ -204,7 +204,7 @@ namespace Gordic.GFE.WinClient.Editor._office
         {
             try
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(OfficeAtomItem));
+                XmlSerializer serializer = GSerializerFactory.GetXmlSerializer(typeof(OfficeAtomItem));
                 // Serialize the object to a StringWriter or a StreamWriter.  
                 using (StringWriter stringWriter = new StringWriter())
                 {
@@ -235,7 +235,7 @@ namespace Gordic.GFE.WinClient.Editor._office
                 {
                     if (lData.IsWellFormedXML(out string outMessage))
                     {
-                        XmlSerializer xmlSerializer = new XmlSerializer(typeof(OfficeAtomItem));
+                        XmlSerializer xmlSerializer = GSerializerFactory.GetXmlSerializer(typeof(OfficeAtomItem));
                         using (StringReader textReader = new StringReader(lData))
                             result = (OfficeAtomItem)xmlSerializer.Deserialize(textReader);
                     }
@@ -595,7 +595,7 @@ namespace Gordic.GFE.WinClient.Editor._office
         {
             try
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(OfficeAtomRegionItem));
+                XmlSerializer serializer = GSerializerFactory.GetXmlSerializer(typeof(OfficeAtomRegionItem));
                 // Serialize the object to a StringWriter or a StreamWriter.  
                 using (StringWriter stringWriter = new StringWriter())
                 {
@@ -626,7 +626,7 @@ namespace Gordic.GFE.WinClient.Editor._office
                 {
                     if (lData.IsWellFormedXML(out string outMessage))
                     {
-                        XmlSerializer xmlSerializer = new XmlSerializer(typeof(OfficeAtomRegionItem));
+                        XmlSerializer xmlSerializer = GSerializerFactory.GetXmlSerializer(typeof(OfficeAtomRegionItem));
                         using (StringReader textReader = new StringReader(lData))
                             result = (OfficeAtomRegionItem)xmlSerializer.Deserialize(textReader);
                     }
@@ -716,7 +716,7 @@ namespace Gordic.GFE.WinClient.Editor._office
         {
             try
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(OfficeAtomGroupItem));
+                XmlSerializer serializer = GSerializerFactory.GetXmlSerializer(typeof(OfficeAtomGroupItem));
                 // Serialize the object to a StringWriter or a StreamWriter.  
                 using (StringWriter stringWriter = new StringWriter())
                 {
@@ -746,7 +746,7 @@ namespace Gordic.GFE.WinClient.Editor._office
                 {
                     if (lData.IsWellFormedXML(out string outMessage))
                     {
-                        XmlSerializer xmlSerializer = new XmlSerializer(typeof(OfficeAtomGroupItem));
+                        XmlSerializer xmlSerializer = GSerializerFactory.GetXmlSerializer(typeof(OfficeAtomGroupItem));
                         using (StringReader textReader = new StringReader(lData))
                             result = (OfficeAtomGroupItem)xmlSerializer.Deserialize(textReader);
                     }
@@ -775,6 +775,8 @@ namespace Gordic.GFE.WinClient.Editor._office
                 result.ExcellComment?.Text(OfficeService.GetUpdatedCommentData(result.ExcellComment.Shape.AlternativeText, result.ToSerializeText()), CommonService.MISSVALUE, CommonService.MISSVALUE);
             };
             return result;
+
+
         }
 
         internal override void SetAttributes(XmlElement xmlElement, XmlDocument xmlDoc, string namespaceUri, bool withGuid)
@@ -1356,24 +1358,6 @@ namespace Gordic.GFE.WinClient.Editor._office
             return oa;
         }
 
-        OfficeAtom getAtomByID(string id)
-        {
-            OfficeAtom atm = sectionPointer;
-            while (atm.parent != null)
-                atm = atm.parent;
-            return getAtomByID(atm, id);
-        }
-
-        bool existsAtom(Guid guid, int ID) => getAtomByGuid(guid, ID) != null;
-
-        OfficeAtom getAtomByGuid(Guid guid, int ID)
-        {
-            OfficeAtom atm = sectionPointer;
-            while (atm.parent != null)
-                atm = atm.parent;
-            return GetByGuid(guid, ID, atm);
-        }
-
         OfficeAtom getAtomByID(OfficeAtom atm, string id)
         {
             OfficeAtom oa = atm.Children.FirstOrNull(item => Convert.ToString(item.ID).Equals(id));
@@ -1394,12 +1378,12 @@ namespace Gordic.GFE.WinClient.Editor._office
             }
             return null;
         }
-        bool sameGui(OfficeAtom item, string guid, int ID, string cellAddress) => CommonService.GetParametr("guid", item.Attributes).Equals(guid) && item.ID == ID || cellAddress.Equals(item.Item?.CellRef);
-        bool sameGui(OfficeAtom item, string guid, int ID) => CommonService.GetParametr("guid", item.Attributes).Equals(guid) && item.ID == ID;
+        bool sameGui(OfficeAtom item, string guid, int lId, string cellAddress) => CommonService.GetParametr("guid", item.Attributes).Equals(guid) && item.ID == lId || cellAddress.Equals(item.Item?.CellRef);
+        bool sameGui(OfficeAtom item, string guid, int lId) => CommonService.GetParametr("guid", item.Attributes).Equals(guid) && item.ID == lId;
         bool sameGui(OfficeAtom item, string guid, string cellAddress) => CommonService.GetParametr("guid", item.Attributes).Equals(guid) || cellAddress.Equals(item.Item?.CellRef);
         bool sameGui(OfficeAtom item, string guid) => CommonService.GetParametr("guid", item.Attributes).Equals(guid);
-        internal OfficeAtom GetByGuid(Guid guid, int ID, string cellAddress, OfficeAtom item = null) => GetByGuid(Convert.ToString(guid), ID, cellAddress, item);
-        internal OfficeAtom GetByGuid(string guid, int ID, string cellAddress, OfficeAtom item = null)
+        internal OfficeAtom GetByGuid(Guid guid, int lId, string cellAddress, OfficeAtom item = null) => GetByGuid(Convert.ToString(guid), lId, cellAddress, item);
+        internal OfficeAtom GetByGuid(string guid, int lId, string cellAddress, OfficeAtom item = null)
         {
             item = item ?? this;
 
@@ -1440,22 +1424,22 @@ namespace Gordic.GFE.WinClient.Editor._office
             return null;
         }
 
-        internal OfficeAtom GetByGuid(Guid guid, int ID, OfficeAtom item = null) => GetByGuid(Convert.ToString(guid), ID, item);
+        internal OfficeAtom GetByGuid(Guid guid, int lId, OfficeAtom item = null) => GetByGuid(Convert.ToString(guid), lId, item);
 
-        internal OfficeAtom GetByGuid(string guid, int ID, OfficeAtom item = null)
+        internal OfficeAtom GetByGuid(string guid, int lId, OfficeAtom item = null)
         {
             item = item ?? this;
 
-            OfficeAtom result = sameGui(item, guid, ID)
+            OfficeAtom result = sameGui(item, guid, lId)
                 ? item
-                : (item.Head.Find(_item => sameGui(_item, guid, ID))
-                ?? item.Foot.Find(_item => sameGui(_item, guid, ID))
-                ?? item.Children.Find(_item => sameGui(_item, guid, ID))
-                ?? item.Body.Find(_item => sameGui(_item, guid, ID)));
+                : (item.Head.Find(_item => sameGui(_item, guid, lId))
+                ?? item.Foot.Find(_item => sameGui(_item, guid, lId))
+                ?? item.Children.Find(_item => sameGui(_item, guid, lId))
+                ?? item.Body.Find(_item => sameGui(_item, guid, lId)));
             if (result == null)
                 foreach (OfficeAtom oa in item.Body)
                 {
-                    result = GetByGuid(guid, ID, oa);
+                    result = GetByGuid(guid, lId, oa);
                     if (result != null)
                         return result;
                 }
@@ -1469,7 +1453,7 @@ namespace Gordic.GFE.WinClient.Editor._office
             if (result == null)
                 foreach (OfficeAtom oa in item.Groups)
                 {
-                    result = GetByGuid(guid, ID, oa);
+                    result = GetByGuid(guid, lId, oa);
                     if (result != null)
                         return result;
                 }
