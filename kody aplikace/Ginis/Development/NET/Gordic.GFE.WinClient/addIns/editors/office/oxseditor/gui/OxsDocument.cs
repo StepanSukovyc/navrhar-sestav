@@ -129,14 +129,17 @@ namespace Gordic.GFE.WinClient.Editor
                         {
                             Int32.TryParse(RemoveTextSymbols(lastRegionCellAddress), out int from);
                             // pokud mezi regiony je prostor
-                            if ((from + 1) <= (to - 1))
+                            if ((from + 1) <= (to - 1) && CanInsertCopyAndFill(stack))
                                 // přidáme copy-and-fill
                                 XMLtext.Add(String.Format("<copy-and-fill from=\"{0}\" to=\"{1}\" />", from + 1, to - 1));
                         }
                         isAfterRegion = false;
 
                         if (OfficeService.IsItemByComment(text))
+                        {
                             XMLtext.Add(OfficeAtomItem.FromSerializeText(text, cellAddress).GetXml(ref stack));
+                            MarkCurrentSectionHasValueOf(stack);
+                        }
                         else
                         {
                             if (OfficeService.IsGroupByComment(text))
@@ -207,7 +210,7 @@ namespace Gordic.GFE.WinClient.Editor
                             {
                                 Int32.TryParse(RemoveTextSymbols(lastCellAddress), out int from);
                                 // pokud mezi regiony je prostor
-                                if ((from + 1) <= (to - 1))
+                                if ((from + 1) <= (to - 1) && CanInsertCopyAndFill(stack))
                                     // přidáme copy-and-fill
                                     XMLtext.Add(String.Format("<copy-and-fill from=\"{0}\" to=\"{1}\" />", from + 1, to - 1));
 
@@ -346,11 +349,44 @@ namespace Gordic.GFE.WinClient.Editor
 
         void checkAndSetCopyAndFill(StackObject currentStackObject, StackProps stack, ref List<string> xMLtext)
         {
-            StackObject lastStack = stack.CurrentStack.Last();
+            StackObject lastStack = GetCurrentSection(stack);
+            if (lastStack == null || lastStack.HasValueOf)
+                return;
+
             // pokud mezi objekty je prostor
             if ((lastStack.Index + 1) <= (currentStackObject.Index - 1))
                 // přidáme copy-and-fill
                 xMLtext.Add(String.Format("<copy-and-fill from=\"{0}\" to=\"{1}\" />", lastStack.Index + 1, currentStackObject.Index - 1));
+        }
+
+        static void MarkCurrentSectionHasValueOf(StackProps stack)
+        {
+            StackObject currentSection = GetCurrentSection(stack);
+            if (currentSection == null)
+                return;
+
+            currentSection.HasValueOf = true;
+        }
+
+        static bool CanInsertCopyAndFill(StackProps stack)
+        {
+            StackObject currentSection = GetCurrentSection(stack);
+            return currentSection == null || !currentSection.HasValueOf;
+        }
+
+        static StackObject GetCurrentSection(StackProps stack)
+        {
+            if (stack?.CurrentStack == null)
+                return null;
+
+            for (int index = stack.CurrentStack.Count - 1; index >= 0; index--)
+            {
+                StackObject stackObject = stack.CurrentStack[index];
+                if (stackObject.Type == "head" || stackObject.Type == "body" || stackObject.Type == "foot")
+                    return stackObject;
+            }
+
+            return null;
         }
 
         void XMLCheckBodySection(string text, ref StackProps stack, ref List<string> xMLtext)

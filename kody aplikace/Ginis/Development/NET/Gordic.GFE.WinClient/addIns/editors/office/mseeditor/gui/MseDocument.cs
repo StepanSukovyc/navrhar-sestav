@@ -167,7 +167,7 @@ namespace Gordic.GFE.WinClient.Editor
                     if (_commentName.ToLowerInvariant().Equals(p_regName.ToLowerInvariant()))
                     {
                         //Položky se mohou objevít nedřivé než o řádek níž
-                        XmlElement _xmlCopyAndFill = OfficeUtil.GetCopyAndFill((Sheet.Comments[p_commentIndex].Parent as Excel.Range).Row + 1, p_regName.Split('.').Last(), xmlDoc, Sheet, namespaceUri, mseOfficeDocument.atom, ref p_commentIndex);
+                        XmlElement _xmlCopyAndFill = OfficeUtil.GetCopyAndFill((Sheet.Comments[p_commentIndex].Parent as Excel.Range).Row + 1, p_regName.Split('.').Last(), xmlDoc, Sheet, namespaceUri, mseOfficeDocument.atom, ref p_commentIndex, _xmlBody);
                         //Pokud nějaké položky v sekci jsou, pak sekci přidáme
                         if (_xmlCopyAndFill != null)
                             _xmlBody.AppendChild(_xmlCopyAndFill);
@@ -181,7 +181,7 @@ namespace Gordic.GFE.WinClient.Editor
                     _xmlBody.AppendChild(_xmlNested);
 
                     //TEST
-                    XmlElement _xmlCAF = OfficeUtil.GetCopyAndFill((Sheet.Comments[p_commentIndex].Parent as Excel.Range).Row + 1, p_regName.Split('.').Last(), xmlDoc, Sheet, namespaceUri, mseOfficeDocument.atom, ref p_commentIndex);
+                    XmlElement _xmlCAF = OfficeUtil.GetCopyAndFill((Sheet.Comments[p_commentIndex].Parent as Excel.Range).Row + 1, p_regName.Split('.').Last(), xmlDoc, Sheet, namespaceUri, mseOfficeDocument.atom, ref p_commentIndex, _xmlBody);
                     //Pokud nějaké položky v sekci jsou, pak sekci přidáme
                     if (_xmlCAF != null)
                         _xmlBody.AppendChild(_xmlCAF);
@@ -192,7 +192,7 @@ namespace Gordic.GFE.WinClient.Editor
                 else if (_text.Contains(CommonService.MSE_FIELD))
                 {
                     p_commentIndex--;
-                    XmlElement _xmlCopyAndFill = OfficeUtil.GetCopyAndFill((Sheet.Comments[p_commentIndex == 0 ? 1 : p_commentIndex].Parent as Excel.Range).Row, p_regName.Split('.').Last(), xmlDoc, Sheet, namespaceUri, mseOfficeDocument.atom, ref p_commentIndex);
+                    XmlElement _xmlCopyAndFill = OfficeUtil.GetCopyAndFill((Sheet.Comments[p_commentIndex == 0 ? 1 : p_commentIndex].Parent as Excel.Range).Row, p_regName.Split('.').Last(), xmlDoc, Sheet, namespaceUri, mseOfficeDocument.atom, ref p_commentIndex, _xmlBody);
                     //Pokud nějaké položky v sekci jsou, pak sekci přidáme
                     if (_xmlCopyAndFill != null)
                         _xmlBody.AppendChild(_xmlCopyAndFill);
@@ -218,7 +218,7 @@ namespace Gordic.GFE.WinClient.Editor
                         _xmlBody.AppendChild(_xmlNested);
 
                         //TEST
-                        XmlElement _xmlCopyAndFill = OfficeUtil.GetCopyAndFill((Sheet.Comments[p_commentIndex].Parent as Excel.Range).Row + 1, p_regName.Split('.').Last(), xmlDoc, Sheet, namespaceUri, mseOfficeDocument.atom, ref p_commentIndex);
+                        XmlElement _xmlCopyAndFill = OfficeUtil.GetCopyAndFill((Sheet.Comments[p_commentIndex].Parent as Excel.Range).Row + 1, p_regName.Split('.').Last(), xmlDoc, Sheet, namespaceUri, mseOfficeDocument.atom, ref p_commentIndex, _xmlBody);
                         //Pokud nějaké položky v sekci jsou, pak sekci přidáme
                         if (_xmlCopyAndFill != null)
                             _xmlBody.AppendChild(_xmlCopyAndFill);
@@ -251,7 +251,7 @@ namespace Gordic.GFE.WinClient.Editor
                         XmlElement _xmlNested = GetRegion(_commentName, Convert.ToString(_guid), ID, ref p_commentIndex);
                         _xmlBody.AppendChild(_xmlNested);
                         //TEST
-                        XmlElement _xmlCopyAndFill = OfficeUtil.GetCopyAndFill((Sheet.Comments[p_commentIndex].Parent as Excel.Range).Row + 1, p_regName.Split('.').Last(), xmlDoc, Sheet, namespaceUri, mseOfficeDocument.atom, ref p_commentIndex);
+                        XmlElement _xmlCopyAndFill = OfficeUtil.GetCopyAndFill((Sheet.Comments[p_commentIndex].Parent as Excel.Range).Row + 1, p_regName.Split('.').Last(), xmlDoc, Sheet, namespaceUri, mseOfficeDocument.atom, ref p_commentIndex, _xmlBody);
                         //Pokud nějaké položky v sekci jsou, pak sekci přidáme
                         if (_xmlCopyAndFill != null)
                             _xmlBody.AppendChild(_xmlCopyAndFill);
@@ -286,7 +286,7 @@ namespace Gordic.GFE.WinClient.Editor
             //p_index++;
 
             //Získáme a připojíme sekci datových položek
-            XmlElement _xmlCopyAndFill = OfficeUtil.GetCopyAndFill((Sheet.Comments[p_index].Parent as Excel.Range).Row + 1, regname, xmlDoc, Sheet, namespaceUri, mseOfficeDocument.atom, ref p_index);
+            XmlElement _xmlCopyAndFill = OfficeUtil.GetCopyAndFill((Sheet.Comments[p_index].Parent as Excel.Range).Row + 1, regname, xmlDoc, Sheet, namespaceUri, mseOfficeDocument.atom, ref p_index, _xmlFoot);
             //XmlElement _xmlCopyAndFill = GetCopyAndFill(xmlDoc, ref p_index);
             //Pokud nějaké položky v sekci jsou, pak sekci přidáme
             //if (_xmlCopyAndFill.ChildNodes.Count != 0)

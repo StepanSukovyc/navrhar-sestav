@@ -2,6 +2,12 @@
 
 ## 2026-04-21
 
+### 08:34:00 Oprava generovani copy-and-fill v MSE a OXS sekcich
+
+- Opravena tvorba fallback `copy-and-fill` pri generovani ALF z MSE a OXS sablon, aby se nevkladal do sekce `head`, `body` ani `foot`, pokud uz dana sekce obsahuje alespon jedno `value-of`.
+- Uprava se propsala do XML generovani pres `OfficeUtil` i do textoveho skladani OXS v `OxsDocument`, aby se stejne pravidlo uplatnilo konzistentne ve vsech blocich sestavy.
+- Tim se odstraňuje chybny vystup, kdy se do jednoho bloku kombinoval realny obsah `value-of` s prazdnym fallback `copy-and-fill`, coz vedlo k nefunkcnimu nebo zavadejicimu ALF kodu.
+
 ### 07:12:52 Oprava nacitani nove OXS sestavy bez fyzickeho souboru
 
 - Upraveno vytvareni nove neulozene ALF/OXS sestavy, aby WinClient pro jeji obsah vytvoril docasny backing soubor a nepracoval jen s relativnim pseudo-nazvem.

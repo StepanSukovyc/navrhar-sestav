@@ -43,7 +43,7 @@ namespace Gordic.GFE.WinClient.Editor
             //Získáme a připojíme sekci datových položek
             if ("mse".Equals(type))
             {
-                XmlElement xmlCopyAndFill = GetCopyAndFill((Sheet.Comments[p_index].Parent as Excel.Range).Row + 1, regname, xmlDoc, Sheet, namespaceUri, null, ref p_index);
+                XmlElement xmlCopyAndFill = GetCopyAndFill((Sheet.Comments[p_index].Parent as Excel.Range).Row + 1, regname, xmlDoc, Sheet, namespaceUri, null, ref p_index, xmlHead);
                 //Pokud nějaké položky v sekci jsou, pak sekci přidáme
                 if (xmlCopyAndFill != null)
                     xmlHead.AppendChild(xmlCopyAndFill);
@@ -81,7 +81,7 @@ namespace Gordic.GFE.WinClient.Editor
                     else if (IsBeginRegionSection(text) || text.Contains(CommonService.MSE_END_SECTION))
                     {
                         p_comment--;
-                        if (commentRowIndex > p_index && !isFrom)
+                        if (commentRowIndex > p_index && !isFrom && !SectionContainsValueOf(xmlParent))
                         {
                             // případ sekce bez datové položky
                             XmlElement xmlCopyAndFill = xmlDoc.CreateElement("copy-and-fill", namespaceUri);
@@ -95,7 +95,7 @@ namespace Gordic.GFE.WinClient.Editor
             }
         }
 
-        internal static XmlElement GetCopyAndFill(int p_index, string regname, XmlDocument xmlDoc, Excel._Worksheet Sheet, string namespaceUri, dynamic atom, ref int p_comment)
+        internal static XmlElement GetCopyAndFill(int p_index, string regname, XmlDocument xmlDoc, Excel._Worksheet Sheet, string namespaceUri, dynamic atom, ref int p_comment, XmlElement xmlParent = null)
         {
             XmlElement xmlCopyAndFill = xmlDoc.CreateElement("copy-and-fill", namespaceUri);
             bool isFrom = false;
@@ -141,6 +141,13 @@ namespace Gordic.GFE.WinClient.Editor
                                 xmlCopyAndFill.SetAttribute("to", (commentRowIndex - 1).ToString());
                                 return xmlCopyAndFill;
                             }
+
+                            if (!SectionContainsValueOf(xmlParent))
+                            {
+                                xmlCopyAndFill.SetAttribute("from", p_index.ToString());
+                                xmlCopyAndFill.SetAttribute("to", (commentRowIndex - 1).ToString());
+                                return xmlCopyAndFill;
+                            }
                         }
                         return null;
                     }
@@ -154,6 +161,32 @@ namespace Gordic.GFE.WinClient.Editor
                 return xmlCopyAndFill;
             }
             return null;
+        }
+
+        internal static bool SectionContainsValueOf(XmlElement xmlParent)
+        {
+            if (xmlParent == null)
+                return false;
+
+            foreach (XmlNode childNode in xmlParent.ChildNodes)
+            {
+                if (!(childNode is XmlElement childElement))
+                    continue;
+
+                if (childElement.LocalName == "value-of")
+                    return true;
+
+                if (childElement.LocalName != "copy-and-fill")
+                    continue;
+
+                foreach (XmlNode copyChild in childElement.ChildNodes)
+                {
+                    if (copyChild is XmlElement copyChildElement && copyChildElement.LocalName == "value-of")
+                        return true;
+                }
+            }
+
+            return false;
         }
 
         static void SetVersion(string p, ref int Version)

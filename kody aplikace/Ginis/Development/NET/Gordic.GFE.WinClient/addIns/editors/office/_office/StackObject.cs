@@ -29,6 +29,11 @@ namespace Gordic.GFE.WinClient.Editor
         /// Text stack objektu - obsah komentáře
         /// </summary>
         public string Text { get; set; }
+
+        /// <summary>
+        /// Indikuje, zda sekce už obsahuje alespoň jeden value-of.
+        /// </summary>
+        public bool HasValueOf { get; set; }
     }
 
 }
