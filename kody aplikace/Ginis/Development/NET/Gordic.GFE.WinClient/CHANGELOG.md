@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-04-21
+
+### 07:12:52 Oprava nacitani nove OXS sestavy bez fyzickeho souboru
+
+- Upraveno vytvareni nove neulozene ALF/OXS sestavy, aby WinClient pro jeji obsah vytvoril docasny backing soubor a nepracoval jen s relativnim pseudo-nazvem.
+- Oprava stabilizuje otevreni nove sestavy v XML editoru a brani tomu, aby se neexistujici cesta skladala proti aktualnimu pracovnimu adresari procesu.
+- Tim se odstranuje pad pri zakladani nove OXS sestavy, kdy se aplikace pokousela otevrit soubor pod nahodnym podadresarem v `system32` nebo `bin`.
+
 ## 2026-04-20
 
 ### 19:51:51 Oprava zachovani custom fontu pri presunu objektu

@@ -644,7 +644,15 @@ namespace Gordic.TextEditor
                 }
                 catch (HighlightingDefinitionInvalidException ex) { MessageBox.Show(ex.ToString(), "Chyba", MessageBoxButtons.OK, MessageBoxIcon.Error); }
 
-            bool streamHasContent = stream.CanRead && stream.Length > 0;
+            bool streamHasContent = false;
+            if (stream.CanRead)
+            {
+                if (!stream.CanSeek)
+                    streamHasContent = true;
+                else
+                    streamHasContent = stream.Length > 0;
+            }
+
             if (streamHasContent)
             {
                 if (autodetectEncoding)
@@ -657,9 +665,23 @@ namespace Gordic.TextEditor
                     using (StreamReader reader = new StreamReader(stream, this.Encoding, true))
                         Document.TextContent = reader.ReadToEnd();
             }
+            else if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName))
+            {
+                if (autodetectEncoding)
+                {
+                    using (FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    {
+                        Encoding encoding = this.Encoding;
+                        Document.TextContent = Util.FileReader.ReadFileContent(fileStream, ref encoding);
+                        this.Encoding = encoding;
+                    }
+                }
+                else
+                    using (StreamReader reader = new StreamReader(fileName, this.Encoding, true))
+                        Document.TextContent = reader.ReadToEnd();
+            }
             else
-                using (StreamReader reader = new StreamReader(fileName, this.Encoding))
-                    Document.TextContent = reader.ReadToEnd();
+                Document.TextContent = string.Empty;
 
             this.FileName = fileName;
             Document.UpdateQueue.Clear();

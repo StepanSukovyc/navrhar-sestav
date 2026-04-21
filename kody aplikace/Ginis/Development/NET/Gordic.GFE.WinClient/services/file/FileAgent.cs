@@ -190,8 +190,14 @@ namespace Gordic.GFE.WinClient.Services
             if (defaultName == null)
                 throw new ArgumentNullException(GResources.GetResourceText(29450544)); //RC 29450544 : Soubor nezle vytvořít - není daný výchozí název!
 
-            OpenedFile file = new FileServiceOpenedFile(ParserService.DefaultFileEncoding.GetBytes(content));
+            byte[] fileData = ParserService.DefaultFileEncoding.GetBytes(content);
+            OpenedFile file = new FileServiceOpenedFile(fileData);
             file.FileName = file.GetHashCode() + "/" + defaultName;
+
+            string contentFileName = FileUtility.NormalizePath(Path.Combine(file.TemporaryDirectory.Path, defaultName));
+            File.WriteAllBytes(contentFileName, fileData);
+            file.ContentFileName = contentFileName;
+
             ParserService.ClearParseInformation(defaultName);
             ParserService.ParseFile(file.FileName, content);
             openedFileDict[file.FileName] = file;
