@@ -2,6 +2,12 @@
 
 ## 2026-04-22
 
+### 19:26:00 Oprava ulozeni nove OXS sestavy a prazdneho Office nahledu
+
+- Textove ulozeni nove Office/OXS sestavy nyni pred zapisem pripravi doprovodny archiv sablony a u bezne `.alf` novne vyexportuje i odpovidajici `.xme` vedle hlavniho souboru.
+- Tim se odstraňuje stav, kdy se po prvnim ulozeni nove OXS sestavy nevytvoril ZIP balicek se `sablona.xlsx` ani doprovodny soubor struktury dat.
+- OXS Office editor uz pri nacteni prazdne nove sestavy nepada na `Sequence contains no elements`, pokud korenovy region jeste nema zadne `body` prvky.
+
 ### 19:02:00 Zprisneni pravidel vkladani datovych polozek do GRF regionu
 
 - Opravena validace vkladani a presunu datovych polozek do konkretniho GRF regionu tak, aby neslo vlozit polozku do sourozeneckeho regionu na stejne urovni.

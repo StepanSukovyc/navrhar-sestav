@@ -176,6 +176,8 @@ namespace Gordic.GFE.WinClient.FormatOffice
                             break;
                     }
 
+                PrepareCompanionFiles(unit);
+
                 string oldName = PrimaryFileName;
 
                 if (!isSaveAs && Path.GetExtension(PrimaryFileName).Equals(".alf", StringComparison.InvariantCultureIgnoreCase))
@@ -187,8 +189,12 @@ namespace Gordic.GFE.WinClient.FormatOffice
                     eventHandler.Invoke(PrimaryFile);
 
                     if (!PrimaryFile.CancelSaving)
+                    {
                         // uložíme archiv - pomocné soubory kopírujeme
                         PrimaryFile.CopyArchive(oldName);
+
+                        CopyStructureFileAlongsidePrimaryFile();
+                    }
 
                     if (!PrimaryFile.CancelSaving && ReportDesignerProperties.Instance.AlfShowSaveMessage)
                         MessageService.ShowMessage(Path.GetFileName(PrimaryFileName), GResources.GetResourceText(29450025)); //RC 29450025 : Soubor uložen
@@ -207,6 +213,86 @@ namespace Gordic.GFE.WinClient.FormatOffice
             catch (ErrorFileNameException ex) { LoggingService.Error(ex); return true; }
             catch (Exception ex) { MessageService.ShowError(ex); }
             return false;
+        }
+
+        void PrepareCompanionFiles(CompilationUnit unit)
+        {
+            PrepareTemplateArchive(unit);
+            CopyStructureFileToTemporaryDirectory();
+        }
+
+        void PrepareTemplateArchive(CompilationUnit unit)
+        {
+            switch (CategoryName)
+            {
+                case "OXS":
+                case "MSE":
+                    if (officeView?.Control is IOfficeDocumentView officeDocumentView)
+                        OfficeTemplateService.GetOrCreateTemplateFile(officeDocumentView);
+
+                    if (string.IsNullOrEmpty(unit.ZipResources))
+                        OfficeTemplateService.SetContentOfCopyDocument(unit);
+                    break;
+                case "RTF":
+                    if (officeView?.Control is IOfficeDocumentView rtfDocumentView)
+                        RtfTemplateService.GetOrCreateTemplateFile(rtfDocumentView);
+
+                    if (string.IsNullOrEmpty(unit.ZipResources))
+                        RtfTemplateService.SetContentOfCopyDocument(unit);
+                    break;
+            }
+        }
+
+        void CopyStructureFileToTemporaryDirectory()
+        {
+            string sourceStructureFile = GetStructureFileSource();
+            if (string.IsNullOrEmpty(sourceStructureFile)
+                || !FileUtility.TestFileExists(sourceStructureFile))
+                return;
+
+            string tempStructureFile = Path.Combine(
+                PrimaryFile.TemporaryDirectory.Path,
+                Path.GetFileNameWithoutExtension(PrimaryFileName) + ".xme");
+
+            if (sourceStructureFile.Equals(tempStructureFile, StringComparison.InvariantCultureIgnoreCase))
+                return;
+
+            File.Copy(sourceStructureFile, tempStructureFile, true);
+        }
+
+        void CopyStructureFileAlongsidePrimaryFile()
+        {
+            if (!Path.GetExtension(PrimaryFileName).Equals(".alf", StringComparison.InvariantCultureIgnoreCase))
+                return;
+
+            string sourceStructureFile = GetStructureFileSource();
+            if (string.IsNullOrEmpty(sourceStructureFile)
+                || !FileUtility.TestFileExists(sourceStructureFile))
+                return;
+
+            string destinationStructureFile = Path.Combine(
+                Path.GetDirectoryName(PrimaryFileName),
+                Path.GetFileNameWithoutExtension(PrimaryFileName) + ".xme");
+
+            if (sourceStructureFile.Equals(destinationStructureFile, StringComparison.InvariantCultureIgnoreCase))
+                return;
+
+            File.Copy(sourceStructureFile, destinationStructureFile, true);
+        }
+
+        string GetStructureFileSource()
+        {
+            FileInfo structureFile = PrimaryFile.TemporaryDirectory
+                .GetFiles()
+                .FirstOrDefault(file => file.Extension.Equals(".xme", StringComparison.InvariantCultureIgnoreCase));
+
+            if (structureFile != null)
+                return structureFile.FullName;
+
+            return !string.IsNullOrEmpty(DataService.StructureFileName)
+                && FileUtility.TestFileExists(DataService.StructureFileName)
+                ? DataService.StructureFileName
+                : null;
         }
         /// <summary>
         /// Uložení souboru do databáze

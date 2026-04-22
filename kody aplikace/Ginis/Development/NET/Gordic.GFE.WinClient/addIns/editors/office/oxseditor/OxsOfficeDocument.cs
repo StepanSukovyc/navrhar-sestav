@@ -297,7 +297,8 @@ namespace Gordic.GFE.WinClient.Editor
                     reg.Foot.ForEach(x => pullToDynamic(x));
                 }
             }
-            else pullToDynamic(reg.Body.First());
+            else if (reg.Body.Count > 0)
+                pullToDynamic(reg.Body.First());
         }
 
         void pullToDynamic(GFEFormatTag tag)
