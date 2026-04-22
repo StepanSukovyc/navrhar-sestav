@@ -64,6 +64,17 @@ namespace Gordic.GFE.WinClient.Editor
 
             return ActionResult.execute_none;
         }
+
+        /// <summary>
+        /// Vyčistí dočasný stav interakce po změně výběru nebo odstranění objektu.
+        /// </summary>
+        protected void ResetInteractionState()
+        {
+            DrawSquare = DrawSquares.nothing;
+            Cursor = Cursors.Default;
+            ObjectsChangeLocker = false;
+            TransformMouseEventArgs = null;
+        }
         #endregion
 
         #region IDesignSearchHandler

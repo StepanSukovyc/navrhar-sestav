@@ -194,15 +194,6 @@ namespace Gordic.GFE.WinClient.GrfEditor
         /// <returns>Objekt, který se nachází bezprostředně pod kurzorem</returns>
         public object GetTowedObject(PointF point)
         {
-            if (TowedService.TowedObject is AbstractLabel)
-            {
-                if ((TowedService.TowedObject as AbstractLabel).BoundsInPixels.Contains(point))
-                    return TowedService.TowedObject;
-            }
-            else if (TowedService.TowedObject is ITagComponent)
-                if ((TowedService.TowedObject as ITagComponent).BoundsInPixels.Contains(GetContentBegin(point.X, point.Y)))
-                    return TowedService.TowedObject;
-
             if (BoundsInPixels.Contains(point))
             {
                 object result = labelZ.GetTowedObject(GetContentBegin(point.X, point.Y), true);

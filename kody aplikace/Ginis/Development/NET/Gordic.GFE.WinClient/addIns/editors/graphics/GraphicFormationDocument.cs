@@ -55,6 +55,8 @@ namespace Gordic.GFE.WinClient.Editor
                     return;
                 }
             }
+
+            TowedService.TowedObject = null;
         }
 
         /// <summary>

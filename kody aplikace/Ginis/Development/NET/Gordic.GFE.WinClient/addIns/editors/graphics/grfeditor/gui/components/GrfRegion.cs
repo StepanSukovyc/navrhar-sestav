@@ -37,6 +37,57 @@ namespace Gordic.GFE.WinClient.GrfEditor
     class GrfRegion : AreaContent, IDataItem, IRDArgumentHandler, IRegion
     {
         #region AbstractContainer
+        string GetRegionFullName(GFERegion region)
+        {
+            if (region == null)
+                return null;
+
+            if (!string.IsNullOrEmpty(region.FullName))
+                return region.FullName;
+
+            List<string> names = new List<string>();
+            GFERegion current = region;
+            while (current != null && !string.IsNullOrEmpty(current.Name))
+            {
+                names.Add(current.Name);
+                current = current.Parent;
+            }
+
+            names.Reverse();
+            return names.Count == 0 ? null : string.Join(".", names);
+        }
+
+        string NormalizeRegionFullName(string regionFullName)
+        {
+            if (string.IsNullOrEmpty(regionFullName))
+                return regionFullName;
+
+            return regionFullName.StartsWith("ROOT.", StringComparison.OrdinalIgnoreCase)
+                ? regionFullName.Substring(5)
+                : regionFullName;
+        }
+
+        bool CanInsertDataItem(dynamic info, ComponentType type)
+        {
+            if (type == ComponentType.region || !(info is StructExtNode node) || node.DataItem?.Region == null)
+                return true;
+
+            string sourceRegionFullName = NormalizeRegionFullName(GetRegionFullName(node.DataItem.Region));
+            string targetRegionFullName = NormalizeRegionFullName(DataFullName);
+            if (string.Equals(sourceRegionFullName, targetRegionFullName, StringComparison.OrdinalIgnoreCase))
+                return true;
+
+            MessageService.ShowWarning(
+                string.Format(
+                    "Položku '{0}' nelze vytvořit v regionu '{1}'.\n\n" +
+                    "Datová položka patří regionu '{2}'.\n" +
+                    "Lze ji vložit pouze do tohoto regionu.",
+                    node.FullName ?? node.Name ?? "neznámá položka",
+                    targetRegionFullName ?? "neznámý region",
+                    sourceRegionFullName ?? "neznámý region"));
+            return false;
+        }
+
         /// <summary>
         /// Přidání položky bočního panelu
         /// </summary>
@@ -55,7 +106,9 @@ namespace Gordic.GFE.WinClient.GrfEditor
         /// <param name="type">Typ přidávané položky</param>
         /// <param name="format">Formát sestavy</param>
         public override IComponent CreateObject(PointF insertPoint, Gordic.GFE.Parsers.IPage page, dynamic info, ComponentType type, GFEFormat format = null) =>
-            LocalCommonService.CreateObject(this, insertPoint, page, info, type, format);
+            CanInsertDataItem(info, type)
+                ? LocalCommonService.CreateObject(this, insertPoint, page, info, type, format)
+                : null;
 
         /// <summary>
         /// Indikuje mo6nost daný objekt optimalizovat při převodu do ALF formátu

@@ -844,8 +844,12 @@ namespace Gordic.GFE.WinClient.Editor
                     && BoundsInPixels.Contains(PagePanel.DragPoint))
                 {
                     List<IComponent> comps = SearchComponent(PagePanel.DragPoint);
-                    towed = comps.FirstOrDefault(itm => itm.GetType() == GetType()
-                        && !ServiceSelection.SelectedComponents.Contains(itm)) == this;
+                    IComponent closestComponent = comps
+                        .Where(itm => itm.GetType() == GetType() && !ServiceSelection.SelectedComponents.Contains(itm))
+                        .OrderByDescending(itm => itm is IOrder order ? order.Order.Count : 0)
+                        .FirstOrDefault();
+
+                    towed = closestComponent == this;
                 }
 
                 ThreadService.SafeThreadAsyncCall(delegate

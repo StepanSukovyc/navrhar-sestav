@@ -259,9 +259,10 @@ namespace Gordic.GFE.WinClient.GrfEditor
 
                 List<object> draggedItems = (List<object>)e.Data.GetData(typeof(List<object>));
                 List<object> movedItems = new List<object>();
+                URAbstractContainer dropTarget = GetDropTargetFromLocation(e) ?? GetCurrentDropTargetContainer();
 
-                if (TowedService.TowedComponent != null)
-                    movedItems = SetParent(draggedItems, TowedService.TowedComponent);
+                if (dropTarget != null)
+                    movedItems = SetParent(draggedItems, dropTarget);
 
                 // Pokud byly objekty úspěšně přesunuty, provedeme zarovnání
                 if (movedItems.Count > 0)
@@ -284,6 +285,29 @@ namespace Gordic.GFE.WinClient.GrfEditor
             ObjectsChangeLocker = false;
             IsDragOver = false;
         }
+
+        URAbstractContainer GetDropTargetFromLocation(DragEventArgs e)
+        {
+            if (e == null)
+                return null;
+
+            Point clientPoint = PointToClient(new Point(e.X, e.Y));
+            int adjustedX = clientPoint.X + HorizontalScroll.Value - ReportDesignerProperties.Instance.StepBetween;
+            int adjustedY = clientPoint.Y + VerticalScroll.Value;
+
+            SetTowedObject(new MouseEventArgs(MouseButtons.Left, 0, adjustedX, adjustedY, 0));
+
+            URAbstractContainer target = GetCurrentDropTargetContainer();
+            if (target != null)
+                return target;
+
+            List<IComponent> hoveredComponents = SearchComponent(clientPoint);
+            if (hoveredComponents != null && hoveredComponents.Count > 0)
+                return ResolveTargetContainer(hoveredComponents.Cast<object>().ToList());
+
+            return null;
+        }
+
         /// <summary>
         /// Přidání položky ze struktury dat do sestavy
         /// </summary>
@@ -295,10 +319,7 @@ namespace Gordic.GFE.WinClient.GrfEditor
             if (ServiceSelection.SelectedComponents.Count == 0)
                 return null;
 
-            object sel = ServiceSelection.SelectedComponents.First();
-            dynamic selected = sel is IItemContainer 
-                ? sel 
-                : (sel is ITagComponent tag ? tag.Parent : null);
+            dynamic selected = GetInsertTargetFromLocation(e) ?? GetCurrentInsertTarget();
 
             if (selected == null)
             {
@@ -306,10 +327,25 @@ namespace Gordic.GFE.WinClient.GrfEditor
                 return null;
             }
 
+            if (!ValidateDataSchemaForInsert(info, selected))
+                return null;
+
             if (!UndoRedoService.IsTransactionStarted)
                 UndoRedoService.StartTransaction(GResources.GetResourceText(29450052)); //RC 29450052 : vytvoření nové datové položky
 
             return selected.CreateItem(info, e, type, Document._FormationProperty.Format);
+        }
+
+        object GetInsertTargetFromLocation(MouseEventArgs e)
+        {
+            if (e == null)
+                return null;
+
+            int adjustedX = e.X + HorizontalScroll.Value - ReportDesignerProperties.Instance.StepBetween;
+            int adjustedY = e.Y + VerticalScroll.Value;
+            SetTowedObject(new MouseEventArgs(MouseButtons.Left, 0, adjustedX, adjustedY, 0));
+
+            return GetCurrentInsertTarget();
         }
         /// <summary>
         /// Odstranění stránky ze seznamu stránek
@@ -328,6 +364,9 @@ namespace Gordic.GFE.WinClient.GrfEditor
         /// <returns>True pokud byl objekt úspěšně vložen</returns>
         bool TryInsertClonedTag(object clone, object selected, PointF position, bool isDiff)
         {
+            if (!ValidateDataSchemaForInsert(clone, selected))
+                return false;
+
             if (selected is URAbstractContainer container)
             {
                 container.InsertTagComponent(clone, position, isDiff);
@@ -446,8 +485,7 @@ namespace Gordic.GFE.WinClient.GrfEditor
             int adjustedX = clientPoint.X + HorizontalScroll.Value - ReportDesignerProperties.Instance.StepBetween;
             int adjustedY = clientPoint.Y + VerticalScroll.Value;
 
-            toweds.Add(Task.Factory.StartNew(() => 
-                SetTowedObject(new MouseEventArgs(MouseButtons.Left, 0, adjustedX, adjustedY, 0))));
+            SetTowedObject(new MouseEventArgs(MouseButtons.Left, 0, adjustedX, adjustedY, 0));
 
             if (drgevent.Data.GetData(typeof(StructExtNode)) is StructExtNode svtn)
             {
@@ -469,6 +507,36 @@ namespace Gordic.GFE.WinClient.GrfEditor
                             LocalCommonService.ValidateObject(((TowedService.TowedObject as IParentable).Parent as IGRRCell).ParentLabel, svtn.FullName, svtn.DataRegion != null)
                             ? DragDropEffects.Copy : DragDropEffects.None;
                     }
+                return;
+            }
+
+            if (drgevent.Data.GetDataPresent(typeof(List<object>)))
+            {
+                List<object> draggedItems = drgevent.Data.GetData(typeof(List<object>)) as List<object>;
+                URAbstractContainer targetContainer = GetCurrentDropTargetContainer();
+
+                if (draggedItems == null || targetContainer == null)
+                {
+                    drgevent.Effect = DragDropEffects.None;
+                    return;
+                }
+
+                string targetRegionLabel = GetRegionLabel(targetContainer);
+                bool isValid = true;
+
+                foreach (ITagComponent tag in draggedItems.OfType<ITagComponent>())
+                {
+                    if (targetContainer == tag || (draggedItems.Contains(tag.Parent) && !(tag.Parent is GrfPage)))
+                        continue;
+
+                    if (!ValidateDataSchemaForMove(tag, targetRegionLabel, targetContainer, false))
+                    {
+                        isValid = false;
+                        break;
+                    }
+                }
+
+                drgevent.Effect = isValid ? DragDropEffects.Move : DragDropEffects.None;
                 return;
             }
         }
@@ -556,6 +624,8 @@ namespace Gordic.GFE.WinClient.GrfEditor
         }
         void ServiceSelectionSelectionChanged(object sender, EventArgs e)
         {
+            ResetInteractionState();
+
             if (EditControl != null)
                 RemoveEditControl(true);
         }
@@ -656,6 +726,12 @@ namespace Gordic.GFE.WinClient.GrfEditor
             int adjustedY = e.Y + VerticalScroll.Value;
 
             SetTowedObject(new MouseEventArgs(MouseButtons.Left, 0, adjustedX, adjustedY, 0));
+
+            if (GetCurrentInsertTarget() is IComponent target)
+            {
+                SetSelectedComponents(target, SelectionTypes.Replace);
+                return;
+            }
 
             List<IComponent> item = SearchComponent(e.Location);
             if (item != null && item.Count > 0)
@@ -903,6 +979,7 @@ namespace Gordic.GFE.WinClient.GrfEditor
         List<object> SetParent(List<object> draggedItems, URAbstractContainer towedComponent)
         {
             List<object> movedItems = new List<object>();
+            List<ITagComponent> tagsToMove = new List<ITagComponent>();
 
             if (towedComponent == null)
                 return movedItems;
@@ -913,7 +990,7 @@ namespace Gordic.GFE.WinClient.GrfEditor
                     // SPECIÁLNÍ PŘÍPAD: Posun v rámci stejného kontejneru (pouze změna pozice Left/Top)
                     if (tag.Parent == towedComponent)
                     {
-                        movedItems.Add(item); // Validní operace - zarovnání se provede normálně
+                        tagsToMove.Add(tag);
                         continue;
                     }
 
@@ -927,14 +1004,22 @@ namespace Gordic.GFE.WinClient.GrfEditor
 
                             // Validace datového schématu před přesunutím (předáme towedComponent pro správnou validaci)
                             if (!ValidateDataSchemaForMove(tag, targetRegionLabel, towedComponent))
-                                continue; // Přeskočíme tento objekt - validace selhala
+                                return new List<object>();
 
-                            // Validace proběhla úspěšně - provedeme přesun
-                            (tag.Parent as URAbstractContainer).Remove(tag);
-                            towedComponent.Add(tag);
-                            movedItems.Add(item); // Přidáme do seznamu úspěšně přesunutých
+                            tagsToMove.Add(tag);
                         }
                 }
+
+            foreach (var tag in tagsToMove)
+            {
+                if (tag.Parent is URAbstractContainer currentParent && currentParent != towedComponent)
+                {
+                    currentParent.Remove(tag);
+                    towedComponent.Add(tag);
+                }
+
+                movedItems.Add(tag);
+            }
 
             return movedItems;
         }
@@ -971,30 +1056,53 @@ namespace Gordic.GFE.WinClient.GrfEditor
         /// <param name="targetRegionLabel">Label cílového regionu</param>
         /// <param name="towedComponent">Cílový kontejner pro validaci kompatibility</param>
         /// <returns>True pokud lze přesunout, false pokud validace selhala</returns>
-        bool ValidateDataSchemaForMove(ITagComponent tag, string targetRegionLabel, URAbstractContainer towedComponent = null)
+        bool ValidateDataSchemaForMove(ITagComponent tag, string targetRegionLabel, URAbstractContainer towedComponent = null, bool showWarnings = true)
         {
             // Získání plného názvu taženého objektu
             string movingObjectName = GetFullName(tag);
             if (string.IsNullOrEmpty(movingObjectName))
                 return true; // Není datová položka - validaci přeskočíme
 
+            bool isRegionObject = IsRegionObject(tag);
+
             // PRAVIDLO 1 a 2: Táhnutí DO REGIONU (má DataRegionFullName)
             if (!string.IsNullOrEmpty(targetRegionLabel))
             {
-                return ValidateTargetRegion(movingObjectName, targetRegionLabel);
+                return ValidateTargetRegion(movingObjectName, targetRegionLabel, isRegionObject, showWarnings);
             }
 
             // PRAVIDLO 3: Táhnutí NA STRÁNKU (bez region labelu)
-            return ValidatePageTarget(tag, movingObjectName, towedComponent);
+            return ValidatePageTarget(tag, movingObjectName, towedComponent, showWarnings);
         }
 
         /// <summary>
-        /// Validuje přesun do cílového regionu (target má DataRegionFullName)
-        /// Pravidla:
-        ///   1. Lze táhnout do regionu dané položky (immediate parent)
-        ///   2. Lze táhnout do podřízeného regionu nadřazeného regionu (sourozenec regionu)
+        /// Validuje nové vložení nebo vložení klonovaného objektu do cílového kontejneru.
         /// </summary>
-        bool ValidateTargetRegion(string movingObjectName, string targetRegionLabel)
+        bool ValidateDataSchemaForInsert(object source, object target)
+        {
+            string movingObjectName = GetFullName(source);
+            if (string.IsNullOrEmpty(movingObjectName))
+                return true;
+
+            bool isRegionObject = IsRegionObject(source);
+
+            URAbstractContainer targetContainer = ResolveTargetContainer(target);
+            if (targetContainer == null)
+                return true;
+
+            string targetRegionLabel = GetRegionLabel(targetContainer);
+            if (!string.IsNullOrEmpty(targetRegionLabel))
+                return ValidateTargetRegion(movingObjectName, targetRegionLabel, isRegionObject);
+
+            return ValidatePageTarget(null, movingObjectName, targetContainer);
+        }
+
+        /// <summary>
+        /// Validuje přesun nebo vložení do cílového regionu (target má DataRegionFullName).
+        /// Datová položka smí pouze do vlastního regionu.
+        /// Region smí do svého nadřazeného regionu nebo do sourozenecké větve pod stejným předkem.
+        /// </summary>
+        bool ValidateTargetRegion(string movingObjectName, string targetRegionLabel, bool isRegionObject, bool showWarnings = true)
         {
             // Získáme region tažené položky (immediate parent)
             // Např. "x.y.z" → region je "x.y"
@@ -1002,8 +1110,18 @@ namespace Gordic.GFE.WinClient.GrfEditor
             if (string.IsNullOrEmpty(movingItemRegion))
                 movingItemRegion = "root";
 
-            // PRAVIDLO 1: Lze táhnout do regionu dané položky
-            // Např. "x.y.z" → lze do regionu "x.y"
+            // Datovou polozku lze vlozit jen do jejiho vlastniho regionu.
+            if (!isRegionObject)
+            {
+                if (targetRegionLabel.Equals(movingItemRegion, StringComparison.OrdinalIgnoreCase))
+                    return true;
+
+                if (showWarnings)
+                    ShowInvalidTargetWarning(movingObjectName, targetRegionLabel, movingItemRegion, null, false);
+                return false;
+            }
+
+            // PRAVIDLO 1: Region lze táhnout do svého nadřazeného regionu.
             if (targetRegionLabel.Equals(movingItemRegion, StringComparison.OrdinalIgnoreCase))
                 return true; // ✓ OK
 
@@ -1016,12 +1134,12 @@ namespace Gordic.GFE.WinClient.GrfEditor
             // PRAVIDLO 2: Lze táhnout do podřízeného regionu nadřazeného regionu
             // Např. "x.y.z" má grandparent "x"
             //       Lze táhnout do jakéhokoliv regionu "x.*" (např. "x.y1", "x.y2", "x.y")
-            if (targetRegionLabel.StartsWith(movingItemGrandparent + ".", StringComparison.OrdinalIgnoreCase)
-                || targetRegionLabel.Equals(movingItemGrandparent, StringComparison.OrdinalIgnoreCase))
+            if (targetRegionLabel.StartsWith(movingItemGrandparent + ".", StringComparison.OrdinalIgnoreCase))
                 return true; // ✓ OK
 
             // Validace selhala - cílový region nesplňuje žádné pravidlo
-            ShowInvalidTargetWarning(movingObjectName, targetRegionLabel, movingItemRegion, movingItemGrandparent);
+            if (showWarnings)
+                ShowInvalidTargetWarning(movingObjectName, targetRegionLabel, movingItemRegion, movingItemGrandparent, true);
             return false;
         }
 
@@ -1029,7 +1147,7 @@ namespace Gordic.GFE.WinClient.GrfEditor
         /// Validuje přesun na stránku (target NEMÁ DataRegionFullName)
         /// Pravidlo: Existující položky musí patřit stejnému regionu NEBO stejnému nadřazenému regionu
         /// </summary>
-        bool ValidatePageTarget(ITagComponent tag, string movingObjectName, URAbstractContainer targetContainer)
+        bool ValidatePageTarget(ITagComponent tag, string movingObjectName, URAbstractContainer targetContainer, bool showWarnings = true)
         {
             if (targetContainer == null)
                 return true;
@@ -1068,10 +1186,10 @@ namespace Gordic.GFE.WinClient.GrfEditor
                 // PRAVIDLO 3: Položky musí patřit stejnému regionu NEBO stejnému nadřazenému regionu
                 bool sameRegion = movingItemRegion.Equals(existingItemRegion, StringComparison.OrdinalIgnoreCase);
                 bool sameGrandparent = movingItemGrandparent.Equals(existingItemGrandparent, StringComparison.OrdinalIgnoreCase);
-
                 if (!sameRegion && !sameGrandparent)
                 {
-                    ShowPageMismatchWarning(movingObjectName, existingFullName, movingItemRegion, movingItemGrandparent);
+                    if (showWarnings)
+                        ShowPageMismatchWarning(movingObjectName, existingItemRegion, movingItemRegion, movingItemGrandparent);
                     return false;
                 }
             }
@@ -1128,26 +1246,106 @@ namespace Gordic.GFE.WinClient.GrfEditor
         }
 
         /// <summary>
+        /// Získá plný název objektu z různých zdrojů vložení.
+        /// </summary>
+        string GetFullName(object source)
+        {
+            if (source == null)
+                return null;
+
+            if (source is StructExtNode node)
+                return node.FullName;
+
+            if (source is ITagComponent tag)
+                return GetFullName(tag);
+
+            return null;
+        }
+
+        bool IsRegionObject(object source)
+        {
+            if (source == null)
+                return false;
+
+            if (source is StructExtNode node)
+                return node.DataRegion != null;
+
+            if (source is ITagComponent)
+                return TryGetPropertyValue(source, "DataRegionFullName", out string regionName)
+                    && !string.IsNullOrEmpty(regionName);
+
+            return false;
+        }
+
+        /// <summary>
+        /// Přeloží cíl vložení na kontejner, vůči kterému se vyhodnocuje regionová kompatibilita.
+        /// </summary>
+        URAbstractContainer ResolveTargetContainer(object target)
+        {
+            if (target is IList<object> hoveredObjects)
+            {
+                IComponent deepestComponent = CommonService.GetComponents(hoveredObjects)
+                    .OrderByDescending(component => component is IOrder order ? order.Order.Count : 0)
+                    .FirstOrDefault();
+
+                return ResolveTargetContainer(deepestComponent);
+            }
+
+            if (target is URAbstractContainer container)
+                return container;
+
+            if (target is ITagComponent tag)
+                return tag.Parent as URAbstractContainer;
+
+            if (target is IParentable parentable)
+                return parentable.Parent as URAbstractContainer;
+
+            return null;
+        }
+
+        object GetCurrentInsertTarget()
+        {
+            // Insert se musi ridit stejnou logikou jako move:
+            // primarni je skutecne zvyrazneny drop target (TowedComponent)
+            // a teprve potom fallback na nejhlubsi objekt pod kurzorem.
+            object target = (object)TowedService.TowedComponent
+                ?? ResolveTargetContainer(TowedService.TowedObject);
+
+            if (target != null)
+                return target;
+
+            object selected = ServiceSelection.SelectedComponents.First();
+            return selected is IItemContainer
+                ? selected
+                : (selected is ITagComponent tag ? tag.Parent : null);
+        }
+
+        URAbstractContainer GetCurrentDropTargetContainer()
+        {
+            return TowedService.TowedComponent
+                ?? ResolveTargetContainer(TowedService.TowedObject);
+        }
+
+        /// <summary>
         /// Získá region label (DataRegionFullName) pro daný kontejner
         /// </summary>
         /// <param name="container">Kontejner, pro který hledáme region label</param>
         /// <returns>Region label nebo null pokud není nalezen</returns>
-        string GetRegionLabel(URAbstractContainer container)
+        string GetRegionLabel(object target)
         {
-            if (container == null)
+            if (target == null)
                 return null;
 
-            // Projdeme kontejner a jeho rodiče a hledáme region s DataRegionFullName
-            URAbstractContainer current = container;
+            // V GRF muze regionovy label viset na samotnem tagu i na nekterem rodici.
+            // Proto prochazime cely parent chain pres IParentable, ne jen URAbstractContainer rodice.
+            object current = target;
             while (current != null)
             {
-                // Pokusíme se získat DataRegionFullName
                 if (TryGetPropertyValue(current, "DataRegionFullName", out string dataRegionFullName) 
                     && !string.IsNullOrEmpty(dataRegionFullName))
                     return dataRegionFullName;
 
-                // Pokračujeme k rodiči
-                current = (current as IParentable)?.Parent as URAbstractContainer;
+                current = (current as IParentable)?.Parent;
             }
 
             return null;
@@ -1192,36 +1390,46 @@ namespace Gordic.GFE.WinClient.GrfEditor
         /// <summary>
         /// Zobrazí varovné hlášení o neplatném cílovém regionu
         /// </summary>
-        void ShowInvalidTargetWarning(string movingItemName, string targetRegion, string movingItemRegion, string movingItemGrandparent)
+        void ShowInvalidTargetWarning(string movingItemName, string targetRegion, string movingItemRegion, string movingItemGrandparent, bool isRegionObject)
         {
-            MessageService.ShowWarning(
-                string.Format(
+            string message = isRegionObject
+                ? string.Format(
                     "Položku '{0}' nelze přesunout do regionu '{1}'.\n\n" +
-                    "Položka patří regionu '{2}' (nadřazený region: '{3}').\n" +
+                    "Region patří pod region '{2}'.\n" +
                     "Lze přesunout pouze do:\n" +
-                    "  - regionu '{2}' (region položky)\n" +
-                    "  - podřízených regionů '{3}.*' (sourozenci regionu položky)",
+                    "  - regionu '{2}' (nadřazený region)\n" +
+                    "  - podřízených regionů '{3}.*' (sourozenci regionu)",
                     movingItemName ?? "neznámá položka",
                     targetRegion,
                     movingItemRegion,
-                    movingItemGrandparent
-                )
+                    movingItemGrandparent ?? "root")
+                : string.Format(
+                    "Položku '{0}' nelze přesunout do regionu '{1}'.\n\n" +
+                    "Datová položka patří regionu '{2}'.\n" +
+                    "Lze ji přesunout pouze do tohoto regionu.",
+                    movingItemName ?? "neznámá položka",
+                    targetRegion,
+                    movingItemRegion);
+
+            MessageService.ShowWarning(
+                message
             );
         }
 
         /// <summary>
         /// Zobrazí varovné hlášení o nekompatibilitě s existujícími objekty na stránce
         /// </summary>
-        void ShowPageMismatchWarning(string movingItemName, string existingItemName, string movingItemRegion, string movingItemGrandparent)
+        void ShowPageMismatchWarning(string movingItemName, string existingItemRegion, string movingItemRegion, string movingItemGrandparent)
         {
             MessageService.ShowWarning(
                 string.Format(
-                    "Položku '{0}' nelze přesunout do stejného kontejneru jako '{1}'.\n\n" +
+                    "Položku '{0}' nelze přesunout do zvoleného kontejneru.\n\n" +
+                    "V cílovém kontejneru jsou položky regionu '{1}'.\n" +
                     "Položky na stránce musí patřit:\n" +
                     "  - stejnému regionu ('{2}')\n" +
                     "  - NEBO stejnému nadřazenému regionu ('{3}')",
                     movingItemName ?? "neznámá položka",
-                    existingItemName ?? "neznámá položka",
+                    existingItemRegion ?? "neznámý region",
                     movingItemRegion,
                     movingItemGrandparent
                 )
